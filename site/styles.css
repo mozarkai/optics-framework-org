@@ -140,11 +140,12 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 /* the 20s loop, full width under the hero */
 .stage { position: relative; margin-top: clamp(40px, 5vw, 64px); aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; background: #0A0A10; border: 1px solid var(--line-2); box-shadow: var(--shadow); }
 .loop { width: 100%; height: 100%; object-fit: cover; }
-.film-open { position: absolute; left: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px 0 14px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 22px; background: rgba(10, 10, 16, .45); color: #fff; font: 600 .9375rem/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background .2s, transform .35s var(--spring); }
-.film-open svg { width: 14px; height: 14px; fill: #fff; }
+.film-open { position: absolute; left: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px 0 11px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 17px; background: rgba(10, 10, 16, .45); color: #fff; font: 600 .8125rem/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background .2s, transform .35s var(--spring); }
+.film-open svg { width: 11px; height: 11px; fill: #fff; }
+.fd-short { display: none; }
 .film-open:hover { background: rgba(10, 10, 16, .7); transform: scale(1.03); }
-.loop-toggle { position: absolute; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .25); background: rgba(10, 10, 16, .45); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(8px); }
-.loop-toggle svg { width: 18px; height: 18px; fill: #fff; }
+.loop-toggle { position: absolute; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .25); background: rgba(10, 10, 16, .45); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(8px); }
+.loop-toggle svg { width: 14px; height: 14px; fill: #fff; }
 .loop-toggle .i-play, .stage.paused .loop-toggle .i-pause { display: none; }
 .stage.paused .loop-toggle .i-play { display: block; }
 
@@ -224,12 +225,17 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .c-lit { color: var(--code-lit); } .c-pass { color: var(--code-pass); } .c-info { color: var(--code-info); }
 .c-run { color: var(--code-var); font-weight: 500; } .c-ghost { color: var(--code-dim); font-style: italic; }
 .diff pre code { display: block; min-width: max-content; }
-.diff pre span { display: block; padding: 0 20px; margin: 0 -20px; }
+.diff pre span { display: inline-block; min-width: 100%; padding: 0 20px; margin: 0 -20px; }
 .d-ctx { color: var(--code-dim); }
 .d-del { color: #FF9DB8; background: rgba(245, 111, 161, .14); }
 .d-add { color: var(--code-pass); background: rgba(61, 220, 132, .12); }
 .suite-formats { margin-top: clamp(64px, 8vw, 104px); }
 .formats { display: grid; gap: 14px; min-width: 0; }
+/* Both panels share one cell so switching formats never changes the height. */
+.fmt-panels { display: grid; grid-template-columns: minmax(0, 1fr); }
+.fmt-panels > .code { grid-area: 1 / 1; display: flex; flex-direction: column; }
+.fmt-panels > .code[hidden] { display: flex !important; visibility: hidden; }
+.fmt-panels pre { flex: 1; }
 .bar { display: inline-block; width: 140px; height: 6px; border-radius: 3px; background: var(--code-pass); vertical-align: 3px; margin: 0 6px; }
 
 /* ---------- run ---------- */
@@ -289,8 +295,11 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .step-text .body-text { margin-left: 0; }
   .os-tab { padding: 0 10px; font-size: .8125rem; }
   .stage { border-radius: 14px; }
-  .film-open { left: 10px; bottom: 12px; height: 40px; padding: 0 14px 0 12px; font-size: .875rem; }
-  .loop-toggle { right: 10px; bottom: 12px; width: 40px; height: 40px; }
+  .film-open { left: 10px; bottom: 10px; height: 28px; gap: 5px; padding: 0 10px 0 8px; font-size: .75rem; }
+  .fd-long { display: none; } .fd-short { display: inline; }
+  .film-open svg { width: 10px; height: 10px; }
+  .loop-toggle { right: 10px; bottom: 10px; width: 28px; height: 28px; }
+  .loop-toggle svg { width: 12px; height: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
