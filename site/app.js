@@ -80,13 +80,33 @@
 
   tabs(document.querySelector(".os"));
 
-  // ---- film ----------------------------------------------------------------
-  var frame = document.querySelector(".film-frame");
-  var video = document.getElementById("film-video");
-  frame.querySelector(".film-play").addEventListener("click", function () {
-    frame.classList.add("playing");
-    video.controls = true;
-    video.play();
-    video.focus();
+  // ---- hero loop -----------------------------------------------------------
+  var stage = document.querySelector(".stage");
+  var loop = stage.querySelector(".loop");
+  var loopToggle = stage.querySelector(".loop-toggle");
+  var userPaused = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function syncLoop(visible) {
+    var run = !userPaused && visible !== false;
+    if (run) { var p = loop.play(); if (p && p.catch) p.catch(function () {}); } else loop.pause();
+    stage.classList.toggle("paused", userPaused);
+    loopToggle.setAttribute("aria-label", userPaused ? "Play the preview" : "Pause the preview");
+  }
+  loopToggle.addEventListener("click", function () { userPaused = !userPaused; syncLoop(true); });
+  // Only spend CPU on the loop while it is on screen.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) { syncLoop(entries[0].isIntersecting); }, { threshold: 0.15 }).observe(stage);
+  }
+  syncLoop(true);
+
+  // ---- full demo dialog ------------------------------------------------------
+  var dialog = document.querySelector(".film-dialog");
+  var film = document.getElementById("film-video");
+  stage.querySelector(".film-open").addEventListener("click", function () {
+    dialog.showModal();
+    loop.pause();
+    var p = film.play(); if (p && p.catch) p.catch(function () {});
   });
+  // Click on the backdrop closes it.
+  dialog.addEventListener("click", function (e) { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener("close", function () { film.pause(); syncLoop(true); });
 })();
