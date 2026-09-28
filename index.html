@@ -21,7 +21,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=5876587892">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -74,8 +74,8 @@
             <source src="media/optics-loop.webm" type="video/webm">
             <source src="media/optics-loop.mp4" type="video/mp4">
           </video>
-          <button class="film-open" type="button" aria-haspopup="dialog">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the full demo
+          <button class="film-open" type="button" aria-haspopup="dialog" aria-label="Watch the full demo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="fd-long" aria-hidden="true">Watch the full demo</span><span class="fd-short" aria-hidden="true">Full demo</span>
           </button>
           <button class="loop-toggle" type="button" aria-label="Pause the preview">
             <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
@@ -206,7 +206,12 @@
           </div>
           <figure class="code diff">
             <figcaption>test_data/elements.csv</figcaption>
-<pre><code><span class="d-ctx"> Element_Name,Element_ID</span><span class="d-ctx"> email_field,//*[@resource-id='email']</span><span class="d-del">-sign_in,//*[@text='Sign in']</span><span class="d-add">+sign_in,//*[@resource-id='login']</span><span class="d-add">+sign_in,Sign in</span><span class="d-ctx"> search_bar,//*[@resource-id='search']</span></code></pre>
+<pre><code><span class="d-ctx"> Element_Name,Element_ID</span>
+<span class="d-ctx"> email_field,//*[@resource-id='email']</span>
+<span class="d-del">-sign_in,//*[@text='Sign in']</span>
+<span class="d-add">+sign_in,//*[@resource-id='login']</span>
+<span class="d-add">+sign_in,Sign in</span>
+<span class="d-ctx"> search_bar,//*[@resource-id='search']</span></code></pre>
           </figure>
         </div>
         <div class="two align-center suite-formats">
@@ -225,6 +230,7 @@
               <button class="os-tab" role="tab" id="fmt-csv" aria-controls="fmt-panel-csv" aria-selected="true">CSV</button>
               <button class="os-tab" role="tab" id="fmt-yaml" aria-controls="fmt-panel-yaml" aria-selected="false" tabindex="-1">YAML</button>
             </div>
+            <div class="fmt-panels">
             <figure class="code" role="tabpanel" id="fmt-panel-csv" aria-labelledby="fmt-csv">
               <figcaption>checkout/</figcaption>
 <pre><code><span class="c-dim">test_cases/test_cases.csv</span>
@@ -264,6 +270,7 @@ Element_Name,Element_ID
   <span class="c-var">sign_in</span>: ["//*[@resource-id='login']", <span class="c-lit">Sign in</span>]
   <span class="c-var">search_bar</span>: "//*[@resource-id='search']"</code></pre>
             </figure>
+            </div>
           </div>
         </div>
       </div>
@@ -443,6 +450,6 @@ Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></
     </symbol>
   </svg>
 
-  <script src="app.js" defer></script>
+  <script src="app.js?v=2488b35f28" defer></script>
 </body>
 </html>
