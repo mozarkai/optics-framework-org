@@ -75,8 +75,7 @@
             <source src="media/optics-loop.mp4" type="video/mp4">
           </video>
           <button class="film-open" type="button" aria-haspopup="dialog">
-            <span class="film-play-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
-            <span class="film-open-text"><b>Watch the full demo</b><span>One minute, with sound</span></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the full demo
           </button>
           <button class="loop-toggle" type="button" aria-label="Pause the preview">
             <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
@@ -198,23 +197,74 @@
 
     <section class="band suite" aria-labelledby="suite-h">
       <div class="wrap">
-        <h2 class="h2" id="suite-h">Every way produces the same files</h2>
+        <h2 class="h2" id="suite-h">Every way ends in plain text</h2>
         <div class="two align-center">
           <div>
-            <p class="body-text">However a test starts, it ends up as a few plain files. Commit them, review them in a pull request, and run them anywhere.</p>
-            <p class="body-text">Optics recognises each file by its contents, so the folder names are only a convention. Repeat an element name in <code class="ic">elements.csv</code> and each value becomes a fallback for the others.</p>
+            <h3 class="h3">Reviewed like code</h3>
+            <p class="body-text">A recording in Optics isn't a binary blob or a row in someone else's cloud. <code class="ic">/save</code> writes the same rows you would have typed, and an agent working through <code class="ic">optics mcp</code> writes them too. They live in your repo, next to the app they test.</p>
+            <p class="body-text">So changing a test is a pull request. When a redesign moves the sign-in button, the diff shows the one locator that changed and the text fallback added beside it, and CI runs exactly what was merged.</p>
           </div>
-          <figure class="code">
-            <figcaption>checkout/</figcaption>
-<pre><code>checkout/
-├── config.yaml            <span class="c-dim">drivers, OCR, LLM</span>
-├── test_cases/test_cases.csv
-├── modules/modules.csv
-└── test_data/
-    ├── elements.csv       <span class="c-dim">names → locators</span>
-    ├── error_definitions.csv
-    └── input_templates/*.png</code></pre>
+          <figure class="code diff">
+            <figcaption>test_data/elements.csv</figcaption>
+<pre><code><span class="d-ctx"> Element_Name,Element_ID</span><span class="d-ctx"> email_field,//*[@resource-id='email']</span><span class="d-del">-sign_in,//*[@text='Sign in']</span><span class="d-add">+sign_in,//*[@resource-id='login']</span><span class="d-add">+sign_in,Sign in</span><span class="d-ctx"> search_bar,//*[@resource-id='search']</span></code></pre>
           </figure>
+        </div>
+        <div class="two align-center suite-formats">
+          <div>
+            <h3 class="h3">CSV or YAML</h3>
+            <p class="body-text">Write in whichever your team reads best. CSV opens in any spreadsheet and keeps one step per row. YAML keeps a whole flow in one indented file. <code class="ic">/save</code> writes either, and one project can hold both.</p>
+            <p class="body-text">Optics tells files apart by what is inside them, not where they sit, so the folder layout is yours. Both formats load into the same suite, and each file holds one of three things.</p>
+            <dl class="outputs">
+              <div><dt>Test cases</dt><dd>Which flows run, and in what order.</dd></div>
+              <div><dt>Modules</dt><dd>The steps, one keyword each, reused by every test case that names them.</dd></div>
+              <div><dt>Elements</dt><dd>Every name mapped to the ways to find it on screen. The only place a locator lives, so a redesign is an edit here and not in every test.</dd></div>
+            </dl>
+          </div>
+          <div class="formats">
+            <div class="os fmt" role="tablist" aria-label="File format">
+              <button class="os-tab" role="tab" id="fmt-csv" aria-controls="fmt-panel-csv" aria-selected="true">CSV</button>
+              <button class="os-tab" role="tab" id="fmt-yaml" aria-controls="fmt-panel-yaml" aria-selected="false" tabindex="-1">YAML</button>
+            </div>
+            <figure class="code" role="tabpanel" id="fmt-panel-csv" aria-labelledby="fmt-csv">
+              <figcaption>checkout/</figcaption>
+<pre><code><span class="c-dim">test_cases/test_cases.csv</span>
+test_case,test_step
+<span class="c-mod">Checkout</span>,<span class="c-mod">Sign In</span>
+<span class="c-mod">Checkout</span>,<span class="c-mod">Add To Cart</span>
+
+<span class="c-dim">modules/modules.csv</span>
+module_name,module_step,param_1,param_2
+<span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${email_field}</span>,<span class="c-lit">ada@example.com</span>
+<span class="c-mod">Sign In</span>,<b>Press Element</b>,<span class="c-var">${sign_in}</span>
+<span class="c-mod">Add To Cart</span>,<b>Enter Text</b>,<span class="c-var">${search_bar}</span>,<span class="c-lit">running shoes</span>
+<span class="c-mod">Add To Cart</span>,<b>Press Element</b>,<span class="c-lit">Add to cart</span>
+
+<span class="c-dim">test_data/elements.csv</span>
+Element_Name,Element_ID
+<span class="c-var">email_field</span>,//*[@resource-id='email']
+<span class="c-var">sign_in</span>,//*[@resource-id='login']
+<span class="c-var">sign_in</span>,<span class="c-lit">Sign in</span>
+<span class="c-var">search_bar</span>,//*[@resource-id='search']</code></pre>
+            </figure>
+            <figure class="code" role="tabpanel" id="fmt-panel-yaml" aria-labelledby="fmt-yaml" hidden>
+              <figcaption>checkout/checkout.yaml</figcaption>
+<pre><code><span class="c-dim">Test Cases:</span>
+  - <span class="c-mod">Checkout</span>:
+      - <span class="c-mod">Sign In</span>
+      - <span class="c-mod">Add To Cart</span>
+<span class="c-dim">Modules:</span>
+  - <span class="c-mod">Sign In</span>:
+      - <b>Enter Text</b> <span class="c-var">${email_field}</span> <span class="c-lit">ada@example.com</span>
+      - <b>Press Element</b> <span class="c-var">${sign_in}</span>
+  - <span class="c-mod">Add To Cart</span>:
+      - <b>Enter Text</b> <span class="c-var">${search_bar}</span> <span class="c-lit">"running shoes"</span>
+      - <b>Press Element</b> <span class="c-lit">"Add to cart"</span>
+<span class="c-dim">Elements:</span>
+  <span class="c-var">email_field</span>: "//*[@resource-id='email']"
+  <span class="c-var">sign_in</span>: ["//*[@resource-id='login']", <span class="c-lit">Sign in</span>]
+  <span class="c-var">search_bar</span>: "//*[@resource-id='search']"</code></pre>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
