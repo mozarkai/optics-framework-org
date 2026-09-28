@@ -1,25 +1,11 @@
 {
-  "name": "optics-framework-landing",
-  "version": "1.0.0",
+  "name": "optics-framework-site",
+  "version": "2.0.0",
   "private": true,
-  "description": "Landing page for Optics Framework — self-healing, vision-powered test automation.",
+  "description": "optics-framework.org: the Optics landing page and install scripts.",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "next": "^16.3.5",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.16.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "build": "node build.mjs",
+    "dev": "node build.mjs && python3 -m http.server 4173 --directory out"
   }
 }
