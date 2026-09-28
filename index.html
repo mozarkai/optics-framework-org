@@ -50,68 +50,67 @@
   </header>
 
   <main id="main">
-    <!-- Hero: the headline is the design. "Run it forever." repeats like runs on a log. -->
+    <!-- Hero: tagline and install on one row, the 20s loop full width beneath. -->
     <section class="hero" id="top">
       <div class="wrap">
-        <h1 class="hero-title">
-          <span class="line">Create it your way.</span>
-          <span class="line line-run">Run it forever.</span>
-          <span class="echo" aria-hidden="true">
-            <span>Run it forever.</span><span>Run it forever.</span><span>Run it forever.</span>
-          </span>
-        </h1>
-        <div class="hero-foot">
-          <p class="lede">Optics is open-source test automation for Android, iOS, web and TV. Write a test by hand, record it, describe it in plain English, or hand it to your AI agent. Then run that same suite on every build, every device, around the clock.</p>
-          <div class="hero-cta">
+        <div class="two hero-grid">
+          <h1 class="hero-title"><span>Create it</span> <span>your way.</span> <span>Run it</span> <span>forever.</span></h1>
+          <div class="hero-copy">
+            <p class="lede">Optics is open-source test automation for Android, iOS, web and TV. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.</p>
             <div class="cmd" data-copy="curl -fsSL https://optics-framework.org/install | sh">
               <code><span class="prompt">$</span> curl -fsSL https://optics-framework.org/install | sh</code>
               <button class="copy" type="button" aria-label="Copy install command">Copy</button>
             </div>
             <div class="btn-row">
-              <a class="btn btn-solid" href="#film">Watch the film</a>
-              <a class="btn btn-ghost" href="https://mozarkai.github.io/optics-framework/">Read the docs</a>
+              <a class="btn btn-solid" href="https://mozarkai.github.io/optics-framework/getting-started/">Get started</a>
+              <a class="btn btn-ghost" href="https://github.com/mozarkai/optics-framework">View on GitHub</a>
             </div>
-            <p class="fineprint">Apache 2.0. Python 3.12 or newer. Windows installer below.</p>
+            <p class="fineprint">Apache 2.0. Needs Python 3.12 or newer. <a href="#install">Windows and pip</a></p>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="film" id="film" aria-labelledby="film-h">
-      <div class="wrap">
-        <h2 class="h2" id="film-h">Optics in one minute.</h2>
-        <div class="film-frame">
-          <video id="film-video" preload="none" playsinline poster="media/optics-film-poster.jpg">
-            <source src="media/optics-film.mp4" type="video/mp4">
+        <div class="stage">
+          <video class="loop" autoplay muted loop playsinline preload="auto" poster="media/optics-loop-poster.jpg" aria-label="Looping preview: the four ways to create a test feed one suite, which runs and passes">
+            <source src="media/optics-loop.webm" type="video/webm">
+            <source src="media/optics-loop.mp4" type="video/mp4">
           </video>
-          <button class="film-play" type="button" aria-label="Play the one-minute film with sound">
-            <span class="film-play-pill"><span class="film-play-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>Play the film, 1 min</span>
+          <button class="film-open" type="button" aria-haspopup="dialog">
+            <span class="film-play-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
+            <span class="film-open-text"><b>Watch the full demo</b><span>One minute, with sound</span></span>
+          </button>
+          <button class="loop-toggle" type="button" aria-label="Pause the preview">
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
           </button>
         </div>
       </div>
     </section>
 
-    <section class="lives" aria-labelledby="lives-h">
-      <div class="wrap lives-grid">
-        <h2 class="h2" id="lives-h">Every test has two lives.</h2>
-        <div class="lives-col">
-          <h3 class="h3">The day you create it</h3>
-          <p>Someone has to turn a user flow into steps a machine can repeat. Optics lets that person work the way they already think: in a spreadsheet, on the device, in a sentence, or through an AI agent.</p>
-        </div>
-        <div class="lives-col">
-          <h3 class="h3">And every day it runs</h3>
-          <p>After that, the test has one job: run the same way on every build, every device and every release, and fail loudly only when the app is actually broken.</p>
+    <section class="band lives" aria-labelledby="lives-h">
+      <div class="wrap">
+        <h2 class="h2 statement" id="lives-h">Every test has two lives.</h2>
+        <div class="two">
+          <div>
+            <h3 class="h3">The day you create it</h3>
+            <p class="body-text">Someone turns a user flow into steps a machine can repeat. Optics lets that person work the way they already think: in a spreadsheet, on the device, in a sentence, or through an AI agent.</p>
+          </div>
+          <div>
+            <h3 class="h3">Every day after that</h3>
+            <p class="body-text">The test has one job: run the same way on every build, every device and every release, and fail only when the app is actually broken.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Create: the logo is the selector. Each bracket is one way to make a test. -->
-    <section class="create" id="create" aria-labelledby="create-h">
+    <section class="band create" id="create" aria-labelledby="create-h">
       <div class="wrap">
-        <h2 class="h2" id="create-h">Pick your way in.</h2>
-        <p class="section-lede">Whoever writes the test, there is a way that fits how they already work. Click a bracket of the logo, or pick from the list.</p>
+        <div class="head-row">
+          <h2 class="h2" id="create-h">Four ways to create a test</h2>
+          <p class="head-note">Click a bracket of the logo or pick from the list.</p>
+        </div>
 
-        <div class="create-grid">
+        <div class="two create-grid">
           <div class="selector">
             <div class="selector-mark" aria-hidden="true">
               <svg viewBox="0 0 600 600">
@@ -136,7 +135,7 @@
 
           <div class="panels">
             <div class="panel" role="tabpanel" id="panel-write" aria-labelledby="tab-write" data-way="write">
-              <h3 class="panel-title">Write it as data.</h3>
+              <h3 class="panel-title">Write it</h3>
               <p>Elements, modules and test cases are plain CSV or YAML that anyone on the team can read and review. Prefer code? The same keywords are a Python library and a Robot Framework library.</p>
               <figure class="code">
                 <figcaption>modules/modules.csv</figcaption>
@@ -150,7 +149,7 @@
             </div>
 
             <div class="panel" role="tabpanel" id="panel-record" aria-labelledby="tab-record" data-way="record" hidden>
-              <h3 class="panel-title">Record it by using the app.</h3>
+              <h3 class="panel-title">Record it</h3>
               <p>Open <code class="ic">optics live</code> next to your device and run keywords one at a time. Every step that works is recorded, and <code class="ic">/save</code> writes the recording into your suite as a reusable module.</p>
               <figure class="code">
                 <figcaption>optics live</figcaption>
@@ -161,32 +160,28 @@
 <span class="c-pass"> ✓</span> <b>press_element Sign in</b>
 <span class="c-dim">     0.31s  [XPath]</span>
 <span class="c-info"> •</span> <b>/save checkout sign_in</b>
-<span class="c-pass">     Saved 3 step(s) → module 'sign_in' in modules/modules.csv</span></code></pre>
+<span class="c-pass">     Saved 3 step(s) → module 'sign_in'</span></code></pre>
               </figure>
             </div>
 
             <div class="panel" role="tabpanel" id="panel-say" aria-labelledby="tab-say" data-way="say" hidden>
-              <h3 class="panel-title">Say it in plain English.</h3>
+              <h3 class="panel-title">Say it</h3>
               <p>Press <kbd>Ctrl</kbd>&thinsp;<kbd>N</kbd> in <code class="ic">optics live</code> and describe the flow. An AI agent drives the device a step at a time, then keeps only the steps that mattered, ready to save. Uses the Gemini model you configure.</p>
               <figure class="code">
                 <figcaption>optics live, AI mode</figcaption>
 <pre><code><span class="c-run">ai ›</span> <b>add running shoes to the cart</b>
 <span class="c-ghost">     thinking: open search, then look for the shoes</span>
-<span class="c-pass">   ✓</span> <b>press_element Search</b>              <span class="c-dim">[Text]</span>
-<span class="c-pass">   ✓</span> <b>enter_text Search running shoes</b>   <span class="c-dim">[Text]</span>
-<span class="c-pass">   ✓</span> <b>press_element Trail Runner 2</b>      <span class="c-dim">[OCR]</span>
-<span class="c-pass">   ✓</span> <b>press_element Add to cart</b>         <span class="c-dim">[XPath]</span>
-<span class="c-dim">     done · 4 step(s) · 9.8s · recorded 4 (/save to keep)</span></code></pre>
+<span class="c-pass">   ✓</span> <b>press_element Search</b>            <span class="c-dim">[Text]</span>
+<span class="c-pass">   ✓</span> <b>enter_text Search running shoes</b> <span class="c-dim">[Text]</span>
+<span class="c-pass">   ✓</span> <b>press_element Trail Runner 2</b>    <span class="c-dim">[OCR]</span>
+<span class="c-pass">   ✓</span> <b>press_element Add to cart</b>       <span class="c-dim">[XPath]</span>
+<span class="c-dim">     done · 4 step(s) · recorded 4</span></code></pre>
               </figure>
             </div>
 
             <div class="panel" role="tabpanel" id="panel-delegate" aria-labelledby="tab-delegate" data-way="delegate" hidden>
-              <h3 class="panel-title">Delegate it to your agent.</h3>
+              <h3 class="panel-title">Delegate it</h3>
               <p>Add <code class="ic">optics mcp</code> to any MCP client. Every keyword becomes a tool and the screen becomes a resource, so your agent can explore the app and write the suite files itself. The agent is yours; Optics gives it eyes and hands.</p>
-              <figure class="code">
-                <figcaption>mcp config</figcaption>
-<pre><code>{ <span class="c-lit">"mcpServers"</span>: { <span class="c-lit">"optics"</span>: { <span class="c-lit">"command"</span>: <span class="c-var">"optics"</span>, <span class="c-lit">"args"</span>: [<span class="c-var">"mcp"</span>] } } }</code></pre>
-              </figure>
               <figure class="code">
                 <figcaption>your agent</figcaption>
 <pre><code><span class="c-dim">⏺</span> optics · <b>start_session</b><span class="c-dim">(driver="appium")</span>
@@ -201,154 +196,173 @@
       </div>
     </section>
 
-    <section class="suite" aria-labelledby="suite-h">
-      <div class="wrap suite-grid">
-        <div>
-          <h2 class="h2" id="suite-h">Four ways in, one suite.</h2>
-          <p class="section-lede">However a test starts, it ends up as the same few files. Commit them, review them in a pull request, and run them anywhere. Optics recognises each file by what's in it, so the folder names are only a convention.</p>
-        </div>
-        <figure class="code tree">
-          <figcaption>checkout/</figcaption>
+    <section class="band suite" aria-labelledby="suite-h">
+      <div class="wrap">
+        <h2 class="h2" id="suite-h">Every way produces the same files</h2>
+        <div class="two align-center">
+          <div>
+            <p class="body-text">However a test starts, it ends up as a few plain files. Commit them, review them in a pull request, and run them anywhere.</p>
+            <p class="body-text">Optics recognises each file by its contents, so the folder names are only a convention. Repeat an element name in <code class="ic">elements.csv</code> and each value becomes a fallback for the others.</p>
+          </div>
+          <figure class="code">
+            <figcaption>checkout/</figcaption>
 <pre><code>checkout/
-├── config.yaml             <span class="c-dim">drivers, OCR, vision, LLM</span>
+├── config.yaml            <span class="c-dim">drivers, OCR, LLM</span>
 ├── test_cases/test_cases.csv
 ├── modules/modules.csv
 └── test_data/
-    ├── elements.csv        <span class="c-dim">names → locators</span>
+    ├── elements.csv       <span class="c-dim">names → locators</span>
     ├── error_definitions.csv
     └── input_templates/*.png</code></pre>
-        </figure>
+          </figure>
+        </div>
       </div>
     </section>
 
-    <section class="run" id="run" aria-labelledby="run-h">
-      <div class="wrap run-grid">
-        <div class="run-copy">
-          <h2 class="h2" id="run-h">One command, every time.</h2>
-          <p class="section-lede">One command replays the suite step by step. Results stream into <code class="ic">junit_output.xml</code> as the run goes, so your CI sees progress live, with a screenshot of every action.</p>
-          <p class="section-lede">Check a suite before you have a device: <code class="ic">optics dry_run</code> validates every keyword, element and module reference.</p>
-        </div>
-        <figure class="code term">
-          <figcaption>~/birch</figcaption>
+    <section class="band run" id="run" aria-labelledby="run-h">
+      <div class="wrap">
+        <h2 class="h2" id="run-h">Run a suite</h2>
+        <div class="two">
+          <div class="run-copy">
+            <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which validates every keyword, element and module reference.</p>
+            <dl class="outputs">
+              <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
+              <div><dt>Screenshots</dt><dd>Before and after every action, annotated with the strategy that found the element.</dd></div>
+              <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code>, fail the run even without an assertion.</dd></div>
+            </dl>
+          </div>
+          <figure class="code">
+            <figcaption>~/birch</figcaption>
 <pre><code><span class="c-pass">~/birch</span> <span class="c-mod">❯</span> <b>optics execute checkout</b>
 Running tests <span class="bar"></span> 100%
 <b>Test Suite</b>
-<span class="c-dim">├──</span> Suite Setup                                 <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Launch App                        1.21s  <span class="c-pass">PASS</span>
-<span class="c-dim">├──</span> Sign In                                     <span class="c-pass">PASS</span>
-<span class="c-dim">│   ├──</span> Enter Text (Email, ava@birch.shop) 0.52s  <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Press Element (Sign in)           0.31s  <span class="c-pass">PASS</span>
-<span class="c-dim">├──</span> Add To Cart                                 <span class="c-pass">PASS</span>
-<span class="c-dim">│   ├──</span> Enter Text (Search, running shoes) 0.61s  <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Press Element (Add to cart)       0.29s  <span class="c-pass">PASS</span>
-<span class="c-dim">└──</span> Checkout                                    <span class="c-pass">PASS</span>
-<span class="c-dim">    └──</span> Assert Presence (Order placed)    0.83s  <span class="c-pass">PASS</span>
+<span class="c-dim">├──</span> Suite Setup                      <span class="c-pass">PASS</span>
+<span class="c-dim">│   └──</span> Launch App             <span class="c-dim">1.21s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">├──</span> Sign In                          <span class="c-pass">PASS</span>
+<span class="c-dim">│   ├──</span> Enter Text (Email)     <span class="c-dim">0.52s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">│   └──</span> Press Element          <span class="c-dim">0.31s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">├──</span> Add To Cart                      <span class="c-pass">PASS</span>
+<span class="c-dim">│   ├──</span> Enter Text (Search)    <span class="c-dim">0.61s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">│   └──</span> Press Element          <span class="c-dim">0.29s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">└──</span> Checkout                         <span class="c-pass">PASS</span>
+<span class="c-dim">    └──</span> Assert Presence        <span class="c-dim">0.83s</span>  <span class="c-pass">PASS</span>
 
 Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></pre>
-        </figure>
+          </figure>
+        </div>
       </div>
     </section>
 
     <!-- The locator ladder, drawn as a ladder: the rungs are an ordered fallback. -->
-    <section class="ladder" id="ladder" aria-labelledby="ladder-h">
-      <div class="wrap ladder-grid">
-        <div>
-          <h2 class="h2" id="ladder-h">When the app changes, Optics looks again.</h2>
-          <p class="section-lede">Most frameworks give an element one locator and fail the moment a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first. Vision only costs you time when the UI tree can't help.</p>
-          <p class="section-lede">List more than one value for the same element name and those are tried too. Enable a second driver and it becomes a fallback.</p>
+    <section class="band ladder" id="ladder" aria-labelledby="ladder-h">
+      <div class="wrap">
+        <h2 class="h2" id="ladder-h">How Optics finds an element</h2>
+        <div class="two">
+          <div>
+            <p class="body-text">Most frameworks give an element one locator and fail when a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first, so vision only costs you time when the UI tree can't help.</p>
+            <p class="body-text">Two more fallbacks sit alongside the ladder. List several values for the same element name and each is tried in turn. Enable a second driver or element source and it takes over when the first one fails.</p>
+          </div>
+          <ol class="rungs">
+            <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
+            <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
+            <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with EasyOCR, Tesseract or Google Vision.</span></div></li>
+            <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
+            <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
+          </ol>
         </div>
-        <ol class="rungs">
-          <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
-          <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
-          <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with EasyOCR, Tesseract or Google Vision.</span></div></li>
-          <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
-          <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, so it re-enters the ladder instead of tapping blind. Works in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
-        </ol>
       </div>
     </section>
 
-    <section class="where" aria-labelledby="where-h">
+    <section class="band where" aria-labelledby="where-h">
       <div class="wrap">
-        <h2 class="h2" id="where-h">Same suite, everywhere it matters.</h2>
-        <div class="where-list">
-          <div class="where-row">
+        <h2 class="h2" id="where-h">Where suites run</h2>
+        <div class="two where-grid">
+          <div class="where-item">
             <h3 class="h3">On every build</h3>
-            <p>Run in CI and read results as they arrive. Add an <code class="ic">error_definitions.csv</code> and Optics also watches the screen for crash dialogs and error messages, failing the build even when no assertion would have caught it.</p>
+            <p class="body-text">Run in CI and read results as they arrive. On-screen error detection fails the build when the app crashes mid-test, even if no assertion would have caught it.</p>
           </div>
-          <div class="where-row">
+          <div class="where-item">
             <h3 class="h3">Before every release</h3>
-            <p>Run the full regression on your own emulator or device, with annotated screenshots of every step to show what the test saw.</p>
+            <p class="body-text">Run the full regression on your own emulator or device, with annotated screenshots of every step to show exactly what the test saw.</p>
           </div>
-          <div class="where-row">
+          <div class="where-item">
             <h3 class="h3">On every device</h3>
-            <p>Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium. Web through Selenium or Playwright. The keywords don't change.</p>
+            <p class="body-text">Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium. Web through Selenium or Playwright. The keywords stay the same.</p>
           </div>
-          <div class="where-row">
-            <h3 class="h3">Around the clock</h3>
-            <p>Point the same suite at your production app on a schedule. On devices where debugging and screenshots are locked down, the BLE driver acts as a Bluetooth mouse and keyboard, paired with a camera.</p>
+          <div class="where-item">
+            <h3 class="h3">In production</h3>
+            <p class="body-text">Point the same suite at your live app on a schedule. Where debugging and screenshots are locked down, the BLE driver acts as a Bluetooth mouse and keyboard, paired with a camera.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="start" id="install" aria-labelledby="start-h">
+    <section class="band start" id="install" aria-labelledby="start-h">
       <div class="wrap">
-        <h2 class="h2" id="start-h">Get to a running test in three commands.</h2>
+        <h2 class="h2" id="start-h">Install</h2>
         <ol class="steps">
-          <li class="step">
-            <h3 class="h3">Install</h3>
+          <li class="step two">
+            <div class="step-text">
+              <h3 class="h3"><span class="step-n">1</span>Install Optics</h3>
+              <p class="body-text">The installer keeps Optics in its own environment under <code class="ic">~/.optics</code>, away from your system Python.</p>
+            </div>
             <div class="step-cmds">
-            <div class="os" role="tablist" aria-label="Your operating system">
-              <button class="os-tab" role="tab" id="os-unix" aria-controls="os-panel-unix" aria-selected="true">macOS and Linux</button>
-              <button class="os-tab" role="tab" id="os-win" aria-controls="os-panel-win" aria-selected="false" tabindex="-1">Windows</button>
-              <button class="os-tab" role="tab" id="os-pip" aria-controls="os-panel-pip" aria-selected="false" tabindex="-1">pip</button>
+              <div class="os" role="tablist" aria-label="Your operating system">
+                <button class="os-tab" role="tab" id="os-unix" aria-controls="os-panel-unix" aria-selected="true">macOS and Linux</button>
+                <button class="os-tab" role="tab" id="os-win" aria-controls="os-panel-win" aria-selected="false" tabindex="-1">Windows</button>
+                <button class="os-tab" role="tab" id="os-pip" aria-controls="os-panel-pip" aria-selected="false" tabindex="-1">pip</button>
+              </div>
+              <div class="cmd" role="tabpanel" id="os-panel-unix" aria-labelledby="os-unix" data-copy="curl -fsSL https://optics-framework.org/install | sh">
+                <code><span class="prompt">$</span> curl -fsSL https://optics-framework.org/install | sh</code>
+                <button class="copy" type="button" aria-label="Copy install command">Copy</button>
+              </div>
+              <div class="cmd" role="tabpanel" id="os-panel-win" aria-labelledby="os-win" data-copy="irm https://optics-framework.org/install.ps1 | iex" hidden>
+                <code><span class="prompt">&gt;</span> irm https://optics-framework.org/install.ps1 | iex</code>
+                <button class="copy" type="button" aria-label="Copy install command">Copy</button>
+              </div>
+              <div class="cmd" role="tabpanel" id="os-panel-pip" aria-labelledby="os-pip" data-copy="pip install optics-framework" hidden>
+                <code><span class="prompt">$</span> pip install optics-framework</code>
+                <button class="copy" type="button" aria-label="Copy install command">Copy</button>
+              </div>
             </div>
-            <div class="cmd" role="tabpanel" id="os-panel-unix" aria-labelledby="os-unix" data-copy="curl -fsSL https://optics-framework.org/install | sh">
-              <code><span class="prompt">$</span> curl -fsSL https://optics-framework.org/install | sh</code>
-              <button class="copy" type="button" aria-label="Copy install command">Copy</button>
-            </div>
-            <div class="cmd" role="tabpanel" id="os-panel-win" aria-labelledby="os-win" data-copy="irm https://optics-framework.org/install.ps1 | iex" hidden>
-              <code><span class="prompt">&gt;</span> irm https://optics-framework.org/install.ps1 | iex</code>
-              <button class="copy" type="button" aria-label="Copy install command">Copy</button>
-            </div>
-            <div class="cmd" role="tabpanel" id="os-panel-pip" aria-labelledby="os-pip" data-copy='pip install "optics-framework[appium,easyocr]"' hidden>
-              <code><span class="prompt">$</span> pip install "optics-framework[appium,easyocr]"</code>
-              <button class="copy" type="button" aria-label="Copy install command">Copy</button>
-            </div>
-            </div>
-            <p class="step-note">The installer keeps Optics in its own environment under <code class="ic">~/.optics</code>, away from your system Python.</p>
           </li>
-          <li class="step">
-            <h3 class="h3">Set up a project</h3>
-            <div class="step-cmds"><div class="cmd" data-copy="optics quickstart">
-              <code><span class="prompt">$</span> optics quickstart</code>
-              <button class="copy" type="button" aria-label="Copy command">Copy</button>
-            </div></div>
-            <p class="step-note">Asks what you want to automate, installs the right engine, scaffolds a project from a working sample and checks your setup. Pressing Enter throughout still gives you a runnable project.</p>
+          <li class="step two">
+            <div class="step-text">
+              <h3 class="h3"><span class="step-n">2</span>Set up a project</h3>
+              <p class="body-text">Asks what you want to automate, installs the matching driver and OCR engine, scaffolds a project from a working sample and checks your setup. Add more engines any time with <code class="ic">optics setup</code>.</p>
+            </div>
+            <div class="step-cmds">
+              <div class="cmd" data-copy="optics quickstart">
+                <code><span class="prompt">$</span> optics quickstart</code>
+                <button class="copy" type="button" aria-label="Copy command">Copy</button>
+              </div>
+            </div>
           </li>
-          <li class="step">
-            <h3 class="h3">Run it</h3>
-            <div class="step-cmds"><div class="cmd" data-copy="optics execute my_test_project">
-              <code><span class="prompt">$</span> optics execute my_test_project</code>
-              <button class="copy" type="button" aria-label="Copy command">Copy</button>
-            </div></div>
-            <p class="step-note">Then do it again tomorrow, and on every build after that.</p>
+          <li class="step two">
+            <div class="step-text">
+              <h3 class="h3"><span class="step-n">3</span>Run it</h3>
+              <p class="body-text">Then run it again on the next build, and every one after that.</p>
+            </div>
+            <div class="step-cmds">
+              <div class="cmd" data-copy="optics execute my_test_project">
+                <code><span class="prompt">$</span> optics execute my_test_project</code>
+                <button class="copy" type="button" aria-label="Copy command">Copy</button>
+              </div>
+            </div>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <section class="finale" aria-labelledby="finale-h">
-      <div class="wrap finale-inner">
-        <svg class="finale-mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
-        <h2 class="finale-title" id="finale-h">Create it your way.<br>Run it forever.</h2>
-        <div class="btn-row">
-          <a class="btn btn-solid" href="https://github.com/mozarkai/optics-framework">Star Optics on GitHub</a>
-          <a class="btn btn-ghost" href="https://mozarkai.github.io/optics-framework/getting-started/">Follow the getting-started guide</a>
-        </div>
       </div>
     </section>
   </main>
+
+  <dialog class="film-dialog" aria-label="Optics full demo">
+    <div class="film-dialog-frame">
+      <video id="film-video" controls preload="none" playsinline poster="media/optics-film-poster.jpg">
+        <source src="media/optics-film.mp4" type="video/mp4">
+      </video>
+    </div>
+    <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
+  </dialog>
 
   <footer class="foot">
     <div class="wrap foot-row">
