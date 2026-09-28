@@ -78,7 +78,8 @@
     });
   });
 
-  tabs(document.querySelector(".os"));
+  tabs(document.querySelector(".os:not(.fmt)"));
+  tabs(document.querySelector(".fmt"));
 
   // ---- hero loop -----------------------------------------------------------
   var stage = document.querySelector(".stage");
