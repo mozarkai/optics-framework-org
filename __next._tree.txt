@@ -1,7 +1,0 @@
-:HL["/_next/static/chunks/0rj-pk30k1md_.css","style"]
-:HL["https://img.shields.io/pypi/v/optics-framework.svg","image"]
-:HL["https://img.shields.io/pypi/dm/optics-framework.svg","image"]
-:HL["https://img.shields.io/badge/python-3.12%2B-blue.svg","image"]
-:HL["https://img.shields.io/badge/license-Apache_2.0-blue.svg","image"]
-:HL["https://sonarcloud.io/api/project_badges/measure?project=mozarkai_optics-framework&metric=alert_status","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"pZi9noUP4p8WWqFSyW_eF"}
