@@ -31,18 +31,22 @@ export function markdownPath(pathname) {
   return `${pathname}.md`;
 }
 
+function addVaryAccept(headers) {
+  const vary = headers.get("vary");
+  if (!vary || !/(^|,)\s*accept\s*(,|$)/i.test(vary)) headers.set("vary", vary ? `${vary}, Accept` : "Accept");
+}
+
 function withVaryAccept(response) {
   const out = new Response(response.body, response);
-  const vary = out.headers.get("vary");
-  if (!vary || !/(^|,)\s*accept\s*(,|$)/i.test(vary)) out.headers.set("vary", vary ? `${vary}, Accept` : "Accept");
+  addVaryAccept(out.headers);
   return out;
 }
 
 function asMarkdown(response, status) {
   const out = new Response(response.body, { status, headers: response.headers });
   out.headers.set("content-type", MARKDOWN);
-  out.headers.set("vary", "Accept");
   out.headers.delete("content-length");
+  addVaryAccept(out.headers);
   return out;
 }
 

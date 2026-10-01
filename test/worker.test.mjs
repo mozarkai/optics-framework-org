@@ -38,7 +38,7 @@ test("the homepage answers Accept: text/markdown with Markdown and Vary: Accept"
   const res = await get("/", "text/markdown");
   assert.equal(res.status, 200);
   assert.match(res.headers.get("content-type"), /^text\/markdown/);
-  assert.equal(res.headers.get("vary"), "Accept");
+  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept");
   assert.equal(await res.text(), readFileSync("out/index.md", "utf8"));
 });
 
@@ -57,7 +57,7 @@ test("a missing page answers Markdown agents with a Markdown 404", async () => {
   const res = await get("/__ora-404-probe-9s1x6rf4", "text/markdown");
   assert.equal(res.status, 404);
   assert.match(res.headers.get("content-type"), /^text\/markdown/);
-  assert.equal(res.headers.get("vary"), "Accept");
+  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept");
   const body = await res.text();
   assert.ok(body.length >= 20);
   assert.match(body, /https:\/\/optics-framework\.org\/llms\.txt/);
