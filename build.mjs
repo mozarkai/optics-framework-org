@@ -10,8 +10,8 @@ const ORIGIN = "https://optics-framework.org";
 
 // GitHub Pages serves `/about` from about.html, so each page is published as <path>.html.
 const PAGES = [
-  { src: "pages/about.html", path: "about", title: "About Optics", description: "What Optics is, who builds it and how it is licensed." },
-  { src: "pages/contact.html", path: "contact", title: "Contact the Optics team", description: "Where to report bugs, ask questions, disclose security issues and reach Mozark." },
+  { src: "pages/about.html", path: "about", title: "About Optics", description: "What Optics is, how it works and how it is licensed." },
+  { src: "pages/contact.html", path: "contact", title: "Contact the Optics team", description: "Where to report bugs, ask questions and disclose security issues." },
   { src: "pages/privacy.html", path: "privacy", title: "Privacy at Optics", description: "What optics-framework.org, the install scripts and the framework collect: no cookies, no analytics, no telemetry." },
 ];
 
