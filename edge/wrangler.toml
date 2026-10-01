@@ -1,0 +1,4 @@
+name = "optics-framework-org-markdown"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+routes = [{ pattern = "optics-framework.org/*", zone_name = "optics-framework.org" }]
