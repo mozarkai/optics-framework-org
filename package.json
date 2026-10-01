@@ -2,10 +2,10 @@
   "name": "optics-framework-site",
   "version": "2.0.0",
   "private": true,
-  "description": "optics-framework.org: the Optics landing page and install scripts.",
+  "description": "optics-framework.org: the Optics landing page, install scripts and the edge worker that serves Markdown to agents.",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "dev": "node build.mjs && python3 -m http.server 4173 --directory out"
+    "dev": "node build.mjs && node pages-origin.mjs"
   }
 }
