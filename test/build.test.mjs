@@ -25,21 +25,27 @@ test("the homepage carries all four metadata signals", () => {
   assert.match(html, /<link rel="alternate" type="text\/markdown" href="index\.md"/);
 });
 
-test("the homepage JSON-LD describes the software and a contactable organization", () => {
-  const [doc] = jsonLd(read("index.html"));
-  assert.equal(doc["@context"], "https://schema.org");
-  const byType = Object.fromEntries(doc["@graph"].map((node) => [node["@type"], node]));
-
-  const app = byType.SoftwareApplication;
+test("the homepage JSON-LD describes the software", () => {
+  const [app] = jsonLd(read("index.html"));
+  assert.equal(app["@context"], "https://schema.org");
+  assert.equal(app["@type"], "SoftwareApplication");
   assert.equal(app.name, "Optics");
   assert.equal(app.url, `${ORIGIN}/`);
   assert.ok(app.description.length > 50);
   assert.equal(app.offers.price, "0");
-  assert.equal(app.publisher["@id"], byType.Organization["@id"]);
+  assert.equal(app.author, undefined);
+  assert.equal(app.publisher, undefined);
+});
 
-  const org = byType.Organization;
-  assert.ok(org.name && org.url && org.sameAs.length);
-  assert.ok(org.contactPoint.some((c) => c["@type"] === "ContactPoint" && c.contactType && c.email));
+// Optics is not a Mozark product: the name may appear only inside URLs and addresses.
+test("no page attributes Optics to Mozark", () => {
+  const files = readdirSync("out").filter((f) => /\.(html|md|txt|xml)$/.test(f));
+  for (const file of files) {
+    const prose = read(file)
+      .replace(/(?:https?:\/\/|mailto:)[^\s"'<>)]+/g, "")
+      .replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, "");
+    assert.doesNotMatch(prose, /mozark/i, `${file} mentions Mozark`);
+  }
 });
 
 test("the trust pages exist with real content and their own canonical URL", () => {
