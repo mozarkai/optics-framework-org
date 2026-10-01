@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Optics</title>
+  <meta name="description" content="What Optics is, how it works and how it is licensed.">
+  <link rel="canonical" href="https://optics-framework.org/about">
+  <meta property="og:title" content="About Optics">
+  <meta property="og:description" content="What Optics is, how it works and how it is licensed.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=ed166ef424">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="./" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="./#create">Create</a>
+        <a href="./#run">Run</a>
+        <a href="./#ladder">Locators</a>
+        <a href="https://mozarkai.github.io/optics-framework/">Docs</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="./#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+      <h1 class="h2">About Optics</h1>
+      <p class="lede">Optics is open-source test automation for Android, iOS, web and TV, developed in the open and free to use.</p>
+
+      <h2 class="h3">What it is</h2>
+      <p class="body-text">Optics turns a user flow into a test suite that runs the same way on every build and every device. A suite is plain CSV or YAML: test cases name modules, modules are steps of one keyword each, and elements map every name to the ways to find it on screen. The same keywords are also a Python library and a Robot Framework library.</p>
+      <p class="body-text">You can write a suite by hand, record it step by step in <code class="ic">optics live</code>, describe a flow in plain English and let an AI model drive the device, or hand the job to your own AI agent through <code class="ic">optics mcp</code>. Every way ends in the same plain-text files, which live in your repository and are reviewed like code.</p>
+
+      <h2 class="h3">How it finds things on screen</h2>
+      <p class="body-text">Each element can carry several identities. Optics tries them cheapest first: an XPath query, then visible text, then OCR on a screenshot, then image matching, and optionally an AI self-heal step. A redesign that breaks one locator falls through to the next instead of failing the run.</p>
+
+      <h2 class="h3">Where it runs</h2>
+      <p class="body-text">Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium; web through Selenium or Playwright; and locked-down production devices through a Bluetooth driver paired with a camera. Results are written as JUnit XML with annotated screenshots of every step.</p>
+
+      <h2 class="h3">Open source</h2>
+      <p class="body-text">The framework is released under the <a href="https://github.com/mozarkai/optics-framework/blob/main/LICENSE">Apache License 2.0</a>, so you can use, change and redistribute it, including commercially. Development happens in the open on <a href="https://github.com/mozarkai/optics-framework">GitHub</a>, and releases are published to <a href="https://pypi.org/project/optics-framework/">PyPI</a> as <code class="ic">optics-framework</code>.</p>
+
+      <h2 class="h3">Learn more</h2>
+      <p class="body-text">Start with the <a href="https://mozarkai.github.io/optics-framework/getting-started/">getting-started guide</a>, browse the full <a href="https://mozarkai.github.io/optics-framework/">documentation</a>, or see the <a href="contact">contact page</a> for how to reach the maintainers.</p>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="./" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="https://mozarkai.github.io/optics-framework/">Docs</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="about">About</a>
+        <a href="contact">Contact</a>
+        <a href="privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="app.js?v=ada98e8182" defer></script>
+</body>
+</html>
