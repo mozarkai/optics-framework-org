@@ -33,6 +33,9 @@
     });
   });
 
+  // The text pages share this script for the theme toggle only.
+  if (!document.querySelector(".selector-mark")) return;
+
   // ---- accessible tabs (roving tabindex, arrow keys) ----------------------
   function tabs(list, onSelect) {
     var items = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
