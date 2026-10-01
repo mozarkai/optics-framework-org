@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "dev": "node build.mjs && node pages-origin.mjs"
+    "dev": "node build.mjs && node pages-origin.mjs",
+    "test": "node build.mjs && node --test --test-concurrency=1 test/*.test.mjs"
   }
 }

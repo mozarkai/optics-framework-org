@@ -44,6 +44,9 @@ jobs:
             echo "dest=$SAFE" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Test the site and the edge worker
+        run: npm test
+
       - name: Build static site
         run: npm run build
         env:
