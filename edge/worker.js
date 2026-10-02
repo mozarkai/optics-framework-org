@@ -1,26 +1,32 @@
-// Markdown content negotiation in front of GitHub Pages, which cannot vary a response on
-// the Accept header. A request that prefers text/markdown gets the page's Markdown twin
-// (`/` -> `/index.md`, `/about` -> `/about.md`); a missing page gets `/404.md` with a 404.
+// Content negotiation in front of GitHub Pages, which cannot vary a response on the
+// Accept header. A request that prefers text/markdown gets the page's Markdown twin
+// (`/` -> `/index.md`, `/about` -> `/about.md`) and a missing page gets `/404.md` with a
+// 404; a request that prefers JSON gets a missing page as an RFC 9457 problem document.
 // Everything else passes through untouched apart from `Vary: Accept` on HTML, so caches
-// keep the two representations apart.
+// keep the representations apart.
 
 const MARKDOWN = "text/markdown; charset=utf-8";
+const PROBLEM_JSON = "application/problem+json";
 
-// True when the client ranks text/markdown above HTML. A tie between explicit types goes
-// to HTML so browsers are never affected; an explicit markdown entry beats a wildcard.
-export function prefersMarkdown(accept) {
-  if (!accept) return false;
-  let markdown = 0, html = 0, wildcard = 0;
+// "markdown" or "json" when the client ranks that type above HTML, otherwise "html". A tie
+// with explicit HTML goes to HTML so browsers are never affected; an explicit entry beats
+// a wildcard.
+export function negotiate(accept) {
+  if (!accept) return "html";
+  let markdown = 0, json = 0, html = 0, wildcard = 0;
   for (const range of accept.toLowerCase().split(",")) {
     const [type, ...params] = range.split(";").map((s) => s.trim());
     const qParam = params.find((p) => p.startsWith("q="));
     const q = qParam ? Number(qParam.slice(2)) : 1;
     if (!(q >= 0 && q <= 1)) continue;
     if (type === "text/markdown" || type === "text/x-markdown") markdown = Math.max(markdown, q);
+    else if (type === "application/json" || type === "application/problem+json") json = Math.max(json, q);
     else if (type === "text/html" || type === "application/xhtml+xml") html = Math.max(html, q);
-    else if (type === "*/*" || type === "text/*") wildcard = Math.max(wildcard, q);
+    else if (type === "*/*" || type === "text/*" || type === "application/*") wildcard = Math.max(wildcard, q);
   }
-  return markdown > 0 && markdown > html && markdown >= wildcard;
+  const best = Math.max(markdown, json);
+  if (best === 0 || best <= html || best < wildcard) return "html";
+  return markdown >= json ? "markdown" : "json";
 }
 
 // The Markdown file for a page URL, or null for anything that is not a page (assets, .md).
@@ -50,25 +56,51 @@ function asMarkdown(response, status) {
   return out;
 }
 
+function notFoundProblem(url, method) {
+  const at = (path) => new URL(path, url).href;
+  const problem = {
+    type: "about:blank",
+    title: "Not Found",
+    status: 404,
+    detail: `Nothing exists at ${url.pathname} on ${url.host}.`,
+    instance: url.pathname,
+    code: "not_found",
+    hint: "Check the path against the sitemap. This domain hosts no API: the Optics HTTP API runs on your own machine with `optics serve` and is described by the OpenAPI document.",
+    links: {
+      home: at("/"),
+      llms: at("/llms.txt"),
+      sitemap: at("/sitemap.xml"),
+      openapi: at("/openapi.json"),
+      docs: "https://mozarkai.github.io/optics-framework/",
+    },
+  };
+  return new Response(method === "HEAD" ? null : JSON.stringify(problem, null, 2), {
+    status: 404,
+    headers: { "content-type": PROBLEM_JSON, vary: "Accept" },
+  });
+}
+
 export async function handle(request, upstream = fetch) {
   const url = new URL(request.url);
+  const { method } = request;
+  const readable = method === "GET" || method === "HEAD";
+  const wants = readable ? negotiate(request.headers.get("accept")) : "html";
   const page = markdownPath(url.pathname);
-  const negotiable = (request.method === "GET" || request.method === "HEAD") && page !== null;
 
-  if (!negotiable || !prefersMarkdown(request.headers.get("accept"))) {
-    const response = await upstream(request);
-    const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
-    return negotiable && isHtml ? withVaryAccept(response) : response;
+  if (wants === "markdown" && page) {
+    const twin = await upstream(new Request(new URL(page, url), { method }));
+    if (twin.ok) return asMarkdown(twin, 200);
   }
 
-  const twin = await upstream(new Request(new URL(page, url), { method: request.method }));
-  if (twin.ok) return asMarkdown(twin, 200);
-
-  // No Markdown twin: serve the page itself if it exists, otherwise the Markdown 404.
-  const original = await upstream(request);
-  if (original.status !== 404) return withVaryAccept(original);
-  const notFound = await upstream(new Request(new URL("/404.md", url), { method: request.method }));
-  return notFound.ok ? asMarkdown(notFound, 404) : withVaryAccept(original);
+  // No Markdown twin: serve the resource itself if it exists, otherwise the negotiated 404.
+  const response = await upstream(request);
+  if (response.status === 404 && wants === "json") return notFoundProblem(url, method);
+  if (response.status === 404 && wants === "markdown") {
+    const notFound = await upstream(new Request(new URL("/404.md", url), { method }));
+    if (notFound.ok) return asMarkdown(notFound, 404);
+  }
+  const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
+  return readable && isHtml ? withVaryAccept(response) : response;
 }
 
 export default {
