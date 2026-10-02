@@ -1,0 +1,47 @@
+# Optics
+
+> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
+
+Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web).
+
+How an agent should call Optics:
+
+1. Install it: `curl -fsSL https://optics-framework.org/install | sh` (macOS, Linux), `irm https://optics-framework.org/install.ps1 | iex` (Windows) or `pip install 'optics-framework[mcp]'`.
+2. To drive a device live, register the MCP server with your client as `{"mcpServers": {"optics": {"command": "optics", "args": ["mcp"]}}}`. Call `start_session` first (driver, URL and capabilities), then the keyword tools such as `press_element` and `enter_text`. Read `optics://session/{session_id}/screenshot` and `optics://session/{session_id}/elements` to see the screen.
+3. To make the work repeatable, read the `optics://project-format` resource and write a CSV project (`test_cases/`, `modules/`, `test_data/elements.csv`, `config.yaml`). Validate it with `optics dry_run <folder>` and run it with `optics execute <folder>`, which writes `execution_output/junit_output.xml` and annotated screenshots.
+4. Without MCP, scaffold a project with `optics init my_project --template contact` or `optics quickstart`, list every keyword with `optics list`, and check the environment with `optics doctor`.
+
+Do not reach for Optics for unit tests, load or performance testing, API-only contract tests with no UI, or visual pixel-diff regression suites.
+
+## When to use
+
+- [Delegate it: drive a device from your agent over MCP](https://mozarkai.github.io/optics-framework/usage/mcp_usage/): use when you, an AI agent, need eyes and hands on a phone, TV or browser, to reproduce a bug, explore an app, or author a test suite yourself.
+- [Write it: CSV and YAML suites](https://mozarkai.github.io/optics-framework/usage/keyword_usage/): use when a team wants end-to-end UI tests that non-developers can read and review in pull requests.
+- [Record it and say it: `optics live`](https://mozarkai.github.io/optics-framework/usage/live_usage/): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
+- [Run it in CI](https://mozarkai.github.io/optics-framework/usage/CLI_usage/): use when the same suite must run on every build and report JUnit XML, including on-screen error detection for crash dialogs.
+- [Python and Robot Framework libraries](https://mozarkai.github.io/optics-framework/usage/library_usage/): use when tests should live in pytest or Robot Framework code instead of CSV.
+- [HTTP API: `optics serve`](https://mozarkai.github.io/optics-framework/usage/REST_API_usage/): use when another service needs to run keywords over HTTP. The server runs on your machine (default http://127.0.0.1:8000); its OpenAPI document is https://optics-framework.org/openapi.json.
+
+## Docs
+
+- [Introduction](https://mozarkai.github.io/optics-framework/introduction/): what Optics is and how the pieces fit.
+- [Installation](https://mozarkai.github.io/optics-framework/prerequisites/): Python, drivers and optional engines.
+- [Getting started](https://mozarkai.github.io/optics-framework/getting-started/): create and run a first project.
+- [Configuration](https://mozarkai.github.io/optics-framework/configuration/): `config.yaml` drivers, element sources, OCR, image detection and LLM settings.
+- [Action keywords](https://mozarkai.github.io/optics-framework/api_reference/action_keywords/): every keyword, its parameters and defaults.
+- [Verification keywords](https://mozarkai.github.io/optics-framework/api_reference/verification/): assertions and presence checks.
+- [Error detection](https://mozarkai.github.io/optics-framework/usage/error_detection/): fail a run on crash dialogs and error messages via `error_definitions.csv`.
+
+## Project
+
+- [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
+- [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
+- [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
+- [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
+
+## Optional
+
+- [About](https://optics-framework.org/about): who builds Optics.
+- [Privacy](https://optics-framework.org/privacy): what this site and the installers collect.
+- [Developer guide](https://mozarkai.github.io/optics-framework/contribution/developer_guide/): contributing to Optics.
