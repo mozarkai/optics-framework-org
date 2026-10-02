@@ -1,0 +1,1156 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Optics Framework API",
+    "version": "1.0",
+    "description": "The HTTP API of `optics serve` from optics-framework 1.10.4. It is not hosted on optics-framework.org: install Optics (`pip install optics-framework`) and run `optics serve`, which listens on http://127.0.0.1:8000 by default (`--host` and `--port` change it). Start a session with POST /v1/sessions/start, run keywords with POST /v1/sessions/{session_id}/action, and list keywords with GET /v1/keywords. The server has no authentication, so keep it on a trusted network."
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Health check endpoint for Optics Framework API.\nReturns API status and version.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Health check endpoint for Optics Framework API.\nReturns API status and version.",
+        "operationId": "health_check__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/start": {
+      "post": {
+        "summary": "Create Session",
+        "description": "Create a new Optics session with the provided configuration.\nReturns the session ID if successful.",
+        "operationId": "create_session_v1_sessions_start_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid API data in session config"
+          },
+          "500": {
+            "description": "Session creation or app launch failed"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/action": {
+      "post": {
+        "summary": "Execute Keyword",
+        "description": "Execute a keyword in the specified session.\nSupports both positional and named parameters with fallback support.\nOptional template_images: names to base64 image data for vision-based keywords.\nReturns execution status and result.",
+        "operationId": "execute_keyword_v1_sessions__session_id__action_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid mode, missing keyword, or invalid template image"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "500": {
+            "description": "Keyword execution failed"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/templates": {
+      "post": {
+        "summary": "Upload Template",
+        "description": "Upload a template image for the session. The name can be used in execute\nparams (e.g. element) for vision-based keywords. Overwrites if name exists.",
+        "operationId": "upload_template_v1_sessions__session_id__templates_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateUploadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid base64 image data or unsafe template name"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/api": {
+      "post": {
+        "summary": "Add Session Api",
+        "description": "Add or replace API definitions for the session. Request body must be a JSON\nobject: either { \"api\": { \"collections\": ... } } or the api content at root.\nReplaces session API data (same semantics as Add API keyword).",
+        "operationId": "add_session_api_v1_sessions__session_id__api_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "400": {
+            "description": "Invalid API data format"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/screenshot": {
+      "get": {
+        "summary": "Capture Screenshot",
+        "description": "Capture a screenshot in the specified session.\nReturns the screenshot result.",
+        "operationId": "capture_screenshot_v1_sessions__session_id__screenshot_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/driver-id": {
+      "get": {
+        "summary": "Get Driver Session Id",
+        "description": "Get the underlying Driver session ID for this Optics session.\nReturns ExecutionResponse with the session id in data.result.",
+        "operationId": "get_driver_session_id_v1_sessions__session_id__driver_id_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/variables": {
+      "get": {
+        "summary": "Get Session Variables",
+        "description": "Return the session's ``${variable}`` namespace: name -> ordered values.",
+        "operationId": "get_session_variables_v1_sessions__session_id__variables_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/elements": {
+      "get": {
+        "summary": "Get Elements",
+        "description": "Get interactive elements from the current session screen.\n\nArgs:\n    session_id: The session ID\n    filter_config: Optional list of filter types. Valid values:\n        - \"all\": Show all elements (default when None or empty)\n        - \"interactive\": Only interactive elements\n        - \"buttons\": Only button elements\n        - \"inputs\": Only input/text field elements\n        - \"images\": Only image elements\n        - \"text\": Only text elements\n        Can be combined: ?filter_config=buttons&filter_config=inputs\n    compact: When true, ignore filter_config and return the compact list\n        ({i, label, cls, bounds, act, rid?}) instead of the full element dump.\n\nReturns:\n    The elements result.",
+        "operationId": "get_elements_v1_sessions__session_id__elements_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "filter_config",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter types: all, interactive, buttons, inputs, images, text",
+              "title": "Filter Config"
+            },
+            "description": "Filter types: all, interactive, buttons, inputs, images, text"
+          },
+          {
+            "name": "compact",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Return only actionable elements (folded labels) plus read-only text, as a compact token-lean list (Appium and Playwright sources)",
+              "default": false,
+              "title": "Compact"
+            },
+            "description": "Return only actionable elements (folded labels) plus read-only text, as a compact token-lean list (Appium and Playwright sources)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/source": {
+      "get": {
+        "summary": "Get Pagesource",
+        "description": "Capture the page source from the current session.\nReturns the page source result.",
+        "operationId": "get_pagesource_v1_sessions__session_id__source_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/screen_elements": {
+      "get": {
+        "summary": "Screen Elements",
+        "description": "Capture and get screen elements from the current session.\nReturns the screen elements result.",
+        "operationId": "screen_elements_v1_sessions__session_id__screen_elements_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/events": {
+      "get": {
+        "summary": "Stream Events",
+        "description": "Stream execution events for the specified session using Server-Sent Events (SSE).",
+        "operationId": "stream_events_v1_sessions__session_id__events_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/workspace/stream": {
+      "get": {
+        "summary": "Stream Workspace",
+        "description": "Stream workspace data (screenshot, elements, optionally source) for the specified session using Server-Sent Events (SSE).\nOnly emits updates when workspace data actually changes, reducing load on the driver.",
+        "operationId": "stream_workspace_v1_sessions__session_id__workspace_stream_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "interval_ms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Polling interval in milliseconds (minimum 500ms)",
+              "default": 2000,
+              "title": "Interval Ms"
+            },
+            "description": "Polling interval in milliseconds (minimum 500ms)"
+          },
+          {
+            "name": "include_source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include page source in workspace data",
+              "default": false,
+              "title": "Include Source"
+            },
+            "description": "Include page source in workspace data"
+          },
+          {
+            "name": "filter_config",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter types for elements: all, interactive, buttons, inputs, images, text",
+              "title": "Filter Config"
+            },
+            "description": "Filter types for elements: all, interactive, buttons, inputs, images, text"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/keywords": {
+      "get": {
+        "summary": "List Keywords",
+        "description": "List all available keywords and their parameters.",
+        "operationId": "list_keywords_v1_keywords_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/KeywordInfo"
+                  },
+                  "type": "array",
+                  "title": "Response List Keywords V1 Keywords Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/stop": {
+      "delete": {
+        "summary": "Delete Session",
+        "description": "Terminate the specified session and clean up resources.\nReturns termination status.",
+        "operationId": "delete_session_v1_sessions__session_id__stop_delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerminationResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Session termination failed"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExecuteRequest": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "test_case": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Case"
+          },
+          "keyword": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keyword"
+          },
+          "params": {
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  ]
+                },
+                "type": "object"
+              }
+            ],
+            "title": "Params",
+            "default": []
+          },
+          "template_images": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Images"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "title": "ExecuteRequest",
+        "description": "Request model for executing a keyword or test case.\nSupports both positional and named parameters with fallback support.\nOptional template_images allows inline template images for vision-based\nkeywords (e.g. Press Element with an image): keys are logical names,\nvalues are base64-encoded image bytes (raw base64 or data URL)."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthCheckResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version"
+        ],
+        "title": "HealthCheckResponse"
+      },
+      "KeywordInfo": {
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "title": "Keyword"
+          },
+          "keyword_slug": {
+            "type": "string",
+            "title": "Keyword Slug"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/KeywordParameter"
+            },
+            "type": "array",
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "keyword",
+          "keyword_slug",
+          "description",
+          "parameters"
+        ],
+        "title": "KeywordInfo"
+      },
+      "KeywordParameter": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "default": {
+            "title": "Default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "type"
+        ],
+        "title": "KeywordParameter"
+      },
+      "SessionConfig": {
+        "properties": {
+          "driver_sources": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Driver Sources",
+            "default": []
+          },
+          "elements_sources": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Elements Sources",
+            "default": []
+          },
+          "text_detection": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Text Detection",
+            "default": []
+          },
+          "image_detection": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Image Detection",
+            "default": []
+          },
+          "ai_self_heal": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ai Self Heal"
+          },
+          "llm_provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Provider"
+          },
+          "llm_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Model"
+          },
+          "project_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Path"
+          },
+          "appium_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appium Url"
+          },
+          "appium_config": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appium Config"
+          },
+          "strict_element_match": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strict Element Match"
+          },
+          "api_data": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Data"
+          }
+        },
+        "type": "object",
+        "title": "SessionConfig",
+        "description": "Configuration for starting a new Optics session.\n\nThis model accepts two formats for source lists:\n- Deprecated simple format: list of strings, e.g. [\"appium\", \"selenium\"]\n- New detailed format: list of dicts, e.g. [{\"appium\": {\"enabled\": True, \"url\": \"...\", \"capabilities\": {...}}}]\n\nUse `normalize_sources()` to convert entries into a consistent list of\n{name: DependencyConfig} mappings used by the server internals.\n\n``ai_self_heal`` / ``llm_provider`` / ``llm_model`` are optional per-session\nself-heal overrides, kept as flat scalars (not a nested llm_models block) so no LLM\ncredentials ride the request body. See ``_resolve_self_heal_settings`` for their\nper-field precedence over the service-level env-var defaults."
+      },
+      "SessionResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "driver_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Driver Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "created"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id"
+        ],
+        "title": "SessionResponse",
+        "description": "Response model for session creation."
+      },
+      "TemplateUploadRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "image_base64": {
+            "type": "string",
+            "title": "Image Base64"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "image_base64"
+        ],
+        "title": "TemplateUploadRequest",
+        "description": "Request model for uploading a template image to a session."
+      },
+      "TerminationResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "terminated"
+          }
+        },
+        "type": "object",
+        "title": "TerminationResponse",
+        "description": "Response model for session termination."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8000",
+      "description": "optics serve on your own machine (default host and port)"
+    }
+  ],
+  "externalDocs": {
+    "description": "REST API usage guide",
+    "url": "https://mozarkai.github.io/optics-framework/usage/REST_API_usage/"
+  }
+}
