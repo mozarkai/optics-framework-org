@@ -39,7 +39,7 @@ test("the homepage JSON-LD describes the software", () => {
 
 // Optics is not a Mozark product: the name may appear only inside URLs and addresses.
 test("no page attributes Optics to Mozark", () => {
-  const files = readdirSync("out").filter((f) => /\.(html|md|txt|xml)$/.test(f));
+  const files = readdirSync("out").filter((f) => /\.(html|md|txt|xml|json)$/.test(f));
   for (const file of files) {
     const prose = read(file)
       .replace(/(?:https?:\/\/|mailto:)[^\s"'<>)]+/g, "")
@@ -150,4 +150,24 @@ test("llms.txt follows the llmstxt.org layout and says when to use Optics", () =
   for (const [, path] of text.matchAll(/\]\(https:\/\/optics-framework\.org\/([^)]+)\)/g)) {
     assert.ok(existsSync(`out/${path}`) || existsSync(`out/${path}.html`), `llms.txt links missing ${path}`);
   }
+});
+
+test("openapi.json describes the local optics serve API and is linked for agents", () => {
+  const spec = JSON.parse(read("openapi.json"));
+  assert.match(spec.openapi, /^3\.\d+\.\d+$/);
+  assert.ok(spec.info.title && spec.info.version && spec.info.description);
+  assert.deepEqual(spec.servers.map((s) => s.url), ["http://127.0.0.1:8000"]);
+
+  const operations = Object.values(spec.paths).flatMap((methods) => Object.values(methods));
+  assert.ok(operations.length > 0);
+  const ids = operations.map((op) => op.operationId);
+  assert.equal(new Set(ids).size, ids.length, "operationIds are unique");
+  for (const op of operations) {
+    assert.ok(op.operationId, "every operation has an operationId");
+    assert.ok(op.summary || op.description, `${op.operationId} is described`);
+    assert.ok(op.responses && Object.keys(op.responses).length, `${op.operationId} declares responses`);
+  }
+
+  assert.match(read("index.html"), /<link rel="service-desc" type="application\/vnd\.oai\.openapi\+json;version=3\.1" href="openapi\.json"/);
+  assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/openapi\.json\)/);
 });

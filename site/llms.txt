@@ -20,7 +20,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Record it and say it: `optics live`](https://mozarkai.github.io/optics-framework/usage/live_usage/): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
 - [Run it in CI](https://mozarkai.github.io/optics-framework/usage/CLI_usage/): use when the same suite must run on every build and report JUnit XML, including on-screen error detection for crash dialogs.
 - [Python and Robot Framework libraries](https://mozarkai.github.io/optics-framework/usage/library_usage/): use when tests should live in pytest or Robot Framework code instead of CSV.
-- [HTTP API: `optics serve`](https://mozarkai.github.io/optics-framework/usage/REST_API_usage/): use when another service needs to run keywords over HTTP.
+- [HTTP API: `optics serve`](https://mozarkai.github.io/optics-framework/usage/REST_API_usage/): use when another service needs to run keywords over HTTP. The server runs on your machine (default http://127.0.0.1:8000); its OpenAPI document is https://optics-framework.org/openapi.json.
 
 ## Docs
 
@@ -35,6 +35,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Project
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
 - [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
 - [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
