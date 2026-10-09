@@ -6,7 +6,7 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
 - Install (pip): `pip install optics-framework`
 - Licence: Apache 2.0. Needs Python 3.12 or newer.
-- Docs: https://mozarkai.github.io/optics-framework/
+- Docs: https://optics-framework.org/docs/ (every page is also Markdown; index for agents: https://optics-framework.org/docs/llms.txt)
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
 - Source: https://github.com/mozarkai/optics-framework
 - For AI agents: https://optics-framework.org/llms.txt

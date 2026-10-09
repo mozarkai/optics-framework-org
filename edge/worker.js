@@ -71,7 +71,7 @@ function notFoundProblem(url, method) {
       llms: at("/llms.txt"),
       sitemap: at("/sitemap.xml"),
       openapi: at("/openapi.json"),
-      docs: "https://mozarkai.github.io/optics-framework/",
+      docs: at("/docs/"),
     },
   };
   return new Response(method === "HEAD" ? null : JSON.stringify(problem, null, 2), {

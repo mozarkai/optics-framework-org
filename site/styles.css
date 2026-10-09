@@ -269,6 +269,16 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .os-tab { height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-3); font: 560 .875rem/1 var(--sans); cursor: pointer; white-space: nowrap; }
 .os-tab[aria-selected="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 1px 2px rgba(15, 18, 60, .12); }
 
+/* ---------- learn (docs entry points) ---------- */
+.learn-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.learn-card { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 24px 22px 22px; border-radius: 18px; border: 1px solid var(--line); background: var(--bg); text-decoration: none; color: var(--ink-2); overflow: hidden; transition: transform .3s var(--ease), border-color .2s ease, box-shadow .3s ease; }
+.learn-card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px; background: var(--c); }
+.learn-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--c) 55%, var(--line)); box-shadow: 0 24px 40px -30px rgba(15, 18, 60, .5); }
+.learn-tag { font: 600 .8125rem/1 var(--sans); color: var(--ink-3); letter-spacing: .02em; }
+.learn-title { font-size: 1.1875rem; font-weight: 640; line-height: 1.25; letter-spacing: -.012em; color: var(--ink); }
+.learn-text { font-size: .96875rem; line-height: 1.5; }
+.learn-cta { margin-top: 28px; }
+
 /* ---------- text pages (about, contact, privacy, 404) ---------- */
 .page { padding-block: clamp(56px, 7vw, 96px); }
 .page .wrap > * { max-width: 68ch; }
@@ -291,6 +301,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .two, .head-row { grid-template-columns: minmax(0, 1fr); }
+  .learn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-grid { gap: 28px; }
   .step { gap: 18px; }
 }
@@ -299,6 +310,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .nav-row { gap: 16px; }
   .selector { padding: 24px 16px; }
   .ways { grid-template-columns: minmax(0, 1fr); }
+  .learn-grid { grid-template-columns: minmax(0, 1fr); }
   .foot-links { margin-left: 0; }
   .step-text .body-text { margin-left: 0; }
   .os-tab { padding: 0 10px; font-size: .8125rem; }
