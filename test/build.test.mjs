@@ -7,6 +7,17 @@ const ORIGIN = "https://optics-framework.org";
 const TRUST_PAGES = ["about", "contact", "privacy"];
 
 const read = (f) => readFileSync(`out/${f}`, "utf8");
+
+// Every docs page in nav order, with its URL path and its built file.
+const docsPages = () => {
+  const nav = JSON.parse(readFileSync("docs/nav.json", "utf8"));
+  const ids = ["index", ...nav.sections.flatMap((s) => s.groups.flatMap((g) => g.pages))];
+  return ids.map((id) => ({
+    id,
+    url: `docs/${id === "index" ? "" : id.replace(/(^|\/)index$/, "$1")}`,
+    file: `docs/${id}.html`,
+  }));
+};
 const visibleText = (html) =>
   html
     .match(/<main[^>]*>([\s\S]*?)<\/main>/)[1]
@@ -110,14 +121,13 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.ok(statSync("out/sitemap.xml").size < 50 * 1024 * 1024);
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
-  assert.deepEqual(
-    urls.map(([, loc]) => loc),
-    [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`)],
-  );
+  const locs = urls.map(([, loc]) => loc);
+  assert.deepEqual(locs.slice(0, 1 + TRUST_PAGES.length), [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`)]);
+  assert.deepEqual(locs.slice(1 + TRUST_PAGES.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
     assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/, `${loc} lastmod`);
     const path = loc.slice(ORIGIN.length + 1) || "index";
-    assert.ok(existsSync(`out/${path}.html`), `${loc} is not built`);
+    assert.ok(existsSync(`out/${path}.html`) || existsSync(`out/${path}index.html`), `${loc} is not built`);
   }
   assert.equal(urls.length, (xml.match(/<url>/g) ?? []).length);
 });
@@ -170,4 +180,66 @@ test("openapi.json describes the local optics serve API and is linked for agents
 
   assert.match(read("index.html"), /<link rel="service-desc" type="application\/vnd\.oai\.openapi\+json;version=3\.1" href="openapi\.json"/);
   assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/openapi\.json\)/);
+});
+
+test("every docs page is built with its Markdown twin, title and canonical URL", () => {
+  for (const page of docsPages()) {
+    const html = read(page.file);
+    assert.match(html, /<html lang="en">/, page.id);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${ORIGIN}/${page.url}">`), page.id);
+    assert.doesNotMatch(html, /\{\{\w+\}\}/, `${page.id} has an unfilled placeholder`);
+    assert.ok(visibleText(html).length >= 300, `${page.id} has too little text`);
+    const md = read(page.file.replace(/\.html$/, ".md"));
+    assert.match(md, /^# \S/, `${page.id}.md starts with a title`);
+    assert.doesNotMatch(md, /^:::|^::scene/m, `${page.id}.md still has directives`);
+  }
+});
+
+test("links and assets on docs pages resolve to built files", () => {
+  for (const page of docsPages()) {
+    const dir = page.file.split("/").slice(0, -1).join("/");
+    const html = read(page.file);
+    for (const [, raw] of html.matchAll(/(?:href|src|poster)="([^"#]*)(?:#([^"]*))?"/g)) {
+      if (!raw || /^(https?:|mailto:|\/)/.test(raw)) continue;
+      const path = new URL(raw.split("?")[0], `file:///${dir}/`).pathname.slice(1);
+      const ok = existsSync(`out/${path}`) && !path.endsWith("/") ? true
+        : existsSync(`out/${path}.html`) || existsSync(`out/${path}index.html`) || existsSync(`out/${path}`);
+      assert.ok(ok, `${page.id} links missing ${raw}`);
+    }
+  }
+});
+
+test("in-page anchors on docs pages point at real headings", () => {
+  const ids = new Map(docsPages().map((p) => [p.file, new Set([...read(p.file).matchAll(/ id="([^"]+)"/g)].map((m) => m[1]))]));
+  for (const page of docsPages()) {
+    const dir = page.file.split("/").slice(0, -1).join("/");
+    for (const [, raw, hash] of read(page.file).matchAll(/href="([^"#]*)#([^"]+)"/g)) {
+      if (/^(https?:|mailto:)/.test(raw)) continue;
+      let target = page.file;
+      if (raw) {
+        const path = new URL(raw.split("?")[0], `file:///${dir}/`).pathname.slice(1);
+        target = path.endsWith("/") ? `${path}index.html` : `${path}.html`;
+      }
+      if (!ids.has(target)) continue;
+      assert.ok(ids.get(target).has(hash), `${page.id} links to missing #${hash} on ${target}`);
+    }
+  }
+});
+
+test("docs search index and agent index cover every page", () => {
+  const index = JSON.parse(read("docs/search.json"));
+  assert.equal(index.length, docsPages().length);
+  for (const entry of index) assert.ok(entry.t && entry.x.length > 100, `search entry ${entry.u} is empty`);
+  const llms = read("docs/llms.txt");
+  for (const page of docsPages()) {
+    const md = `${ORIGIN}/${page.url}`.replace(/\/$/, "/index") + ".md";
+    assert.ok(llms.includes(`(${md})`), `docs/llms.txt lacks ${md}`);
+  }
+});
+
+test("the homepage and every text page link to the docs", () => {
+  for (const page of ["index.html", ...TRUST_PAGES.map((p) => `${p}.html`)]) {
+    assert.match(read(page), /href="(\.\/)?docs\/"/, `${page} has no docs link`);
+  }
+  assert.doesNotMatch(read("index.html"), /mozarkai\.github\.io/);
 });

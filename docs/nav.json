@@ -1,0 +1,72 @@
+{
+  "sections": [
+    {
+      "id": "get-started",
+      "title": "Get started",
+      "groups": [
+        { "title": null, "pages": ["get-started/index", "get-started/quickstart", "get-started/install"] },
+        { "title": "Learn the basics", "pages": ["get-started/first-test", "get-started/concepts", "get-started/next-steps"] }
+      ]
+    },
+    {
+      "id": "create",
+      "title": "Create tests",
+      "groups": [
+        { "title": null, "pages": ["create/index"] },
+        { "title": "No code", "pages": ["create/write", "create/record", "create/describe"] },
+        { "title": "With an AI agent", "pages": ["create/agent"] },
+        { "title": "In code", "pages": ["create/python", "create/robot"] },
+        { "title": "Organise a suite", "pages": ["create/organise", "create/yaml"] }
+      ]
+    },
+    {
+      "id": "elements",
+      "title": "Find elements",
+      "groups": [
+        { "title": null, "pages": ["elements/index", "elements/define"] },
+        { "title": "When the UI tree is not enough", "pages": ["elements/text-and-images", "elements/area-of-interest", "elements/self-heal"] }
+      ]
+    },
+    {
+      "id": "run",
+      "title": "Run and report",
+      "groups": [
+        { "title": null, "pages": ["run/index", "run/results", "run/error-detection"] },
+        { "title": "Run every day", "pages": ["run/ci", "run/checklist"] }
+      ]
+    },
+    {
+      "id": "platforms",
+      "title": "Platforms",
+      "groups": [
+        { "title": null, "pages": ["platforms/index"] },
+        { "title": "Targets", "pages": ["platforms/android", "platforms/ios", "platforms/web", "platforms/tv", "platforms/production"] }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Advanced",
+      "groups": [
+        { "title": null, "pages": ["advanced/index"] },
+        { "title": "Logic and data", "pages": ["advanced/variables", "advanced/data-driven", "advanced/conditions", "advanced/api-calls"] },
+        { "title": "Integrate", "pages": ["advanced/http-api", "advanced/generate"] }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Reference",
+      "groups": [
+        { "title": null, "pages": ["reference/index"] },
+        { "title": "Keywords", "pages": ["reference/keywords/index", "reference/keywords/app", "reference/keywords/actions", "reference/keywords/verification", "reference/keywords/flow"] },
+        { "title": "Tools and files", "pages": ["reference/cli", "reference/config", "reference/files", "reference/engines", "reference/mcp", "reference/http-api", "reference/errors"] }
+      ]
+    },
+    {
+      "id": "help",
+      "title": "Help",
+      "groups": [
+        { "title": null, "pages": ["help/index", "help/troubleshooting", "help/faq", "help/glossary"] }
+      ]
+    }
+  ]
+}

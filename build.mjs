@@ -5,6 +5,7 @@
 import { cpSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { buildDocs } from "./lib/docs.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -60,22 +61,31 @@ for (const page of PAGES) {
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 
+// The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
+const docs = buildDocs({ lastModified });
+
 writeFileSync(
   "out/sitemap.xml",
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    ...docs,
   ]),
 );
 
-// Fingerprint every local asset a page links to (stylesheet, script, media) so a deploy
-// never pairs new HTML with a cached old file.
+// Fingerprint every local asset a page links to (stylesheets, scripts, media) so a deploy
+// never pairs new HTML with a cached old file. Docs pages sit in folders, so their links
+// start with "../".
 const hash = (f) => createHash("sha256").update(readFileSync(`out/${f}`)).digest("hex").slice(0, 10);
-for (const name of readdirSync("out").filter((f) => f.endsWith(".html"))) {
-  const page = readFileSync(`out/${name}`, "utf8").replace(
-    /(href|src|poster)="((?:\/[\w.-]+)*\/)?(styles\.css|app\.js|media\/[^"?#]+)"/g,
-    (_, attr, prefix = "", file) => `${attr}="${prefix}${file}?v=${hash(file)}"`,
+const htmlFiles = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? htmlFiles(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : [],
   );
-  writeFileSync(`out/${name}`, page);
+for (const file of htmlFiles("out")) {
+  const page = readFileSync(file, "utf8").replace(
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|docs\.css|docs\.js|scenes\.js|scene-defs\.js|media\/[^"?#]+)"/g,
+    (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
+  );
+  writeFileSync(file, page);
 }
 console.log("built out/");
