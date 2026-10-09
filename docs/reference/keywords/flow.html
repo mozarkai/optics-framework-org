@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flow control keywords · Optics docs</title>
+  <meta name="description" content="Learn how to reuse modules, loop, branch, load data, compute values and call APIs in a suite.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/keywords/flow">
+  <link rel="alternate" type="text/markdown" href="flow.md" title="This page as Markdown">
+  <meta property="og:title" content="Flow control keywords · Optics docs">
+  <meta property="og:description" content="Learn how to reuse modules, loop, branch, load data, compute values and call APIs in a suite.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../../styles.css?v=54f05b77ff">
+  <link rel="stylesheet" href="../../../docs.css?v=025c111801">
+</head>
+<body class="docs " data-docs-root="../../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../../docs/get-started/">Get started</a><a class="dtab" href="../../../docs/create/">Create tests</a><a class="dtab" href="../../../docs/elements/">Find elements</a><a class="dtab" href="../../../docs/run/">Run and report</a><a class="dtab" href="../../../docs/platforms/">Platforms</a><a class="dtab" href="../../../docs/advanced/">Advanced</a><a class="dtab on" href="../../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../../docs/get-started/">Overview</a></li><li><a href="../../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../../docs/create/write">Write it</a></li><li><a href="../../../docs/create/record">Record it</a></li><li><a href="../../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../../docs/create/python">Python</a></li><li><a href="../../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../../docs/create/organise">Organise a suite</a></li><li><a href="../../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../../docs/elements/">Overview</a></li><li><a href="../../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../../docs/run/">Overview</a></li><li><a href="../../../docs/run/results">Results</a></li><li><a href="../../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../../docs/run/ci">Run tests in CI</a></li><li><a href="../../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../../docs/platforms/android">Android</a></li><li><a href="../../../docs/platforms/ios">iOS</a></li><li><a href="../../../docs/platforms/web">Web</a></li><li><a href="../../../docs/platforms/tv">TV</a></li><li><a href="../../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../../docs/advanced/variables">Variables</a></li><li><a href="../../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../../docs/reference/keywords/">Keywords</a></li><li><a href="../../../docs/reference/keywords/app">App management</a></li><li><a href="../../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../../docs/reference/keywords/flow" aria-current="page">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../../docs/reference/cli">CLI</a></li><li><a href="../../../docs/reference/config">config.yaml</a></li><li><a href="../../../docs/reference/files">Project files</a></li><li><a href="../../../docs/reference/engines">Engines and extras</a></li><li><a href="../../../docs/reference/mcp">MCP server</a></li><li><a href="../../../docs/reference/http-api">HTTP API</a></li><li><a href="../../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../../docs/help/">Overview</a></li><li><a href="../../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../../docs/help/faq">FAQ</a></li><li><a href="../../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Keywords</span></nav>
+        <header class="doc-head">
+          <h1>Flow control keywords</h1>
+          <p class="doc-summary">Learn how to reuse modules, loop, branch, load data, compute values and call APIs in a suite.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="flow.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="flow.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Flow control keywords run other modules, repeat them, choose between them, and create variables you can use in later steps.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2,param_3
+Checkout Flow,Execute Module,Sign In
+Checkout Flow,Run Loop,Add Product,product,Trail Runner 2|Pace Knit
+Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2,param_3</span>
+<span class="c-mod">Checkout Flow</span><span class="c-dim">,</span><b>Execute Module</b><span class="c-dim">,</span>Sign In
+<span class="c-mod">Checkout Flow</span><span class="c-dim">,</span><b>Run Loop</b><span class="c-dim">,</span>Add Product<span class="c-dim">,</span>product<span class="c-dim">,</span>Trail Runner 2|Pace Knit
+<span class="c-mod">Checkout Flow</span><span class="c-dim">,</span><b>Condition</b><span class="c-dim">,</span><span class="c-var">${coupon}</span> == 'none'<span class="c-dim">,</span>Pay Full Price<span class="c-dim">,</span>Apply Coupon</code></pre></figure>
+<h2 id="rules-for-every-flow-keyword">Rules for every flow keyword<a class="anchor" href="#rules-for-every-flow-keyword" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Targets are module names.</strong> Execute Module, Run Loop and Condition run modules, not single keywords. Multi-word names are fine in CSV. In YAML, quote them: <code class="ic">"Add Product"</code>.</li><li><strong>Write the variable you create as a bare name.</strong> Read Data, Evaluate, Date Evaluate and Run Loop take the name of a variable to write. Write <code class="ic">total</code>, not <code class="ic">${total}</code>. A <code class="ic">${total}</code> cell is replaced before the keyword runs, so the step fails if <code class="ic">total</code> doesn't exist yet. The log shows a harmless warning about the bare name.</li><li><strong>Values are text.</strong> Every variable holds text. Compare with quoted literals: <code class="ic">${status} == 'ready'</code>, <code class="ic">${count} == '3'</code>. A numeric comparison such as <code class="ic">${count} &gt; 3</code> fails in Condition. See <a href="#compare-numbers">Compare numbers</a> for the workaround.</li><li><strong>Lists use pipes.</strong> Separate values with <code class="ic">|</code>: <code class="ic">Trail Runner 2|Pace Knit</code>.</li><li><strong>Steps inside a target are stricter.</strong> In a module run by Execute Module, Run Loop or Condition, write every parameter positionally, because <code class="ic">name=value</code> isn't recognized there. <code class="ic">${name}</code> uses only the first value, with no fallback to the next one. Any error inside is reported as error E0401.</li></ul>
+<p>Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, <code class="ic">optics live</code>, <code class="ic">optics serve</code> and <a href="../../../docs/create/python">Python</a>.</p>
+<h2 id="reuse-and-repeat">Reuse and repeat<a class="anchor" href="#reuse-and-repeat" aria-label="Link to this section">#</a></h2>
+<h3 id="execute-module">Execute Module<a class="anchor" href="#execute-module" aria-label="Link to this section">#</a></h3>
+<p>Runs another module's steps from inside a module.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">module_name</code></td><td>Required</td><td>The module to run.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Checkout Flow,Execute Module,Sign In
+Checkout Flow,Execute Module,Add To Cart">Copy</button><pre><code><span class="c-dim">Checkout Flow,Execute Module,Sign In</span>
+<span class="c-mod">Checkout Flow</span><span class="c-dim">,</span><b>Execute Module</b><span class="c-dim">,</span>Add To Cart</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Execute Module &quot;Sign In&quot;">Copy</button><pre><code>- Execute Module <span class="c-lit">"Sign In"</span></code></pre></figure>
+<p>Good to know:</p>
+<ul><li>Use Execute Module whenever one module calls another. A row whose keyword cell is a module name fails with "Keyword not found".</li><li>A module can't run itself.</li><li>Python doesn't have Execute Module. Call your own Python functions instead.</li></ul>
+<h3 id="run-loop">Run Loop<a class="anchor" href="#run-loop" aria-label="Link to this section">#</a></h3>
+<p>Runs a module a number of times, or once for each value in one or more lists.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">target</code></td><td>Required</td><td>The module to run.</td></tr><tr><td>then one of:</td><td></td><td></td></tr><tr><td><code class="ic">count</code></td><td></td><td>A whole number of times to run, 1 or more.</td></tr><tr><td><code class="ic">variable</code>, <code class="ic">values</code>, …</td><td></td><td>Pairs of a variable name and its list of values. Add as many pairs as you need.</td></tr></tbody></table></div>
+<p><code class="ic">values</code> can be:</p>
+<ul><li>a pipe-separated list: <code class="ic">Trail Runner 2|Pace Knit</code>. Spaces around each value are trimmed.</li><li>a JSON list: <code class="ic">["Trail Runner 2", "Pace Knit"]</code>.</li><li><code class="ic">${name}</code>, where the element <code class="ic">name</code> holds either of the above.</li></ul>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Fill Cart,Run Loop,Add Trail Runner,3
+Fill Cart,Run Loop,Add Product,product,Trail Runner 2|Pace Knit
+Fill Cart,Run Loop,Add Product,product,${featured},size,US 9|US 10">Copy</button><pre><code><span class="c-dim">Fill Cart,Run Loop,Add Trail Runner,3</span>
+<span class="c-mod">Fill Cart</span><span class="c-dim">,</span><b>Run Loop</b><span class="c-dim">,</span>Add Product<span class="c-dim">,</span>product<span class="c-dim">,</span>Trail Runner 2|Pace Knit
+<span class="c-mod">Fill Cart</span><span class="c-dim">,</span><b>Run Loop</b><span class="c-dim">,</span>Add Product<span class="c-dim">,</span>product<span class="c-dim">,</span><span class="c-var">${featured}</span><span class="c-dim">,</span>size<span class="c-dim">,</span>US 9|US 10</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Run Loop &quot;Add Product&quot; product &quot;Trail Runner 2|Pace Knit&quot;">Copy</button><pre><code>- Run Loop <span class="c-lit">"Add Product"</span> product <span class="c-lit">"Trail Runner 2|Pace Knit"</span></code></pre></figure>
+<p>Inside the target module, use <code class="ic">${product}</code> to read the current value:</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Add Product,Enter Text,${search_bar},${product}
+Add Product,Enter Text,${search_bar},&lt;enter&gt;
+Add Product,Assert Presence,${add_to_cart},10
+Add Product,Press Element,${add_to_cart}">Copy</button><pre><code><span class="c-mod">Add Product</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${search_bar}</span><span class="c-dim">,</span><span class="c-var">${product}</span>
+<span class="c-mod">Add Product</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${search_bar}</span><span class="c-dim">,</span>&lt;enter&gt;
+<span class="c-mod">Add Product</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${add_to_cart}</span><span class="c-dim">,</span>10
+<span class="c-mod">Add Product</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${add_to_cart}</span></code></pre></figure>
+<p>Good to know:</p>
+<ul><li>With several lists, the loop runs as many times as the shortest list.</li><li>The variable keeps its last value after the loop ends.</li><li>A list stored in an elements file needs CSV quoting if it's JSON: <code class="ic">featured,"[""Trail Runner 2"",""Pace Knit""]"</code>. A pipe list needs none: <code class="ic">featured,Trail Runner 2|Pace Knit</code>.</li><li>An odd number of parameters after the target, other than a single count, fails with error E0403.</li></ul>
+<h2 id="branch">Branch<a class="anchor" href="#branch" aria-label="Link to this section">#</a></h2>
+<h3 id="condition">Condition<a class="anchor" href="#condition" aria-label="Link to this section">#</a></h3>
+<p>Runs a module only when a condition is true, like if, else-if and else.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">condition</code>, <code class="ic">target</code>, …</td><td>Required</td><td>Pairs of a condition and the module to run when it's true. Add as many pairs as you need.</td></tr><tr><td><code class="ic">else_target</code></td><td>Empty</td><td>A module to run when no condition is true. Give it as the last parameter.</td></tr></tbody></table></div>
+<p>The conditions are checked in order. The first true one runs its target, and the rest are skipped. With an odd number of parameters, the last one is the else target.</p>
+<p>A condition is one of two kinds:</p>
+<ul><li><strong>A module name.</strong> Optics runs that module. If every step passes, the condition is true. Start the name with <code class="ic">!</code> to flip it: <code class="ic">!Is Signed In</code> is true when the module fails.</li><li><strong>An expression.</strong> Each <code class="ic">${name}</code> is replaced with its value in double quotes, so compare it with a quoted literal. You can use <code class="ic">==</code>, <code class="ic">!=</code>, <code class="ic">and</code>, <code class="ic">or</code> and <code class="ic">not</code>. Start the expression with <code class="ic">!</code> to negate it.</li></ul>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Start,Condition,Is Signed In,Go Home,Sign In
+Start,Condition,!Is Signed In,Sign In
+Pay,Condition,${payment} == 'card',Pay By Card,${payment} == 'wallet',Pay By Wallet,Pay On Delivery">Copy</button><pre><code><span class="c-dim">Start,Condition,Is Signed In,Go Home,Sign In</span>
+<span class="c-mod">Start</span><span class="c-dim">,</span><b>Condition</b><span class="c-dim">,</span>!Is Signed In<span class="c-dim">,</span>Sign In
+<span class="c-mod">Pay</span><span class="c-dim">,</span><b>Condition</b><span class="c-dim">,</span><span class="c-var">${payment}</span> == 'card'<span class="c-dim">,</span>Pay By Card<span class="c-dim">,</span><span class="c-var">${payment}</span> == 'wallet'<span class="c-dim">,</span>Pay By Wallet<span class="c-dim">,</span>Pay On Delivery</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Condition ${payment}=='card' &quot;Pay By Card&quot; &quot;Pay On Delivery&quot;">Copy</button><pre><code>- Condition <span class="c-var">${payment}</span>==<span class="c-lit">'card'</span> <span class="c-lit">"Pay By Card"</span> <span class="c-lit">"Pay On Delivery"</span></code></pre></figure>
+<p>Good to know:</p>
+<ul><li>A module condition really runs its steps. Use one that only checks, such as a module with a single Assert Presence.</li><li>If no condition is true and there's no else target, the step passes and nothing runs.</li><li>If the target module fails, the step fails.</li><li>In YAML, write the expression without spaces: <code class="ic">${payment}=='card'</code>. A quoted expression that contains <code class="ic">=</code> keeps its quotes and fails.</li></ul>
+<h3 id="compare-numbers">Compare numbers<a class="anchor" href="#compare-numbers" aria-label="Link to this section">#</a></h3>
+<p>Condition compares text, so <code class="ic">${count} &gt; 3</code> fails. Compute the comparison with <a href="#evaluate">Evaluate</a> first, which does arithmetic, then test its <code class="ic">True</code> or <code class="ic">False</code> result:</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Shipping,Evaluate,free_shipping,${item_count} &gt; 3
+Shipping,Condition,${free_shipping} == 'True',Expect Free Shipping,Expect Paid Shipping">Copy</button><pre><code><span class="c-mod">Shipping</span><span class="c-dim">,</span><b>Evaluate</b><span class="c-dim">,</span>free_shipping<span class="c-dim">,</span><span class="c-var">${item_count}</span> &gt; 3
+<span class="c-mod">Shipping</span><span class="c-dim">,</span><b>Condition</b><span class="c-dim">,</span><span class="c-var">${free_shipping}</span> == 'True'<span class="c-dim">,</span>Expect Free Shipping<span class="c-dim">,</span>Expect Paid Shipping</code></pre></figure>
+<h2 id="create-variables">Create variables<a class="anchor" href="#create-variables" aria-label="Link to this section">#</a></h2>
+<h3 id="read-data">Read Data<a class="anchor" href="#read-data" aria-label="Link to this section">#</a></h3>
+<p>Loads a value from a CSV or JSON file, or an environment variable, into a variable.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">input_element</code></td><td>Required</td><td>The variable to write. Write a bare name.</td></tr><tr><td><code class="ic">file_path</code></td><td>Required</td><td>A <code class="ic">.csv</code> or <code class="ic">.json</code> file, or <code class="ic">ENV:NAME</code> for an environment variable. Relative paths start at the project folder.</td></tr><tr><td><code class="ic">query</code></td><td>Empty</td><td>Which rows and columns to keep. See below.</td></tr></tbody></table></div>
+<p>The query has parts separated by <code class="ic">;</code>:</p>
+<ul><li><code class="ic">select=column</code> keeps one column. <code class="ic">select=a,b</code> keeps several.</li><li>A filter such as <code class="ic">tier == 'gold'</code> keeps the matching rows. Several filters must all match.</li><li><code class="ic">${name}</code> inside the query is replaced with its value in single quotes, so write <code class="ic">email == ${email}</code>.</li></ul>
+<p>Given this data file:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/users.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="email,password,tier
+ana@birch.example,pw-ana,gold
+ben@birch.example,pw-ben,basic">Copy</button><pre><code><span class="c-dim">email,password,tier</span>
+<span class="c-mod">ana@birch.example</span><span class="c-dim">,</span><b>pw-ana</b><span class="c-dim">,</span>gold
+<span class="c-mod">ben@birch.example</span><span class="c-dim">,</span><b>pw-ben</b><span class="c-dim">,</span>basic</code></pre></figure>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Load User,Read Data,gold_email,test_data/users.csv,tier == 'gold';select=email
+Load User,Read Data,ana_tier,test_data/users.csv,email == 'ana@birch.example';select=tier
+Load Token,Read Data,api_token,ENV:BIRCH_API_TOKEN">Copy</button><pre><code><span class="c-mod">Load User</span><span class="c-dim">,</span><b>Read Data</b><span class="c-dim">,</span>gold_email<span class="c-dim">,</span>test_data/users.csv<span class="c-dim">,</span>tier == 'gold';select=email
+<span class="c-mod">Load User</span><span class="c-dim">,</span><b>Read Data</b><span class="c-dim">,</span>ana_tier<span class="c-dim">,</span>test_data/users.csv<span class="c-dim">,</span>email == 'ana@birch.example';select=tier
+<span class="c-mod">Load Token</span><span class="c-dim">,</span><b>Read Data</b><span class="c-dim">,</span>api_token<span class="c-dim">,</span>ENV:BIRCH_API_TOKEN</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Read Data gold_email test_data/users.csv tier=='gold';select=email">Copy</button><pre><code>- Read Data gold_email test_data/users.csv tier==<span class="c-lit">'gold'</span>;select=email</code></pre></figure>
+<p>After these steps, <code class="ic">${gold_email}</code> is <code class="ic">ana@birch.example</code> and <code class="ic">${ana_tier}</code> is <code class="ic">gold</code>.</p>
+<p>Good to know:</p>
+<ul><li>Every cell is read as text, so filters must compare text: <code class="ic">age == '30'</code>. <code class="ic">age &gt; 26</code> fails with error E0403.</li><li>Narrow the result to one row and one column. One row with several columns is stored joined by commas, such as <code class="ic">ana@birch.example,gold</code>. Several rows are stored in a form you can't use in a step.</li><li>A query that matches nothing fails with "No data found". A missing column fails with error E0403. A missing file or environment variable fails with error E0501.</li><li><strong>JSON files</strong> can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as <code class="ic">address.city</code>.</li><li><strong>Environment variables</strong> are stored as they are, such as <code class="ic">ENV:BIRCH_API_TOKEN</code> giving <code class="ic">abc123</code>. A value that starts with <code class="ic">{</code> or <code class="ic">[</code> is read as JSON, and one with several lines is read as CSV.</li><li>In CSV, wrap a query that contains commas in double quotes: <code class="ic">"tier == 'gold';select=email,password"</code>.</li><li>In YAML, write filters without spaces.</li></ul>
+<h3 id="evaluate">Evaluate<a class="anchor" href="#evaluate" aria-label="Link to this section">#</a></h3>
+<p>Computes an expression and saves the result in a variable.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">param1</code></td><td>Required</td><td>The variable to write. Write a bare name.</td></tr><tr><td><code class="ic">param2</code></td><td>Required</td><td>The expression to compute.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Cart,Evaluate,total,${price} * 2
+Cart,Evaluate,label,'free' if ${total} &gt; 100 else 'paid'
+Cart,Evaluate,greeting,'Hello ' + '${first_name}'">Copy</button><pre><code><span class="c-mod">Cart</span><span class="c-dim">,</span><b>Evaluate</b><span class="c-dim">,</span>total<span class="c-dim">,</span><span class="c-var">${price}</span> * 2
+<span class="c-mod">Cart</span><span class="c-dim">,</span><b>Evaluate</b><span class="c-dim">,</span>label<span class="c-dim">,</span>'free' if <span class="c-var">${total}</span> &gt; 100 else 'paid'
+<span class="c-mod">Cart</span><span class="c-dim">,</span><b>Evaluate</b><span class="c-dim">,</span>greeting<span class="c-dim">,</span>'Hello ' + '<span class="c-var">${first_name}</span>'</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Evaluate total &quot;${price} * 2&quot;">Copy</button><pre><code>- Evaluate total <span class="c-lit">"<span class="c-var">${price}</span> * 2"</span></code></pre></figure>
+<p>Good to know:</p>
+<ul><li>Each <code class="ic">${name}</code> is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: <code class="ic">'${first_name}'</code>.</li><li>You can use numbers, quoted text, lists, <code class="ic">+ - * / % **</code>, comparisons, <code class="ic">and</code>, <code class="ic">or</code>, <code class="ic">not</code> and <code class="ic">x if condition else y</code>.</li><li>Function calls such as <code class="ic">int(...)</code> or <code class="ic">len(...)</code> aren't allowed. They fail with "Unsafe expression".</li><li>The result is saved as text. A comparison saves <code class="ic">True</code> or <code class="ic">False</code>.</li><li>In CSV, wrap an expression that contains commas in double quotes.</li></ul>
+<h3 id="date-evaluate">Date Evaluate<a class="anchor" href="#date-evaluate" aria-label="Link to this section">#</a></h3>
+<p>Adds or subtracts days from a date and saves the result, formatted the way you choose.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">param1</code></td><td>Required</td><td>The variable to write. Write a bare name.</td></tr><tr><td><code class="ic">param2</code></td><td>Required</td><td>The start date.</td></tr><tr><td><code class="ic">param3</code></td><td>Required</td><td><code class="ic">+N days</code>, <code class="ic">-N days</code>, <code class="ic">today</code> or <code class="ic">now</code>.</td></tr><tr><td><code class="ic">param4</code></td><td><code class="ic">%d %B</code></td><td>The output format, such as <code class="ic">%Y-%m-%d</code>.</td></tr></tbody></table></div>
+<p>The start date can be in any of these forms. They're tried in this order:</p>
+<div class="table-wrap"><table><thead><tr><th>Format</th><th>Example</th></tr></thead><tbody><tr><td>Month/day/year</td><td><code class="ic">10/24/2026</code></td></tr><tr><td>Day/month/year</td><td><code class="ic">24/10/2026</code></td></tr><tr><td>Year-month-day</td><td><code class="ic">2026-10-24</code></td></tr><tr><td>Day-month-year</td><td><code class="ic">24-10-2026</code></td></tr><tr><td>Year/month/day</td><td><code class="ic">2026/10/24</code></td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Delivery,Date Evaluate,delivery_date,${order_date},+5 days
+Delivery,Assert Presence,${delivery_date},10">Copy</button><pre><code><span class="c-mod">Delivery</span><span class="c-dim">,</span><b>Date Evaluate</b><span class="c-dim">,</span>delivery_date<span class="c-dim">,</span><span class="c-var">${order_date}</span><span class="c-dim">,</span>+5 days
+<span class="c-mod">Delivery</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${delivery_date}</span><span class="c-dim">,</span>10</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Date Evaluate delivery_date ${order_date} &quot;+5 days&quot; &quot;%d %B&quot;">Copy</button><pre><code>- Date Evaluate delivery_date <span class="c-var">${order_date}</span> <span class="c-lit">"+5 days"</span> <span class="c-lit">"%d %B"</span></code></pre></figure>
+<p>With <code class="ic">order_date</code> set to <code class="ic">2026-10-10</code> in your elements file, <code class="ic">${delivery_date}</code> is <code class="ic">15 October</code>.</p>
+<p>Good to know:</p>
+<ul><li>Only days work. <code class="ic">+1 week</code> fails with error E0403. Put a space between the number and <code class="ic">days</code>.</li><li><code class="ic">today</code> and <code class="ic">now</code> don't read the clock. They keep the start date as it is, which is useful to reformat a date.</li><li>An ambiguous date such as <code class="ic">03/04/2026</code> is read as March 4.</li><li>Use a variable name that has no value yet, and don't add it to your elements file. If the name already has a value, Date Evaluate adds the new date after it, and <code class="ic">${name}</code> keeps giving the old value. For the same reason, don't reuse the name inside a loop.</li><li>Common format codes are <code class="ic">%d</code> day, <code class="ic">%m</code> month number, <code class="ic">%B</code> month name, <code class="ic">%b</code> short month name and <code class="ic">%Y</code> year.</li></ul>
+<h3 id="invoke-api">Invoke API<a class="anchor" href="#invoke-api" aria-label="Link to this section">#</a></h3>
+<p>Calls an HTTP API that you define in YAML and saves values from the response as variables.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">api_identifier</code></td><td>Required</td><td>The API to call, as <code class="ic">collection.api</code>.</td></tr></tbody></table></div>
+<p>Define your APIs in a YAML file anywhere in the project folder, with a top-level <code class="ic">api:</code> key. You can also put the <code class="ic">api:</code> block in your config.yaml.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>test_data/api.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="api:
+  collections:
+    birch:
+      name: &quot;Birch API&quot;
+      base_url: &quot;https://api.birch.example&quot;
+      global_headers:
+        content-type: &quot;application/json&quot;
+      apis:
+        login:
+          name: &quot;Sign in&quot;
+          endpoint: &quot;/v1/token&quot;
+          request:
+            method: POST
+            body:
+              email: &quot;${api_email}&quot;
+              password: &quot;${api_password}&quot;
+          expected_result:
+            jsonpath_assertions:
+              - path: $.token
+                condition: &quot;len($) &gt; 0&quot;
+            extract:
+              auth_token: $.token
+              customer_id: $.customer.id
+        cart:
+          name: &quot;Get cart&quot;
+          endpoint: &quot;/v1/customers/${customer_id}/cart&quot;
+          request:
+            method: GET
+            headers:
+              Authorization: &quot;Bearer ${auth_token}&quot;
+          expected_result:
+            extract:
+              cart_count: $.item_count">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>api</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  <span class=<span class="c-lit">"c-mod"</span>>collections</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+    <span class=<span class="c-lit">"c-mod"</span>>birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Birch API"</span>
+      <span class=<span class="c-lit">"c-mod"</span>>base_url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"https://api.birch.example"</span>
+      <span class=<span class="c-lit">"c-mod"</span>>global_headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+        <span class=<span class="c-lit">"c-mod"</span>>content-type</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"application/json"</span>
+      <span class=<span class="c-lit">"c-mod"</span>>apis</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+        <span class=<span class="c-lit">"c-mod"</span>>login</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Sign in"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/v1/token"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> POST
+            <span class=<span class="c-lit">"c-mod"</span>>body</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+              <span class=<span class="c-lit">"c-mod"</span>>email</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_email}</span>"</span>
+              <span class=<span class="c-lit">"c-mod"</span>>password</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_password}</span>"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+            <span class=<span class="c-lit">"c-mod"</span>>jsonpath_assertions</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+              - <span class=<span class="c-lit">"c-mod"</span>>path</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.token
+                <span class=<span class="c-lit">"c-mod"</span>>condition</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"len($) &gt; 0"</span>
+            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+              <span class=<span class="c-lit">"c-mod"</span>>auth_token</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.token
+              <span class=<span class="c-lit">"c-mod"</span>>customer_id</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.customer.id
+        <span class=<span class="c-lit">"c-mod"</span>>cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Get cart"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/v1/customers/<span class="c-var">${customer_id}</span>/cart"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> GET
+            <span class=<span class="c-lit">"c-mod"</span>>headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+              <span class=<span class="c-lit">"c-mod"</span>>Authorization</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Bearer <span class="c-var">${auth_token}</span>"</span>
+          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+              <span class=<span class="c-lit">"c-mod"</span>>cart_count</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.item_count</code></pre></figure>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Prepare Cart,Invoke API,birch.login
+Prepare Cart,Invoke API,birch.cart">Copy</button><pre><code><span class="c-mod">Prepare Cart</span><span class="c-dim">,</span><b>Invoke API</b><span class="c-dim">,</span>birch.login
+<span class="c-mod">Prepare Cart</span><span class="c-dim">,</span><b>Invoke API</b><span class="c-dim">,</span>birch.cart</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Invoke API birch.login">Copy</button><pre><code>- Invoke API birch.login</code></pre></figure>
+<p>After <code class="ic">birch.login</code>, <code class="ic">${auth_token}</code> and <code class="ic">${customer_id}</code> hold the extracted values.</p>
+<p>Good to know:</p>
+<ul><li>The URL is <code class="ic">base_url</code> plus <code class="ic">endpoint</code>. An absolute <code class="ic">endpoint</code> is used on its own.</li><li><code class="ic">${name}</code> is replaced anywhere in the endpoint, headers and body. A missing variable fails the step.</li><li>The body is sent as JSON. Every request has a 30-second timeout.</li><li><code class="ic">extract</code> maps a variable name to a JSONPath. <code class="ic">$.a.b</code>, <code class="ic">a.b</code> and <code class="ic">[0]</code> indexing all work.</li><li>Each <code class="ic">jsonpath_assertions</code> entry checks the value at <code class="ic">path</code>. In <code class="ic">condition</code>, <code class="ic">$</code> stands for that value, as in <code class="ic">len($) &gt; 0</code> or <code class="ic">$ == 'ok'</code>. A false condition fails the step.</li><li><code class="ic">expected_status</code>, <code class="ic">json_schema</code> and <code class="ic">request.timeout</code> are accepted but not checked yet. Use a <code class="ic">jsonpath_assertions</code> entry to check the response instead.</li><li>With <code class="ic">expected_result</code>, a response that isn't JSON fails the step with error E0403.</li><li>Each call is logged to <code class="ic">api_details.log</code> and <code class="ic">api_details.har</code> in the run's output folder. See <a href="../../../docs/run/results">Results</a>.</li><li>The top-level key must be <code class="ic">api:</code>. A file that starts with <code class="ic">apis:</code> is ignored.</li></ul>
+<p>See <a href="../../../docs/advanced/api-calls">Call APIs from a test</a> for a full walkthrough.</p>
+<h2 id="worked-example-sign-in-as-each-user">Worked example: sign in as each user<a class="anchor" href="#worked-example-sign-in-as-each-user" aria-label="Link to this section">#</a></h2>
+<p>This suite signs in as two Birch users, reads each user's tier from a data file, and checks for the gold badge only for gold users.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_cases/test_cases.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="test_case,test_step
+Sign In Every User,Open Birch
+Sign In Every User,Sign In Everyone">Copy</button><pre><code><span class="c-dim">test_case,test_step</span>
+<span class="c-mod">Sign In Every User</span><span class="c-dim">,</span><b>Open Birch</b>
+<span class="c-mod">Sign In Every User</span><span class="c-dim">,</span><b>Sign In Everyone</b></code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2,param_3,param_4,param_5
+Open Birch,Launch App,com.birch.shop
+Sign In Everyone,Run Loop,Sign In As,email,ana@birch.example|ben@birch.example,password,pw-ana|pw-ben
+Sign In As,Assert Presence,${email_field},15
+Sign In As,Enter Text,${email_field},${email}
+Sign In As,Enter Text,${password_field},${password}
+Sign In As,Press Element,${sign_in}
+Sign In As,Assert Presence,Welcome,20
+Sign In As,Read Data,tier,test_data/users.csv,email == ${email};select=tier
+Sign In As,Condition,${tier} == 'gold',Check Gold Badge
+Sign In As,Press Element,${sign_out}
+Check Gold Badge,Assert Presence,Gold member,10">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2,param_3,param_4,param_5</span>
+<span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>com.birch.shop
+<span class="c-mod">Sign In Everyone</span><span class="c-dim">,</span><b>Run Loop</b><span class="c-dim">,</span>Sign In As<span class="c-dim">,</span>email<span class="c-dim">,</span>ana@birch.example|ben@birch.example<span class="c-dim">,</span>password<span class="c-dim">,</span>pw-ana|pw-ben
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${email_field}</span><span class="c-dim">,</span>15
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${email_field}</span><span class="c-dim">,</span><span class="c-var">${email}</span>
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${password_field}</span><span class="c-dim">,</span><span class="c-var">${password}</span>
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_in}</span>
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome<span class="c-dim">,</span>20
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Read Data</b><span class="c-dim">,</span>tier<span class="c-dim">,</span>test_data/users.csv<span class="c-dim">,</span>email == <span class="c-var">${email}</span>;select=tier
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Condition</b><span class="c-dim">,</span><span class="c-var">${tier}</span> == 'gold'<span class="c-dim">,</span>Check Gold Badge
+<span class="c-mod">Sign In As</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_out}</span>
+<span class="c-mod">Check Gold Badge</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Gold member<span class="c-dim">,</span>10</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID,Element_ID_text
+email_field,//android.widget.EditText[@resource-id=&quot;com.birch.shop:id/email&quot;],Email
+password_field,//android.widget.EditText[@resource-id=&quot;com.birch.shop:id/password&quot;],Password
+sign_in,//android.widget.Button[@resource-id=&quot;com.birch.shop:id/sign_in&quot;],Sign in
+sign_out,//android.widget.Button[@resource-id=&quot;com.birch.shop:id/sign_out&quot;],Sign out">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID,Element_ID_text</span>
+<span class="c-mod">email_field</span><span class="c-dim">,</span><b>//android.widget.EditText[@resource-id="com.birch.shop:id/email"]</b><span class="c-dim">,</span>Email
+<span class="c-mod">password_field</span><span class="c-dim">,</span><b>//android.widget.EditText[@resource-id="com.birch.shop:id/password"]</b><span class="c-dim">,</span>Password
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//android.widget.Button[@resource-id="com.birch.shop:id/sign_in"]</b><span class="c-dim">,</span>Sign in
+<span class="c-mod">sign_out</span><span class="c-dim">,</span><b>//android.widget.Button[@resource-id="com.birch.shop:id/sign_out"]</b><span class="c-dim">,</span>Sign out</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/users.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="email,password,tier
+ana@birch.example,pw-ana,gold
+ben@birch.example,pw-ben,basic">Copy</button><pre><code><span class="c-dim">email,password,tier</span>
+<span class="c-mod">ana@birch.example</span><span class="c-dim">,</span><b>pw-ana</b><span class="c-dim">,</span>gold
+<span class="c-mod">ben@birch.example</span><span class="c-dim">,</span><b>pw-ben</b><span class="c-dim">,</span>basic</code></pre></figure>
+<p>How it works:</p>
+<ul><li>Run Loop runs <code class="ic">Sign In As</code> twice. It sets <code class="ic">email</code> and <code class="ic">password</code> to the next pair of values each time.</li><li>Steps in <code class="ic">Sign In As</code> are positional, because it runs inside Run Loop. <code class="ic">Assert Presence,Welcome,20</code> is correct there. <code class="ic">timeout_str=20</code> wouldn't be.</li><li>Read Data writes the bare name <code class="ic">tier</code>. Its query replaces <code class="ic">${email}</code> with the current email in quotes.</li><li>Condition compares <code class="ic">${tier}</code> with the quoted literal <code class="ic">'gold'</code>. For Ben the condition is false, so nothing runs and the step passes.</li><li>Inside the loop, <code class="ic">${email_field}</code> uses only its first value, the XPath. The <code class="ic">Email</code> fallback is used only by steps outside a loop.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../../docs/advanced/variables">Variables</a></li><li><a href="../../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../../docs/advanced/conditions">Conditions</a></li><li><a href="../../../docs/advanced/api-calls">Call APIs from a test</a></li><li><a href="../../../docs/create/organise">Organise tests</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Flow%20control%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fflow%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Flow%20control%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fflow%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../../docs/reference/keywords/verification"><span>Previous</span>Verification</a><a class="pager-next" href="../../../docs/reference/cli"><span>Next</span>CLI</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/keywords/flow.md">Edit this page on GitHub</a><span aria-hidden="true">·</span><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#rules-for-every-flow-keyword">Rules for every flow keyword</a></li><li class="toc-l2"><a href="#reuse-and-repeat">Reuse and repeat</a></li><li class="toc-l3"><a href="#execute-module">Execute Module</a></li><li class="toc-l3"><a href="#run-loop">Run Loop</a></li><li class="toc-l2"><a href="#branch">Branch</a></li><li class="toc-l3"><a href="#condition">Condition</a></li><li class="toc-l3"><a href="#compare-numbers">Compare numbers</a></li><li class="toc-l2"><a href="#create-variables">Create variables</a></li><li class="toc-l3"><a href="#read-data">Read Data</a></li><li class="toc-l3"><a href="#evaluate">Evaluate</a></li><li class="toc-l3"><a href="#date-evaluate">Date Evaluate</a></li><li class="toc-l3"><a href="#invoke-api">Invoke API</a></li><li class="toc-l2"><a href="#worked-example-sign-in-as-each-user">Worked example: sign in as each user</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../../docs/">Docs</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../../about">About</a>
+        <a href="../../../contact">Contact</a>
+        <a href="../../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../../app.js?v=ada98e8182" defer></script>
+  <script src="../../../docs.js?v=af6f271657" defer></script>
+  <script src="../../../scenes.js?v=0576d1c19e" defer></script>
+  <script src="../../../scene-defs.js?v=2c98ce7666" defer></script>
+</body>
+</html>
