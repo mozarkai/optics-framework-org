@@ -27,7 +27,9 @@ Use **Selenium** when you already run a Selenium Grid, or need Firefox or a real
 
 ## What changes between platforms
 
-Only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
+Between phones and browsers, only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
+
+TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so Press Element and the typing keywords fail with E0105 there. Write those flows with Press Keycode steps that move the focus, such as `Press Keycode,RIGHT` and then `Press Keycode,ENTER`. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the key names.
 
 Element values usually do change, because each platform names things differently. Give an element one row per platform, and Optics tries each value in turn:
 

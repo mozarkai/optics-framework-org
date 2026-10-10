@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=025c111801">
+  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -101,7 +101,7 @@
 <span class="c-dim">├── </span>execution_logs.log<span class="c-dim">                            # with file_log: true</span>
 <span class="c-dim">└── </span>logs.json<span class="c-dim">                                     # with json_log: true</span></code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>File</th><th>When it's written</th><th>Use it to</th></tr></thead><tbody><tr><td><code class="ic">junit_output.xml</code></td><td>Every run</td><td>Show results in CI. Standard JUnit XML that GitHub Actions, GitLab, Jenkins and others read.</td></tr><tr><td><code class="ic">…pre_&lt;keyword&gt;.jpg</code></td><td>Before each step that finds an element</td><td>See what was on screen when the step started.</td></tr><tr><td><code class="ic">…_detection_result.jpg</code></td><td>When Optics found an element by position</td><td>See exactly what Optics found, boxed in green.</td></tr><tr><td><code class="ic">…_with_aoi.jpg</code></td><td>When a step uses an <a href="../../docs/elements/area-of-interest">area of interest</a></td><td>Check the area covers the right part of the screen. It's drawn in blue.</td></tr><tr><td><code class="ic">…end_of_run.jpg</code></td><td>At the end of the run</td><td>See where the app was left.</td></tr><tr><td><code class="ic">page_sources_log.xml</code> or <code class="ic">.html</code></td><td>When the UI tree is read</td><td>Find the right XPath or text for an element.</td></tr><tr><td><code class="ic">internal_logs.log</code>, <code class="ic">execution_logs.log</code></td><td>With <code class="ic">file_log: true</code></td><td>Read every attempt Optics made, including which ways of finding an element failed.</td></tr><tr><td><code class="ic">logs.json</code></td><td>With <code class="ic">json_log: true</code></td><td>Feed results into your own dashboards.</td></tr><tr><td><code class="ic">detected_errors_&lt;id&gt;.json</code></td><td>When an <a href="../../docs/run/error-detection">error screen</a> was found</td><td>See which error definition matched.</td></tr></tbody></table></div>
-<figure class="scene-fig"><div class="scene" data-scene="results" role="img" aria-label="On the left, the screen before the step. On the right, the same screen with a box around the element Optics found and the way it found it."></div><figcaption>On the left, the screen before the step. On the right, the same screen with a box around the element Optics found and the way it found it.</figcaption></figure>
+<figure class="scene-fig"><div class="scene" data-scene="results" role="img" aria-label="On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it."></div><figcaption>On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it.</figcaption></figure>
 <h2 id="investigate-a-failure">Investigate a failure<a class="anchor" href="#investigate-a-failure" aria-label="Link to this section">#</a></h2>
 <ol><li><strong>Read the Failure details box</strong> in the terminal. It names the test case, the step and the reason.</li><li>**Open the last <code class="ic">pre_…</code> screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an <code class="ic">Assert Presence</code> before it. If it shows a different screen, an earlier step went somewhere unexpected.</li><li><strong>Search the logs</strong> for the element's value. With <code class="ic">file_log: true</code>, <code class="ic">execution_logs.log</code> has a line for every attempt, such as <code class="ic">Trying … on 'Sign in' ... FAIL</code>.</li><li>**Reproduce it in <code class="ic">optics live</code>.** Run the steps before the failure, then try the failing step with different values until one works. See <a href="../../docs/create/record">Record a test</a>.</li></ol>
 <h2 id="turn-on-more-logging">Turn on more logging<a class="anchor" href="#turn-on-more-logging" aria-label="Link to this section">#</a></h2>
@@ -184,7 +184,7 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
 
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
-  <script src="../../scenes.js?v=0576d1c19e" defer></script>
-  <script src="../../scene-defs.js?v=2c98ce7666" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
 </body>
 </html>

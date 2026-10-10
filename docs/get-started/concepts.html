@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=025c111801">
+  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -112,7 +112,7 @@ search_bar,//*[@resource-id='search']">Copy</button><pre><code><span class="c-di
 <ol><li>Reads every file in the project folder and decides what each one is from its column names.</li><li>Runs <strong>Suite Setup</strong>, then each test case in order, then <strong>Suite Teardown</strong>.</li><li>For each step, takes a screenshot, finds the element, and performs the action.</li><li>If a step fails, skips the rest of that test case and moves on to the next one. One broken flow doesn't stop the run.</li><li>At the end, checks the last screen for known error messages, if you've <a href="../../docs/run/error-detection">defined any</a>.</li><li>Writes the results to <code class="ic">execution_output/</code>, and exits with <code class="ic">0</code> if every test case passed or <code class="ic">1</code> if any failed.</li></ol>
 <h3 id="how-optics-finds-an-element">How Optics finds an element<a class="anchor" href="#how-optics-finds-an-element" aria-label="Link to this section">#</a></h3>
 <p>For each value of an element, Optics tries the cheapest ways first. An XPath is looked up in the UI tree. Text is looked up in the UI tree, and if it isn't there, Optics reads a screenshot with OCR. A picture is matched against a screenshot. If everything fails and you've switched on <a href="../../docs/elements/self-heal">AI self-heal</a>, an AI model looks at the screen and tries to recover.</p>
-<figure class="scene-fig"><div class="scene" data-scene="ladder" role="img" aria-label="The button's id changed in a redesign, so the XPath misses and its text finds it. Next, a product name drawn inside an image isn't in the UI tree, so OCR reads it from a screenshot."></div><figcaption>The button's id changed in a redesign, so the XPath misses and its text finds it. Next, a product name drawn inside an image isn't in the UI tree, so OCR reads it from a screenshot.</figcaption></figure>
+<figure class="scene-fig"><div class="scene" data-scene="ladder" role="img" aria-label="sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot."></div><figcaption>sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot.</figcaption></figure>
 <p><a href="../../docs/elements/">How Optics finds elements</a> covers the full order and how to tune it.</p>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/create/">Choose how to create tests</a></li><li><a href="../../docs/reference/files">Project files reference</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul>
@@ -177,7 +177,7 @@ search_bar,//*[@resource-id='search']">Copy</button><pre><code><span class="c-di
 
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
-  <script src="../../scenes.js?v=0576d1c19e" defer></script>
-  <script src="../../scene-defs.js?v=2c98ce7666" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
 </body>
 </html>

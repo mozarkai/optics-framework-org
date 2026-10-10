@@ -55,9 +55,13 @@
     var T = {
       win: win, body: body,
       status: win.querySelector(".sc-status"),
-      line: function (tl, html, t) {
-        return tl.at(t, function () { var l = h(body, '<div class="sc-ln enter">' + (html || " ") + "</div>"); T.last = l; });
+      ref: {},
+      // Print a line. A key keeps a handle on it so set() can rewrite it later, the
+      // way a live terminal UI updates a line in place.
+      line: function (tl, html, t, key, cls) {
+        return tl.at(t, function () { var l = h(body, '<div class="sc-ln enter' + (cls ? " " + cls : "") + '">' + (html || " ") + "</div>"); T.last = l; if (key) T.ref[key] = l; });
       },
+      set: function (tl, key, html, t) { return tl.at(t, function () { if (T.ref[key]) T.ref[key].innerHTML = html; }); },
       // A prompt line with typed command; returns the time typing ends.
       cmd: function (tl, prompt, text, t, cps) {
         var ln;
@@ -135,7 +139,7 @@
   var BOX = {
     email: [16, 214, 220, 46], password: [16, 270, 220, 46], signin: [16, 334, 220, 46],
     search: [14, 92, 224, 38], card0: [14, 178, 111, 136], card1: [131, 178, 111, 136], card2: [14, 330, 111, 136],
-    add: [16, 452, 220, 46], title: [18, 296, 200, 28], tab: [0, 486, 252, 56],
+    add: [16, 452, 220, 46], title: [18, 296, 200, 28], tab: [0, 486, 252, 56], banner: [14, 142, 224, 150], bannerText: [26, 162, 168, 32],
   };
 
   function phone(parent, x, y, scale) {
@@ -172,6 +176,13 @@
       '<div class="b-chips" style="top:358px;left:18px"><span style="background:#EFEBE2;color:#1C1B19">8</span><span style="background:#1C1B19;color:#fff">9</span><span>10</span><span>11</span></div>' +
       '<div class="sc-abs" style="left:18px;right:18px;top:398px;font-size:11.5px;line-height:1.5;color:#6f6b62">Grippy, light and built for long miles on mixed terrain.</div>' +
       '<div class="b-btn b-add" style="top:452px">Add to cart</div></div>');
+    // A home screen whose banner is a picture: its words are pixels, not UI-tree text.
+    S.promo = h(scr, '<div class="sc-app">' +
+      '<div class="sc-abs" style="left:16px;top:52px">' + logo(19) + "</div>" +
+      '<div class="b-search" style="top:92px"><svg width="14" height="14" viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="6.5" stroke="#8b877d" stroke-width="2.4" fill="none"/><path d="M13.5 13.5L18 18" stroke="#8b877d" stroke-width="2.4" stroke-linecap="round"/></svg><span class="q">Search Birch</span></div>' +
+      '<svg class="sc-abs" style="left:14px;top:142px" width="224" height="150" viewBox="0 0 224 150"><defs><linearGradient id="bp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F5B43"/><stop offset="1" stop-color="#5FA57F"/></linearGradient></defs><rect width="224" height="150" rx="16" fill="url(#bp)"/><text x="16" y="44" fill="#fff" font-family="Georgia, serif" font-style="italic" font-weight="700" font-size="23" letter-spacing="-.5">Trail Runner 2</text><text x="17" y="66" fill="rgba(255,255,255,.8)" font-family="sans-serif" font-size="10.5" font-weight="600">NEW COLOURS · SHOP NOW</text><g transform="translate(92 74) scale(.8)">' + shoe("#E8EFE9").replace(/^<svg[^>]*>|<\/svg>$/g, "") + "</g></svg>" +
+      card(PRODUCTS[1], 14, 306) + card(PRODUCTS[3], 131, 306) +
+      '<div class="b-tab"><i></i><i></i><i></i><i></i></div></div>');
     var toast = h(scr, '<div class="b-toast"><i>✓</i><span>Added to cart</span></div>');
     var modal = h(scr, '<div class="b-modal"><div><b>Session expired</b><p>Please sign in again to keep shopping.</p><span>OK</span></div></div>');
     var tap = h(scr, '<div class="sc-tap"></div>');
@@ -194,7 +205,6 @@
         tl.at(t, function () {
           tap.style.left = bx[0] + bx[2] / 2 + "px"; tap.style.top = bx[1] + bx[3] / 2 + "px";
           tap.classList.remove("go"); void tap.offsetWidth; tap.classList.add("go");
-          var btn = document.elementFromPoint ? null : null;
           scr.querySelectorAll(".sc-app.on .b-btn").forEach(function (b) {
             var top = parseFloat(b.style.top);
             if (Math.abs(top - bx[1]) < 4) { b.classList.add("press"); setTimeout(function () { b.classList.remove("press"); }, 160); }
@@ -233,6 +243,20 @@
         return t + 450;
       },
       unlock: function (tl, t) { return tl.hide(ret, t); },
+      // Show search results on the home screen: only the product at index keep, moved
+      // to the first slot. filter(tl, null, t) puts the full grid back.
+      filter: function (tl, keep, t) {
+        var cards = S.home.querySelectorAll(".b-card");
+        return tl.at(t, function () {
+          cards.forEach(function (c, i) {
+            if (!c.dataset.x) { c.dataset.x = c.style.left; c.dataset.y = c.style.top; }
+            var show = keep == null || i === keep;
+            c.style.opacity = show ? "" : "0";
+            c.style.left = keep == null ? c.dataset.x : show ? "14px" : c.dataset.x;
+            c.style.top = keep == null ? c.dataset.y : show ? "178px" : c.dataset.y;
+          });
+        });
+      },
       scan: function (tl, t) { return tl.at(t, function () { scan.classList.remove("go"); void scan.offsetWidth; scan.classList.add("go"); }) + 1100; },
     };
     return api;

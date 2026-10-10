@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=025c111801">
+  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -82,7 +82,7 @@
         </header>
         <div class="prose">
 <p>Some failures don't break a step. The app shows <em>Session expired</em>, or Android shows <em>Birch has stopped</em>, and the test still passes because no step looked for that message. Error detection catches these. You list the messages that mean something went wrong, and Optics checks the screen for them at the end of every run.</p>
-<figure class="scene-fig"><div class="scene" data-scene="errors" role="img" aria-label="At the end of the run, Optics checks the last screen against your error definitions. A match adds a failing entry to the JUnit report."></div><figcaption>At the end of the run, Optics checks the last screen against your error definitions. A match adds a failing entry to the JUnit report.</figcaption></figure>
+<figure class="scene-fig"><div class="scene" data-scene="errors" role="img" aria-label="A step fails because the app signed the shopper out. At the end of the run, Optics reads the text on the last screen, matches it against your error definitions, and adds the match to the JUnit report."></div><figcaption>A step fails because the app signed the shopper out. At the end of the run, Optics reads the text on the last screen, matches it against your error definitions, and adds the match to the JUnit report.</figcaption></figure>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="list-the-error-messages">List the error messages<a class="anchor" href="#list-the-error-messages" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>Create a CSV anywhere in the project. The template uses <code class="ic">test_data/error_definitions.csv</code>:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/error_definitions.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="error_code,match_string,description,severity
@@ -103,8 +103,9 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
 <h2 id="what-happens-at-the-end-of-a-run">What happens at the end of a run<a class="anchor" href="#what-happens-at-the-end-of-a-run" aria-label="Link to this section">#</a></h2>
 <p>After the last test case, Optics captures the screen one more time, reads all the text in the app's UI tree, and looks for each <code class="ic">match_string</code>. Matching ignores case and finds the text anywhere: <code class="ic">session expired</code> matches <em>Your session expired. Please sign in again.</em></p>
 <p>For each match, Optics:</p>
-<ul><li>prints a warning: <code class="ic">ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out</code>,</li><li>adds a failing test case named <code class="ic">on-screen-error-detection</code> to <code class="ic">junit_output.xml</code>, with one failure per match,</li><li>writes the details to <code class="ic">execution_output/detected_errors_&lt;id&gt;.json</code>.</li></ul>
+<ul><li>logs a warning, which you can read in <code class="ic">execution_logs.log</code> when <code class="ic">file_log: true</code> is set: <code class="ic">ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out</code>,</li><li>adds a failing test case named <code class="ic">on-screen-error-detection</code> to <code class="ic">junit_output.xml</code>, with one failure per match,</li><li>writes the details to <code class="ic">execution_output/detected_errors_&lt;id&gt;.json</code>.</li></ul>
 <p>CI tools that read the JUnit report then show the run as failed, even though every step passed.</p>
+<aside class="callout callout-mistake"><p class="callout-title">On Optics 1.10.5, an all-pass run can leave the entry out</p><p>When every test case passes, Optics 1.10.5 can finish the JUnit report before the error-detection entry is added, so the report shows no failure. The match is still written to <code class="ic">detected_errors_&lt;id&gt;.json</code>, and to <code class="ic">execution_logs.log</code> with <code class="ic">file_log: true</code>. Until a release fixes this, have CI check <code class="ic">detected_errors_&lt;id&gt;.json</code> as well as the JUnit report.</p></aside>
 <aside class="callout callout-important"><p class="callout-title">The exit code doesn't change</p><p>A detected error appears in the JUnit report but doesn't change the exit code of <code class="ic">optics execute</code>. If your CI decides pass or fail from the exit code alone, have it read the JUnit report as well. See <a href="../../docs/run/ci">Run tests in CI</a>.</p></aside>
 <h2 id="write-good-match-strings">Write good match strings<a class="anchor" href="#write-good-match-strings" aria-label="Link to this section">#</a></h2>
 <ul><li><strong>Use a phrase only an error would show.</strong> <code class="ic">has stopped</code> is good. <code class="ic">Error</code> matches too much, such as a help page about error messages.</li><li><strong>Copy the exact words</strong> from a screenshot of the error, and keep them short. Matching is plain text, not a pattern, so <code class="ic">*</code> or <code class="ic">.*</code> are matched literally.</li><li><strong>Avoid text that appears in your own tests.</strong> A match anywhere on the last screen counts.</li></ul>
@@ -173,7 +174,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
 
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
-  <script src="../../scenes.js?v=0576d1c19e" defer></script>
-  <script src="../../scene-defs.js?v=2c98ce7666" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
 </body>
 </html>

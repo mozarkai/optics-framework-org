@@ -40,11 +40,14 @@ After the last test case, Optics captures the screen one more time, reads all th
 
 For each match, Optics:
 
-- prints a warning: `ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out`,
+- logs a warning, which you can read in `execution_logs.log` when `file_log: true` is set: `ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out`,
 - adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, with one failure per match,
 - writes the details to `execution_output/detected_errors_<id>.json`.
 
 CI tools that read the JUnit report then show the run as failed, even though every step passed.
+
+**On Optics 1.10.5, an all-pass run can leave the entry out:**
+When every test case passes, Optics 1.10.5 can finish the JUnit report before the error-detection entry is added, so the report shows no failure. The match is still written to `detected_errors_<id>.json`, and to `execution_logs.log` with `file_log: true`. Until a release fixes this, have CI check `detected_errors_<id>.json` as well as the JUnit report.
 
 **The exit code doesn't change:**
 A detected error appears in the JUnit report but doesn't change the exit code of `optics execute`. If your CI decides pass or fail from the exit code alone, have it read the JUnit report as well. See [Run tests in CI](https://optics-framework.org/docs/run/ci).

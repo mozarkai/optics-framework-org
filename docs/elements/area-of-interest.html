@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=025c111801">
+  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -82,7 +82,7 @@
         </header>
         <div class="prose">
 <p>An <strong>area of interest</strong> (AOI) is a rectangle on the screen. Give one to a step and Optics only accepts an element inside it. Use it when the same text appears in several places, such as an <em>Add to cart</em> button that also appears in a product description, or to make OCR faster by reading less of the screen.</p>
-<figure class="scene-fig"><div class="scene" data-scene="aoi" role="img" aria-label="With an area of interest covering the bottom quarter, Optics only reads that part of the screen, so it finds the button rather than the same words in the description."></div><figcaption>With an area of interest covering the bottom quarter, Optics only reads that part of the screen, so it finds the button rather than the same words in the description.</figcaption></figure>
+<figure class="scene-fig"><div class="scene" data-scene="aoi" role="img" aria-label="With an area of interest covering the bottom quarter, Optics only searches that part of the screen, so it presses the button rather than the same words in the banner at the top."></div><figcaption>With an area of interest covering the bottom quarter, Optics only searches that part of the screen, so it presses the button rather than the same words in the banner at the top.</figcaption></figure>
 <h2 id="set-an-area">Set an area<a class="anchor" href="#set-an-area" aria-label="Link to this section">#</a></h2>
 <p>Four values describe the rectangle, each as a <strong>percentage</strong> of the screen, from 0 to 100:</p>
 <div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Meaning</th><th>Default</th></tr></thead><tbody><tr><td><code class="ic">aoi_x</code></td><td>Left edge, from the left of the screen</td><td><code class="ic">0</code></td></tr><tr><td><code class="ic">aoi_y</code></td><td>Top edge, from the top of the screen</td><td><code class="ic">0</code></td></tr><tr><td><code class="ic">aoi_width</code></td><td>Width of the area</td><td><code class="ic">100</code></td></tr><tr><td><code class="ic">aoi_height</code></td><td>Height of the area</td><td><code class="ic">100</code></td></tr></tbody></table></div>
@@ -165,7 +165,7 @@ Add To Cart,Press Element,Add to cart,aoi_y=75,aoi_height=25">Copy</button><pre>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
-  <script src="../../scenes.js?v=0576d1c19e" defer></script>
-  <script src="../../scene-defs.js?v=2c98ce7666" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
 </body>
 </html>

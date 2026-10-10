@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=025c111801">
+  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -81,7 +81,7 @@
           </div>
         </header>
         <div class="prose">
-<figure class="scene-fig"><div class="scene" data-scene="platforms" role="img" aria-label="The same Press Element step on a phone, a TV and a browser. Only the config changes."></div><figcaption>The same Press Element step on a phone, a TV and a browser. Only the config changes.</figcaption></figure>
+<figure class="scene-fig"><div class="scene" data-scene="platforms" role="img" aria-label="One test on a phone, a TV and a browser. Phones and browsers press the element itself. Tizen and webOS TVs have no touch, so their steps move the focus with remote keys."></div><figcaption>One test on a phone, a TV and a browser. Phones and browsers press the element itself. Tizen and webOS TVs have no touch, so their steps move the focus with remote keys.</figcaption></figure>
 <p>Optics runs the same tests on phones, TVs, browsers and locked production devices. A <strong>driver</strong> controls the device, and <strong>element sources</strong> are the ways Optics looks at the screen. You pick both in <code class="ic">config.yaml</code>.</p>
 <h2 id="support-matrix">Support matrix<a class="anchor" href="#support-matrix" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Platform</th><th>Driver</th><th>Element sources</th><th>Notes</th></tr></thead><tbody><tr><td>Android</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Needs the Appium server, adb, and a phone or emulator.</td></tr><tr><td>iOS</td><td><code class="ic">appium</code> (XCUITest)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Needs a Mac with Xcode, and a simulator or a signed real device.</td></tr><tr><td>Android TV</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Same setup as Android. Move around with D-pad key numbers.</td></tr><tr><td>Samsung Tizen</td><td><code class="ic">appium</code> (<code class="ic">platformName: TizenTV</code>)</td><td><code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Remote keys only. Touch and typing keywords fail with E0105.</td></tr><tr><td>LG webOS</td><td><code class="ic">appium</code> (<code class="ic">platformName: LGTV</code>)</td><td><code class="ic">appium_screenshot</code>, plus OCR</td><td>Remote keys only. Touch and typing keywords fail with E0105.</td></tr><tr><td>Web (Playwright)</td><td><code class="ic">playwright</code></td><td><code class="ic">playwright_find_element</code>, <code class="ic">playwright_page_source</code>, <code class="ic">playwright_screenshot</code></td><td>No server. Installs and opens its own Chromium.</td></tr><tr><td>Web (Selenium)</td><td><code class="ic">selenium</code></td><td><code class="ic">selenium_find_element</code>, <code class="ic">selenium_page_source</code>, <code class="ic">selenium_screenshot</code></td><td>Needs a WebDriver server or Grid. Chrome or Firefox.</td></tr><tr><td>Production devices (BLE + camera)</td><td><code class="ic">ble</code></td><td><code class="ic">camera_screenshot</code>, plus OCR or image matching</td><td>Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera.</td></tr></tbody></table></div>
@@ -90,7 +90,8 @@
 <p>We recommend <strong>Playwright</strong> for most people. It needs no server, <code class="ic">optics setup</code> installs its browser for you, and it runs on your own machine.</p>
 <p>Use <strong>Selenium</strong> when you already run a Selenium Grid, or need Firefox or a real Chrome on remote machines. It needs a WebDriver server running before each run. <a href="../../docs/platforms/web">Test websites</a> covers both.</p>
 <h2 id="what-changes-between-platforms">What changes between platforms<a class="anchor" href="#what-changes-between-platforms" aria-label="Link to this section">#</a></h2>
-<p>Only <code class="ic">config.yaml</code> changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.</p>
+<p>Between phones and browsers, only <code class="ic">config.yaml</code> changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.</p>
+<p>TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so Press Element and the typing keywords fail with E0105 there. Write those flows with Press Keycode steps that move the focus, such as <code class="ic">Press Keycode,RIGHT</code> and then <code class="ic">Press Keycode,ENTER</code>. <a href="../../docs/platforms/tv">Test TV apps</a> shows the key names.</p>
 <p>Element values usually do change, because each platform names things differently. Give an element one row per platform, and Optics tries each value in turn:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
 sign_in,//android.widget.Button[@text='Sign in']
@@ -167,7 +168,7 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
 
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
-  <script src="../../scenes.js?v=0576d1c19e" defer></script>
-  <script src="../../scene-defs.js?v=2c98ce7666" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
 </body>
 </html>
