@@ -76,7 +76,7 @@ body {
 h1, h2, h3, p, ol, dl, dd, figure, pre { margin: 0; }
 a { color: inherit; }
 img, svg, video { display: block; }
-code, kbd, pre { font-family: var(--mono); }
+code, kbd, pre { font-family: var(--mono); font-variant-ligatures: none; } /* show == and -- as typed: people copy these */
 ::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 .cmd :focus-visible, .code :focus-visible { outline-color: var(--code-info); }
