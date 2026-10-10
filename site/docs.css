@@ -83,7 +83,7 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .prose > * + * { margin-top: 18px; }
 .prose p, .prose li { text-wrap: pretty; }
 /* Running text keeps a reading measure (about 75 characters); code and tables use the full column. */
-.prose > p, .prose > ul, .prose > ol, .prose > blockquote, .callout p { max-width: 35em; }
+.prose > p, .prose > ul, .prose > ol:not(.doc-steps), .prose > blockquote, .step-body > p, .step-body > ul, .step-body > ol, .callout p { max-width: 35em; }
 .prose strong { color: var(--ink); font-weight: 620; }
 .prose a { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent); text-underline-offset: 3px; }
 .prose a:hover { text-decoration-color: currentColor; }
@@ -116,7 +116,7 @@ html:has(.docs) { scroll-padding-top: 126px; }
 /* code */
 .doc-code { position: relative; }
 .doc-code pre { padding: 16px 20px 18px; font-size: .8125rem; line-height: 1.75; }
-.doc-code:not(.has-title) pre { padding-right: 84px; }
+.doc-code:not(.has-title, .no-copy) pre { padding-right: 84px; }
 .doc-code figcaption { display: flex; align-items: center; min-height: 44px; padding: 0 84px 0 20px; }
 .doc-code .copy { position: absolute; top: 6px; right: 6px; height: 32px; min-width: 60px; font-size: .8125rem; opacity: .85; }
 .doc-code:not(.has-title) .copy { top: 8px; }
