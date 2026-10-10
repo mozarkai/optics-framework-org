@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=54f05b77ff">
-  <link rel="stylesheet" href="../../docs.css?v=1d8c10f569">
+  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
+  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -67,7 +67,7 @@
           <h1>Catch error screens</h1>
           <p class="doc-summary">Fail a run in CI when the app ends on a crash dialog, a &quot;Session expired&quot; message or any other error you define.</p>
           <div class="doc-meta">
-            <div class="chips"><span class="chip chip-intermediate">Intermediate</span><span class="chip chip-time">6 min</span></div>
+            <p class="doc-level">Intermediate, about 6 min</p>
             <div class="page-actions">
               <button class="page-copy" type="button" data-md="error-detection.md">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
@@ -104,7 +104,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
 <p>After the last test case, Optics captures the screen one more time, reads all the text in the app's UI tree, and looks for each <code class="ic">match_string</code>. Matching ignores case and finds the text anywhere: <code class="ic">session expired</code> matches <em>Your session expired. Please sign in again.</em></p>
 <p>For each match, Optics:</p>
 <ul><li>logs a warning, which you can read in <code class="ic">execution_logs.log</code> when <code class="ic">file_log: true</code> is set: <code class="ic">ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out</code>,</li><li>adds a failing test case named <code class="ic">on-screen-error-detection</code> to <code class="ic">junit_output.xml</code>, with one failure per match,</li><li>writes the details to <code class="ic">execution_output/detected_errors_&lt;id&gt;.json</code>.</li></ul>
-<p>CI tools that read the JUnit report then show the run as failed, even though every step passed.</p>
+<p>CI tools that read the JUnit report then show the run as failed, even when every step passed. On 1.10.5 that last case has a bug:</p>
 <aside class="callout callout-mistake"><p class="callout-title">On Optics 1.10.5, an all-pass run can leave the entry out</p><p>When every test case passes, Optics 1.10.5 can finish the JUnit report before the error-detection entry is added, so the report shows no failure. The match is still written to <code class="ic">detected_errors_&lt;id&gt;.json</code>, and to <code class="ic">execution_logs.log</code> with <code class="ic">file_log: true</code>. Until a release fixes this, have CI check <code class="ic">detected_errors_&lt;id&gt;.json</code> as well as the JUnit report.</p></aside>
 <aside class="callout callout-important"><p class="callout-title">The exit code doesn't change</p><p>A detected error appears in the JUnit report but doesn't change the exit code of <code class="ic">optics execute</code>. If your CI decides pass or fail from the exit code alone, have it read the JUnit report as well. See <a href="../../docs/run/ci">Run tests in CI</a>.</p></aside>
 <h2 id="write-good-match-strings">Write good match strings<a class="anchor" href="#write-good-match-strings" aria-label="Link to this section">#</a></h2>
@@ -124,7 +124,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
             <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Catch%20error%20screens&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Ferror-detection%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
           </div>
           <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/run/results"><span>Previous</span>Results</a><a class="pager-next" href="../../docs/run/ci"><span>Next</span>Run tests in CI</a></nav>
-          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/error-detection.md">Edit this page on GitHub</a><span aria-hidden="true">·</span><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/error-detection.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
       <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l3"><a href="#list-the-error-messages">List the error messages</a></li><li class="toc-l3"><a href="#run-the-suite-as-usual">Run the suite as usual</a></li><li class="toc-l2"><a href="#what-happens-at-the-end-of-a-run">What happens at the end of a run</a></li><li class="toc-l2"><a href="#write-good-match-strings">Write good match strings</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
@@ -175,6 +175,6 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=af6f271657" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5e73da81f9" defer></script>
+  <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>
 </html>

@@ -50,7 +50,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=54f05b77ff">
+  <link rel="stylesheet" href="styles.css?v=1870328b62">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -94,7 +94,7 @@
               <a class="btn btn-solid" href="docs/get-started/quickstart">Get started</a>
               <a class="btn btn-ghost" href="https://github.com/mozarkai/optics-framework">View on GitHub</a>
             </div>
-            <p class="fineprint">Apache 2.0. Needs Python 3.12 or newer. <a href="#install">Windows and pip</a> · <a href="docs/">Read the docs</a></p>
+            <p class="fineprint">Apache 2.0. Needs Python 3.12 or newer. Also installs on <a href="#install">Windows and with pip</a>. <a href="docs/">Read the docs</a>.</p>
           </div>
         </div>
 
@@ -181,14 +181,16 @@
               <p>Open <code class="ic">optics live</code> next to your device and run keywords one at a time. Every step that works is recorded, and <code class="ic">/save</code> writes the recording into your suite as a reusable module.</p>
               <figure class="code">
                 <figcaption>optics live</figcaption>
-<pre><code><span class="c-pass"> ✓</span> <b>enter_text Email ava@birch.shop</b>
+<pre><code><span class="c-pass"> ✓</span> <b>launch_app</b>
+<span class="c-dim">     1.21s</span>
+<span class="c-pass"> ✓</span> <b>enter_text Email ava@birch.shop</b>
 <span class="c-dim">     0.48s  [Text]</span>
 <span class="c-pass"> ✓</span> <b>enter_text Password ${password}</b>
 <span class="c-dim">     0.41s  [Text]</span>
 <span class="c-pass"> ✓</span> <b>press_element Sign in</b>
 <span class="c-dim">     0.31s  [XPath]</span>
-<span class="c-info"> •</span> <b>/save checkout sign_in</b>
-<span class="c-pass">     Saved 3 step(s) → module 'sign_in'</span></code></pre>
+<span class="c-run">›</span> <b>/save checkout sign_in</b>
+<span class="c-info"> •</span> <span class="c-pass">Saved 4 step(s) → module 'sign_in' in modules/modules.csv</span></code></pre>
               </figure>
             </div>
 
@@ -198,12 +200,15 @@
               <figure class="code">
                 <figcaption>optics live, AI mode</figcaption>
 <pre><code><span class="c-run">ai ›</span> <b>add running shoes to the cart</b>
-<span class="c-ghost">     thinking: open search, then look for the shoes</span>
-<span class="c-pass">   ✓</span> <b>press_element Search</b>            <span class="c-dim">[Text]</span>
-<span class="c-pass">   ✓</span> <b>enter_text Search running shoes</b> <span class="c-dim">[Text]</span>
-<span class="c-pass">   ✓</span> <b>press_element Trail Runner 2</b>    <span class="c-dim">[OCR]</span>
-<span class="c-pass">   ✓</span> <b>press_element Add to cart</b>       <span class="c-dim">[XPath]</span>
-<span class="c-dim">     done · 4 step(s) · recorded 4</span></code></pre>
+<span class="c-pass"> ✓</span> [ai] add running shoes to the cart
+<span class="c-dim">     8.02s  done · 3 step(s) · 8.0s · recorded 3 (/save to keep)</span>
+<span class="c-ghost">     thinking: search for running shoes first</span>
+<span class="c-pass">   ✓</span> <b>enter_text 'Search' 'running shoes'</b>
+<span class="c-dim">       1.06s  [Text]</span>
+<span class="c-pass">   ✓</span> <b>press_element 'Trail Runner 2'</b>
+<span class="c-dim">       0.87s  [OCR]</span>
+<span class="c-pass">   ✓</span> <b>press_element 'Add to cart'</b>
+<span class="c-dim">       0.34s  [Text]</span></code></pre>
               </figure>
             </div>
 
@@ -213,7 +218,7 @@
               <figure class="code">
                 <figcaption>your agent</figcaption>
 <pre><code><span class="c-dim">⏺</span> optics · <b>start_session</b><span class="c-dim">(driver="appium")</span>
-<span class="c-dim">⏺</span> optics · <b>press_element</b><span class="c-dim">(element="Sign in")</span>
+<span class="c-dim">⏺</span> optics · <b>press_element</b><span class="c-dim">(session_id="7f3c…", element="Sign in")</span>
 <span class="c-dim">⏺</span> Read <b>optics://project-format</b>
 <span class="c-dim">⏺</span> Write <b>checkout/modules/modules.csv</b> <span class="c-pass">+18</span>
 <span class="c-pass">●</span> Suite ready: 3 modules, 14 steps.</code></pre>
@@ -313,27 +318,28 @@ Element_Name,Element_ID
             <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which validates every keyword, element and module reference.</p>
             <dl class="outputs">
               <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
-              <div><dt>Screenshots</dt><dd>Before and after every action, annotated with the strategy that found the element.</dd></div>
-              <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code>, fail the run even without an assertion.</dd></div>
+              <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
+              <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
             </dl>
           </div>
           <figure class="code">
             <figcaption>~/birch</figcaption>
 <pre><code><span class="c-pass">~/birch</span> <span class="c-mod">❯</span> <b>optics execute checkout</b>
-Running tests <span class="bar"></span> 100%
+Running tests <span class="bar"></span> 100% 0:00:04
 <b>Test Suite</b>
-<span class="c-dim">├──</span> Suite Setup                      <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Launch App             <span class="c-dim">1.21s</span>  <span class="c-pass">PASS</span>
-<span class="c-dim">├──</span> Sign In                          <span class="c-pass">PASS</span>
-<span class="c-dim">│   ├──</span> Enter Text (Email)     <span class="c-dim">0.52s</span>  <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Press Element          <span class="c-dim">0.31s</span>  <span class="c-pass">PASS</span>
-<span class="c-dim">├──</span> Add To Cart                      <span class="c-pass">PASS</span>
-<span class="c-dim">│   ├──</span> Enter Text (Search)    <span class="c-dim">0.61s</span>  <span class="c-pass">PASS</span>
-<span class="c-dim">│   └──</span> Press Element          <span class="c-dim">0.29s</span>  <span class="c-pass">PASS</span>
-<span class="c-dim">└──</span> Checkout                         <span class="c-pass">PASS</span>
-<span class="c-dim">    └──</span> Assert Presence        <span class="c-dim">0.83s</span>  <span class="c-pass">PASS</span>
+<span class="c-dim">├── </span>Suite Setup                           <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">│   └── </span>Open Store                        <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">│       └── </span>Launch App                    <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">└── </span>Checkout                              <span class="c-dim">| 2.95s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">    ├── </span>Sign In                           <span class="c-dim">| 0.83s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">    │   ├── </span>Enter Text (//*[@resource-... <span class="c-dim">| 0.52s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">    │   └── </span>Press Element (Sign in)       <span class="c-dim">| 0.31s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">    └── </span>Add To Cart                       <span class="c-dim">| 2.12s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">        ├── </span>Enter Text Direct (running... <span class="c-dim">| 0.61s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">        ├── </span>Press Element (Trail Runne... <span class="c-dim">| 1.22s |</span>    <span class="c-pass">PASS</span>
+<span class="c-dim">        └── </span>Assert Presence (Added to ... <span class="c-dim">| 0.29s |</span>    <span class="c-pass">PASS</span>
 
-Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></pre>
+Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></pre>
           </figure>
         </div>
       </div>
@@ -365,7 +371,7 @@ Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></
         <div class="two where-grid">
           <div class="where-item">
             <h3 class="h3">On every build</h3>
-            <p class="body-text">Run in CI and read results as they arrive. On-screen error detection fails the build when the app crashes mid-test, even if no assertion would have caught it.</p>
+            <p class="body-text">Run in CI and read results as they arrive. On-screen error detection flags a crash or sign-out screen left showing at the end of the run, even if no assertion would have caught it.</p>
           </div>
           <div class="where-item">
             <h3 class="h3">Before every release</h3>
@@ -446,27 +452,23 @@ Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></
           <h2 class="h2" id="docs-h">Learn Optics</h2>
           <p class="head-note">Guides from your first test to production monitoring, and a reference for every keyword, command and setting.</p>
         </div>
-        <div class="learn-grid">
-          <a class="learn-card" href="docs/get-started/quickstart" style="--c:var(--write)">
-            <span class="learn-tag">5 minutes</span>
-            <span class="learn-title">Quickstart</span>
-            <span class="learn-text">Install Optics and run a working test in a browser. No device needed.</span>
-          </a>
-          <a class="learn-card" href="docs/get-started/first-test" style="--c:var(--record)">
-            <span class="learn-tag">15 minutes</span>
-            <span class="learn-title">Write your first test</span>
-            <span class="learn-text">Sign in to a real online store and add to cart, step by step.</span>
-          </a>
-          <a class="learn-card" href="docs/create/" style="--c:var(--say)">
-            <span class="learn-tag">Guides</span>
-            <span class="learn-title">Create tests your way</span>
-            <span class="learn-text">Write, record, describe in plain English, or hand it to your AI agent.</span>
-          </a>
-          <a class="learn-card" href="docs/reference/" style="--c:var(--delegate)">
-            <span class="learn-tag">Reference</span>
-            <span class="learn-title">Every keyword and setting</span>
-            <span class="learn-text">Keywords, the CLI, config.yaml, file formats and error codes.</span>
-          </a>
+        <div class="two where-grid">
+          <div class="where-item">
+            <h3 class="h3"><a class="learn-link" href="docs/get-started/quickstart">Quickstart</a></h3>
+            <p class="body-text">Five minutes. Install Optics and run a working test in a browser, no device needed.</p>
+          </div>
+          <div class="where-item">
+            <h3 class="h3"><a class="learn-link" href="docs/get-started/first-test">Write your first test</a></h3>
+            <p class="body-text">Fifteen minutes. Sign in to a real online store and add to cart, one step at a time.</p>
+          </div>
+          <div class="where-item">
+            <h3 class="h3"><a class="learn-link" href="docs/create/">Create tests your way</a></h3>
+            <p class="body-text">Write a test, record it on the device, describe it in plain English, or hand it to your AI agent.</p>
+          </div>
+          <div class="where-item">
+            <h3 class="h3"><a class="learn-link" href="docs/reference/">Every keyword and setting</a></h3>
+            <p class="body-text">Keywords, the CLI, config.yaml, file formats and error codes.</p>
+          </div>
         </div>
         <div class="btn-row learn-cta">
           <a class="btn btn-solid" href="docs/">Read the docs</a>
