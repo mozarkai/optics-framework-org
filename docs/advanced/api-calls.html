@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -83,7 +83,7 @@
         <div class="prose">
 <p>Some steps are faster or more reliable through an API than through the screen: creating a test account, fetching today's offer code, or checking that an order reached the backend. <code class="ic">Invoke API</code> calls an endpoint you describe in a YAML file, checks the response, and saves values from it as variables for later steps.</p>
 <p>The example on this page runs as written. It uses <a href="https://dummyjson.com" rel="noopener">DummyJSON</a>, a free public API for testing.</p>
-<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="describe-the-api">Describe the API<a class="anchor" href="#describe-the-api" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="describe-the-api">Describe the API<a class="anchor" href="#describe-the-api" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Create a YAML file anywhere in the project, with a top-level <code class="ic">api:</code> key. Group endpoints into <strong>collections</strong>, each with a base URL:</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>test_data/api.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="api:
   collections:
@@ -116,40 +116,40 @@
               Authorization: &quot;Bearer ${access_token}&quot;
           expected_result:
             extract:
-              email: $.email">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>api</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>collections</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>dummyjson</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"DummyJSON"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>base_url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"https://dummyjson.com"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>global_headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>content-type</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"application/json"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>apis</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>login</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Sign in"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/auth/login"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> POST
-            <span class=<span class="c-lit">"c-mod"</span>>body</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>username</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_username}</span>"</span>
-              <span class=<span class="c-lit">"c-mod"</span>>password</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_password}</span>"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>jsonpath_assertions</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              - <span class=<span class="c-lit">"c-mod"</span>>path</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.accessToken
-                <span class=<span class="c-lit">"c-mod"</span>>condition</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"len($) &gt; 0"</span>
-            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>access_token</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.accessToken
-        <span class=<span class="c-lit">"c-mod"</span>>me</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Who am I"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/auth/me"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> GET
-            <span class=<span class="c-lit">"c-mod"</span>>headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>Authorization</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Bearer <span class="c-var">${access_token}</span>"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>email</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.email</code></pre></figure>
+              email: $.email">Copy</button><pre><code><span class="c-mod">api</span><span class="c-dim">:</span>
+  <span class="c-mod">collections</span><span class="c-dim">:</span>
+    <span class="c-mod">dummyjson</span><span class="c-dim">:</span>
+      <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"DummyJSON"</span>
+      <span class="c-mod">base_url</span><span class="c-dim">:</span> <span class="c-lit">"https://dummyjson.com"</span>
+      <span class="c-mod">global_headers</span><span class="c-dim">:</span>
+        <span class="c-mod">content-type</span><span class="c-dim">:</span> <span class="c-lit">"application/json"</span>
+      <span class="c-mod">apis</span><span class="c-dim">:</span>
+        <span class="c-mod">login</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"Sign in"</span>
+          <span class="c-mod">endpoint</span><span class="c-dim">:</span> <span class="c-lit">"/auth/login"</span>
+          <span class="c-mod">request</span><span class="c-dim">:</span>
+            <span class="c-mod">method</span><span class="c-dim">:</span> POST
+            <span class="c-mod">body</span><span class="c-dim">:</span>
+              <span class="c-mod">username</span><span class="c-dim">:</span> <span class="c-lit">"<span class="c-var">${api_username}</span>"</span>
+              <span class="c-mod">password</span><span class="c-dim">:</span> <span class="c-lit">"<span class="c-var">${api_password}</span>"</span>
+          <span class="c-mod">expected_result</span><span class="c-dim">:</span>
+            <span class="c-mod">jsonpath_assertions</span><span class="c-dim">:</span>
+              - <span class="c-mod">path</span><span class="c-dim">:</span> $.accessToken
+                <span class="c-mod">condition</span><span class="c-dim">:</span> <span class="c-lit">"len($) &gt; 0"</span>
+            <span class="c-mod">extract</span><span class="c-dim">:</span>
+              <span class="c-mod">access_token</span><span class="c-dim">:</span> $.accessToken
+        <span class="c-mod">me</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"Who am I"</span>
+          <span class="c-mod">endpoint</span><span class="c-dim">:</span> <span class="c-lit">"/auth/me"</span>
+          <span class="c-mod">request</span><span class="c-dim">:</span>
+            <span class="c-mod">method</span><span class="c-dim">:</span> GET
+            <span class="c-mod">headers</span><span class="c-dim">:</span>
+              <span class="c-mod">Authorization</span><span class="c-dim">:</span> <span class="c-lit">"Bearer <span class="c-var">${access_token}</span>"</span>
+          <span class="c-mod">expected_result</span><span class="c-dim">:</span>
+            <span class="c-mod">extract</span><span class="c-dim">:</span>
+              <span class="c-mod">email</span><span class="c-dim">:</span> $.email</code></pre></figure>
 <ul><li>**<code class="ic">request</code>** sets the method, headers and a JSON body. <code class="ic">${name}</code> is replaced anywhere in the endpoint, headers and body.</li><li>**<code class="ic">jsonpath_assertions</code>** checks the response. <code class="ic">path</code> picks a value, and <code class="ic">condition</code> is a small expression where <code class="ic">$</code> stands for that value. A false condition fails the step.</li><li>**<code class="ic">extract</code>** saves values from the response as variables, using JSONPath: <code class="ic">$.accessToken</code>, <code class="ic">$.customer.id</code>, <code class="ic">$.items[0].name</code>.</li></ul>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="add-the-inputs-to-your-elements-file">Add the inputs to your elements file<a class="anchor" href="#add-the-inputs-to-your-elements-file" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="add-the-inputs-to-your-elements-file">Add the inputs to your elements file<a class="anchor" href="#add-the-inputs-to-your-elements-file" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
 api_username,emilys
 api_password,emilyspass
@@ -160,7 +160,7 @@ email,placeholder">Copy</button><pre><code><span class="c-dim">Element_Name,Elem
 <span class="c-mod">access_token</span><span class="c-dim">,</span><b>placeholder</b>
 <span class="c-mod">email</span><span class="c-dim">,</span><b>placeholder</b></code></pre></figure>
 <p>The <code class="ic">placeholder</code> rows let <code class="ic">optics dry_run</code> accept variables that only get their value during the run.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="call-the-endpoints-in-a-module">Call the endpoints in a module<a class="anchor" href="#call-the-endpoints-in-a-module" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h2 id="call-the-endpoints-in-a-module">Call the endpoints in a module<a class="anchor" href="#call-the-endpoints-in-a-module" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Refer to an endpoint as <code class="ic">collection.name</code>:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
 Sign In Over The API,Invoke API,dummyjson.login
@@ -173,7 +173,7 @@ API sign in works,Sign In Over The API">Copy</button><pre><code><span class="c-d
 <span class="c-mod">API sign in works</span><span class="c-dim">,</span><b>Sign In Over The API</b></code></pre></figure>
 <p>The first call signs in and saves <code class="ic">access_token</code>. The second sends the token and saves the account's <code class="ic">email</code>. From here, any step can use <code class="ic">${email}</code>: type it into a field, check it on screen, or compare it in a <a href="../../docs/advanced/conditions">condition</a>.</p>
 <p>A project with only API steps still needs a <code class="ic">config.yaml</code> with a driver enabled, but the driver doesn't open anything unless a step asks it to.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="run-it">Run it<a class="anchor" href="#run-it" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h2 id="run-it">Run it<a class="anchor" href="#run-it" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute api-demo">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute api-demo</code></pre></figure>
 <figure class="code doc-code" data-lang="terminal"><button class="copy" type="button" aria-label="Copy code" data-copy="└── API sign in works                                       |  1.31s |    PASS
     └── Sign In Over The API                                |  1.31s |    PASS
@@ -211,7 +211,7 @@ Order Shows In App,Assert Presence,${order_number}">Copy</button><pre><code><spa
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/advanced/api-calls.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l3"><a href="#describe-the-api">Describe the API</a></li><li class="toc-l3"><a href="#add-the-inputs-to-your-elements-file">Add the inputs to your elements file</a></li><li class="toc-l3"><a href="#call-the-endpoints-in-a-module">Call the endpoints in a module</a></li><li class="toc-l3"><a href="#run-it">Run it</a></li><li class="toc-l2"><a href="#combine-api-and-ui-steps">Combine API and UI steps</a></li><li class="toc-l2"><a href="#good-to-know">Good to know</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#describe-the-api">Describe the API</a></li><li class="toc-l2"><a href="#add-the-inputs-to-your-elements-file">Add the inputs to your elements file</a></li><li class="toc-l2"><a href="#call-the-endpoints-in-a-module">Call the endpoints in a module</a></li><li class="toc-l2"><a href="#run-it">Run it</a></li><li class="toc-l2"><a href="#combine-api-and-ui-steps">Combine API and UI steps</a></li><li class="toc-l2"><a href="#good-to-know">Good to know</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
     </main>
   </div>
 
@@ -257,7 +257,7 @@ Order Shows In App,Assert Presence,${order_number}">Copy</button><pre><code><spa
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

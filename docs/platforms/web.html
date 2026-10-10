@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -97,17 +97,17 @@
 elements_sources:
   - playwright_find_element: {enabled: true}
   - playwright_page_source:  {enabled: true}
-  - playwright_screenshot:   {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true                         <span class="c-dim"> # no url and no server needed</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browser</span><span class=<span class="c-lit">"c-dim"</span>>:</span> chromium                   <span class="c-dim"> # ignored on 1.10.5: always Chromium</span>
-        <span class=<span class="c-lit">"c-mod"</span>>headless</span><span class=<span class="c-lit">"c-dim"</span>>:</span> false                     <span class="c-dim"> # ignored on 1.10.5: always a visible window</span>
+  - playwright_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true                         </span><span class="c-dim"> # no url and no server needed</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browser</span><span class="c-dim">:</span> chromium                   <span class="c-dim"> # ignored on 1.10.5: always Chromium</span>
+        <span class="c-mod">headless</span><span class="c-dim">:</span> <span class="c-info">false                     </span><span class="c-dim"> # ignored on 1.10.5: always a visible window</span>
        <span class="c-dim"> # viewport: {width: 1280, height: 800}  # ignored on 1.10.5: always 1280×800</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}</code></pre></figure>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">playwright_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">playwright_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
 <aside class="callout callout-note"><p class="callout-title">Note</p><p>On Optics 1.10.5, Playwright ignores <code class="ic">browser</code>, <code class="ic">headless</code> and <code class="ic">viewport</code> under <code class="ic">capabilities</code>. It always opens a visible Chromium window at 1280×800. You can leave the keys in place for when they take effect.</p></aside>
 <p>There's no server to start, so <code class="ic">optics execute</code> skips its preflight check for Playwright.</p>
 <aside class="callout callout-mistake"><p class="callout-title">Enter Text and Get Text fail in browsers on Optics 1.10.5</p><p>On 1.10.5, Enter Text and Get Text fail in Playwright with <code class="ic">Object of type Locator is not JSON serializable</code>. Both are fixed in the next release (<a href="https://github.com/mozarkai/optics-framework/pull/600" rel="noopener">pull request #600</a>). Until you upgrade, click the field, then type into it:</p>
@@ -131,17 +131,17 @@ Sign in,Enter Text Direct,standard_user">Copy</button><pre><code><span class="c-
 elements_sources:
   - selenium_find_element: {enabled: true}
   - selenium_page_source:  {enabled: true}
-  - selenium_screenshot:   {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span>  <span class="c-dim"> # your Grid or standalone server</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                         <span class="c-dim"> # must not be empty</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browserName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> chrome                 <span class="c-dim"> # required: chrome or firefox</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browserURL</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"https://www.saucedemo.com"</span> <span class="c-dim"> # page opened when the browser starts</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}</code></pre></figure>
+  - selenium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span>  <span class="c-dim"> # your Grid or standalone server</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                         <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> chrome                 <span class="c-dim"> # required: chrome or firefox</span>
+        <span class="c-mod">browserURL</span><span class="c-dim">:</span> <span class="c-lit">"https://www.saucedemo.com"</span> <span class="c-dim"> # page opened when the browser starts</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">selenium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">selenium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
 <p><code class="ic">capabilities</code> must include <code class="ic">browserName</code>, and only <code class="ic">chrome</code> and <code class="ic">firefox</code> work. <code class="ic">optics configure</code> writes <code class="ic">capabilities: {}</code> for Selenium, which can't start, so add these keys by hand. Other keys under <code class="ic">capabilities</code> are passed to the browser as WebDriver capabilities.</p>
 <p>Before each run, <code class="ic">optics execute</code> checks that the server answers at <code class="ic">url</code>. If it doesn't, Optics stops with a "Cannot start" panel. Set <code class="ic">OPTICS_SKIP_PREFLIGHT=1</code> to skip the check.</p></div></div>
 <p>Then check the setup and run your tests:</p>
@@ -210,14 +210,14 @@ Shopper can add a backpack,Add the backpack">Copy</button><pre><code><span class
       capabilities:
         browserName: chrome
         goog:chromeOptions:
-          args: [&quot;--headless=new&quot;, &quot;--no-sandbox&quot;, &quot;--disable-dev-shm-usage&quot;]">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browserName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> chrome
+          args: [&quot;--headless=new&quot;, &quot;--no-sandbox&quot;, &quot;--disable-dev-shm-usage&quot;]">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> chrome
         goog:chromeOptions:
-          <span class=<span class="c-lit">"c-mod"</span>>args</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [<span class="c-lit">"--headless=new"</span>, <span class="c-lit">"--no-sandbox"</span>, <span class="c-lit">"--disable-dev-shm-usage"</span>]</code></pre></figure>
+          <span class="c-mod">args</span><span class="c-dim">:</span> [<span class="c-lit">"--headless=new"</span>, <span class="c-lit">"--no-sandbox"</span>, <span class="c-lit">"--disable-dev-shm-usage"</span>]</code></pre></figure>
 <p><a href="../../docs/run/ci">Run tests in CI</a> covers the rest of the CI setup.</p>
 <h2 id="if-it-isnt-working">If it isn't working<a class="anchor" href="#if-it-isnt-working" aria-label="Link to this section">#</a></h2>
 <ul><li><strong>"Object of type Locator is not JSON serializable".</strong> Enter Text or Get Text ran in Playwright on 1.10.5. Use Press Element, then Enter Text Direct. See <a href="../../docs/help/troubleshooting#locator-not-serializable">Troubleshooting</a>.</li><li><strong>The Playwright browser isn't installed.</strong> Run <code class="ic">optics setup --install playwright</code> again. <code class="ic">optics doctor</code> shows a ✅ for <code class="ic">playwright browser</code> once Chromium is downloaded.</li><li><strong>"Selenium capabilities not found in config".</strong> Add <code class="ic">browserName: chrome</code> or <code class="ic">browserName: firefox</code> under <code class="ic">capabilities</code>.</li><li><strong>"Cannot start" with "No Selenium/WebDriver server reachable".</strong> Start the server, and check that <code class="ic">url</code> points to it.</li><li><strong>Swipe fails on Selenium.</strong> Selenium has no Swipe. Use Scroll, which moves one screen in any direction.</li><li><strong>A step acts before the page loads.</strong> Actions don't wait. Put <code class="ic">Assert Presence</code> on something from the new page before you act on it.</li><li>**A password typed in Playwright starts with <code class="ic">@:</code>.** Playwright doesn't strip the secret prefix. Leave it off for Playwright.</li></ul>
@@ -283,7 +283,7 @@ Shopper can add a backpack,Add the backpack">Copy</button><pre><code><span class
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

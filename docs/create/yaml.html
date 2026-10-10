@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -109,33 +109,33 @@ Elements:
   sign_in:
     - &quot;//*[@resource-id='com.birch.shop:id/login']&quot;
     - Sign in
-  password: correct-horse">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Test Cases</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Suite Setup</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  password: correct-horse">Copy</button><pre><code><span class="c-mod">Test Cases</span><span class="c-dim">:</span>
+  - <span class="c-mod">Suite Setup</span><span class="c-dim">:</span>
       - Launch Birch
-  - <span class=<span class="c-lit">"c-mod"</span>>Shopper can add trail runners</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Shopper can add trail runners</span><span class="c-dim">:</span>
       - Sign In
       - Add To Cart
 
-<span class=<span class="c-lit">"c-mod"</span>>Modules</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Launch Birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+<span class="c-mod">Modules</span><span class="c-dim">:</span>
+  - <span class="c-mod">Launch Birch</span><span class="c-dim">:</span>
       - Launch App
-  - <span class=<span class="c-lit">"c-mod"</span>>Sign In</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Sign In</span><span class="c-dim">:</span>
       - Enter Text <span class="c-var">${email_field}</span> ava@birch.shop
       - Enter Text <span class="c-var">${password_field}</span> <span class="c-var">${password}</span>
       - Press Element <span class="c-var">${sign_in}</span>
       - Assert Presence <span class="c-lit">"Picked for you"</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Add To Cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Add To Cart</span><span class="c-dim">:</span>
       - Press Element <span class="c-lit">"Trail Runner 2"</span>
       - Press Element <span class="c-lit">"Add to cart"</span>
       - Assert Presence <span class="c-lit">"Added to cart"</span> timeout_str=10
 
-<span class=<span class="c-lit">"c-mod"</span>>Elements</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>email_field</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/email']"</span>
-  <span class=<span class="c-lit">"c-mod"</span>>password_field</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/password']"</span>
-  <span class=<span class="c-lit">"c-mod"</span>>sign_in</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+<span class="c-mod">Elements</span><span class="c-dim">:</span>
+  <span class="c-mod">email_field</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/email']"</span>
+  <span class="c-mod">password_field</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/password']"</span>
+  <span class="c-mod">sign_in</span><span class="c-dim">:</span>
     - <span class="c-lit">"//*[@resource-id='com.birch.shop:id/login']"</span>
     - Sign in
-  <span class=<span class="c-lit">"c-mod"</span>>password</span><span class=<span class="c-lit">"c-dim"</span>>:</span> correct-horse</code></pre></figure>
+  <span class="c-mod">password</span><span class="c-dim">:</span> correct-horse</code></pre></figure>
 <p>Keep <code class="ic">config.yaml</code> as its own file. You can split the suite into several YAML files, or keep elements in CSV and steps in YAML.</p>
 <h2 id="the-rules">The rules<a class="anchor" href="#the-rules" aria-label="Link to this section">#</a></h2>
 <h3 id="section-names-are-exact">Section names are exact<a class="anchor" href="#section-names-are-exact" aria-label="Link to this section">#</a></h3>
@@ -163,8 +163,8 @@ Elements:
 <h3 id="elements">Elements<a class="anchor" href="#elements" aria-label="Link to this section">#</a></h3>
 <p>An element is a single value or a list. A list gives fallbacks, tried in order:</p>
 <figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="Elements:
-  sign_in: [&quot;//*[@resource-id='com.birch.shop:id/login']&quot;, &quot;Sign in&quot;, sign_in.png]">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Elements</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>sign_in</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [<span class="c-lit">"//*[@resource-id='com.birch.shop:id/login']"</span>, <span class="c-lit">"Sign in"</span>, sign_in.png]</code></pre></figure>
+  sign_in: [&quot;//*[@resource-id='com.birch.shop:id/login']&quot;, &quot;Sign in&quot;, sign_in.png]">Copy</button><pre><code><span class="c-mod">Elements</span><span class="c-dim">:</span>
+  <span class="c-mod">sign_in</span><span class="c-dim">:</span> [<span class="c-lit">"//*[@resource-id='com.birch.shop:id/login']"</span>, <span class="c-lit">"Sign in"</span>, sign_in.png]</code></pre></figure>
 <p>Quote XPaths. They contain characters YAML treats specially, such as <code class="ic">[</code>, <code class="ic">@</code> and <code class="ic">:</code>.</p>
 <h2 id="what-stays-in-csv">What stays in CSV<a class="anchor" href="#what-stays-in-csv" aria-label="Link to this section">#</a></h2>
 <ul><li><strong>Error definitions</strong> are CSV only. See <a href="../../docs/run/error-detection">Catch error screens</a>.</li><li>**<code class="ic">/save</code> in <code class="ic">optics live</code>** always writes CSV, even in a YAML project. Move the steps into your YAML file afterwards, or keep the CSV next to it.</li></ul>
@@ -230,7 +230,7 @@ Elements:
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

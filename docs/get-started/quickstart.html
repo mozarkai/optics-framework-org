@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -83,19 +83,19 @@
         <div class="prose">
 <p>You'll install Optics, let it create a small project from a working sample, and run that project in a browser. You don't need a phone or an emulator for this.</p>
 <figure class="scene-fig"><div class="scene" data-scene="quickstart" role="img" aria-label="The whole quickstart: install Optics, create a project from a sample, run it."></div><figcaption>The whole quickstart: install Optics, create a project from a sample, run it.</figcaption></figure>
-<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-optics">Install Optics<a class="anchor" href="#install-optics" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="install-optics">Install Optics<a class="anchor" href="#install-optics" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Run the installer for your system. It puts Optics in its own folder (<code class="ic">~/.optics</code>), so it doesn't touch the rest of your Python setup. You need Python 3.12 or newer.</p>
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button><button class="os-tab" role="tab" id="tabs-os-t2" aria-controls="tabs-os-p2" aria-selected="false" tabindex="-1" data-tab="pip">pip</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>irm</b> https://optics-framework.org/install.ps1 | iex</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p2" aria-labelledby="tabs-os-t2" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install optics-framework">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install optics-framework</code></pre></figure></div></div>
 <p>Open a new terminal window, then check that the <code class="ic">optics</code> command works:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics --version">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> <span class="c-info">--version</span>
 Optics Framework 1.10.5</code></pre></figure>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="create-a-project">Create a project<a class="anchor" href="#create-a-project" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="create-a-project">Create a project<a class="anchor" href="#create-a-project" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Run the guided setup:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics quickstart">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> quickstart</code></pre></figure>
 <p>It asks a few questions. Every question has a default, shown in brackets. For this quickstart, answer like this:</p>
 <div class="table-wrap"><table><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody><tr><td>What do you want to automate?</td><td><code class="ic">web</code></td></tr><tr><td>Install Playwright, Selenium now?</td><td>Yes</td></tr><tr><td>Start from the 'playwright' example?</td><td>Yes</td></tr><tr><td>Project name</td><td>Press Enter to keep <code class="ic">my-optics-project</code></td></tr><tr><td>Where should the project live?</td><td>Press Enter for the current folder</td></tr><tr><td>Overwrite the template's config.yaml with your own answers?</td><td>No</td></tr></tbody></table></div>
 <p>Optics installs the browser engine, copies the sample into <code class="ic">my-optics-project</code>, and checks your setup. Rows marked ⚠️ in that check are optional extras you can add later.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="run-the-test">Run the test<a class="anchor" href="#run-the-test" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h2 id="run-the-test">Run the test<a class="anchor" href="#run-the-test" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>When Optics asks <strong>Run your first test now?</strong>, answer yes. You can also run it yourself at any time:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute my-optics-project">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute my-optics-project</code></pre></figure>
 <p>A browser window opens, visits a page, checks some text on it and closes. The terminal shows each step as it runs:</p>
@@ -167,7 +167,7 @@ Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-di
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/get-started/quickstart.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l3"><a href="#install-optics">Install Optics</a></li><li class="toc-l3"><a href="#create-a-project">Create a project</a></li><li class="toc-l3"><a href="#run-the-test">Run the test</a></li><li class="toc-l2"><a href="#what-just-happened">What just happened</a></li><li class="toc-l2"><a href="#testing-a-phone-app-instead">Testing a phone app instead</a></li><li class="toc-l2"><a href="#next-steps">Next steps</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#install-optics">Install Optics</a></li><li class="toc-l2"><a href="#create-a-project">Create a project</a></li><li class="toc-l2"><a href="#run-the-test">Run the test</a></li><li class="toc-l2"><a href="#what-just-happened">What just happened</a></li><li class="toc-l2"><a href="#testing-a-phone-app-instead">Testing a phone app instead</a></li><li class="toc-l2"><a href="#next-steps">Next steps</a></li></ul></nav>
     </main>
   </div>
 
@@ -213,7 +213,7 @@ Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-di
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

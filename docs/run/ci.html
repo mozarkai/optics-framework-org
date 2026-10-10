@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -118,40 +118,40 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: optics-output
-          path: birch-tests/execution_output/">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Optics
+          path: birch-tests/execution_output/">Copy</button><pre><code><span class="c-mod">name</span><span class="c-dim">:</span> Optics
 
-<span class=<span class="c-lit">"c-mod"</span>>on</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [push, pull_request]
+<span class="c-mod">on</span><span class="c-dim">:</span> [push, pull_request]
 
-<span class=<span class="c-lit">"c-mod"</span>>jobs</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>web</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>runs-on</span><span class=<span class="c-lit">"c-dim"</span>>:</span> ubuntu-latest
-    <span class=<span class="c-lit">"c-mod"</span>>steps</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      - <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/checkout@v4
+<span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">web</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> ubuntu-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
 
-      - <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/setup-python@v5
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>python-version</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Install Optics and the browser
-        <span class=<span class="c-lit">"c-mod"</span>>run</span><span class=<span class="c-lit">"c-dim"</span>>:</span> |
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Install Optics and the browser
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
           pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
           python -m playwright install --with-deps chromium
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Run the suite
-        <span class=<span class="c-lit">"c-mod"</span>>run</span><span class=<span class="c-lit">"c-dim"</span>>:</span> xvfb-run -a optics execute birch-tests --no-use-printer
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Run the suite
+        <span class="c-mod">run</span><span class="c-dim">:</span> xvfb-run -a optics execute birch-tests --no-use-printer
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Publish results
-        <span class=<span class="c-lit">"c-mod"</span>>if</span><span class=<span class="c-lit">"c-dim"</span>>:</span> always()
-        <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> mikepenz/action-junit-report@v5
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>report_paths</span><span class=<span class="c-lit">"c-dim"</span>>:</span> birch-tests/execution_output/junit_output.xml
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Publish results
+        <span class="c-mod">if</span><span class="c-dim">:</span> always()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> mikepenz/action-junit-report@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">report_paths</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Keep screenshots
-        <span class=<span class="c-lit">"c-mod"</span>>if</span><span class=<span class="c-lit">"c-dim"</span>>:</span> failure()
-        <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/upload-artifact@v4
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> optics-output
-          <span class=<span class="c-lit">"c-mod"</span>>path</span><span class=<span class="c-lit">"c-dim"</span>>:</span> birch-tests/execution_output/</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-ci-p1" aria-labelledby="tabs-ci-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.gitlab-ci.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="optics-web:
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Keep screenshots
+        <span class="c-mod">if</span><span class="c-dim">:</span> failure()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> actions/upload-artifact@v4
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> optics-output
+          <span class="c-mod">path</span><span class="c-dim">:</span> birch-tests/execution_output/</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-ci-p1" aria-labelledby="tabs-ci-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.gitlab-ci.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="optics-web:
   image: python:3.12-bookworm
   script:
     - apt-get update &amp;&amp; apt-get install -y xvfb
@@ -163,19 +163,19 @@ jobs:
     paths:
       - birch-tests/execution_output/
     reports:
-      junit: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>optics-web</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>image</span><span class=<span class="c-lit">"c-dim"</span>>:</span> python:3.12-bookworm
-  <span class=<span class="c-lit">"c-mod"</span>>script</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      junit: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class="c-mod">optics-web</span><span class="c-dim">:</span>
+  <span class="c-mod">image</span><span class="c-dim">:</span> python:3.12-bookworm
+  <span class="c-mod">script</span><span class="c-dim">:</span>
     - apt-get update &amp;&amp; apt-get install -y xvfb
     - pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
     - python -m playwright install --with-deps chromium
     - xvfb-run -a optics execute birch-tests --no-use-printer
-  <span class=<span class="c-lit">"c-mod"</span>>artifacts</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>when</span><span class=<span class="c-lit">"c-dim"</span>>:</span> always
-    <span class=<span class="c-lit">"c-mod"</span>>paths</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  <span class="c-mod">artifacts</span><span class="c-dim">:</span>
+    <span class="c-mod">when</span><span class="c-dim">:</span> always
+    <span class="c-mod">paths</span><span class="c-dim">:</span>
       - birch-tests/execution_output/
-    <span class=<span class="c-lit">"c-mod"</span>>reports</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>junit</span><span class=<span class="c-lit">"c-dim"</span>>:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure></div></div>
+    <span class="c-mod">reports</span><span class="c-dim">:</span>
+      <span class="c-mod">junit</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure></div></div>
 <p><code class="ic">xvfb-run</code> gives the browser a virtual screen. Optics 1.10.5 always opens a visible browser window, and CI machines have no display. From the next release you can set <code class="ic">headless: true</code> under the Playwright driver's <code class="ic">capabilities</code> and drop <code class="ic">xvfb-run</code>.</p>
 <h2 id="run-an-android-suite">Run an Android suite<a class="anchor" href="#run-an-android-suite" aria-label="Link to this section">#</a></h2>
 <p>Android suites need an emulator and an Appium server on the CI machine. Linux runners with hardware acceleration, such as GitHub's <code class="ic">ubuntu-latest</code>, can run the Android emulator.</p>
@@ -223,51 +223,51 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v5
         with:
-          report_paths: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Optics Android
+          report_paths: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class="c-mod">name</span><span class="c-dim">:</span> Optics Android
 
-<span class=<span class="c-lit">"c-mod"</span>>on</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [pull_request]
+<span class="c-mod">on</span><span class="c-dim">:</span> [pull_request]
 
-<span class=<span class="c-lit">"c-mod"</span>>jobs</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>android</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>runs-on</span><span class=<span class="c-lit">"c-dim"</span>>:</span> ubuntu-latest
-    <span class=<span class="c-lit">"c-mod"</span>>steps</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      - <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/checkout@v4
+<span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">android</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> ubuntu-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Enable KVM
-        <span class=<span class="c-lit">"c-mod"</span>>run</span><span class=<span class="c-lit">"c-dim"</span>>:</span> |
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Enable KVM
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
           echo <span class="c-lit">'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"'</span> | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/setup-python@v5
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>python-version</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"3.12"</span>
-      - <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> actions/setup-node@v4
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>node-version</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 20
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-node@v4
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">node-version</span><span class="c-dim">:</span> <span class="c-info">20</span>
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Install Optics and Appium
-        <span class=<span class="c-lit">"c-mod"</span>>run</span><span class=<span class="c-lit">"c-dim"</span>>:</span> |
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Install Optics and Appium
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
           pip install <span class="c-lit">"optics-framework[appium]==1.10.5"</span>
           npm install -g appium
           appium driver install uiautomator2
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Run the suite on an emulator
-        <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> reactivecircus/android-emulator-runner@v2
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>api-level</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 34
-          <span class=<span class="c-lit">"c-mod"</span>>arch</span><span class=<span class="c-lit">"c-dim"</span>>:</span> x86_64
-          <span class=<span class="c-lit">"c-mod"</span>>script</span><span class=<span class="c-lit">"c-dim"</span>>:</span> |
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Run the suite on an emulator
+        <span class="c-mod">uses</span><span class="c-dim">:</span> reactivecircus/android-emulator-runner@v2
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">api-level</span><span class="c-dim">:</span> <span class="c-info">34</span>
+          <span class="c-mod">arch</span><span class="c-dim">:</span> x86_64
+          <span class="c-mod">script</span><span class="c-dim">:</span> |
             adb install app/build/outputs/apk/debug/app-debug.apk
             appium &gt; appium.log 2&gt;&amp;1 &amp;
             sleep 5
             optics execute birch-tests --no-use-printer
 
-      - <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Publish results
-        <span class=<span class="c-lit">"c-mod"</span>>if</span><span class=<span class="c-lit">"c-dim"</span>>:</span> always()
-        <span class=<span class="c-lit">"c-mod"</span>>uses</span><span class=<span class="c-lit">"c-dim"</span>>:</span> mikepenz/action-junit-report@v5
-        <span class=<span class="c-lit">"c-mod"</span>>with</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>report_paths</span><span class=<span class="c-lit">"c-dim"</span>>:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure>
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Publish results
+        <span class="c-mod">if</span><span class="c-dim">:</span> always()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> mikepenz/action-junit-report@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">report_paths</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure>
 <p>Make sure <code class="ic">deviceName</code> in <code class="ic">config.yaml</code> matches the emulator (<code class="ic">emulator-5554</code> for the first one), and that <code class="ic">appPackage</code> and <code class="ic">appActivity</code> match the app you install.</p>
 <h2 id="decide-pass-or-fail">Decide pass or fail<a class="anchor" href="#decide-pass-or-fail" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics execute</code> exits with <code class="ic">1</code> when any test case fails, so the run step fails the job by itself.</p>
@@ -336,7 +336,7 @@ jobs:
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

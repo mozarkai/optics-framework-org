@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -119,12 +119,12 @@ password,correct-horse">Copy</button><pre><code><span class="c-dim">Element_Name
   password_field: &quot;//*[@resource-id='com.birch.shop:id/password']&quot;
   sign_in: [&quot;//*[@resource-id='com.birch.shop:id/login']&quot;, &quot;Sign in&quot;]
   search_bar: Search Birch
-  password: correct-horse">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Elements</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>email_field</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/email']"</span>
-  <span class=<span class="c-lit">"c-mod"</span>>password_field</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/password']"</span>
-  <span class=<span class="c-lit">"c-mod"</span>>sign_in</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [<span class="c-lit">"//*[@resource-id='com.birch.shop:id/login']"</span>, <span class="c-lit">"Sign in"</span>]
-  <span class=<span class="c-lit">"c-mod"</span>>search_bar</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Search Birch
-  <span class=<span class="c-lit">"c-mod"</span>>password</span><span class=<span class="c-lit">"c-dim"</span>>:</span> correct-horse</code></pre></figure></div></div>
+  password: correct-horse">Copy</button><pre><code><span class="c-mod">Elements</span><span class="c-dim">:</span>
+  <span class="c-mod">email_field</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/email']"</span>
+  <span class="c-mod">password_field</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/password']"</span>
+  <span class="c-mod">sign_in</span><span class="c-dim">:</span> [<span class="c-lit">"//*[@resource-id='com.birch.shop:id/login']"</span>, <span class="c-lit">"Sign in"</span>]
+  <span class="c-mod">search_bar</span><span class="c-dim">:</span> Search Birch
+  <span class="c-mod">password</span><span class="c-dim">:</span> correct-horse</code></pre></figure></div></div>
 <p>The header must be exactly <code class="ic">Element_Name,Element_ID</code>. Repeat a name, or give a list in YAML, to add <strong>fallbacks</strong>: Optics tries the values in order until one works. Here <code class="ic">sign_in</code> is found by its id, or by its text if the id changes.</p>
 <p>A value can be an XPath, visible text, or the file name of a picture of the element. <a href="../../docs/elements/define">Define elements</a> explains each kind and when to use it.</p>
 <aside class="callout callout-tip"><p class="callout-title">Tip</p><p>Elements can hold test data too, such as <code class="ic">email,ava@birch.shop</code>. Keeping data next to locators means one file holds everything that changes between environments.</p></aside>
@@ -163,15 +163,15 @@ Add To Cart,Assert Presence,Added to cart">Copy</button><pre><code><span class="
       - Enter Text Direct &quot;trail runner&quot;
       - Press Element &quot;Trail Runner 2&quot;
       - Press Element &quot;Add to cart&quot;
-      - Assert Presence &quot;Added to cart&quot;">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Modules</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Launch Birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      - Assert Presence &quot;Added to cart&quot;">Copy</button><pre><code><span class="c-mod">Modules</span><span class="c-dim">:</span>
+  - <span class="c-mod">Launch Birch</span><span class="c-dim">:</span>
       - Launch App
-  - <span class=<span class="c-lit">"c-mod"</span>>Sign In</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Sign In</span><span class="c-dim">:</span>
       - Enter Text <span class="c-var">${email_field}</span> ava@birch.shop
       - Enter Text <span class="c-var">${password_field}</span> <span class="c-var">${password}</span>
       - Press Element <span class="c-var">${sign_in}</span>
       - Assert Presence <span class="c-lit">"Picked for you"</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Add To Cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Add To Cart</span><span class="c-dim">:</span>
       - Press Element <span class="c-var">${search_bar}</span>
       - Enter Text Direct <span class="c-lit">"trail runner"</span>
       - Press Element <span class="c-lit">"Trail Runner 2"</span>
@@ -195,10 +195,10 @@ Shopper can buy running shoes,Add To Cart">Copy</button><pre><code><span class="
       - Launch Birch
   - Shopper can buy running shoes:
       - Sign In
-      - Add To Cart">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Test Cases</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Suite Setup</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      - Add To Cart">Copy</button><pre><code><span class="c-mod">Test Cases</span><span class="c-dim">:</span>
+  - <span class="c-mod">Suite Setup</span><span class="c-dim">:</span>
       - Launch Birch
-  - <span class=<span class="c-lit">"c-mod"</span>>Shopper can buy running shoes</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Shopper can buy running shoes</span><span class="c-dim">:</span>
       - Sign In
       - Add To Cart</code></pre></figure></div></div>
 <p>A test case named <strong>Suite Setup</strong> runs once before the others, and <strong>Suite Teardown</strong> runs once after them. <a href="../../docs/create/organise">Organise a suite</a> covers setup, teardown and sharing modules.</p>
@@ -270,7 +270,7 @@ Shopper can buy running shoes,Add To Cart">Copy</button><pre><code><span class="
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

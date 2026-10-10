@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -223,39 +223,39 @@ Delivery,Assert Presence,${delivery_date},10">Copy</button><pre><code><span clas
               Authorization: &quot;Bearer ${auth_token}&quot;
           expected_result:
             extract:
-              cart_count: $.item_count">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>api</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>collections</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Birch API"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>base_url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"https://api.birch.example"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>global_headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>content-type</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"application/json"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>apis</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>login</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Sign in"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/v1/token"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> POST
-            <span class=<span class="c-lit">"c-mod"</span>>body</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>email</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_email}</span>"</span>
-              <span class=<span class="c-lit">"c-mod"</span>>password</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"<span class="c-var">${api_password}</span>"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>jsonpath_assertions</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              - <span class=<span class="c-lit">"c-mod"</span>>path</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.token
-                <span class=<span class="c-lit">"c-mod"</span>>condition</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"len($) &gt; 0"</span>
-            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>auth_token</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.token
-              <span class=<span class="c-lit">"c-mod"</span>>customer_id</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.customer.id
-        <span class=<span class="c-lit">"c-mod"</span>>cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Get cart"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/v1/customers/<span class="c-var">${customer_id}</span>/cart"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> GET
-            <span class=<span class="c-lit">"c-mod"</span>>headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>Authorization</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Bearer <span class="c-var">${auth_token}</span>"</span>
-          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>cart_count</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.item_count</code></pre></figure>
+              cart_count: $.item_count">Copy</button><pre><code><span class="c-mod">api</span><span class="c-dim">:</span>
+  <span class="c-mod">collections</span><span class="c-dim">:</span>
+    <span class="c-mod">birch</span><span class="c-dim">:</span>
+      <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"Birch API"</span>
+      <span class="c-mod">base_url</span><span class="c-dim">:</span> <span class="c-lit">"https://api.birch.example"</span>
+      <span class="c-mod">global_headers</span><span class="c-dim">:</span>
+        <span class="c-mod">content-type</span><span class="c-dim">:</span> <span class="c-lit">"application/json"</span>
+      <span class="c-mod">apis</span><span class="c-dim">:</span>
+        <span class="c-mod">login</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"Sign in"</span>
+          <span class="c-mod">endpoint</span><span class="c-dim">:</span> <span class="c-lit">"/v1/token"</span>
+          <span class="c-mod">request</span><span class="c-dim">:</span>
+            <span class="c-mod">method</span><span class="c-dim">:</span> POST
+            <span class="c-mod">body</span><span class="c-dim">:</span>
+              <span class="c-mod">email</span><span class="c-dim">:</span> <span class="c-lit">"<span class="c-var">${api_email}</span>"</span>
+              <span class="c-mod">password</span><span class="c-dim">:</span> <span class="c-lit">"<span class="c-var">${api_password}</span>"</span>
+          <span class="c-mod">expected_result</span><span class="c-dim">:</span>
+            <span class="c-mod">jsonpath_assertions</span><span class="c-dim">:</span>
+              - <span class="c-mod">path</span><span class="c-dim">:</span> $.token
+                <span class="c-mod">condition</span><span class="c-dim">:</span> <span class="c-lit">"len($) &gt; 0"</span>
+            <span class="c-mod">extract</span><span class="c-dim">:</span>
+              <span class="c-mod">auth_token</span><span class="c-dim">:</span> $.token
+              <span class="c-mod">customer_id</span><span class="c-dim">:</span> $.customer.id
+        <span class="c-mod">cart</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> <span class="c-lit">"Get cart"</span>
+          <span class="c-mod">endpoint</span><span class="c-dim">:</span> <span class="c-lit">"/v1/customers/<span class="c-var">${customer_id}</span>/cart"</span>
+          <span class="c-mod">request</span><span class="c-dim">:</span>
+            <span class="c-mod">method</span><span class="c-dim">:</span> GET
+            <span class="c-mod">headers</span><span class="c-dim">:</span>
+              <span class="c-mod">Authorization</span><span class="c-dim">:</span> <span class="c-lit">"Bearer <span class="c-var">${auth_token}</span>"</span>
+          <span class="c-mod">expected_result</span><span class="c-dim">:</span>
+            <span class="c-mod">extract</span><span class="c-dim">:</span>
+              <span class="c-mod">cart_count</span><span class="c-dim">:</span> $.item_count</code></pre></figure>
 <figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Prepare Cart,Invoke API,birch.login
 Prepare Cart,Invoke API,birch.cart">Copy</button><pre><code><span class="c-mod">Prepare Cart</span><span class="c-dim">,</span><b>Invoke API</b><span class="c-dim">,</span>birch.login
 <span class="c-mod">Prepare Cart</span><span class="c-dim">,</span><b>Invoke API</b><span class="c-dim">,</span>birch.cart</code></pre></figure>
@@ -372,7 +372,7 @@ ben@birch.example,pw-ben,basic">Copy</button><pre><code><span class="c-dim">emai
   </svg>
 
   <script src="../../../app.js?v=ada98e8182" defer></script>
-  <script src="../../../docs.js?v=af6f271657" defer></script>
+  <script src="../../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

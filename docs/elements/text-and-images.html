@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -100,17 +100,17 @@
 
 text_detection:
   - easyocr:
-      enabled: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
+      enabled: true">Copy</button><pre><code><span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
 
-<span class=<span class="c-lit">"c-mod"</span>>text_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>easyocr</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="use-text-values">Use text values<a class="anchor" href="#use-text-values" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>Nothing changes in your tests. Any text value, such as <code class="ic">Press Element,Trail Runner 2</code>, is tried in the UI tree first and with OCR second. To skip the UI tree and use OCR straight away, write <code class="ic">text_only:Trail Runner 2</code>.</p></div></li></ol>
 <h3 id="ocr-engines">OCR engines<a class="anchor" href="#ocr-engines" aria-label="Link to this section">#</a></h3>
@@ -120,9 +120,9 @@ text_detection:
 <p>Image matching finds a picture of an element, such as an icon, on the screen. It needs no extra install.</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="image_detection:
   - templatematch:
-      enabled: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>image_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>templatematch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+      enabled: true">Copy</button><pre><code><span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 <p>Then use the picture's file name as an element value:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
 cart_icon,//*[@content-desc='Cart']
@@ -199,7 +199,7 @@ cart_icon,cart_icon.png">Copy</button><pre><code><span class="c-dim">Element_Nam
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

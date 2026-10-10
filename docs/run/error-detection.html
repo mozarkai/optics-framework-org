@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -83,7 +83,7 @@
         <div class="prose">
 <p>Some failures don't break a step. The app shows <em>Session expired</em>, or Android shows <em>Birch has stopped</em>, and the test still passes because no step looked for that message. Error detection catches these. You list the messages that mean something went wrong, and Optics checks the screen for them at the end of every run.</p>
 <figure class="scene-fig"><div class="scene" data-scene="errors" role="img" aria-label="A step fails because the app signed the shopper out. At the end of the run, Optics reads the text on the last screen, matches it against your error definitions, and adds the match to the JUnit report."></div><figcaption>A step fails because the app signed the shopper out. At the end of the run, Optics reads the text on the last screen, matches it against your error definitions, and adds the match to the JUnit report.</figcaption></figure>
-<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="list-the-error-messages">List the error messages<a class="anchor" href="#list-the-error-messages" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="list-the-error-messages">List the error messages<a class="anchor" href="#list-the-error-messages" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Create a CSV anywhere in the project. The template uses <code class="ic">test_data/error_definitions.csv</code>:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/error_definitions.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="error_code,match_string,description,severity
 ERR_CRASH,has stopped,The app crashed with a system dialog,critical
@@ -97,7 +97,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
 <span class="c-mod">ERR_NETWORK</span><span class="c-dim">,</span><b>No internet connection</b><span class="c-dim">,</span>The app lost its connection<span class="c-dim">,</span>medium
 <span class="c-mod">ERR_SERVER</span><span class="c-dim">,</span><b>Something went wrong</b><span class="c-dim">,</span>The server returned an error page<span class="c-dim">,</span>high</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Column</th><th>Required</th><th>What it's for</th></tr></thead><tbody><tr><td><code class="ic">error_code</code></td><td>Yes</td><td>A short name for the error. It appears in the report.</td></tr><tr><td><code class="ic">match_string</code></td><td>Yes</td><td>Text that means this error is on screen.</td></tr><tr><td><code class="ic">description</code></td><td>No</td><td>What the error means, for whoever reads the report.</td></tr><tr><td><code class="ic">severity</code></td><td>No</td><td>Any label you like, such as <code class="ic">critical</code> or <code class="ic">low</code>.</td></tr></tbody></table></div>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="run-the-suite-as-usual">Run the suite as usual<a class="anchor" href="#run-the-suite-as-usual" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="run-the-suite-as-usual">Run the suite as usual<a class="anchor" href="#run-the-suite-as-usual" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
 <p>There's nothing to switch on. If the project has an error definitions file, Optics uses it.</p></div></li></ol>
 <h2 id="what-happens-at-the-end-of-a-run">What happens at the end of a run<a class="anchor" href="#what-happens-at-the-end-of-a-run" aria-label="Link to this section">#</a></h2>
@@ -127,7 +127,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/error-detection.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l3"><a href="#list-the-error-messages">List the error messages</a></li><li class="toc-l3"><a href="#run-the-suite-as-usual">Run the suite as usual</a></li><li class="toc-l2"><a href="#what-happens-at-the-end-of-a-run">What happens at the end of a run</a></li><li class="toc-l2"><a href="#write-good-match-strings">Write good match strings</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#list-the-error-messages">List the error messages</a></li><li class="toc-l2"><a href="#run-the-suite-as-usual">Run the suite as usual</a></li><li class="toc-l2"><a href="#what-happens-at-the-end-of-a-run">What happens at the end of a run</a></li><li class="toc-l2"><a href="#write-good-match-strings">Write good match strings</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
     </main>
   </div>
 
@@ -173,7 +173,7 @@ ERR_SERVER,Something went wrong,The server returned an error page,high">Copy</bu
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -98,12 +98,12 @@
       enabled: true         # required: only enabled entries are loaded
       url: &quot;http://127.0.0.1:4723&quot;
       capabilities:         # engine-specific settings
-        platformName: Android">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                <span class="c-dim"> # engine name</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true        <span class="c-dim"> # required: only enabled entries are loaded</span>
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>        <span class="c-dim"> # engine-specific settings</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Android</code></pre></figure>
+        platformName: Android">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>                <span class="c-dim"> # engine name</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true        </span><span class="c-dim"> # required: only enabled entries are loaded</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>        <span class="c-dim"> # engine-specific settings</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">enabled</code></td><td>Required</td><td>Only enabled entries are loaded. A disabled entry with any name is ignored.</td></tr><tr><td><code class="ic">url</code></td><td>None</td><td>The server address, for engines that use one.</td></tr><tr><td><code class="ic">capabilities</code></td><td><code class="ic">{}</code></td><td>Settings passed to the engine.</td></tr></tbody></table></div>
 <p>When several entries in one list are enabled, Optics tries them in the order you list them. For element sources this is the order in which strategies run.</p>
 <p>An enabled entry with an unknown name fails with <a href="../../docs/reference/errors#e06-modules-and-engines">E0601</a>. So does an enabled engine whose extra isn't installed. A list you write replaces the default list completely.</p>
@@ -124,11 +124,11 @@
   - gemini:
       enabled: true
       capabilities:
-        model: gemini-2.5-flash">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>llm_models</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>gemini</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>model</span><span class=<span class="c-lit">"c-dim"</span>>:</span> gemini-2.5-flash</code></pre></figure>
+        model: gemini-2.5-flash">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">gemini</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">model</span><span class="c-dim">:</span> gemini-2.5-flash</code></pre></figure>
 <p>Gemini reads its credentials from the environment: <code class="ic">GEMINI_API_KEY</code> or <code class="ic">GOOGLE_API_KEY</code>, or <code class="ic">GOOGLE_GENAI_USE_VERTEXAI=true</code> with <code class="ic">GOOGLE_CLOUD_PROJECT</code>, <code class="ic">GOOGLE_CLOUD_LOCATION</code> and <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code>. Don't put an API key in config.yaml: Optics accepts <code class="ic">api_key</code> there but warns, because the file usually ends up in version control.</p>
 <h2 id="examples-by-platform">Examples by platform<a class="anchor" href="#examples-by-platform" aria-label="Link to this section">#</a></h2>
 <div class="doc-tabs" data-group="platform"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-platform-t0" aria-controls="tabs-platform-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-platform-t1" aria-controls="tabs-platform-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button><button class="os-tab" role="tab" id="tabs-platform-t2" aria-controls="tabs-platform-p2" aria-selected="false" tabindex="-1" data-tab="Web">Web</button></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p0" aria-labelledby="tabs-platform-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
@@ -152,28 +152,28 @@ image_detection:
   - templatematch: {enabled: true}
 log_level: INFO
 file_log: true
-json_log: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>       <span class="c-dim"> # required; the Appium server</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                       <span class="c-dim"> # must not be empty</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Android             <span class="c-dim"> # required; picks the Android profile</span>
-        <span class=<span class="c-lit">"c-mod"</span>>automationName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> UiAutomator2
-        <span class=<span class="c-lit">"c-mod"</span>>deviceName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> emulator-5554
+json_log: true">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>       <span class="c-dim"> # required; the Appium server</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                       <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android             <span class="c-dim"> # required; picks the Android profile</span>
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> UiAutomator2
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> emulator-5554
        <span class="c-dim"> # udid: emulator-5554              # pin one device when several are connected</span>
-        <span class=<span class="c-lit">"c-mod"</span>>appPackage</span><span class=<span class="c-lit">"c-dim"</span>>:</span> com.birch.shop        <span class="c-dim"> # the app Launch App opens</span>
-        <span class=<span class="c-lit">"c-mod"</span>>appActivity</span><span class=<span class="c-lit">"c-dim"</span>>:</span> com.birch.shop.MainActivity
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}  <span class="c-dim"> # XPath, accessibility id, class</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}  <span class="c-dim"> # UI tree search (uses strict_element_match)</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}  <span class="c-dim"> # screenshots for OCR, images, self-heal</span>
-<span class=<span class="c-lit">"c-mod"</span>>text_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>easyocr</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}              <span class="c-dim"> # extra: easyocr</span>
-<span class=<span class="c-lit">"c-mod"</span>>image_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>templatematch</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>log_level</span><span class=<span class="c-lit">"c-dim"</span>>:</span> INFO
-<span class=<span class="c-lit">"c-mod"</span>>file_log</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-<span class=<span class="c-lit">"c-mod"</span>>json_log</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+        <span class="c-mod">appPackage</span><span class="c-dim">:</span> com.birch.shop        <span class="c-dim"> # the app Launch App opens</span>
+        <span class="c-mod">appActivity</span><span class="c-dim">:</span> com.birch.shop.MainActivity
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}  <span class="c-dim"> # XPath, accessibility id, class</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}  <span class="c-dim"> # UI tree search (uses strict_element_match)</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}  <span class="c-dim"> # screenshots for OCR, images, self-heal</span>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}              <span class="c-dim"> # extra: easyocr</span>
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span> {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 <p>Before <code class="ic">optics execute</code>, Optics checks that the Appium server answers and that <code class="ic">adb devices</code> lists a device.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p1" aria-labelledby="tabs-platform-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
   - appium:
       enabled: true
@@ -189,22 +189,22 @@ elements_sources:
   - appium_page_source:  {enabled: true}
   - appium_screenshot:   {enabled: true}
 log_level: INFO
-file_log: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> iOS                 <span class="c-dim"> # picks the iOS profile</span>
-        <span class=<span class="c-lit">"c-mod"</span>>automationName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> XCUITest
-        <span class=<span class="c-lit">"c-mod"</span>>deviceName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"iPhone 15"</span>
-        <span class=<span class="c-lit">"c-mod"</span>>bundleId</span><span class=<span class="c-lit">"c-dim"</span>>:</span> com.birch.shop          <span class="c-dim"> # required on iOS</span>
+file_log: true">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> iOS                 <span class="c-dim"> # picks the iOS profile</span>
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> XCUITest
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> <span class="c-lit">"iPhone 15"</span>
+        <span class="c-mod">bundleId</span><span class="c-dim">:</span> com.birch.shop          <span class="c-dim"> # required on iOS</span>
        <span class="c-dim"> # udid: &lt;device udid&gt;              # for a real device</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>log_level</span><span class=<span class="c-lit">"c-dim"</span>>:</span> INFO
-<span class=<span class="c-lit">"c-mod"</span>>file_log</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 <p><code class="ic">optics doctor</code> fails an iOS project without <code class="ic">bundleId</code>. The preflight checks only the Appium server.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p2" aria-labelledby="tabs-platform-t2" hidden><p>Use Playwright unless you already run a Selenium Grid. It needs no server.</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (Playwright)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
   - playwright:
@@ -216,17 +216,17 @@ elements_sources:
   - playwright_find_element: {enabled: true}
   - playwright_page_source:  {enabled: true}
   - playwright_screenshot:   {enabled: true}
-log_level: INFO">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true                       <span class="c-dim"> # no url and no server</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browser</span><span class=<span class="c-lit">"c-dim"</span>>:</span> chromium                 <span class="c-dim"> # currently ignored, see the note below</span>
-        <span class=<span class="c-lit">"c-mod"</span>>headless</span><span class=<span class="c-lit">"c-dim"</span>>:</span> false                   <span class="c-dim"> # currently ignored</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>playwright_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>log_level</span><span class=<span class="c-lit">"c-dim"</span>>:</span> INFO</code></pre></figure>
+log_level: INFO">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true                       </span><span class="c-dim"> # no url and no server</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browser</span><span class="c-dim">:</span> chromium                 <span class="c-dim"> # currently ignored, see the note below</span>
+        <span class="c-mod">headless</span><span class="c-dim">:</span> <span class="c-info">false                   </span><span class="c-dim"> # currently ignored</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">playwright_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">playwright_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO</code></pre></figure>
 <aside class="callout callout-note"><p class="callout-title">Note</p><p>In 1.10.5 the Playwright driver ignores <code class="ic">browser</code>, <code class="ic">headless</code> and <code class="ic">viewport</code> under <code class="ic">capabilities</code>. It always opens a visible Chromium window at 1280×800, and waits up to 60 seconds for each page to load.</p></aside>
 <p>Open your site with a module step such as <code class="ic">Launch App,https://birch.example</code>.</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (Selenium)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
@@ -240,18 +240,18 @@ elements_sources:
   - selenium_find_element: {enabled: true}
   - selenium_page_source:  {enabled: true}
   - selenium_screenshot:   {enabled: true}
-log_level: INFO">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span> <span class="c-dim"> # the Selenium server or Grid</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                       <span class="c-dim"> # must not be empty</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browserName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> chrome               <span class="c-dim"> # required: chrome or firefox</span>
-        <span class=<span class="c-lit">"c-mod"</span>>browserURL</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"https://birch.example"</span> <span class="c-dim"> # opened when the session starts</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_find_element</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>selenium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>   {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>log_level</span><span class=<span class="c-lit">"c-dim"</span>>:</span> INFO</code></pre></figure>
+log_level: INFO">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span> <span class="c-dim"> # the Selenium server or Grid</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                       <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> chrome               <span class="c-dim"> # required: chrome or firefox</span>
+        <span class="c-mod">browserURL</span><span class="c-dim">:</span> <span class="c-lit">"https://birch.example"</span> <span class="c-dim"> # opened when the session starts</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">selenium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">selenium_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO</code></pre></figure>
 <p>Selenium won't start with empty <code class="ic">capabilities</code> or without <code class="ic">browserName</code>. The file <code class="ic">optics configure</code> writes for <code class="ic">web-selenium</code> has <code class="ic">capabilities: {}</code>, so add <code class="ic">browserName</code> before you run.</p></div></div>
 <h3 id="appium-capabilities">Appium capabilities<a class="anchor" href="#appium-capabilities" aria-label="Link to this section">#</a></h3>
 <p>Optics reads only <code class="ic">platformName</code> and the app id; it passes every other capability to Appium unchanged. You can write any key with the <code class="ic">appium:</code> prefix, for example <code class="ic">appium:udid</code>.</p>
@@ -273,21 +273,21 @@ log_level: INFO">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
   - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> TizenTV
+  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> TizenTV
         appium:automationName: TizenTV
         appium:deviceAddress: 192.168.1.50
         appium:rcToken: <span class="c-lit">"14184553"</span>
         appium:appPackage: com.birch.tv
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}</code></pre></figure>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>  {enabled: true}</code></pre></figure>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (LG webOS)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
   - appium:
       enabled: true
@@ -298,17 +298,17 @@ elements_sources:
         appium:deviceHost: 192.168.1.50
         appium:appId: com.birch.tv
 elements_sources:
-  - appium_screenshot: {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> LGTV
+  - appium_screenshot: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> LGTV
         appium:automationName: webOS
         appium:deviceHost: 192.168.1.50
         appium:appId: com.birch.tv
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}</code></pre></figure>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
 <p>On Tizen and webOS, touch and typing keywords fail with <a href="../../docs/reference/errors#e01-driver-and-session">E0105</a>. Move around with <code class="ic">Press Keycode</code> and remote keys: <code class="ic">UP</code>, <code class="ic">DOWN</code>, <code class="ic">LEFT</code>, <code class="ic">RIGHT</code>, <code class="ic">ENTER</code>, <code class="ic">BACK</code>, <code class="ic">HOME</code>, <code class="ic">PLAY</code>, <code class="ic">PAUSE</code>, <code class="ic">STOP</code>, <code class="ic">REWIND</code>, <code class="ic">FF</code>. See <a href="../../docs/platforms/tv">Test TV apps</a>.</p>
 <h2 id="ble-and-camera">BLE and camera<a class="anchor" href="#ble-and-camera" aria-label="Link to this section">#</a></h2>
 <p>The <code class="ic">ble</code> driver taps and types through a Bluetooth mouse-and-keyboard dongle. A camera or frame server provides the screen, and Optics finds elements with OCR or image templates.</p>
@@ -332,27 +332,27 @@ elements_sources:
 text_detection:
   - easyocr: {enabled: true}
 image_detection:
-  - templatematch: {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>ble</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>device_id</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"Birch test phone"</span>    <span class="c-dim"> # required</span>
-        <span class=<span class="c-lit">"c-mod"</span>>port</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"/dev/ttyACM0"</span>             <span class="c-dim"> # required: device path, COM port or USB product name</span>
-        <span class=<span class="c-lit">"c-mod"</span>>pixel_width</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 1080                <span class="c-dim"> # the device screen in pixels</span>
-        <span class=<span class="c-lit">"c-mod"</span>>pixel_height</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 2336
-        <span class=<span class="c-lit">"c-mod"</span>>mickeys_width</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 1080              <span class="c-dim"> # the device screen in mouse units</span>
-        <span class=<span class="c-lit">"c-mod"</span>>mickeys_height</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 2336
-        <span class=<span class="c-lit">"c-mod"</span>>x_invert</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 1                      <span class="c-dim"> # 1 or -1</span>
-        <span class=<span class="c-lit">"c-mod"</span>>y_invert</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 1
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>camera_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>camera_index</span><span class=<span class="c-lit">"c-dim"</span>>:</span> 0                  <span class="c-dim"> # a webcam, or url: "192.168.1.20:9000" for a TCP frame server</span>
-<span class=<span class="c-lit">"c-mod"</span>>text_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>easyocr</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>image_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>templatematch</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}</code></pre></figure>
+  - templatematch: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">ble</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">device_id</span><span class="c-dim">:</span> <span class="c-lit">"Birch test phone"</span>    <span class="c-dim"> # required</span>
+        <span class="c-mod">port</span><span class="c-dim">:</span> <span class="c-lit">"/dev/ttyACM0"</span>             <span class="c-dim"> # required: device path, COM port or USB product name</span>
+        <span class="c-mod">pixel_width</span><span class="c-dim">:</span> <span class="c-info">1080                </span><span class="c-dim"> # the device screen in pixels</span>
+        <span class="c-mod">pixel_height</span><span class="c-dim">:</span> <span class="c-info">2336</span>
+        <span class="c-mod">mickeys_width</span><span class="c-dim">:</span> <span class="c-info">1080              </span><span class="c-dim"> # the device screen in mouse units</span>
+        <span class="c-mod">mickeys_height</span><span class="c-dim">:</span> <span class="c-info">2336</span>
+        <span class="c-mod">x_invert</span><span class="c-dim">:</span> <span class="c-info">1                      </span><span class="c-dim"> # 1 or -1</span>
+        <span class="c-mod">y_invert</span><span class="c-dim">:</span> <span class="c-info">1</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">camera_screenshot</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">camera_index</span><span class="c-dim">:</span> <span class="c-info">0                  </span><span class="c-dim"> # a webcam, or url: "192.168.1.20:9000" for a TCP frame server</span>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th><code class="ic">ble</code> capability</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">device_id</code></td><td>Required</td><td>A name for the device.</td></tr><tr><td><code class="ic">port</code></td><td>Required</td><td>The dongle's serial port (<code class="ic">/dev/ttyACM0</code>, <code class="ic">COM3</code>) or its USB product description.</td></tr><tr><td><code class="ic">pixel_width</code>, <code class="ic">pixel_height</code></td><td><code class="ic">0</code></td><td>The device screen size in pixels. Set them: taps can't be placed without them.</td></tr><tr><td><code class="ic">mickeys_width</code>, <code class="ic">mickeys_height</code></td><td><code class="ic">0</code></td><td>The device screen size in mouse movement units. Set them too.</td></tr><tr><td><code class="ic">x_invert</code>, <code class="ic">y_invert</code></td><td><code class="ic">1</code></td><td><code class="ic">-1</code> reverses the direction of mouse movement on that axis.</td></tr></tbody></table></div>
 <div class="table-wrap"><table><thead><tr><th><code class="ic">camera_screenshot</code> capability</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">camera_index</code></td><td>None</td><td>The webcam number. Use this or <code class="ic">url</code>.</td></tr><tr><td><code class="ic">url</code></td><td>None</td><td>A TCP frame server as <code class="ic">host:port</code>.</td></tr><tr><td><code class="ic">header_size</code></td><td><code class="ic">8</code></td><td>Bytes in the frame server's length header: <code class="ic">4</code> or <code class="ic">8</code>.</td></tr><tr><td><code class="ic">byte_order</code></td><td><code class="ic">little</code></td><td>The length header's byte order: <code class="ic">little</code> or <code class="ic">big</code>.</td></tr></tbody></table></div>
 <p>The BLE driver can't launch apps, so <code class="ic">Launch App</code> fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See <a href="../../docs/platforms/production">Test production devices</a>.</p>
@@ -363,11 +363,11 @@ image_detection:
   - Shopper can add Trail Runner 2 to the cart
 # or
 exclude:
-  - Shopper can check out">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>include</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - Shopper can check out">Copy</button><pre><code><span class="c-mod">include</span><span class="c-dim">:</span>
   - Shopper can sign in
   - Shopper can add Trail Runner 2 to the cart
 <span class="c-dim"># or</span>
-<span class=<span class="c-lit">"c-mod"</span>>exclude</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+<span class="c-mod">exclude</span><span class="c-dim">:</span>
   - Shopper can check out</code></pre></figure>
 <ul><li>Names match the <code class="ic">test_case</code> column exactly, ignoring case.</li><li>Set one of the two. Setting both fails with <a href="../../docs/reference/errors#e04-keywords-and-parameters">E0403</a>.</li><li>Test cases with "setup" or "teardown" in their names always run.</li></ul>
 <h2 id="logging">Logging<a class="anchor" href="#logging" aria-label="Link to this section">#</a></h2>
@@ -379,17 +379,17 @@ exclude:
 <figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="ai_self_heal: true
 llm_models:
   - gemini:
-      enabled: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>ai_self_heal</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-<span class=<span class="c-lit">"c-mod"</span>>llm_models</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>gemini</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+      enabled: true">Copy</button><pre><code><span class="c-mod">ai_self_heal</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">gemini</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 <ul><li>It needs an enabled <code class="ic">llm_models</code> entry, the <code class="ic">llm</code> extra, Gemini credentials, and a screenshot element source such as <code class="ic">appium_screenshot</code>. Without them it does nothing, and the run isn't affected.</li><li>It applies to keywords that find and act on an element: <code class="ic">Press Element</code>, <code class="ic">Enter Text</code>, <code class="ic">Enter Number</code>, <code class="ic">Clear Element Text</code>, <code class="ic">Get Text</code>, <code class="ic">Swipe From Element</code>, <code class="ic">Scroll From Element</code>, <code class="ic">Detect And Press</code> and <code class="ic">Select Dropdown Option</code>. It doesn't apply to assertions.</li><li>A healed step passes. Check the logs for <code class="ic">AI self-heal:</code> lines so a real regression doesn't go unnoticed.</li></ul>
 <p><code class="ic">optics serve</code> and <code class="ic">optics mcp</code> ignore this key. They use per-session fields and the <code class="ic">OPTICS_AI_SELF_HEAL</code> variable instead. See <a href="../../docs/elements/self-heal">Self-heal</a>.</p>
 <h2 id="strict-element-match">strict_element_match<a class="anchor" href="#strict-element-match" aria-label="Link to this section">#</a></h2>
-<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="strict_element_match: true">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>strict_element_match</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="strict_element_match: true">Copy</button><pre><code><span class="c-mod">strict_element_match</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
 <p>By default the page-source element sources (<code class="ic">appium_page_source</code>, <code class="ic">selenium_page_source</code>, <code class="ic">playwright_page_source</code>) accept close or partial text matches, so <code class="ic">Sign in</code> can match <code class="ic">Sign in with email</code>. Set <code class="ic">strict_element_match: true</code> to accept only exact matches. Turn it on when similar labels make tests press the wrong element.</p>
 <h2 id="save-captures">save_captures<a class="anchor" href="#save-captures" aria-label="Link to this section">#</a></h2>
-<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="save_captures: false">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>save_captures</span><span class=<span class="c-lit">"c-dim"</span>>:</span> false</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="save_captures: false">Copy</button><pre><code><span class="c-mod">save_captures</span><span class="c-dim">:</span> <span class="c-info">false</span></code></pre></figure>
 <p>When <code class="ic">false</code>, <code class="ic">Capture Screenshot</code>, <code class="ic">Capture Pagesource</code> and <code class="ic">Get Screen Elements</code> stop writing files. Optics still saves the screenshot it takes before each action, the annotated screenshots and the page source logs. <code class="ic">optics serve</code> always turns captures off.</p>
 <h2 id="starter-config">Starter config<a class="anchor" href="#starter-config" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics init</code> writes a commented config.yaml with every engine disabled. To get started, enable one driver, enable its three element sources, and install the driver's extra with <code class="ic">optics setup --install &lt;name&gt;</code>. See <a href="../../docs/get-started/install">Install Optics</a>.</p>
@@ -453,7 +453,7 @@ llm_models:
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

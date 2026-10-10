@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -113,21 +113,21 @@ npm install -g appium">Copy</button><pre><code><span class="prompt">$</span> <b>
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
   - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> TizenTV
+  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> TizenTV
         appium:automationName: TizenTV
         appium:deviceAddress: 192.168.1.50
         appium:rcToken: <span class="c-lit">"14184553"</span>
         appium:appPackage: com.birch.tv
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_page_source</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span>  {enabled: true}</code></pre></figure>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>  {enabled: true}</code></pre></figure>
 <p>Optics reads <code class="ic">platformName</code> and the app id (<code class="ic">appPackage</code>, with or without the <code class="ic">appium:</code> prefix). It passes every other capability to the Tizen driver unchanged. The <a href="https://github.com/headspinio/appium-tizen-tv-driver" rel="noopener">driver's README</a> explains each one, including how to get the <code class="ic">rcToken</code>.</p>
 <h2 id="lg-webos">LG webOS<a class="anchor" href="#lg-webos" aria-label="Link to this section">#</a></h2>
 <p>Install the webOS driver into Appium:</p>
@@ -148,22 +148,22 @@ elements_sources:
 elements_sources:
   - appium_screenshot: {enabled: true}
 text_detection:
-  - easyocr: {enabled: true}               # reads text on the TV screenshot">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>driver_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-      <span class=<span class="c-lit">"c-mod"</span>>enabled</span><span class=<span class="c-lit">"c-dim"</span>>:</span> true
-      <span class=<span class="c-lit">"c-mod"</span>>url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"http://localhost:4723"</span>
-      <span class=<span class="c-lit">"c-mod"</span>>capabilities</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>platformName</span><span class=<span class="c-lit">"c-dim"</span>>:</span> LGTV
+  - easyocr: {enabled: true}               # reads text on the TV screenshot">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> LGTV
         appium:automationName: webOS
         appium:deviceHost: 192.168.1.50
         appium:appId: com.birch.tv
         appium:rcMode: rc
-        appium:useSecureWebsocket: <span class="c-info">true</span>
-        appium:newCommandTimeout: <span class="c-info">600</span>
-<span class=<span class="c-lit">"c-mod"</span>>elements_sources</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>appium_screenshot</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}
-<span class=<span class="c-lit">"c-mod"</span>>text_detection</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>easyocr</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {enabled: true}              <span class="c-dim"> # reads text on the TV screenshot</span></code></pre></figure>
+        appium:useSecureWebsocket: true
+        appium:newCommandTimeout: 600
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span> {enabled: true}
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}              <span class="c-dim"> # reads text on the TV screenshot</span></code></pre></figure>
 <p>This setup finds things on screen with screenshots only, so add an OCR engine (<code class="ic">optics setup --install easyocr</code>) to check text, or <a href="../../docs/elements/text-and-images">image matching</a> for icons. The <a href="https://github.com/headspinio/appium-lg-webos-driver" rel="noopener">driver's README</a> explains the capabilities.</p>
 <h2 id="check-the-setup">Check the setup<a class="anchor" href="#check-the-setup" aria-label="Link to this section">#</a></h2>
 <p>Start <code class="ic">appium</code> in another terminal, then run the doctor:</p>
@@ -281,7 +281,7 @@ Watch a shoe video,Go home">Copy</button><pre><code><span class="c-dim">test_cas
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

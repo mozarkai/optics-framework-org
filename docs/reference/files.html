@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -126,16 +126,16 @@ Suite Teardown,Close Birch">Copy</button><pre><code><span class="c-dim">test_cas
       - Search For Trail Runner
       - Add To Cart
   - Suite Teardown:
-      - Close Birch">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Test Cases</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Suite Setup</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      - Close Birch">Copy</button><pre><code><span class="c-mod">Test Cases</span><span class="c-dim">:</span>
+  - <span class="c-mod">Suite Setup</span><span class="c-dim">:</span>
       - Open Birch
-  - <span class=<span class="c-lit">"c-mod"</span>>Shopper can sign in</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Shopper can sign in</span><span class="c-dim">:</span>
       - Sign In
       - Check Home Screen
-  - <span class=<span class="c-lit">"c-mod"</span>>Shopper can add a shoe</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Shopper can add a shoe</span><span class="c-dim">:</span>
       - Search For Trail Runner
       - Add To Cart
-  - <span class=<span class="c-lit">"c-mod"</span>>Suite Teardown</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Suite Teardown</span><span class="c-dim">:</span>
       - Close Birch</code></pre></figure></div></div>
 <div class="table-wrap"><table><thead><tr><th>Column</th><th>What it holds</th></tr></thead><tbody><tr><td><code class="ic">test_case</code></td><td>The test case name. Rows with an empty name are skipped.</td></tr><tr><td><code class="ic">test_step</code></td><td>The name of a module to run. Rows with an empty step are skipped.</td></tr></tbody></table></div>
 <p>Within a test case, the first failing step fails the test case and skips its remaining steps. The next test case still runs.</p>
@@ -179,20 +179,20 @@ Close Birch,Close And Terminate App,,,">Copy</button><pre><code><span class="c-d
   - Add To Cart:
       - Press Element ${add_to_cart} index=0
   - Close Birch:
-      - Close And Terminate App">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Modules</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Open Birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+      - Close And Terminate App">Copy</button><pre><code><span class="c-mod">Modules</span><span class="c-dim">:</span>
+  - <span class="c-mod">Open Birch</span><span class="c-dim">:</span>
       - Launch App
-  - <span class=<span class="c-lit">"c-mod"</span>>Sign In</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Sign In</span><span class="c-dim">:</span>
       - Assert Presence <span class="c-var">${email_field}</span> 20
       - Enter Text <span class="c-var">${email_field}</span> ana@birch.example
       - Enter Text <span class="c-var">${password_field}</span> @:s3cret
       - Press Element <span class="c-var">${sign_in}</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Search For Trail Runner</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Search For Trail Runner</span><span class="c-dim">:</span>
       - Press Element <span class="c-var">${search_bar}</span>
       - Enter Text <span class="c-var">${search_bar}</span> <span class="c-lit">"Trail Runner 2"</span>
-  - <span class=<span class="c-lit">"c-mod"</span>>Add To Cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Add To Cart</span><span class="c-dim">:</span>
       - Press Element <span class="c-var">${add_to_cart}</span> index=0
-  - <span class=<span class="c-lit">"c-mod"</span>>Close Birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  - <span class="c-mod">Close Birch</span><span class="c-dim">:</span>
       - Close And Terminate App</code></pre></figure></div></div>
 <div class="table-wrap"><table><thead><tr><th>Column</th><th>What it holds</th></tr></thead><tbody><tr><td><code class="ic">module_name</code></td><td>The module name.</td></tr><tr><td><code class="ic">module_step</code></td><td>A keyword name, such as <code class="ic">Press Element</code>. Case and spaces don't matter: <code class="ic">press_element</code> works too. To run another module from inside a module, use <code class="ic">Execute Module,&lt;name&gt;</code>.</td></tr><tr><td><code class="ic">param_1</code>, <code class="ic">param_2</code>, …</td><td>The keyword's parameters, in order. Add as many <code class="ic">param_</code> columns as you need.</td></tr></tbody></table></div>
 <p>Parameter rules:</p>
@@ -220,14 +220,14 @@ order_total,placeholder,,">Copy</button><pre><code><span class="c-dim">Element_N
   sign_in: [&quot;//android.widget.Button[@text='Sign in']&quot;, &quot;Sign in&quot;, &quot;sign_in.png&quot;]
   search_bar: &quot;//*[@resource-id='com.birch.shop:id/search']&quot;
   add_to_cart: [&quot;text=Add to cart&quot;, &quot;add_to_cart.png&quot;]
-  order_total: placeholder">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>Elements</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>email_field</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
+  order_total: placeholder">Copy</button><pre><code><span class="c-mod">Elements</span><span class="c-dim">:</span>
+  <span class="c-mod">email_field</span><span class="c-dim">:</span>
     - //android.widget.EditText[@resource-id=<span class="c-lit">'com.birch.shop:id/email'</span>]
     - Email
-  <span class=<span class="c-lit">"c-mod"</span>>sign_in</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [<span class="c-lit">"//android.widget.Button[@text='Sign in']"</span>, <span class="c-lit">"Sign in"</span>, <span class="c-lit">"sign_in.png"</span>]
-  <span class=<span class="c-lit">"c-mod"</span>>search_bar</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/search']"</span>
-  <span class=<span class="c-lit">"c-mod"</span>>add_to_cart</span><span class=<span class="c-lit">"c-dim"</span>>:</span> [<span class="c-lit">"text=Add to cart"</span>, <span class="c-lit">"add_to_cart.png"</span>]
-  <span class=<span class="c-lit">"c-mod"</span>>order_total</span><span class=<span class="c-lit">"c-dim"</span>>:</span> placeholder</code></pre></figure></div></div>
+  <span class="c-mod">sign_in</span><span class="c-dim">:</span> [<span class="c-lit">"//android.widget.Button[@text='Sign in']"</span>, <span class="c-lit">"Sign in"</span>, <span class="c-lit">"sign_in.png"</span>]
+  <span class="c-mod">search_bar</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/search']"</span>
+  <span class="c-mod">add_to_cart</span><span class="c-dim">:</span> [<span class="c-lit">"text=Add to cart"</span>, <span class="c-lit">"add_to_cart.png"</span>]
+  <span class="c-mod">order_total</span><span class="c-dim">:</span> placeholder</code></pre></figure></div></div>
 <div class="table-wrap"><table><thead><tr><th>Column</th><th>What it holds</th></tr></thead><tbody><tr><td><code class="ic">Element_Name</code></td><td>The name. Write the header exactly like this.</td></tr><tr><td><code class="ic">Element_ID</code></td><td>The first locator or value. Required.</td></tr><tr><td><code class="ic">Element_ID_*</code></td><td>Fallbacks. Any column whose header starts with <code class="ic">Element_ID</code>, such as <code class="ic">Element_ID_text</code>, <code class="ic">Element_ID_image</code> or <code class="ic">Element_ID_2</code>, adds another value. They're tried in column order.</td></tr></tbody></table></div>
 <ul><li>Empty cells are ignored. Columns that don't start with <code class="ic">Element_ID</code>, such as <code class="ic">Element_Text</code>, are ignored.</li><li>A second row with the same name adds more fallback values.</li><li>When a step uses <code class="ic">${name}</code>, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside <code class="ic">Run Loop</code>, <code class="ic">Condition</code> and <code class="ic">Execute Module</code> use only the first value.</li><li>Variables a step creates while running, such as the target of <code class="ic">Evaluate</code> or <code class="ic">Read Data</code>, need a row with a placeholder value so <code class="ic">optics dry_run</code> passes.</li></ul>
 <p>Optics decides what kind of locator a value is from its form:</p>
@@ -267,28 +267,28 @@ BIRCH_003,Out of stock,Product page shows out of stock,medium">Copy</button><pre
               - path: $.name
                 condition: &quot;$ == 'Trail Runner 2'&quot;
             extract:
-              product_price: $.price        # saves ${product_price}">Copy</button><pre><code><span class=<span class="c-lit">"c-mod"</span>>api</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-  <span class=<span class="c-lit">"c-mod"</span>>collections</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-    <span class=<span class="c-lit">"c-mod"</span>>birch</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                                 <span class="c-dim"> # collection id, used in Invoke API</span>
-      <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Birch API
-      <span class=<span class="c-lit">"c-mod"</span>>base_url</span><span class=<span class="c-lit">"c-dim"</span>>:</span> https://api.birch.example
-      <span class=<span class="c-lit">"c-mod"</span>>global_headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>Accept</span><span class=<span class="c-lit">"c-dim"</span>>:</span> application/json
-      <span class=<span class="c-lit">"c-mod"</span>>apis</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-        <span class=<span class="c-lit">"c-mod"</span>>get_product</span><span class=<span class="c-lit">"c-dim"</span>>:</span>                       <span class="c-dim"> # API id</span>
-          <span class=<span class="c-lit">"c-mod"</span>>name</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Get product
-          <span class=<span class="c-lit">"c-mod"</span>>description</span><span class=<span class="c-lit">"c-dim"</span>>:</span> Look up Trail Runner 2
-          <span class=<span class="c-lit">"c-mod"</span>>endpoint</span><span class=<span class="c-lit">"c-dim"</span>>:</span> /v1/products/trail-runner-2
-          <span class=<span class="c-lit">"c-mod"</span>>request</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>method</span><span class=<span class="c-lit">"c-dim"</span>>:</span> GET
-            <span class=<span class="c-lit">"c-mod"</span>>headers</span><span class=<span class="c-lit">"c-dim"</span>>:</span> {}
-            <span class=<span class="c-lit">"c-mod"</span>>body</span><span class=<span class="c-lit">"c-dim"</span>>:</span> null
-          <span class=<span class="c-lit">"c-mod"</span>>expected_result</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-            <span class=<span class="c-lit">"c-mod"</span>>jsonpath_assertions</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              - <span class=<span class="c-lit">"c-mod"</span>>path</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.name
-                <span class=<span class="c-lit">"c-mod"</span>>condition</span><span class=<span class="c-lit">"c-dim"</span>>:</span> <span class="c-lit">"$ == 'Trail Runner 2'"</span>
-            <span class=<span class="c-lit">"c-mod"</span>>extract</span><span class=<span class="c-lit">"c-dim"</span>>:</span>
-              <span class=<span class="c-lit">"c-mod"</span>>product_price</span><span class=<span class="c-lit">"c-dim"</span>>:</span> $.price       <span class="c-dim"> # saves ${product_price}</span></code></pre></figure>
+              product_price: $.price        # saves ${product_price}">Copy</button><pre><code><span class="c-mod">api</span><span class="c-dim">:</span>
+  <span class="c-mod">collections</span><span class="c-dim">:</span>
+    <span class="c-mod">birch</span><span class="c-dim">:</span>                                 <span class="c-dim"> # collection id, used in Invoke API</span>
+      <span class="c-mod">name</span><span class="c-dim">:</span> Birch API
+      <span class="c-mod">base_url</span><span class="c-dim">:</span> https://api.birch.example
+      <span class="c-mod">global_headers</span><span class="c-dim">:</span>
+        <span class="c-mod">Accept</span><span class="c-dim">:</span> application/json
+      <span class="c-mod">apis</span><span class="c-dim">:</span>
+        <span class="c-mod">get_product</span><span class="c-dim">:</span>                       <span class="c-dim"> # API id</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> Get product
+          <span class="c-mod">description</span><span class="c-dim">:</span> Look up Trail Runner 2
+          <span class="c-mod">endpoint</span><span class="c-dim">:</span> /v1/products/trail-runner-2
+          <span class="c-mod">request</span><span class="c-dim">:</span>
+            <span class="c-mod">method</span><span class="c-dim">:</span> GET
+            <span class="c-mod">headers</span><span class="c-dim">:</span> {}
+            <span class="c-mod">body</span><span class="c-dim">:</span> <span class="c-info">null</span>
+          <span class="c-mod">expected_result</span><span class="c-dim">:</span>
+            <span class="c-mod">jsonpath_assertions</span><span class="c-dim">:</span>
+              - <span class="c-mod">path</span><span class="c-dim">:</span> $.name
+                <span class="c-mod">condition</span><span class="c-dim">:</span> <span class="c-lit">"$ == 'Trail Runner 2'"</span>
+            <span class="c-mod">extract</span><span class="c-dim">:</span>
+              <span class="c-mod">product_price</span><span class="c-dim">:</span> $.price       <span class="c-dim"> # saves ${product_price}</span></code></pre></figure>
 <p>Call it from a module with <code class="ic">Invoke API,birch.get_product</code>. Only the top-level key <code class="ic">api</code> works; a file whose top key is <code class="ic">apis</code> is recognized but loads nothing. See <a href="../../docs/advanced/api-calls">Call an API</a>.</p>
 <h2 id="escaping-and-special-values">Escaping and special values<a class="anchor" href="#escaping-and-special-values" aria-label="Link to this section">#</a></h2>
 <p><strong>CSV quoting.</strong> Wrap a cell in double quotes when it contains a comma, and double any quotes inside it:</p>
@@ -385,7 +385,7 @@ Go Home,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

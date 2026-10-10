@@ -22,8 +22,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=1870328b62">
-  <link rel="stylesheet" href="../../docs.css?v=86b4c95a80">
+  <link rel="stylesheet" href="../../styles.css?v=df652ca055">
+  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -84,13 +84,13 @@
 <p><code class="ic">optics serve</code> runs Optics as a small web server on your machine. Another program, such as an internal dashboard, a test orchestrator or a script in another language, can then open a session on a device and run keywords on it with plain HTTP requests. Each request runs one keyword and returns its result.</p>
 <figure class="scene-fig"><div class="scene" data-scene="http" role="img" aria-label="optics serve runs in one terminal. From another, start a session, run a keyword, fetch a screenshot and stop the session, all with plain HTTP requests."></div><figcaption>optics serve runs in one terminal. From another, start a session, run a keyword, fetch a screenshot and stop the session, all with plain HTTP requests.</figcaption></figure>
 <p>Use the server when something other than Optics decides what to do next. If you want to run a suite, <code class="ic">optics execute</code> is simpler. If an AI agent is the caller, use <a href="../../docs/create/agent">MCP</a> instead.</p>
-<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="start-the-server">Start the server<a class="anchor" href="#start-the-server" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="start-the-server">Start the server<a class="anchor" href="#start-the-server" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics serve">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> serve</code></pre></figure>
 <p>It listens on <code class="ic">http://127.0.0.1:8000</code>. Check it's up:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl http://127.0.0.1:8000/health">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> http://127.0.0.1:8000/health
 {"status":"Optics Framework API is running","version":"1.10.5"}</code></pre></figure>
 <p>Use <code class="ic">--port</code> to change the port. Interactive API docs are at <code class="ic">http://127.0.0.1:8000/docs</code> while the server runs.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="start-a-session">Start a session<a class="anchor" href="#start-a-session" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="start-a-session">Start a session<a class="anchor" href="#start-a-session" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>A session is one connection to a device or browser. Send the same settings you'd put in <code class="ic">config.yaml</code>:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -X POST http://127.0.0.1:8000/v1/sessions/start \">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-X</span> POST http://127.0.0.1:8000/v1/sessions/start \
     -H 'Content-Type: application/json' \
@@ -111,7 +111,7 @@
     <span class="c-mod">"deviceName"</span>: <span class="c-lit">"emulator-5554"</span>, <span class="c-mod">"appPackage"</span>: <span class="c-lit">"com.birch.shop"</span>, <span class="c-mod">"appActivity"</span>: <span class="c-lit">".MainActivity"</span>}}}],
   <span class="c-mod">"elements_sources"</span>: [<span class="c-lit">"appium_find_element"</span>, <span class="c-lit">"appium_page_source"</span>, <span class="c-lit">"appium_screenshot"</span>]
 }</code></pre></figure>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="run-keywords">Run keywords<a class="anchor" href="#run-keywords" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h2 id="run-keywords">Run keywords<a class="anchor" href="#run-keywords" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Send one keyword per request, with its values in order:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \
 curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-X</span> POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \
@@ -124,11 +124,11 @@ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><
     -d '{"mode": "keyword", "keyword": "Assert Presence", "params": ["Accepted usernames are"]}'
 {"execution_id":"71f5ee34-…","status":"SUCCESS","data":{"result":true}}</code></pre></figure>
 <p>Keyword names work in any case: <code class="ic">Assert Presence</code> or <code class="ic">assert_presence</code>. <code class="ic">params</code> can also be an object of named values, such as <code class="ic">{"element": "Login", "index": "1"}</code>. A list inside it gives fallbacks: <code class="ic">{"element": ["//input[@id='login-button']", "Login"]}</code>.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="look-at-the-screen">Look at the screen<a class="anchor" href="#look-at-the-screen" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h2 id="look-at-the-screen">Look at the screen<a class="anchor" href="#look-at-the-screen" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl http://127.0.0.1:8000/v1/sessions/$SESSION/screenshot \">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> http://127.0.0.1:8000/v1/sessions/$SESSION/screenshot \
     | python3 -c 'import sys,json,base64; open("screen.png","wb").write(base64.b64decode(json.load(sys.stdin)["data"]["result"]))'</code></pre></figure>
 <p><code class="ic">/elements</code> lists the elements on screen, and <code class="ic">/source</code> returns the UI tree.</p>
-</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h3 id="stop-the-session">Stop the session<a class="anchor" href="#stop-the-session" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h2 id="stop-the-session">Stop the session<a class="anchor" href="#stop-the-session" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -X DELETE http://127.0.0.1:8000/v1/sessions/$SESSION/stop">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-X</span> DELETE http://127.0.0.1:8000/v1/sessions/$SESSION/stop
 {"status":"terminated"}</code></pre></figure>
 <p>This closes the app and ends the session.</p></div></li></ol>
@@ -155,7 +155,7 @@ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/advanced/http-api.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l3"><a href="#start-the-server">Start the server</a></li><li class="toc-l3"><a href="#start-a-session">Start a session</a></li><li class="toc-l3"><a href="#run-keywords">Run keywords</a></li><li class="toc-l3"><a href="#look-at-the-screen">Look at the screen</a></li><li class="toc-l3"><a href="#stop-the-session">Stop the session</a></li><li class="toc-l2"><a href="#follow-a-session-live">Follow a session live</a></li><li class="toc-l2"><a href="#keep-the-server-safe">Keep the server safe</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#start-the-server">Start the server</a></li><li class="toc-l2"><a href="#start-a-session">Start a session</a></li><li class="toc-l2"><a href="#run-keywords">Run keywords</a></li><li class="toc-l2"><a href="#look-at-the-screen">Look at the screen</a></li><li class="toc-l2"><a href="#stop-the-session">Stop the session</a></li><li class="toc-l2"><a href="#follow-a-session-live">Follow a session live</a></li><li class="toc-l2"><a href="#keep-the-server-safe">Keep the server safe</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
     </main>
   </div>
 
@@ -201,7 +201,7 @@ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><
   </svg>
 
   <script src="../../app.js?v=ada98e8182" defer></script>
-  <script src="../../docs.js?v=af6f271657" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
   <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
 </body>

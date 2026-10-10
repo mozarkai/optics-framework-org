@@ -99,7 +99,7 @@
     var visible = new Set();
     var mark = function () {
       var active = null;
-      for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top < 160) active = heads[i]; }
+      for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top < Math.max(160, innerHeight * .35)) active = heads[i]; }
       if (!active) active = heads[0];
       tocLinks.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + active.id); });
     };
@@ -191,8 +191,9 @@
           score += s;
         });
         // A heading that contains the whole query is the best place to land.
-        p.h.forEach(function (h) { if (h[0].toLowerCase().indexOf(q) > -1 && terms.length) { var exact = h[0].toLowerCase() === q; score += exact ? 30 : 12; if (exact || hash.indexOf("!") !== 0) hash = (exact ? "!" : "") + h[1]; } });
-        hash = hash.replace(/^!/, "");
+        // Link the best heading for the whole query: exact, then starts with it, then contains it; the first wins a tie.
+        var best = 0;
+        p.h.forEach(function (h) { var l = h[0].toLowerCase(), at = l.indexOf(q); if (at > -1 && terms.length) { var rank = l === q ? 3 : at === 0 ? 2 : 1; score += rank === 3 ? 30 : 12; if (rank > best) { best = rank; hash = h[1]; } } });
         if (title.indexOf(q) > -1) score += 12;
         var nav = (p.n || "").toLowerCase();
         if (nav === q || title === q) { score += 45; hash = ""; }
