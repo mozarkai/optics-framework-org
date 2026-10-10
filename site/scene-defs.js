@@ -871,10 +871,18 @@
       var steps = [
         [R("Sign In", "Enter Text", V("${email_field}"), "ava@birch.shop"), "0.52s", "email", "email_field", function (t) { return P.typeField(tl, ".f-email", "ava@birch.shop", t, 30); }],
         [R("Sign In", "Enter Text", V("${password_field}"), V("${password}")), "0.47s", "password", "password_field", function (t) { return P.typeField(tl, ".f-pass", "•••••••••••••", t, 34); }],
-        [R("Sign In", "Press Element", V("${sign_in}")), "0.55s", "signin", "sign_in", function (t) { P.tap(tl, "signin", t); return P.screen(tl, "home", t + 380) + 300; }],
+        // sign_in has two values: its id no longer matches after a redesign, so Optics
+        // falls back to the button's text.
+        [R("Sign In", "Press Element", V("${sign_in}")), "0.55s [Text]", "signin", "", function (t) {
+          P.lock(tl, "signin", "XPath: no match", t, "#FF7096");
+          P.lock(tl, "signin", "Text: Sign in", t + 900, "#7086FF");
+          P.tap(tl, "signin", t + 1450);
+          P.unlock(tl, t + 1700);
+          return P.screen(tl, "home", t + 1800) + 300;
+        }],
         [R("Add To Cart", "Press Element", V("${search_bar}")), "0.61s", "search", "search_bar", function (t) { return P.tap(tl, "search", t); }],
         [R("Add To Cart", "Enter Text Direct", L("trail runner")), "0.70s", "search", "", function (t) { var e = P.typeSearch(tl, "trail runner", t); P.filter(tl, 0, e + 250); return e + 650; }],
-        [R("Add To Cart", "Press Element", L("Trail Runner 2")), "1.12s", "card0", "Trail Runner 2", function (t) { P.tap(tl, "card0", t); return P.screen(tl, "product", t + 380) + 300; }],
+        [R("Add To Cart", "Press Element", L("Trail Runner 2")), "1.12s", "card0", "Trail Runner 2", function (t) { P.tap(tl, "card0", t); P.unlock(tl, t + 300); return P.screen(tl, "product", t + 400) + 300; }],
         [R("Add To Cart", "Press Element", L("Add to cart")), "0.48s", "add", "Add to cart", function (t) { P.tap(tl, "add", t); return tl.add(P.toast, "in", t + 300) + 200; }],
         [R("Add To Cart", "Assert Presence", L("Added to cart")), "0.66s", [18, 46, 216, 44], "Added to cart", function (t) { return t + 500; }],
       ];

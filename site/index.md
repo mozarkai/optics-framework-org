@@ -33,9 +33,9 @@ A suite is three kinds of file, in CSV or YAML, and lives in your repository nex
 
 ```csv
 module_name,module_step,param_1,param_2
-Sign In,Enter Text,${email_field},ada@example.com
+Sign In,Enter Text,${email_field},ava@birch.shop
 Sign In,Press Element,${sign_in}
-Add To Cart,Enter Text,${search_bar},running shoes
+Add To Cart,Enter Text,${search_bar},trail runner
 Add To Cart,Press Element,Add to cart
 ```
 

@@ -100,9 +100,9 @@
         </div>
 
         <figure class="hero-proof">
-          <div class="scene" data-scene="hero" role="img" aria-label="A test running on a shop app. Each row of modules.csv lights up while Optics does that step on the phone: it types an email and password, signs in, searches for trail runners, opens Trail Runner 2, adds it to the cart and checks that Added to cart appears. Every row is ticked off with its time, and the run passes."></div>
+          <div class="scene" data-scene="hero" role="img" aria-label="A test running on a shop app. Each row of modules.csv lights up while Optics does that step on the phone: it types an email and password, finds the Sign in button by its text when its id no longer matches, signs in, searches for trail runners, opens Trail Runner 2, adds it to the cart and checks that Added to cart appears. Every row is ticked off with its time, and the run passes."></div>
           <figcaption class="hero-cap">
-            <p>Each row of <code>modules.csv</code> is one step Optics does on the device.</p>
+            <p>Each row of <code>modules.csv</code> is one step Optics does on the device. When an element&#8217;s id stops matching, Optics finds it by its text.</p>
             <button class="btn btn-ghost film-open" type="button" aria-haspopup="dialog">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
             </button>
@@ -165,10 +165,10 @@
               <figure class="code">
                 <figcaption>modules/modules.csv</figcaption>
 <pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
-<span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${email_field}</span>,<span class="c-var">${email}</span>
+<span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${email_field}</span>,<span class="c-lit">ava@birch.shop</span>
 <span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${password_field}</span>,<span class="c-var">${password}</span>
-<span class="c-mod">Sign In</span>,<b>Press Element</b>,<span class="c-var">${sign_in_button}</span>
-<span class="c-mod">Add To Cart</span>,<b>Enter Text</b>,<span class="c-var">${search_bar}</span>,<span class="c-lit">running shoes</span>
+<span class="c-mod">Sign In</span>,<b>Press Element</b>,<span class="c-var">${sign_in}</span>
+<span class="c-mod">Add To Cart</span>,<b>Enter Text</b>,<span class="c-var">${search_bar}</span>,<span class="c-lit">trail runner</span>
 <span class="c-mod">Add To Cart</span>,<b>Press Element</b>,<span class="c-lit">Add to cart</span></code></pre>
               </figure>
             </div>
@@ -271,9 +271,9 @@ test_case,test_step
 
 <span class="c-dim">modules/modules.csv</span>
 module_name,module_step,param_1,param_2
-<span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${email_field}</span>,<span class="c-lit">ada@example.com</span>
+<span class="c-mod">Sign In</span>,<b>Enter Text</b>,<span class="c-var">${email_field}</span>,<span class="c-lit">ava@birch.shop</span>
 <span class="c-mod">Sign In</span>,<b>Press Element</b>,<span class="c-var">${sign_in}</span>
-<span class="c-mod">Add To Cart</span>,<b>Enter Text</b>,<span class="c-var">${search_bar}</span>,<span class="c-lit">running shoes</span>
+<span class="c-mod">Add To Cart</span>,<b>Enter Text</b>,<span class="c-var">${search_bar}</span>,<span class="c-lit">trail runner</span>
 <span class="c-mod">Add To Cart</span>,<b>Press Element</b>,<span class="c-lit">Add to cart</span>
 
 <span class="c-dim">test_data/elements.csv</span>
@@ -291,10 +291,10 @@ Element_Name,Element_ID
       - <span class="c-mod">Add To Cart</span>
 <span class="c-dim">Modules:</span>
   - <span class="c-mod">Sign In</span>:
-      - <b>Enter Text</b> <span class="c-var">${email_field}</span> <span class="c-lit">ada@example.com</span>
+      - <b>Enter Text</b> <span class="c-var">${email_field}</span> <span class="c-lit">ava@birch.shop</span>
       - <b>Press Element</b> <span class="c-var">${sign_in}</span>
   - <span class="c-mod">Add To Cart</span>:
-      - <b>Enter Text</b> <span class="c-var">${search_bar}</span> <span class="c-lit">"running shoes"</span>
+      - <b>Enter Text</b> <span class="c-var">${search_bar}</span> <span class="c-lit">"trail runner"</span>
       - <b>Press Element</b> <span class="c-lit">"Add to cart"</span>
 <span class="c-dim">Elements:</span>
   <span class="c-var">email_field</span>: "//*[@resource-id='email']"
