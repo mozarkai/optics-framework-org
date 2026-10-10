@@ -8,8 +8,6 @@ time: 5 min
 
 You'll install Optics, let it create a small project from a working sample, and run that project in a browser. You don't need a phone or an emulator for this.
 
-::scene{name="quickstart" caption="The whole quickstart: install Optics, create a project from a sample, run it."}
-
 :::steps
 ### Install Optics
 
@@ -66,33 +64,64 @@ When Optics asks **Run your first test now?**, answer yes. You can also run it y
 $ optics execute my-optics-project
 ```
 
-A browser window opens, visits a page, checks some text on it and closes. The terminal shows each step as it runs:
+A browser window opens, visits example.com, looks for some text and closes. On Optics 1.10.5 this first run fails, and that's worth seeing: it shows you how Optics reports a failure.
 
 ```terminal
 Test Suite
-├── Playwright Suite Setup                                 |  3.54s |    PASS
-│   └── Open Example Page                                  |  3.54s |    PASS
-│       └── Launch App (https://example.com)               |  3.54s |    PASS
-├── TC1 Verify Landing                                     |  0.11s |    PASS
-│   └── Verify Example Page                                |  0.11s |    PASS
-│       └── Validate Element (text=This domain is for…)    |  0.11s |    PASS
-└── Playwright Suite Teardown                              |  0.12s |    PASS
-    └── Close Browser                                      |  0.12s |    PASS
-        └── Close And Terminate App                        |  0.12s |    PASS
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 3 | Passed: 3 | Failed: 0          │
-╰──────────────────────────────────────────────────────╯
+├── Playwright Suite Setup                               |      1.54s |    PASS
+│   └── Open Example Page                                |      1.54s |    PASS
+│       └── Launch App (https://example.com)             |      1.54s |    PASS
+├── TC1 Verify Landing                                   |      7.38s |    FAIL
+│   └── Verify Example Page                              |      7.38s |    FAIL
+│       └── Validate Element (text=Example Domain)       |      7.17s |    FAIL
+└── Playwright Suite Teardown                            |      0.14s |    PASS
+    └── Close Browser                                    |      0.13s |    PASS
+        └── Close And Terminate App                      |      0.13s |    PASS
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 3 | Passed: 2 | Failed: 1                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭────────────────────────────── Failure details ───────────────────────────────╮
+│ TC1 Verify Landing → step 'Validate Element (text=Example Domain)' — Keyword │
+│ 'Validate Element' failed after fallback attempts                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-:::mistake[TC1 Verify Landing fails on Optics 1.10.5]
-The example page changed its wording after 1.10.5 shipped, so the sample looks for text that is no longer there. Open `my-optics-project/test_data/elements.csv` and replace its second line with:
+The tree shows where the run broke: the test case `TC1 Verify Landing`, its module `Verify Example Page`, and the step `Validate Element`. **Failure details** names the step and the value it looked for, `text=Example Domain`. Optics tried every way it knows to find that text, and the page doesn't show it: example.com dropped its "Example Domain" heading after 1.10.5 shipped.
+
+### Fix the element and run again
+
+Steps refer to things on screen by name, and the names live in one file, so the fix is one line. Open `my-optics-project/test_data/elements.csv` and change the `Heading` row to text the page does show:
 
 ```csv title="test_data/elements.csv"
+Element_Name,Element_ID
 Heading,text=This domain is for use in documentation examples
 ```
 
-Then run `optics execute my-optics-project` again. The next release ships the corrected sample.
-:::
+Run it again:
+
+```shell
+$ optics execute my-optics-project
+```
+
+Every step passes:
+
+```terminal
+Test Suite
+├── Playwright Suite Setup                               |      1.39s |    PASS
+│   └── Open Example Page                                |      1.39s |    PASS
+│       └── Launch App (https://example.com)             |      1.39s |    PASS
+├── TC1 Verify Landing                                   |      0.12s |    PASS
+│   └── Verify Example Page                              |      0.12s |    PASS
+│       └── Validate Element (text=This domain is for... |      0.12s |    PASS
+└── Playwright Suite Teardown                            |      0.10s |    PASS
+    └── Close Browser                                    |      0.10s |    PASS
+        └── Close And Terminate App                      |      0.10s |    PASS
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 3 | Passed: 3 | Failed: 0                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+The next release ships the corrected sample. On a newer version the first run passes, and you can skip this step.
 :::
 
 ## What just happened
