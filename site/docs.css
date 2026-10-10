@@ -294,6 +294,28 @@ a.card:hover .card-title, a.card:focus-visible .card-title { text-decoration-col
   .pager-next { grid-column: 1; }
 }
 
+/* Touch screens: every control is at least 44px on each side (see styles.css). */
+@media (pointer: coarse) {
+  .menu-toggle { width: 44px; height: 44px; }
+  .search-open { height: 44px; min-width: 44px; justify-content: center; }
+  .search-close { height: 44px; padding: 0 12px; }
+  .side-section a, .path li a, .dh-col a, .toc li a { display: flex; align-items: center; min-height: 44px; padding-block: 6px; }
+  .dh-col ul { gap: 0; }
+  .page-actions a, .page-actions button, .helpful-btns button { height: 44px; }
+  .helpful-btns button { min-width: 56px; }
+  .doc-edit { flex-wrap: wrap; column-gap: 24px; row-gap: 0; }
+  .doc-edit a { display: inline-flex; align-items: center; min-height: 44px; }
+  .docs-label, .crumbs a { position: relative; }
+  .docs-label::after, .crumbs a::after, .doc-code .copy::after, .task label::after { content: ""; position: absolute; }
+  .docs-label::after { inset: -11px -4px; }
+  .crumbs a::after { inset: -11px -6px; }
+  .doc-code .copy { z-index: 2; }
+  .doc-code .copy::after { inset: -7px; }
+  .task label::after { inset: -11px; }
+}
+/* Heading anchors appear on hover, which touch screens don't have, so they would be invisible tap targets. */
+@media (hover: none) { .anchor { display: none; } }
+
 /* checklists */
 .prose ul.tasks { list-style: none; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
 .prose ul.tasks > li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; padding: 16px 0; margin: 0; border-bottom: 1px solid var(--line); }

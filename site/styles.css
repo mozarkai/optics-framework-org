@@ -312,3 +312,18 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+/* Touch screens: every control is at least 44px on each side. Compact controls keep their look and grow an invisible hit area instead. */
+@media (pointer: coarse) {
+  .theme-toggle { width: 44px; height: 44px; }
+  .btn-sm, .copy, .film-close, .os-tab { height: 44px; }
+  .os-tab { min-width: 44px; }
+  .brand { min-height: 44px; }
+  .nav-links { gap: 6px; }
+  .nav-links a, .foot-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 6px; }
+  .foot-links { gap: 0 10px; margin-right: -6px; }
+  .learn .where-item { position: relative; }
+  .learn .learn-link::after { content: ""; position: absolute; inset: 0; }
+}
+@media (pointer: coarse) and (max-width: 520px) {
+  .foot-links { margin-left: -6px; }
+}

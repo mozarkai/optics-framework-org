@@ -11,6 +11,11 @@
 .sc-ctl { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; z-index: 5; opacity: 0; transition: opacity .2s ease; }
 .scene:hover .sc-ctl, .scene:focus-within .sc-ctl, .sc-ctl.show { opacity: 1; }
 @media (hover: none) { .sc-ctl { opacity: 1; } }
+@media (pointer: coarse) {
+  .sc-ctl { gap: 14px; right: 14px; bottom: 14px; } /* clear of the 18px rounded corner, which clips */
+  .sc-ctl button { position: relative; }
+  .sc-ctl button::before { content: ""; position: absolute; inset: -8px; } /* -8px from inside the 1px border: a 44px square */
+}
 .sc-ctl button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--sc-line); background: color-mix(in srgb, var(--bg) 80%, transparent); color: var(--ink); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px); }
 .sc-ctl svg { width: 13px; height: 13px; fill: currentColor; }
 .sc-ctl .i-play, .scene.paused .sc-ctl .i-pause { display: none; }
