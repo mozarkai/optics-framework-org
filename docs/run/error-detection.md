@@ -50,7 +50,7 @@ For each match, Optics:
 - adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, with one failure per match,
 - writes the details to `execution_output/detected_errors_<id>.json`.
 
-CI tools that read the JUnit report then show the run as failed, even though every step passed.
+CI tools that read the JUnit report then show the run as failed, even when every step passed. On 1.10.5 that last case has a bug:
 
 :::mistake[On Optics 1.10.5, an all-pass run can leave the entry out]
 When every test case passes, Optics 1.10.5 can finish the JUnit report before the error-detection entry is added, so the report shows no failure. The match is still written to `detected_errors_<id>.json`, and to `execution_logs.log` with `file_log: true`. Until a release fixes this, have CI check `detected_errors_<id>.json` as well as the JUnit report.

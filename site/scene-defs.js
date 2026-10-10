@@ -698,11 +698,11 @@
         ["Delegate it", "#F56FA1", "your AI agent, through optics mcp"],
       ];
       var cards = ways.map(function (wy, i) {
-        return abs(w, 24, 46 + i * 104, '<div class="sc-node" style="width:236px;height:84px;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;border-left:4px solid ' + wy[1] + '"><span style="font-size:16px">' + wy[0] + '</span><span style="font:400 12.5px/1.2 var(--sans);color:var(--sc-ink2);white-space:normal">' + wy[2] + "</span></div>");
+        return abs(w, 24, 46 + i * 104, '<div class="sc-node" style="width:236px;height:84px;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px"><span style="font-size:16px;display:flex;align-items:center;gap:9px"><i style="width:10px;height:10px;border-radius:3px;background:' + wy[1] + '"></i>' + wy[0] + '</span><span style="font:400 12.5px/1.2 var(--sans);color:var(--sc-ink2);white-space:normal">' + wy[2] + "</span></div>");
       });
-      label(w, 300, 128, "one suite, plain text");
+      label(w, 300, 128, "One suite, plain text");
       var suite = K.file(w, { x: 300, y: 150, w: 222, title: "birch-tests/", rows: ['<span class="t-dim">config.yaml</span>', '<span class="t-dim">test_cases/test_cases.csv</span>', '<span class="t-dim">modules/modules.csv</span>', '<span class="t-dim">test_data/elements.csv</span>'] });
-      label(w, 552, 128, "every build");
+      label(w, 552, 128, "Every build");
       var T = K.term(w, { x: 552, y: 150, w: 310, h: 210, title: "ci", top: true });
       T.body.style.fontSize = "11px";
       var wire = K.wire(w, 880, 500);
