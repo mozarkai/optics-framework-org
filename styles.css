@@ -101,7 +101,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .btn:active { transform: translateY(1px); }
 .btn-solid { background: var(--accent); color: var(--on-accent); }
 .btn-solid:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
-.btn-ghost { border-color: var(--line-2); color: var(--ink); }
+.btn-ghost { border-color: var(--line-2); color: var(--ink); background: transparent; cursor: pointer; }
 .btn-ghost:hover { background: var(--bg-2); }
 .btn-sm { height: 40px; padding: 0 16px; font-size: .9375rem; border-radius: 10px; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -121,9 +121,9 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 [data-theme="light"] .i-sun, [data-theme="dark"] .i-moon { display: none; }
 
 /* ---------- hero ---------- */
-.hero { padding-top: clamp(48px, 7vw, 96px); padding-bottom: clamp(64px, 8vw, 112px); }
+.hero { padding-top: clamp(32px, 4vw, 56px); padding-bottom: clamp(64px, 8vw, 112px); }
 .hero-grid { align-items: end; }
-.hero-title { font-size: clamp(3.5rem, 8.4vw, 7.5rem); font-weight: 650; font-stretch: 76%; line-height: .9; letter-spacing: -.035em; }
+.hero-title { font-size: clamp(3rem, 5.6vw, 4.75rem); font-weight: 650; font-stretch: 76%; line-height: .9; letter-spacing: -.035em; }
 .hero-title span { display: block; }
 .hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; padding-bottom: .35rem; }
 .lede { font-size: 1.1875rem; line-height: 1.55; color: var(--ink-2); }
@@ -138,17 +138,13 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 }
 @keyframes rise { from { opacity: 0; transform: translateY(.3em); } }
 
-/* the 20s loop, full width under the hero */
-.stage { position: relative; margin-top: clamp(40px, 5vw, 64px); aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; background: #0A0A10; border: 1px solid var(--line-2); box-shadow: var(--shadow); }
-.loop { width: 100%; height: 100%; object-fit: cover; }
-.film-open { position: absolute; left: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px 0 11px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 17px; background: rgba(10, 10, 16, .45); color: #fff; font: 600 .8125rem/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background .2s, transform .35s var(--spring); }
-.film-open svg { width: 11px; height: 11px; fill: #fff; }
-.fd-short { display: none; }
-.film-open:hover { background: rgba(10, 10, 16, .7); transform: scale(1.03); }
-.loop-toggle { position: absolute; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .25); background: rgba(10, 10, 16, .45); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(8px); }
-.loop-toggle svg { width: 14px; height: 14px; fill: #fff; }
-.loop-toggle .i-play, .stage.paused .loop-toggle .i-pause { display: none; }
-.stage.paused .loop-toggle .i-play { display: block; }
+/* the proof under the hero: a suite running on a phone, drawn by scenes.js */
+.hero-proof { margin-top: clamp(32px, 3.4vw, 48px); }
+.hero-proof .scene { border-radius: 22px; border-color: var(--line-2); box-shadow: var(--shadow); }
+.hero-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: 16px; color: var(--ink-3); font-size: .9375rem; }
+.hero-cap code { font-size: .875em; color: var(--ink-2); }
+.film-open { gap: 8px; }
+.film-open svg { width: 12px; height: 12px; fill: currentColor; }
 
 /* full demo dialog */
 .film-dialog { width: min(1200px, 92vw); max-width: none; padding: 0; border: 0; background: transparent; overflow: visible; }
@@ -311,12 +307,6 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .foot-links { margin-left: 0; }
   .step-text .body-text { margin-left: 0; }
   .os-tab { padding: 0 10px; font-size: .8125rem; }
-  .stage { border-radius: 14px; }
-  .film-open { left: 10px; bottom: 10px; height: 28px; gap: 5px; padding: 0 10px 0 8px; font-size: .75rem; }
-  .fd-long { display: none; } .fd-short { display: inline; }
-  .film-open svg { width: 10px; height: 10px; }
-  .loop-toggle { right: 10px; bottom: 10px; width: 28px; height: 28px; }
-  .loop-toggle svg { width: 12px; height: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
