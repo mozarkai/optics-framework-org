@@ -17,7 +17,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 
 - [Delegate it: drive a device from your agent over MCP](https://optics-framework.org/docs/create/agent.md): use when you, an AI agent, need eyes and hands on a phone, TV or browser, to reproduce a bug, explore an app, or author a test suite yourself.
 - [Write it: CSV and YAML suites](https://optics-framework.org/docs/create/write.md): use when a team wants end-to-end UI tests that non-developers can read and review in pull requests.
-- [Record it and say it: `optics live`](https://optics-framework.org/docs/create/record.md): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
+- [Record it or describe it: `optics live`](https://optics-framework.org/docs/create/record.md): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
 - [Run it in CI](https://optics-framework.org/docs/run/ci.md): use when the same suite must run on every build and report JUnit XML, including on-screen error detection for crash dialogs.
 - [Python and Robot Framework libraries](https://optics-framework.org/docs/create/python.md): use when tests should live in pytest or Robot Framework code instead of CSV.
 - [HTTP API: `optics serve`](https://optics-framework.org/docs/advanced/http-api.md): use when another service needs to run keywords over HTTP. The server runs on your machine (default http://127.0.0.1:8000); its OpenAPI document is https://optics-framework.org/openapi.json.

@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=df652ca055">
-  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
+  <link rel="stylesheet" href="../../docs.css?v=a8658ff547">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -116,17 +116,7 @@ Buy Trail Runners,Press Element,Add to cart">Copy</button><pre><code><span class
 <p>Listing a module's name as a step on its own doesn't work; you need <code class="ic">Execute Module</code>. Steps inside a module called this way use only the first value of each element, so give important elements a value that's reliable on its own. <a href="../../docs/advanced/conditions">Conditions and loops</a> explains the details.</p>
 <h2 id="split-a-suite-across-files">Split a suite across files<a class="anchor" href="#split-a-suite-across-files" aria-label="Link to this section">#</a></h2>
 <p>Optics reads every CSV and YAML file in the project folder and its subfolders, and recognises each by its first row (or top-level key in YAML). So you can split a large suite however suits your team:</p>
-<figure class="code doc-code" data-lang="tree"><button class="copy" type="button" aria-label="Copy code" data-copy="birch-tests/
-├── config.yaml
-├── checkout/
-│   ├── test_cases.csv
-│   └── modules.csv
-├── search/
-│   ├── test_cases.csv
-│   └── modules.csv
-└── elements/
-    ├── shared.csv
-    └── checkout.csv">Copy</button><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/</span>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/</span>
 <span class="c-dim">├── </span>config.yaml
 <span class="c-dim">├── </span><span class="c-mod">checkout/</span>
 <span class="c-dim">│   ├── </span>test_cases.csv
@@ -153,13 +143,7 @@ Buy Trail Runners,Press Element,Add to cart">Copy</button><pre><code><span class
 <p>Names match exactly, ignoring case. Use <code class="ic">include</code> or <code class="ic">exclude</code>, not both. Suite Setup and Suite Teardown always run.</p>
 <h2 id="run-the-same-suite-on-different-devices">Run the same suite on different devices<a class="anchor" href="#run-the-same-suite-on-different-devices" aria-label="Link to this section">#</a></h2>
 <p>Keep one config file in a project. Optics uses the config it finds in the project folder, so two of them would compete. To run the same suite on several targets, keep one config per target outside the project and copy the one you need into place before the run:</p>
-<figure class="code doc-code" data-lang="tree"><button class="copy" type="button" aria-label="Copy code" data-copy="birch/
-├── configs/
-│   ├── pixel-8.yaml
-│   └── chrome.yaml
-└── birch-tests/
-    ├── config.yaml        # copied from configs/ before each run
-    └── …">Copy</button><pre><code><span class="c-dim"></span><span class="c-mod">birch/</span>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch/</span>
 <span class="c-dim">├── </span><span class="c-mod">configs/</span>
 <span class="c-dim">│   ├── </span>pixel-8.yaml
 <span class="c-dim">│   └── </span>chrome.yaml
@@ -236,6 +220,6 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
+  <script src="../../scene-defs.js?v=8eaf62a595" defer></script>
 </body>
 </html>

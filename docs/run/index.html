@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=df652ca055">
-  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
+  <link rel="stylesheet" href="../../docs.css?v=a8658ff547">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -92,17 +92,7 @@
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
 <p>Before the run, Optics checks that the target is reachable: for Appium, that the server answers and (on Android) that a device is connected; for Selenium, that the server answers. If not, it stops with a message saying what to start. Playwright needs no check.</p>
 <p>Then it runs <strong>Suite Setup</strong>, each test case in order, and <strong>Suite Teardown</strong>, and prints a live tree:</p>
-<figure class="code doc-code" data-lang="terminal"><button class="copy" type="button" aria-label="Copy code" data-copy="Test Suite
-├── Suite Setup                                       |  1.21s |    PASS
-│   └── Launch Birch                                  |  1.21s |    PASS
-├── Shopper can sign in                               |  1.38s |    PASS
-│   └── Sign In                                       |  1.38s |    PASS
-└── Shopper can add trail runners                     |  4.02s |    FAIL
-    ├── Sign In                                       |  1.31s |    PASS
-    └── Add To Cart                                   |  2.71s |    FAIL
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 3 | Passed: 2 | Failed: 1          │
-╰──────────────────────────────────────────────────────╯">Copy</button><pre><code>Test Suite
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Test Suite
 ├── Suite Setup                                       |  1.21s |    <span class="c-pass">PASS</span>
 │   └── Launch Birch                                  |  1.21s |    <span class="c-pass">PASS</span>
 ├── Shopper can sign in                               |  1.38s |    <span class="c-pass">PASS</span>
@@ -195,6 +185,6 @@
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
+  <script src="../../scene-defs.js?v=8eaf62a595" defer></script>
 </body>
 </html>

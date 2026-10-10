@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=df652ca055">
-  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
+  <link rel="stylesheet" href="../../docs.css?v=a8658ff547">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -82,7 +82,6 @@
         </header>
         <div class="prose">
 <p>You'll install Optics, let it create a small project from a working sample, and run that project in a browser. You don't need a phone or an emulator for this.</p>
-<figure class="scene-fig"><div class="scene" data-scene="quickstart" role="img" aria-label="The whole quickstart: install Optics, create a project from a sample, run it."></div><figcaption>The whole quickstart: install Optics, create a project from a sample, run it.</figcaption></figure>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="install-optics">Install Optics<a class="anchor" href="#install-optics" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Run the installer for your system. It puts Optics in its own folder (<code class="ic">~/.optics</code>), so it doesn't touch the rest of your Python setup. You need Python 3.12 or newer.</p>
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button><button class="os-tab" role="tab" id="tabs-os-t2" aria-controls="tabs-os-p2" aria-selected="false" tabindex="-1" data-tab="pip">pip</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>irm</b> https://optics-framework.org/install.ps1 | iex</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p2" aria-labelledby="tabs-os-t2" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install optics-framework">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install optics-framework</code></pre></figure></div></div>
@@ -98,43 +97,50 @@ Optics Framework 1.10.5</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h2 id="run-the-test">Run the test<a class="anchor" href="#run-the-test" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>When Optics asks <strong>Run your first test now?</strong>, answer yes. You can also run it yourself at any time:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute my-optics-project">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute my-optics-project</code></pre></figure>
-<p>A browser window opens, visits a page, checks some text on it and closes. The terminal shows each step as it runs:</p>
-<figure class="code doc-code" data-lang="terminal"><button class="copy" type="button" aria-label="Copy code" data-copy="Test Suite
-├── Playwright Suite Setup                                 |  3.54s |    PASS
-│   └── Open Example Page                                  |  3.54s |    PASS
-│       └── Launch App (https://example.com)               |  3.54s |    PASS
-├── TC1 Verify Landing                                     |  0.11s |    PASS
-│   └── Verify Example Page                                |  0.11s |    PASS
-│       └── Validate Element (text=This domain is for…)    |  0.11s |    PASS
-└── Playwright Suite Teardown                              |  0.12s |    PASS
-    └── Close Browser                                      |  0.12s |    PASS
-        └── Close And Terminate App                        |  0.12s |    PASS
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 3 | Passed: 3 | Failed: 0          │
-╰──────────────────────────────────────────────────────╯">Copy</button><pre><code>Test Suite
-├── Playwright Suite Setup                                 |  3.54s |    <span class="c-pass">PASS</span>
-│   └── Open Example Page                                  |  3.54s |    <span class="c-pass">PASS</span>
-│       └── Launch App (https://example.com)               |  3.54s |    <span class="c-pass">PASS</span>
-├── TC1 Verify Landing                                     |  0.11s |    <span class="c-pass">PASS</span>
-│   └── Verify Example Page                                |  0.11s |    <span class="c-pass">PASS</span>
-│       └── Validate Element (text=This domain is for…)    |  0.11s |    <span class="c-pass">PASS</span>
-└── Playwright Suite Teardown                              |  0.12s |    <span class="c-pass">PASS</span>
-    └── Close Browser                                      |  0.12s |    <span class="c-pass">PASS</span>
-        └── Close And Terminate App                        |  0.12s |    <span class="c-pass">PASS</span>
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 3 | <span class="c-pass">Passed</span>: 3 | Failed: 0          │
-╰──────────────────────────────────────────────────────╯</code></pre></figure>
-<aside class="callout callout-mistake"><p class="callout-title">TC1 Verify Landing fails on Optics 1.10.5</p><p>The example page changed its wording after 1.10.5 shipped, so the sample looks for text that is no longer there. Open <code class="ic">my-optics-project/test_data/elements.csv</code> and replace its second line with:</p>
-<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Heading,text=This domain is for use in documentation examples">Copy</button><pre><code><span class="c-mod">Heading</span><span class="c-dim">,</span><b>text=This domain is for use in documentation examples</b></code></pre></figure>
-<p>Then run <code class="ic">optics execute my-optics-project</code> again. The next release ships the corrected sample.</p></aside></div></li></ol>
+<p>A browser window opens, visits example.com, looks for some text and closes. On Optics 1.10.5 this first run fails, and that's worth seeing: it shows you how Optics reports a failure.</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Test Suite
+├── Playwright Suite Setup                               |      1.54s |    <span class="c-pass">PASS</span>
+│   └── Open Example Page                                |      1.54s |    <span class="c-pass">PASS</span>
+│       └── Launch App (https://example.com)             |      1.54s |    <span class="c-pass">PASS</span>
+├── TC1 Verify Landing                                   |      7.38s |    <span class="c-fail">FAIL</span>
+│   └── Verify Example Page                              |      7.38s |    <span class="c-fail">FAIL</span>
+│       └── Validate Element (text=Example Domain)       |      7.17s |    <span class="c-fail">FAIL</span>
+└── Playwright Suite Teardown                            |      0.14s |    <span class="c-pass">PASS</span>
+    └── Close Browser                                    |      0.13s |    <span class="c-pass">PASS</span>
+        └── Close And Terminate App                      |      0.13s |    <span class="c-pass">PASS</span>
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 3 | <span class="c-pass">Passed</span>: 2 | <span class="c-fail">Failed: 1</span>                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭────────────────────────────── Failure details ───────────────────────────────╮
+│ TC1 Verify Landing → step 'Validate Element (text=Example Domain)' — Keyword │
+│ 'Validate Element' failed after fallback attempts                            │
+╰──────────────────────────────────────────────────────────────────────────────╯</code></pre></figure>
+<p>The tree shows where the run broke: the test case <code class="ic">TC1 Verify Landing</code>, its module <code class="ic">Verify Example Page</code>, and the step <code class="ic">Validate Element</code>. <strong>Failure details</strong> names the step and the value it looked for, <code class="ic">text=Example Domain</code>. Optics tried every way it knows to find that text, and the page doesn't show it: example.com dropped its "Example Domain" heading after 1.10.5 shipped.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h2 id="fix-the-element-and-run-again">Fix the element and run again<a class="anchor" href="#fix-the-element-and-run-again" aria-label="Link to this section">#</a></h2></div><div class="step-body">
+<p>Steps refer to things on screen by name, and the names live in one file, so the fix is one line. Open <code class="ic">my-optics-project/test_data/elements.csv</code> and change the <code class="ic">Heading</code> row to text the page does show:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
+Heading,text=This domain is for use in documentation examples">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID</span>
+<span class="c-mod">Heading</span><span class="c-dim">,</span><b>text=This domain is for use in documentation examples</b></code></pre></figure>
+<p>Run it again:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute my-optics-project">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute my-optics-project</code></pre></figure>
+<p>Every step passes:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Test Suite
+├── Playwright Suite Setup                               |      1.39s |    <span class="c-pass">PASS</span>
+│   └── Open Example Page                                |      1.39s |    <span class="c-pass">PASS</span>
+│       └── Launch App (https://example.com)             |      1.39s |    <span class="c-pass">PASS</span>
+├── TC1 Verify Landing                                   |      0.12s |    <span class="c-pass">PASS</span>
+│   └── Verify Example Page                              |      0.12s |    <span class="c-pass">PASS</span>
+│       └── Validate Element (text=This domain is for... |      0.12s |    <span class="c-pass">PASS</span>
+└── Playwright Suite Teardown                            |      0.10s |    <span class="c-pass">PASS</span>
+    └── Close Browser                                    |      0.10s |    <span class="c-pass">PASS</span>
+        └── Close And Terminate App                      |      0.10s |    <span class="c-pass">PASS</span>
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 3 | <span class="c-pass">Passed</span>: 3 | Failed: 0                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯</code></pre></figure>
+<p>The next release ships the corrected sample. On a newer version the first run passes, and you can skip this step.</p></div></li></ol>
 <h2 id="what-just-happened">What just happened<a class="anchor" href="#what-just-happened" aria-label="Link to this section">#</a></h2>
 <p>The project is three small spreadsheets and a settings file:</p>
-<figure class="code doc-code" data-lang="tree"><button class="copy" type="button" aria-label="Copy code" data-copy="my-optics-project/
-├── config.yaml                  # which browser or device to use
-├── test_cases/test_cases.csv    # which flows to run
-├── modules/modules.csv          # the steps in each flow
-├── test_data/elements.csv       # names for things on screen
-└── execution_output/            # results, written by each run">Copy</button><pre><code><span class="c-dim"></span><span class="c-mod">my-optics-project/</span>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">my-optics-project/</span>
 <span class="c-dim">├── </span>config.yaml<span class="c-dim">                  # which browser or device to use</span>
 <span class="c-dim">├── </span>test_cases/test_cases.csv<span class="c-dim">    # which flows to run</span>
 <span class="c-dim">├── </span>modules/modules.csv<span class="c-dim">          # the steps in each flow</span>
@@ -167,7 +173,7 @@ Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-di
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/get-started/quickstart.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#install-optics">Install Optics</a></li><li class="toc-l2"><a href="#create-a-project">Create a project</a></li><li class="toc-l2"><a href="#run-the-test">Run the test</a></li><li class="toc-l2"><a href="#what-just-happened">What just happened</a></li><li class="toc-l2"><a href="#testing-a-phone-app-instead">Testing a phone app instead</a></li><li class="toc-l2"><a href="#next-steps">Next steps</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#install-optics">Install Optics</a></li><li class="toc-l2"><a href="#create-a-project">Create a project</a></li><li class="toc-l2"><a href="#run-the-test">Run the test</a></li><li class="toc-l2"><a href="#fix-the-element-and-run-again">Fix the element and run again</a></li><li class="toc-l2"><a href="#what-just-happened">What just happened</a></li><li class="toc-l2"><a href="#testing-a-phone-app-instead">Testing a phone app instead</a></li><li class="toc-l2"><a href="#next-steps">Next steps</a></li></ul></nav>
     </main>
   </div>
 
@@ -215,6 +221,6 @@ Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-di
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
+  <script src="../../scene-defs.js?v=8eaf62a595" defer></script>
 </body>
 </html>

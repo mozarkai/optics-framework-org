@@ -23,7 +23,7 @@
     })();
   </script>
   <link rel="stylesheet" href="../../styles.css?v=df652ca055">
-  <link rel="stylesheet" href="../../docs.css?v=dcfdc47f7b">
+  <link rel="stylesheet" href="../../docs.css?v=a8658ff547">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -85,12 +85,7 @@
 <p>For a guided introduction, see <a href="../../docs/create/write">Write a test</a> and <a href="../../docs/create/yaml">Write tests in YAML</a>.</p>
 <h2 id="how-optics-finds-your-files">How Optics finds your files<a class="anchor" href="#how-optics-finds-your-files" aria-label="Link to this section">#</a></h2>
 <p>Optics walks the whole project folder, including subfolders, and decides what each <code class="ic">.csv</code>, <code class="ic">.yml</code> and <code class="ic">.yaml</code> file is by its <strong>content</strong>, not its name or location. You can use any folder layout. We recommend the one <code class="ic">optics init</code> creates:</p>
-<figure class="code doc-code" data-lang="tree"><button class="copy" type="button" aria-label="Copy code" data-copy="birch-tests/
-├── config.yaml
-├── test_cases/test_cases.csv
-├── modules/modules.csv
-├── test_data/elements.csv
-└── test_data/error_definitions.csv    # optional">Copy</button><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/</span>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/</span>
 <span class="c-dim">├── </span>config.yaml
 <span class="c-dim">├── </span>test_cases/test_cases.csv
 <span class="c-dim">├── </span>modules/modules.csv
@@ -303,16 +298,7 @@ Go Home,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile
 <p><strong>YAML quoting.</strong> A quoted value that contains <code class="ic">=</code> keeps its quotes. Write conditions without spaces instead: <code class="ic">Condition ${size}=='9' "Pick Size" "Show Error"</code>.</p>
 <h2 id="outputs">Outputs<a class="anchor" href="#outputs" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics execute</code> and <code class="ic">optics dry_run</code> write to <code class="ic">execution_output/</code> in the project, unless you set <code class="ic">execution_output_path</code> in <a href="../../docs/reference/config">config.yaml</a>.</p>
-<figure class="code doc-code" data-lang="tree"><button class="copy" type="button" aria-label="Copy code" data-copy="birch-tests/execution_output/
-├── junit_output.xml
-├── logs.json                                      # json_log: true
-├── internal_logs.log                              # file_log: true
-├── execution_logs.log                             # file_log: true
-├── 2026-10-09T15-04-05-123456-pre_press_element.jpg
-├── ...-press_element_element_detection_result.jpg
-├── ...-end_of_run.jpg
-├── page_sources_log.xml
-└── detected_errors_&lt;session_id&gt;.json              # only when error definitions match">Copy</button><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/execution_output/</span>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/execution_output/</span>
 <span class="c-dim">├── </span>junit_output.xml
 <span class="c-dim">├── </span>logs.json<span class="c-dim">                                      # json_log: true</span>
 <span class="c-dim">├── </span>internal_logs.log<span class="c-dim">                              # file_log: true</span>
@@ -387,6 +373,6 @@ Go Home,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile
   <script src="../../app.js?v=ada98e8182" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=ac04b257d0" defer></script>
+  <script src="../../scene-defs.js?v=8eaf62a595" defer></script>
 </body>
 </html>
