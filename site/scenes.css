@@ -190,3 +190,8 @@
 .sc-box.bad::before { color: #FF7096; }
 .sc-box.info { border-color: rgba(111, 208, 255, .55); }
 .sc-box.info::before, .sc-box.info::after { color: #6FD0FF; }
+
+/* rows ticked off as a run passes them, and the one-row file on a narrow hero */
+.sc-row .sc-done { margin-left: auto; padding-left: 16px; color: #3DDC84; opacity: 0; transition: opacity .3s ease; }
+.sc-row.done .sc-done { opacity: 1; }
+.sc-ticker .sc-row { font-size: 11.5px; }
