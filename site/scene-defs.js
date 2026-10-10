@@ -694,7 +694,7 @@
       var ways = [
         ["Write it", "#9672F8", "CSV or YAML by hand"],
         ["Record it", "#24C3AB", "optics live"],
-        ["Say it", "#F3BE00", "plain English, Ctrl+N in optics live"],
+        ["Describe it", "#F3BE00", "plain English, Ctrl+N in optics live"],
         ["Delegate it", "#F56FA1", "your AI agent, through optics mcp"],
       ];
       var cards = ways.map(function (wy, i) {
