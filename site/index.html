@@ -365,11 +365,38 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     <section class="band where" aria-labelledby="where-h">
       <div class="wrap">
         <h2 class="h2" id="where-h">Where suites run</h2>
-        <div class="two where-grid">
+        <div class="two ci-row">
           <div class="where-item">
             <h3 class="h3">On every build</h3>
-            <p class="body-text">Run in CI and read results as they arrive. On-screen error detection flags a crash or sign-out screen left showing at the end of the run, even if no assertion would have caught it.</p>
+            <p class="body-text">This workflow runs a web suite on every push. <code class="ic">optics execute</code> exits with 1 when a test fails, which fails the job, and the JUnit report shows up as a check on the pull request.</p>
+            <p class="body-text">On-screen error detection also flags a crash or sign-out screen left showing at the end of the run, even if no assertion would have caught it.</p>
+            <p class="body-text"><a class="learn-link" href="docs/run/ci">Run tests in CI</a> has the same job for GitLab and for Android on an emulator.</p>
           </div>
+          <figure class="code ci-yaml">
+            <figcaption>.github/workflows/optics.yml</figcaption>
+<pre><code><span class="c-dim">name:</span> Optics
+<span class="c-dim">on:</span> [push, pull_request]
+<span class="c-dim">permissions:</span>
+  <span class="c-dim">contents:</span> read
+  <span class="c-dim">checks:</span> write
+<span class="c-dim">jobs:</span>
+  <span class="c-dim">web:</span>
+    <span class="c-dim">runs-on:</span> ubuntu-latest
+    <span class="c-dim">steps:</span>
+      - <span class="c-dim">uses:</span> actions/checkout@v7
+      - <span class="c-dim">uses:</span> actions/setup-python@v7
+        <span class="c-dim">with:</span>
+          <span class="c-dim">python-version:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
+      - <span class="c-dim">run:</span> python -m playwright install --with-deps chromium
+      - <span class="c-dim">run:</span> xvfb-run -a <b>optics execute birch-tests</b> --no-use-printer
+      - <span class="c-dim">if:</span> always()
+        <span class="c-dim">uses:</span> mikepenz/action-junit-report@v6
+        <span class="c-dim">with:</span>
+          <span class="c-dim">report_paths:</span> birch-tests/execution_output/junit_output.xml</code></pre>
+          </figure>
+        </div>
+        <div class="where-rest">
           <div class="where-item">
             <h3 class="h3">Before every release</h3>
             <p class="body-text">Run the full regression on your own emulator or device, with annotated screenshots of every step to show exactly what the test saw.</p>

@@ -20,13 +20,17 @@ name: Optics
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+  checks: write   # lets the report step post a check
+
 jobs:
   web:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -40,16 +44,21 @@ jobs:
 
       - name: Publish results
         if: always()
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: birch-tests/execution_output/junit_output.xml
 
-      - name: Keep screenshots
+      # Screenshot file names contain colons, which upload-artifact rejects,
+      # so the output folder is uploaded as one archive.
+      - name: Keep the run output
         if: failure()
-        uses: actions/upload-artifact@v4
+        run: tar -czf optics-output.tgz birch-tests/execution_output
+
+      - if: failure()
+        uses: actions/upload-artifact@v7
         with:
           name: optics-output
-          path: birch-tests/execution_output/
+          path: optics-output.tgz
 ```
 ::tab[GitLab CI]
 ```yaml title=".gitlab-ci.yml"
@@ -69,7 +78,9 @@ optics-web:
 ```
 :::
 
-`xvfb-run` gives the browser a virtual screen. Optics 1.10.5 always opens a visible browser window, and CI machines have no display. From the next release you can set `headless: true` under the Playwright driver's `capabilities` and drop `xvfb-run`.
+`xvfb-run` gives the browser a virtual screen. Optics 1.10.5 always opens a visible browser window, even with `headless: true` in `config.yaml`, and CI machines have no display. Once the fix in [pull request #600](https://github.com/mozarkai/optics-framework/pull/600) is released, `headless: true` works and you can drop `xvfb-run`.
+
+The `permissions` block lets the report step post its check. Without it, the step logs `Resource not accessible by integration` and no check appears. Pull requests from forks always get a read-only token, so on those the results are in the job log only.
 
 ## Run an Android suite
 
@@ -80,11 +91,15 @@ name: Optics Android
 
 on: [pull_request]
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Enable KVM
         run: |
@@ -92,12 +107,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Optics and Appium
         run: |
@@ -118,7 +133,7 @@ jobs:
 
       - name: Publish results
         if: always()
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: birch-tests/execution_output/junit_output.xml
 ```
@@ -136,7 +151,7 @@ There's one case the exit code misses: [error screens](/docs/run/error-detection
 - **Pin the Optics version** (`optics-framework==1.10.5`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
-- **Keep the artifacts.** Upload `execution_output/` when a run fails. The screenshots usually explain the failure faster than the log.
+- **Keep the artifacts.** Upload `execution_output/` when a run fails, as an archive (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
 - **Keep secrets out of the suite.** Pass API keys such as `GEMINI_API_KEY` as CI secrets, in environment variables.
 - **Wait for screens to load.** Runners are often slower than your laptop. Put `Assert Presence` before actions that follow a screen change, rather than adding `Sleep` steps.
 
