@@ -8,7 +8,7 @@ time: 5 min
 
 An **area of interest** (AOI) is a rectangle on the screen. Give one to a step and Optics only accepts an element inside it. Use it when the same text appears in several places, such as an *Add to cart* button that also appears in a product description, or to make OCR faster by reading less of the screen.
 
-::scene{name="aoi" caption="With an area of interest covering the bottom quarter, Optics only reads that part of the screen, so it finds the button rather than the same words in the description."}
+::scene{name="aoi" caption="With an area of interest covering the bottom quarter, Optics only searches that part of the screen, so it presses the button rather than the same words in the banner at the top."}
 
 ## Set an area
 

@@ -8,7 +8,7 @@ time: 6 min
 
 AI self-heal is a last line of defence. When a step can't find its element by any value or any method, Optics sends a screenshot to an AI model and asks it to complete the step. If the button now says *Log in* instead of *Sign in*, the model can spot that and press it, and the test carries on. It's off by default.
 
-::scene{name="selfheal" caption="Every value fails after a redesign. Self-heal reads the screen, finds the renamed button, and the step passes. The log records what it did."}
+::scene{name="selfheal" caption="Both ways of finding “Sign in” fail after a redesign. Self-heal reads the screen, presses “Log in” instead, and the step passes. The log records each step it took."}
 
 ## When to use it
 

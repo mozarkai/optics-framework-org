@@ -8,7 +8,7 @@ time: 10 min
 
 `optics serve` runs Optics as a small web server on your machine. Another program, such as an internal dashboard, a test orchestrator or a script in another language, can then open a session on a device and run keywords on it with plain HTTP requests. Each request runs one keyword and returns its result.
 
-::scene{name="http" caption="Start a session, run a keyword, fetch a screenshot, stop the session, all with plain HTTP requests."}
+::scene{name="http" caption="optics serve runs in one terminal. From another, start a session, run a keyword, fetch a screenshot and stop the session, all with plain HTTP requests."}
 
 Use the server when something other than Optics decides what to do next. If you want to run a suite, `optics execute` is simpler. If an AI agent is the caller, use [MCP](/docs/create/agent) instead.
 

@@ -8,7 +8,7 @@ time: 10 min
 
 `optics live` opens an interactive session next to your device or browser. You type a step, Optics runs it straight away, and you see whether it worked. Every step that succeeds is recorded. When the flow is done, `/save` writes it into your suite as a module, ready for `optics execute`.
 
-::scene{name="record" caption="Each step runs on the device as you type it. /save turns the steps that worked into a module in modules.csv."}
+::scene{name="record" caption="Each step runs on the device as you type it. /save writes every step you ran, including the launch at startup, to a module in modules.csv."}
 
 ## Before you begin
 

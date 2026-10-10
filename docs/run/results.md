@@ -34,7 +34,7 @@ birch-tests/execution_output/
 | `logs.json` | With `json_log: true` | Feed results into your own dashboards. |
 | `detected_errors_<id>.json` | When an [error screen](/docs/run/error-detection) was found | See which error definition matched. |
 
-::scene{name="results" caption="On the left, the screen before the step. On the right, the same screen with a box around the element Optics found and the way it found it."}
+::scene{name="results" caption="On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it."}
 
 ## Investigate a failure
 

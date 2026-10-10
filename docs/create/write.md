@@ -158,7 +158,7 @@ Check that every keyword exists and every `${name}` is defined, without touching
 $ optics dry_run birch-tests
 ```
 
-::scene{name="dryrun" caption="A dry run catches a mistyped keyword and suggests the right one, before anything runs on a device."}
+::scene{name="dryrun" caption="A dry run catches a mistyped keyword and suggests the right one, before anything runs on a device. Steps after the failure show NOT_RUN."}
 
 When the dry run passes, run the suite for real:
 

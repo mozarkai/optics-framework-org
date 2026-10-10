@@ -6,7 +6,7 @@ summary: Learn how Optics tries several ways to find each element, so one change
 
 Most test tools give an element one locator, and the test fails the moment that locator changes. Optics assumes an element has several identities (its place in the UI tree, its text, what it looks like) and tries them in order before giving up. A redesign that breaks one identity falls through to the next.
 
-::scene{name="ladder" caption="A redesign changed the button's id, so its XPath misses and its text finds it. A product name drawn inside an image isn't in the UI tree at all, so OCR reads it from a screenshot."}
+::scene{name="ladder" caption="sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot."}
 
 ## The order Optics tries things
 

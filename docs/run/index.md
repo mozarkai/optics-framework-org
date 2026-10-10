@@ -7,7 +7,7 @@ level: Beginner
 
 Two commands cover almost every run. `optics dry_run` checks your files without touching a device. `optics execute` runs the suite on the device or browser in your `config.yaml` and writes the results to `execution_output/`.
 
-::scene{name="run" caption="optics execute shows each step as it runs and writes a JUnit report, screenshots and logs to execution_output."}
+::scene{name="run" caption="optics execute shows each test case, module and step with its time and status, then writes a JUnit report, screenshots and logs to execution_output."}
 
 ## Check the suite first
 

@@ -6,7 +6,7 @@ level: Advanced
 time: 30 min
 ---
 
-::scene{name="production" caption="Optics taps through a Bluetooth dongle that acts as a mouse and keyboard, and sees the screen through a camera."}
+::scene{name="production" caption="Optics sees the screen through a camera, finds the element with OCR, and taps it by moving a Bluetooth mouse, then parks the pointer in the corner."}
 
 Optics can test a device with no automation software on it at all. A **BLE dongle** (a small USB Bluetooth adapter) pairs with the device as an ordinary Bluetooth mouse and keyboard. A **camera** pointed at the screen shows Optics what's there. Optics finds things in the camera picture with OCR and image matching, then moves the pointer and taps.
 

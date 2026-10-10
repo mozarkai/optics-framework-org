@@ -73,7 +73,7 @@ When you run `optics execute`, Optics:
 
 For each value of an element, Optics tries the cheapest ways first. An XPath is looked up in the UI tree. Text is looked up in the UI tree, and if it isn't there, Optics reads a screenshot with OCR. A picture is matched against a screenshot. If everything fails and you've switched on [AI self-heal](/docs/elements/self-heal), an AI model looks at the screen and tries to recover.
 
-::scene{name="ladder" caption="The button's id changed in a redesign, so the XPath misses and its text finds it. Next, a product name drawn inside an image isn't in the UI tree, so OCR reads it from a screenshot."}
+::scene{name="ladder" caption="sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot."}
 
 [How Optics finds elements](/docs/elements/) covers the full order and how to tune it.
 
