@@ -76,7 +76,7 @@ body {
 h1, h2, h3, p, ol, dl, dd, figure, pre { margin: 0; }
 a { color: inherit; }
 img, svg, video { display: block; }
-code, kbd, pre { font-family: var(--mono); }
+code, kbd, pre { font-family: var(--mono); font-variant-ligatures: none; } /* show == and -- as typed: people copy these */
 ::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 .cmd :focus-visible, .code :focus-visible { outline-color: var(--code-info); }
@@ -254,6 +254,10 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 /* ---------- where ---------- */
 .where-grid { row-gap: 40px; }
 .where-item { padding-top: 24px; border-top: 2px solid var(--ink); }
+.where-item > .body-text + .body-text { margin-top: 14px; }
+.ci-row { align-items: start; }
+.ci-yaml pre { font-size: .75rem; line-height: 1.75; }
+.where-rest { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px var(--gutter); margin-top: clamp(48px, 6vw, 72px); }
 
 /* ---------- install ---------- */
 .steps { list-style: none; padding: 0; }
@@ -294,6 +298,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .nav-links { gap: 18px; margin-left: 0; }
   .nav-links a[href^="#"] { display: none; }
   .two, .head-row { grid-template-columns: minmax(0, 1fr); }
+  .where-rest { grid-template-columns: minmax(0, 1fr); }
   .hero-grid { gap: 28px; }
   .step { gap: 18px; }
 }
@@ -307,6 +312,21 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .foot-links { margin-left: 0; }
   .step-text .body-text { margin-left: 0; }
   .os-tab { padding: 0 10px; font-size: .8125rem; }
+}
+/* Touch screens: every control is at least 44px on each side. Compact controls keep their look and grow an invisible hit area instead. */
+@media (pointer: coarse) {
+  .theme-toggle { width: 44px; height: 44px; }
+  .btn-sm, .copy, .film-close, .os-tab { height: 44px; }
+  .os-tab { min-width: 44px; }
+  .brand { min-height: 44px; }
+  .nav-links { gap: 6px; }
+  .nav-links a, .foot-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 6px; }
+  .foot-links { gap: 0 10px; margin-right: -6px; }
+  .learn .where-item { position: relative; }
+  .learn .learn-link::after { content: ""; position: absolute; inset: 0; }
+}
+@media (pointer: coarse) and (max-width: 520px) {
+  .foot-links { margin-left: -6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

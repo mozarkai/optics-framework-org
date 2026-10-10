@@ -59,10 +59,34 @@ Every element can have several identities, tried cheapest first:
 
 ## Where suites run
 
-- **On every build:** in CI, with on-screen error detection.
+- **On every build:** in CI. `optics execute` exits with 1 when a test fails, and the JUnit report becomes a check on the pull request. On-screen error detection runs too. GitLab and Android versions: https://optics-framework.org/docs/run/ci
 - **Before every release:** on your own emulator or device, with annotated screenshots.
 - **On every device:** Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium; web through Selenium or Playwright.
 - **In production:** on a schedule against your live app, including a Bluetooth driver for locked-down devices.
+
+```yaml
+# .github/workflows/optics.yml
+name: Optics
+on: [push, pull_request]
+permissions:
+  contents: read
+  checks: write
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install "optics-framework[playwright]==1.10.5"
+      - run: python -m playwright install --with-deps chromium
+      - run: xvfb-run -a optics execute birch-tests --no-use-printer
+      - if: always()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: birch-tests/execution_output/junit_output.xml
+```
 
 ## Get started
 
