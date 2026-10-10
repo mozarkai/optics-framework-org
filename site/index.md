@@ -44,8 +44,8 @@ Add To Cart,Press Element,Add to cart
 `optics execute <folder>` replays the suite step by step. `optics dry_run <folder>` validates every keyword, element and module reference without a device. Each run writes:
 
 - `junit_output.xml`, written as the run goes so CI sees progress live.
-- Screenshots before and after every action, annotated with the strategy that found the element.
-- Detected errors: crash dialogs and messages matched from `error_definitions.csv` fail the run even without an assertion.
+- Screenshots of the screen before each step that finds an element, and the same screen with a box around what Optics found.
+- Detected errors: crash dialogs and messages matched from `error_definitions.csv` on the last screen add a failure to the JUnit report, even without an assertion.
 
 ## How Optics finds an element
 
