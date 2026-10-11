@@ -125,9 +125,26 @@ Enable the sources that match your driver. We recommend all three for your drive
 
 ### llm_models
 
-| Name | Extra | Settings |
+Enable the engine that matches the account you already have. Each engine has an extra of the same name, and the `llm` bundle installs all three.
+
+| You have | Enable |
+|---|---|
+| A Gemini API key, or Google Cloud Vertex AI | `gemini` |
+| An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio | `openai` |
+| A Claude API key, or Claude on Amazon Bedrock or Google Vertex AI | `anthropic` |
+
+Each engine reads its key from an environment variable. Don't put a key in config.yaml, because the file usually ends up in version control. If you enable more than one entry, Optics tries them in list order and moves to the next one when a call fails.
+
+Plain-English mode and self-heal send screenshots, so choose a model that accepts images.
+
+#### gemini
+
+| Setting | Default | What it does |
 |---|---|---|
-| `gemini` | `llm` | All optional: `model` (`gemini-2.5-flash`), `temperature` (`0.0`), `use_vertexai`, `project`, `location`. |
+| `model` | `gemini-2.5-flash` | The Gemini model. |
+| `use_vertexai` | From `GOOGLE_GENAI_USE_VERTEXAI` | `true` uses Vertex AI instead of the Gemini API. |
+| `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
+| `temperature` | The model's default | Sampling temperature. |
 
 ```yaml
 llm_models:
@@ -137,7 +154,64 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its credentials from the environment: `GEMINI_API_KEY` or `GOOGLE_API_KEY`, or `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Don't put an API key in config.yaml: Optics accepts `api_key` there but warns, because the file usually ends up in version control.
+Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` in `capabilities` too, but warns when you use it.
+
+#### openai
+
+Works with OpenAI and with any server that offers an OpenAI-compatible Chat Completions API. Set the entry's `url` to the server's base URL, or leave it out to call OpenAI. `OPENAI_BASE_URL` works in place of `url`.
+
+| Setting | Default | What it does |
+|---|---|---|
+| `model` | None (required) | The model name as the server spells it, for example `gpt-5-mini`, or `anthropic/claude-sonnet-5-5` on OpenRouter. |
+| `api_key_env` | `OPENAI_API_KEY` | The environment variable that holds the key. |
+| `response_format` | `json_schema` | Set `json_object` if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead. |
+| `temperature` | The model's default | Sampling temperature. |
+
+| Server | `url` | Key |
+|---|---|---|
+| OpenAI | Leave it out | `OPENAI_API_KEY` |
+| OpenRouter | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY`, with `api_key_env: OPENROUTER_API_KEY` |
+| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable `api_key_env` names |
+| Ollama | `http://localhost:11434/v1` | None |
+| vLLM, LM Studio | The server's `/v1` URL | None |
+
+```yaml
+llm_models:
+  - openai:
+      enabled: true
+      url: https://openrouter.ai/api/v1
+      capabilities:
+        model: anthropic/claude-sonnet-5-5
+        api_key_env: OPENROUTER_API_KEY
+```
+
+#### anthropic
+
+Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedrock or Vertex AI, also install `anthropic[bedrock]` or `anthropic[vertex]` into the same Python environment as Optics.
+
+| Setting | Default | What it does |
+|---|---|---|
+| `model` | None (required) | The model ID, for example `claude-sonnet-5-5`. Bedrock and Vertex AI use their own model IDs. |
+| `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
+| `region` | From the environment | The Bedrock or Vertex AI region. |
+| `project` | From the environment | The Vertex AI project. |
+| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. |
+| `max_tokens` | `4096` | The longest reply the model may write. |
+| `temperature` | The model's default | Sampling temperature. |
+
+| Platform | Credentials |
+|---|---|
+| `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
+| `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
+| `vertex` | Google Cloud application default credentials |
+
+```yaml
+llm_models:
+  - anthropic:
+      enabled: true
+      capabilities:
+        model: claude-sonnet-5-5
+```
 
 ## Examples by platform
 
@@ -370,7 +444,7 @@ llm_models:
       enabled: true
 ```
 
-- It needs an enabled `llm_models` entry, the `llm` extra, Gemini credentials, and a screenshot element source such as `appium_screenshot`. Without them it does nothing, and the run isn't affected.
+- It needs an enabled `llm_models` entry, that engine's extra and key, and a screenshot element source such as `appium_screenshot`. Without them it does nothing, and the run isn't affected.
 - It applies to keywords that find and act on an element: `Press Element`, `Enter Text`, `Enter Number`, `Clear Element Text`, `Get Text`, `Swipe From Element`, `Scroll From Element`, `Detect And Press` and `Select Dropdown Option`. It doesn't apply to assertions.
 - A healed step passes. Check the logs for `AI self-heal:` lines so a real regression doesn't go unnoticed.
 
