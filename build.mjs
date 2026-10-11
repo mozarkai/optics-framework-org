@@ -63,13 +63,14 @@ for (const page of PAGES) {
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 
-// The blog lists articles and videos hosted elsewhere: /blog, its Markdown twin, an RSS
-// feed, and the latest four on the homepage (both the HTML and the Markdown twin).
+// The blog lists articles, videos and posts hosted elsewhere, from any author:
+// /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
+// (both the HTML and the Markdown twin).
 const blog = loadBlog();
 const BLOG_PAGE = {
   path: "blog",
-  title: "Optics blog: articles and videos",
-  description: "Articles, videos and posts about Optics, the open-source test automation framework. Each one links to the original on Medium, YouTube, LinkedIn or X.",
+  title: "Optics blog: articles, videos and posts",
+  description: "Articles, videos and posts about Optics, the open-source test automation framework. Each one links to the original on Medium, YouTube, LinkedIn, X or Instagram.",
   body: blogPage(blog),
   head: `<link rel="alternate" type="application/rss+xml" href="feed.xml" title="Optics blog">\n  <link rel="alternate" type="text/markdown" href="blog.md" title="Optics blog, as Markdown">\n  <script type="application/ld+json">\n${blogJsonLd(blog, ORIGIN)}\n  </script>`,
 };

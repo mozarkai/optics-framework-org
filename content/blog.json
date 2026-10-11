@@ -1,9 +1,4 @@
 {
-  "channels": [
-    { "platform": "youtube", "label": "YouTube", "url": null, "note": "Launching soon" },
-    { "platform": "medium", "label": "Medium", "url": "https://medium.com/@chinmayajha", "note": "Articles" },
-    { "platform": "github", "label": "GitHub", "url": "https://github.com/mozarkai/optics-framework/releases", "note": "Release notes" }
-  ],
   "items": [
     {
       "type": "article",
