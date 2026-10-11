@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Troubleshooting · Optics docs</title>
+  <meta name="description" content="Fix the most common problems with installing, configuring and running Optics.">
+  <link rel="canonical" href="https://optics-framework.org/docs/help/troubleshooting">
+  <link rel="alternate" type="text/markdown" href="troubleshooting.md" title="This page as Markdown">
+  <meta property="og:title" content="Troubleshooting · Optics docs">
+  <meta property="og:description" content="Fix the most common problems with installing, configuring and running Optics.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/help/" aria-current="true">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting" aria-current="page">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/help/">Help</a></nav>
+        <header class="doc-head">
+          <h1>Troubleshooting</h1>
+          <p class="doc-summary">Fix the most common problems with installing, configuring and running Optics.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="troubleshooting.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="troubleshooting.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Problems are grouped by when they happen and named by the message Optics prints, so you can search this page for the words on your screen. Start with <code class="ic">optics doctor &lt;project&gt;</code>, which finds many of these for you. For messages with a code such as <code class="ic">E0201</code>, see <a href="../../docs/reference/errors">Error codes</a>.</p>
+<h2 id="installing">Installing<a class="anchor" href="#installing" aria-label="Link to this section">#</a></h2>
+<h3 id="command-not-found"><code class="ic">optics: command not found</code><a class="anchor" href="#command-not-found" aria-label="Link to this section">#</a></h3>
+<p>Your shell can't find the <code class="ic">optics</code> command. The installer adds it to your PATH, but only new terminals pick that up.</p>
+<p>Open a new terminal. If it still fails, add <code class="ic">~/.optics/bin</code> to your PATH, as the installer printed. With pip, activate the virtual environment you installed into.</p>
+<h3 id="python-version">Optics needs Python 3.12 or newer<a class="anchor" href="#python-version" aria-label="Link to this section">#</a></h3>
+<p>Optics runs on Python 3.12 and later. pip on an older Python reports that no matching version of <code class="ic">optics-framework</code> exists.</p>
+<p>Check with <code class="ic">python3 --version</code>, then install a current Python from <a href="https://www.python.org/downloads/" rel="noopener">python.org</a> or use the installer, which sets up its own environment. See <a href="../../docs/get-started/install">Install Optics</a>.</p>
+<h3 id="cannot-load-dependencies">"Cannot start": Optics could not load one of its dependencies<a class="anchor" href="#cannot-load-dependencies" aria-label="Link to this section">#</a></h3>
+<p>Every command stops with a red panel because a package Optics needs is missing or broken. This usually follows a partial upgrade or a package installed into the wrong environment.</p>
+<p>Run the reinstall command shown in the panel, for example <code class="ic">pip install --force-reinstall optics-framework</code>. It matches the way you installed Optics.</p>
+<h3 id="setup-refuses"><code class="ic">optics setup</code> refuses to install<a class="anchor" href="#setup-refuses" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics setup</code> and <code class="ic">optics quickstart</code> won't install engines into environments that another tool manages: Conda, pipx, <code class="ic">uv tool</code>, and project environments run by uv, Poetry, PDM or Pipenv. They also refuse a system Python marked as externally managed.</p>
+<p>Run the command the message suggests, such as <code class="ic">pipx inject optics-framework …</code> or <code class="ic">poetry add …</code>. Or install Optics into a plain virtual environment, where <code class="ic">optics setup</code> works. See <a href="../../docs/reference/engines#where-installs-are-refused">Where installs are refused</a>.</p>
+<h3 id="easyocr-conda">EasyOCR fails under Conda<a class="anchor" href="#easyocr-conda" aria-label="Link to this section">#</a></h3>
+<p>EasyOCR and Optics need different major versions of NumPy under Conda, so they can't share a Conda environment.</p>
+<p>Use the installer or a standard <code class="ic">venv</code> instead of Conda.</p>
+<h3 id="mcp-not-installed">The MCP server isn't installed by <code class="ic">optics setup</code><a class="anchor" href="#mcp-not-installed" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics setup --install mcp</code> reports <code class="ic">Invalid engine(s): mcp</code>, and the <code class="ic">all</code> bundle leaves the MCP server out.</p>
+<p>Install it with pip: <code class="ic">pip install "optics-framework[mcp]"</code>. See <a href="../../docs/reference/mcp#install">MCP server</a>.</p>
+<h2 id="setting-up-a-project">Setting up a project<a class="anchor" href="#setting-up-a-project" aria-label="Link to this section">#</a></h2>
+<h3 id="no-driver-enabled">"No driver enabled in …/config.yaml"<a class="anchor" href="#no-driver-enabled" aria-label="Link to this section">#</a></h3>
+<p>No entry under <code class="ic">driver_sources</code> has <code class="ic">enabled: true</code>. Optics also prints this when it couldn't read <code class="ic">config.yaml</code> at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults.</p>
+<ul><li>Run <code class="ic">optics doctor &lt;project&gt;</code>. Its <code class="ic">config: file</code> row shows whether the file parses.</li><li>Set <code class="ic">enabled: true</code> on one driver, or run <code class="ic">optics configure &lt;project&gt;</code> to write a working config.</li><li>Check indentation: each engine is a list item, as in <code class="ic">- appium:</code> followed by its settings indented below.</li></ul>
+<h3 id="missing-required-files">"Missing required files in …: test_cases, modules"<a class="anchor" href="#missing-required-files" aria-label="Link to this section">#</a></h3>
+<p>Optics finds files by their header row, not their names, and found no test cases file or no modules file.</p>
+<p>Check that the first line of each file is exactly right: <code class="ic">test_case,test_step</code> for test cases and <code class="ic">module_name,module_step,param_1,…</code> for modules. A spreadsheet app can add an invisible character to the first cell when it saves as "CSV UTF-8", so save as plain CSV. See <a href="../../docs/reference/files#how-optics-finds-your-files">How Optics finds your files</a>.</p>
+<h3 id="no-appium-server">"Cannot start" panel: "No Appium server reachable at …"<a class="anchor" href="#no-appium-server" aria-label="Link to this section">#</a></h3>
+<p>Before a run, <code class="ic">optics execute</code> checks that the Appium server answers at the <code class="ic">url</code> in <code class="ic">config.yaml</code>. Nothing is listening there.</p>
+<p>Start the server in another terminal with <code class="ic">appium</code>, then run again. If the server runs on another port or machine, fix <code class="ic">url</code> under <code class="ic">driver_sources</code>. On Android, the same panel appears when <code class="ic">adb</code> isn't installed or no device is connected; check with <code class="ic">adb devices</code>.</p>
+<h3 id="selenium-not-reachable">"Cannot start" panel for Selenium<a class="anchor" href="#selenium-not-reachable" aria-label="Link to this section">#</a></h3>
+<p>No Selenium server answers at the <code class="ic">url</code> in <code class="ic">config.yaml</code>.</p>
+<p>Start one, for example with Docker: <code class="ic">docker run -d -p 4444:4444 selenium/standalone-chrome</code>. Check that <code class="ic">url</code> in <code class="ic">config.yaml</code> points to it, usually <code class="ic">http://localhost:4444/wd/hub</code>.</p>
+<h3 id="selenium-capabilities">"Selenium capabilities not found in config"<a class="anchor" href="#selenium-capabilities" aria-label="Link to this section">#</a></h3>
+<p>The Selenium driver needs a <code class="ic">browserName</code> under <code class="ic">capabilities</code>. <code class="ic">optics configure</code> writes <code class="ic">capabilities: {}</code> for Selenium, which can't start, and <code class="ic">optics doctor</code> doesn't catch it.</p>
+<p>Add <code class="ic">browserName: chrome</code> or <code class="ic">browserName: firefox</code> under <code class="ic">capabilities</code>. Those are the only two browsers the Selenium driver supports. See <a href="../../docs/reference/config#examples-by-platform">config.yaml examples</a>.</p>
+<h3 id="appium-capabilities"><code class="ic">E0104</code> Appium capabilities not found or unsupported platform<a class="anchor" href="#appium-capabilities" aria-label="Link to this section">#</a></h3>
+<p>The Appium driver needs non-empty <code class="ic">capabilities</code> with a <code class="ic">platformName</code> of <code class="ic">Android</code>, <code class="ic">iOS</code>, <code class="ic">TizenTV</code> or <code class="ic">LGTV</code>.</p>
+<p>Fill in the capabilities for your platform. Run <code class="ic">optics configure &lt;project&gt;</code> to answer a few questions instead of writing them by hand. See <a href="../../docs/reference/errors#e01-driver-and-session">Error codes</a>.</p>
+<h3 id="yaml-test-cases">YAML test cases load nothing<a class="anchor" href="#yaml-test-cases" aria-label="Link to this section">#</a></h3>
+<p>A YAML file with <code class="ic">test_cases:</code> at the top is recognized as a test cases file but loads no tests. The run then stops with "No test cases to run". Section names in YAML suites are exact.</p>
+<p>Use <code class="ic">Test Cases:</code>, <code class="ic">Modules:</code> and <code class="ic">Elements:</code>, with that capitalization and spacing. See <a href="../../docs/create/yaml#section-names-are-exact">Section names are exact</a>.</p>
+<h3 id="elements-header-case">Elements file loads no elements<a class="anchor" href="#elements-header-case" aria-label="Link to this section">#</a></h3>
+<p>The header must start with exactly <code class="ic">Element_Name</code>. A file headed <code class="ic">element_name,element_id</code> is recognized as an elements file but loads nothing, so every <code class="ic">${name}</code> fails with "Element not found".</p>
+<p>Change the header to <code class="ic">Element_Name,Element_ID</code>. Extra value columns must also start with <code class="ic">Element_ID</code>, such as <code class="ic">Element_ID_text</code>. See <a href="../../docs/elements/define#write-elements">Define elements</a>.</p>
+<h3 id="config-ignored">My config.yaml changes have no effect<a class="anchor" href="#config-ignored" aria-label="Link to this section">#</a></h3>
+<p>Optics ignores keys it doesn't know, so a typo such as <code class="ic">driver_source</code> is skipped without a warning. If your project folder holds more than one YAML file with <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code>, <code class="ic">optics execute</code> uses the last one it finds, which may not be the one you edited.</p>
+<p>Check the spelling against <a href="../../docs/reference/config#top-level-keys">config.yaml</a>. Keep one config file per project; to switch targets, copy a different file into place. See <a href="../../docs/create/organise#run-the-same-suite-on-different-devices">Run the same suite on different devices</a>.</p>
+<h2 id="finding-elements">Finding elements<a class="anchor" href="#finding-elements" aria-label="Link to this section">#</a></h2>
+<h3 id="element-not-found-name">"Element not found: &lt;name&gt;"<a class="anchor" href="#element-not-found-name" aria-label="Link to this section">#</a></h3>
+<p>A step uses <code class="ic">${name}</code>, and no elements file defines <code class="ic">name</code>. The step fails before Optics looks at the screen.</p>
+<ul><li>Add a row for <code class="ic">name</code> to <code class="ic">test_data/elements.csv</code>, and check the spelling and case.</li><li>If a step creates the value while running, such as <code class="ic">Evaluate</code> or <code class="ic">Read Data</code>, add a placeholder row (<code class="ic">order_total,placeholder</code>) so <code class="ic">optics dry_run</code> accepts it.</li><li>If every name fails, check the elements header. See <a href="#elements-header-case">Elements file loads no elements</a>.</li></ul>
+<h3 id="e0201"><code class="ic">[E0201]</code> No valid strategies found<a class="anchor" href="#e0201" aria-label="Link to this section">#</a></h3>
+<p>Optics looked for the element every way it could and didn't find it on the current screen.</p>
+<ul><li>Check the value against the screen. In <code class="ic">optics live</code>, try it with <code class="ic">assert_presence</code> and see whether it's found.</li><li>If the element appears late, put <code class="ic">Assert Presence</code> before the step. Actions don't wait.</li><li>For text drawn inside images, enable a <a href="../../docs/elements/text-and-images#turn-on-ocr">text detection engine</a> and a screenshot source.</li><li>Add fallback values, so a second way can take over when the first breaks.</li></ul>
+<p>See <a href="../../docs/reference/errors#e02-elements"><code class="ic">E0201</code> and <code class="ic">X0201</code></a>.</p>
+<h3 id="text-looks-like-locator">A text value is treated as an XPath or CSS selector<a class="anchor" href="#text-looks-like-locator" aria-label="Link to this section">#</a></h3>
+<p>Optics decides what a value is from how it looks. Text that starts with <code class="ic">(</code> or <code class="ic">/</code>, or contains <code class="ic">[</code> and <code class="ic">]</code>, is read as an XPath or CSS selector: <code class="ic">(optional)</code>, <code class="ic">Price [USD]</code>, <code class="ic">.com</code>.</p>
+<p>Put <code class="ic">text=</code> in front to force text, for example <code class="ic">text=(optional)</code>. See <a href="../../docs/elements/define#choose-the-kind-of-value">Choose the kind of value</a>.</p>
+<h3 id="id-locators"><code class="ic">id:</code> values always fail<a class="anchor" href="#id-locators" aria-label="Link to this section">#</a></h3>
+<p>No element source supports values written as <code class="ic">id:login</code>, so they fail with <code class="ic">E0201</code> every time.</p>
+<p>Use an XPath on the id instead, for example <code class="ic">//*[@resource-id='com.birch.shop:id/login']</code> on Android or <code class="ic">//*[@id='login']</code> on the web.</p>
+<h3 id="assert-presence-commas">Assert Presence with several elements fails<a class="anchor" href="#assert-presence-commas" aria-label="Link to this section">#</a></h3>
+<p>Assert Presence, Assert Visibility and Validate Screen separate elements with <code class="ic">|</code>, not commas. In a CSV, a comma starts a new cell, so the second element becomes the timeout and the step fails with <code class="ic">ValueError: invalid literal for int()</code>.</p>
+<p>Write <code class="ic">Assert Presence,Welcome|Picked for you,20</code>. See <a href="../../docs/reference/keywords/verification#check-several-elements-at-once">Check several elements at once</a>.</p>
+<h3 id="images-not-found">Images aren't found<a class="anchor" href="#images-not-found" aria-label="Link to this section">#</a></h3>
+<p>Image values refer to a picture by file name, and Optics searches the whole project folder for it.</p>
+<ul><li>Use the file name only (<code class="ic">cart_icon.png</code>), not a path.</li><li>Keep the picture inside the project folder, and give every picture a unique file name. Two files with the same name in different folders replace each other.</li><li>Use <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code>. Other formats aren't treated as images.</li><li>Enable <code class="ic">templatematch</code> under <code class="ic">image_detection</code> and a screenshot source under <code class="ic">elements_sources</code>.</li></ul>
+<p>See <a href="../../docs/elements/text-and-images#capture-a-good-template">Capture a good template</a>.</p>
+<h3 id="ocr-slow">OCR is slow on the first run<a class="anchor" href="#ocr-slow" aria-label="Link to this section">#</a></h3>
+<p>EasyOCR downloads its models the first time it runs, and loads them at the start of every run. The first run can take minutes on a slow connection.</p>
+<p>Let the first run finish once; later runs reuse the download. To make OCR faster in general, list UI tree sources before screenshot sources and use an <a href="../../docs/elements/area-of-interest">area of interest</a>. See <a href="../../docs/elements/text-and-images#speed-things-up">Speed things up</a>.</p>
+<h3 id="wrong-match">The wrong match is tapped<a class="anchor" href="#wrong-match" aria-label="Link to this section">#</a></h3>
+<p>The same text or picture appears more than once on screen, and Optics took the first match.</p>
+<p>Add <code class="ic">index=1</code> to pick the second match, counting from 0, or narrow the search with an <a href="../../docs/elements/area-of-interest">area of interest</a>. See <a href="../../docs/elements/define#pick-one-of-several-matches">Pick one of several matches</a>.</p>
+<h2 id="running-tests">Running tests<a class="anchor" href="#running-tests" aria-label="Link to this section">#</a></h2>
+<h3 id="keyword-not-found">"Keyword not found: X. Did you mean …"<a class="anchor" href="#keyword-not-found" aria-label="Link to this section">#</a></h3>
+<p>A module step names a keyword that doesn't exist, usually because of a typo. Optics suggests the closest real name.</p>
+<p>Fix the spelling. Case and spaces don't matter, so <code class="ic">Press Element</code> and <code class="ic">press element</code> both work. Run <code class="ic">optics list</code> to see every keyword.</p>
+<h3 id="nested-module">A module that calls another module reports "Keyword not found"<a class="anchor" href="#nested-module" aria-label="Link to this section">#</a></h3>
+<p>A module step that names another module is read as a keyword name.</p>
+<p>Call the other module with <code class="ic">Execute Module</code>: <code class="ic">Checkout,Execute Module,Sign In</code>. See <a href="../../docs/reference/keywords/flow#execute-module">Execute Module</a>.</p>
+<h3 id="actions-dont-wait">Enter Text or Press Element acts before the page loads<a class="anchor" href="#actions-dont-wait" aria-label="Link to this section">#</a></h3>
+<p>Action keywords act on the screen as it is at that moment. They don't wait for a page or screen to finish loading, so they fail or act on the wrong screen.</p>
+<p>Put <code class="ic">Assert Presence</code> before the action, which waits up to 30 seconds by default: <code class="ic">Search,Assert Presence,${search_bar},15</code>. Use <code class="ic">Detect And Press</code> for pop-ups that may or may not appear. See <a href="../../docs/reference/keywords/#action-keywords-dont-wait">Action keywords don't wait</a>.</p>
+<h3 id="variable-typed-literally"><code class="ic">${name}</code> is typed literally<a class="anchor" href="#variable-typed-literally" aria-label="Link to this section">#</a></h3>
+<p>Optics substitutes <code class="ic">${name}</code> only when it fills the whole cell. <code class="ic">Hello ${name}</code> is typed exactly as written.</p>
+<p>Put the complete value in the elements file and use it on its own: <code class="ic">greeting,Hello Ava</code>, then <code class="ic">Enter Text,${message_field},${greeting}</code>. To build a value from parts, use <a href="../../docs/reference/keywords/flow#evaluate">Evaluate</a>, which substitutes inside expressions.</p>
+<h3 id="condition-numbers">Condition with numbers fails with <code class="ic">E0403</code><a class="anchor" href="#condition-numbers" aria-label="Link to this section">#</a></h3>
+<p>Condition compares values as text, so <code class="ic">${count} &gt; 5</code> can't be evaluated.</p>
+<p>Compare with quoted values: <code class="ic">${count} == '7'</code> or <code class="ic">${status} == 'ready'</code>. For greater-than or less-than, compute the result with Evaluate first, then test it: see <a href="../../docs/reference/keywords/flow#compare-numbers">Compare numbers</a>.</p>
+<h3 id="write-target-bare-name">Evaluate or Read Data fails when the target is <code class="ic">${x}</code><a class="anchor" href="#write-target-bare-name" aria-label="Link to this section">#</a></h3>
+<p>The first value of Evaluate, Date Evaluate and Read Data, and the variable names in Run Loop, name a variable to write. Written as <code class="ic">${total}</code>, Optics tries to read <code class="ic">total</code> first and fails with "Element not found: total".</p>
+<p>Write the name without <code class="ic">${}</code>: <code class="ic">Calc,Evaluate,total,${price} + 3</code>. See <a href="../../docs/reference/keywords/flow">Flow control keywords</a>.</p>
+<h3 id="invalid-literal-int"><code class="ic">ValueError: invalid literal for int()</code><a class="anchor" href="#invalid-literal-int" aria-label="Link to this section">#</a></h3>
+<p>A parameter that must be a whole number got something else. Two causes are common: a timeout or count with a decimal point, such as <code class="ic">2.5</code>, and an empty cell. Empty cells are dropped, so the values after them shift left into the wrong parameter.</p>
+<p>Use whole numbers. To skip a parameter, name the next one instead of leaving a gap: <code class="ic">Press Element,${sign_in},index=1</code>.</p>
+<h3 id="per-test-setup">Per-test Setup runs only around the first test case<a class="anchor" href="#per-test-setup" aria-label="Link to this section">#</a></h3>
+<p>In 1.10.5, a test case named <code class="ic">Setup</code> or <code class="ic">Teardown</code> (without "suite") runs only before or after the first regular test case, not around each one.</p>
+<p>Use <code class="ic">Suite Setup</code> and <code class="ic">Suite Teardown</code>, which run once and work as expected. If each test needs a fresh start, open and close the app inside that test's own modules. See <a href="../../docs/reference/files#setup-and-teardown">Setup and teardown</a>.</p>
+<h3 id="step-runs-nothing">A test step runs nothing<a class="anchor" href="#step-runs-nothing" aria-label="Link to this section">#</a></h3>
+<p>A test case step that names a keyword instead of a module passes without doing anything.</p>
+<p>List modules in <code class="ic">test_cases.csv</code>, and put keywords inside modules in <code class="ic">modules.csv</code>.</p>
+<h3 id="assert-equality">Assert Equality never fails<a class="anchor" href="#assert-equality" aria-label="Link to this section">#</a></h3>
+<p>Assert Equality and Validate Screen return false on a mismatch but never fail a step.</p>
+<p>Use Assert Presence or Validate Element to check what's on screen. See <a href="../../docs/reference/keywords/#keywords-that-never-fail-a-step">Keywords that never fail a step</a>.</p>
+<h3 id="windows-screenshots">Screenshots are missing on Windows<a class="anchor" href="#windows-screenshots" aria-label="Link to this section">#</a></h3>
+<p>Some screenshot names contain a time with colons, such as <code class="ic">+05:30</code>. Windows doesn't allow colons in file names, so those images may not be saved. The run itself isn't affected.</p>
+<p>The screenshots Optics takes before each step use names without colons, so they're still saved. Use those and <code class="ic">junit_output.xml</code> to see what happened.</p>
+<h3 id="output-folder-missing">Screenshots are missing from a custom output folder<a class="anchor" href="#output-folder-missing" aria-label="Link to this section">#</a></h3>
+<p>When you set <code class="ic">execution_output_path</code> yourself, Optics doesn't create the folder. Results and logs create it, but screenshots fail to save without a warning.</p>
+<p>Create the folder before the run. See <a href="../../docs/reference/config#top-level-keys">config.yaml</a>.</p>
+<h3 id="dry-run-needs-engines"><code class="ic">optics dry_run</code> fails without a device<a class="anchor" href="#dry-run-needs-engines" aria-label="Link to this section">#</a></h3>
+<p>A dry run doesn't tap or type, but it still starts the engines in <code class="ic">config.yaml</code>. Every enabled engine must be installed, a driver must be enabled, and its settings must be valid.</p>
+<p>Install the engines with <code class="ic">optics setup --install &lt;name&gt;</code>, and run <code class="ic">optics doctor &lt;project&gt;</code> to find what's missing. You don't need a device or a running Appium server for a dry run.</p>
+<h2 id="optics-live">optics live<a class="anchor" href="#optics-live" aria-label="Link to this section">#</a></h2>
+<h3 id="live-one-driver">"optics live supports exactly one enabled driver"<a class="anchor" href="#live-one-driver" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics live</code> drives one target at a time, and your <code class="ic">config.yaml</code> enables more than one driver.</p>
+<p>Set <code class="ic">enabled: false</code> on every driver except the one you want.</p>
+<h3 id="live-needs-config">"optics live needs a config.yaml with an enabled driver and elements source"<a class="anchor" href="#live-needs-config" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics live</code> found no config file in the folder. Without a folder argument, it uses the current folder.</p>
+<p>Run it from your project folder, or pass the folder: <code class="ic">optics live my-project</code>. Live has no built-in defaults.</p>
+<h3 id="live-no-element-source">"No enabled source in config.yaml's elements_sources"<a class="anchor" href="#live-no-element-source" aria-label="Link to this section">#</a></h3>
+<p>Live needs at least one element source enabled.</p>
+<p>Enable the sources for your driver, such as <code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code> and <code class="ic">appium_screenshot</code>.</p>
+<h3 id="live-launch-app">Every step fails with "run <code class="ic">launch_app</code> first"<a class="anchor" href="#live-launch-app" aria-label="Link to this section">#</a></h3>
+<p>The app didn't open when the session started, so no keyword can run (<code class="ic">E0101</code>).</p>
+<p>Check the server and device with <code class="ic">optics doctor &lt;project&gt;</code>, then type <code class="ic">launch_app</code> and read its error.</p>
+<h3 id="live-e0901"><code class="ic">[E0901]</code> Named element is not defined in this project<a class="anchor" href="#live-e0901" aria-label="Link to this section">#</a></h3>
+<p>You typed <code class="ic">${name}</code>, and no elements file in the project defines it.</p>
+<p>Add the name to <code class="ic">test_data/elements.csv</code>, or type the value directly. Run <code class="ic">/elements</code> to see the names live found.</p>
+<h3 id="live-unknown-keyword">"Unknown keyword: … Keywords use snake_case"<a class="anchor" href="#live-unknown-keyword" aria-label="Link to this section">#</a></h3>
+<p>Live didn't recognize the first words you typed as a keyword.</p>
+<p>Check the spelling and the suggestion in the message. Press <kbd>Tab</kbd> to complete names, or <kbd>Ctrl</kbd>+<kbd>K</kbd> to browse them.</p>
+<h3 id="live-save-usage"><code class="ic">/save</code> prints "Usage: /save &lt;test_case&gt; &lt;module_name&gt;"<a class="anchor" href="#live-save-usage" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">/save</code> takes exactly two names, and names can't contain spaces.</p>
+<p>Use underscores: <code class="ic">/save Checkout Sign_In</code>. Rename them in the CSV files afterwards if you like.</p>
+<h3 id="live-log">Find the session log<a class="anchor" href="#live-log" aria-label="Link to this section">#</a></h3>
+<p>Live writes a full log to <code class="ic">logs/optics_live_&lt;time&gt;.log</code> in the project folder, and prints its path when you quit. Attach it when you <a href="../../docs/help/#ask-a-question-or-report-a-bug">report a problem</a>.</p>
+<h2 id="ai-features">AI features<a class="anchor" href="#ai-features" aria-label="Link to this section">#</a></h2>
+<h3 id="no-llm-engine">"No LLM engine is enabled"<a class="anchor" href="#no-llm-engine" aria-label="Link to this section">#</a></h3>
+<p>You pressed <kbd>Ctrl</kbd>+<kbd>N</kbd> in <code class="ic">optics live</code>, and <code class="ic">config.yaml</code> has no enabled <code class="ic">llm_models</code> entry.</p>
+<p>Add one, then restart <code class="ic">optics live</code>:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
+  - gemini:
+      enabled: true">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">gemini</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>Use <code class="ic">openai</code> or <code class="ic">anthropic</code> instead if that's the account you have. See <a href="../../docs/create/describe#before-you-begin">Describe a test in plain English</a>.</p>
+<h3 id="llm-not-installed"><code class="ic">E0601</code>: the LLM engine requires an optional dependency<a class="anchor" href="#llm-not-installed" aria-label="Link to this section">#</a></h3>
+<p>An engine is enabled under <code class="ic">llm_models</code>, but its extra isn't installed. The message names the engine.</p>
+<p>Install it by that name, for example <code class="ic">optics setup --install openai</code>.</p>
+<h3 id="llm-not-configured"><code class="ic">E0601</code>: the LLM engine needs a model or a key<a class="anchor" href="#llm-not-configured" aria-label="Link to this section">#</a></h3>
+<p>The <code class="ic">openai</code> and <code class="ic">anthropic</code> engines have no default model, so set <code class="ic">capabilities.model</code>. The <code class="ic">openai</code> engine also stops when it finds no key and no <code class="ic">url</code>: set <code class="ic">OPENAI_API_KEY</code>, or the variable you named in <code class="ic">api_key_env</code>. See <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
+<h3 id="llm-auth"><code class="ic">E0801</code> or authentication errors from the model<a class="anchor" href="#llm-auth" aria-label="Link to this section">#</a></h3>
+<p>The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.</p>
+<p>Set your engine's key (<code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable in <code class="ic">api_key_env</code>) in the terminal you run Optics from, and check your quota with the provider. See <a href="../../docs/reference/cli#environment-variables">Environment variables</a>.</p>
+<p>If a server used through the <code class="ic">openai</code> engine rejects the response format, set <code class="ic">response_format: json_object</code> in its <code class="ic">capabilities</code>.</p>
+<h3 id="self-heal-inactive">AI self-heal does nothing<a class="anchor" href="#self-heal-inactive" aria-label="Link to this section">#</a></h3>
+<p>Self-heal needs <code class="ic">ai_self_heal: true</code>, an enabled <code class="ic">llm_models</code> entry, the AI engine, a key, and a screenshot source. If any is missing, Optics logs "AI self-heal enabled but no usable LLM" or skips self-heal without a message.</p>
+<p>Check each item in <a href="../../docs/elements/self-heal#turn-it-on">Turn it on</a>. Self-heal only helps steps that find and act on an element; Assert Presence and other checks never self-heal.</p>
+<h3 id="ai-run-stops">A plain-English instruction stops before it's done<a class="anchor" href="#ai-run-stops" aria-label="Link to this section">#</a></h3>
+<p>Each instruction stops after 15 steps, after 3 failed steps in a row, or after repeated taps and swipes that don't get closer ("Repeated gesture/coordinate actions did not reach the goal").</p>
+<p>Break the goal into smaller instructions, and use the words shown on screen. See <a href="../../docs/create/describe#write-goals-the-model-can-finish">Write goals the model can finish</a>.</p>
+<h2 id="web-and-playwright">Web and Playwright<a class="anchor" href="#web-and-playwright" aria-label="Link to this section">#</a></h2>
+<h3 id="locator-not-serializable">"Object of type Locator is not JSON serializable"<a class="anchor" href="#locator-not-serializable" aria-label="Link to this section">#</a></h3>
+<p>On Optics 1.10.5, Enter Text and Get Text fail in Playwright with this error. The fix (<a href="https://github.com/mozarkai/optics-framework/pull/600" rel="noopener">pull request #600</a>) ships in the next release.</p>
+<p>Until you upgrade, click the field and type in two steps:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Sign In,Press Element,${email_field}
+Sign In,Enter Text Direct,ava@birch.shop">Copy</button><pre><code><span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${email_field}</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Enter Text Direct</b><span class="c-dim">,</span>ava@birch.shop</code></pre></figure>
+<h3 id="playwright-sample-fails">The Playwright sample's "TC1 Verify Landing" fails<a class="anchor" href="#playwright-sample-fails" aria-label="Link to this section">#</a></h3>
+<p>On 1.10.5, the <code class="ic">playwright</code> sample checks for text that example.com no longer shows.</p>
+<p>Open <code class="ic">test_data/elements.csv</code> in the project and replace the <code class="ic">Heading</code> row with:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Heading,text=This domain is for use in documentation examples">Copy</button><pre><code><span class="c-mod">Heading</span><span class="c-dim">,</span><b>text=This domain is for use in documentation examples</b></code></pre></figure>
+<h3 id="playwright-settings-ignored">Playwright ignores <code class="ic">headless</code>, <code class="ic">browser</code> and <code class="ic">viewport</code><a class="anchor" href="#playwright-settings-ignored" aria-label="Link to this section">#</a></h3>
+<p>In 1.10.5, Playwright reads none of the settings under <code class="ic">capabilities</code>. It always opens a visible Chromium window at 1280×800.</p>
+<p>There's no workaround in config. On a Linux CI machine without a display, run Optics under a virtual display such as <code class="ic">xvfb-run optics execute my-project</code>.</p>
+<h3 id="playwright-browser-missing">The Playwright browser isn't installed<a class="anchor" href="#playwright-browser-missing" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics doctor</code> shows ⚠️ on the <code class="ic">playwright browser</code> row, or Playwright fails to launch Chromium.</p>
+<p>Run <code class="ic">optics setup --install playwright</code> again. It downloads the Chromium build Playwright needs.</p>
+<h3 id="playwright-at-prefix">A password typed with <code class="ic">@:</code> shows the prefix<a class="anchor" href="#playwright-at-prefix" aria-label="Link to this section">#</a></h3>
+<p>Playwright types the <code class="ic">@:</code> prefix that masks secrets in logs, unlike Appium and Selenium.</p>
+<p>Don't use <code class="ic">@:</code> with Playwright. Use test accounts whose passwords are safe to appear in logs, and keep log files private.</p>
+<h2 id="ci">CI<a class="anchor" href="#ci" aria-label="Link to this section">#</a></h2>
+<h3 id="ci-on-screen-error">The run passes, but CI shows a failed test<a class="anchor" href="#ci-on-screen-error" aria-label="Link to this section">#</a></h3>
+<p>When your project has an <a href="../../docs/run/error-detection">error definitions file</a>, Optics checks the last screen for known error messages at the end of <code class="ic">optics execute</code>. A match adds a failing test case named <code class="ic">on-screen-error-detection</code> to <code class="ic">junit_output.xml</code>, but doesn't change the exit code or the summary in the terminal.</p>
+<p>Open <code class="ic">execution_output/detected_errors_&lt;session&gt;.json</code> to see which message matched. Fix the app, or the definition if it matched by mistake.</p>
+<h3 id="doctor-check-no-folder"><code class="ic">optics doctor --check</code> passes even with a broken config<a class="anchor" href="#doctor-check-no-folder" aria-label="Link to this section">#</a></h3>
+<p>Without a folder, doctor checks your machine but not any <code class="ic">config.yaml</code>, so <code class="ic">--check</code> can't fail on config problems.</p>
+<p>Always pass the project: <code class="ic">optics doctor ./my-project --check</code>.</p>
+<h3 id="ci-preflight">The preflight fails in CI<a class="anchor" href="#ci-preflight" aria-label="Link to this section">#</a></h3>
+<p>Your CI starts the Appium or Selenium server in a way the preflight check can't reach, or starts it after Optics.</p>
+<p>Wait for the server before running Optics. If you're sure it's reachable, set <code class="ic">OPTICS_SKIP_PREFLIGHT=1</code> to skip the check.</p>
+<h3 id="junit-truncated"><code class="ic">junit_output.xml</code> is cut short<a class="anchor" href="#junit-truncated" aria-label="Link to this section">#</a></h3>
+<p>On long runs, Optics may stop before every result is written.</p>
+<p>Set <code class="ic">OPTICS_EVENT_DRAIN_TIMEOUT_S</code> to a higher value, such as <code class="ic">10</code>. See <a href="../../docs/reference/cli#environment-variables">Environment variables</a>.</p>
+<h3 id="ci-logs">CI logs are full of progress output<a class="anchor" href="#ci-logs" aria-label="Link to this section">#</a></h3>
+<p>The live result tree redraws itself, which clutters plain CI logs.</p>
+<p>Run <code class="ic">optics execute my-project --no-use-printer</code>, and set <code class="ic">file_log: true</code> to keep full logs as build artifacts.</p>
+<h3 id="runner-pytest"><code class="ic">--runner pytest</code> fails<a class="anchor" href="#runner-pytest" aria-label="Link to this section">#</a></h3>
+<p>The pytest runner needs the <code class="ic">pytest-cov</code> package, which Optics doesn't install.</p>
+<p>Use the default runner by leaving out <code class="ic">--runner</code>. To run tests under pytest, generate pytest code with <a href="../../docs/advanced/generate"><code class="ic">optics generate</code></a> instead.</p>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Troubleshooting&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fhelp%2Ftroubleshooting%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Troubleshooting&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fhelp%2Ftroubleshooting%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/help/"><span>Previous</span>Overview</a><a class="pager-next" href="../../docs/help/faq"><span>Next</span>FAQ</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/help/troubleshooting.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#installing">Installing</a></li><li class="toc-l3"><a href="#command-not-found">optics: command not found</a></li><li class="toc-l3"><a href="#python-version">Optics needs Python 3.12 or newer</a></li><li class="toc-l3"><a href="#cannot-load-dependencies">"Cannot start": Optics could not load one of its dependencies</a></li><li class="toc-l3"><a href="#setup-refuses">optics setup refuses to install</a></li><li class="toc-l3"><a href="#easyocr-conda">EasyOCR fails under Conda</a></li><li class="toc-l3"><a href="#mcp-not-installed">The MCP server isn't installed by optics setup</a></li><li class="toc-l2"><a href="#setting-up-a-project">Setting up a project</a></li><li class="toc-l3"><a href="#no-driver-enabled">"No driver enabled in …/config.yaml"</a></li><li class="toc-l3"><a href="#missing-required-files">"Missing required files in …: test_cases, modules"</a></li><li class="toc-l3"><a href="#no-appium-server">"Cannot start" panel: "No Appium server reachable at …"</a></li><li class="toc-l3"><a href="#selenium-not-reachable">"Cannot start" panel for Selenium</a></li><li class="toc-l3"><a href="#selenium-capabilities">"Selenium capabilities not found in config"</a></li><li class="toc-l3"><a href="#appium-capabilities">E0104 Appium capabilities not found or unsupported platform</a></li><li class="toc-l3"><a href="#yaml-test-cases">YAML test cases load nothing</a></li><li class="toc-l3"><a href="#elements-header-case">Elements file loads no elements</a></li><li class="toc-l3"><a href="#config-ignored">My config.yaml changes have no effect</a></li><li class="toc-l2"><a href="#finding-elements">Finding elements</a></li><li class="toc-l3"><a href="#element-not-found-name">"Element not found: &lt;name&gt;"</a></li><li class="toc-l3"><a href="#e0201">[E0201] No valid strategies found</a></li><li class="toc-l3"><a href="#text-looks-like-locator">A text value is treated as an XPath or CSS selector</a></li><li class="toc-l3"><a href="#id-locators">id: values always fail</a></li><li class="toc-l3"><a href="#assert-presence-commas">Assert Presence with several elements fails</a></li><li class="toc-l3"><a href="#images-not-found">Images aren't found</a></li><li class="toc-l3"><a href="#ocr-slow">OCR is slow on the first run</a></li><li class="toc-l3"><a href="#wrong-match">The wrong match is tapped</a></li><li class="toc-l2"><a href="#running-tests">Running tests</a></li><li class="toc-l3"><a href="#keyword-not-found">"Keyword not found: X. Did you mean …"</a></li><li class="toc-l3"><a href="#nested-module">A module that calls another module reports "Keyword not found"</a></li><li class="toc-l3"><a href="#actions-dont-wait">Enter Text or Press Element acts before the page loads</a></li><li class="toc-l3"><a href="#variable-typed-literally">${name} is typed literally</a></li><li class="toc-l3"><a href="#condition-numbers">Condition with numbers fails with E0403</a></li><li class="toc-l3"><a href="#write-target-bare-name">Evaluate or Read Data fails when the target is ${x}</a></li><li class="toc-l3"><a href="#invalid-literal-int">ValueError: invalid literal for int()</a></li><li class="toc-l3"><a href="#per-test-setup">Per-test Setup runs only around the first test case</a></li><li class="toc-l3"><a href="#step-runs-nothing">A test step runs nothing</a></li><li class="toc-l3"><a href="#assert-equality">Assert Equality never fails</a></li><li class="toc-l3"><a href="#windows-screenshots">Screenshots are missing on Windows</a></li><li class="toc-l3"><a href="#output-folder-missing">Screenshots are missing from a custom output folder</a></li><li class="toc-l3"><a href="#dry-run-needs-engines">optics dry_run fails without a device</a></li><li class="toc-l2"><a href="#optics-live">optics live</a></li><li class="toc-l3"><a href="#live-one-driver">"optics live supports exactly one enabled driver"</a></li><li class="toc-l3"><a href="#live-needs-config">"optics live needs a config.yaml with an enabled driver and elements source"</a></li><li class="toc-l3"><a href="#live-no-element-source">"No enabled source in config.yaml's elements_sources"</a></li><li class="toc-l3"><a href="#live-launch-app">Every step fails with "run launch_app first"</a></li><li class="toc-l3"><a href="#live-e0901">[E0901] Named element is not defined in this project</a></li><li class="toc-l3"><a href="#live-unknown-keyword">"Unknown keyword: … Keywords use snake_case"</a></li><li class="toc-l3"><a href="#live-save-usage">/save prints "Usage: /save &lt;test_case&gt; &lt;module_name&gt;"</a></li><li class="toc-l3"><a href="#live-log">Find the session log</a></li><li class="toc-l2"><a href="#ai-features">AI features</a></li><li class="toc-l3"><a href="#no-llm-engine">"No LLM engine is enabled"</a></li><li class="toc-l3"><a href="#llm-not-installed">E0601: the LLM engine requires an optional dependency</a></li><li class="toc-l3"><a href="#llm-not-configured">E0601: the LLM engine needs a model or a key</a></li><li class="toc-l3"><a href="#llm-auth">E0801 or authentication errors from the model</a></li><li class="toc-l3"><a href="#self-heal-inactive">AI self-heal does nothing</a></li><li class="toc-l3"><a href="#ai-run-stops">A plain-English instruction stops before it's done</a></li><li class="toc-l2"><a href="#web-and-playwright">Web and Playwright</a></li><li class="toc-l3"><a href="#locator-not-serializable">"Object of type Locator is not JSON serializable"</a></li><li class="toc-l3"><a href="#playwright-sample-fails">The Playwright sample's "TC1 Verify Landing" fails</a></li><li class="toc-l3"><a href="#playwright-settings-ignored">Playwright ignores headless, browser and viewport</a></li><li class="toc-l3"><a href="#playwright-browser-missing">The Playwright browser isn't installed</a></li><li class="toc-l3"><a href="#playwright-at-prefix">A password typed with @: shows the prefix</a></li><li class="toc-l2"><a href="#ci">CI</a></li><li class="toc-l3"><a href="#ci-on-screen-error">The run passes, but CI shows a failed test</a></li><li class="toc-l3"><a href="#doctor-check-no-folder">optics doctor --check passes even with a broken config</a></li><li class="toc-l3"><a href="#ci-preflight">The preflight fails in CI</a></li><li class="toc-l3"><a href="#junit-truncated">junit_output.xml is cut short</a></li><li class="toc-l3"><a href="#ci-logs">CI logs are full of progress output</a></li><li class="toc-l3"><a href="#runner-pytest">--runner pytest fails</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=4f681e7d12" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

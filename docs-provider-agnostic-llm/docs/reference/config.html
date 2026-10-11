@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>config.yaml · Optics docs</title>
+  <meta name="description" content="Every setting in a project's config.yaml.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/config">
+  <link rel="alternate" type="text/markdown" href="config.md" title="This page as Markdown">
+  <meta property="og:title" content="config.yaml · Optics docs">
+  <meta property="og:description" content="Every setting in a project's config.yaml.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs layout-wide" data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab on" href="../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config" aria-current="page">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Tools and files</span></nav>
+        <header class="doc-head">
+          <h1>config.yaml</h1>
+          <p class="doc-summary">Every setting in a project's config.yaml.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="config.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="config.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>A project's config.yaml tells Optics which driver to use, how to find elements, and where to write logs and results. Every setting lives in the project; there's no global config file and no environment variable that overrides it.</p>
+<p>Run <a href="../../docs/reference/cli#optics-configure"><code class="ic">optics configure</code></a> to write a working file by answering a few questions, then edit it by hand with this page.</p>
+<h2 id="how-optics-finds-the-file">How Optics finds the file<a class="anchor" href="#how-optics-finds-the-file" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Command</th><th>Which file it reads</th></tr></thead><tbody><tr><td><code class="ic">optics execute</code>, <code class="ic">optics dry_run</code></td><td>Any YAML file in the project tree that has <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code>. The file name doesn't matter. If there are several, the last one found wins.</td></tr><tr><td><code class="ic">optics live</code></td><td>The first YAML file in the project tree with any config key.</td></tr><tr><td><code class="ic">optics doctor</code>, <code class="ic">optics configure</code>, <code class="ic">optics generate</code></td><td>Exactly <code class="ic">&lt;folder&gt;/config.yaml</code>.</td></tr><tr><td><code class="ic">optics serve</code>, <code class="ic">optics mcp</code></td><td>None. Settings come from each session request.</td></tr></tbody></table></div>
+<p>We recommend one file named <code class="ic">config.yaml</code> at the project root, so every command reads the same settings.</p>
+<p>Settings you leave out take their defaults. Optics ignores keys it doesn't know, so a typo such as <code class="ic">log_levle</code> is silently skipped.</p>
+<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>If config.yaml has a wrong value type, <code class="ic">optics execute</code> logs the problem, skips the file and runs with defaults. The run then stops with "No driver enabled". Run <code class="ic">optics doctor &lt;folder&gt;</code> to find the problem.</p></aside>
+<h2 id="top-level-keys">Top-level keys<a class="anchor" href="#top-level-keys" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">driver_sources</code></td><td>All disabled</td><td>The driver that controls the device or browser. See <a href="#driver-sources">driver_sources</a>.</td></tr><tr><td><code class="ic">elements_sources</code></td><td>All disabled</td><td>Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. <code class="ic">element_sources</code> is accepted as an alias.</td></tr><tr><td><code class="ic">text_detection</code></td><td>All disabled</td><td>OCR engines for finding elements by on-screen text.</td></tr><tr><td><code class="ic">image_detection</code></td><td>All disabled</td><td>Engines for finding elements by image templates.</td></tr><tr><td><code class="ic">llm_models</code></td><td>All disabled</td><td>The LLM for AI self-heal and the plain-English mode of <code class="ic">optics live</code>.</td></tr><tr><td><code class="ic">log_level</code></td><td><code class="ic">INFO</code></td><td><code class="ic">DEBUG</code>, <code class="ic">INFO</code>, <code class="ic">WARNING</code>, <code class="ic">ERROR</code> or <code class="ic">CRITICAL</code>, any case. Unknown values become <code class="ic">INFO</code>.</td></tr><tr><td><code class="ic">file_log</code></td><td><code class="ic">false</code></td><td>Writes <code class="ic">internal_logs.log</code> and <code class="ic">execution_logs.log</code> to the output folder.</td></tr><tr><td><code class="ic">log_path</code></td><td>None</td><td>One file for both logs instead of two. Used only with <code class="ic">file_log: true</code>.</td></tr><tr><td><code class="ic">json_log</code></td><td><code class="ic">false</code></td><td>Writes a JSON array of every test, module and keyword event to <code class="ic">logs.json</code> at the end of the run.</td></tr><tr><td><code class="ic">json_path</code></td><td>None</td><td>Where to write the JSON events instead of <code class="ic">&lt;output&gt;/logs.json</code>. <code class="ic">~</code> is expanded.</td></tr><tr><td><code class="ic">console</code></td><td><code class="ic">true</code></td><td><strong>Has no effect in 1.10.5.</strong> Nothing reads it. Use <code class="ic">log_level</code> to control console output.</td></tr><tr><td><code class="ic">execution_output_path</code></td><td><code class="ic">&lt;project&gt;/execution_output</code></td><td>Where results, screenshots and logs go. Relative paths are relative to the folder you run <code class="ic">optics</code> from.</td></tr><tr><td><code class="ic">include</code></td><td>None</td><td>Run only these test cases. See <a href="#include-and-exclude">include and exclude</a>.</td></tr><tr><td><code class="ic">exclude</code></td><td>None</td><td>Skip these test cases.</td></tr><tr><td><code class="ic">ai_self_heal</code></td><td><code class="ic">false</code></td><td>Lets an LLM try to recover when an element can't be found. See <a href="#ai-self-heal">ai_self_heal</a>.</td></tr><tr><td><code class="ic">strict_element_match</code></td><td><code class="ic">false</code></td><td>Turns off fuzzy and partial text matching. See <a href="#strict-element-match">strict_element_match</a>.</td></tr><tr><td><code class="ic">save_captures</code></td><td><code class="ic">true</code></td><td>Whether <code class="ic">Capture Screenshot</code>, <code class="ic">Capture Pagesource</code> and <code class="ic">Get Screen Elements</code> write files. See <a href="#save-captures">save_captures</a>.</td></tr><tr><td><code class="ic">halt_duration</code></td><td><code class="ic">0.1</code></td><td>Seconds to wait after a keyword fails every fallback. It isn't a pause between steps.</td></tr><tr><td><code class="ic">event_attributes_json</code></td><td>None</td><td>Path to a JSON file of event attributes. When it includes an <code class="ic">eventUrl</code>, events you label with <code class="ic">event_name</code> are sent there at the end of the session.</td></tr><tr><td><code class="ic">project_path</code></td><td>The project folder</td><td>The CLI always sets this to the folder you pass, so leave it out. It only matters for the Python SDK.</td></tr></tbody></table></div>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>If you set <code class="ic">execution_output_path</code> yourself, create the folder first. JUnit results and logs create their own folders, but screenshots fail to save without a warning if the folder is missing.</p></aside>
+<h2 id="engine-lists">Engine lists<a class="anchor" href="#engine-lists" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">driver_sources</code>, <code class="ic">elements_sources</code>, <code class="ic">text_detection</code>, <code class="ic">image_detection</code> and <code class="ic">llm_models</code> are lists. Each item is an engine name with its settings:</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:                 # engine name
+      enabled: true         # required: only enabled entries are loaded
+      url: &quot;http://127.0.0.1:4723&quot;
+      capabilities:         # engine-specific settings
+        platformName: Android">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>                <span class="c-dim"> # engine name</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true        </span><span class="c-dim"> # required: only enabled entries are loaded</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>        <span class="c-dim"> # engine-specific settings</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">enabled</code></td><td>Required</td><td>Only enabled entries are loaded. A disabled entry with any name is ignored.</td></tr><tr><td><code class="ic">url</code></td><td>None</td><td>The server address, for engines that use one.</td></tr><tr><td><code class="ic">capabilities</code></td><td><code class="ic">{}</code></td><td>Settings passed to the engine.</td></tr></tbody></table></div>
+<p>When several entries in one list are enabled, Optics tries them in the order you list them. For element sources this is the order in which strategies run.</p>
+<p>An enabled entry with an unknown name fails with <a href="../../docs/reference/errors#e06-modules-and-engines">E0601</a>. So does an enabled engine whose extra isn't installed. A list you write replaces the default list completely.</p>
+<h3 id="driver-sources">driver_sources<a class="anchor" href="#driver-sources" aria-label="Link to this section">#</a></h3>
+<p>Enable one driver. <code class="ic">optics live</code> refuses more than one, and <code class="ic">optics doctor</code> warns about it.</p>
+<div class="table-wrap"><table><thead><tr><th>Name</th><th>Extra</th><th>What it drives</th></tr></thead><tbody><tr><td><code class="ic">appium</code></td><td><code class="ic">appium</code></td><td>Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps through an Appium server.</td></tr><tr><td><code class="ic">selenium</code></td><td><code class="ic">selenium</code></td><td>Chrome or Firefox through a Selenium server or Grid.</td></tr><tr><td><code class="ic">playwright</code></td><td><code class="ic">playwright</code></td><td>A local Chromium browser. No server needed.</td></tr><tr><td><code class="ic">ble</code></td><td><code class="ic">ble</code></td><td>Any device paired with a Bluetooth mouse-and-keyboard dongle. For devices with no automation access.</td></tr></tbody></table></div>
+<h3 id="elements-sources">elements_sources<a class="anchor" href="#elements-sources" aria-label="Link to this section">#</a></h3>
+<p>Enable the sources that match your driver. We recommend all three for your driver: locators, page source and screenshots.</p>
+<div class="table-wrap"><table><thead><tr><th>Name</th><th>Needs driver</th><th>What it gives you</th></tr></thead><tbody><tr><td><code class="ic">appium_find_element</code></td><td><code class="ic">appium</code></td><td>Finds elements by XPath, accessibility id and class.</td></tr><tr><td><code class="ic">appium_page_source</code></td><td><code class="ic">appium</code></td><td>Searches the UI tree by XPath and text, with fuzzy matching. Lists interactive elements.</td></tr><tr><td><code class="ic">appium_screenshot</code></td><td><code class="ic">appium</code></td><td>Screenshots for OCR, image matching and AI self-heal.</td></tr><tr><td><code class="ic">selenium_find_element</code></td><td><code class="ic">selenium</code></td><td>Finds elements by XPath, text, id, name, CSS and link text.</td></tr><tr><td><code class="ic">selenium_page_source</code></td><td><code class="ic">selenium</code></td><td>Searches the page HTML. Doesn't list interactive elements.</td></tr><tr><td><code class="ic">selenium_screenshot</code></td><td><code class="ic">selenium</code></td><td>Screenshots for OCR and image matching.</td></tr><tr><td><code class="ic">playwright_find_element</code></td><td><code class="ic">playwright</code></td><td>Finds elements by <code class="ic">xpath=</code>, <code class="ic">css=</code> and <code class="ic">text=</code> locators.</td></tr><tr><td><code class="ic">playwright_page_source</code></td><td><code class="ic">playwright</code></td><td>Searches the page and lists interactive elements.</td></tr><tr><td><code class="ic">playwright_screenshot</code></td><td><code class="ic">playwright</code></td><td>Screenshots for OCR and image matching.</td></tr><tr><td><code class="ic">camera_screenshot</code></td><td>Any</td><td>Frames from a webcam or a TCP frame server. Used with <code class="ic">ble</code>.</td></tr></tbody></table></div>
+<p><code class="ic">optics doctor</code> fails a project when no enabled element source starts with the enabled driver's name.</p>
+<h3 id="text-detection">text_detection<a class="anchor" href="#text-detection" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Name</th><th>Extra</th><th>Settings</th></tr></thead><tbody><tr><td><code class="ic">easyocr</code></td><td><code class="ic">easyocr</code></td><td>None. Accurate but slow on CPU. Downloads its models on first use. The language is always English.</td></tr><tr><td><code class="ic">pytesseract</code></td><td><code class="ic">pytesseract</code></td><td>None. Needs the Tesseract program installed and on your PATH.</td></tr><tr><td><code class="ic">google_vision</code></td><td><code class="ic">google-vision</code></td><td>None. Credentials come from <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code>. <code class="ic">googlevision</code> also works.</td></tr><tr><td><code class="ic">remote_ocr</code></td><td>None</td><td><code class="ic">url</code> (required): your OCR service. <code class="ic">capabilities</code>: <code class="ic">timeout</code> (30), <code class="ic">method</code> (<code class="ic">easyocr</code>), <code class="ic">language</code> (<code class="ic">en</code>). Optics posts screenshots to <code class="ic">&lt;url&gt;/detect-text</code>.</td></tr></tbody></table></div>
+<h3 id="image-detection">image_detection<a class="anchor" href="#image-detection" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Name</th><th>Extra</th><th>Settings</th></tr></thead><tbody><tr><td><code class="ic">templatematch</code></td><td>None</td><td><code class="ic">capabilities.sift_nfeatures</code> (2000). Finds template images, including scaled or rotated ones. Images are found by file name anywhere in the project.</td></tr><tr><td><code class="ic">remote_oir</code></td><td>None</td><td><code class="ic">url</code> (required): your image service. <code class="ic">capabilities</code>: <code class="ic">timeout</code> (30), <code class="ic">method</code> (<code class="ic">template_matching</code>). Optics posts to <code class="ic">&lt;url&gt;/detect-image</code>.</td></tr></tbody></table></div>
+<h3 id="llm-models">llm_models<a class="anchor" href="#llm-models" aria-label="Link to this section">#</a></h3>
+<p>Enable the engine that matches the account you already have. Each engine has an extra of the same name, and the <code class="ic">llm</code> bundle installs all three.</p>
+<div class="table-wrap"><table><thead><tr><th>You have</th><th>Enable</th></tr></thead><tbody><tr><td>A Gemini API key, or Google Cloud Vertex AI</td><td><code class="ic">gemini</code></td></tr><tr><td>An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio</td><td><code class="ic">openai</code></td></tr><tr><td>A Claude API key, or Claude on Amazon Bedrock or Google Vertex AI</td><td><code class="ic">anthropic</code></td></tr></tbody></table></div>
+<p>Each engine reads its key from an environment variable. Don't put a key in config.yaml, because the file usually ends up in version control. If you enable more than one entry, Optics tries them in list order and moves to the next one when a call fails.</p>
+<p>Plain-English mode and self-heal send screenshots, so choose a model that accepts images.</p>
+<h4 id="gemini">gemini<a class="anchor" href="#gemini" aria-label="Link to this section">#</a></h4>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">model</code></td><td><code class="ic">gemini-2.5-flash</code></td><td>The Gemini model.</td></tr><tr><td><code class="ic">use_vertexai</code></td><td>From <code class="ic">GOOGLE_GENAI_USE_VERTEXAI</code></td><td><code class="ic">true</code> uses Vertex AI instead of the Gemini API.</td></tr><tr><td><code class="ic">project</code>, <code class="ic">location</code></td><td>From <code class="ic">GOOGLE_CLOUD_PROJECT</code>, <code class="ic">GOOGLE_CLOUD_LOCATION</code></td><td>The Vertex AI project and region.</td></tr><tr><td><code class="ic">temperature</code></td><td>The model's default</td><td>Sampling temperature.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
+  - gemini:
+      enabled: true
+      capabilities:
+        model: gemini-2.5-flash">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">gemini</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">model</span><span class="c-dim">:</span> gemini-2.5-flash</code></pre></figure>
+<p>Gemini reads its key from <code class="ic">GEMINI_API_KEY</code> or <code class="ic">GOOGLE_API_KEY</code>. For Vertex AI, set <code class="ic">GOOGLE_GENAI_USE_VERTEXAI=true</code> with <code class="ic">GOOGLE_CLOUD_PROJECT</code>, <code class="ic">GOOGLE_CLOUD_LOCATION</code> and <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code>. Optics accepts <code class="ic">api_key</code> in <code class="ic">capabilities</code> too, but warns when you use it.</p>
+<h4 id="openai">openai<a class="anchor" href="#openai" aria-label="Link to this section">#</a></h4>
+<p>Works with OpenAI and with any server that offers an OpenAI-compatible Chat Completions API. Set the entry's <code class="ic">url</code> to the server's base URL, or leave it out to call OpenAI. <code class="ic">OPENAI_BASE_URL</code> works in place of <code class="ic">url</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">model</code></td><td>None (required)</td><td>The model name as the server spells it, for example <code class="ic">gpt-5-mini</code>, or <code class="ic">anthropic/claude-sonnet-5-5</code> on OpenRouter.</td></tr><tr><td><code class="ic">api_key_env</code></td><td><code class="ic">OPENAI_API_KEY</code></td><td>The environment variable that holds the key.</td></tr><tr><td><code class="ic">response_format</code></td><td><code class="ic">json_schema</code></td><td>Set <code class="ic">json_object</code> if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead.</td></tr><tr><td><code class="ic">temperature</code></td><td>The model's default</td><td>Sampling temperature.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Server</th><th><code class="ic">url</code></th><th>Key</th></tr></thead><tbody><tr><td>OpenAI</td><td>Leave it out</td><td><code class="ic">OPENAI_API_KEY</code></td></tr><tr><td>OpenRouter</td><td><code class="ic">https://openrouter.ai/api/v1</code></td><td><code class="ic">OPENROUTER_API_KEY</code>, with <code class="ic">api_key_env: OPENROUTER_API_KEY</code></td></tr><tr><td>Azure OpenAI</td><td><code class="ic">https://&lt;resource&gt;.openai.azure.com/openai/v1/</code></td><td>Your Azure key, in the variable <code class="ic">api_key_env</code> names</td></tr><tr><td>Ollama</td><td><code class="ic">http://localhost:11434/v1</code></td><td>None</td></tr><tr><td>vLLM, LM Studio</td><td>The server's <code class="ic">/v1</code> URL</td><td>None</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
+  - openai:
+      enabled: true
+      url: https://openrouter.ai/api/v1
+      capabilities:
+        model: anthropic/claude-sonnet-5-5
+        api_key_env: OPENROUTER_API_KEY">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">openai</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> https://openrouter.ai/api/v1
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">model</span><span class="c-dim">:</span> anthropic/claude-sonnet-5-5
+        <span class="c-mod">api_key_env</span><span class="c-dim">:</span> OPENROUTER_API_KEY</code></pre></figure>
+<h4 id="anthropic">anthropic<a class="anchor" href="#anthropic" aria-label="Link to this section">#</a></h4>
+<p>Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedrock or Vertex AI, also install <code class="ic">anthropic[bedrock]</code> or <code class="ic">anthropic[vertex]</code> into the same Python environment as Optics.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">model</code></td><td>None (required)</td><td>The model ID, for example <code class="ic">claude-sonnet-5-5</code>. Bedrock and Vertex AI use their own model IDs.</td></tr><tr><td><code class="ic">platform</code></td><td><code class="ic">anthropic</code></td><td><code class="ic">anthropic</code> (the Claude API), <code class="ic">bedrock</code> or <code class="ic">vertex</code>.</td></tr><tr><td><code class="ic">region</code></td><td>From the environment</td><td>The Bedrock or Vertex AI region.</td></tr><tr><td><code class="ic">project</code></td><td>From the environment</td><td>The Vertex AI project.</td></tr><tr><td><code class="ic">api_key_env</code></td><td><code class="ic">ANTHROPIC_API_KEY</code></td><td>The environment variable that holds the Claude API key.</td></tr><tr><td><code class="ic">max_tokens</code></td><td><code class="ic">4096</code></td><td>The longest reply the model may write.</td></tr><tr><td><code class="ic">temperature</code></td><td>The model's default</td><td>Sampling temperature.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Platform</th><th>Credentials</th></tr></thead><tbody><tr><td><code class="ic">anthropic</code></td><td><code class="ic">ANTHROPIC_API_KEY</code>, or the variable <code class="ic">api_key_env</code> names</td></tr><tr><td><code class="ic">bedrock</code></td><td>Your usual AWS credentials, such as <code class="ic">AWS_PROFILE</code> and <code class="ic">AWS_REGION</code></td></tr><tr><td><code class="ic">vertex</code></td><td>Google Cloud application default credentials</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
+  - anthropic:
+      enabled: true
+      capabilities:
+        model: claude-sonnet-5-5">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">anthropic</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">model</span><span class="c-dim">:</span> claude-sonnet-5-5</code></pre></figure>
+<h2 id="examples-by-platform">Examples by platform<a class="anchor" href="#examples-by-platform" aria-label="Link to this section">#</a></h2>
+<div class="doc-tabs" data-group="platform"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-platform-t0" aria-controls="tabs-platform-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-platform-t1" aria-controls="tabs-platform-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button><button class="os-tab" role="tab" id="tabs-platform-t2" aria-controls="tabs-platform-p2" aria-selected="false" tabindex="-1" data-tab="Web">Web</button></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p0" aria-labelledby="tabs-platform-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;        # required; the Appium server
+      capabilities:                        # must not be empty
+        platformName: Android              # required; picks the Android profile
+        automationName: UiAutomator2
+        deviceName: emulator-5554
+        # udid: emulator-5554              # pin one device when several are connected
+        appPackage: com.birch.shop         # the app Launch App opens
+        appActivity: com.birch.shop.MainActivity
+elements_sources:
+  - appium_find_element: {enabled: true}   # XPath, accessibility id, class
+  - appium_page_source:  {enabled: true}   # UI tree search (uses strict_element_match)
+  - appium_screenshot:   {enabled: true}   # screenshots for OCR, images, self-heal
+text_detection:
+  - easyocr: {enabled: true}               # extra: easyocr
+image_detection:
+  - templatematch: {enabled: true}
+log_level: INFO
+file_log: true
+json_log: true">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>       <span class="c-dim"> # required; the Appium server</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                       <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android             <span class="c-dim"> # required; picks the Android profile</span>
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> UiAutomator2
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> emulator-5554
+       <span class="c-dim"> # udid: emulator-5554              # pin one device when several are connected</span>
+        <span class="c-mod">appPackage</span><span class="c-dim">:</span> com.birch.shop        <span class="c-dim"> # the app Launch App opens</span>
+        <span class="c-mod">appActivity</span><span class="c-dim">:</span> com.birch.shop.MainActivity
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}  <span class="c-dim"> # XPath, accessibility id, class</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}  <span class="c-dim"> # UI tree search (uses strict_element_match)</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}  <span class="c-dim"> # screenshots for OCR, images, self-heal</span>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}              <span class="c-dim"> # extra: easyocr</span>
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span> {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>Before <code class="ic">optics execute</code>, Optics checks that the Appium server answers and that <code class="ic">adb devices</code> lists a device.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p1" aria-labelledby="tabs-platform-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;
+      capabilities:
+        platformName: iOS                  # picks the iOS profile
+        automationName: XCUITest
+        deviceName: &quot;iPhone 15&quot;
+        bundleId: com.birch.shop           # required on iOS
+        # udid: &lt;device udid&gt;              # for a real device
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}
+log_level: INFO
+file_log: true">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> iOS                 <span class="c-dim"> # picks the iOS profile</span>
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> XCUITest
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> <span class="c-lit">"iPhone 15"</span>
+        <span class="c-mod">bundleId</span><span class="c-dim">:</span> com.birch.shop          <span class="c-dim"> # required on iOS</span>
+       <span class="c-dim"> # udid: &lt;device udid&gt;              # for a real device</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p><code class="ic">optics doctor</code> fails an iOS project without <code class="ic">bundleId</code>. The preflight checks only the Appium server.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p2" aria-labelledby="tabs-platform-t2" hidden><p>Use Playwright unless you already run a Selenium Grid. It needs no server.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (Playwright)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - playwright:
+      enabled: true                        # no url and no server
+      capabilities:
+        browser: chromium                  # currently ignored, see the note below
+        headless: false                    # currently ignored
+elements_sources:
+  - playwright_find_element: {enabled: true}
+  - playwright_page_source:  {enabled: true}
+  - playwright_screenshot:   {enabled: true}
+log_level: INFO">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true                       </span><span class="c-dim"> # no url and no server</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browser</span><span class="c-dim">:</span> chromium                 <span class="c-dim"> # currently ignored, see the note below</span>
+        <span class="c-mod">headless</span><span class="c-dim">:</span> <span class="c-info">false                   </span><span class="c-dim"> # currently ignored</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">playwright_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">playwright_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO</code></pre></figure>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>In 1.10.5 the Playwright driver ignores <code class="ic">browser</code>, <code class="ic">headless</code> and <code class="ic">viewport</code> under <code class="ic">capabilities</code>. It always opens a visible Chromium window at 1280×800, and waits up to 60 seconds for each page to load.</p></aside>
+<p>Open your site with a module step such as <code class="ic">Launch App,https://birch.example</code>.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (Selenium)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - selenium:
+      enabled: true
+      url: &quot;http://localhost:4444/wd/hub&quot;  # the Selenium server or Grid
+      capabilities:                        # must not be empty
+        browserName: chrome                # required: chrome or firefox
+        browserURL: &quot;https://birch.example&quot;  # opened when the session starts
+elements_sources:
+  - selenium_find_element: {enabled: true}
+  - selenium_page_source:  {enabled: true}
+  - selenium_screenshot:   {enabled: true}
+log_level: INFO">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4444/wd/hub"</span> <span class="c-dim"> # the Selenium server or Grid</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                       <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> chrome               <span class="c-dim"> # required: chrome or firefox</span>
+        <span class="c-mod">browserURL</span><span class="c-dim">:</span> <span class="c-lit">"https://birch.example"</span> <span class="c-dim"> # opened when the session starts</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">selenium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">selenium_screenshot</span><span class="c-dim">:</span>   {enabled: true}
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO</code></pre></figure>
+<p>Selenium won't start with empty <code class="ic">capabilities</code> or without <code class="ic">browserName</code>. The file <code class="ic">optics configure</code> writes for <code class="ic">web-selenium</code> has <code class="ic">capabilities: {}</code>, so add <code class="ic">browserName</code> before you run.</p></div></div>
+<h3 id="appium-capabilities">Appium capabilities<a class="anchor" href="#appium-capabilities" aria-label="Link to this section">#</a></h3>
+<p>Optics reads only <code class="ic">platformName</code> and the app id; it passes every other capability to Appium unchanged. You can write any key with the <code class="ic">appium:</code> prefix, for example <code class="ic">appium:udid</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>platformName</th><th>App id capability</th><th>Defaults Optics adds (your values win)</th></tr></thead><tbody><tr><td><code class="ic">Android</code></td><td><code class="ic">appPackage</code> and <code class="ic">appActivity</code></td><td><code class="ic">noReset</code>, <code class="ic">newCommandTimeout: 3600</code>, <code class="ic">forceAppLaunch</code>, <code class="ic">shouldTerminateApp</code>, <code class="ic">ignoreHiddenApiPolicyError</code> and a few others</td></tr><tr><td><code class="ic">iOS</code></td><td><code class="ic">bundleId</code></td><td>The same mobile defaults, without <code class="ic">ignoreHiddenApiPolicyError</code></td></tr><tr><td><code class="ic">TizenTV</code></td><td><code class="ic">appPackage</code></td><td><code class="ic">newCommandTimeout: 3600</code>, <code class="ic">rcMode: remote</code>, <code class="ic">noReset: true</code></td></tr><tr><td><code class="ic">LGTV</code></td><td><code class="ic">appId</code></td><td><code class="ic">newCommandTimeout: 600</code>, <code class="ic">rcMode: rc</code>, <code class="ic">useSecureWebsocket: true</code>, <code class="ic">autoExtendDevMode: false</code>, <code class="ic">noReset: true</code></td></tr></tbody></table></div>
+<p>Any other <code class="ic">platformName</code> fails with <a href="../../docs/reference/errors#e01-driver-and-session">E0104</a>. To attach to an Appium session that's already running, add <code class="ic">appium:existingSessionId</code>. Optics starts a new session if it can't attach.</p>
+<h2 id="tv">TV<a class="anchor" href="#tv" aria-label="Link to this section">#</a></h2>
+<p>Android TV uses the Android example. Samsung and LG TVs use Appium's TV drivers:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (Samsung Tizen)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: TizenTV
+        appium:automationName: TizenTV
+        appium:deviceAddress: 192.168.1.50
+        appium:rcToken: &quot;14184553&quot;
+        appium:appPackage: com.birch.tv
+        appium:app: /path/to/birch.wgt
+        appium:chromedriverExecutableDir: /path/to/chromedrivers
+elements_sources:
+  - appium_page_source: {enabled: true}
+  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> TizenTV
+        appium:automationName: TizenTV
+        appium:deviceAddress: 192.168.1.50
+        appium:rcToken: <span class="c-lit">"14184553"</span>
+        appium:appPackage: com.birch.tv
+        appium:app: /path/to/birch.wgt
+        appium:chromedriverExecutableDir: /path/to/chromedrivers
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>  {enabled: true}</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml (LG webOS)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: LGTV
+        appium:automationName: webOS
+        appium:deviceHost: 192.168.1.50
+        appium:appId: com.birch.tv
+elements_sources:
+  - appium_screenshot: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> LGTV
+        appium:automationName: webOS
+        appium:deviceHost: 192.168.1.50
+        appium:appId: com.birch.tv
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
+<p>On Tizen and webOS, touch and typing keywords fail with <a href="../../docs/reference/errors#e01-driver-and-session">E0105</a>. Move around with <code class="ic">Press Keycode</code> and remote keys: <code class="ic">UP</code>, <code class="ic">DOWN</code>, <code class="ic">LEFT</code>, <code class="ic">RIGHT</code>, <code class="ic">ENTER</code>, <code class="ic">BACK</code>, <code class="ic">HOME</code>, <code class="ic">PLAY</code>, <code class="ic">PAUSE</code>, <code class="ic">STOP</code>, <code class="ic">REWIND</code>, <code class="ic">FF</code>. See <a href="../../docs/platforms/tv">Test TV apps</a>.</p>
+<h2 id="ble-and-camera">BLE and camera<a class="anchor" href="#ble-and-camera" aria-label="Link to this section">#</a></h2>
+<p>The <code class="ic">ble</code> driver taps and types through a Bluetooth mouse-and-keyboard dongle. A camera or frame server provides the screen, and Optics finds elements with OCR or image templates.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - ble:
+      enabled: true
+      capabilities:
+        device_id: &quot;Birch test phone&quot;     # required
+        port: &quot;/dev/ttyACM0&quot;              # required: device path, COM port or USB product name
+        pixel_width: 1080                 # the device screen in pixels
+        pixel_height: 2336
+        mickeys_width: 1080               # the device screen in mouse units
+        mickeys_height: 2336
+        x_invert: 1                       # 1 or -1
+        y_invert: 1
+elements_sources:
+  - camera_screenshot:
+      enabled: true
+      capabilities:
+        camera_index: 0                   # a webcam, or url: &quot;192.168.1.20:9000&quot; for a TCP frame server
+text_detection:
+  - easyocr: {enabled: true}
+image_detection:
+  - templatematch: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">ble</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">device_id</span><span class="c-dim">:</span> <span class="c-lit">"Birch test phone"</span>    <span class="c-dim"> # required</span>
+        <span class="c-mod">port</span><span class="c-dim">:</span> <span class="c-lit">"/dev/ttyACM0"</span>             <span class="c-dim"> # required: device path, COM port or USB product name</span>
+        <span class="c-mod">pixel_width</span><span class="c-dim">:</span> <span class="c-info">1080                </span><span class="c-dim"> # the device screen in pixels</span>
+        <span class="c-mod">pixel_height</span><span class="c-dim">:</span> <span class="c-info">2336</span>
+        <span class="c-mod">mickeys_width</span><span class="c-dim">:</span> <span class="c-info">1080              </span><span class="c-dim"> # the device screen in mouse units</span>
+        <span class="c-mod">mickeys_height</span><span class="c-dim">:</span> <span class="c-info">2336</span>
+        <span class="c-mod">x_invert</span><span class="c-dim">:</span> <span class="c-info">1                      </span><span class="c-dim"> # 1 or -1</span>
+        <span class="c-mod">y_invert</span><span class="c-dim">:</span> <span class="c-info">1</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">camera_screenshot</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">camera_index</span><span class="c-dim">:</span> <span class="c-info">0                  </span><span class="c-dim"> # a webcam, or url: "192.168.1.20:9000" for a TCP frame server</span>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th><code class="ic">ble</code> capability</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">device_id</code></td><td>Required</td><td>A name for the device.</td></tr><tr><td><code class="ic">port</code></td><td>Required</td><td>The dongle's serial port (<code class="ic">/dev/ttyACM0</code>, <code class="ic">COM3</code>) or its USB product description.</td></tr><tr><td><code class="ic">pixel_width</code>, <code class="ic">pixel_height</code></td><td><code class="ic">0</code></td><td>The device screen size in pixels. Set them: taps can't be placed without them.</td></tr><tr><td><code class="ic">mickeys_width</code>, <code class="ic">mickeys_height</code></td><td><code class="ic">0</code></td><td>The device screen size in mouse movement units. Set them too.</td></tr><tr><td><code class="ic">x_invert</code>, <code class="ic">y_invert</code></td><td><code class="ic">1</code></td><td><code class="ic">-1</code> reverses the direction of mouse movement on that axis.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th><code class="ic">camera_screenshot</code> capability</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">camera_index</code></td><td>None</td><td>The webcam number. Use this or <code class="ic">url</code>.</td></tr><tr><td><code class="ic">url</code></td><td>None</td><td>A TCP frame server as <code class="ic">host:port</code>.</td></tr><tr><td><code class="ic">header_size</code></td><td><code class="ic">8</code></td><td>Bytes in the frame server's length header: <code class="ic">4</code> or <code class="ic">8</code>.</td></tr><tr><td><code class="ic">byte_order</code></td><td><code class="ic">little</code></td><td>The length header's byte order: <code class="ic">little</code> or <code class="ic">big</code>.</td></tr></tbody></table></div>
+<p>The BLE driver can't launch apps, so <code class="ic">Launch App</code> fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See <a href="../../docs/platforms/production">Test production devices</a>.</p>
+<h2 id="include-and-exclude">include and exclude<a class="anchor" href="#include-and-exclude" aria-label="Link to this section">#</a></h2>
+<p>Run a subset of test cases. There are no CLI flags for this.</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="include:
+  - Shopper can sign in
+  - Shopper can add Trail Runner 2 to the cart
+# or
+exclude:
+  - Shopper can check out">Copy</button><pre><code><span class="c-mod">include</span><span class="c-dim">:</span>
+  - Shopper can sign in
+  - Shopper can add Trail Runner 2 to the cart
+<span class="c-dim"># or</span>
+<span class="c-mod">exclude</span><span class="c-dim">:</span>
+  - Shopper can check out</code></pre></figure>
+<ul><li>Names match the <code class="ic">test_case</code> column exactly, ignoring case.</li><li>Set one of the two. Setting both fails with <a href="../../docs/reference/errors#e04-keywords-and-parameters">E0403</a>.</li><li>Test cases with "setup" or "teardown" in their names always run.</li></ul>
+<h2 id="logging">Logging<a class="anchor" href="#logging" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">log_level</code></td><td><code class="ic">INFO</code></td><td>The level for the console and the log files. Set <code class="ic">DEBUG</code> to see every strategy Optics tries.</td></tr><tr><td><code class="ic">file_log</code></td><td><code class="ic">false</code></td><td>Writes <code class="ic">internal_logs.log</code> and <code class="ic">execution_logs.log</code> to the output folder. Each rotates at 10 MB and keeps 10 old files.</td></tr><tr><td><code class="ic">log_path</code></td><td>None</td><td>Sends both logs to this one file.</td></tr><tr><td><code class="ic">json_log</code></td><td><code class="ic">false</code></td><td>Writes <code class="ic">logs.json</code>: a list of events with name, status, timings and log lines for each test case, module and keyword.</td></tr><tr><td><code class="ic">json_path</code></td><td>None</td><td>Writes the JSON events here instead.</td></tr><tr><td><code class="ic">console</code></td><td><code class="ic">true</code></td><td>No effect in 1.10.5.</td></tr></tbody></table></div>
+<p>With <code class="ic">file_log: true</code> and no <code class="ic">execution_output_path</code>, Optics also writes a copy of both logs to <code class="ic">logs/</code> in the folder you ran <code class="ic">optics</code> from.</p>
+<p>Values you write with the <code class="ic">@:</code> prefix, such as <code class="ic">@:s3cret</code>, are masked as <code class="ic">****</code> in log files. See <a href="../../docs/run/results">Read results</a>.</p>
+<h2 id="ai-self-heal">ai_self_heal<a class="anchor" href="#ai-self-heal" aria-label="Link to this section">#</a></h2>
+<p>When an element can't be found, self-heal sends a screenshot to an LLM and lets it try up to five corrective steps, such as scrolling or closing a popup.</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="ai_self_heal: true
+llm_models:
+  - gemini:
+      enabled: true">Copy</button><pre><code><span class="c-mod">ai_self_heal</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">gemini</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<ul><li>It needs an enabled <code class="ic">llm_models</code> entry, that engine's extra and key, and a screenshot element source such as <code class="ic">appium_screenshot</code>. Without them it does nothing, and the run isn't affected.</li><li>It applies to keywords that find and act on an element: <code class="ic">Press Element</code>, <code class="ic">Enter Text</code>, <code class="ic">Enter Number</code>, <code class="ic">Clear Element Text</code>, <code class="ic">Get Text</code>, <code class="ic">Swipe From Element</code>, <code class="ic">Scroll From Element</code>, <code class="ic">Detect And Press</code> and <code class="ic">Select Dropdown Option</code>. It doesn't apply to assertions.</li><li>A healed step passes. Check the logs for <code class="ic">AI self-heal:</code> lines so a real regression doesn't go unnoticed.</li></ul>
+<p><code class="ic">optics serve</code> and <code class="ic">optics mcp</code> ignore this key. They use per-session fields and the <code class="ic">OPTICS_AI_SELF_HEAL</code> variable instead. See <a href="../../docs/elements/self-heal">Self-heal</a>.</p>
+<h2 id="strict-element-match">strict_element_match<a class="anchor" href="#strict-element-match" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="strict_element_match: true">Copy</button><pre><code><span class="c-mod">strict_element_match</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>By default the page-source element sources (<code class="ic">appium_page_source</code>, <code class="ic">selenium_page_source</code>, <code class="ic">playwright_page_source</code>) accept close or partial text matches, so <code class="ic">Sign in</code> can match <code class="ic">Sign in with email</code>. Set <code class="ic">strict_element_match: true</code> to accept only exact matches. Turn it on when similar labels make tests press the wrong element.</p>
+<h2 id="save-captures">save_captures<a class="anchor" href="#save-captures" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="save_captures: false">Copy</button><pre><code><span class="c-mod">save_captures</span><span class="c-dim">:</span> <span class="c-info">false</span></code></pre></figure>
+<p>When <code class="ic">false</code>, <code class="ic">Capture Screenshot</code>, <code class="ic">Capture Pagesource</code> and <code class="ic">Get Screen Elements</code> stop writing files. Optics still saves the screenshot it takes before each action, the annotated screenshots and the page source logs. <code class="ic">optics serve</code> always turns captures off.</p>
+<h2 id="starter-config">Starter config<a class="anchor" href="#starter-config" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">optics init</code> writes a commented config.yaml with every engine disabled. To get started, enable one driver, enable its three element sources, and install the driver's extra with <code class="ic">optics setup --install &lt;name&gt;</code>. See <a href="../../docs/get-started/install">Install Optics</a>.</p>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20config.yaml&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fconfig%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20config.yaml&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fconfig%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/reference/cli"><span>Previous</span>CLI</a><a class="pager-next" href="../../docs/reference/files"><span>Next</span>Project files</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/config.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#how-optics-finds-the-file">How Optics finds the file</a></li><li class="toc-l2"><a href="#top-level-keys">Top-level keys</a></li><li class="toc-l2"><a href="#engine-lists">Engine lists</a></li><li class="toc-l3"><a href="#driver-sources">driver_sources</a></li><li class="toc-l3"><a href="#elements-sources">elements_sources</a></li><li class="toc-l3"><a href="#text-detection">text_detection</a></li><li class="toc-l3"><a href="#image-detection">image_detection</a></li><li class="toc-l3"><a href="#llm-models">llm_models</a></li><li class="toc-l2"><a href="#examples-by-platform">Examples by platform</a></li><li class="toc-l3"><a href="#appium-capabilities">Appium capabilities</a></li><li class="toc-l2"><a href="#tv">TV</a></li><li class="toc-l2"><a href="#ble-and-camera">BLE and camera</a></li><li class="toc-l2"><a href="#include-and-exclude">include and exclude</a></li><li class="toc-l2"><a href="#logging">Logging</a></li><li class="toc-l2"><a href="#ai-self-heal">ai_self_heal</a></li><li class="toc-l2"><a href="#strict-element-match">strict_element_match</a></li><li class="toc-l2"><a href="#save-captures">save_captures</a></li><li class="toc-l2"><a href="#starter-config">Starter config</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=4f681e7d12" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
