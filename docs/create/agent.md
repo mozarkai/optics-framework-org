@@ -125,13 +125,15 @@ The server has no authentication. Keep it on `127.0.0.1` or a trusted network.
 :::
 
 :::details[Let the agent recover failing steps with AI self-heal]
-Self-heal uses Gemini to recover a step when every locator fails (see [AI self-heal](/docs/elements/self-heal)). Over MCP it's controlled by environment variables on the server, or by `ai_self_heal: true` in `start_session`:
+Self-heal uses an AI model to recover a step when every locator fails (see [AI self-heal](/docs/elements/self-heal)). Over MCP it's controlled by environment variables on the server, or by `ai_self_heal: true` in `start_session`:
 
 ```shell
 $ export OPTICS_AI_SELF_HEAL=1
 $ export GEMINI_API_KEY="your-key"
 $ optics mcp
 ```
+
+For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER` and `OPTICS_LLM_MODEL`. See [Environment variables](/docs/reference/mcp#environment-variables).
 
 When a step is healed, the tool result includes `"healed": true` and the steps that worked, so the agent can update the suite.
 :::

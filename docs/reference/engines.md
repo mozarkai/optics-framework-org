@@ -64,13 +64,15 @@ Image matching finds an element by a template image you saved in the project. En
 
 ## LLM
 
-An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mode of `optics live`. Enable it under `llm_models`.
+An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mode of `optics live`. Enable one under `llm_models`, choosing the engine that matches the account you already have.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `gemini` | `llm` | Google Gemini, through the Gemini API or Vertex AI. The only LLM Optics supports. Default model `gemini-2.5-flash`. | All |
+| `gemini` | `gemini` | Google Gemini, through the Gemini API or Vertex AI. Default model `gemini-2.5-flash`. | All |
+| `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
+| `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Gemini reads its credentials from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`.
+Each engine reads its key from an environment variable. See [llm_models](/docs/reference/config#llm-models) for each engine's settings and credentials.
 
 ## Other extras
 
@@ -87,7 +89,8 @@ A bundle installs several extras at once.
 | `mobile` | `appium` |
 | `web` | `selenium`, `playwright` |
 | `vision` | `easyocr`, `pytesseract`, `google-vision` |
-| `all` | `appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `llm`. Not `mcp`. |
+| `llm` | `gemini`, `openai`, `anthropic` |
+| `all` | `appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`. Not `mcp`. |
 
 ## Install with optics setup
 
@@ -101,7 +104,7 @@ Without flags, it opens a picker with a checkbox for each engine. In scripts and
 
 ```shell
 $ optics setup --install appium easyocr
-$ optics setup --install web llm
+$ optics setup --install web gemini
 $ optics setup --install appium==5.0.0
 ```
 
@@ -127,13 +130,16 @@ OCR Engines:
   google-vision   (google-cloud-vision)
 
 LLM Engines:
-  llm             (google-genai)
+  gemini          (google-genai)
+  openai          (openai)
+  anthropic       (anthropic)
 
 Bundles (install several at once):
   mobile          (appium)
   web             (selenium, playwright)
   vision          (easyocr, pytesseract, google-vision)
-  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, llm)
+  llm             (gemini, openai, anthropic)
+  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
 
 Pin a version by appending a specifier, e.g. `optics setup --install appium==5.0.0`.
 ```
