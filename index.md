@@ -96,6 +96,13 @@ optics quickstart
 optics execute my_test_project
 ```
 
+## From the blog
+
+- [Introducing Optics: create a test your way, run it forever](https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4): article on Medium, 11 Oct 2026, by Chinmay Jha. Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.
+
+All posts and videos: https://optics-framework.org/blog
+
+
 - [About](https://optics-framework.org/about)
 - [Contact](https://optics-framework.org/contact)
 - [Privacy](https://optics-framework.org/privacy)
