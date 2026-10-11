@@ -21,10 +21,10 @@ It isn't a substitute for good elements. A healed step **passes**, so a real cha
 :::steps
 ### Install the AI engine and set your key
 
-Self-heal uses Google's Gemini models, the same as [plain-English mode](/docs/create/describe):
+Self-heal uses the same AI engine and key as [plain-English mode](/docs/create/describe#before-you-begin). Install the engine that matches your account (`gemini`, `openai` or `anthropic`) and set its key, for example:
 
 ```shell
-$ optics setup --install llm
+$ optics setup --install gemini
 $ export GEMINI_API_KEY="your-key"
 ```
 
@@ -37,6 +37,8 @@ llm_models:
   - gemini:
       enabled: true
 ```
+
+For OpenAI, Claude or a local model, use that engine's entry instead. See [llm_models](/docs/reference/config#llm-models).
 
 ### Enable a screenshot source
 
@@ -80,8 +82,7 @@ Over the [HTTP API](/docs/advanced/http-api) and [MCP](/docs/create/agent), a he
 ## Costs and limits
 
 - Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.
-- Screenshots are sent to Google while self-heal runs. Don't enable it on screens with data you can't share with a third party.
-- Gemini is the only supported provider.
+- Screenshots are sent to your model provider while self-heal runs, unless the model runs on your own machine. Don't use a hosted model on screens with data you can't share with a third party.
 - The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.
 
 ## See also

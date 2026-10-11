@@ -79,8 +79,8 @@ Starts a session and launches the app. Returns `{"session_id", "driver_id"}`. Ke
 | `image_detection` | None | Image engines, for example `["templatematch"]`. |
 | `project_path` | None | A project folder. Optics loads its image templates. It doesn't load elements or test cases. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](/docs/elements/self-heal). |
-| `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM provider for self-heal. |
-| `llm_model` | `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` | The model for self-heal. |
+| `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM engine for self-heal: `gemini`, `openai` or `anthropic`. |
+| `llm_model` | `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini | The model for self-heal. `openai` and `anthropic` need one. |
 | `strict_element_match` | Off | Accepts only exact text matches. |
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
@@ -178,10 +178,11 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | Variable | What it does |
 |---|---|
 | `OPTICS_AI_SELF_HEAL` | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
-| `OPTICS_LLM_PROVIDER` | The default LLM provider. Only `gemini` is supported. |
+| `OPTICS_LLM_PROVIDER` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | The default model. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | `1`, `true`, `yes` or `on` exposes the coordinate tap tools. |
-| `GEMINI_API_KEY`, `GOOGLE_API_KEY` and the Vertex AI variables | Gemini credentials. They never travel in a tool call. |
+| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see [llm_models](/docs/reference/config#llm-models). |
+| `OPENAI_BASE_URL` | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator can set it, never a session. Put that server's key in `OPENAI_API_KEY`. |
 
 ## Typical agent loop
 
