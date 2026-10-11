@@ -61,12 +61,12 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `project_path` | string | A project folder on the server. Optics loads its image templates. It doesn't load elements or test cases. |
 | `api_data` | object | API definitions for `Invoke API`, inline. File paths aren't supported. |
 | `ai_self_heal` | boolean | Turns on [AI self-heal](/docs/elements/self-heal). Defaults to `OPTICS_AI_SELF_HEAL`, else off. |
-| `llm_provider` | string | The self-heal provider. Defaults to `OPTICS_LLM_PROVIDER`, else `gemini`. |
-| `llm_model` | string | The self-heal model. Defaults to `OPTICS_LLM_MODEL`, else `gemini-2.5-flash`. |
+| `llm_provider` | string | The self-heal engine: `gemini`, `openai` or `anthropic`. Defaults to `OPTICS_LLM_PROVIDER`, else `gemini`. |
+| `llm_model` | string | The self-heal model. Defaults to `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini. `openai` and `anthropic` need one. |
 | `strict_element_match` | boolean | Accepts only exact text matches. |
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
-Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request; set them in the server's environment.
+Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). See [Environment variables](/docs/reference/cli#environment-variables).
 
 ## ExecuteRequest
 

@@ -149,7 +149,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 | Section | What it checks |
 |---|---|
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
-| Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini. |
+| Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. |
 | Project | With a folder: config.yaml parses, exactly one driver is enabled, the driver's element sources are enabled, and the driver has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
@@ -176,7 +176,7 @@ optics setup [--install NAME [NAME ...]] [--list]
 | `--list` | Prints every engine and bundle you can install. Wins if you also pass `--install`. |
 | `--install` | Installs the named engines or bundles. |
 
-Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `llm`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `all`). Pin a version with a standard specifier such as `appium==5.0.0` or `"easyocr>=1.7,<2.0"`.
+Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin a version with a standard specifier such as `appium==5.0.0` or `"easyocr>=1.7,<2.0"`.
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](/docs/reference/engines#where-installs-are-refused).
 
@@ -184,7 +184,7 @@ The MCP server isn't an engine here. Install it with `pip install "optics-framew
 
 ```shell
 $ optics setup --install appium easyocr
-$ optics setup --install web llm
+$ optics setup --install web gemini
 ```
 
 Exit code 1 if a name is unknown, a version specifier is malformed (`appium=5.0.0`), or the install fails.
@@ -449,13 +449,16 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_SKIP_PREFLIGHT` | `execute` | Set to `1` or `true` to skip the server and device check before a run. |
 | `OPTICS_HOME` | `optics` | Folder for the first-run marker. Default `~/.optics`. |
 | `OPTICS_AI_SELF_HEAL` | `serve`, `mcp` | Set to `1`, `true`, `yes` or `on` to turn on AI self-heal for every session by default. |
-| `OPTICS_LLM_PROVIDER` | `serve`, `mcp` | The LLM provider for self-heal. Default and only option: `gemini`. |
-| `OPTICS_LLM_MODEL` | `serve`, `mcp` | The model for self-heal. Default `gemini-2.5-flash`. |
+| `OPTICS_LLM_PROVIDER` | `serve`, `mcp` | The LLM engine for self-heal: `gemini` (default), `openai` or `anthropic`. |
+| `OPTICS_LLM_MODEL` | `serve`, `mcp` | The model for self-heal. Gemini defaults to `gemini-2.5-flash`; `openai` and `anthropic` need one. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | `mcp` | Set to `1`, `true`, `yes` or `on` to expose the `press_by_coordinates` and `press_by_percentage` tools. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
 | `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. |
 | `GOOGLE_GENAI_USE_VERTEXAI`, `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_APPLICATION_CREDENTIALS` | Gemini, Google Vision | Use Vertex AI and Google Cloud credentials instead of an API key. |
+| `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. Set `api_key_env` in config.yaml to read another variable. |
+| `OPENAI_BASE_URL` | `openai` engine | The server to call when the entry has no `url`, such as OpenRouter or a local Ollama. |
+| `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. |
 
 `Read Data` can also read any variable with `ENV:<NAME>`. See [Flow control keywords](/docs/reference/keywords/flow).
 

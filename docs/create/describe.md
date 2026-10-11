@@ -10,35 +10,83 @@ In plain-English mode, you type a goal like *add trail runners to the cart*. An 
 
 ::scene{name="describe" caption="Ctrl+N switches optics live to plain-English mode. The model works a step at a time, and every step it takes is a normal Optics keyword."}
 
-This mode uses Google's Gemini models. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.
+It works with Gemini, Claude, OpenAI, or a model you run yourself. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.
 
 ## Before you begin
 
 You need:
 
 - A project that works in [`optics live`](/docs/create/record).
-- A Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey), or a Google Cloud project with Vertex AI.
+- An API key for an AI model, or a local model server such as Ollama.
 
 :::steps
 ### Install the AI engine
 
+Pick the engine that matches the account you already have:
+
+| You have | Install | Enable in config.yaml |
+|---|---|---|
+| A Gemini API key, or Google Cloud Vertex AI | `gemini` | `gemini` |
+| An OpenAI API key | `openai` | `openai` |
+| An OpenRouter key, for any model it hosts | `openai` | `openai`, with OpenRouter's `url` |
+| A local model in Ollama, vLLM or LM Studio | `openai` | `openai`, with the server's `url` |
+| A Claude API key, or Claude on Amazon Bedrock or Vertex AI | `anthropic` | `anthropic` |
+
+Install it by the name in the Install column, for example:
+
 ```shell
-$ optics setup --install llm
+$ optics setup --install gemini
 ```
 
 ### Turn it on in config.yaml
 
 Add an `llm_models` section to your project's `config.yaml`:
 
+:::tabs{group="llm"}
+::tab[Gemini]
 ```yaml title="config.yaml"
 llm_models:
   - gemini:
       enabled: true
-      capabilities:
-        model: gemini-2.5-flash
 ```
+::tab[OpenAI]
+```yaml title="config.yaml"
+llm_models:
+  - openai:
+      enabled: true
+      capabilities:
+        model: gpt-5-mini
+```
+::tab[OpenRouter]
+```yaml title="config.yaml"
+llm_models:
+  - openai:
+      enabled: true
+      url: https://openrouter.ai/api/v1
+      capabilities:
+        model: anthropic/claude-sonnet-5-5
+        api_key_env: OPENROUTER_API_KEY
+```
+::tab[Ollama]
+```yaml title="config.yaml"
+llm_models:
+  - openai:
+      enabled: true
+      url: http://localhost:11434/v1
+      capabilities:
+        model: qwen2.5vl
+```
+::tab[Claude]
+```yaml title="config.yaml"
+llm_models:
+  - anthropic:
+      enabled: true
+      capabilities:
+        model: claude-sonnet-5-5
+```
+:::
 
-`model` is optional; `gemini-2.5-flash` is the default.
+Gemini uses `gemini-2.5-flash` unless you set a `model`; the other engines need one. Optics sends the model screenshots, so pick one that accepts images. Every setting is listed under [llm_models](/docs/reference/config#llm-models).
 
 ### Give Optics your key
 
@@ -55,11 +103,13 @@ PS> $env:GEMINI_API_KEY = "your-key"
 ```
 :::
 
+Use the variable for your engine: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the one you named in `api_key_env`. A local server such as Ollama needs no key.
+
 :::warning
 Don't put API keys in `config.yaml`. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.
 :::
 
-To use Vertex AI instead, set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`, and sign in with your usual Google Cloud credentials.
+For Vertex AI or Amazon Bedrock, see [llm_models](/docs/reference/config#llm-models) for the settings and credentials each one needs.
 :::
 
 ## Describe a flow
@@ -113,9 +163,8 @@ Each run stops after 15 steps, after 3 failed steps in a row, or when the model 
 
 ## Limits
 
-- Gemini is the only supported model provider.
 - Each step is a call to the model, so a run costs API usage and takes several seconds per step.
-- Screenshots go to Google's API while the mode is on. Don't use it on screens that show data you can't send to a third party.
+- Screenshots go to your model provider while the mode is on, unless the model runs on your own machine. Don't use a hosted model on screens that show data you can't send to a third party.
 
 ## See also
 
