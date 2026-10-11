@@ -33,6 +33,29 @@
     });
   });
 
+  // ---- blog type filters ----------------------------------------------------
+  // Shown only when there is more than one type; ?type=video opens on that filter.
+  var filters = document.querySelector(".blog-filters");
+  if (filters) {
+    var buttons = Array.prototype.slice.call(filters.querySelectorAll("[data-filter]"));
+    var cards = document.querySelectorAll(".blog-feed .entry");
+    var status = document.querySelector(".blog-status");
+    var show = function (type, push) {
+      var shown = 0;
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.filter === type ? "true" : "false"); });
+      cards.forEach(function (c) { var on = type === "all" || c.dataset.type === type; c.hidden = !on; if (on) shown++; });
+      if (status) status.textContent = "Showing " + shown + (shown === 1 ? " item" : " items");
+      if (push) {
+        var url = new URL(location.href);
+        if (type === "all") url.searchParams.delete("type"); else url.searchParams.set("type", type);
+        history.replaceState(null, "", url);
+      }
+    };
+    buttons.forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.filter, true); }); });
+    var wanted = new URLSearchParams(location.search).get("type");
+    if (wanted && buttons.some(function (b) { return b.dataset.filter === wanted; })) show(wanted, false);
+  }
+
   // The text pages share this script for the theme toggle only.
   if (!document.querySelector(".selector-mark")) return;
 

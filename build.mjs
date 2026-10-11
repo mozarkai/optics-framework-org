@@ -6,6 +6,7 @@ import { cpSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } fr
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
+import { blogBand, blogFeed, blogJsonLd, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -26,11 +27,12 @@ function render(page, { root, home, canonical }) {
     title: page.title,
     description: page.description,
     canonical: canonical ? `<link rel="canonical" href="${canonical}">` : "",
+    head: page.head ?? "",
     root,
     home,
   };
   return layout
-    .replace("{{body}}", () => readFileSync(page.src, "utf8").trimEnd())
+    .replace("{{body}}", () => (page.body ?? readFileSync(page.src, "utf8")).trimEnd())
     .replace(/\{\{(\w+)\}\}/g, (_, key) => values[key]);
 }
 
@@ -61,6 +63,27 @@ for (const page of PAGES) {
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 
+// The blog lists articles and videos hosted elsewhere: /blog, its Markdown twin, an RSS
+// feed, and the latest four on the homepage (both the HTML and the Markdown twin).
+const blog = loadBlog();
+const BLOG_PAGE = {
+  path: "blog",
+  title: "Optics blog: articles and videos",
+  description: "Articles, videos and posts about Optics, the open-source test automation framework. Each one links to the original on Medium, YouTube, LinkedIn or X.",
+  body: blogPage(blog),
+  head: `<link rel="alternate" type="application/rss+xml" href="feed.xml" title="Optics blog">\n  <link rel="alternate" type="text/markdown" href="blog.md" title="Optics blog, as Markdown">\n  <script type="application/ld+json">\n${blogJsonLd(blog, ORIGIN)}\n  </script>`,
+};
+writeFileSync("out/blog.html", render(BLOG_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/blog` }));
+writeFileSync("out/blog.md", blogMarkdown(blog, ORIGIN));
+writeFileSync("out/feed.xml", blogFeed(blog, ORIGIN));
+const fill = (file, marker, text) => {
+  const page = readFileSync(file, "utf8");
+  if (!page.includes(marker)) throw new Error(`${file} lost its ${marker} marker`);
+  writeFileSync(file, page.replace(marker, () => text));
+};
+fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
+fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
+
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
 const docs = buildDocs({ lastModified });
 
@@ -69,6 +92,7 @@ writeFileSync(
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...docs,
   ]),
 );

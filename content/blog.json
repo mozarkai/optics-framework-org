@@ -1,0 +1,21 @@
+{
+  "channels": [
+    { "platform": "youtube", "label": "YouTube", "url": null, "note": "Launching soon" },
+    { "platform": "medium", "label": "Medium", "url": "https://medium.com/@chinmayajha", "note": "Articles" },
+    { "platform": "github", "label": "GitHub", "url": "https://github.com/mozarkai/optics-framework/releases", "note": "Release notes" }
+  ],
+  "items": [
+    {
+      "type": "article",
+      "platform": "medium",
+      "title": "Introducing Optics: create a test your way, run it forever",
+      "summary": "Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.",
+      "url": "https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4",
+      "date": "2026-10-11",
+      "author": "Chinmay Jha",
+      "length": "5 min read",
+      "image": "media/blog/introducing-optics.webp",
+      "alt": "The headline Create it your way. Run it forever. beside a modules.csv test file and a passing optics execute run"
+    }
+  ]
+}

@@ -96,6 +96,8 @@ optics quickstart
 optics execute my_test_project
 ```
 
+<!-- blog:latest -->
+
 - [About](https://optics-framework.org/about)
 - [Contact](https://optics-framework.org/contact)
 - [Privacy](https://optics-framework.org/privacy)

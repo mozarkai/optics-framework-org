@@ -12,6 +12,15 @@ Static landing page and documentation for Optics. No framework, no dependencies.
 - Local preview: `npm run dev` then open http://localhost:4173. It serves `out/` the way Pages does (`/about` → `about.html`, missing paths → `404.html`) through the edge worker, so `curl -H 'Accept: text/markdown' http://localhost:4173/` shows what agents get.
 - Tests: `npm test` (builds, then `node --test`).
 
+## Blog (`content/blog.json`)
+
+`/blog` lists articles, videos and posts published elsewhere (Medium, YouTube, LinkedIn, X); nothing is hosted here and every card links to the original. `lib/blog.mjs` turns `content/blog.json` into `out/blog.html`, its Markdown twin `out/blog.md`, the RSS feed `out/feed.xml`, and the "From the blog" band on the homepage (filled in at the `<!-- blog:latest -->` marker in `site/index.html` and `site/index.md`; the band disappears when there are no items).
+
+- Add an item to `items` (any order; the build sorts by date): `type` (`article`, `video` or `post`), `platform` (`medium`, `youtube`, `linkedin`, `x`, `github`; a new platform needs a mark in `PLATFORMS`), `title`, `summary`, `url`, `date` (YYYY-MM-DD), and optionally `author` and `length` ("5 min read", or "9:42" for a video). Articles and videos need an `image`.
+- Save thumbnails to `site/media/blog/` as WebP, about 1280 px wide (`cwebp -q 82`), and never hot-link them: the privacy page promises the site loads nothing from other servers, and a test enforces it. For a YouTube video, download `https://i.ytimg.com/vi/<id>/maxresdefault.jpg` once and convert it. Videos link out to YouTube; there are no embedded players for the same reason. Posts on LinkedIn or X need no image; their summary is shown as a quote.
+- `channels` is the "Follow along" row. A channel with `"url": null` shows as coming soon; fill in the URL when the account goes live.
+- The newest item is the wide lead card. Type filters appear on `/blog` once there is more than one type, and `/blog?type=video` opens on a filter.
+
 ## Documentation (`docs/`)
 
 The docs live at `/docs/` and are built from Markdown by `lib/docs.mjs` and `lib/markdown.mjs`, a small renderer written for this site.

@@ -1,7 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { loadBlog } from "../lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 const TRUST_PAGES = ["about", "contact", "privacy"];
@@ -70,7 +73,7 @@ test("the trust pages exist with real content and their own canonical URL", () =
 });
 
 test("every page links the trust pages from its footer", () => {
-  for (const page of ["index.html", "404.html", ...TRUST_PAGES.map((p) => `${p}.html`)]) {
+  for (const page of ["index.html", "404.html", "blog.html", ...TRUST_PAGES.map((p) => `${p}.html`)]) {
     const footer = read(page).match(/<footer[\s\S]*<\/footer>/)[0];
     for (const trust of TRUST_PAGES) assert.match(footer, new RegExp(`href="/?${trust}"`), `${page} footer lacks ${trust}`);
   }
@@ -122,8 +125,8 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   assert.ok(statSync("out/sitemap.xml").size < 50 * 1024 * 1024);
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
-  assert.deepEqual(locs.slice(0, 1 + TRUST_PAGES.length), [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`)]);
-  assert.deepEqual(locs.slice(1 + TRUST_PAGES.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
+  assert.deepEqual(locs.slice(0, 2 + TRUST_PAGES.length), [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`]);
+  assert.deepEqual(locs.slice(2 + TRUST_PAGES.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
     assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/, `${loc} lastmod`);
     const path = loc.slice(ORIGIN.length + 1) || "index";
@@ -242,4 +245,78 @@ test("the homepage and every text page link to the docs", () => {
     assert.match(read(page), /href="(\.\/)?docs\/"/, `${page} has no docs link`);
   }
   assert.doesNotMatch(read("index.html"), /mozarkai\.github\.io/);
+});
+
+// ---- blog ------------------------------------------------------------------------------
+
+const blog = () => loadBlog();
+
+test("the blog page lists every item, newest first, linking to the original", () => {
+  const html = read("blog.html");
+  assert.match(html, new RegExp(`<link rel="canonical" href="${ORIGIN}/blog">`));
+  assert.match(html, /<link rel="alternate" type="application\/rss\+xml" href="feed\.xml"/);
+  assert.doesNotMatch(html, /\{\{\w+\}\}/);
+  const links = [...html.matchAll(/<h[234] class="entry-title"><a href="([^"]+)">/g)].map((m) => m[1].replace(/&amp;/g, "&"));
+  assert.deepEqual(links, blog().items.map((i) => i.url));
+  const [page] = jsonLd(html);
+  assert.equal(page["@type"], "CollectionPage");
+  assert.equal(page.mainEntity.itemListElement.length, blog().items.length);
+});
+
+test("blog filters appear only when there is more than one type", () => {
+  const types = new Set(blog().items.map((i) => i.type));
+  assert.equal(/class="os blog-filters"/.test(read("blog.html")), types.size > 1);
+});
+
+test("the homepage shows the latest blog items in HTML and Markdown", () => {
+  const { items } = blog();
+  const html = read("index.html");
+  const md = read("index.md");
+  assert.doesNotMatch(html + md, /<!-- blog:latest -->/);
+  for (const item of items.slice(0, 4)) {
+    assert.ok(html.includes(`href="${item.url}"`), `homepage lacks ${item.url}`);
+    assert.ok(md.includes(`(${item.url})`), `index.md lacks ${item.url}`);
+  }
+  assert.match(html, /href="blog"/);
+});
+
+test("the blog has an RSS feed and a Markdown twin", () => {
+  const { items } = blog();
+  const feed = read("feed.xml");
+  assert.match(feed, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<rss version="2\.0"/);
+  assert.equal((feed.match(/<item>/g) ?? []).length, items.length);
+  const md = read("blog.md");
+  assert.match(md, /^# Optics blog/);
+  for (const item of items) assert.ok(md.includes(`(${item.url})`), `blog.md lacks ${item.url}`);
+});
+
+test("a malformed blog item fails the build with the reason", () => {
+  const dir = mkdtempSync(join(tmpdir(), "blog-"));
+  const bad = (item) => {
+    const file = join(dir, "blog.json");
+    writeFileSync(file, JSON.stringify({ channels: [], items: [item] }));
+    return () => loadBlog(file);
+  };
+  const ok = { type: "post", platform: "x", title: "t", summary: "s", url: "https://x.com/a", date: "2026-10-12" };
+  assert.doesNotThrow(bad(ok));
+  assert.throws(bad({ ...ok, type: "podcast" }), /type must be one of/);
+  assert.throws(bad({ ...ok, platform: "myspace" }), /platform must be one of/);
+  assert.throws(bad({ ...ok, url: "http://x.com/a" }), /https/);
+  assert.throws(bad({ ...ok, date: "12/10/2026" }), /YYYY-MM-DD/);
+  assert.throws(bad({ ...ok, type: "video" }), /needs an image/);
+  assert.throws(bad({ ...ok, image: "https://i.ytimg.com/vi/x/hq.jpg" }), /site\/media\/blog/);
+});
+
+// The privacy page promises the site loads nothing from third-party servers. Links may
+// point anywhere; images, scripts, styles and media must come from this site.
+test("no page loads an asset from another server", () => {
+  const pages = ["index.html", "blog.html", ...TRUST_PAGES.map((p) => `${p}.html`), ...docsPages().map((p) => p.file)];
+  for (const page of pages) {
+    const html = read(page);
+    for (const [tag] of html.matchAll(/<(?:img|script|source|video|iframe|link)\b[^>]*>/g)) {
+      if (/^<link\b/.test(tag) && !/rel="(?:stylesheet|preload|icon)"/.test(tag)) continue;
+      const url = tag.match(/\b(?:src|href|poster)="([^"]*)"/)?.[1] ?? "";
+      assert.doesNotMatch(url, /^(?:https?:)?\/\//, `${page} loads ${url}`);
+    }
+  }
 });
