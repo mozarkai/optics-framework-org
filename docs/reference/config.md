@@ -165,6 +165,7 @@ Works with OpenAI and with any server that offers an OpenAI-compatible Chat Comp
 | `model` | None (required) | The model name as the server spells it, for example `gpt-5-mini`, or `anthropic/claude-sonnet-5-5` on OpenRouter. |
 | `api_key_env` | `OPENAI_API_KEY` | The environment variable that holds the key. |
 | `response_format` | `json_schema` | Set `json_object` if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead. |
+| `max_tokens` | The server's limit | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
 | Server | `url` | Key |
