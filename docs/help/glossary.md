@@ -73,7 +73,7 @@ The execution output is the `execution_output/` folder in a project, where each 
 
 ### Extra {#extra}
 
-An extra is the pip name for an optional engine, such as `appium`, `easyocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web` and `all` install several at once. See [Engines and extras](/docs/reference/engines).
+An extra is the pip name for an optional engine, such as `appium`, `easyocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web`, `llm` and `all` install several at once. See [Engines and extras](/docs/reference/engines).
 
 ## F
 
@@ -111,7 +111,7 @@ A keyword is one action or check that a step performs, such as `Press Element`, 
 
 ### LLM {#llm}
 
-An LLM (large language model) is the AI model behind plain-English mode and self-heal. Optics works with Gemini, Claude, OpenAI and OpenAI-compatible servers, configured under `llm_models` in `config.yaml`. See [llm_models](/docs/reference/config#llm-models).
+An LLM (large language model) is the AI model behind plain-English mode and self-heal. Optics works with Gemini, Claude and OpenAI, plus OpenAI-compatible servers such as OpenRouter or Ollama, configured under `llm_models` in `config.yaml`. See [llm_models](/docs/reference/config#llm-models).
 
 ### Locator {#locator}
 
