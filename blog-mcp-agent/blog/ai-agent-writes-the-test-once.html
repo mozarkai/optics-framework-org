@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your AI agent writes the test once. Optics runs it with no model. · Optics blog</title>
+  <meta name="description" content="An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.">
+  <link rel="canonical" href="https://optics-framework.org/blog/ai-agent-writes-the-test-once">
+  <link rel="stylesheet" href="../docs.css?v=f46a574929">
+  <link rel="alternate" type="text/markdown" href="ai-agent-writes-the-test-once.md" title="Your AI agent writes the test once. Optics runs it with no model., as Markdown">
+  <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Your AI agent writes the test once. Optics runs it with no model.",
+  "description": "An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.",
+  "url": "https://optics-framework.org/blog/ai-agent-writes-the-test-once",
+  "mainEntityOfPage": "https://optics-framework.org/blog/ai-agent-writes-the-test-once",
+  "datePublished": "2026-10-20",
+  "dateModified": "2026-10-20",
+  "image": "https://optics-framework.org/media/blog/agent-writes-once.webp",
+  "author": {
+    "@type": "Person",
+    "name": "Chinmay Jha"
+  },
+  "about": {
+    "@id": "https://optics-framework.org/#optics"
+  },
+  "isPartOf": {
+    "@type": "Blog",
+    "name": "Optics blog",
+    "url": "https://optics-framework.org/blog"
+  }
+}
+  </script>
+  <meta property="og:title" content="Your AI agent writes the test once. Optics runs it with no model. · Optics blog">
+  <meta property="og:description" content="An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="../#create">Create</a>
+        <a href="../#run">Run</a>
+        <a href="../#ladder">Locators</a>
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="../#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<article class="post">
+        <p class="post-crumbs"><a href="../blog">Blog</a></p>
+        <h1 class="h2">Your AI agent writes the test once. Optics runs it with no model.</h1>
+        <p class="lede">An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.</p>
+        <p class="post-meta"><span><time datetime="2026-10-20">20 Oct 2026</time></span><span>Chinmay Jha</span><span>6 min read</span></p>
+        <img class="post-hero" src="../media/blog/agent-writes-once.webp?v=e9a690dc76" alt="The headline Your agent writes it once. Optics runs it forever. beside an agent tool-call log and a terminal where optics execute passes with 0 model calls" decoding="async">
+        <div class="prose">
+<p>Many AI tools for UI tests put a model in control of each test run. Thus, each run has a model cost. Also, the model can go through the app in a different sequence each time.</p>
+<p>Optics Framework uses the model at a different point. Your AI agent goes through the app one time through the Optics MCP server. Then it writes a CSV test suite. After that, each run replays the suite and uses no model.</p>
+<p>I did this procedure on saucedemo.com, a sample web site for tests. The agent was Claude Code with claude-opus-5-5, and the server was Optics Framework 1.11.0. This post shows the recorded session, the files that the agent wrote and the data from 10 replays.</p>
+<video src="../media/blog/agent-session.mp4?v=a39307f53b" poster="../media/blog/agent-session-poster.webp?v=8b5cd2f532" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: Claude Code calls Optics MCP tools in a terminal panel while a Chromium window signs in to saucedemo.com, adds a backpack to the cart and completes the checkout. The agent then writes four suite files and the dry run passes."></video>
+<p><em>The recorded agent session at 1.5× speed. The left panel shows each Optics tool call, and the right panel shows the browser that the agent controls.</em></p>
+<h2 id="the-prompt">The prompt<a class="anchor" href="#the-prompt" aria-label="Link to this section">#</a></h2>
+<p>I gave Claude Code one prompt and one MCP server. Skills and user settings were off. Thus, the agent had only the information from Optics.</p>
+<figure class="code doc-code no-copy" data-lang="text"><pre><code>Use the optics tools to open https://www.saucedemo.com in Playwright with headless false.
+Sign in as standard_user / secret_sauce, add the Sauce Labs Backpack to the cart,
+open the cart, check out as Ava Birch with postcode 560001, finish the order,
+and check that "Thank you for your order!" appears.
+Then write it as an Optics suite in ./checkout, run optics dry_run on it,
+and tell me how to run it.</code></pre></figure>
+<h2 id="what-the-mcp-server-gives-the-agent">What the MCP server gives the agent<a class="anchor" href="#what-the-mcp-server-gives-the-agent" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">optics mcp</code> is a <a href="https://modelcontextprotocol.io" rel="noopener">Model Context Protocol</a> server. In version 1.11.0 it has 41 tools. 3 tools control the session, and 38 tools are Optics keywords such as <code class="ic">press_element</code>, <code class="ic">enter_text</code> and <code class="ic">assert_presence</code>. The agent can also read these MCP resources:</p>
+<ul><li><code class="ic">optics://session/{id}/elements</code>: a short list of the elements on the screen. Each item has a label, the permitted actions and the position on the screen.</li><li><code class="ic">optics://session/{id}/screenshot</code> and <code class="ic">optics://session/{id}/source</code>: the screen as an image, and the full UI tree.</li><li><code class="ic">optics://project-format</code>: the rules for the suite files.</li><li><code class="ic">optics://keywords</code>: the full list of keywords.</li></ul>
+<p>On a web page, an item in the element list can also have a <code class="ic">loc</code> value. Optics makes this CSS selector in the browser. Then Optics makes sure that the selector finds only that element. This is the item for the Login button on saucedemo.com:</p>
+<figure class="code doc-code no-copy" data-lang="json"><pre><code>{<span class="c-mod">"i"</span>: <span class="c-info">3</span>, <span class="c-mod">"label"</span>: <span class="c-lit">"Login"</span>, <span class="c-mod">"cls"</span>: <span class="c-lit">"input"</span>, <span class="c-mod">"bounds"</span>: [494, 302, 786, 351], <span class="c-mod">"act"</span>: [<span class="c-lit">"tap"</span>], <span class="c-mod">"rid"</span>: <span class="c-lit">"login-button"</span>, <span class="c-mod">"loc"</span>: <span class="c-lit">"[data-test=\"login-button\"]"</span>}</code></pre></figure>
+<p>The agent used a <code class="ic">loc</code> value for each of its 11 clicks and text entries.</p>
+<p>The server has no tool to record or save a test. The agent writes the files, and it uses the rules from <code class="ic">optics://project-format</code>. The server also does not show the tools that tap a screen coordinate. On a different screen size, a coordinate from a screenshot can point to a different element.</p>
+<h2 id="the-session">The session<a class="anchor" href="#the-session" aria-label="Link to this section">#</a></h2>
+<p>The time for the session was 71 seconds, with 32 model turns. The agent made 21 Optics tool calls and read the project format one time. It read the element list 6 times, one time on each new page. Claude Code showed a model cost of $0.44.</p>
+<p>First, the agent did the full checkout in the browser. It found "Thank you for your order!" on the last page. Then it wrote 4 files and ran <code class="ic">optics dry_run</code>. The dry run passed.</p>
+<h2 id="the-files">The files<a class="anchor" href="#the-files" aria-label="Link to this section">#</a></h2>
+<p>The test case uses 5 modules in sequence. The modules file has one row for each action, and all the values are variables:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>checkout/modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Open Site,Launch App,${site_url}
+Login,Enter Text,${username_field},${username}
+Login,Enter Text,${password_field},${password}
+Login,Press Element,${login_button}
+Add Backpack To Cart,Press Element,${add_backpack_button}
+Add Backpack To Cart,Press Element,${cart_link}
+Add Backpack To Cart,Press Element,${checkout_button}
+Enter Checkout Details,Enter Text,${first_name_field},${first_name}
+Enter Checkout Details,Enter Text,${last_name_field},${last_name}
+Enter Checkout Details,Enter Text,${postal_code_field},${postal_code}
+Enter Checkout Details,Press Element,${continue_button}
+Finish Order,Press Element,${finish_button}
+Finish Order,Assert Presence,${order_complete_header}">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Open Site</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span><span class="c-var">${site_url}</span>
+<span class="c-mod">Login</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${username_field}</span><span class="c-dim">,</span><span class="c-var">${username}</span>
+<span class="c-mod">Login</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${password_field}</span><span class="c-dim">,</span><span class="c-var">${password}</span>
+<span class="c-mod">Login</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${login_button}</span>
+<span class="c-mod">Add Backpack To Cart</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${add_backpack_button}</span>
+<span class="c-mod">Add Backpack To Cart</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${cart_link}</span>
+<span class="c-mod">Add Backpack To Cart</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${checkout_button}</span>
+<span class="c-mod">Enter Checkout Details</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${first_name_field}</span><span class="c-dim">,</span><span class="c-var">${first_name}</span>
+<span class="c-mod">Enter Checkout Details</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${last_name_field}</span><span class="c-dim">,</span><span class="c-var">${last_name}</span>
+<span class="c-mod">Enter Checkout Details</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${postal_code_field}</span><span class="c-dim">,</span><span class="c-var">${postal_code}</span>
+<span class="c-mod">Enter Checkout Details</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${continue_button}</span>
+<span class="c-mod">Finish Order</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${finish_button}</span>
+<span class="c-mod">Finish Order</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${order_complete_header}</span></code></pre></figure>
+<p>The elements file holds the test data and the locators. For most elements, the agent put the verified <code class="ic">loc</code> value first and the label second:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>checkout/test_data/elements.csv (part)</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID,Element_ID_2
+site_url,https://www.saucedemo.com,
+username,standard_user,
+first_name,Ava,
+username_field,&quot;[data-test=&quot;&quot;username&quot;&quot;]&quot;,Username
+login_button,&quot;[data-test=&quot;&quot;login-button&quot;&quot;]&quot;,Login
+checkout_button,&quot;[data-test=&quot;&quot;checkout&quot;&quot;]&quot;,Checkout
+finish_button,&quot;[data-test=&quot;&quot;finish&quot;&quot;]&quot;,Finish
+order_complete_header,text=Thank you for your order!,&quot;[data-test=&quot;&quot;complete-header&quot;&quot;]&quot;">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID,Element_ID_2</span>
+<span class="c-mod">site_url</span><span class="c-dim">,</span><b>https://www.saucedemo.com</b><span class="c-dim">,</span>
+<span class="c-mod">username</span><span class="c-dim">,</span><b>standard_user</b><span class="c-dim">,</span>
+<span class="c-mod">first_name</span><span class="c-dim">,</span><b>Ava</b><span class="c-dim">,</span>
+<span class="c-mod">username_field</span><span class="c-dim">,</span><b>"[data-test=""username""]"</b><span class="c-dim">,</span>Username
+<span class="c-mod">login_button</span><span class="c-dim">,</span><b>"[data-test=""login-button""]"</b><span class="c-dim">,</span>Login
+<span class="c-mod">checkout_button</span><span class="c-dim">,</span><b>"[data-test=""checkout""]"</b><span class="c-dim">,</span>Checkout
+<span class="c-mod">finish_button</span><span class="c-dim">,</span><b>"[data-test=""finish""]"</b><span class="c-dim">,</span>Finish
+<span class="c-mod">order_complete_header</span><span class="c-dim">,</span><b>text=Thank you for your order!</b><span class="c-dim">,</span>"[data-test=""complete-header""]"</code></pre></figure>
+<p>For a different user or a different product, write new values in this file. The modules stay the same.</p>
+<p>These 4 files are the full result of the session. You can read them, review them in a pull request and keep them in Git with the code of your app.</p>
+<h2 id="the-replay">The replay<a class="anchor" href="#the-replay" aria-label="Link to this section">#</a></h2>
+<p>Then I ran the suite 10 times with <code class="ic">optics execute</code>. The environment had no API keys. All 10 runs passed. The shortest run was 2.8 seconds, the longest run was 4.2 seconds, and the median was 3.3 seconds. Each time includes the start of Python and the start of the browser.</p>
+<video src="../media/blog/replay-runs.mp4?v=3736f8f8b7" poster="../media/blog/replay-runs-poster.webp?v=83b3afcae3" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: three runs of optics execute checkout. Each run prints a tree of passed steps while Chromium completes the saucedemo.com checkout in about three seconds, with no model calls."></video>
+<p><em>3 recorded replays of the suite at 1× speed, with the terminal output of each run.</em></p>
+<p>To count the model calls, I recorded each DNS lookup and each network connection from the Optics Python process. In all 10 runs, the record was empty. Only the browser connected to the network, to load saucedemo.com. To make sure that the record works, I sent one request to example.com from the same process. The record showed that request.</p>
+<p>The source code agrees with this result. Optics makes an LLM client only when you set <code class="ic">ai_self_heal</code> to <code class="ic">true</code>. The value is <code class="ic">false</code> if you do not set it.</p>
+<p><img src="../media/blog/agent-replay-figure.webp?v=9e7775e8ba" alt="Diagram: the agent session uses the model for 32 turns and 21 Optics tool calls, and writes 4 files in 71 seconds for $0.44. Each replay runs 13 steps in 3.3 seconds with 0 model calls and costs $0." loading="lazy"></p>
+<p><em>Data from the agent session and from the 10 replays.</em></p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Agent session</th><th>Each replay</th></tr></thead><tbody><tr><td>Time</td><td>71 s</td><td>3.3 s (median of 10)</td></tr><tr><td>Model turns</td><td>32</td><td>0</td></tr><tr><td>Model cost</td><td>$0.44</td><td>$0</td></tr><tr><td>Result</td><td>4 suite files</td><td>10 of 10 runs passed</td></tr></tbody></table></div>
+<h2 id="when-the-page-changes">When the page changes<a class="anchor" href="#when-the-page-changes" aria-label="Link to this section">#</a></h2>
+<p>A suite from an agent has the same problem as a suite from a person: the app can change. To simulate a refactor, I replaced the login button locator in <code class="ic">elements.csv</code> with <code class="ic">[data-test="login-btn-v2"]</code>. That selector is not on the page.</p>
+<p>The run passed. Optics did not find the first locator. Then it tried the second locator, the label "Login". The log shows each locator that Optics tried:</p>
+<figure class="code doc-code no-copy" data-lang="text"><pre><code>Locating element: [data-test="login-btn-v2"] of type: CSS...
+Locating element: Login of type: Text...
+Pressing element 'Login'</code></pre></figure>
+<p>The time for this step was 10.2 seconds. With a correct first locator, the time for the same step is approximately 0.1 seconds. Optics waits for the first locator until its time limit, and then it tries the label. The run passes with the second locator, but the run is slower. When the log shows a fallback, update the first locator.</p>
+<h2 id="do-it-yourself">Do it yourself<a class="anchor" href="#do-it-yourself" aria-label="Link to this section">#</a></h2>
+<p>Python 3.12 (minimum) and an MCP client are necessary. These steps use Claude Code.</p>
+<ol><li>Install Optics Framework with the MCP server: <code class="ic">pip install "optics-framework[mcp]"</code>.</li><li>Install the browser engine: <code class="ic">optics setup --install playwright</code>.</li><li>Add the server to Claude Code: <code class="ic">claude mcp add optics -- optics mcp</code>.</li><li>Give the agent a prompt with the same parts as the prompt above: the URL, the steps, the last check and the folder for the suite.</li><li>Read the files that the agent writes. Examine them as you examine a pull request.</li><li>Run the suite: <code class="ic">optics execute checkout</code>.</li></ol>
+<p>For Cursor, VS Code and Claude Desktop, refer to <a href="../docs/create/agent">Let your AI agent build tests</a>. For CI, set <code class="ic">headless: true</code> in <code class="ic">config.yaml</code> and refer to <a href="../docs/run/ci">Run tests in CI</a>.</p>
+<h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+<ul><li>The quality of the suite is a function of the model and the prompt. Read the files before you commit them.</li><li><code class="ic">optics dry_run</code> examines the files only. It does not open the app. Run <code class="ic">optics execute</code> one time before you use a new suite in CI.</li><li><code class="ic">loc</code> values are available on web pages only. On Android and iOS, the agent uses the ids and labels from the element list.</li><li>Loops, conditions and data files are not MCP tools, because they operate only in a full suite run. The agent can write them into the modules.</li><li>The HTTP transport (<code class="ic">optics mcp --transport http</code>) has no authentication. Keep it on 127.0.0.1 or on a network that you control.</li></ul>
+<p>For an introduction to Optics Framework, read <a href="../blog/introducing-optics-framework">Introducing Optics Framework</a>. To find error screens that no step examines, read <a href="../blog/your-tests-passed-your-app-didnt">Your tests passed. Your app didn't.</a></p>
+<ul><li>Docs: <a href="../docs/create/agent">Let your AI agent build tests</a> and the <a href="../docs/reference/mcp">MCP server reference</a></li><li>Source: <a href="https://github.com/mozarkai/optics-framework" rel="noopener">github.com/mozarkai/optics-framework</a></li></ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../about">About</a>
+        <a href="../contact">Contact</a>
+        <a href="../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../app.js?v=5160aed22e" defer></script>
+</body>
+</html>
