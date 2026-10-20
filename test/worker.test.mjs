@@ -166,3 +166,8 @@ test("the API catalog is served as an RFC 9727 linkset", async () => {
   const { linkset } = await res.json();
   assert.ok(linkset.some((entry) => entry["service-desc"] && entry["service-doc"]));
 });
+
+test("the AI catalog and MCP server card carry their own media types", async () => {
+  assert.equal((await get("/.well-known/ai-catalog.json")).headers.get("content-type"), "application/ai-catalog+json");
+  assert.equal((await get("/.well-known/mcp/server-card.json")).headers.get("content-type"), "application/mcp-server-card+json");
+});

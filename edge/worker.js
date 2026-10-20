@@ -3,13 +3,19 @@
 // (`/` -> `/index.md`, `/about` -> `/about.md`) and a missing page gets `/404.md` with a
 // 404; a request that prefers JSON gets a missing page as an RFC 9457 problem document.
 // Everything else passes through untouched apart from `Vary: Accept` (so caches keep the
-// representations apart) and discovery `Link` headers on HTML, and the API catalog's
-// media type.
+// representations apart) and discovery `Link` headers on HTML, and the media types of
+// the discovery documents.
 
 const MARKDOWN = "text/markdown; charset=utf-8";
 const PROBLEM_JSON = "application/problem+json";
 const API_CATALOG = "/.well-known/api-catalog";
-const LINKSET = 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"';
+// Pages serves .json as application/json and the extensionless catalog as octet-stream;
+// these are the types the specs ask for (RFC 9727, MCP Server Card discovery).
+const MEDIA_TYPES = {
+  [API_CATALOG]: 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"',
+  "/.well-known/ai-catalog.json": "application/ai-catalog+json",
+  "/.well-known/mcp/server-card.json": "application/mcp-server-card+json",
+};
 
 // Agent discovery (RFC 8288, RFC 9727 section 3) on every HTML page.
 export const LINK = [
@@ -118,10 +124,9 @@ export async function handle(request, upstream = fetch) {
     const notFound = await upstream(new Request(new URL("/404.md", url), { method }));
     if (notFound.ok) return asMarkdown(notFound, 404);
   }
-  // Pages serves the extensionless catalog as application/octet-stream.
-  if (url.pathname === API_CATALOG && response.ok) {
+  if (MEDIA_TYPES[url.pathname] && response.ok) {
     const out = new Response(response.body, response);
-    out.headers.set("content-type", LINKSET);
+    out.headers.set("content-type", MEDIA_TYPES[url.pathname]);
     return out;
   }
   const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
