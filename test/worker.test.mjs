@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { handle, markdownPath, negotiate } from "../edge/worker.js";
 import { pagesOrigin } from "../pages-origin.mjs";
 
@@ -145,10 +145,32 @@ test("HTML pages advertise the API catalog and agent resources in a Link header"
   assert.equal((await get("/styles.css")).headers.get("link"), null);
 });
 
+test("each HTML page's Link header names its own Markdown twin only when it exists", async () => {
+  const pages = readdirSync("out", { recursive: true }).filter((f) => f.endsWith(".html") && f !== "404.html");
+  assert.ok(pages.length > 20);
+  for (const file of pages) {
+    const link = (await get(`/${file}`)).headers.get("link");
+    const twin = /<([^>]+)>; rel="alternate"; type="text\/markdown"/.exec(link)?.[1];
+    assert.equal(twin, existsSync(`out/${file.replace(/\.html$/, ".md")}`) ? `/${file.replace(/\.html$/, ".md")}` : undefined, file);
+  }
+  assert.match((await get("/__ora-404-probe-9s1x6rf4")).headers.get("link"), /<\/404\.md>; rel="alternate"/);
+  assert.match((await get("/")).headers.get("link"), /<\/index\.md>; rel="alternate"/);
+});
+
 test("the API catalog is served as an RFC 9727 linkset", async () => {
   const res = await get("/.well-known/api-catalog", "application/linkset+json, application/json");
   assert.equal(res.status, 200);
   assert.match(res.headers.get("content-type"), /^application\/linkset\+json; profile="https:\/\/www\.rfc-editor\.org\/info\/rfc9727"/);
   const { linkset } = await res.json();
   assert.ok(linkset.some((entry) => entry["service-desc"] && entry["service-doc"]));
+});
+
+test("the AI catalog and MCP server card carry their own media types", async () => {
+  const types = { "/.well-known/ai-catalog.json": "application/ai-catalog+json", "/.well-known/mcp/server-card.json": "application/mcp-server-card+json" };
+  for (const [path, type] of Object.entries(types)) {
+    const res = await get(path);
+    assert.equal(res.status, 200, path);
+    assert.equal(res.headers.get("content-type"), type);
+    await res.json();
+  }
 });

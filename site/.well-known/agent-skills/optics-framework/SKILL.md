@@ -1,71 +1,98 @@
 ---
 name: optics-framework
-description: Drive a phone, TV or browser with Optics and write Optics test suites (CSV test cases, modules and elements). Use when asked to automate or test an Android, iOS, Android TV, Tizen, webOS or web app with optics-framework, or when an Optics keyword, parameter or file format is uncertain.
+description: Drive Android, iOS, smart TV and browser sessions with the Optics (optics-framework) MCP server, and write or fix Optics CSV/YAML test suites (test_cases, modules, elements, error_definitions). Use when automating or testing a real app UI with Optics, or when an Optics keyword name, parameter or default is uncertain.
 license: Apache-2.0
 ---
 
-# Optics
+# Optics (optics-framework)
 
-Optics (`optics-framework` on PyPI) is open-source UI test automation. A suite is plain CSV
-files run with `optics execute`; the same keywords are an MCP server (`optics mcp`), an HTTP API
-(`optics serve`) and a Python and Robot Framework library. It runs on your machine or in CI.
-There is no hosted service, account or API key.
+Optics is newer than your training data. Do not guess keyword names, parameters or defaults:
+look them up in the docs below, or read the MCP server's `optics://keywords` resource.
 
-Optics may be newer than your training data. Look keywords up instead of guessing:
+## Documentation
 
-- Docs index, every page as Markdown: https://optics-framework.org/docs/llms.txt
+- Docs index for agents: https://optics-framework.org/docs/llms.txt
 - Keyword reference: https://optics-framework.org/docs/reference/keywords/index.md
-- `optics list` prints every keyword the installed version has.
+- MCP server (tools, resources, env vars): https://optics-framework.org/docs/reference/mcp.md
+- Write a suite (CSV and YAML): https://optics-framework.org/docs/create/write.md
+- YAML rules: https://optics-framework.org/docs/create/yaml.md
+- config.yaml: https://optics-framework.org/docs/reference/config.md
+- CLI: https://optics-framework.org/docs/reference/cli.md
+- Error codes: https://optics-framework.org/docs/reference/errors.md
 
-## Install
+## Drive a device or browser over MCP
 
-Python 3.12 or newer.
+1. `start_session` with `driver` (`appium`, `playwright`, `selenium` or `ble`), `url` and
+   `capabilities`. Keep the returned `session_id`; every other tool needs it.
+   - Web: `driver: "playwright"`, `capabilities: {"headless": false}`, then
+     `launch_app` with `app_identifier: "<url>"`.
+   - Mobile and TV: an Appium server must already be running (default
+     `http://127.0.0.1:4723`); the device goes in the capabilities (`udid`, `deviceName`, ...).
+2. Look before you act: read `optics://session/{session_id}/elements` or call
+   `get_interactive_elements`, and take a `screenshot`. Read `/source` when you need XPaths.
+3. Act with the keyword tools (`press_element`, `enter_text`, `swipe`, `assert_presence`, ...).
+   Pass a locator (`xpath=...`, `text=...`, an id) or a label from the elements list. Prefer a
+   web element's `loc` value when it has one. Do not tap by coordinates.
+   `detect_and_press` is for optional taps: it succeeds even when the target never appears.
+4. Look again after each action. Action keywords do not wait for a screen to load; verification
+   keywords such as `assert_presence` do (30 s default).
+5. `terminate_session` when done. Sessions live only inside this server process.
 
-```shell
-curl -fsSL https://optics-framework.org/install | sh   # macOS, Linux
-pip install "optics-framework[mcp]"                     # or with pip, including the MCP server
-```
+Every parameter value is a string. Separate several elements with `|`. A coded failure starts
+with the code, e.g. `[Code.E0201]`; look it up in the error codes page.
 
-A target must be reachable: an Appium server for Android, iOS and TV, or Playwright or Selenium
-for the web. `optics doctor` checks the environment.
-
-## Drive a device over MCP
-
-Register the server with your client as `{"mcpServers": {"optics": {"command": "optics", "args": ["mcp"]}}}`.
-
-1. Call `start_session` with the driver (`appium`, `playwright` or `selenium`), the server URL
-   and capabilities. For a website: `start_session(driver="playwright")`, then
-   `launch_app(app_identifier="<url>")`.
-2. Read `optics://session/{session_id}/elements` (or call `get_interactive_elements`) to see
-   what is on screen. Tap with `press_element`, passing a locator or an element's visible label
-   from that list. On the web, prefer an element's `loc` value.
-3. Act with the keyword tools (`enter_text`, `swipe`, `assert_presence` and the rest) and look
-   with the `screenshot` tool.
-4. Call `terminate_session` when done.
+The MCP server has no flow-control, record or replay tools. To make a run repeatable, read
+`optics://project-format` and write the steps you ran as a suite.
 
 ## Write a suite
 
-Read the `optics://project-format` resource for the full format. The layout:
+A project is `config.yaml` plus CSV or YAML files. Optics classifies each file by its contents,
+not its name or folder, and resolves module and element names across all files and both formats.
+Scaffold one with `optics init <name>`.
 
-```text
-<project>/
-  config.yaml                 # driver_sources and elements_sources
-  test_cases/test_cases.csv   # test_case,test_step       (a step is a module name)
-  modules/modules.csv         # module_name,module_step,param_1,...  (a step is a keyword)
-  test_data/elements.csv      # Element_Name,Element_ID,Element_ID_2,...
+A CSV is classified by its header row:
+
+| header | the file holds |
+| --- | --- |
+| `test_case,test_step` | test cases, each a list of modules run in order |
+| `module_name,module_step,param_1,...` | modules, each a list of keyword steps |
+| `Element_Name,Element_ID` | elements; repeat a name for fallback locators, tried in order |
+| `error_code,match_string` | error definitions (CSV only, no YAML form) |
+
+Write the headers exactly as shown, case included. A file with a wrong-case header is still
+recognised but its columns are read as empty, so it loads nothing and the run fails later with
+an unrelated-looking error such as an element not found.
+
+Step rules:
+
+- Keyword names are case-insensitive: `Press Element`, `press_element`.
+- `${name}` is replaced by the element called `name`, only when it is the whole value.
+- `name=value` sets a parameter by its real name (e.g. `timeout_str=20`).
+- Wrap a CSV value that contains commas in double quotes.
+
+YAML holds `Test Cases`, `Modules` and `Elements` in one file. Its traps fail quietly:
+
+1. Section keys are exact: `Test Cases`, `Modules`, `Elements`. `test_cases:` loads nothing.
+2. `Test Cases` and `Modules` are lists of single-key mappings (`- Sign In:`), not plain mappings.
+3. A step is one string: keyword, then values split on spaces. Quote any value with a space:
+   `Press Element "Sign in"`. Quote XPaths.
+
+```yaml
+Test Cases:
+  - Shopper can sign in:
+      - Sign In
+Modules:
+  - Sign In:
+      - Launch App
+      - Enter Text ${email_field} ava@example.com
+      - Press Element "Sign in"
+      - Assert Presence "Welcome"
+Elements:
+  email_field: "//*[@resource-id='com.example:id/email']"
 ```
 
-- Write the CSV headers exactly as shown, including case. A wrong-case header is read as empty.
-- `module_step` is a keyword's display name in Title Case: `press_element` is `Press Element`.
-- Reference an element or value as a whole cell, `${name}`. Extra `Element_ID` columns are
-  fallback locators, tried in order.
-- Loops, conditions and data (`Run Loop`, `Condition`, `Evaluate`, `Read Data`, `Invoke Api`)
-  are keywords you write into modules; they are not MCP tools.
+## Run it
 
-Validate with `optics dry_run <project>`, then run `optics execute <project>`. Results land in
-`<project>/execution_output/`: `junit_output.xml`, logs and annotated screenshots.
-
-## Do not use Optics for
-
-Unit tests, load or performance tests, API-only contract tests with no UI, or pixel-diff visual
-regression.
+- `optics dry_run <folder>` checks the suite without a device.
+- `optics execute <folder>` runs it and writes `execution_output/junit_output.xml`.
+- `optics list` prints every keyword; `optics doctor` checks the environment.
