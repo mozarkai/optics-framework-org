@@ -1,5 +1,5 @@
 ---
-title: HTTP API
+title: HTTP API reference
 summary: Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.
 layout: wide
 ---

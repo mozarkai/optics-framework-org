@@ -1,5 +1,5 @@
 ---
-title: MCP server
+title: MCP server reference
 summary: Tools and resources that `optics mcp` gives your AI agent.
 layout: wide
 ---
