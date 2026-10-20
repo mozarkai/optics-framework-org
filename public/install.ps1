@@ -31,6 +31,8 @@
 .PARAMETER Uninstall
     Remove the managed install.
 #>
+# The parameters are read inside the `& { }` body below, which the analyzer does not follow.
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '')]
 [CmdletBinding()]
 param(
     [string] $Version      = $env:OPTICS_VERSION,
