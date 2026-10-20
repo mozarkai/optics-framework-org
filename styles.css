@@ -124,21 +124,19 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 
 /* ---------- hero ---------- */
 .hero { padding-top: clamp(32px, 4vw, 56px); padding-bottom: clamp(64px, 8vw, 112px); }
-.hero-grid { align-items: center; gap: clamp(24px, 3vw, 40px); }
-.hero-title { font-size: clamp(3.25rem, 6.8vw, 5.75rem); font-weight: 650; font-stretch: 76%; line-height: .88; letter-spacing: -.04em; }
-.hero-title span { display: block; }
-.hero-title span:nth-child(-n+2) { color: var(--ink); }
-.hero-title span:nth-child(n+3) { color: var(--hero-run); }
-.hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: center; }
+.hero-title { font-size: clamp(2.75rem, 7.4vw, 6.25rem); font-weight: 650; font-stretch: 88%; line-height: .96; letter-spacing: -.035em; text-wrap: balance; }
+.hero-title span { display: block; color: var(--ink); }
+.hero-title span + span { color: var(--hero-run); }
+.hero-grid { align-items: start; margin-top: clamp(28px, 3.4vw, 44px); }
+.hero-grid .lede { font-size: clamp(1.125rem, 1.5vw, 1.3125rem); line-height: 1.55; max-width: 34em; text-wrap: pretty; }
+.hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .lede { font-size: 1.125rem; line-height: 1.5; color: var(--ink-2); max-width: 56ch; }
 .fineprint { font-size: .875rem; line-height: 1.5; color: var(--ink-3); }
 .fineprint a { color: var(--ink-2); text-underline-offset: 3px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-title span { animation: rise .9s var(--ease) both; }
-  .hero-title span:nth-child(2) { animation-delay: .06s; }
-  .hero-title span:nth-child(3) { animation-delay: .12s; }
-  .hero-title span:nth-child(4) { animation-delay: .18s; }
+  .hero-title span + span { animation-delay: .1s; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(.3em); } }
 
@@ -287,7 +285,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .page .body-text a { text-underline-offset: 3px; }
 .page .btn-row { margin-top: 32px; }
 
-/* ---------- blog: articles and videos hosted elsewhere (built from content/blog.json) ---------- */
+/* ---------- blog: the list, built from content/blog.json ---------- */
 .page .wrap > .blog-feed { max-width: none; }
 .blog-head .lede { margin-top: 20px; text-wrap: pretty; }
 .blog-rss { margin-top: 16px; font-size: .9375rem; }
@@ -298,6 +296,20 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .blog-feed { margin-top: clamp(40px, 5vw, 64px); }
 .blog-filters { margin-bottom: 32px; flex-wrap: wrap; }
 .os-tab[aria-pressed="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 1px 2px rgba(15, 18, 60, .12); }
+
+/* ---------- blog: a hosted article (blog/<slug>.html); prose and code blocks come from docs.css ---------- */
+.page .wrap > .post { max-width: 42rem; margin-inline: auto; }
+.post .prose > * { max-width: none; }
+.post-crumbs { font-size: .9375rem; margin-bottom: 20px; }
+.post-crumbs a { color: var(--ink-3); text-underline-offset: 4px; }
+.post-crumbs a:hover { color: var(--ink); }
+.post h1 { text-wrap: balance; }
+.post .lede { text-wrap: pretty; }
+.post-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 20px; font-size: .9375rem; color: var(--ink-3); }
+.post-hero { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; margin-top: 32px; border-radius: 16px; border: 1px solid var(--line); background: var(--code-bg); }
+.post .prose { margin-top: 40px; }
+.post .prose img, .post .prose video { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--code-bg); }
+.post .prose img + p > em:only-child, .post .prose video + p > em:only-child { display: block; margin-top: -6px; font-size: .9375rem; color: var(--ink-3); }
 .os-tab .n { margin-left: 4px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .blog-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
@@ -360,7 +372,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
   .where-rest { grid-template-columns: minmax(0, 1fr); }
   .entries { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .entry-lead { grid-template-columns: minmax(0, 1fr); }
-  .hero-grid { gap: 28px; }
+  .hero-grid { gap: 20px; }
   .step { gap: 18px; }
 }
 @media (max-width: 520px) {
