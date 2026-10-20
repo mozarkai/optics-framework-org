@@ -16,7 +16,6 @@ export const LINK = [
   `<${API_CATALOG}>; rel="api-catalog"`,
   '</docs/>; rel="service-doc"',
   '</llms.txt>; rel="describedby"; type="text/plain"',
-  '</index.md>; rel="alternate"; type="text/markdown"',
 ].join(", ");
 
 // "markdown" or "json" when the client ranks that type above HTML, otherwise "html". A tie
@@ -53,10 +52,12 @@ function addVaryAccept(headers) {
   if (!vary || !/(^|,)\s*accept\s*(,|$)/i.test(vary)) headers.set("vary", vary ? `${vary}, Accept` : "Accept");
 }
 
-function asHtml(response) {
+// A page's own Markdown twin is linked only when the page exists, so a 404 never points at one.
+function asHtml(response, pathname) {
   const out = new Response(response.body, response);
   addVaryAccept(out.headers);
-  out.headers.set("link", LINK);
+  const twin = response.ok && markdownPath(pathname);
+  out.headers.set("link", twin ? `${LINK}, <${twin}>; rel="alternate"; type="text/markdown"` : LINK);
   return out;
 }
 
@@ -106,6 +107,12 @@ export async function handle(request, upstream = fetch) {
 
   // No Markdown twin: serve the resource itself if it exists, otherwise the negotiated 404.
   const response = await upstream(request);
+  // A section's twin lives at <section>/index.md, but agents append .md to the URL they
+  // see, so /docs.md has to find /docs/index.md.
+  if (response.status === 404 && readable && url.pathname.endsWith(".md")) {
+    const sectionTwin = await upstream(new Request(new URL(`${url.pathname.slice(0, -3)}/index.md`, url), { method }));
+    if (sectionTwin.ok) return asMarkdown(sectionTwin, 200);
+  }
   if (response.status === 404 && wants === "json") return notFoundProblem(url, method);
   if (response.status === 404 && wants === "markdown") {
     const notFound = await upstream(new Request(new URL("/404.md", url), { method }));
@@ -118,7 +125,7 @@ export async function handle(request, upstream = fetch) {
     return out;
   }
   const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
-  return readable && isHtml ? asHtml(response) : response;
+  return readable && isHtml ? asHtml(response, url.pathname) : response;
 }
 
 export default {

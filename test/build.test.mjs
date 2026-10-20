@@ -347,3 +347,12 @@ test("no page loads an asset from another server", () => {
     }
   }
 });
+
+test("every HTML page has a Markdown twin for agents", () => {
+  const html = (dir) => readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? html(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : []);
+  for (const page of html(".")) {
+    assert.ok(existsSync(page.replace(/^\./, "out").replace(/\.html$/, ".md")), `${page} has no .md twin`);
+  }
+  assert.match(read("about.md"), /^# About Optics\n/);
+});
