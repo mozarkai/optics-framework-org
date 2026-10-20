@@ -1,8 +1,8 @@
 # Optics
 
-> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
+> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web, plus locked-down devices driven over Bluetooth (BLE) as a mouse and keyboard. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
 
-Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web).
+Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
 
 How an agent should call Optics:
 
@@ -40,6 +40,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
+- [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
 - [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
 - [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics from the community, hosted on Medium, YouTube, LinkedIn, X and Instagram. RSS at https://optics-framework.org/feed.xml.

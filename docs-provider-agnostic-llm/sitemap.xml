@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://optics-framework.org/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/about</loc>
@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/blog</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-16</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/</loc>
@@ -118,7 +118,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/ci</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/checklist</loc>
@@ -175,6 +175,30 @@
   <url>
     <loc>https://optics-framework.org/docs/advanced/generate</loc>
     <lastmod>2026-10-10</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/smart-tv-apps</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/protected-apps</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/ai-agent-phone</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/optics-vs-maestro</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/docs/guides/optics-and-appium</loc>
+    <lastmod>2026-10-20</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/</loc>

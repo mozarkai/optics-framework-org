@@ -153,7 +153,7 @@ There's one case the exit code misses: [error screens](https://optics-framework.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
 - **Keep the artifacts.** Upload `execution_output/` when a run fails, as an archive (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
-- **Keep secrets out of the suite.** Pass API keys such as `GEMINI_API_KEY` as CI secrets, in environment variables.
+- **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables.
 - **Wait for screens to load.** Runners are often slower than your laptop. Put `Assert Presence` before actions that follow a screen change, rather than adding `Sleep` steps.
 
 ## See also

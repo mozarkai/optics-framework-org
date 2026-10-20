@@ -7,6 +7,14 @@
     <description>Articles, videos and posts about Optics, the open-source test automation framework.</description>
     <language>en</language>
     <item>
+      <title>Your tests passed. Your app didn't.</title>
+      <link>https://medium.com/@chinmayajha/your-tests-passed-your-app-didnt-379163af9b65</link>
+      <guid isPermaLink="true">https://medium.com/@chinmayajha/your-tests-passed-your-app-didnt-379163af9b65</guid>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 GMT</pubDate>
+      <category>Article</category>
+      <description>Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</description>
+    </item>
+    <item>
       <title>Introducing Optics: create a test your way, run it forever</title>
       <link>https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4</link>
       <guid isPermaLink="true">https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4</guid>

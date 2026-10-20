@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Optics: create tests your way, run them forever</title>
-  <meta name="description" content="Optics is open-source test automation for Android, iOS, web and TV. Write tests as data, record them live, describe them in plain English or let your AI agent build them, then run the same suite on every build, every device, around the clock.">
+  <meta name="description" content="Optics is open-source test automation for Android, iOS, web, TV and Bluetooth (BLE). Write tests as data, record them live, describe them in plain English or let your AI agent build them, then run the same suite on every build, every device, around the clock.">
   <meta property="og:title" content="Optics: create it your way, run it forever">
   <meta property="og:description" content="Open-source test automation for Android, iOS, web and TV. Four ways to create a test, one command to run it.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
@@ -21,7 +21,8 @@
     "@id": "https://optics-framework.org/#optics",
     "name": "Optics",
     "alternateName": ["Optics Framework", "optics-framework"],
-    "description": "Open-source test automation for Android, iOS, web and TV. Write tests as CSV or YAML, record them live, describe them in plain English or let an AI agent build them over MCP, then run the same suite on every build and device.",
+    "description": "Open-source test automation for Android, iOS, web and TV, plus a Bluetooth (BLE) driver for locked-down devices. Write tests as CSV or YAML, record them live, describe them in plain English or let an AI agent build them over MCP, then run the same suite on every build and device.",
+    "keywords": "test automation, mobile automation, Android, iOS, web automation, smart TV, Android TV, Samsung Tizen, LG webOS, Bluetooth, BLE, Appium, Selenium, Playwright, Robot Framework, MCP server, self-healing tests",
     "url": "https://optics-framework.org/",
     "image": "https://optics-framework.org/media/optics-film-poster.jpg",
     "applicationCategory": "DeveloperApplication",
@@ -511,10 +512,19 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
         </div>
         <ul class="entries" role="list">
 <li class="entry entry-lead" data-type="article">
-  <div class="entry-media"><img src="media/blog/introducing-optics.webp?v=3a05b8460c" alt="" loading="eager" decoding="async"></div>
+  <div class="entry-media"><img src="media/blog/error-definitions.webp?v=b6295c6439" alt="" loading="eager" decoding="async"></div>
   <div class="entry-body">
-    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-11">11 Oct 2026</time></span><span>5 min read</span><span>Chinmay Jha</span></p>
-    <h3 class="entry-title"><a href="https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4">Introducing Optics: create a test your way, run it forever</a></h3>
+    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-16">16 Oct 2026</time></span><span>6 min read</span><span>Chinmay Jha</span></p>
+    <h3 class="entry-title"><a href="https://medium.com/@chinmayajha/your-tests-passed-your-app-didnt-379163af9b65">Your tests passed. Your app didn't.</a></h3>
+    <p class="entry-summary">Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</p>
+    <p class="entry-cta"><svg class="pf" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>Read on Medium<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></p>
+  </div>
+</li>
+<li class="entry" data-type="article">
+  <div class="entry-media"><img src="media/blog/introducing-optics.webp?v=3a05b8460c" alt="" loading="lazy" decoding="async"></div>
+  <div class="entry-body">
+    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-11">11 Oct 2026</time></span><span>5 min read</span></p>
+    <h4 class="entry-title"><a href="https://medium.com/@chinmayajha/introducing-optics-create-a-test-your-way-run-it-forever-36cb8e249fb4">Introducing Optics: create a test your way, run it forever</a></h4>
     <p class="entry-summary">Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.</p>
     <p class="entry-cta"><svg class="pf" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>Read on Medium<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></p>
   </div>
@@ -529,8 +539,8 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
 
   <dialog class="film-dialog" aria-label="Optics full demo">
     <div class="film-dialog-frame">
-      <video id="film-video" controls preload="none" playsinline poster="media/optics-film-poster.jpg?v=18f4d375f9">
-        <source src="media/optics-film.mp4?v=8320333aa4" type="video/mp4">
+      <video id="film-video" controls preload="none" playsinline poster="media/optics-film-poster.jpg?v=289090ff41">
+        <source src="media/optics-film.mp4?v=ca0db38565" type="video/mp4">
       </video>
     </div>
     <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
@@ -569,7 +579,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     </symbol>
   </svg>
 
-  <script src="app.js?v=4f681e7d12" defer></script>
+  <script src="app.js?v=6e19bed943" defer></script>
   <script src="scenes.js?v=ac7a5affa2" defer></script>
   <script src="scene-defs.js?v=32d6e71075" defer></script>
 </body>
