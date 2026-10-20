@@ -43,7 +43,7 @@
     }
   },
   "serverInfo": {
-    "name": "Optics MCP",
+    "name": "optics-framework",
     "version": "1.11.0"
   },
   "transport": {
