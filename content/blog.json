@@ -14,7 +14,7 @@
     {
       "type": "article",
       "slug": "introducing-optics-framework",
-      "title": "Introducing Optics: create a test your way, run it forever",
+      "title": "Introducing Optics Framework: create a test your way, run it forever",
       "summary": "Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.",
       "date": "2026-10-11",
       "author": "Chinmay Jha",
