@@ -2,6 +2,17 @@
   "items": [
     {
       "type": "article",
+      "slug": "ai-agent-writes-the-test-once",
+      "title": "Your AI agent writes the test once. Optics runs it with no model.",
+      "summary": "An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.",
+      "date": "2026-10-20",
+      "author": "Chinmay Jha",
+      "length": "6 min read",
+      "image": "media/blog/agent-writes-once.webp",
+      "alt": "The headline Your agent writes it once. Optics runs it forever. beside an agent tool-call log and a terminal where optics execute passes with 0 model calls"
+    },
+    {
+      "type": "article",
       "slug": "your-tests-passed-your-app-didnt",
       "title": "Your tests passed. Your app didn't.",
       "summary": "Error definitions catch crash dialogs, \"Session expired\" and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.",
