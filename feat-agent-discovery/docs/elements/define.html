@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Define elements · Optics docs</title>
+  <meta name="description" content="Name the things your tests touch, choose good values for them, and add fallbacks that survive redesigns.">
+  <link rel="canonical" href="https://optics-framework.org/docs/elements/define">
+  <link rel="alternate" type="text/markdown" href="define.md" title="This page as Markdown">
+  <meta property="og:title" content="Define elements · Optics docs">
+  <meta property="og:description" content="Name the things your tests touch, choose good values for them, and add fallbacks that survive redesigns.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab on" href="../../docs/elements/" aria-current="true">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section open" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define" aria-current="page">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/elements/">Find elements</a></nav>
+        <header class="doc-head">
+          <h1>Define elements</h1>
+          <p class="doc-summary">Name the things your tests touch, choose good values for them, and add fallbacks that survive redesigns.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Beginner, about 8 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="define.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="define.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>An element is a name for something on screen, plus one or more values that tell Optics how to find it. Steps refer to elements by name (<code class="ic">${sign_in}</code>), so when the app changes, you update the element once and every test follows.</p>
+<h2 id="write-elements">Write elements<a class="anchor" href="#write-elements" aria-label="Link to this section">#</a></h2>
+<p>Elements live in any CSV whose header starts with <code class="ic">Element_Name,Element_ID</code>. The project template puts them in <code class="ic">test_data/elements.csv</code>.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
+sign_in,//*[@resource-id='com.birch.shop:id/login']
+sign_in,Sign in
+cart_icon,cart_icon.png
+search_bar,Search Birch
+email,ava@birch.shop">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID</span>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//*[@resource-id='com.birch.shop:id/login']</b>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>Sign in</b>
+<span class="c-mod">cart_icon</span><span class="c-dim">,</span><b>cart_icon.png</b>
+<span class="c-mod">search_bar</span><span class="c-dim">,</span><b>Search Birch</b>
+<span class="c-mod">email</span><span class="c-dim">,</span><b>ava@birch.shop</b></code></pre></figure>
+<p>To give an element several values, repeat its name on more rows. Optics tries them top to bottom. You can also add more columns whose names start with <code class="ic">Element_ID</code>, such as <code class="ic">Element_ID_text</code> or <code class="ic">Element_ID_image</code>, and fill them in on the same row:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID,Element_ID_text,Element_ID_image
+sign_in,//*[@resource-id='com.birch.shop:id/login'],Sign in,sign_in.png">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID,Element_ID_text,Element_ID_image</span>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//*[@resource-id='com.birch.shop:id/login']</b><span class="c-dim">,</span>Sign in<span class="c-dim">,</span>sign_in.png</code></pre></figure>
+<p>Both layouts mean the same thing. Use whichever is easier to read for your team. Empty cells are ignored.</p>
+<aside class="callout callout-mistake"><p class="callout-title">The header is exact</p><p>The first column must be named exactly <code class="ic">Element_Name</code>, with that capitalization. A file headed <code class="ic">element_name,element_id</code> is recognised as an elements file but loads no elements, and every <code class="ic">${name}</code> then fails with "Element not found".</p></aside>
+<h2 id="choose-the-kind-of-value">Choose the kind of value<a class="anchor" href="#choose-the-kind-of-value" aria-label="Link to this section">#</a></h2>
+<p>Optics decides what a value is from how it looks:</p>
+<div class="table-wrap"><table><thead><tr><th>Write</th><th>Optics treats it as</th><th>Example</th></tr></thead><tbody><tr><td>Starts with <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code></td><td>XPath, looked up in the UI tree</td><td><code class="ic">//*[@resource-id='login']</code></td></tr><tr><td>Plain words</td><td>Text: UI tree first, then OCR on a screenshot</td><td><code class="ic">Sign in</code></td></tr><tr><td><code class="ic">text_only:</code> then words</td><td>Text, OCR only</td><td><code class="ic">text_only:Sign in</code></td></tr><tr><td>Ends in <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code></td><td>An image to match on a screenshot</td><td><code class="ic">cart_icon.png</code></td></tr><tr><td><code class="ic">css=</code>, <code class="ic">#id</code>, <code class="ic">.class</code> or <code class="ic">tag[attr]</code></td><td>A CSS selector. Works with Playwright, not Selenium</td><td><code class="ic">#login-button</code></td></tr><tr><td>Starts with <code class="ic">android.</code> or <code class="ic">XCUI</code></td><td>A class name</td><td><code class="ic">android.widget.Switch</code></td></tr></tbody></table></div>
+<h3 id="xpath">XPath<a class="anchor" href="#xpath" aria-label="Link to this section">#</a></h3>
+<p>An XPath is a path through the app's UI tree. It's the fastest and most precise kind of value, and the best first choice when the app has stable ids:</p>
+<ul><li>Android: <code class="ic">//*[@resource-id='com.birch.shop:id/login']</code></li><li>iOS: <code class="ic">//XCUIElementTypeButton[@name='Sign in']</code></li><li>Web: <code class="ic">//button[@id='login']</code></li></ul>
+<p>To pick the second of several matches, wrap the XPath in parentheses and add an index: <code class="ic">(//android.widget.Button)[2]</code>.</p>
+<h3 id="text">Text<a class="anchor" href="#text" aria-label="Link to this section">#</a></h3>
+<p>Plain text matches an element showing that text, or with that accessibility label. It's the most readable kind of value, and it survives layout changes. If the text isn't in the UI tree, for example because it's drawn inside an image or a game canvas, Optics reads the screenshot with OCR, as long as a <a href="../../docs/elements/text-and-images">text detection engine</a> is enabled.</p>
+<p>Text matching in the UI tree tolerates small differences. To require exact matches, set <code class="ic">strict_element_match: true</code> in <code class="ic">config.yaml</code>.</p>
+<aside class="callout callout-mistake"><p class="callout-title">Text that looks like something else</p><p>A value is checked against the rules in the table above, top to bottom. Text that happens to start with <code class="ic">(</code> or <code class="ic">/</code>, or contains <code class="ic">[</code> and <code class="ic">]</code>, is read as an XPath or CSS selector: <code class="ic">(optional)</code>, <code class="ic">Price [USD]</code>, <code class="ic">.com</code>. On Appium and Playwright, put <code class="ic">text=</code> in front to force text: <code class="ic">text=(optional)</code>.</p></aside>
+<h3 id="images">Images<a class="anchor" href="#images" aria-label="Link to this section">#</a></h3>
+<p>An image value is the file name of a cropped picture of the element. Put the picture anywhere in the project folder (the templates use <code class="ic">test_data/input_templates/</code>) and refer to it by file name only. Image matching is the slowest kind and needs an image detection engine. Use it for icons with no text or id. <a href="../../docs/elements/text-and-images">Find elements by text and image</a> shows how to capture a good picture.</p>
+<h3 id="values-to-avoid">Values to avoid<a class="anchor" href="#values-to-avoid" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">id:</code> values, such as <code class="ic">id:login</code>, aren't supported by any element source and always fail. Use an XPath on the id instead.</p>
+<h2 id="find-the-right-locator">Find the right locator<a class="anchor" href="#find-the-right-locator" aria-label="Link to this section">#</a></h2>
+<ul><li>**In <code class="ic">optics live</code>**, try a value with <code class="ic">press_element</code> or <code class="ic">assert_presence</code> before you write it down. The history line shows whether it worked and how it was found.</li><li><strong>Android and iOS</strong>: <a href="https://github.com/appium/appium-inspector" rel="noopener">Appium Inspector</a> shows each element's id, text and XPath.</li><li><strong>Web</strong>: right-click an element in Chrome and choose <strong>Inspect</strong>.</li><li><strong>Any platform</strong>: the <code class="ic">Get Interactive Elements</code> keyword lists the buttons, fields and text on the current screen. In <code class="ic">optics live</code>, run <code class="ic">get_interactive_elements</code> and open the JSON file it writes to the output folder.</li></ul>
+<h2 id="pick-one-of-several-matches">Pick one of several matches<a class="anchor" href="#pick-one-of-several-matches" aria-label="Link to this section">#</a></h2>
+<p>When the same text appears more than once, <code class="ic">index</code> picks a match, counting from 0:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Add Second Product,Press Element,Add to cart,index=1">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Add Second Product</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Add to cart<span class="c-dim">,</span>index=1</code></pre></figure>
+<p>To look in one part of the screen instead, use an <a href="../../docs/elements/area-of-interest">area of interest</a>.</p>
+<h2 id="keep-data-in-elements-too">Keep data in elements too<a class="anchor" href="#keep-data-in-elements-too" aria-label="Link to this section">#</a></h2>
+<p>Elements can hold any value a step needs, not only locators: an email address, a search term, a URL. Keeping them together means one file holds everything that changes between environments.</p>
+<p>To keep a password out of log files, start its value with <code class="ic">@:</code>, for example <code class="ic">password,@:correct-horse</code>. Optics masks it as <code class="ic">****</code> in logs and types it without the prefix on Appium, Selenium and Bluetooth devices. Playwright types the prefix too, so don't use <code class="ic">@:</code> with Playwright.</p>
+<p>To put a line break or tab inside a value, write <code class="ic">\n</code> or <code class="ic">\t</code>. Write <code class="ic">\\</code> for a literal backslash.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/elements/">How Optics finds elements</a></li><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/reference/files">Project files reference</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Define%20elements&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Felements%2Fdefine%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Define%20elements&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Felements%2Fdefine%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/elements/"><span>Previous</span>Overview</a><a class="pager-next" href="../../docs/elements/text-and-images"><span>Next</span>Text and images</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/elements/define.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#write-elements">Write elements</a></li><li class="toc-l2"><a href="#choose-the-kind-of-value">Choose the kind of value</a></li><li class="toc-l3"><a href="#xpath">XPath</a></li><li class="toc-l3"><a href="#text">Text</a></li><li class="toc-l3"><a href="#images">Images</a></li><li class="toc-l3"><a href="#values-to-avoid">Values to avoid</a></li><li class="toc-l2"><a href="#find-the-right-locator">Find the right locator</a></li><li class="toc-l2"><a href="#pick-one-of-several-matches">Pick one of several matches</a></li><li class="toc-l2"><a href="#keep-data-in-elements-too">Keep data in elements too</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=6e19bed943" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test Android apps · Optics docs</title>
+  <meta name="description" content="Set up Appium and adb, then run your tests on an Android phone or emulator.">
+  <link rel="canonical" href="https://optics-framework.org/docs/platforms/android">
+  <link rel="alternate" type="text/markdown" href="android.md" title="This page as Markdown">
+  <meta property="og:title" content="Test Android apps · Optics docs">
+  <meta property="og:description" content="Set up Appium and adb, then run your tests on an Android phone or emulator.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab on" href="../../docs/platforms/" aria-current="true">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section open" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android" aria-current="page">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/platforms/">Platforms</a><span class="sep" aria-hidden="true">/</span><span>Targets</span></nav>
+        <header class="doc-head">
+          <h1>Test Android apps</h1>
+          <p class="doc-summary">Set up Appium and adb, then run your tests on an Android phone or emulator.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Beginner, about 20 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="android.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="android.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics drives Android apps through <strong>Appium</strong>, an open-source server that taps, types and reads the screen on a device. You run the Appium server on your machine, Optics talks to it, and Appium talks to the phone or emulator over <strong>adb</strong> (Android Debug Bridge, the SDK's device tool).</p>
+<p>This page uses Birch, a sample shoe store app with the package name <code class="ic">com.birch.shop</code>. Replace it with your own app.</p>
+<h2 id="before-you-begin">Before you begin<a class="anchor" href="#before-you-begin" aria-label="Link to this section">#</a></h2>
+<p>You need:</p>
+<ul><li>Optics installed. See <a href="../../docs/get-started/install">Install Optics</a>.</li><li><a href="https://nodejs.org/" rel="noopener">Node.js</a> 20 or newer, to run the Appium server.</li><li>The Android SDK. We recommend getting it with <a href="https://developer.android.com/studio" rel="noopener">Android Studio</a>, which also creates emulators.</li><li>An emulator, or an Android phone and a USB cable.</li></ul>
+<h2 id="set-up">Set up<a class="anchor" href="#set-up" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-the-appium-engine">Install the Appium engine<a class="anchor" href="#install-the-appium-engine" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium</code></pre></figure>
+<p>This adds the Python client that Optics uses to talk to Appium. It doesn't install the server.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="install-the-appium-server-and-its-android-driver">Install the Appium server and its Android driver<a class="anchor" href="#install-the-appium-server-and-its-android-driver" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="npm install -g appium
+appium driver install uiautomator2">Copy</button><pre><code><span class="prompt">$</span> <b>npm</b> install <span class="c-info">-g</span> appium
+<span class="prompt">$</span> <b>appium</b> driver install uiautomator2</code></pre></figure>
+<p>UiAutomator2 is the Appium driver for Android. It needs the <code class="ic">ANDROID_HOME</code> environment variable set to your SDK folder, and Java installed. Run <code class="ic">appium driver doctor uiautomator2</code> to check both.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="make-adb-available">Make adb available<a class="anchor" href="#make-adb-available" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>adb ships in the SDK's <code class="ic">platform-tools</code> folder. Add that folder to your PATH, then check it:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="adb version">Copy</button><pre><code><span class="prompt">$</span> <b>adb</b> version</code></pre></figure>
+<p>On macOS the SDK is usually in <code class="ic">~/Library/Android/sdk</code>, on Linux in <code class="ic">~/Android/Sdk</code>, and on Windows in <code class="ic">%LOCALAPPDATA%\Android\Sdk</code>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="start-an-emulator-or-connect-a-phone">Start an emulator or connect a phone<a class="anchor" href="#start-an-emulator-or-connect-a-phone" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>For an emulator, open Android Studio's <strong>Device Manager</strong> and start a virtual device.</p>
+<p>For a phone, turn on <strong>Developer options</strong> (tap <strong>Build number</strong> seven times in <strong>Settings &gt; About phone</strong>), then turn on <strong>USB debugging</strong>. Connect the cable and accept the "Allow USB debugging?" prompt on the phone.</p>
+<p>Check that adb sees it:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="adb devices">Copy</button><pre><code><span class="prompt">$</span> <b>adb</b> devices
+List of devices attached
+emulator-5554    device</code></pre></figure>
+<p>The first column is the device's serial. <code class="ic">device</code> in the second column means it's ready. <code class="ic">unauthorized</code> means you still need to accept the prompt on the phone.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h3 id="find-the-apps-package-and-activity">Find the app's package and activity<a class="anchor" href="#find-the-apps-package-and-activity" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Optics needs the app's <strong>package</strong> (its id, such as <code class="ic">com.birch.shop</code>) and its <strong>activity</strong> (the screen it opens on). Open the app on the device, then ask adb what has focus:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="adb shell dumpsys window | grep -E 'mCurrentFocus'">Copy</button><pre><code><span class="prompt">$</span> <b>adb</b> shell dumpsys window | grep <span class="c-info">-E</span> 'mCurrentFocus'
+  mCurrentFocus=Window{4f2a1c u0 com.birch.shop/com.birch.shop.MainActivity}</code></pre></figure>
+<p>The part before the <code class="ic">/</code> is the package, and the part after it is the activity. If you know the package, you can also ask Android for its launch activity:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="adb shell cmd package resolve-activity --brief com.birch.shop">Copy</button><pre><code><span class="prompt">$</span> <b>adb</b> shell cmd package resolve-activity <span class="c-info">--brief</span> com.birch.shop
+priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+com.birch.shop/.MainActivity</code></pre></figure>
+<p>An activity that starts with a dot is short for the package plus that name: <code class="ic">.MainActivity</code> means <code class="ic">com.birch.shop.MainActivity</code>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">6</span><h3 id="write-configyaml">Write config.yaml<a class="anchor" href="#write-configyaml" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Create a project with <code class="ic">optics init birch-android</code>, then replace its <code class="ic">config.yaml</code>:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;          # where the Appium server listens
+      capabilities:                          # must not be empty
+        platformName: Android                # required; picks the Android setup
+        automationName: UiAutomator2
+        deviceName: emulator-5554
+        udid: emulator-5554                  # optional; pins one device
+        appPackage: com.birch.shop           # app opened by &quot;Launch App&quot; with no value
+        appActivity: com.birch.shop.MainActivity
+        # appium:settings: {allowInvisibleElements: true}  # optional; include off-screen elements
+elements_sources:
+  - appium_find_element: {enabled: true}     # asks Appium for XPaths, ids and text
+  - appium_page_source:  {enabled: true}     # searches the app's UI tree
+  - appium_screenshot:   {enabled: true}     # screenshots for OCR and image matching
+text_detection:
+  - easyocr: {enabled: true}                 # needs: optics setup --install easyocr
+image_detection:
+  - templatematch: {enabled: true}           # finds .png templates anywhere in the project
+log_level: INFO
+file_log: true
+json_log: true">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>         <span class="c-dim"> # where the Appium server listens</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>                         <span class="c-dim"> # must not be empty</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android               <span class="c-dim"> # required; picks the Android setup</span>
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> UiAutomator2
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> emulator-5554
+        <span class="c-mod">udid</span><span class="c-dim">:</span> emulator-5554                 <span class="c-dim"> # optional; pins one device</span>
+        <span class="c-mod">appPackage</span><span class="c-dim">:</span> com.birch.shop          <span class="c-dim"> # app opened by "Launch App" with no value</span>
+        <span class="c-mod">appActivity</span><span class="c-dim">:</span> com.birch.shop.MainActivity
+       <span class="c-dim"> # appium:settings: {allowInvisibleElements: true}  # optional; include off-screen elements</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}    <span class="c-dim"> # asks Appium for XPaths, ids and text</span>
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}    <span class="c-dim"> # searches the app's UI tree</span>
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}    <span class="c-dim"> # screenshots for OCR and image matching</span>
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}                <span class="c-dim"> # needs: optics setup --install easyocr</span>
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span> {enabled: true}          <span class="c-dim"> # finds .png templates anywhere in the project</span>
+<span class="c-mod">log_level</span><span class="c-dim">:</span> INFO
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>Always set <code class="ic">url</code>. Optics can't connect if it's missing or empty. If you don't need OCR yet, delete the <code class="ic">text_detection</code> block, because an enabled OCR engine must be installed for every run.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">7</span><h3 id="check-the-setup">Check the setup<a class="anchor" href="#check-the-setup" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor birch-android">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> doctor birch-android</code></pre></figure>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Mobile
+  ✅ adb                               found at /Users/you/Library/Android/sdk/platform-tools/adb
+  ✅ adb devices                       1 connected: emulator-5554
+  ⚠️ appium server                     not reachable at 127.0.0.1:4723
+      → Start it in another terminal with the `appium` command.
+
+Project
+  ✅ config: driver                    appium enabled
+  ✅ config: appium element source     enabled: appium_find_element, appium_page_source, appium_screenshot
+  ✅ config: appium settings           required settings present</code></pre></figure>
+<p>Fix every ❌ row. A ⚠️ on <code class="ic">adb devices</code> or <code class="ic">appium server</code> blocks the first run too, and the doctor lists them under "Before your first real run". A ⚠️ for <code class="ic">deviceName</code>, <code class="ic">appPackage</code> or <code class="ic">appActivity</code> means the key is missing from <code class="ic">capabilities</code>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">8</span><h3 id="start-appium">Start Appium<a class="anchor" href="#start-appium" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Open a second terminal and leave this running:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="appium">Copy</button><pre><code><span class="prompt">$</span> <b>appium</b></code></pre></figure>
+<p>It listens on port 4723, which matches <code class="ic">url</code> in the config.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">9</span><h3 id="run-the-tests">Run the tests<a class="anchor" href="#run-the-tests" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch-android">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch-android</code></pre></figure>
+<p>The app opens on the device and the terminal shows each step as it runs.</p></div></li></ol>
+<h2 id="write-steps-for-android">Write steps for Android<a class="anchor" href="#write-steps-for-android" aria-label="Link to this section">#</a></h2>
+<p>Tests for Android look like any other Optics test. Elements can be XPaths into the Android UI tree, visible text, or images:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
+email_field,//android.widget.EditText[@resource-id='com.birch.shop:id/email']
+password_field,//android.widget.EditText[@resource-id='com.birch.shop:id/password']
+sign_in,Sign in
+password,@:trailrunner">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID</span>
+<span class="c-mod">email_field</span><span class="c-dim">,</span><b>//android.widget.EditText[@resource-id='com.birch.shop:id/email']</b>
+<span class="c-mod">password_field</span><span class="c-dim">,</span><b>//android.widget.EditText[@resource-id='com.birch.shop:id/password']</b>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>Sign in</b>
+<span class="c-mod">password</span><span class="c-dim">,</span><b>@:trailrunner</b></code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Open Birch,Launch App
+Open Birch,Assert Presence,Sign in,20
+Sign in,Enter Text,${email_field},ava@birch.shop
+Sign in,Enter Text,${password_field},${password}
+Sign in,Press Element,${sign_in}
+Sign in,Assert Presence,Trail Runner 2,15">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Launch App</b>
+<span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Sign in<span class="c-dim">,</span>20
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${email_field}</span><span class="c-dim">,</span>ava@birch.shop
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${password_field}</span><span class="c-dim">,</span><span class="c-var">${password}</span>
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_in}</span>
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Trail Runner 2<span class="c-dim">,</span>15</code></pre></figure>
+<p><code class="ic">Launch App</code> with no value opens <code class="ic">appPackage</code> from the config. Pass a package to open a different app: <code class="ic">Launch App,com.android.settings</code>. The <code class="ic">@:</code> prefix marks <code class="ic">password</code> as secret, so it's typed without the prefix and masked in log files. To find XPaths and ids, open the app in <a href="../../docs/create/record"><code class="ic">optics live</code></a> or <a href="https://github.com/appium/appium-inspector" rel="noopener">Appium Inspector</a>.</p>
+<h2 id="what-optics-execute-checks-first">What <code class="ic">optics execute</code> checks first<a class="anchor" href="#what-optics-execute-checks-first" aria-label="Link to this section">#</a></h2>
+<p>Before a run starts, <code class="ic">optics execute</code> runs a <strong>preflight</strong>. For Android it checks that:</p>
+<ol><li>The Appium server answers at <code class="ic">url</code>.</li><li><code class="ic">adb</code> is on your PATH.</li><li>adb reports at least one device in the <code class="ic">device</code> state.</li></ol>
+<p>If a check fails, Optics stops and prints what to do:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Cannot start
+
+No Appium server reachable at http://127.0.0.1:4723.
+
+Start one in another terminal:  appium
+Then re-run:  optics execute birch-android</code></pre></figure>
+<p>The adb checks only run when the plain <code class="ic">platformName</code> key is <code class="ic">Android</code>, in any capitalization. Optics doesn't read <code class="ic">appium:platformName</code> for this check. To skip the preflight, for example when Appium and the devices run on a remote device farm, set <code class="ic">OPTICS_SKIP_PREFLIGHT</code>:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="OPTICS_SKIP_PREFLIGHT=1 optics execute birch-android">Copy</button><pre><code><span class="prompt">$</span> <b>OPTICS_SKIP_PREFLIGHT=1</b> optics execute birch-android</code></pre></figure>
+<p><code class="ic">optics dry_run</code> has no preflight, so it works without a device.</p>
+<h2 id="press-keys">Press keys<a class="anchor" href="#press-keys" aria-label="Link to this section">#</a></h2>
+<p>Press Keycode sends an Android key by its number:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Number</th></tr></thead><tbody><tr><td>Back</td><td><code class="ic">4</code></td></tr><tr><td>Home</td><td><code class="ic">3</code></td></tr><tr><td>Enter</td><td><code class="ic">66</code></td></tr><tr><td>Backspace</td><td><code class="ic">67</code></td></tr><tr><td>Tab</td><td><code class="ic">61</code></td></tr><tr><td>Volume up / down</td><td><code class="ic">24</code> / <code class="ic">25</code></td></tr><tr><td>Recent apps</td><td><code class="ic">187</code></td></tr></tbody></table></div>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Go back,Press Keycode,4">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Go back</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>4</code></pre></figure>
+<p>Android's <a href="https://developer.android.com/reference/android/view/KeyEvent" rel="noopener">KeyEvent list</a> has every number. To press Enter after typing, you can also write <code class="ic">Enter Text Using Keyboard,&lt;enter&gt;</code>. See <a href="../../docs/reference/keywords/actions#press-keycode">Press Keycode</a> for details.</p>
+<h2 id="tips">Tips<a class="anchor" href="#tips" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>App data is kept between runs.</strong> Optics starts each session with <code class="ic">noReset: true</code>, so Appium doesn't clear the app's data and a signed-in user stays signed in. Add <code class="ic">noReset: false</code> to <code class="ic">capabilities</code> to start every run from a fresh app.</li><li>**Pick a device with <code class="ic">udid</code>.** When several devices are connected, set <code class="ic">udid</code> to the serial from <code class="ic">adb devices</code>. <code class="ic">deviceName</code> is only a label.</li><li><strong>Include off-screen elements.</strong> Android leaves elements that are scrolled out of view out of the UI tree. Add <code class="ic">appium:settings: {allowInvisibleElements: true}</code> under <code class="ic">capabilities</code> to include them.</li><li>**Switch devices in <code class="ic">optics live</code>.** When you plug in another Android device during <code class="ic">optics live</code>, Optics notices and switches the session to it.</li><li><strong>Android TV uses the same setup.</strong> See <a href="../../docs/platforms/tv">Test TV apps</a> for remote-control keys.</li></ul>
+<h2 id="if-it-isnt-working">If it isn't working<a class="anchor" href="#if-it-isnt-working" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>"No Appium server reachable".</strong> Start <code class="ic">appium</code> in another terminal. If it runs on another port or machine, make <code class="ic">url</code> match.</li><li><strong>"No Android device/emulator attached".</strong> Run <code class="ic">adb devices</code>. If the phone shows <code class="ic">unauthorized</code>, accept the prompt on it. If it shows <code class="ic">offline</code>, reconnect the cable or run <code class="ic">adb kill-server</code>, then <code class="ic">adb devices</code> again.</li><li>**<code class="ic">E0104</code> "Appium capabilities not found in config".** <code class="ic">capabilities</code> is empty or missing. Add at least <code class="ic">platformName</code>.</li><li>**<code class="ic">E0104</code> "Unsupported platform".** Check the spelling of <code class="ic">platformName</code>. Use <code class="ic">Android</code>.</li><li>**Appium can't find the UiAutomator2 driver, or complains about <code class="ic">ANDROID_HOME</code>.** Run <code class="ic">appium driver install uiautomator2</code>, set <code class="ic">ANDROID_HOME</code>, and check with <code class="ic">appium driver doctor uiautomator2</code>.</li><li><strong>The app opens on the wrong screen.</strong> Check <code class="ic">appActivity</code>. If the app remembers an old state, set <code class="ic">noReset: false</code>.</li><li><strong>A swipe or scroll passes but nothing moves.</strong> Appium gesture errors are logged, not raised. Check the screenshots in <code class="ic">execution_output/</code>, and only use <code class="ic">up</code> and <code class="ic">down</code> with Scroll.</li><li><strong>An element isn't found.</strong> Actions don't wait, so put <code class="ic">Assert Presence</code> before them. <a href="../../docs/help/troubleshooting">Troubleshooting</a> covers more cases.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/platforms/tv">Test TV apps</a></li><li><a href="../../docs/elements/define">Define elements</a></li><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/reference/config">config.yaml reference</a></li><li><a href="../../docs/reference/cli">CLI reference</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20Android%20apps&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fandroid%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20Android%20apps&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fandroid%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/platforms/"><span>Previous</span>Overview</a><a class="pager-next" href="../../docs/platforms/ios"><span>Next</span>iOS</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/platforms/android.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#before-you-begin">Before you begin</a></li><li class="toc-l2"><a href="#set-up">Set up</a></li><li class="toc-l3"><a href="#install-the-appium-engine">Install the Appium engine</a></li><li class="toc-l3"><a href="#install-the-appium-server-and-its-android-driver">Install the Appium server and its Android driver</a></li><li class="toc-l3"><a href="#make-adb-available">Make adb available</a></li><li class="toc-l3"><a href="#start-an-emulator-or-connect-a-phone">Start an emulator or connect a phone</a></li><li class="toc-l3"><a href="#find-the-apps-package-and-activity">Find the app's package and activity</a></li><li class="toc-l3"><a href="#write-configyaml">Write config.yaml</a></li><li class="toc-l3"><a href="#check-the-setup">Check the setup</a></li><li class="toc-l3"><a href="#start-appium">Start Appium</a></li><li class="toc-l3"><a href="#run-the-tests">Run the tests</a></li><li class="toc-l2"><a href="#write-steps-for-android">Write steps for Android</a></li><li class="toc-l2"><a href="#what-optics-execute-checks-first">What optics execute checks first</a></li><li class="toc-l2"><a href="#press-keys">Press keys</a></li><li class="toc-l2"><a href="#tips">Tips</a></li><li class="toc-l2"><a href="#if-it-isnt-working">If it isn't working</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=6e19bed943" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Optics works · Optics docs</title>
+  <meta name="description" content="Learn the five ideas every Optics test is built from, and what happens when a test runs.">
+  <link rel="canonical" href="https://optics-framework.org/docs/get-started/concepts">
+  <link rel="alternate" type="text/markdown" href="concepts.md" title="This page as Markdown">
+  <meta property="og:title" content="How Optics works · Optics docs">
+  <meta property="og:description" content="Learn the five ideas every Optics test is built from, and what happens when a test runs.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab on" href="../../docs/get-started/" aria-current="true">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section open" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts" aria-current="page">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/get-started/">Get started</a><span class="sep" aria-hidden="true">/</span><span>Learn the basics</span></nav>
+        <header class="doc-head">
+          <h1>How Optics works</h1>
+          <p class="doc-summary">Learn the five ideas every Optics test is built from, and what happens when a test runs.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Beginner, about 6 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="concepts.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="concepts.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>An Optics test is data, not code. You write down <strong>what</strong> a person does in plain rows. Optics works out <strong>how</strong> to do each step on the screen in front of it.</p>
+<figure class="scene-fig"><div class="scene" data-scene="anatomy" role="img" aria-label="A test case names modules. A module is a list of steps. Each ${name} in a step comes from the elements file, which tells Optics where to tap or type."></div><figcaption>A test case names modules. A module is a list of steps. Each ${name} in a step comes from the elements file, which tells Optics where to tap or type.</figcaption></figure>
+<h2 id="keywords">Keywords<a class="anchor" href="#keywords" aria-label="Link to this section">#</a></h2>
+<p>A <strong>keyword</strong> is one action or check, such as <code class="ic">Press Element</code>, <code class="ic">Enter Text</code> or <code class="ic">Assert Presence</code>. Every step in a test is one keyword plus the values it needs. Keywords fall into four groups:</p>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Use it to</th><th>Examples</th></tr></thead><tbody><tr><td>App management</td><td>Open and close the app or website</td><td><code class="ic">Launch App</code>, <code class="ic">Close And Terminate App</code></td></tr><tr><td>Actions</td><td>Tap, type, swipe and press keys</td><td><code class="ic">Press Element</code>, <code class="ic">Enter Text</code>, <code class="ic">Scroll</code></td></tr><tr><td>Verification</td><td>Check what's on screen</td><td><code class="ic">Assert Presence</code>, <code class="ic">Validate Element</code></td></tr><tr><td>Flow control</td><td>Repeat steps, branch, read data, call APIs</td><td><code class="ic">Run Loop</code>, <code class="ic">Condition</code>, <code class="ic">Read Data</code></td></tr></tbody></table></div>
+<p>The same keywords work on every platform. <code class="ic">Press Element</code> taps on a phone and clicks in a browser. The <a href="../../docs/reference/keywords/">keyword reference</a> lists all of them, and <code class="ic">optics list</code> prints them in your terminal.</p>
+<h2 id="elements">Elements<a class="anchor" href="#elements" aria-label="Link to this section">#</a></h2>
+<p>An <strong>element</strong> is a name for something on screen, like <code class="ic">sign_in</code> or <code class="ic">search_bar</code>. Steps use the name inside <code class="ic">${…}</code>, and <code class="ic">elements.csv</code> says how to find it:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
+sign_in,//*[@resource-id='login']
+sign_in,Sign in
+search_bar,//*[@resource-id='search']">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID</span>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//*[@resource-id='login']</b>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>Sign in</b>
+<span class="c-mod">search_bar</span><span class="c-dim">,</span><b>//*[@resource-id='search']</b></code></pre></figure>
+<p>Keeping locators in one file means a redesign is a one-line change, not an edit to every test. An element can have several values. <code class="ic">sign_in</code> above can be found by its id or by its text, and Optics tries them in order until one works.</p>
+<p>A value can be an XPath (a path through the app's UI tree), visible text, or the file name of a picture of the element. Elements can also hold plain data, such as a username, so one file holds everything a test might change.</p>
+<h2 id="modules">Modules<a class="anchor" href="#modules" aria-label="Link to this section">#</a></h2>
+<p>A <strong>module</strong> is a named, reusable sequence of steps, like <em>Sign In</em> or <em>Add To Cart</em>. Write a flow once as a module and reuse it in as many test cases as you like. When the sign-in screen changes, you fix one module.</p>
+<h2 id="test-cases">Test cases<a class="anchor" href="#test-cases" aria-label="Link to this section">#</a></h2>
+<p>A <strong>test case</strong> is a flow you want to check, made of modules in order. <em>Checkout</em> might run <em>Sign In</em>, <em>Add To Cart</em> and <em>Pay</em>. Each test case passes or fails on its own.</p>
+<p>Two names are special. A test case called <strong>Suite Setup</strong> runs before all the others, and <strong>Suite Teardown</strong> runs after them. Use them to launch the app once and close it at the end.</p>
+<h2 id="configuration">Configuration<a class="anchor" href="#configuration" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">config.yaml</code> says what Optics drives and how it may look at the screen. It holds lists of <strong>engines</strong>:</p>
+<ul><li>A <strong>driver</strong> controls the target: Appium for phones and TVs, Playwright or Selenium for browsers, or a Bluetooth keyboard and mouse for locked-down devices.</li><li><strong>Element sources</strong> are ways to look at the screen: ask the app directly, read its UI tree, or take a screenshot.</li><li><strong>Text detection</strong> (OCR) and <strong>image detection</strong> are optional. They let Optics find elements on a screenshot when the UI tree can't help.</li></ul>
+<p>The tests themselves never mention engines. That's why the same test runs on a phone today and against a different device tomorrow.</p>
+<h2 id="what-happens-during-a-run">What happens during a run<a class="anchor" href="#what-happens-during-a-run" aria-label="Link to this section">#</a></h2>
+<p>When you run <code class="ic">optics execute</code>, Optics:</p>
+<ol><li>Reads every file in the project folder and decides what each one is from its column names.</li><li>Runs <strong>Suite Setup</strong>, then each test case in order, then <strong>Suite Teardown</strong>.</li><li>For each step, takes a screenshot, finds the element, and performs the action.</li><li>If a step fails, skips the rest of that test case and moves on to the next one. One broken flow doesn't stop the run.</li><li>At the end, checks the last screen for known error messages, if you've <a href="../../docs/run/error-detection">defined any</a>.</li><li>Writes the results to <code class="ic">execution_output/</code>, and exits with <code class="ic">0</code> if every test case passed or <code class="ic">1</code> if any failed.</li></ol>
+<h3 id="how-optics-finds-an-element">How Optics finds an element<a class="anchor" href="#how-optics-finds-an-element" aria-label="Link to this section">#</a></h3>
+<p>For each value of an element, Optics tries the cheapest ways first. An XPath is looked up in the UI tree. Text is looked up in the UI tree, and if it isn't there, Optics reads a screenshot with OCR. A picture is matched against a screenshot. If everything fails and you've switched on <a href="../../docs/elements/self-heal">AI self-heal</a>, an AI model looks at the screen and tries to recover.</p>
+<figure class="scene-fig"><div class="scene" data-scene="ladder" role="img" aria-label="sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot."></div><figcaption>sign_in has two values. A redesign changed the button's id, so the XPath value misses and Optics tries the text value, which it finds in the UI tree. Next, a product name painted into a banner picture isn't in the UI tree, so OCR reads it from a screenshot.</figcaption></figure>
+<p><a href="../../docs/elements/">How Optics finds elements</a> covers the full order and how to tune it.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/create/">Choose how to create tests</a></li><li><a href="../../docs/reference/files">Project files reference</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20How%20Optics%20works&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fget-started%2Fconcepts%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20How%20Optics%20works&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fget-started%2Fconcepts%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/get-started/first-test"><span>Previous</span>Write your first test</a><a class="pager-next" href="../../docs/get-started/next-steps"><span>Next</span>Next steps</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/get-started/concepts.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#keywords">Keywords</a></li><li class="toc-l2"><a href="#elements">Elements</a></li><li class="toc-l2"><a href="#modules">Modules</a></li><li class="toc-l2"><a href="#test-cases">Test cases</a></li><li class="toc-l2"><a href="#configuration">Configuration</a></li><li class="toc-l2"><a href="#what-happens-during-a-run">What happens during a run</a></li><li class="toc-l3"><a href="#how-optics-finds-an-element">How Optics finds an element</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=6e19bed943" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

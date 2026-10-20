@@ -1,0 +1,6 @@
+# Content signals (contentsignals.org): search, AI answers and AI training are all allowed.
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+Sitemap: https://optics-framework.org/sitemap.xml

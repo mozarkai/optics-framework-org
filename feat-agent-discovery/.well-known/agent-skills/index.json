@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "optics-framework",
+      "type": "skill-md",
+      "description": "Drive a phone, TV or browser with Optics and write Optics test suites (CSV test cases, modules and elements). Use when asked to automate or test an Android, iOS, Android TV, Tizen, webOS or web app with optics-framework, or when an Optics keyword, parameter or file format is uncertain.",
+      "url": "/.well-known/agent-skills/optics-framework/SKILL.md",
+      "digest": "sha256:55d2821b80b0dbcf929f4f4206ebd8e3c80a6a8c97ad2344cf0115e45deb5828"
+    }
+  ]
+}
