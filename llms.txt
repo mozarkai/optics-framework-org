@@ -1,8 +1,8 @@
 # Optics
 
-> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
+> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web, plus locked-down devices driven over Bluetooth (BLE) as a mouse and keyboard. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
 
-Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web).
+Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
 
 How an agent should call Optics:
 
