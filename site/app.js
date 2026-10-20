@@ -1,4 +1,71 @@
 // Theme toggle, copy buttons, the create-it selector, install tabs and the demo film.
+
+// WebMCP: read-only tools for an agent working in this tab, on every page that loads app.js.
+(function () {
+  var mc = document.modelContext || navigator.modelContext;
+  if (!mc || !mc.registerTool) return;
+  var site = new URL(".", document.currentScript.src);
+  var text = function (value) { return { content: [{ type: "text", text: typeof value === "string" ? value : JSON.stringify(value) }] }; };
+  var markdownUrl = function (url) {
+    var path = url.pathname;
+    if (/\/$/.test(path)) path += "index.md";
+    else if (/\.html$/.test(path)) path = path.replace(/\.html$/, ".md");
+    else if (!/\.md$/.test(path)) path += ".md";
+    return new URL(path, url);
+  };
+  var index = null;
+  var tools = [
+    {
+      name: "search_docs",
+      description: "Search the Optics documentation. Returns matching pages with their URL, a Markdown URL and a one-line summary.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Words to look for, such as 'run in CI' or 'press element'." },
+          limit: { type: "integer", minimum: 1, maximum: 10, description: "How many pages to return. Defaults to 5." },
+        },
+        required: ["query"],
+      },
+      annotations: { readOnlyHint: true },
+      execute: function (input) {
+        var terms = String(input.query || "").toLowerCase().split(/\s+/).filter(Boolean);
+        var docs = new URL("docs/", site);
+        index = index || fetch(new URL("search.json", docs)).then(function (r) { return r.json(); });
+        return index.then(function (pages) {
+          var hits = pages.map(function (p) {
+            var score = 0, title = p.t.toLowerCase(), summary = (p.d || "").toLowerCase(), body = (p.x || "").toLowerCase();
+            terms.forEach(function (t) { score += (title.indexOf(t) >= 0 ? 3 : 0) + (summary.indexOf(t) >= 0 ? 2 : 0) + (body.indexOf(t) >= 0 ? 1 : 0); });
+            var url = new URL(p.u, docs);
+            return { score: score, title: p.t, url: url.href, markdown: markdownUrl(url).href, summary: p.d };
+          }).filter(function (h) { return h.score > 0; });
+          hits.sort(function (a, b) { return b.score - a.score; });
+          return text(hits.slice(0, input.limit || 5).map(function (h) { delete h.score; return h; }));
+        });
+      },
+    },
+    {
+      name: "get_page_markdown",
+      description: "Read a page of this site as Markdown, such as /docs/run/ci or /docs/reference/keywords/actions.",
+      inputSchema: {
+        type: "object",
+        properties: { path: { type: "string", description: "A path or URL on this site." } },
+        required: ["path"],
+      },
+      annotations: { readOnlyHint: true },
+      execute: function (input) {
+        var url = new URL(String(input.path || "").replace(/^\//, ""), site);
+        if (url.origin !== site.origin) return Promise.resolve(text("Only pages on " + site.origin + " can be read."));
+        return fetch(markdownUrl(url)).then(function (r) {
+          return r.ok ? r.text().then(text) : text("No page at " + url.pathname + ". Try search_docs.");
+        });
+      },
+    },
+  ];
+  tools.forEach(function (tool) {
+    try { Promise.resolve(mc.registerTool(tool)).catch(function () {}); } catch (e) {}
+  });
+})();
+
 (function () {
   var root = document.documentElement;
 
