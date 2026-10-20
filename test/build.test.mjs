@@ -52,6 +52,13 @@ test("the homepage JSON-LD describes the software", () => {
   assert.equal(app.publisher, undefined);
 });
 
+test("the homepage JSON-LD names a contact for the project", () => {
+  const org = jsonLd(read("index.html")).find((d) => d["@type"] === "Organization");
+  assert.equal(org.name, "Optics");
+  assert.equal(org.contactPoint.email, "chinmayajha@gmail.com");
+  assert.ok(org.contactPoint.contactType);
+});
+
 // Optics is not a Mozark product: the name may appear only inside URLs and addresses.
 test("no page attributes Optics to Mozark", () => {
   const files = readdirSync("out").filter((f) => /\.(html|md|txt|xml|json)$/.test(f));
