@@ -91,9 +91,10 @@
   });
 
   // ---- copy buttons --------------------------------------------------------
-  document.querySelectorAll(".cmd .copy").forEach(function (btn) {
+  // Blog articles reuse the docs code blocks, which carry their text on the button.
+  document.querySelectorAll(".cmd .copy, .doc-code .copy").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var text = btn.closest(".cmd").dataset.copy;
+      var text = btn.dataset.copy || btn.closest(".cmd").dataset.copy;
       var done = function () {
         btn.textContent = "Copied";
         btn.classList.add("done");

@@ -2,11 +2,11 @@
 // pages into the shared layout, and write the sitemap.
 // Every URL in site/ is relative, so the same build works at optics-framework.org/
 // and under a branch preview path like optics-framework.org/<branch>/.
-import { cpSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
-import { blogBand, blogFeed, blogJsonLd, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
+import { blogArticle, blogBand, blogFeed, blogJsonLd, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -77,20 +77,31 @@ for (const page of PAGES) {
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 
-// The blog lists articles, videos and posts hosted elsewhere, from any author:
+// The blog lists articles, videos and posts, hosted here or elsewhere, from any author:
 // /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
 // (both the HTML and the Markdown twin).
 const blog = loadBlog();
 const BLOG_PAGE = {
   path: "blog",
   title: "Optics blog: articles, videos and posts",
-  description: "Articles, videos and posts about Optics, the open-source test automation framework. Each one links to the original on Medium, YouTube, LinkedIn, X or Instagram.",
+  description: "Articles, videos and posts about Optics, the open-source test automation framework. Guides and announcements from the Optics team, plus posts from the community.",
   body: blogPage(blog),
   head: `<link rel="alternate" type="application/rss+xml" href="feed.xml" title="Optics blog">\n  <link rel="alternate" type="text/markdown" href="blog.md" title="Optics blog, as Markdown">\n  <script type="application/ld+json">\n${blogJsonLd(blog, ORIGIN)}\n  </script>`,
 };
 writeFileSync("out/blog.html", render(BLOG_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/blog` }));
 writeFileSync("out/blog.md", blogMarkdown(blog, ORIGIN));
 writeFileSync("out/feed.xml", blogFeed(blog, ORIGIN));
+
+// Articles hosted here: blog/<slug>.html and its Markdown twin, canonical to this site.
+const articles = blog.items.filter((item) => item.slug);
+const articleSrc = (item) => `content/blog/${item.slug}.md`;
+mkdirSync("out/blog", { recursive: true });
+for (const item of articles) {
+  const { body, head, markdown, description } = blogArticle(item, { origin: ORIGIN, modified: lastModified(articleSrc(item)) });
+  const page = { title: `${item.title} · Optics blog`, description, body, head };
+  writeFileSync(`out/blog/${item.slug}.html`, render(page, { root: "../", home: "../", canonical: `${ORIGIN}/blog/${item.slug}` }));
+  writeFileSync(`out/blog/${item.slug}.md`, markdown);
+}
 const fill = (file, marker, text) => {
   const page = readFileSync(file, "utf8");
   if (!page.includes(marker)) throw new Error(`${file} lost its ${marker} marker`);
@@ -130,6 +141,7 @@ writeFileSync(
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
+    ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     ...docs,
   ]),
 );

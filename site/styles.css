@@ -287,7 +287,7 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .page .body-text a { text-underline-offset: 3px; }
 .page .btn-row { margin-top: 32px; }
 
-/* ---------- blog: articles and videos hosted elsewhere (built from content/blog.json) ---------- */
+/* ---------- blog: the list, built from content/blog.json ---------- */
 .page .wrap > .blog-feed { max-width: none; }
 .blog-head .lede { margin-top: 20px; text-wrap: pretty; }
 .blog-rss { margin-top: 16px; font-size: .9375rem; }
@@ -298,6 +298,19 @@ kbd { font-size: .8em; padding: .1em .45em; border-radius: 6px; border: 1px soli
 .blog-feed { margin-top: clamp(40px, 5vw, 64px); }
 .blog-filters { margin-bottom: 32px; flex-wrap: wrap; }
 .os-tab[aria-pressed="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 1px 2px rgba(15, 18, 60, .12); }
+
+/* ---------- blog: a hosted article (blog/<slug>.html); prose and code blocks come from docs.css ---------- */
+.page .wrap > .post { max-width: 46rem; margin-inline: auto; }
+.post-crumbs { font-size: .9375rem; margin-bottom: 20px; }
+.post-crumbs a { color: var(--ink-3); text-underline-offset: 4px; }
+.post-crumbs a:hover { color: var(--ink); }
+.post h1 { text-wrap: balance; }
+.post .lede { text-wrap: pretty; }
+.post-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 20px; font-size: .9375rem; color: var(--ink-3); }
+.post-hero { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; margin-top: 32px; border-radius: 16px; border: 1px solid var(--line); background: var(--code-bg); }
+.post .prose { margin-top: 40px; }
+.post .prose img, .post .prose video { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--code-bg); }
+.post .prose img + p > em:only-child, .post .prose video + p > em:only-child { display: block; margin-top: -6px; font-size: .9375rem; color: var(--ink-3); }
 .os-tab .n { margin-left: 4px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .blog-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 

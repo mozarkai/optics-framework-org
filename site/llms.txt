@@ -45,7 +45,9 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
 - [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
-- [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics from the community, hosted on Medium, YouTube, LinkedIn, X and Instagram. RSS at https://optics-framework.org/feed.xml.
+- [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics, from the team and the community. RSS at https://optics-framework.org/feed.xml.
+- [Introducing Optics Framework](https://optics-framework.org/blog/introducing-optics-framework.md): what Optics is, the CSV test format, the four ways to create a test, locator fallback and the supported platforms.
+- [Your tests passed. Your app didn't.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt.md): error definitions, which fail a run on crash dialogs and "Session expired" screens no step asserted.
 - [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
 
 ## Optional
