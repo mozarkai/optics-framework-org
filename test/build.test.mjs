@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadBlog } from "../lib/blog.mjs";
@@ -139,6 +140,25 @@ test("robots.txt allows crawling and names the sitemap", () => {
   const robots = read("robots.txt");
   assert.match(robots, /^User-agent: \*$/m);
   assert.match(robots, /^Sitemap: https:\/\/optics-framework\.org\/sitemap\.xml$/m);
+  for (const signal of ["search", "ai-input", "ai-train"]) assert.match(robots, new RegExp(`^Content-Signal: .*\\b${signal}=yes`, "m"));
+});
+
+test("agent discovery documents are published and point at real files", () => {
+  const index = JSON.parse(read(".well-known/agent-skills/index.json"));
+  assert.equal(index.$schema, "https://schemas.agentskills.io/discovery/0.2.0/schema.json");
+  assert.ok(index.skills.length > 0);
+  for (const skill of index.skills) {
+    const file = readFileSync(`out${skill.url}`);
+    assert.equal(skill.digest, `sha256:${createHash("sha256").update(file).digest("hex")}`, skill.name);
+  }
+  const local = (href) => href.replace(ORIGIN, "out").replace(/\/$/, "/index.html");
+  const page = (href) => (existsSync(local(href)) ? local(href) : `${local(href)}.html`);
+  const { linkset } = JSON.parse(read(".well-known/api-catalog"));
+  for (const href of linkset.flatMap((e) => Object.values(e).flat().filter((l) => l.href).map((l) => l.href))) {
+    assert.ok(existsSync(page(href)), href);
+  }
+  for (const { url } of JSON.parse(read(".well-known/ai-catalog.json")).entries) assert.ok(existsSync(page(url)), url);
+  assert.equal(JSON.parse(read(".well-known/mcp/server-card.json")).name, "org.optics-framework/optics");
 });
 
 test("llms.txt follows the llmstxt.org layout and says when to use Optics", () => {
