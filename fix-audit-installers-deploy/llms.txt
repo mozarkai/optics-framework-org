@@ -1,0 +1,55 @@
+# Optics
+
+> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web, plus locked-down devices driven over Bluetooth (BLE) as a mouse and keyboard. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
+
+Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
+
+How an agent should call Optics:
+
+1. Install it: `curl -fsSL https://optics-framework.org/install | sh` (macOS, Linux), `irm https://optics-framework.org/install.ps1 | iex` (Windows) or `pip install 'optics-framework[mcp]'`.
+2. To drive a device live, register the MCP server with your client as `{"mcpServers": {"optics": {"command": "optics", "args": ["mcp"]}}}`. Call `start_session` first (driver, URL and capabilities), then the keyword tools such as `press_element` and `enter_text`. Read `optics://session/{session_id}/screenshot` and `optics://session/{session_id}/elements` to see the screen.
+3. To make the work repeatable, read the `optics://project-format` resource and write a CSV project (`test_cases/`, `modules/`, `test_data/elements.csv`, `config.yaml`). Validate it with `optics dry_run <folder>` and run it with `optics execute <folder>`, which writes `execution_output/junit_output.xml` and annotated screenshots.
+4. Without MCP, scaffold a project with `optics init my_project --template contact` or `optics quickstart`, list every keyword with `optics list`, and check the environment with `optics doctor`.
+
+Do not reach for Optics for unit tests, load or performance testing, API-only contract tests with no UI, or visual pixel-diff regression suites.
+
+## When to use
+
+- [Delegate it: drive a device from your agent over MCP](https://optics-framework.org/docs/create/agent.md): use when you, an AI agent, need eyes and hands on a phone, TV or browser, to reproduce a bug, explore an app, or author a test suite yourself.
+- [Write it: CSV and YAML suites](https://optics-framework.org/docs/create/write.md): use when a team wants end-to-end UI tests that non-developers can read and review in pull requests.
+- [Record it or describe it: `optics live`](https://optics-framework.org/docs/create/record.md): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
+- [Run it in CI](https://optics-framework.org/docs/run/ci.md): use when the same suite must run on every build and report JUnit XML, including on-screen error detection for crash dialogs.
+- [Python and Robot Framework libraries](https://optics-framework.org/docs/create/python.md): use when tests should live in pytest or Robot Framework code instead of CSV.
+- [HTTP API: `optics serve`](https://optics-framework.org/docs/advanced/http-api.md): use when another service needs to run keywords over HTTP. The server runs on your machine (default http://127.0.0.1:8000); its OpenAPI document is https://optics-framework.org/openapi.json.
+
+## Docs
+
+- [Docs index for agents](https://optics-framework.org/docs/llms.txt): every docs page, as Markdown.
+- [Get started](https://optics-framework.org/docs/get-started/index.md): what Optics is and what it tests.
+- [Quickstart](https://optics-framework.org/docs/get-started/quickstart.md): install and run a sample in a browser.
+- [Install Optics](https://optics-framework.org/docs/get-started/install.md): Python, the installer, and engines per platform.
+- [How Optics works](https://optics-framework.org/docs/get-started/concepts.md): test cases, modules, elements, keywords and config.
+- [config.yaml reference](https://optics-framework.org/docs/reference/config.md): drivers, element sources, OCR, image detection and LLM settings.
+- [Keyword reference](https://optics-framework.org/docs/reference/keywords/index.md): every keyword, its parameters and defaults.
+- [CLI reference](https://optics-framework.org/docs/reference/cli.md): every `optics` command and flag.
+- [Error codes](https://optics-framework.org/docs/reference/errors.md): what each code means and how to fix it.
+- [HTTP API reference](https://optics-framework.org/docs/reference/http-api.md): the endpoints `optics serve` exposes for sessions, keywords and streamed results.
+- [MCP server reference](https://optics-framework.org/docs/reference/mcp.md): the tools and resources `optics mcp` gives your AI agent.
+- [Error detection](https://optics-framework.org/docs/run/error-detection.md): fail a run on crash dialogs and error messages via `error_definitions.csv`.
+- [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting.md): fixes for common problems.
+
+## Project
+
+- [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
+- [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
+- [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
+- [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
+- [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics from the community, hosted on Medium, YouTube, LinkedIn, X and Instagram. RSS at https://optics-framework.org/feed.xml.
+- [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
+
+## Optional
+
+- [About](https://optics-framework.org/about): who builds Optics.
+- [Privacy](https://optics-framework.org/privacy): what this site and the installers collect.
+- [Contributing guide](https://github.com/mozarkai/optics-framework/blob/main/CONTRIBUTING.md): contributing to Optics.

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read the results · Optics Framework docs</title>
+  <meta name="description" content="Find out what happened in a run from the JUnit report, the screenshots and the logs.">
+  <link rel="canonical" href="https://optics-framework.org/docs/run/results">
+  <link rel="alternate" type="text/markdown" href="results.md" title="This page as Markdown">
+  <meta property="og:title" content="Read the results · Optics Framework docs">
+  <meta property="og:description" content="Find out what happened in a run from the JUnit report, the screenshots and the logs.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab on" href="../../docs/run/" aria-current="true">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section open" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results" aria-current="page">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/run/">Run and report</a></nav>
+        <header class="doc-head">
+          <h1>Read the results</h1>
+          <p class="doc-summary">Find out what happened in a run from the JUnit report, the screenshots and the logs.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Beginner, about 6 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="results.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="results.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Every run writes its results to <code class="ic">execution_output/</code> inside the project folder. The terminal tree tells you <em>what</em> failed. The files tell you <em>why</em>.</p>
+<h2 id="what-a-run-writes">What a run writes<a class="anchor" href="#what-a-run-writes" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/execution_output/</span>
+<span class="c-dim">├── </span>junit_output.xml<span class="c-dim">                              # pass/fail for every test, for CI</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-11-…-pre_press_element.jpg<span class="c-dim">  # the screen before each step</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-11-…-press_element_element_detection_result.jpg
+<span class="c-dim">├── </span>2026-10-09T14-02-15-…-end_of_run.jpg<span class="c-dim">         # the last screen</span>
+<span class="c-dim">├── </span>page_sources_log.xml<span class="c-dim">                          # the UI tree, captured during the run</span>
+<span class="c-dim">├── </span>internal_logs.log<span class="c-dim">                             # with file_log: true</span>
+<span class="c-dim">├── </span>execution_logs.log<span class="c-dim">                            # with file_log: true</span>
+<span class="c-dim">└── </span>logs.json<span class="c-dim">                                     # with json_log: true</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>File</th><th>When it's written</th><th>Use it to</th></tr></thead><tbody><tr><td><code class="ic">junit_output.xml</code></td><td>Every run</td><td>Show results in CI. Standard JUnit XML that GitHub Actions, GitLab, Jenkins and others read.</td></tr><tr><td><code class="ic">…pre_&lt;keyword&gt;.jpg</code></td><td>Before each step that finds an element</td><td>See what was on screen when the step started.</td></tr><tr><td><code class="ic">…_detection_result.jpg</code></td><td>When Optics found an element by position</td><td>See exactly what Optics found, boxed in green.</td></tr><tr><td><code class="ic">…_with_aoi.jpg</code></td><td>When a step uses an <a href="../../docs/elements/area-of-interest">area of interest</a></td><td>Check the area covers the right part of the screen. It's drawn in blue.</td></tr><tr><td><code class="ic">…end_of_run.jpg</code></td><td>At the end of the run</td><td>See where the app was left.</td></tr><tr><td><code class="ic">page_sources_log.xml</code> or <code class="ic">.html</code></td><td>When the UI tree is read</td><td>Find the right XPath or text for an element.</td></tr><tr><td><code class="ic">internal_logs.log</code>, <code class="ic">execution_logs.log</code></td><td>With <code class="ic">file_log: true</code></td><td>Read every attempt Optics made, including which ways of finding an element failed.</td></tr><tr><td><code class="ic">logs.json</code></td><td>With <code class="ic">json_log: true</code></td><td>Feed results into your own dashboards.</td></tr><tr><td><code class="ic">detected_errors_&lt;id&gt;.json</code></td><td>When an <a href="../../docs/run/error-detection">error screen</a> was found</td><td>See which error definition matched.</td></tr></tbody></table></div>
+<figure class="scene-fig"><div class="scene" data-scene="results" role="img" aria-label="On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it."></div><figcaption>On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it.</figcaption></figure>
+<h2 id="investigate-a-failure">Investigate a failure<a class="anchor" href="#investigate-a-failure" aria-label="Link to this section">#</a></h2>
+<ol><li><strong>Read the Failure details box</strong> in the terminal. It names the test case, the step and the reason.</li><li>**Open the last <code class="ic">pre_…</code> screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an <code class="ic">Assert Presence</code> before it. If it shows a different screen, an earlier step went somewhere unexpected.</li><li><strong>Search the logs</strong> for the element's value. With <code class="ic">file_log: true</code>, <code class="ic">execution_logs.log</code> has a line for every attempt, such as <code class="ic">Trying … on 'Sign in' ... FAIL</code>.</li><li>**Reproduce it in <code class="ic">optics live</code>.** Run the steps before the failure, then try the failing step with different values until one works. See <a href="../../docs/create/record">Record a test</a>.</li></ol>
+<h2 id="turn-on-more-logging">Turn on more logging<a class="anchor" href="#turn-on-more-logging" aria-label="Link to this section">#</a></h2>
+<p>Add these to <code class="ic">config.yaml</code>:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="file_log: true      # write internal_logs.log and execution_logs.log
+json_log: true      # write logs.json, a list of every run event
+log_level: DEBUG    # more detail in the terminal and log files">Copy</button><pre><code><span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true     </span><span class="c-dim"> # write internal_logs.log and execution_logs.log</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true     </span><span class="c-dim"> # write logs.json, a list of every run event</span>
+<span class="c-mod">log_level</span><span class="c-dim">:</span> DEBUG   <span class="c-dim"> # more detail in the terminal and log files</span></code></pre></figure>
+<p><code class="ic">log_level</code> takes <code class="ic">DEBUG</code>, <code class="ic">INFO</code> (the default), <code class="ic">WARNING</code> or <code class="ic">ERROR</code>. Use <code class="ic">WARNING</code> to keep the terminal quiet so the tree stands out.</p>
+<h2 id="read-the-junit-report">Read the JUnit report<a class="anchor" href="#read-the-junit-report" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">junit_output.xml</code> has one <code class="ic">&lt;testcase&gt;</code> per test case, with a <code class="ic">&lt;failure&gt;</code> when it failed. Inside each, Optics records every module and keyword with its status and timing, so CI tools that show nested steps display the same tree you saw in the terminal.</p>
+<p>If error screens were detected, the report has an extra failing test case called <code class="ic">on-screen-error-detection</code>. See <a href="../../docs/run/error-detection">Catch error screens</a>.</p>
+<h2 id="keep-the-folder-tidy">Keep the folder tidy<a class="anchor" href="#keep-the-folder-tidy" aria-label="Link to this section">#</a></h2>
+<p>Screenshots from every run accumulate in <code class="ic">execution_output/</code>. Clear the folder before runs where you need clean results, such as in CI:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="rm -rf birch-tests/execution_output
+optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>rm</b> <span class="c-info">-rf</span> birch-tests/execution_output
+<span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
+<p>To write results somewhere else, set <code class="ic">execution_output_path</code> in <code class="ic">config.yaml</code>. A relative path is relative to the folder you run <code class="ic">optics</code> from, and the folder must exist.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/run/error-detection">Catch error screens</a></li><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Read%20the%20results&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fresults%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Read%20the%20results&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fresults%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/run/"><span>Previous</span>Overview</a><a class="pager-next" href="../../docs/run/error-detection"><span>Next</span>Error detection</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/results.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#what-a-run-writes">What a run writes</a></li><li class="toc-l2"><a href="#investigate-a-failure">Investigate a failure</a></li><li class="toc-l2"><a href="#turn-on-more-logging">Turn on more logging</a></li><li class="toc-l2"><a href="#read-the-junit-report">Read the JUnit report</a></li><li class="toc-l2"><a href="#keep-the-folder-tidy">Keep the folder tidy</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=b970c72ba6" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

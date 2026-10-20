@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organise a suite · Optics Framework docs</title>
+  <meta name="description" content="Structure a growing suite with setup and teardown, shared modules, several files and run selection.">
+  <link rel="canonical" href="https://optics-framework.org/docs/create/organise">
+  <link rel="alternate" type="text/markdown" href="organise.md" title="This page as Markdown">
+  <meta property="og:title" content="Organise a suite · Optics Framework docs">
+  <meta property="og:description" content="Structure a growing suite with setup and teardown, shared modules, several files and run selection.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab on" href="../../docs/create/" aria-current="true">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section open" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise" aria-current="page">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/create/">Create tests</a><span class="sep" aria-hidden="true">/</span><span>Organise a suite</span></nav>
+        <header class="doc-head">
+          <h1>Organise a suite</h1>
+          <p class="doc-summary">Structure a growing suite with setup and teardown, shared modules, several files and run selection.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 8 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="organise.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="organise.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>A handful of tests fits in three files. A suite that covers a whole app needs a little structure so changes stay small. This page covers the tools Optics gives you for that.</p>
+<h2 id="open-and-close-the-app-once">Open and close the app once<a class="anchor" href="#open-and-close-the-app-once" aria-label="Link to this section">#</a></h2>
+<p>Name a test case <strong>Suite Setup</strong> and it runs once, before every other test case. <strong>Suite Teardown</strong> runs once at the end. Use them to launch and close the app, so each test case can focus on its own flow:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_cases/test_cases.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="test_case,test_step
+Suite Setup,Launch Birch
+Shopper can sign in,Sign In
+Shopper can search,Sign In
+Shopper can search,Search For Shoes
+Suite Teardown,Close Birch">Copy</button><pre><code><span class="c-dim">test_case,test_step</span>
+<span class="c-mod">Suite Setup</span><span class="c-dim">,</span><b>Launch Birch</b>
+<span class="c-mod">Shopper can sign in</span><span class="c-dim">,</span><b>Sign In</b>
+<span class="c-mod">Shopper can search</span><span class="c-dim">,</span><b>Sign In</b>
+<span class="c-mod">Shopper can search</span><span class="c-dim">,</span><b>Search For Shoes</b>
+<span class="c-mod">Suite Teardown</span><span class="c-dim">,</span><b>Close Birch</b></code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Launch Birch,Launch App
+Close Birch,Close And Terminate App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Launch Birch</span><span class="c-dim">,</span><b>Launch App</b>
+<span class="c-mod">Close Birch</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
+<p>Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so <code class="ic">Birch Suite Setup</code> works too. Setup and teardown always run, even when you <a href="#run-only-some-test-cases">select which tests run</a>.</p>
+<aside class="callout callout-warning"><p class="callout-title">Per-test Setup and Teardown</p><p>Test cases named just <strong>Setup</strong> or <strong>Teardown</strong> are meant to run around every test case. In Optics 1.10.5 they only wrap the first test case, so don't rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as <code class="ic">Sign In</code> is above.</p>
+<p>Avoid "setup" and "teardown" in ordinary test names for the same reason: a test called <em>Setup wizard works</em> is treated as the per-test setup.</p></aside>
+<h2 id="reuse-modules">Reuse modules<a class="anchor" href="#reuse-modules" aria-label="Link to this section">#</a></h2>
+<p>A module can appear in as many test cases as you like. Keep each module small and focused on one screen or one task, such as <em>Sign In</em>, <em>Search For Shoes</em> or <em>Open Cart</em>. When that screen changes, you fix one module and every test that uses it follows.</p>
+<p>To call one module from inside another, use <code class="ic">Execute Module</code>:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Buy Trail Runners,Execute Module,Search For Shoes
+Buy Trail Runners,Press Element,Trail Runner 2
+Buy Trail Runners,Press Element,Add to cart">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Buy Trail Runners</span><span class="c-dim">,</span><b>Execute Module</b><span class="c-dim">,</span>Search For Shoes
+<span class="c-mod">Buy Trail Runners</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Trail Runner 2
+<span class="c-mod">Buy Trail Runners</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Add to cart</code></pre></figure>
+<p>Listing a module's name as a step on its own doesn't work; you need <code class="ic">Execute Module</code>. Steps inside a module called this way use only the first value of each element, so give important elements a value that's reliable on its own. <a href="../../docs/advanced/conditions">Conditions and loops</a> explains the details.</p>
+<h2 id="split-a-suite-across-files">Split a suite across files<a class="anchor" href="#split-a-suite-across-files" aria-label="Link to this section">#</a></h2>
+<p>Optics reads every CSV and YAML file in the project folder and its subfolders, and recognises each by its first row (or top-level key in YAML). So you can split a large suite however suits your team:</p>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/</span>
+<span class="c-dim">├── </span>config.yaml
+<span class="c-dim">├── </span><span class="c-mod">checkout/</span>
+<span class="c-dim">│   ├── </span>test_cases.csv
+<span class="c-dim">│   └── </span>modules.csv
+<span class="c-dim">├── </span><span class="c-mod">search/</span>
+<span class="c-dim">│   ├── </span>test_cases.csv
+<span class="c-dim">│   └── </span>modules.csv
+<span class="c-dim">└── </span><span class="c-mod">elements/</span>
+<span class="c-dim">    ├── </span>shared.csv
+<span class="c-dim">    └── </span>checkout.csv</code></pre></figure>
+<p>When two files define the same thing:</p>
+<ul><li><strong>Elements</strong> with the same name are merged, and every value becomes a fallback.</li><li><strong>Modules</strong> and <strong>test cases</strong> with the same name: the one read last wins, and Optics logs a warning. Keep names unique.</li></ul>
+<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>Optics also reads files inside <code class="ic">execution_output/</code>. Keep stray CSV or YAML files, and copies of old suites, out of the project folder so they don't get picked up.</p></aside>
+<h2 id="run-only-some-test-cases">Run only some test cases<a class="anchor" href="#run-only-some-test-cases" aria-label="Link to this section">#</a></h2>
+<p>There's no command-line flag for this. List the test cases to run, or to skip, in <code class="ic">config.yaml</code>:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="include:
+  - Shopper can sign in
+  - Shopper can search">Copy</button><pre><code><span class="c-mod">include</span><span class="c-dim">:</span>
+  - Shopper can sign in
+  - Shopper can search</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="exclude:
+  - Shopper can pay with a gift card">Copy</button><pre><code><span class="c-mod">exclude</span><span class="c-dim">:</span>
+  - Shopper can pay with a gift card</code></pre></figure>
+<p>Names match exactly, ignoring case. Use <code class="ic">include</code> or <code class="ic">exclude</code>, not both. Suite Setup and Suite Teardown always run.</p>
+<h2 id="run-the-same-suite-on-different-devices">Run the same suite on different devices<a class="anchor" href="#run-the-same-suite-on-different-devices" aria-label="Link to this section">#</a></h2>
+<p>Keep one config file in a project. Optics uses the config it finds in the project folder, so two of them would compete. To run the same suite on several targets, keep one config per target outside the project and copy the one you need into place before the run:</p>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch/</span>
+<span class="c-dim">├── </span><span class="c-mod">configs/</span>
+<span class="c-dim">│   ├── </span>pixel-8.yaml
+<span class="c-dim">│   └── </span>chrome.yaml
+<span class="c-dim">└── </span><span class="c-mod">birch-tests/</span>
+<span class="c-dim">    ├── </span>config.yaml<span class="c-dim">        # copied from configs/ before each run</span>
+<span class="c-dim">    └── </span>…</code></pre></figure>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="cp configs/pixel-8.yaml birch-tests/config.yaml
+optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>cp</b> configs/pixel-8.yaml birch-tests/config.yaml
+<span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
+<h2 id="name-things-so-failures-explain-themselves">Name things so failures explain themselves<a class="anchor" href="#name-things-so-failures-explain-themselves" aria-label="Link to this section">#</a></h2>
+<p>The run's tree and the JUnit report use your names, so a good name saves a trip into the files:</p>
+<ul><li><strong>Test cases</strong> describe an outcome: <em>Shopper can add a backpack</em>, not <em>Test 3</em>.</li><li><strong>Modules</strong> describe a task: <em>Sign In</em>, <em>Apply Discount Code</em>.</li><li><strong>Elements</strong> describe what's on screen: <code class="ic">sign_in</code>, <code class="ic">cart_badge</code>, <code class="ic">promo_code_field</code>.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/create/write">Write a test suite</a></li><li><a href="../../docs/create/yaml">Write tests in YAML</a></li><li><a href="../../docs/reference/files">Project files reference</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Organise%20a%20suite&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Forganise%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Organise%20a%20suite&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Forganise%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/create/robot"><span>Previous</span>Robot Framework</a><a class="pager-next" href="../../docs/create/yaml"><span>Next</span>YAML format</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/create/organise.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#open-and-close-the-app-once">Open and close the app once</a></li><li class="toc-l2"><a href="#reuse-modules">Reuse modules</a></li><li class="toc-l2"><a href="#split-a-suite-across-files">Split a suite across files</a></li><li class="toc-l2"><a href="#run-only-some-test-cases">Run only some test cases</a></li><li class="toc-l2"><a href="#run-the-same-suite-on-different-devices">Run the same suite on different devices</a></li><li class="toc-l2"><a href="#name-things-so-failures-explain-themselves">Name things so failures explain themselves</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=b970c72ba6" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
