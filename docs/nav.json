@@ -53,6 +53,15 @@
       ]
     },
     {
+      "id": "guides",
+      "title": "Guides",
+      "groups": [
+        { "title": null, "pages": ["guides/index"] },
+        { "title": "Task guides", "pages": ["guides/smart-tv-apps", "guides/protected-apps", "guides/ai-agent-phone"] },
+        { "title": "Compare", "pages": ["guides/optics-vs-maestro", "guides/optics-and-appium"] }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Reference",
       "groups": [
