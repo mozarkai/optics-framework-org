@@ -99,7 +99,7 @@ optics execute my_test_project
 ## From the blog
 
 - [Your tests passed. Your app didn't.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt.md): article, 16 Oct 2026, by Chinmay Jha. Error definitions catch crash dialogs, "Session expired" and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.
-- [Introducing Optics: create a test your way, run it forever](https://optics-framework.org/blog/introducing-optics-framework.md): article, 11 Oct 2026, by Chinmay Jha. Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.
+- [Introducing Optics Framework: create a test your way, run it forever](https://optics-framework.org/blog/introducing-optics-framework.md): article, 11 Oct 2026, by Chinmay Jha. Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.
 
 All posts and videos: https://optics-framework.org/blog
 

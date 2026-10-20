@@ -1,4 +1,4 @@
-# Introducing Optics: create a test your way, run it forever
+# Introducing Optics Framework: create a test your way, run it forever
 
 > Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.
 
@@ -41,7 +41,7 @@ All four write the same files, and one project can mix them:
 
 ![Animation: an optics live terminal session running test steps on a phone app, then saving them to modules.csv](https://optics-framework.org/media/blog/optics-live.webp)
 
-*`optics live` runs each step on the device as you type it, and `/save` writes the steps into the suite.*
+*optics live runs each step on the device as you type it, and /save writes the steps into the suite.*
 
 Teams that prefer code can use the same keywords from [Python or Robot Framework](https://optics-framework.org/docs/create/python).
 
@@ -99,7 +99,7 @@ Teams that already run Appium, Playwright or Selenium keep their drivers and dev
 
 <video src="https://optics-framework.org/media/blog/execute-run.mp4" poster="https://optics-framework.org/media/blog/execute-run-poster.webp" autoplay loop muted playsinline preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
 
-*A real `optics execute` run on an Android emulator.*
+*A real optics execute run on an Android emulator.*
 
 A run leaves behind a JUnit report for CI, screenshots with a box around every element it found, and an exit code of 1 when a test fails. You can list error messages such as *Session expired* in a definitions file, and Optics looks for them on the last screen to catch failures no step asserted. [Your tests passed. Your app didn’t.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt) walks through that feature.
 

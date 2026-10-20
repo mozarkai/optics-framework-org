@@ -15,7 +15,7 @@
       <description>Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</description>
     </item>
     <item>
-      <title>Introducing Optics: create a test your way, run it forever</title>
+      <title>Introducing Optics Framework: create a test your way, run it forever</title>
       <link>https://optics-framework.org/blog/introducing-optics-framework</link>
       <guid isPermaLink="true">https://optics-framework.org/blog/introducing-optics-framework</guid>
       <pubDate>Sun, 11 Oct 2026 00:00:00 GMT</pubDate>

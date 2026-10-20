@@ -49,7 +49,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=fd620d4825">
+  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -132,7 +132,7 @@ ERR_NETWORK,No internet connection,Offline,medium">Copy</button><pre><code><span
 }</code></pre></figure>
 <h2 id="which-text-optics-reads">Which text Optics reads<a class="anchor" href="#which-text-optics-reads" aria-label="Link to this section">#</a></h2>
 <p><img src="../media/blog/visible-text.webp?v=63a019fd3e" alt="Diagram: Optics keeps only the visible text from the UI tree and checks it against every match_string" loading="lazy"></p>
-<p>*Optics keeps only the text a person can see, then checks it against every <code class="ic">match_string</code>.*</p>
+<p><em>Optics keeps only the text a person can see, then checks it against every match_string.</em></p>
 <p>The check reads the UI tree the driver already provides, with no OCR, and keeps the text a person can see. On Android and iOS that is the <code class="ic">text</code>, <code class="ic">content-desc</code>, <code class="ic">label</code>, <code class="ic">value</code>, <code class="ic">hint</code> and <code class="ic">name</code> attributes. On the web Optics strips every tag and keeps the page's text. It skips ids, class names and bounds, so a button with the id <code class="ic">error_retry</code> or a div with <code class="ic">class="error"</code> can't set off a match. The whole check costs one page-source call at the end of the run.</p>
 <p>Optics matches the <code class="ic">error_code</code> column too. If your app prints its own codes, such as "Error E1042", use <code class="ic">E1042</code> as the code and Optics will catch it even when the wording around it changes.</p>
 <h2 id="make-ci-fail-on-it">Make CI fail on it<a class="anchor" href="#make-ci-fail-on-it" aria-label="Link to this section">#</a></h2>

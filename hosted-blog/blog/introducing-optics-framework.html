@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Introducing Optics: create a test your way, run it forever · Optics blog</title>
+  <title>Introducing Optics Framework: create a test your way, run it forever · Optics blog</title>
   <meta name="description" content="Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.">
   <link rel="canonical" href="https://optics-framework.org/blog/introducing-optics-framework">
   <link rel="stylesheet" href="../docs.css?v=f46a574929">
-  <link rel="alternate" type="text/markdown" href="introducing-optics-framework.md" title="Introducing Optics: create a test your way, run it forever, as Markdown">
+  <link rel="alternate" type="text/markdown" href="introducing-optics-framework.md" title="Introducing Optics Framework: create a test your way, run it forever, as Markdown">
   <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Introducing Optics: create a test your way, run it forever",
+  "headline": "Introducing Optics Framework: create a test your way, run it forever",
   "description": "Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.",
   "url": "https://optics-framework.org/blog/introducing-optics-framework",
   "mainEntityOfPage": "https://optics-framework.org/blog/introducing-optics-framework",
@@ -34,7 +34,7 @@
   }
 }
   </script>
-  <meta property="og:title" content="Introducing Optics: create a test your way, run it forever · Optics blog">
+  <meta property="og:title" content="Introducing Optics Framework: create a test your way, run it forever · Optics blog">
   <meta property="og:description" content="Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
   <meta property="og:type" content="website">
@@ -49,7 +49,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=fd620d4825">
+  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -82,7 +82,7 @@
     <div class="wrap">
 <article class="post">
         <p class="post-crumbs"><a href="../blog">Blog</a></p>
-        <h1 class="h2">Introducing Optics: create a test your way, run it forever</h1>
+        <h1 class="h2">Introducing Optics Framework: create a test your way, run it forever</h1>
         <p class="lede">Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.</p>
         <p class="post-meta"><span><time datetime="2026-10-11">11 Oct 2026</time></span><span>Chinmay Jha</span><span>5 min read</span></p>
         <img class="post-hero" src="../media/blog/introducing-optics.webp?v=3a05b8460c" alt="The headline Create it your way. Run it forever. beside a modules.csv test file and a passing optics execute run" decoding="async">
@@ -108,7 +108,7 @@ Add To Cart,Press Element,Add to cart">Copy</button><pre><code><span class="c-di
 <p>All four write the same files, and one project can mix them:</p>
 <ul><li>Write it in a text editor or a spreadsheet.</li><li>Record it in <code class="ic">optics live</code>, an interactive session next to your device. Each step runs on the device as you type it, and <code class="ic">/save</code> stores the steps that worked as a module.</li><li>Describe it in plain English. Press Ctrl+N in <code class="ic">optics live</code>, type <em>add trail runners to the cart</em>, and an AI model drives the app one keyword at a time.</li><li>Delegate it to your AI agent. Add <code class="ic">optics mcp</code> to Claude Code, Cursor or another MCP client, and every keyword becomes a tool the agent can call while it explores the app and writes the suite files.</li></ul>
 <p><img src="../media/blog/optics-live.webp?v=d12cf847fe" alt="Animation: an optics live terminal session running test steps on a phone app, then saving them to modules.csv" loading="lazy"></p>
-<p>*<code class="ic">optics live</code> runs each step on the device as you type it, and <code class="ic">/save</code> writes the steps into the suite.*</p>
+<p><em>optics live runs each step on the device as you type it, and /save writes the steps into the suite.</em></p>
 <p>Teams that prefer code can use the same keywords from <a href="../docs/create/python">Python or Robot Framework</a>.</p>
 <h2 id="how-optics-finds-an-element">How Optics finds an element<a class="anchor" href="#how-optics-finds-an-element" aria-label="Link to this section">#</a></h2>
 <p>You can give an element several locators. Optics tries them in order, cheapest first:</p>
@@ -135,7 +135,7 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
 <h2 id="running-a-suite">Running a suite<a class="anchor" href="#running-a-suite" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics execute</code> prints a live tree of every test case, module and step. This is a real run on an Android emulator:</p>
 <video src="../media/blog/execute-run.mp4?v=2da78e5d87" poster="../media/blog/execute-run-poster.webp?v=d6279c5f98" autoplay loop muted playsinline preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
-<p>*A real <code class="ic">optics execute</code> run on an Android emulator.*</p>
+<p><em>A real optics execute run on an Android emulator.</em></p>
 <p>A run leaves behind a JUnit report for CI, screenshots with a box around every element it found, and an exit code of 1 when a test fails. You can list error messages such as <em>Session expired</em> in a definitions file, and Optics looks for them on the last screen to catch failures no step asserted. <a href="../blog/your-tests-passed-your-app-didnt">Your tests passed. Your app didn’t.</a> walks through that feature.</p>
 <p><code class="ic">optics dry_run</code> checks a suite without a device, and loops, conditions and data files run one flow with many inputs. To connect Optics to other tools, Invoke API calls your backend mid-test, <code class="ic">optics serve</code> exposes the keywords over REST, and <code class="ic">optics generate</code> converts a suite to pytest or Robot Framework code.</p>
 <h2 id="try-it">Try it<a class="anchor" href="#try-it" aria-label="Link to this section">#</a></h2>

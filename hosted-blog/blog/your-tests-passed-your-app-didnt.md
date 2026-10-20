@@ -72,7 +72,7 @@ I ran a checkout test against a small web demo shop. The terminal said Passed: 1
 
 ![Diagram: Optics keeps only the visible text from the UI tree and checks it against every match_string](https://optics-framework.org/media/blog/visible-text.webp)
 
-*Optics keeps only the text a person can see, then checks it against every `match_string`.*
+*Optics keeps only the text a person can see, then checks it against every match_string.*
 
 The check reads the UI tree the driver already provides, with no OCR, and keeps the text a person can see. On Android and iOS that is the `text`, `content-desc`, `label`, `value`, `hint` and `name` attributes. On the web Optics strips every tag and keeps the page's text. It skips ids, class names and bounds, so a button with the id `error_retry` or a div with `class="error"` can't set off a match. The whole check costs one page-source call at the end of the run.
 
