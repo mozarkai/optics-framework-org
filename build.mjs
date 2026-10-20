@@ -52,6 +52,19 @@ function sitemap(entries) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
+// The Markdown twin of a text page. Those pages use only headings, paragraphs, links and
+// inline code; any other tag stops the build rather than being dropped from the twin.
+function pageMarkdown(html) {
+  const md = html
+    .replace(/<a [^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g, "[$2]($1)")
+    .replace(/<code[^>]*>([\s\S]*?)<\/code>/g, "`$1`")
+    .replace(/\s*<h([1-6])[^>]*>([\s\S]*?)<\/h\1>\s*/g, (_, level, text) => `\n\n${"#".repeat(level)} ${text}\n\n`)
+    .replace(/\s*<p[^>]*>([\s\S]*?)<\/p>\s*/g, "\n\n$1\n\n");
+  const leftover = /<\/?[a-z][^>]*>/i.exec(md);
+  if (leftover) throw new Error(`pageMarkdown cannot convert ${leftover[0]}`);
+  return `${md.replace(/\n{3,}/g, "\n\n").trim()}\n`;
+}
+
 const base = process.env.PAGES_BASE_PATH ?? "";
 
 rmSync("out", { recursive: true, force: true });
@@ -60,6 +73,7 @@ cpSync("public", "out", { recursive: true });
 
 for (const page of PAGES) {
   writeFileSync(`out/${page.path}.html`, render(page, { root: "", home: "./", canonical: `${ORIGIN}/${page.path}` }));
+  writeFileSync(`out/${page.path}.md`, pageMarkdown(readFileSync(page.src, "utf8")));
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 

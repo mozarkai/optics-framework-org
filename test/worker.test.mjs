@@ -116,7 +116,8 @@ test("a missing page still answers browsers with the HTML 404", async () => {
 });
 
 test("a page without a Markdown twin falls back to its HTML", async () => {
-  const res = await get("/about", "text/markdown");
+  const noTwin = (req) => (new URL(req.url).pathname === "/about.md" ? new Response(null, { status: 404 }) : origin(req));
+  const res = await handle(new Request("https://optics-framework.org/about", { headers: { accept: "text/markdown" } }), noTwin);
   assert.equal(res.status, 200);
   assert.match(res.headers.get("content-type"), /^text\/html/);
   assert.match(res.headers.get("vary"), /Accept/);
@@ -142,7 +143,20 @@ test("HTML pages advertise the API catalog and agent resources in a Link header"
   const res = await get("/");
   assert.match(res.headers.get("link"), /<\/\.well-known\/api-catalog>; rel="api-catalog"/);
   assert.match(res.headers.get("link"), /<\/llms\.txt>; rel="describedby"/);
+  assert.match(res.headers.get("link"), /<\/index\.md>; rel="alternate"; type="text\/markdown"/);
+  assert.match((await get("/docs/create/")).headers.get("link"), /<\/docs\/create\/index\.md>; rel="alternate"/);
+  assert.doesNotMatch((await get("/no-such-page")).headers.get("link") ?? "", /alternate/);
   assert.equal((await get("/styles.css")).headers.get("link"), null);
+});
+
+test("a section URL with .md appended finds the section's index.md", async () => {
+  for (const [path, file] of [["/docs.md", "docs/index.md"], ["/docs/create.md", "docs/create/index.md"]]) {
+    const res = await get(path);
+    assert.equal(res.status, 200, path);
+    assert.match(res.headers.get("content-type"), /^text\/markdown/);
+    assert.equal(await res.text(), readFileSync(`out/${file}`, "utf8"));
+  }
+  assert.equal((await get("/nope.md")).status, 404);
 });
 
 test("the API catalog is served as an RFC 9727 linkset", async () => {
