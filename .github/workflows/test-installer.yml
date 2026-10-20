@@ -14,6 +14,7 @@ on:
     paths:
       - 'public/install.sh'
       - 'public/install.ps1'
+      - '.github/workflows/test-installer.yml'
   workflow_dispatch:
 
 permissions:
@@ -58,6 +59,23 @@ jobs:
           set -eu
           sh public/install.sh --uninstall
           test ! -e "$HOME/.optics"
+
+      - name: uninstall from a shared folder keeps what Optics did not create
+        run: |
+          set -eu
+          export HOME="$(mktemp -d)"
+          cd "$HOME"
+          mkdir -p shared/venv shared/bin
+          touch shared/bin/optics shared/notes.txt
+          printf '%s\n' 'alias ll="ls -l"' '' '# Optics Framework' "export PATH=\"$HOME/shared/bin:\$PATH\"" 'export EDITOR=vi' > .bashrc
+          sh "$GITHUB_WORKSPACE/public/install.sh" --uninstall --dir shared
+          test -f shared/notes.txt
+          test ! -e shared/venv
+          test ! -e shared/bin
+          if grep -q 'Optics' .bashrc; then cat .bashrc; exit 1; fi
+          grep -qx 'alias ll="ls -l"' .bashrc
+          grep -qx 'export EDITOR=vi' .bashrc
+          sh "$GITHUB_WORKSPACE/public/install.sh" --uninstall --dir shared | grep -q 'Nothing to uninstall'
 
   windows:
     name: windows-latest
@@ -107,3 +125,38 @@ jobs:
         run: |
           ./public/install.ps1 -Uninstall
           if (Test-Path (Join-Path $HOME '.optics')) { throw 'uninstall left files behind' }
+
+      - name: uninstall from a shared folder keeps what Optics did not create
+        shell: pwsh
+        run: |
+          Set-Location $HOME
+          $shared = Join-Path $HOME 'shared'
+          New-Item -ItemType Directory -Force (Join-Path $shared 'venv'), (Join-Path $shared 'bin') | Out-Null
+          Set-Content (Join-Path $shared 'bin\optics.cmd') '@echo off'
+          Set-Content (Join-Path $shared 'notes.txt') 'keep me'
+          $before = (Get-Item 'HKCU:\Environment').GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+          $entries = @('%USERPROFILE%\keep-this-reference', "$shared\bin") + @($before -split ';' | Where-Object { $_ })
+          Set-ItemProperty 'HKCU:\Environment' -Name Path -Value ($entries -join ';') -Type ExpandString
+          & "$env:GITHUB_WORKSPACE/public/install.ps1" -Uninstall -Dir shared
+          if (-not (Test-Path (Join-Path $shared 'notes.txt'))) { throw 'uninstall removed a file it did not create' }
+          if (Test-Path (Join-Path $shared 'venv')) { throw 'uninstall left the venv' }
+          $after = (Get-Item 'HKCU:\Environment').GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+          if ($after -like "*$shared\bin*") { throw "uninstall left $shared\bin on the user PATH" }
+          if ($after -notlike '*%USERPROFILE%\keep-this-reference*') { throw "uninstall expanded or dropped another PATH entry: $after" }
+          $out = & "$env:GITHUB_WORKSPACE/public/install.ps1" -Uninstall -Dir shared 6>&1 | Out-String
+          if ($out -notmatch 'Nothing to uninstall') { throw "second uninstall said: $out" }
+
+      # The documented command. Windows PowerShell 5.1 is what a fresh Windows
+      # opens, and an `exit` from inside iex would close the user's window.
+      - name: a failed install under iex in Windows PowerShell keeps the session open
+        shell: powershell
+        run: |
+          $env:OPTICS_VERSION = '0.0.0'
+          $env:OPTICS_INSTALL_DIR = Join-Path $HOME 'iex-probe'
+          Get-Content public/install.ps1 -Raw | Invoke-Expression
+          if ($LASTEXITCODE -ne 1) { throw "expected exit code 1, got $LASTEXITCODE" }
+          Write-Host 'session survived the failed install'
+          $env:OPTICS_VERSION = $null
+          & ([scriptblock]::Create((Get-Content public/install.ps1 -Raw))) -Uninstall
+          if (Test-Path $env:OPTICS_INSTALL_DIR) { throw 'uninstall through a script block left files behind' }
+          $global:LASTEXITCODE = 0
