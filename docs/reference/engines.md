@@ -64,7 +64,7 @@ Image matching finds an element by a template image you saved in the project. En
 
 ## LLM
 
-An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mode of `optics live`. Enable one under `llm_models`, choosing the engine that matches the account you already have.
+An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mode of `optics live`. Enable one under `llm_models`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
@@ -72,7 +72,7 @@ An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mod
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Each engine reads its key from an environment variable. See [llm_models](/docs/reference/config#llm-models) for each engine's settings and credentials.
+Each engine reads its credentials from the environment. See [llm_models](/docs/reference/config#llm-models) for its settings and credentials.
 
 ## Other extras
 

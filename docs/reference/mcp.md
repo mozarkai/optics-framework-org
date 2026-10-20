@@ -179,10 +179,10 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 |---|---|
 | `OPTICS_AI_SELF_HEAL` | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
 | `OPTICS_LLM_PROVIDER` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
-| `OPTICS_LLM_MODEL` | The default model. |
+| `OPTICS_LLM_MODEL` | The default model. `openai` and `anthropic` need one. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | `1`, `true`, `yes` or `on` exposes the coordinate tap tools. |
 | `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see [llm_models](/docs/reference/config#llm-models). |
-| `OPENAI_BASE_URL` | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator can set it, never a session. Put that server's key in `OPENAI_API_KEY`. |
+| `OPENAI_BASE_URL` | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY` or `api_key_env`. |
 
 ## Typical agent loop
 

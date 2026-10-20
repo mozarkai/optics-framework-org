@@ -21,7 +21,7 @@ It isn't a substitute for good elements. A healed step **passes**, so a real cha
 :::steps
 ### Install the AI engine and set your key
 
-Self-heal uses the same AI engine and key as [plain-English mode](/docs/create/describe#before-you-begin). Install the engine that matches your account (`gemini`, `openai` or `anthropic`) and set its key, for example:
+Self-heal uses the same AI engine and key as [plain-English mode](/docs/create/describe#before-you-begin). Install it and set its key, for example:
 
 ```shell
 $ optics setup --install gemini
@@ -82,7 +82,7 @@ Over the [HTTP API](/docs/advanced/http-api) and [MCP](/docs/create/agent), a he
 ## Costs and limits
 
 - Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.
-- Screenshots are sent to your model provider while self-heal runs, unless the model runs on your own machine. Don't use a hosted model on screens with data you can't share with a third party.
+- Screenshots go to your model provider while self-heal runs, unless you run the model locally. Don't use a hosted model on screens with data you can't share with a third party.
 - The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.
 
 ## See also
