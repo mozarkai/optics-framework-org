@@ -137,3 +137,18 @@ test("assets and non-GET requests pass through untouched", async () => {
   assert.match(post.headers.get("content-type"), /^text\/html/);
   assert.equal(post.headers.get("vary"), "Accept-Encoding");
 });
+
+test("HTML pages advertise the API catalog and agent resources in a Link header", async () => {
+  const res = await get("/");
+  assert.match(res.headers.get("link"), /<\/\.well-known\/api-catalog>; rel="api-catalog"/);
+  assert.match(res.headers.get("link"), /<\/llms\.txt>; rel="describedby"/);
+  assert.equal((await get("/styles.css")).headers.get("link"), null);
+});
+
+test("the API catalog is served as an RFC 9727 linkset", async () => {
+  const res = await get("/.well-known/api-catalog", "application/linkset+json, application/json");
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-type"), /^application\/linkset\+json; profile="https:\/\/www\.rfc-editor\.org\/info\/rfc9727"/);
+  const { linkset } = await res.json();
+  assert.ok(linkset.some((entry) => entry["service-desc"] && entry["service-doc"]));
+});

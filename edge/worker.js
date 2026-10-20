@@ -2,11 +2,22 @@
 // Accept header. A request that prefers text/markdown gets the page's Markdown twin
 // (`/` -> `/index.md`, `/about` -> `/about.md`) and a missing page gets `/404.md` with a
 // 404; a request that prefers JSON gets a missing page as an RFC 9457 problem document.
-// Everything else passes through untouched apart from `Vary: Accept` on HTML, so caches
-// keep the representations apart.
+// Everything else passes through untouched apart from `Vary: Accept` (so caches keep the
+// representations apart) and discovery `Link` headers on HTML, and the API catalog's
+// media type.
 
 const MARKDOWN = "text/markdown; charset=utf-8";
 const PROBLEM_JSON = "application/problem+json";
+const API_CATALOG = "/.well-known/api-catalog";
+const LINKSET = 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"';
+
+// Agent discovery (RFC 8288, RFC 9727 section 3) on every HTML page.
+export const LINK = [
+  `<${API_CATALOG}>; rel="api-catalog"`,
+  '</docs/>; rel="service-doc"',
+  '</llms.txt>; rel="describedby"; type="text/plain"',
+  '</index.md>; rel="alternate"; type="text/markdown"',
+].join(", ");
 
 // "markdown" or "json" when the client ranks that type above HTML, otherwise "html". A tie
 // with explicit HTML goes to HTML so browsers are never affected; an explicit entry beats
@@ -42,9 +53,10 @@ function addVaryAccept(headers) {
   if (!vary || !/(^|,)\s*accept\s*(,|$)/i.test(vary)) headers.set("vary", vary ? `${vary}, Accept` : "Accept");
 }
 
-function withVaryAccept(response) {
+function asHtml(response) {
   const out = new Response(response.body, response);
   addVaryAccept(out.headers);
+  out.headers.set("link", LINK);
   return out;
 }
 
@@ -99,8 +111,14 @@ export async function handle(request, upstream = fetch) {
     const notFound = await upstream(new Request(new URL("/404.md", url), { method }));
     if (notFound.ok) return asMarkdown(notFound, 404);
   }
+  // Pages serves the extensionless catalog as application/octet-stream.
+  if (url.pathname === API_CATALOG && response.ok) {
+    const out = new Response(response.body, response);
+    out.headers.set("content-type", LINKSET);
+    return out;
+  }
   const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
-  return readable && isHtml ? withVaryAccept(response) : response;
+  return readable && isHtml ? asHtml(response) : response;
 }
 
 export default {
