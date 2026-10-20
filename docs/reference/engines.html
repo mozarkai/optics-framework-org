@@ -100,22 +100,22 @@
 <p>Image matching finds an element by a template image you saved in the project. Enable engines under <code class="ic">image_detection</code>.</p>
 <div class="table-wrap"><table><thead><tr><th>Name in config</th><th>Extra</th><th>What it's for</th><th>Platforms</th></tr></thead><tbody><tr><td><code class="ic">templatematch</code></td><td>None</td><td>Local matching. Finds templates even when they're scaled or rotated.</td><td>All</td></tr><tr><td><code class="ic">remote_oir</code></td><td>None</td><td>Your own image matching service over HTTP. Set its <code class="ic">url</code>.</td><td>All</td></tr></tbody></table></div>
 <h2 id="llm">LLM<a class="anchor" href="#llm" aria-label="Link to this section">#</a></h2>
-<p>An LLM powers <a href="../../docs/elements/self-heal">AI self-heal</a> and the plain-English mode of <code class="ic">optics live</code>. Enable it under <code class="ic">llm_models</code>.</p>
-<div class="table-wrap"><table><thead><tr><th>Name in config</th><th>Extra</th><th>What it's for</th><th>Platforms</th></tr></thead><tbody><tr><td><code class="ic">gemini</code></td><td><code class="ic">llm</code></td><td>Google Gemini, through the Gemini API or Vertex AI. The only LLM Optics supports. Default model <code class="ic">gemini-2.5-flash</code>.</td><td>All</td></tr></tbody></table></div>
-<p>Gemini reads its credentials from <code class="ic">GEMINI_API_KEY</code> or <code class="ic">GOOGLE_API_KEY</code>. For Vertex AI, set <code class="ic">GOOGLE_GENAI_USE_VERTEXAI=true</code>, <code class="ic">GOOGLE_CLOUD_PROJECT</code>, <code class="ic">GOOGLE_CLOUD_LOCATION</code> and <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code>.</p>
+<p>An LLM powers <a href="../../docs/elements/self-heal">AI self-heal</a> and the plain-English mode of <code class="ic">optics live</code>. Enable one under <code class="ic">llm_models</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Name in config</th><th>Extra</th><th>What it's for</th><th>Platforms</th></tr></thead><tbody><tr><td><code class="ic">gemini</code></td><td><code class="ic">gemini</code></td><td>Google Gemini, through the Gemini API or Vertex AI. Default model <code class="ic">gemini-2.5-flash</code>.</td><td>All</td></tr><tr><td><code class="ic">openai</code></td><td><code class="ic">openai</code></td><td>OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio.</td><td>All</td></tr><tr><td><code class="ic">anthropic</code></td><td><code class="ic">anthropic</code></td><td>Claude, through the Claude API, Amazon Bedrock or Google Vertex AI.</td><td>All</td></tr></tbody></table></div>
+<p>Each engine reads its credentials from the environment. See <a href="../../docs/reference/config#llm-models">llm_models</a> for its settings and credentials.</p>
 <h2 id="other-extras">Other extras<a class="anchor" href="#other-extras" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Extra</th><th>What it's for</th></tr></thead><tbody><tr><td><code class="ic">mcp</code></td><td>The <a href="../../docs/reference/mcp">MCP server</a>, <code class="ic">optics mcp</code>. Install it with pip; <code class="ic">optics setup</code> can't install it, and the <code class="ic">all</code> bundle doesn't include it.</td></tr></tbody></table></div>
 <h2 id="bundles">Bundles<a class="anchor" href="#bundles" aria-label="Link to this section">#</a></h2>
 <p>A bundle installs several extras at once.</p>
-<div class="table-wrap"><table><thead><tr><th>Bundle</th><th>Installs</th></tr></thead><tbody><tr><td><code class="ic">mobile</code></td><td><code class="ic">appium</code></td></tr><tr><td><code class="ic">web</code></td><td><code class="ic">selenium</code>, <code class="ic">playwright</code></td></tr><tr><td><code class="ic">vision</code></td><td><code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code></td></tr><tr><td><code class="ic">all</code></td><td><code class="ic">appium</code>, <code class="ic">ble</code>, <code class="ic">selenium</code>, <code class="ic">playwright</code>, <code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code>, <code class="ic">llm</code>. Not <code class="ic">mcp</code>.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Bundle</th><th>Installs</th></tr></thead><tbody><tr><td><code class="ic">mobile</code></td><td><code class="ic">appium</code></td></tr><tr><td><code class="ic">web</code></td><td><code class="ic">selenium</code>, <code class="ic">playwright</code></td></tr><tr><td><code class="ic">vision</code></td><td><code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code></td></tr><tr><td><code class="ic">llm</code></td><td><code class="ic">gemini</code>, <code class="ic">openai</code>, <code class="ic">anthropic</code></td></tr><tr><td><code class="ic">all</code></td><td><code class="ic">appium</code>, <code class="ic">ble</code>, <code class="ic">selenium</code>, <code class="ic">playwright</code>, <code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code>, <code class="ic">gemini</code>, <code class="ic">openai</code>, <code class="ic">anthropic</code>. Not <code class="ic">mcp</code>.</td></tr></tbody></table></div>
 <h2 id="install-with-optics-setup">Install with optics setup<a class="anchor" href="#install-with-optics-setup" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics setup</code> installs extras into the same Python environment Optics runs in.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup [--install NAME [NAME ...]] [--list]">Copy</button><pre><code>optics setup [--install NAME [NAME ...]] [--list]</code></pre></figure>
 <p>Without flags, it opens a picker with a checkbox for each engine. In scripts and CI, name the engines:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium easyocr
-optics setup --install web llm
+optics setup --install web gemini
 optics setup --install appium==5.0.0">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium easyocr
-<span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> web llm
+<span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> web gemini
 <span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium==5.0.0</code></pre></figure>
 <ul><li>Names are case-insensitive. Use an extra name, a display name such as <code class="ic">Gemini</code> or <code class="ic">Google Vision</code>, or a bundle.</li><li>Pin the engine's main package with a version specifier: <code class="ic">appium==5.0.0</code>, <code class="ic">"easyocr&gt;=1.7,&lt;2.0"</code>. Use an operator such as <code class="ic">==</code>; <code class="ic">appium=5.0.0</code> is an error. Bundles can't take a version.</li><li>Optics keeps itself at the version you have, so installing an engine never upgrades Optics.</li><li>Installing <code class="ic">playwright</code> also downloads the Chromium browser.</li></ul>
 <p><code class="ic">optics setup --list</code> prints every name:</p>
@@ -133,13 +133,16 @@ OCR Engines:
   google-vision   (google-cloud-vision)
 
 LLM Engines:
-  llm             (google-genai)
+  gemini          (google-genai)
+  openai          (openai)
+  anthropic       (anthropic)
 
 Bundles (install several at once):
   mobile          (appium)
   web             (selenium, playwright)
   vision          (easyocr, pytesseract, google-vision)
-  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, llm)
+  llm             (gemini, openai, anthropic)
+  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
 
 Pin a version by appending a specifier, e.g. `optics setup --install appium==5.0.0`.</code></pre></figure>
 <p>On success, Optics reminds you that services such as the Appium server still need to be started separately. Run <code class="ic">optics doctor</code> to confirm each engine shows ✅.</p>

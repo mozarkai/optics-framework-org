@@ -96,10 +96,10 @@ Add these when a page tells you to. You don't need them for your first test.
 | EasyOCR | `easyocr` | Finds elements by reading text on a screenshot. Runs locally. |
 | Tesseract | `pytesseract` | A lighter OCR engine. Needs the Tesseract program installed too. |
 | Google Vision | `google-vision` | Cloud OCR. Needs Google Cloud credentials. |
-| Gemini | `llm` | Plain-English test creation and AI self-heal. Needs a Gemini API key. |
+| AI model | `gemini`, `openai` or `anthropic` | Plain-English test creation and AI self-heal. Pick the one for your account; see [Describe it](https://optics-framework.org/docs/create/describe#before-you-begin). |
 | MCP server | `mcp` | Lets AI agents drive Optics. Install with pip: `pip install "optics-framework[mcp]"`. |
 
-Bundles install several at once: `mobile` (Appium), `web` (Playwright and Selenium), `vision` (all OCR engines) and `all` (everything except the MCP server). The [engines reference](https://optics-framework.org/docs/reference/engines) lists every engine.
+Bundles install several at once: `mobile` (Appium), `web` (Playwright and Selenium), `vision` (all OCR engines), `llm` (all three AI engines) and `all` (everything except the MCP server). The [engines reference](https://optics-framework.org/docs/reference/engines) lists every engine.
 
 ## Check your setup
 

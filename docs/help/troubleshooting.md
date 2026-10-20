@@ -306,19 +306,23 @@ llm_models:
       enabled: true
 ```
 
-See [Describe a test in plain English](https://optics-framework.org/docs/create/describe#before-you-begin).
+Use `openai` or `anthropic` for those providers. See [Describe a test in plain English](https://optics-framework.org/docs/create/describe#before-you-begin).
 
-### `E0601`: the 'gemini' LLM engine requires 'google-genai'
+### `E0601`: the LLM engine requires an optional dependency
 
-Gemini is enabled, but the AI engine isn't installed.
+An engine is enabled under `llm_models`, but its extra isn't installed. The message names the engine.
 
-Run `optics setup --install llm`.
+Install it by that name, for example `optics setup --install openai`.
 
-### `E0801` or authentication errors from Gemini
+### `E0601`: the LLM engine needs a model or a key
 
-Gemini rejected the request, usually because the API key is missing, wrong or out of quota.
+The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
 
-Set `GEMINI_API_KEY` in the terminal you run Optics from, and check your quota in Google AI Studio. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with your project, location and credentials. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
+### `E0801` or authentication errors from the model
+
+The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.
+
+Set your engine's key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`) in the terminal you run Optics from, and check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
 
 ### AI self-heal does nothing
 

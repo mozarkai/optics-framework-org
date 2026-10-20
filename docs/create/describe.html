@@ -84,29 +84,28 @@
         <div class="prose">
 <p>In plain-English mode, you type a goal like <em>add trail runners to the cart</em>. An AI model looks at the screen, picks one keyword at a time, and runs it on the real device until the goal is done. The steps it took are recorded like any other <code class="ic">optics live</code> steps, and <code class="ic">/save</code> writes them into your suite.</p>
 <figure class="scene-fig"><div class="scene" data-scene="describe" role="img" aria-label="Ctrl+N switches optics live to plain-English mode. The model works a step at a time, and every step it takes is a normal Optics keyword."></div><figcaption>Ctrl+N switches optics live to plain-English mode. The model works a step at a time, and every step it takes is a normal Optics keyword.</figcaption></figure>
-<p>This mode uses Google's Gemini models. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.</p>
+<p>It works with Gemini, Claude, OpenAI, or a model you run yourself. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.</p>
 <h2 id="before-you-begin">Before you begin<a class="anchor" href="#before-you-begin" aria-label="Link to this section">#</a></h2>
 <p>You need:</p>
-<ul><li>A project that works in <a href="../../docs/create/record"><code class="ic">optics live</code></a>.</li><li>A Gemini API key from <a href="https://aistudio.google.com/apikey" rel="noopener">Google AI Studio</a>, or a Google Cloud project with Vertex AI.</li></ul>
+<ul><li>A project that works in <a href="../../docs/create/record"><code class="ic">optics live</code></a>.</li><li>An API key for an AI model, or a local model server such as Ollama.</li></ul>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-the-ai-engine">Install the AI engine<a class="anchor" href="#install-the-ai-engine" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install llm">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> llm</code></pre></figure>
+<p>Pick the engine for the account you have:</p>
+<div class="table-wrap"><table><thead><tr><th>You have</th><th>Install</th></tr></thead><tbody><tr><td>A Gemini API key, or Google Cloud Vertex AI</td><td><code class="ic">gemini</code></td></tr><tr><td>An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio</td><td><code class="ic">openai</code></td></tr><tr><td>A Claude API key, or Claude on Amazon Bedrock or Vertex AI</td><td><code class="ic">anthropic</code></td></tr></tbody></table></div>
+<p>Install that name, for example:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install gemini">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> gemini</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="turn-it-on-in-configyaml">Turn it on in config.yaml<a class="anchor" href="#turn-it-on-in-configyaml" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Add an <code class="ic">llm_models</code> section to your project's <code class="ic">config.yaml</code>:</p>
+<p>Add an <code class="ic">llm_models</code> section to your project's <code class="ic">config.yaml</code>, using the same name:</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
   - gemini:
-      enabled: true
-      capabilities:
-        model: gemini-2.5-flash">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
+      enabled: true">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
   - <span class="c-mod">gemini</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
-      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
-        <span class="c-mod">model</span><span class="c-dim">:</span> gemini-2.5-flash</code></pre></figure>
-<p><code class="ic">model</code> is optional; <code class="ic">gemini-2.5-flash</code> is the default.</p>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>For a server such as OpenRouter or Ollama, add its <code class="ic">url</code>. Gemini uses <code class="ic">gemini-2.5-flash</code> unless you set a <code class="ic">model</code>; the other engines need one. Pick a model that accepts screenshots. See <a href="../../docs/reference/config#llm-models">llm_models</a> for every setting.</p>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="give-optics-your-key">Give Optics your key<a class="anchor" href="#give-optics-your-key" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Set the key as an environment variable in the terminal you'll run <code class="ic">optics live</code> from:</p>
+<p>Set the engine's key in the terminal you run <code class="ic">optics live</code> from:</p>
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="export GEMINI_API_KEY=&quot;your-key&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>export</b> GEMINI_API_KEY="your-key"</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="$env:GEMINI_API_KEY = &quot;your-key&quot;">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>$env:GEMINI_API_KEY</b> = "your-key"</code></pre></figure></div></div>
-<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Don't put API keys in <code class="ic">config.yaml</code>. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.</p></aside>
-<p>To use Vertex AI instead, set <code class="ic">GOOGLE_GENAI_USE_VERTEXAI=true</code>, <code class="ic">GOOGLE_CLOUD_PROJECT</code> and <code class="ic">GOOGLE_CLOUD_LOCATION</code>, and sign in with your usual Google Cloud credentials.</p></div></li></ol>
+<p>Use <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable you named in <code class="ic">api_key_env</code>. A local server needs no key.</p>
+<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Don't put API keys in <code class="ic">config.yaml</code>. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.</p></aside></div></li></ol>
 <h2 id="describe-a-flow">Describe a flow<a class="anchor" href="#describe-a-flow" aria-label="Link to this section">#</a></h2>
 <p>Start <code class="ic">optics live</code>, then press <kbd>Ctrl</kbd>+<kbd>N</kbd>. The prompt changes from <code class="ic">›</code> to <code class="ic">ai ›</code>. Type what you want in plain English:</p>
 <figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="c-run">ai ›</span> <b>add trail runners to the cart</b>
@@ -136,7 +135,7 @@
 <ul><li><strong>Describe one outcome per instruction.</strong> <em>Sign in as ava@birch.shop</em> works better than a whole checkout in one sentence. Run several instructions in a row instead.</li><li><strong>Use the words on screen.</strong> <em>Tap Add to cart</em> is clearer than <em>buy it</em>.</li><li><strong>Give values explicitly.</strong> <em>Search for "trail runner"</em>, not <em>search for shoes</em>.</li></ul>
 <p>Each run stops after 15 steps, after 3 failed steps in a row, or when the model repeats gestures without getting closer. Break long flows into smaller goals.</p>
 <h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
-<ul><li>Gemini is the only supported model provider.</li><li>Each step is a call to the model, so a run costs API usage and takes several seconds per step.</li><li>Screenshots go to Google's API while the mode is on. Don't use it on screens that show data you can't send to a third party.</li></ul>
+<ul><li>Each step is a call to the model, so a run costs API usage and takes several seconds per step.</li><li>Screenshots go to your model provider while the mode is on, unless you run the model locally. Don't use a hosted model on screens that show data you can't send to a third party.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/create/record">Record a test</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a>, which uses the same model to recover a failing step during a run</li><li><a href="../../docs/create/agent">Let your AI agent build tests</a></li></ul>
         </div>

@@ -145,12 +145,13 @@ in ./checkout, run optics dry_run on it, and tell me how to run it.</code></pre>
 <p>Then point your client at <code class="ic">http://127.0.0.1:8090/mcp</code>:</p>
 <figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{ &quot;mcpServers&quot;: { &quot;optics&quot;: { &quot;url&quot;: &quot;http://127.0.0.1:8090/mcp&quot; } } }">Copy</button><pre><code>{ <span class="c-mod">"mcpServers"</span>: { <span class="c-mod">"optics"</span>: { <span class="c-mod">"url"</span>: <span class="c-lit">"http://127.0.0.1:<span class="c-info">8090</span>/mcp"</span> } } }</code></pre></figure>
 <p>The server has no authentication. Keep it on <code class="ic">127.0.0.1</code> or a trusted network.</p></div></details>
-<details class="doc-details"><summary>Let the agent recover failing steps with AI self-heal</summary><div class="details-body"><p>Self-heal uses Gemini to recover a step when every locator fails (see <a href="../../docs/elements/self-heal">AI self-heal</a>). Over MCP it's controlled by environment variables on the server, or by <code class="ic">ai_self_heal: true</code> in <code class="ic">start_session</code>:</p>
+<details class="doc-details"><summary>Let the agent recover failing steps with AI self-heal</summary><div class="details-body"><p>Self-heal uses an AI model to recover a step when every locator fails (see <a href="../../docs/elements/self-heal">AI self-heal</a>). Over MCP it's controlled by environment variables on the server, or by <code class="ic">ai_self_heal: true</code> in <code class="ic">start_session</code>:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="export OPTICS_AI_SELF_HEAL=1
 export GEMINI_API_KEY=&quot;your-key&quot;
 optics mcp">Copy</button><pre><code><span class="prompt">$</span> <b>export</b> OPTICS_AI_SELF_HEAL=1
 <span class="prompt">$</span> <b>export</b> GEMINI_API_KEY="your-key"
 <span class="prompt">$</span> <b>optics</b> mcp</code></pre></figure>
+<p>For OpenAI, Claude or a local model, also set <code class="ic">OPTICS_LLM_PROVIDER</code>, <code class="ic">OPTICS_LLM_MODEL</code> and the engine's key. See <a href="../../docs/reference/mcp#environment-variables">Environment variables</a>.</p>
 <p>When a step is healed, the tool result includes <code class="ic">"healed": true</code> and the steps that worked, so the agent can update the suite.</p></div></details>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/create/describe">Describe a test in plain English</a>, the built-in AI mode</li><li><a href="../../docs/advanced/http-api">Run keywords over HTTP</a></li></ul>

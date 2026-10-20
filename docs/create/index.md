@@ -17,14 +17,14 @@ Optics gives you several ways to turn a user flow into a test. They all end in t
 
 We recommend **recording** for most people starting out. You see each step work on the real app before it's saved, and you end up with readable CSV files you can edit by hand later. Teams then usually **write** small changes directly in the files.
 
-Choose **describe** or **delegate** when you have a Gemini API key or an AI agent, and want a first draft of a long flow quickly. Review what the AI saved, the same way you'd review a colleague's change.
+Choose **describe** or **delegate** when you have an AI model key (Gemini, OpenAI, Claude) or an AI agent, and want a first draft of a long flow quickly. Review what the AI saved, the same way you'd review a colleague's change.
 
 Choose **Python or Robot Framework** only if your tests need logic that the files can't express, or your team already runs everything through pytest or Robot. Code-based tests lose the main benefit of Optics files: that anyone on the team can read them.
 
 | | Write | Record | Describe | Delegate | Python / Robot |
 |---|---|---|---|---|---|
 | **Best for** | Small edits, reviews | Building a flow on the real app | Long flows, quick drafts | Agent-driven teams | Custom logic |
-| **You need** | An editor | A running app | A Gemini API key | An MCP client | Python skills |
+| **You need** | An editor | A running app | An AI model key | An MCP client | Python skills |
 | **Output** | CSV or YAML | CSV | CSV | CSV | Python or `.robot` |
 | **Runs with** | `optics execute` | `optics execute` | `optics execute` | `optics execute` | pytest or `robot` |
 | **Effort** | No code | No code | No code | No code | Code |

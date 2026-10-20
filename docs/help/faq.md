@@ -16,7 +16,7 @@ No, not by default. Optics has no telemetry and needs no account. Tests, screens
 
 Data leaves your machine only through features you turn on:
 
-- **Gemini**, used by [plain-English mode](https://optics-framework.org/docs/create/describe) and [AI self-heal](https://optics-framework.org/docs/elements/self-heal), sends screenshots and the screen's UI tree to Google.
+- **The AI features**, [plain-English mode](https://optics-framework.org/docs/create/describe) and [AI self-heal](https://optics-framework.org/docs/elements/self-heal), send screenshots and the screen's UI tree to the provider you configure: Google, OpenAI, Anthropic, or the server in your `url`. A local model keeps them on your machine.
 - **Google Cloud Vision** OCR sends screenshots to Google. EasyOCR and Tesseract run locally.
 - **Remote OCR and image engines** (`remote_ocr`, `remote_oir`) send screenshots to the URL you configure.
 - **Event reporting** sends the events you label with `event_name` to the `eventUrl` in your `event_attributes_json` file, if you set one up.
@@ -55,7 +55,7 @@ Going the other way works: [`optics generate`](https://optics-framework.org/docs
 
 ### Can AI write my tests?
 
-Yes, two ways. [Describe a flow](https://optics-framework.org/docs/create/describe) in plain English inside `optics live`, and Gemini drives the app and records the steps. Or [connect your AI agent](https://optics-framework.org/docs/create/agent) through MCP and let it explore the app and write the files. Both produce ordinary CSV that you review before you rely on it.
+Yes, two ways. [Describe a flow](https://optics-framework.org/docs/create/describe) in plain English inside `optics live`, and an AI model drives the app and records the steps. Or [connect your AI agent](https://optics-framework.org/docs/create/agent) through MCP and let it explore the app and write the files. Both produce ordinary CSV that you review before you rely on it.
 
 ## Running tests
 
@@ -102,7 +102,7 @@ To `execution_output/` in the project: a `junit_output.xml` report that any CI s
 
 ### Which AI models does Optics support?
 
-For plain-English mode and AI self-heal, only Google's Gemini models. The default is `gemini-2.5-flash`, and you can choose another Gemini model in `config.yaml`. You can use a Gemini API key or Google Cloud Vertex AI. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
+For plain-English mode and AI self-heal, Optics works with Gemini, Claude and OpenAI models, and with any server that offers an OpenAI-compatible API, such as OpenRouter or a local Ollama. Choose a model that accepts images. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
 
 The [MCP server](https://optics-framework.org/docs/create/agent) works with any agent that speaks MCP, such as Claude Code, Claude Desktop, Cursor or VS Code, and with whichever model that agent uses.
 
@@ -112,7 +112,7 @@ No. Every AI feature is optional and off by default. Recording, writing, running
 
 ### What do the AI features cost?
 
-Optics is free. Google bills Gemini usage to your API key or Cloud project at its own rates.
+Optics is free. Your model provider bills its usage at its own rates. A local model costs nothing per call.
 
 - **Plain-English mode** makes one model call per step, plus one more to tidy up the steps when the goal is reached. An instruction stops after at most 15 steps.
 - **AI self-heal** makes up to six calls for each step it tries to rescue, and none when steps pass normally.

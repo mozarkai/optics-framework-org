@@ -52,7 +52,7 @@ A Maestro test is a [flow](https://docs.maestro.dev/maestro-flows), a YAML file 
 
 Optics gives each element several identities and tries them in order. You can list an XPath, visible text and an image for the same button. Text is looked up in the UI tree first, then read from a screenshot with OCR. Images are found by matching a cropped picture on the screen. When a redesign breaks one value, the next one takes over. See [How Optics finds elements](https://optics-framework.org/docs/elements/).
 
-On top of that, optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) asks a Gemini model to finish a step when every value fails. It's off by default.
+On top of that, optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) asks an AI model to finish a step when every value fails. It's off by default.
 
 Maestro finds elements through the accessibility layer, with [selectors](https://docs.maestro.dev/reference/selectors/core-selectors) such as text and id. Its docs describe experimental AI commands: [`assertWithAI`](https://docs.maestro.dev/reference/commands-available/assertwithai) checks the screen against a sentence, and [`extractTextWithAI`](https://docs.maestro.dev/reference/commands-available/extracttextwithai) reads text from a screenshot into a variable. Its docs don't describe finding an element to tap by OCR or by a template image.
 
@@ -70,7 +70,7 @@ Optics has four ways to create a test, and each writes the same files:
 
 - [Write it](https://optics-framework.org/docs/create/write) in a spreadsheet or editor.
 - [Record it](https://optics-framework.org/docs/create/record) in `optics live`, a terminal session that runs each step on the device and saves the ones that work.
-- [Describe it](https://optics-framework.org/docs/create/describe) in plain English, and a Gemini model drives the app.
+- [Describe it](https://optics-framework.org/docs/create/describe) in plain English, and an AI model drives the app.
 - [Delegate it](https://optics-framework.org/docs/create/agent) to your AI agent through `optics mcp`.
 
 The `optics mcp` server gives the agent a tool for each keyword and resources for the screenshot, the elements on screen and the project format. The agent then writes a suite for `optics execute`. See the [MCP server reference](https://optics-framework.org/docs/reference/mcp).

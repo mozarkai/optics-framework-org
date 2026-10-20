@@ -75,7 +75,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0601` | **Module not found.** One of: an enabled engine name doesn't exist, or its extra isn't installed (for example `gemini` without `llm`); `Execute Module`, `Run Loop` or `Condition` names a module that doesn't exist; `Invoke API` names an unknown collection or API; or `--runner` has an unknown value. | Check the name in the message. Install the extra with `optics setup --install <name>`. Check module names against modules.csv, including case and spaces. |
+| `E0601` | **Module not found.** One of: an enabled engine name doesn't exist, or its extra isn't installed (for example `openai` without the `openai` extra), or an `openai` or `anthropic` engine has no `model` or key; `Execute Module`, `Run Loop` or `Condition` names a module that doesn't exist; `Invoke API` names an unknown collection or API; or `--runner` has an unknown value. | Check the name in the message. Install the extra with `optics setup --install <name>`. Check module names against modules.csv, including case and spaces. |
 | `E0603` | **Factory init failed.** The name under an engine key matches a file inside Optics, but that file isn't an engine of that kind, for example a helper module's name. | Use one of the names listed for that key in [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists) or [Engines and extras](https://optics-framework.org/docs/reference/engines). |
 
 ## E07: Test cases and variables
@@ -89,7 +89,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0801` | **Unexpected error.** The Gemini request failed, Gemini returned a reply Optics couldn't read, or a keyword produced no result and no error. | Check your Gemini credentials and quota. Retry the step. If it repeats, rerun with `log_level: DEBUG` and report it. |
+| `E0801` | **Unexpected error.** The LLM request failed, the model returned a reply Optics couldn't read, or a keyword produced no result and no error. | Check your LLM key, model name and quota. Retry the step. If it repeats, rerun with `log_level: DEBUG` and report it. |
 
 ## E09: optics live
 

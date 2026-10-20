@@ -124,13 +124,15 @@ Then point your client at `http://127.0.0.1:8090/mcp`:
 The server has no authentication. Keep it on `127.0.0.1` or a trusted network.
 
 **Let the agent recover failing steps with AI self-heal**
-Self-heal uses Gemini to recover a step when every locator fails (see [AI self-heal](https://optics-framework.org/docs/elements/self-heal)). Over MCP it's controlled by environment variables on the server, or by `ai_self_heal: true` in `start_session`:
+Self-heal uses an AI model to recover a step when every locator fails (see [AI self-heal](https://optics-framework.org/docs/elements/self-heal)). Over MCP it's controlled by environment variables on the server, or by `ai_self_heal: true` in `start_session`:
 
 ```shell
 $ export OPTICS_AI_SELF_HEAL=1
 $ export GEMINI_API_KEY="your-key"
 $ optics mcp
 ```
+
+For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER`, `OPTICS_LLM_MODEL` and the engine's key. See [Environment variables](https://optics-framework.org/docs/reference/mcp#environment-variables).
 
 When a step is healed, the tool result includes `"healed": true` and the steps that worked, so the agent can update the suite.
 

@@ -14,10 +14,10 @@ It isn't a substitute for good elements. A healed step **passes**, so a real cha
 
 ### Install the AI engine and set your key
 
-Self-heal uses Google's Gemini models, the same as [plain-English mode](https://optics-framework.org/docs/create/describe):
+Self-heal uses the same AI engine and key as [plain-English mode](https://optics-framework.org/docs/create/describe#before-you-begin). Install it and set its key, for example:
 
 ```shell
-$ optics setup --install llm
+$ optics setup --install gemini
 $ export GEMINI_API_KEY="your-key"
 ```
 
@@ -32,6 +32,8 @@ llm_models:
   - gemini:
       enabled: true
 ```
+
+For OpenAI, Claude or a local model, use that engine's entry instead. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
 
 ### Enable a screenshot source
 
@@ -76,8 +78,7 @@ Over the [HTTP API](https://optics-framework.org/docs/advanced/http-api) and [MC
 ## Costs and limits
 
 - Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.
-- Screenshots are sent to Google while self-heal runs. Don't enable it on screens with data you can't share with a third party.
-- Gemini is the only supported provider.
+- Screenshots go to your model provider while self-heal runs, unless you run the model locally. Don't use a hosted model on screens with data you can't share with a third party.
 - The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.
 
 ## See also

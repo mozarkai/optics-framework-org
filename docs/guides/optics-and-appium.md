@@ -50,11 +50,11 @@ When a redesign changes the id, the text value takes over. Name the element once
 
 Text drawn inside an image, a canvas or a video player isn't in the UI tree, so Appium can't find it. Optics can. It reads text from a screenshot with OCR, and finds icons by matching a cropped picture. It uses them only after the UI tree fails, because they're slower. See [Find elements by text and image](https://optics-framework.org/docs/elements/text-and-images).
 
-Optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) goes one step further. When every value fails, a Gemini model looks at the screen and tries to finish the step. It's off by default.
+Optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) goes one step further. When every value fails, an AI model looks at the screen and tries to finish the step. It's off by default.
 
 ### A live recorder
 
-`optics live` opens a terminal session next to the device. You type a step, it runs straight away, and the steps that work are saved as a module. You can also switch to plain-English mode and let a Gemini model drive. See [Record a test](https://optics-framework.org/docs/create/record) and [Describe a test](https://optics-framework.org/docs/create/describe).
+`optics live` opens a terminal session next to the device. You type a step, it runs straight away, and the steps that work are saved as a module. You can also switch to plain-English mode and let an AI model drive. See [Record a test](https://optics-framework.org/docs/create/record) and [Describe a test](https://optics-framework.org/docs/create/describe).
 
 ### Data-driven tests
 

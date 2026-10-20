@@ -4,24 +4,34 @@
 
 In plain-English mode, you type a goal like *add trail runners to the cart*. An AI model looks at the screen, picks one keyword at a time, and runs it on the real device until the goal is done. The steps it took are recorded like any other `optics live` steps, and `/save` writes them into your suite.
 
-This mode uses Google's Gemini models. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.
+It works with Gemini, Claude, OpenAI, or a model you run yourself. It's the fastest way to draft a long flow, and the result is ordinary keywords you can read and edit.
 
 ## Before you begin
 
 You need:
 
 - A project that works in [`optics live`](https://optics-framework.org/docs/create/record).
-- A Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey), or a Google Cloud project with Vertex AI.
+- An API key for an AI model, or a local model server such as Ollama.
 
 ### Install the AI engine
 
+Pick the engine for the account you have:
+
+| You have | Install |
+|---|---|
+| A Gemini API key, or Google Cloud Vertex AI | `gemini` |
+| An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio | `openai` |
+| A Claude API key, or Claude on Amazon Bedrock or Vertex AI | `anthropic` |
+
+Install that name, for example:
+
 ```shell
-$ optics setup --install llm
+$ optics setup --install gemini
 ```
 
 ### Turn it on in config.yaml
 
-Add an `llm_models` section to your project's `config.yaml`:
+Add an `llm_models` section to your project's `config.yaml`, using the same name:
 
 `config.yaml`:
 
@@ -29,15 +39,13 @@ Add an `llm_models` section to your project's `config.yaml`:
 llm_models:
   - gemini:
       enabled: true
-      capabilities:
-        model: gemini-2.5-flash
 ```
 
-`model` is optional; `gemini-2.5-flash` is the default.
+For a server such as OpenRouter or Ollama, add its `url`. Gemini uses `gemini-2.5-flash` unless you set a `model`; the other engines need one. Pick a model that accepts screenshots. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for every setting.
 
 ### Give Optics your key
 
-Set the key as an environment variable in the terminal you'll run `optics live` from:
+Set the engine's key in the terminal you run `optics live` from:
 
 **macOS and Linux**
 
@@ -50,10 +58,10 @@ $ export GEMINI_API_KEY="your-key"
 PS> $env:GEMINI_API_KEY = "your-key"
 ```
 
+Use `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable you named in `api_key_env`. A local server needs no key.
+
 **Warning:**
 Don't put API keys in `config.yaml`. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.
-
-To use Vertex AI instead, set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`, and sign in with your usual Google Cloud credentials.
 
 ## Describe a flow
 
@@ -106,9 +114,8 @@ Each run stops after 15 steps, after 3 failed steps in a row, or when the model 
 
 ## Limits
 
-- Gemini is the only supported model provider.
 - Each step is a call to the model, so a run costs API usage and takes several seconds per step.
-- Screenshots go to Google's API while the mode is on. Don't use it on screens that show data you can't send to a third party.
+- Screenshots go to your model provider while the mode is on, unless you run the model locally. Don't use a hosted model on screens that show data you can't send to a third party.
 
 ## See also
 
