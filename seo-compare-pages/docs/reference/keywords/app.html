@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App management keywords · Optics docs</title>
+  <meta name="description" content="Learn how to start, switch, close and inspect the app or browser under test.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/keywords/app">
+  <link rel="alternate" type="text/markdown" href="app.md" title="This page as Markdown">
+  <meta property="og:title" content="App management keywords · Optics docs">
+  <meta property="og:description" content="Learn how to start, switch, close and inspect the app or browser under test.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../../docs/get-started/">Get started</a><a class="dtab" href="../../../docs/create/">Create tests</a><a class="dtab" href="../../../docs/elements/">Find elements</a><a class="dtab" href="../../../docs/run/">Run and report</a><a class="dtab" href="../../../docs/platforms/">Platforms</a><a class="dtab" href="../../../docs/advanced/">Advanced</a><a class="dtab" href="../../../docs/guides/">Guides</a><a class="dtab on" href="../../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../../docs/get-started/">Overview</a></li><li><a href="../../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../../docs/create/write">Write it</a></li><li><a href="../../../docs/create/record">Record it</a></li><li><a href="../../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../../docs/create/python">Python</a></li><li><a href="../../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../../docs/create/organise">Organise a suite</a></li><li><a href="../../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../../docs/elements/">Overview</a></li><li><a href="../../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../../docs/run/">Overview</a></li><li><a href="../../../docs/run/results">Results</a></li><li><a href="../../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../../docs/run/ci">Run tests in CI</a></li><li><a href="../../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../../docs/platforms/android">Android</a></li><li><a href="../../../docs/platforms/ios">iOS</a></li><li><a href="../../../docs/platforms/web">Web</a></li><li><a href="../../../docs/platforms/tv">TV</a></li><li><a href="../../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../../docs/advanced/variables">Variables</a></li><li><a href="../../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../../docs/reference/keywords/">Keywords</a></li><li><a href="../../../docs/reference/keywords/app" aria-current="page">App management</a></li><li><a href="../../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../../docs/reference/cli">CLI</a></li><li><a href="../../../docs/reference/config">config.yaml</a></li><li><a href="../../../docs/reference/files">Project files</a></li><li><a href="../../../docs/reference/engines">Engines and extras</a></li><li><a href="../../../docs/reference/mcp">MCP server</a></li><li><a href="../../../docs/reference/http-api">HTTP API</a></li><li><a href="../../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../../docs/help/">Overview</a></li><li><a href="../../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../../docs/help/faq">FAQ</a></li><li><a href="../../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Keywords</span></nav>
+        <header class="doc-head">
+          <h1>App management keywords</h1>
+          <p class="doc-summary">Learn how to start, switch, close and inspect the app or browser under test.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="app.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="app.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>App management keywords start and stop the app or browser that your test drives. Most suites call Launch App in a setup module and Close And Terminate App in a teardown module.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Open Birch,Launch App,com.birch.shop
+Close Birch,Close And Terminate App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>com.birch.shop
+<span class="c-mod">Close Birch</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
+<p>See <a href="../../../docs/reference/keywords/">Keywords</a> for the rules all keywords share.</p>
+<h2 id="start-and-switch">Start and switch<a class="anchor" href="#start-and-switch" aria-label="Link to this section">#</a></h2>
+<h3 id="launch-app">Launch App<a class="anchor" href="#launch-app" aria-label="Link to this section">#</a></h3>
+<p>Starts the app or browser under test, or brings the app to the front.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">app_identifier</code></td><td>Empty</td><td>Appium: the Android package or iOS bundle id. Playwright and Selenium: the URL to open. Empty uses the app from your config.</td></tr><tr><td><code class="ic">app_activity</code></td><td>Empty</td><td>Appium on Android: the activity to start. Selenium: the browser name, <code class="ic">chrome</code> or <code class="ic">firefox</code>.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event. See <a href="../../../docs/reference/keywords/#event-names">Event names</a>.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Open Birch,Launch App,com.birch.shop
+Open Birch,Launch App,com.birch.shop,com.birch.shop.MainActivity
+Open Birch Web,Launch App,https://birch.example">Copy</button><pre><code><span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>com.birch.shop
+<span class="c-mod">Open Birch</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>com.birch.shop<span class="c-dim">,</span>com.birch.shop.MainActivity
+<span class="c-mod">Open Birch Web</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>https://birch.example</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Launch App com.birch.shop">Copy</button><pre><code>- Launch App com.birch.shop</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>On Appium, Launch App starts a session if none is running. If a session is already running and you give an identifier, it brings that app to the front.</li><li>With no parameters, Launch App uses the app, URL and browser from your <a href="../../../docs/reference/config">config</a>.</li><li>On Selenium, <code class="ic">app_identifier</code> and <code class="ic">app_activity</code> apply only when Launch App starts the session. Later calls reopen the configured URL.</li><li>On Playwright, the browser is always Chromium in a visible 1280×800 window. The <code class="ic">browser</code>, <code class="ic">headless</code> and <code class="ic">viewport</code> capabilities are currently ignored.</li><li>The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.</li></ul>
+<h3 id="start-appium-session">Start Appium Session<a class="anchor" href="#start-appium-session" aria-label="Link to this section">#</a></h3>
+<p>Starts a driver session without naming an app. It's the same as Launch App with no parameters, and it works with every driver despite its name.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Open Birch,Start Appium Session">Copy</button><pre><code><span class="c-dim">Open Birch,Start Appium Session</span></code></pre></figure>
+<h3 id="launch-other-app">Launch Other App<a class="anchor" href="#launch-other-app" aria-label="Link to this section">#</a></h3>
+<p>Switches to another app, or opens a deep link or URL.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">app_name</code></td><td>Required</td><td>An Android package, iOS bundle id, deep link or URL.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Share Product,Launch Other App,com.android.settings
+Open Deep Link,Launch Other App,birch://product/trail-runner-2
+Open Help,Launch Other App,https://birch.example/help">Copy</button><pre><code><span class="c-mod">Share Product</span><span class="c-dim">,</span><b>Launch Other App</b><span class="c-dim">,</span>com.android.settings
+<span class="c-mod">Open Deep Link</span><span class="c-dim">,</span><b>Launch Other App</b><span class="c-dim">,</span>birch://product/trail-runner-2
+<span class="c-mod">Open Help</span><span class="c-dim">,</span><b>Launch Other App</b><span class="c-dim">,</span>https://birch.example/help</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Launch Other App com.android.settings">Copy</button><pre><code>- Launch Other App com.android.settings</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>On Appium, a value containing <code class="ic">://</code> opens as a deep link or URL. Anything else is started or brought to the front as an app.</li><li>On Playwright, the URL opens in a new tab.</li><li>On Selenium, the current tab navigates to the URL.</li><li>In Python the parameter is called <code class="ic">bundleid</code>.</li></ul>
+<h2 id="close">Close<a class="anchor" href="#close" aria-label="Link to this section">#</a></h2>
+<h3 id="close-and-terminate-app">Close And Terminate App<a class="anchor" href="#close-and-terminate-app" aria-label="Link to this section">#</a></h3>
+<p>Ends the driver session, which closes the app or browser, and sends any recorded events.</p>
+<p>This keyword takes no parameters.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Close Birch,Close And Terminate App">Copy</button><pre><code><span class="c-dim">Close Birch,Close And Terminate App</span></code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Close And Terminate App">Copy</button><pre><code>- Close And Terminate App</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>After this keyword, later steps have no session. Put it in your last module or a teardown test case. See <a href="../../../docs/create/organise">Organise tests</a>.</li></ul>
+<h3 id="force-terminate-app">Force Terminate App<a class="anchor" href="#force-terminate-app" aria-label="Link to this section">#</a></h3>
+<p>Kills a specific app.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">app_name</code></td><td>Required</td><td>The Android package or iOS bundle id to kill.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Reset Birch,Force Terminate App,com.birch.shop">Copy</button><pre><code><span class="c-mod">Reset Birch</span><span class="c-dim">,</span><b>Force Terminate App</b><span class="c-dim">,</span>com.birch.shop</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Force Terminate App com.birch.shop">Copy</button><pre><code>- Force Terminate App com.birch.shop</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>On Appium, errors are logged and the step passes, even if the app wasn't killed. With no session it does nothing.</li><li>On Selenium, it closes the current browser window and ignores <code class="ic">app_name</code>.</li><li>Playwright doesn't support it. The step fails.</li></ul>
+<h2 id="inspect">Inspect<a class="anchor" href="#inspect" aria-label="Link to this section">#</a></h2>
+<h3 id="get-app-version">Get App Version<a class="anchor" href="#get-app-version" aria-label="Link to this section">#</a></h3>
+<p>Reads the installed app's version.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">app_package</code></td><td>Empty</td><td>The Android package or iOS bundle id. Empty uses the app from your config.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="App Info,Get App Version,com.birch.shop">Copy</button><pre><code><span class="c-mod">App Info</span><span class="c-dim">,</span><b>Get App Version</b><span class="c-dim">,</span>com.birch.shop</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.</li><li>The CSV and YAML runner can't store the version in a variable. The value is returned over <code class="ic">optics serve</code>, MCP and <a href="../../../docs/create/python">Python</a>.</li><li>Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing <code class="ic">app_package</code> fails the step.</li></ul>
+<h3 id="get-driver-session-id">Get Driver Session Id<a class="anchor" href="#get-driver-session-id" aria-label="Link to this section">#</a></h3>
+<p>Returns the id of the current driver session, or nothing when no session is running.</p>
+<p>This keyword takes no parameters.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="App Info,Get Driver Session Id">Copy</button><pre><code><span class="c-dim">App Info,Get Driver Session Id</span></code></pre></figure>
+<p>Good to know:</p>
+<ul><li>The CSV and YAML runner discards the id. It's useful from Python, <code class="ic">optics serve</code> and MCP.</li></ul>
+<h3 id="initialise-setup">Initialise Setup<a class="anchor" href="#initialise-setup" aria-label="Link to this section">#</a></h3>
+<p>Does nothing. It exists for compatibility and writes a debug log line only.</p>
+<p>This keyword takes no parameters.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Setup,Initialise Setup">Copy</button><pre><code><span class="c-dim">Setup,Initialise Setup</span></code></pre></figure>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20App%20management%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fapp%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20App%20management%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fapp%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../../docs/reference/keywords/"><span>Previous</span>Keywords</a><a class="pager-next" href="../../../docs/reference/keywords/actions"><span>Next</span>Actions</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/keywords/app.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#start-and-switch">Start and switch</a></li><li class="toc-l3"><a href="#launch-app">Launch App</a></li><li class="toc-l3"><a href="#start-appium-session">Start Appium Session</a></li><li class="toc-l3"><a href="#launch-other-app">Launch Other App</a></li><li class="toc-l2"><a href="#close">Close</a></li><li class="toc-l3"><a href="#close-and-terminate-app">Close And Terminate App</a></li><li class="toc-l3"><a href="#force-terminate-app">Force Terminate App</a></li><li class="toc-l2"><a href="#inspect">Inspect</a></li><li class="toc-l3"><a href="#get-app-version">Get App Version</a></li><li class="toc-l3"><a href="#get-driver-session-id">Get Driver Session Id</a></li><li class="toc-l3"><a href="#initialise-setup">Initialise Setup</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../../docs/">Docs</a>
+        <a href="../../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../../about">About</a>
+        <a href="../../../contact">Contact</a>
+        <a href="../../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../../app.js?v=4f681e7d12" defer></script>
+  <script src="../../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

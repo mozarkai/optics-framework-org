@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Use Optics from Python · Optics docs</title>
+  <meta name="description" content="Call Optics keywords from pytest or any Python script when a test needs real code.">
+  <link rel="canonical" href="https://optics-framework.org/docs/create/python">
+  <link rel="alternate" type="text/markdown" href="python.md" title="This page as Markdown">
+  <meta property="og:title" content="Use Optics from Python · Optics docs">
+  <meta property="og:description" content="Call Optics keywords from pytest or any Python script when a test needs real code.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab on" href="../../docs/create/" aria-current="true">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section open" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python" aria-current="page">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/create/">Create tests</a><span class="sep" aria-hidden="true">/</span><span>In code</span></nav>
+        <header class="doc-head">
+          <h1>Use Optics from Python</h1>
+          <p class="doc-summary">Call Optics keywords from pytest or any Python script when a test needs real code.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Advanced, about 10 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="python.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="python.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Every keyword is also a method on the <code class="ic">Optics</code> class. Use it when a test needs logic the suite files can't express, or when your team already runs everything through pytest. You keep the same fallbacks, OCR and image matching as a CSV suite.</p>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>If CSV or YAML files can express your test, prefer them. Anyone on the team can read and review a suite file, and the runner gives you the step tree, screenshots and error detection for free. See <a href="../../docs/create/">Choose how to create tests</a>.</p></aside>
+<h2 id="write-a-test-with-pytest">Write a test with pytest<a class="anchor" href="#write-a-test-with-pytest" aria-label="Link to this section">#</a></h2>
+<p>This test signs in to the Sauce Labs demo store, adds a backpack to the cart, and reads the cart badge. It runs as written with <code class="ic">pip install "optics-framework[playwright]" pytest</code>.</p>
+<figure class="code doc-code has-title" data-lang="python"><figcaption><span>test_checkout.py</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="import pytest
+from optics_framework import Optics
+
+CONFIG = {
+    &quot;driver_sources&quot;: [{&quot;playwright&quot;: {&quot;enabled&quot;: True}}],
+    &quot;elements_sources&quot;: [
+        {&quot;playwright_find_element&quot;: {&quot;enabled&quot;: True}},
+        {&quot;playwright_page_source&quot;: {&quot;enabled&quot;: True}},
+        {&quot;playwright_screenshot&quot;: {&quot;enabled&quot;: True}},
+    ],
+}
+
+
+@pytest.fixture
+def optics():
+    with Optics(CONFIG) as session:  # quits the browser when the test ends
+        yield session
+
+
+def test_shopper_can_add_a_backpack(optics):
+    optics.launch_app(&quot;https://www.saucedemo.com&quot;)
+    optics.enter_text(&quot;//input[@id='user-name']&quot;, &quot;standard_user&quot;)
+    optics.enter_text(&quot;//input[@id='password']&quot;, &quot;secret_sauce&quot;)
+    optics.press_element([&quot;//input[@id='login-button']&quot;, &quot;Login&quot;])  # fallbacks
+    optics.assert_presence(&quot;Products&quot;, timeout=&quot;10&quot;)
+    optics.press_element(&quot;//button[@id='add-to-cart-sauce-labs-backpack']&quot;)
+    badge = optics.get_text(&quot;//span[@data-test='shopping-cart-badge']&quot;)
+    assert badge == &quot;1&quot;">Copy</button><pre><code><span class="c-info">import</span> pytest
+<span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+CONFIG = {
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"playwright"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    <span class="c-lit">"elements_sources"</span>: [
+        {<span class="c-lit">"playwright_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+        {<span class="c-lit">"playwright_page_source"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+        {<span class="c-lit">"playwright_screenshot"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+    ],
+}
+
+
+@pytest.fixture
+<span class="c-info">def</span> optics():
+    <span class="c-info">with</span> Optics(CONFIG) <span class="c-info">as</span> session:  <span class="c-dim"># quits the browser when the test ends</span>
+        yield session
+
+
+<span class="c-info">def</span> test_shopper_can_add_a_backpack(optics):
+    optics.launch_app(<span class="c-lit">"https://www.saucedemo.com"</span>)
+    optics.enter_text(<span class="c-lit">"//input[@id='user-name']"</span>, <span class="c-lit">"standard_user"</span>)
+    optics.enter_text(<span class="c-lit">"//input[@id='password']"</span>, <span class="c-lit">"secret_sauce"</span>)
+    optics.press_element([<span class="c-lit">"//input[@id='login-button']"</span>, <span class="c-lit">"Login"</span>])  <span class="c-dim"># fallbacks</span>
+    optics.assert_presence(<span class="c-lit">"Products"</span>, timeout=<span class="c-lit">"10"</span>)
+    optics.press_element(<span class="c-lit">"//button[@id='add-to-cart-sauce-labs-backpack']"</span>)
+    badge = optics.get_text(<span class="c-lit">"//span[@data-test='shopping-cart-badge']"</span>)
+    assert badge == <span class="c-lit">"1"</span></code></pre></figure>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pytest test_checkout.py">Copy</button><pre><code><span class="prompt">$</span> <b>pytest</b> test_checkout.py</code></pre></figure>
+<aside class="callout callout-mistake"><p class="callout-title">Typing and reading text in browsers on Optics 1.10.5</p><p>On 1.10.5, <code class="ic">enter_text</code> and <code class="ic">get_text</code> fail with Playwright (<code class="ic">Object of type Locator is not JSON serializable</code>). The next release fixes it. Until then, click the field with <code class="ic">press_element</code> and type with <code class="ic">enter_text_direct</code>.</p></aside>
+<h2 id="configure-the-session">Configure the session<a class="anchor" href="#configure-the-session" aria-label="Link to this section">#</a></h2>
+<p>Pass the same lists you'd put in <code class="ic">config.yaml</code>, as a Python dict. <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code> are required. The SDK reads these keys:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>What it's for</th></tr></thead><tbody><tr><td><code class="ic">driver_sources</code>, <code class="ic">elements_sources</code></td><td>What to drive and how to look at the screen. See the <a href="../../docs/reference/config">config reference</a>.</td></tr><tr><td><code class="ic">text_detection</code>, <code class="ic">image_detection</code></td><td>OCR and image matching engines, if you use them.</td></tr><tr><td><code class="ic">project_path</code></td><td>A folder to search for image files and to resolve relative paths in <code class="ic">read_data</code>. Required for image elements.</td></tr><tr><td><code class="ic">execution_output_path</code></td><td>Where screenshots and results go.</td></tr></tbody></table></div>
+<p>To reuse a project's <code class="ic">config.yaml</code>, load it yourself and pass the dict:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="import yaml
+from optics_framework import Optics
+
+with open(&quot;birch-tests/config.yaml&quot;) as f:
+    config = yaml.safe_load(f)
+config[&quot;project_path&quot;] = &quot;birch-tests&quot;
+
+with Optics(config) as optics:
+    optics.launch_app()">Copy</button><pre><code><span class="c-info">import</span> yaml
+<span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+<span class="c-info">with</span> open(<span class="c-lit">"birch-tests/config.yaml"</span>) <span class="c-info">as</span> f:
+    config = yaml.safe_load(f)
+config[<span class="c-lit">"project_path"</span>] = <span class="c-lit">"birch-tests"</span>
+
+<span class="c-info">with</span> Optics(config) <span class="c-info">as</span> optics:
+    optics.launch_app()</code></pre></figure>
+<p>Settings such as <code class="ic">ai_self_heal</code>, <code class="ic">llm_models</code> and <code class="ic">log_level</code> aren't read by the SDK.</p>
+<h2 id="how-calls-differ-from-suite-files">How calls differ from suite files<a class="anchor" href="#how-calls-differ-from-suite-files" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Method names are snake_case.</strong> <code class="ic">Press Element</code> is <code class="ic">press_element</code>. Your editor's autocomplete lists them all.</li><li><strong>Pass every value as a string.</strong> <code class="ic">optics.press_by_coordinates("540", "1600")</code> works; numbers raise <code class="ic">TypeError</code>.</li><li><strong>A list means "try these in order".</strong> <code class="ic">press_element(["//button[@id='login']", "Login"])</code> tries the XPath, then the text. To check several elements at once, separate them with a pipe in one string: <code class="ic">assert_presence("Products|Your Cart")</code>.</li><li>**<code class="ic">${name}</code> isn't looked up** in action methods. Pass the locator itself, or keep your own dict of locators.</li><li><strong>Methods return values.</strong> <code class="ic">get_text</code> returns the text, <code class="ic">capture_screenshot</code> returns a base64 PNG, and <code class="ic">assert_presence</code> returns <code class="ic">True</code>. A failed check raises an exception, which fails the pytest test.</li><li><strong>Some defaults differ.</strong> <code class="ic">assert_presence</code> and <code class="ic">assert_visibility</code> wait 60 seconds by default, and <code class="ic">detect_and_press</code> waits 10.</li></ul>
+<h2 id="python-only-methods">Python-only methods<a class="anchor" href="#python-only-methods" aria-label="Link to this section">#</a></h2>
+<p>These have no CSV equivalent:</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">add_element(name, value)</code></td><td>Add a value to a named element, for use in flow-control methods.</td></tr><tr><td><code class="ic">get_element_value(name)</code></td><td>Return the list of values for a named element.</td></tr><tr><td><code class="ic">add_module(name, steps)</code></td><td>Define a module as a list of <code class="ic">(keyword, [values])</code> pairs, for <code class="ic">run_loop</code> and <code class="ic">condition</code>.</td></tr><tr><td><code class="ic">add_api(path_or_dict)</code></td><td>Load API definitions for <code class="ic">invoke_api</code>. See <a href="../../docs/advanced/api-calls">Call APIs in a test</a>.</td></tr><tr><td><code class="ic">add_error_definitions(dict)</code></td><td>Load on-screen error definitions.</td></tr><tr><td><code class="ic">capture_and_detect()</code></td><td>Check the current screen against those definitions and return the matches.</td></tr><tr><td><code class="ic">quit()</code></td><td>End the session. The <code class="ic">with</code> block calls it for you.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.add_element(&quot;term&quot;, &quot;trail runner&quot;)
+optics.add_module(&quot;Search&quot;, [(&quot;Enter Text&quot;, [&quot;//input[@type='search']&quot;, &quot;${term}&quot;])])
+optics.run_loop(&quot;Search&quot;, &quot;${term}&quot;, &quot;trail runner|pace knit&quot;)">Copy</button><pre><code>optics.add_element(<span class="c-lit">"term"</span>, <span class="c-lit">"trail runner"</span>)
+optics.add_module(<span class="c-lit">"Search"</span>, [(<span class="c-lit">"Enter Text"</span>, [<span class="c-lit">"//input[@type='search']"</span>, <span class="c-lit">"${term}"</span>])])
+optics.run_loop(<span class="c-lit">"Search"</span>, <span class="c-lit">"${term}"</span>, <span class="c-lit">"trail runner|pace knit"</span>)</code></pre></figure>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/create/robot">Use Optics in Robot Framework</a></li><li><a href="../../docs/advanced/generate">Generate pytest code from a suite</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Use%20Optics%20from%20Python&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Fpython%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Use%20Optics%20from%20Python&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Fpython%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/create/agent"><span>Previous</span>Delegate it</a><a class="pager-next" href="../../docs/create/robot"><span>Next</span>Robot Framework</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/create/python.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#write-a-test-with-pytest">Write a test with pytest</a></li><li class="toc-l2"><a href="#configure-the-session">Configure the session</a></li><li class="toc-l2"><a href="#how-calls-differ-from-suite-files">How calls differ from suite files</a></li><li class="toc-l2"><a href="#python-only-methods">Python-only methods</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=4f681e7d12" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

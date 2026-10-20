@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keywords · Optics docs</title>
+  <meta name="description" content="Every keyword you can use in a step, grouped by what it does.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/keywords/">
+  <link rel="alternate" type="text/markdown" href="index.md" title="This page as Markdown">
+  <meta property="og:title" content="Keywords · Optics docs">
+  <meta property="og:description" content="Every keyword you can use in a step, grouped by what it does.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../../docs/get-started/">Get started</a><a class="dtab" href="../../../docs/create/">Create tests</a><a class="dtab" href="../../../docs/elements/">Find elements</a><a class="dtab" href="../../../docs/run/">Run and report</a><a class="dtab" href="../../../docs/platforms/">Platforms</a><a class="dtab" href="../../../docs/advanced/">Advanced</a><a class="dtab" href="../../../docs/guides/">Guides</a><a class="dtab on" href="../../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../../docs/get-started/">Overview</a></li><li><a href="../../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../../docs/create/write">Write it</a></li><li><a href="../../../docs/create/record">Record it</a></li><li><a href="../../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../../docs/create/python">Python</a></li><li><a href="../../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../../docs/create/organise">Organise a suite</a></li><li><a href="../../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../../docs/elements/">Overview</a></li><li><a href="../../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../../docs/run/">Overview</a></li><li><a href="../../../docs/run/results">Results</a></li><li><a href="../../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../../docs/run/ci">Run tests in CI</a></li><li><a href="../../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../../docs/platforms/android">Android</a></li><li><a href="../../../docs/platforms/ios">iOS</a></li><li><a href="../../../docs/platforms/web">Web</a></li><li><a href="../../../docs/platforms/tv">TV</a></li><li><a href="../../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../../docs/advanced/variables">Variables</a></li><li><a href="../../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../../docs/reference/keywords/" aria-current="page">Keywords</a></li><li><a href="../../../docs/reference/keywords/app">App management</a></li><li><a href="../../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../../docs/reference/cli">CLI</a></li><li><a href="../../../docs/reference/config">config.yaml</a></li><li><a href="../../../docs/reference/files">Project files</a></li><li><a href="../../../docs/reference/engines">Engines and extras</a></li><li><a href="../../../docs/reference/mcp">MCP server</a></li><li><a href="../../../docs/reference/http-api">HTTP API</a></li><li><a href="../../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../../docs/help/">Overview</a></li><li><a href="../../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../../docs/help/faq">FAQ</a></li><li><a href="../../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Keywords</span></nav>
+        <header class="doc-head">
+          <h1>Keywords</h1>
+          <p class="doc-summary">Every keyword you can use in a step, grouped by what it does.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="index.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="index.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>A keyword is one action or check, such as <code class="ic">Press Element</code> or <code class="ic">Assert Presence</code>. Each row of a module is one keyword followed by its parameters. This page covers the rules every keyword shares, then lists all of them.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Sign In,Enter Text,${email_field},ana@birch.example
+Sign In,Press Element,${sign_in}
+Sign In,Assert Presence,Welcome,20">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${email_field}</span><span class="c-dim">,</span>ana@birch.example
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_in}</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome<span class="c-dim">,</span>20</code></pre></figure>
+<h2 id="keyword-names">Keyword names<a class="anchor" href="#keyword-names" aria-label="Link to this section">#</a></h2>
+<p>Write keyword names in Title Case in CSV and YAML files: <code class="ic">Press Element</code>, <code class="ic">Assert Presence</code>. In <code class="ic">optics live</code>, the MCP server and Python, the same keyword is written in snake_case: <code class="ic">press_element</code>, <code class="ic">assert_presence</code>.</p>
+<p>The runner ignores capitalization and collapses spaces, so <code class="ic">Press Element</code>, <code class="ic">press element</code> and <code class="ic">press_element</code> all reach the same keyword. If you misspell a name, the error suggests the closest match. Run <code class="ic">optics list</code> to print every keyword name in snake_case.</p>
+<h2 id="parameters">Parameters<a class="anchor" href="#parameters" aria-label="Link to this section">#</a></h2>
+<p>Parameters are positional. They fill the keyword's parameters in the order shown in each parameter table on these pages.</p>
+<p>To set a parameter by name, write <code class="ic">name=value</code>. This works only when <code class="ic">name</code> is a real parameter of that keyword. Use it to skip parameters you want to leave at their defaults:</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Browse,Press Element,Trail Runner 2,index=1">Copy</button><pre><code><span class="c-mod">Browse</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Trail Runner 2<span class="c-dim">,</span>index=1</code></pre></figure>
+<p>Here <code class="ic">index=1</code> sets the fifth parameter of Press Element and leaves <code class="ic">repeat</code>, <code class="ic">offset_x</code> and <code class="ic">offset_y</code> at their defaults.</p>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p>Leaving a cell empty doesn't skip a parameter. Empty cells are dropped, so the next value slides into the empty slot. <code class="ic">Press By Percentage,50,90,,tap_cta</code> sets <code class="ic">repeat</code> to <code class="ic">tap_cta</code> and fails. Write <code class="ic">Press By Percentage,50,90,event_name=tap_cta</code> instead.</p></aside>
+<p>A value like <code class="ic">text=Sign in</code> or <code class="ic">css=#cart</code> stays positional, because <code class="ic">text</code> and <code class="ic">css</code> aren't parameter names. Values that start with <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code> are never treated as named, and <code class="ic">==</code>, <code class="ic">!=</code>, <code class="ic">&lt;=</code> and <code class="ic">&gt;=</code> don't count as <code class="ic">=</code>.</p>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>Steps inside a module that runs through <a href="../../../docs/reference/keywords/flow">Execute Module, Run Loop or Condition</a> don't support <code class="ic">name=value</code>. Write every parameter positionally there.</p></aside>
+<h3 id="every-value-is-a-string">Every value is a string<a class="anchor" href="#every-value-is-a-string" aria-label="Link to this section">#</a></h3>
+<p>Each keyword receives its parameters as text and converts them itself. Timeouts, counts, <code class="ic">index</code>, <code class="ic">repeat</code>, lengths and swipe percentages must be whole numbers. A decimal such as <code class="ic">2.5</code> fails the step. Timeouts are always in seconds.</p>
+<h2 id="element-arguments">Element arguments<a class="anchor" href="#element-arguments" aria-label="Link to this section">#</a></h2>
+<p>Many keywords take an <code class="ic">element</code>. Optics looks at the text you pass and decides what kind of locator it is. The checks run in this order, and the first match wins:</p>
+<div class="table-wrap"><table><thead><tr><th>If the value…</th><th>Optics reads it as</th></tr></thead><tbody><tr><td>starts with <code class="ic">text=</code></td><td>Text to find on screen</td></tr><tr><td>starts with <code class="ic">text_only:</code></td><td>Text to find with OCR (reading the screenshot) only, skipping the app's UI tree</td></tr><tr><td>ends with <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code></td><td>An image file name to find on screen</td></tr><tr><td>starts with <code class="ic">css=</code></td><td>A CSS selector</td></tr><tr><td>starts with <code class="ic">xpath=</code>, <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code></td><td>An XPath, a path through the app's UI tree</td></tr><tr><td>starts with <code class="ic">android.</code> or <code class="ic">xcui</code></td><td>A UI class name</td></tr><tr><td>contains <code class="ic">[</code> and <code class="ic">]</code>, starts with <code class="ic">.</code>, or starts with <code class="ic">#</code> followed by a letter</td><td>A CSS selector</td></tr><tr><td>anything else</td><td>Text to find on screen</td></tr></tbody></table></div>
+<p>Text is matched against the app's UI tree first, then with OCR if you configured text detection. Image file names are matched by file name only, and Optics finds the file anywhere in your project folder. See <a href="../../../docs/elements/text-and-images">Text and images</a> for how matching works.</p>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p>Plain text that looks like another locator type is read as that type. <code class="ic">(optional)</code> starts with <code class="ic">(</code>, so it's read as an XPath. <code class="ic">Price [USD]</code> and <code class="ic">.com</code> are read as CSS selectors. Write <code class="ic">text=(optional)</code>, <code class="ic">text=Price [USD]</code> or <code class="ic">text=.com</code> to force text.</p></aside>
+<p>Other pitfalls:</p>
+<ul><li><code class="ic">id:</code> locators always fail. No element source supports them. Use an XPath such as <code class="ic">//*[@resource-id="com.birch.shop:id/cart"]</code>.</li><li>The <code class="ic">text=</code> prefix is understood by the Appium and Playwright element sources. OCR and Selenium search for the whole value, including <code class="ic">text=</code>, so use it only where you need it.</li><li>The <code class="ic">xpath=</code> prefix works only on Playwright. Use a bare <code class="ic">//…</code> XPath on Appium and Selenium.</li><li><code class="ic">.tif</code> and <code class="ic">.tiff</code> files aren't treated as images. Save templates as <code class="ic">.png</code>.</li></ul>
+<p>Most of the time you pass <code class="ic">${name}</code> instead and define the locator in your elements file. See <a href="../../../docs/elements/define">Define elements</a>.</p>
+<h2 id="variables">Variables<a class="anchor" href="#variables" aria-label="Link to this section">#</a></h2>
+<p>A cell that is exactly <code class="ic">${name}</code> is replaced with the value of <code class="ic">name</code> from your elements file, or from a keyword that wrote it (<a href="../../../docs/reference/keywords/flow">Read Data, Evaluate, Run Loop, Invoke API</a>).</p>
+<p>When an element has several values, Optics tries each one in order until the element is found. It moves on only when the element isn't found. Any other error fails the step at once. If <code class="ic">name</code> isn't defined anywhere, the step fails before the keyword runs.</p>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p><code class="ic">${name}</code> is replaced only when it's the whole cell. <code class="ic">Hello ${name}</code> is typed literally, as <code class="ic">Hello ${name}</code>. The exceptions are expressions and queries in Evaluate, Condition, Read Data and Invoke API, which replace <code class="ic">${name}</code> anywhere inside them.</p></aside>
+<p>See <a href="../../../docs/advanced/variables">Variables</a> for how values are stored and passed between steps.</p>
+<h2 id="areas-of-interest">Areas of interest<a class="anchor" href="#areas-of-interest" aria-label="Link to this section">#</a></h2>
+<p>Keywords that find one element take four optional parameters: <code class="ic">aoi_x</code>, <code class="ic">aoi_y</code>, <code class="ic">aoi_width</code> and <code class="ic">aoi_height</code>. They limit the search to a rectangle of the screen, in percent from 0 to 100. The defaults <code class="ic">0</code>, <code class="ic">0</code>, <code class="ic">100</code>, <code class="ic">100</code> mean the whole screen.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Checkout,Press Element,Pay now,aoi_y=50,aoi_height=50">Copy</button><pre><code><span class="c-mod">Checkout</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Pay now<span class="c-dim">,</span>aoi_y=50<span class="c-dim">,</span>aoi_height=50</code></pre></figure>
+<p>This searches the bottom half of the screen only. Assertion keywords don't take an area of interest. See <a href="../../../docs/elements/area-of-interest">Area of interest</a>.</p>
+<h2 id="picking-one-of-several-matches">Picking one of several matches<a class="anchor" href="#picking-one-of-several-matches" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">index</code> picks which match to use when more than one element matches. It starts at <code class="ic">0</code>, the first match. <code class="ic">index=1</code> is the second match.</p>
+<ul><li>Image matches are counted top to bottom, then left to right.</li><li>On Appium, <code class="ic">index</code> doesn't apply to XPath. Write <code class="ic">(//android.widget.Button[@text="Add to cart"])[2]</code> to pick the second XPath match. XPath counts from 1.</li><li>On Selenium, a non-zero <code class="ic">index</code> skips the native lookup, so only OCR and image matching can use it.</li></ul>
+<h2 id="event-names">Event names<a class="anchor" href="#event-names" aria-label="Link to this section">#</a></h2>
+<p>Most action and app keywords take an optional <code class="ic">event_name</code>. When you set it, Optics records a timestamped event with that label right before the action. Events show in the live console and are sent to an events endpoint if you configured one. They never change whether a step passes.</p>
+<h2 id="action-keywords-dont-wait">Action keywords don't wait<a class="anchor" href="#action-keywords-dont-wait" aria-label="Link to this section">#</a></h2>
+<p>Press Element, Enter Text and the other action keywords look at the current screen once. If the element isn't there yet, the step fails at once. Put an assertion before an action when the screen may still be loading:</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Search,Assert Presence,${search_bar},15
+Search,Enter Text,${search_bar},Trail Runner 2">Copy</button><pre><code><span class="c-mod">Search</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${search_bar}</span><span class="c-dim">,</span>15
+<span class="c-mod">Search</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${search_bar}</span><span class="c-dim">,</span>Trail Runner 2</code></pre></figure>
+<p>Use <a href="../../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a> for pop-ups that may or may not appear. Assertion keywords are the only ones that wait. See <a href="../../../docs/reference/keywords/verification">Verification keywords</a>.</p>
+<h2 id="keywords-that-never-fail-a-step">Keywords that never fail a step<a class="anchor" href="#keywords-that-never-fail-a-step" aria-label="Link to this section">#</a></h2>
+<p>These keywords pass even when you might expect a failure. Don't rely on them as checks.</p>
+<ul><li><strong>Assert Equality</strong> returns false on a mismatch but never fails.</li><li><strong>Validate Screen</strong> returns false when nothing is found but never fails.</li><li><strong>Detect And Press</strong> passes and skips the tap when the element doesn't appear.</li><li><strong>Force Terminate App</strong> on Appium logs any error and passes.</li><li><strong>Swipe</strong>, <strong>Press By Coordinates</strong> and <strong>Scroll</strong> on Appium log driver errors and pass. Scroll left or right on Appium does nothing and passes.</li><li><strong>Assert Presence</strong> and <strong>Assert Visibility</strong> pass without checking when every element you give is a CSS selector, an <code class="ic">id:</code> locator or a class name.</li><li><strong>Initialise Setup</strong> does nothing.</li></ul>
+<p>Keywords that return a value, such as Get Text, Execute Script and Capture Screenshot, can't store it in a variable from CSV or YAML. The value is returned to you over <a href="../../../docs/reference/cli"><code class="ic">optics serve</code></a>, MCP and <a href="../../../docs/create/python">Python</a>.</p>
+<h2 id="all-keywords">All keywords<a class="anchor" href="#all-keywords" aria-label="Link to this section">#</a></h2>
+<h3 id="app-management">App management<a class="anchor" href="#app-management" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th><th>Page</th></tr></thead><tbody><tr><td>Launch App</td><td>Start the app or browser, or bring the app to the front</td><td><a href="../../../docs/reference/keywords/app#launch-app">Launch App</a></td></tr><tr><td>Start Appium Session</td><td>Start a driver session without naming an app</td><td><a href="../../../docs/reference/keywords/app#start-appium-session">Start Appium Session</a></td></tr><tr><td>Launch Other App</td><td>Switch to another app, deep link or URL</td><td><a href="../../../docs/reference/keywords/app#launch-other-app">Launch Other App</a></td></tr><tr><td>Close And Terminate App</td><td>End the session and close the app or browser</td><td><a href="../../../docs/reference/keywords/app#close-and-terminate-app">Close And Terminate App</a></td></tr><tr><td>Force Terminate App</td><td>Kill a specific app</td><td><a href="../../../docs/reference/keywords/app#force-terminate-app">Force Terminate App</a></td></tr><tr><td>Get App Version</td><td>Read the installed app's version</td><td><a href="../../../docs/reference/keywords/app#get-app-version">Get App Version</a></td></tr><tr><td>Get Driver Session Id</td><td>Return the current driver session id</td><td><a href="../../../docs/reference/keywords/app#get-driver-session-id">Get Driver Session Id</a></td></tr><tr><td>Initialise Setup</td><td>Do nothing</td><td><a href="../../../docs/reference/keywords/app#initialise-setup">Initialise Setup</a></td></tr></tbody></table></div>
+<h3 id="actions">Actions<a class="anchor" href="#actions" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th><th>Page</th></tr></thead><tbody><tr><td>Press Element</td><td>Tap or click an element</td><td><a href="../../../docs/reference/keywords/actions#press-element">Press Element</a></td></tr><tr><td>Press By Percentage</td><td>Tap a point given in percent of the screen</td><td><a href="../../../docs/reference/keywords/actions#press-by-percentage">Press By Percentage</a></td></tr><tr><td>Press By Coordinates</td><td>Tap a pixel coordinate</td><td><a href="../../../docs/reference/keywords/actions#press-by-coordinates">Press By Coordinates</a></td></tr><tr><td>Detect And Press</td><td>Tap an element only if it appears</td><td><a href="../../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a></td></tr><tr><td>Select Dropdown Option</td><td>Open a dropdown and pick an option</td><td><a href="../../../docs/reference/keywords/actions#select-dropdown-option">Select Dropdown Option</a></td></tr><tr><td>Enter Text</td><td>Type into a field</td><td><a href="../../../docs/reference/keywords/actions#enter-text">Enter Text</a></td></tr><tr><td>Enter Number</td><td>Type a number into a field</td><td><a href="../../../docs/reference/keywords/actions#enter-number">Enter Number</a></td></tr><tr><td>Enter Text Direct</td><td>Type into the focused field</td><td><a href="../../../docs/reference/keywords/actions#enter-text-direct">Enter Text Direct</a></td></tr><tr><td>Enter Text Using Keyboard</td><td>Type key by key, or press one special key</td><td><a href="../../../docs/reference/keywords/actions#enter-text-using-keyboard">Enter Text Using Keyboard</a></td></tr><tr><td>Clear Element Text</td><td>Empty a text field</td><td><a href="../../../docs/reference/keywords/actions#clear-element-text">Clear Element Text</a></td></tr><tr><td>Swipe</td><td>Swipe from a pixel point</td><td><a href="../../../docs/reference/keywords/actions#swipe">Swipe</a></td></tr><tr><td>Swipe By Percentage</td><td>Swipe from a point given in percent</td><td><a href="../../../docs/reference/keywords/actions#swipe-by-percentage">Swipe By Percentage</a></td></tr><tr><td>Swipe From Element</td><td>Swipe starting on an element</td><td><a href="../../../docs/reference/keywords/actions#swipe-from-element">Swipe From Element</a></td></tr><tr><td>Swipe Until Element Appears</td><td>Swipe until an element shows up</td><td><a href="../../../docs/reference/keywords/actions#swipe-until-element-appears">Swipe Until Element Appears</a></td></tr><tr><td>Scroll</td><td>Scroll the screen up or down</td><td><a href="../../../docs/reference/keywords/actions#scroll">Scroll</a></td></tr><tr><td>Scroll From Element</td><td>Scroll starting on an element</td><td><a href="../../../docs/reference/keywords/actions#scroll-from-element">Scroll From Element</a></td></tr><tr><td>Scroll Until Element Appears</td><td>Scroll until an element shows up</td><td><a href="../../../docs/reference/keywords/actions#scroll-until-element-appears">Scroll Until Element Appears</a></td></tr><tr><td>Press Keycode</td><td>Send a hardware, system or remote key</td><td><a href="../../../docs/reference/keywords/actions#press-keycode">Press Keycode</a></td></tr><tr><td>Execute Script</td><td>Run a driver command or browser JavaScript</td><td><a href="../../../docs/reference/keywords/actions#execute-script">Execute Script</a></td></tr><tr><td>Get Text</td><td>Read an element's text</td><td><a href="../../../docs/reference/keywords/actions#get-text">Get Text</a></td></tr><tr><td>Sleep</td><td>Wait a number of seconds</td><td><a href="../../../docs/reference/keywords/actions#sleep">Sleep</a></td></tr><tr><td>Press Checkbox</td><td>Deprecated: use Press Element</td><td><a href="../../../docs/reference/keywords/actions#press-checkbox">Press Checkbox</a></td></tr><tr><td>Press Radio Button</td><td>Deprecated: use Press Element</td><td><a href="../../../docs/reference/keywords/actions#press-radio-button">Press Radio Button</a></td></tr><tr><td>Swipe Seekbar To Right Android</td><td>Deprecated: use Swipe From Element</td><td><a href="../../../docs/reference/keywords/actions#swipe-seekbar-to-right-android">Swipe Seekbar To Right Android</a></td></tr></tbody></table></div>
+<h3 id="verification">Verification<a class="anchor" href="#verification" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th><th>Page</th></tr></thead><tbody><tr><td>Assert Presence</td><td>Fail unless elements exist within a timeout</td><td><a href="../../../docs/reference/keywords/verification#assert-presence">Assert Presence</a></td></tr><tr><td>Assert Visibility</td><td>Fail unless elements are on screen within a timeout</td><td><a href="../../../docs/reference/keywords/verification#assert-visibility">Assert Visibility</a></td></tr><tr><td>Validate Element</td><td>Fail unless one element exists within a timeout</td><td><a href="../../../docs/reference/keywords/verification#validate-element">Validate Element</a></td></tr><tr><td>Validate Screen</td><td>Check for elements without failing</td><td><a href="../../../docs/reference/keywords/verification#validate-screen">Validate Screen</a></td></tr><tr><td>Is Element</td><td>Check that an element is visible, invisible, enabled or disabled</td><td><a href="../../../docs/reference/keywords/verification#is-element">Is Element</a></td></tr><tr><td>Assert Equality</td><td>Compare two values without failing</td><td><a href="../../../docs/reference/keywords/verification#assert-equality">Assert Equality</a></td></tr><tr><td>Capture Screenshot</td><td>Take a screenshot</td><td><a href="../../../docs/reference/keywords/verification#capture-screenshot">Capture Screenshot</a></td></tr><tr><td>Capture Pagesource</td><td>Save the current UI tree</td><td><a href="../../../docs/reference/keywords/verification#capture-pagesource">Capture Pagesource</a></td></tr><tr><td>Get Interactive Elements</td><td>List the elements you can tap or type into</td><td><a href="../../../docs/reference/keywords/verification#get-interactive-elements">Get Interactive Elements</a></td></tr><tr><td>Get Screen Elements</td><td>Take a screenshot and list every element</td><td><a href="../../../docs/reference/keywords/verification#get-screen-elements">Get Screen Elements</a></td></tr></tbody></table></div>
+<h3 id="flow-control">Flow control<a class="anchor" href="#flow-control" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th><th>Page</th></tr></thead><tbody><tr><td>Execute Module</td><td>Run another module</td><td><a href="../../../docs/reference/keywords/flow#execute-module">Execute Module</a></td></tr><tr><td>Run Loop</td><td>Repeat a module a number of times or once per value</td><td><a href="../../../docs/reference/keywords/flow#run-loop">Run Loop</a></td></tr><tr><td>Condition</td><td>Run a module only when a condition is true</td><td><a href="../../../docs/reference/keywords/flow#condition">Condition</a></td></tr><tr><td>Read Data</td><td>Load a value from a CSV or JSON file or an environment variable</td><td><a href="../../../docs/reference/keywords/flow#read-data">Read Data</a></td></tr><tr><td>Evaluate</td><td>Compute an expression and save the result</td><td><a href="../../../docs/reference/keywords/flow#evaluate">Evaluate</a></td></tr><tr><td>Date Evaluate</td><td>Add or subtract days from a date and save it</td><td><a href="../../../docs/reference/keywords/flow#date-evaluate">Date Evaluate</a></td></tr><tr><td>Invoke API</td><td>Call an HTTP API and save values from the response</td><td><a href="../../../docs/reference/keywords/flow#invoke-api">Invoke API</a></td></tr></tbody></table></div>
+<h2 id="deprecated-keywords">Deprecated keywords<a class="anchor" href="#deprecated-keywords" aria-label="Link to this section">#</a></h2>
+<p>Press Checkbox and Press Radio Button still work but log a warning. Use <a href="../../../docs/reference/keywords/actions#press-element">Press Element</a> instead. Swipe Seekbar To Right Android fails on Appium. Use <a href="../../../docs/reference/keywords/actions#swipe-from-element">Swipe From Element</a> instead.</p>
+<h2 id="where-each-keyword-works">Where each keyword works<a class="anchor" href="#where-each-keyword-works" aria-label="Link to this section">#</a></h2>
+<ul><li>**CSV and YAML suites, <code class="ic">optics live</code> and <code class="ic">optics serve</code>** have every keyword on this page.</li><li><strong>The MCP server</strong> has every keyword except the flow-control ones. Press By Coordinates and Press By Percentage are hidden there unless you turn them on.</li><li><strong>Python and Robot Framework</strong> have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See <a href="../../../docs/create/python">Write tests in Python</a>.</li><li>**<code class="ic">optics generate</code>** skips flow-control keywords and a few others when it converts a suite to code.</li></ul>
+<h2 id="python-and-robot-framework-only">Python and Robot Framework only<a class="anchor" href="#python-and-robot-framework-only" aria-label="Link to this section">#</a></h2>
+<p>These keywords exist only in the <a href="../../../docs/create/python">Python library</a> and the <a href="../../../docs/create/robot">Robot Framework library</a>. The CSV and YAML runner reports them as unknown keywords.</p>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th></tr></thead><tbody><tr><td>Setup</td><td>Create a session from a config dictionary or YAML text</td></tr><tr><td>Setup From File</td><td>Create a session from a config file</td></tr><tr><td>Quit</td><td>End the session</td></tr><tr><td>Add Element</td><td>Add a value to a variable, after any values it already has</td></tr><tr><td>Get Element Value</td><td>Return the list of values for a variable</td></tr><tr><td>Add API</td><td>Load API definitions for Invoke API</td></tr><tr><td>Add Module</td><td>Define a module for Run Loop and Condition</td></tr><tr><td>Add Testcase</td><td>Set the session's test cases</td></tr><tr><td>Add Error Definitions</td><td>Add on-screen error definitions</td></tr><tr><td>Capture And Detect Errors</td><td>Check the current screen for defined errors and return any matches</td></tr><tr><td>Press Element With Index</td><td>Press Element with an index</td></tr></tbody></table></div>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2F%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2F%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../../docs/reference/"><span>Previous</span>Reference</a><a class="pager-next" href="../../../docs/reference/keywords/app"><span>Next</span>App management</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/keywords/index.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#keyword-names">Keyword names</a></li><li class="toc-l2"><a href="#parameters">Parameters</a></li><li class="toc-l3"><a href="#every-value-is-a-string">Every value is a string</a></li><li class="toc-l2"><a href="#element-arguments">Element arguments</a></li><li class="toc-l2"><a href="#variables">Variables</a></li><li class="toc-l2"><a href="#areas-of-interest">Areas of interest</a></li><li class="toc-l2"><a href="#picking-one-of-several-matches">Picking one of several matches</a></li><li class="toc-l2"><a href="#event-names">Event names</a></li><li class="toc-l2"><a href="#action-keywords-dont-wait">Action keywords don't wait</a></li><li class="toc-l2"><a href="#keywords-that-never-fail-a-step">Keywords that never fail a step</a></li><li class="toc-l2"><a href="#all-keywords">All keywords</a></li><li class="toc-l3"><a href="#app-management">App management</a></li><li class="toc-l3"><a href="#actions">Actions</a></li><li class="toc-l3"><a href="#verification">Verification</a></li><li class="toc-l3"><a href="#flow-control">Flow control</a></li><li class="toc-l2"><a href="#deprecated-keywords">Deprecated keywords</a></li><li class="toc-l2"><a href="#where-each-keyword-works">Where each keyword works</a></li><li class="toc-l2"><a href="#python-and-robot-framework-only">Python and Robot Framework only</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../../docs/">Docs</a>
+        <a href="../../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../../about">About</a>
+        <a href="../../../contact">Contact</a>
+        <a href="../../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../../app.js?v=4f681e7d12" defer></script>
+  <script src="../../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
