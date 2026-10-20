@@ -59,7 +59,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
 | `--dry-run` | | Print what would happen and change nothing. |
-| `--uninstall` | | Remove the managed install. |
+| `--uninstall` | | Remove Optics and the PATH entry it added. |
 
 ```shell
 $ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,easyocr
