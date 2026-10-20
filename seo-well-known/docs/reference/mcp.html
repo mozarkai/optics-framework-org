@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP server · Optics docs</title>
+  <meta name="description" content="Tools and resources that `optics mcp` gives your AI agent.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/mcp">
+  <link rel="alternate" type="text/markdown" href="mcp.md" title="This page as Markdown">
+  <meta property="og:title" content="MCP server · Optics docs">
+  <meta property="og:description" content="Tools and resources that `optics mcp` gives your AI agent.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=26c9dd2bd6">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs layout-wide" data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab on" href="../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp" aria-current="page">MCP server</a></li><li><a href="../../docs/reference/http-api">HTTP API</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Tools and files</span></nav>
+        <header class="doc-head">
+          <h1>MCP server</h1>
+          <p class="doc-summary">Tools and resources that `optics mcp` gives your AI agent.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="mcp.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="mcp.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p><code class="ic">optics mcp</code> runs a Model Context Protocol (MCP) server, a standard way for AI agents such as Claude, Cursor or VS Code to call outside tools. Your agent can start a session on a device or browser, look at the screen, and run Optics keywords one at a time.</p>
+<p>For a guided walkthrough, see <a href="../../docs/create/agent">Build tests with an AI agent</a>.</p>
+<h2 id="install">Install<a class="anchor" href="#install" aria-label="Link to this section">#</a></h2>
+<p>The server needs the <code class="ic">mcp</code> extra. <code class="ic">optics setup</code> can't install it, and the <code class="ic">all</code> bundle doesn't include it.</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install &quot;optics-framework[mcp]&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install "optics-framework[mcp]"</code></pre></figure>
+<p>You also need the extras for your driver, for example <code class="ic">appium</code> or <code class="ic">playwright</code>. See <a href="../../docs/reference/engines">Engines and extras</a>.</p>
+<h2 id="start-the-server">Start the server<a class="anchor" href="#start-the-server" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics mcp [--transport stdio|http] [--host HOST] [--port PORT]">Copy</button><pre><code>optics mcp [--transport stdio|http] [--host HOST] [--port PORT]</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Flag</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--transport</code></td><td><code class="ic">stdio</code></td><td><code class="ic">stdio</code>: your agent starts the server and talks to it directly. <code class="ic">http</code>: the server listens at <code class="ic">http://&lt;host&gt;:&lt;port&gt;/mcp</code>.</td></tr><tr><td><code class="ic">--host</code></td><td><code class="ic">127.0.0.1</code></td><td>The address to listen on. <code class="ic">http</code> only.</td></tr><tr><td><code class="ic">--port</code></td><td><code class="ic">8090</code></td><td>The port to listen on. <code class="ic">http</code> only.</td></tr></tbody></table></div>
+<p>We recommend <code class="ic">stdio</code> for an agent on your own machine. Use <code class="ic">http</code> when the server runs in a container or on another machine.</p>
+<h2 id="connect-your-agent">Connect your agent<a class="anchor" href="#connect-your-agent" aria-label="Link to this section">#</a></h2>
+<p>Most agents read a JSON file that lists MCP servers. For Claude Desktop it's <code class="ic">claude_desktop_config.json</code>; for Claude Code it's <code class="ic">.mcp.json</code> in your project. Other agents use the same shape.</p>
+<figure class="code doc-code has-title" data-lang="json"><figcaption><span>.mcp.json</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;optics&quot;: {
+      &quot;command&quot;: &quot;optics&quot;,
+      &quot;args&quot;: [&quot;mcp&quot;]
+    }
+  }
+}">Copy</button><pre><code>{
+  <span class="c-mod">"mcpServers"</span>: {
+    <span class="c-mod">"optics"</span>: {
+      <span class="c-mod">"command"</span>: <span class="c-lit">"optics"</span>,
+      <span class="c-mod">"args"</span>: [<span class="c-lit">"mcp"</span>]
+    }
+  }
+}</code></pre></figure>
+<p>If your agent can't find <code class="ic">optics</code>, use the full path to it, for example <code class="ic">/Users/ana/.optics/bin/optics</code>.</p>
+<p>For the <code class="ic">http</code> transport, point the agent at the URL instead:</p>
+<figure class="code doc-code has-title" data-lang="json"><figcaption><span>.mcp.json</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="{
+  &quot;mcpServers&quot;: {
+    &quot;optics&quot;: {
+      &quot;url&quot;: &quot;http://127.0.0.1:8090/mcp&quot;
+    }
+  }
+}">Copy</button><pre><code>{
+  <span class="c-mod">"mcpServers"</span>: {
+    <span class="c-mod">"optics"</span>: {
+      <span class="c-mod">"url"</span>: <span class="c-lit">"http://127.0.0.1:<span class="c-info">8090</span>/mcp"</span>
+    }
+  }
+}</code></pre></figure>
+<p>When the server runs in Docker and Appium runs on your machine, pass <code class="ic">url: "http://host.docker.internal:4723"</code> to <code class="ic">start_session</code>.</p>
+<h2 id="session-tools">Session tools<a class="anchor" href="#session-tools" aria-label="Link to this section">#</a></h2>
+<h3 id="start-session">start_session<a class="anchor" href="#start-session" aria-label="Link to this section">#</a></h3>
+<p>Starts a session and launches the app. Returns <code class="ic">{"session_id", "driver_id"}</code>. Keep the <code class="ic">session_id</code>: every other tool needs it.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">driver</code></td><td><code class="ic">appium</code></td><td><code class="ic">appium</code>, <code class="ic">selenium</code>, <code class="ic">playwright</code> or <code class="ic">ble</code>.</td></tr><tr><td><code class="ic">url</code></td><td>Appium: <code class="ic">http://127.0.0.1:4723</code></td><td>The driver's server URL.</td></tr><tr><td><code class="ic">capabilities</code></td><td>None</td><td>The driver's capabilities, as in <a href="../../docs/reference/config#examples-by-platform">config.yaml</a>.</td></tr><tr><td><code class="ic">elements_sources</code></td><td>The driver's three sources</td><td>For example <code class="ic">["appium_find_element", "appium_page_source", "appium_screenshot"]</code>. Passing <code class="ic">[]</code> makes the session fail to start.</td></tr><tr><td><code class="ic">text_detection</code></td><td>None</td><td>OCR engines, for example <code class="ic">["easyocr"]</code>.</td></tr><tr><td><code class="ic">image_detection</code></td><td>None</td><td>Image engines, for example <code class="ic">["templatematch"]</code>.</td></tr><tr><td><code class="ic">project_path</code></td><td>None</td><td>A project folder. Optics loads its image templates. It doesn't load elements or test cases.</td></tr><tr><td><code class="ic">ai_self_heal</code></td><td><code class="ic">OPTICS_AI_SELF_HEAL</code>, else off</td><td>Turns on <a href="../../docs/elements/self-heal">AI self-heal</a>.</td></tr><tr><td><code class="ic">llm_provider</code></td><td><code class="ic">OPTICS_LLM_PROVIDER</code>, else <code class="ic">gemini</code></td><td>The LLM engine for self-heal: <code class="ic">gemini</code>, <code class="ic">openai</code> or <code class="ic">anthropic</code>.</td></tr><tr><td><code class="ic">llm_model</code></td><td><code class="ic">OPTICS_LLM_MODEL</code>, else <code class="ic">gemini-2.5-flash</code> for Gemini</td><td>The model for self-heal. <code class="ic">openai</code> and <code class="ic">anthropic</code> need one.</td></tr><tr><td><code class="ic">strict_element_match</code></td><td>Off</td><td>Accepts only exact text matches.</td></tr></tbody></table></div>
+<p>The first session against a remote device farm can take 30 to 60 seconds to start.</p>
+<h3 id="terminate-session">terminate_session<a class="anchor" href="#terminate-session" aria-label="Link to this section">#</a></h3>
+<p>Closes the app and ends the session. Takes <code class="ic">session_id</code>. Returns <code class="ic">{"session_id", "status": "terminated"}</code>.</p>
+<h3 id="screenshot">screenshot<a class="anchor" href="#screenshot" aria-label="Link to this section">#</a></h3>
+<p>Returns the current screen as a PNG image. Takes <code class="ic">session_id</code>.</p>
+<h2 id="keyword-tools">Keyword tools<a class="anchor" href="#keyword-tools" aria-label="Link to this section">#</a></h2>
+<p>Every app, action and verification keyword is a tool named after the keyword in snake_case. Each takes <code class="ic">session_id</code> plus the keyword's parameters. All parameter values are strings. Leave out a parameter to use its default.</p>
+<p><code class="ic">aoi_*</code> stands for <code class="ic">aoi_x</code>, <code class="ic">aoi_y</code>, <code class="ic">aoi_width</code> and <code class="ic">aoi_height</code>, an area of the screen in percent (0–100). See <a href="../../docs/elements/area-of-interest">Area of interest</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Parameters (defaults)</th></tr></thead><tbody><tr><td><code class="ic">launch_app</code></td><td><code class="ic">app_identifier</code>, <code class="ic">app_activity</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">launch_other_app</code></td><td><code class="ic">app_name</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">close_and_terminate_app</code></td><td>none</td></tr><tr><td><code class="ic">force_terminate_app</code></td><td><code class="ic">app_name</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">get_app_version</code></td><td><code class="ic">app_package</code></td></tr><tr><td><code class="ic">get_driver_session_id</code></td><td>none</td></tr><tr><td><code class="ic">start_appium_session</code></td><td><code class="ic">event_name</code></td></tr><tr><td><code class="ic">initialise_setup</code></td><td>none</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Parameters (defaults)</th></tr></thead><tbody><tr><td><code class="ic">press_element</code></td><td><code class="ic">element</code>, <code class="ic">repeat</code> (1), <code class="ic">offset_x</code> (0), <code class="ic">offset_y</code> (0), <code class="ic">index</code> (0), <code class="ic">aoi_*</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">detect_and_press</code></td><td><code class="ic">element</code>, <code class="ic">timeout</code> (30), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">select_dropdown_option</code></td><td><code class="ic">element</code>, <code class="ic">option</code>, <code class="ic">timeout</code> (30), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">enter_text</code></td><td><code class="ic">element</code>, <code class="ic">text</code>, <code class="ic">aoi_*</code>, <code class="ic">event_name</code>, <code class="ic">index</code> (0)</td></tr><tr><td><code class="ic">enter_text_direct</code></td><td><code class="ic">text</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">enter_text_using_keyboard</code></td><td><code class="ic">text_input</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">enter_number</code></td><td><code class="ic">element</code>, <code class="ic">number</code>, <code class="ic">aoi_*</code>, <code class="ic">event_name</code>, <code class="ic">index</code> (0)</td></tr><tr><td><code class="ic">clear_element_text</code></td><td><code class="ic">element</code>, <code class="ic">aoi_*</code>, <code class="ic">event_name</code>, <code class="ic">index</code> (0)</td></tr><tr><td><code class="ic">get_text</code></td><td><code class="ic">element</code>, <code class="ic">index</code> (0), <code class="ic">aoi_*</code></td></tr><tr><td><code class="ic">press_keycode</code></td><td><code class="ic">keycode</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">swipe</code></td><td><code class="ic">coor_x</code>, <code class="ic">coor_y</code>, <code class="ic">direction</code> (right), <code class="ic">swipe_length</code> (50), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">swipe_by_percentage</code></td><td><code class="ic">percent_x</code>, <code class="ic">percent_y</code>, <code class="ic">direction</code> (right), <code class="ic">swipe_length</code> (50), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">swipe_from_element</code></td><td><code class="ic">element</code>, <code class="ic">direction</code>, <code class="ic">swipe_length</code>, <code class="ic">aoi_*</code>, <code class="ic">event_name</code>, <code class="ic">index</code> (0)</td></tr><tr><td><code class="ic">swipe_until_element_appears</code></td><td><code class="ic">element</code>, <code class="ic">direction</code>, <code class="ic">timeout</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">scroll</code></td><td><code class="ic">direction</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">scroll_from_element</code></td><td><code class="ic">element</code>, <code class="ic">direction</code>, <code class="ic">scroll_length</code>, <code class="ic">aoi_*</code>, <code class="ic">event_name</code>, <code class="ic">index</code> (0)</td></tr><tr><td><code class="ic">scroll_until_element_appears</code></td><td><code class="ic">element</code>, <code class="ic">direction</code>, <code class="ic">timeout</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">sleep</code></td><td><code class="ic">duration</code></td></tr><tr><td><code class="ic">execute_script</code></td><td><code class="ic">script_or_json</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">press_checkbox</code>, <code class="ic">press_radio_button</code>, <code class="ic">swipe_seekbar_to_right_android</code></td><td>Deprecated. Use <code class="ic">press_element</code> and <code class="ic">swipe_from_element</code>.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Parameters (defaults)</th></tr></thead><tbody><tr><td><code class="ic">validate_element</code></td><td><code class="ic">element</code>, <code class="ic">timeout</code> (10), <code class="ic">rule</code> (all), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">is_element</code></td><td><code class="ic">element</code>, <code class="ic">element_state</code>, <code class="ic">timeout</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">assert_presence</code></td><td><code class="ic">elements</code>, <code class="ic">timeout_str</code> (30), <code class="ic">rule</code> (any), <code class="ic">event_name</code>, <code class="ic">fail</code> (True)</td></tr><tr><td><code class="ic">assert_visibility</code></td><td><code class="ic">elements</code>, <code class="ic">timeout_str</code> (30), <code class="ic">rule</code> (any), <code class="ic">event_name</code>, <code class="ic">fail</code> (True)</td></tr><tr><td><code class="ic">assert_equality</code></td><td><code class="ic">output</code>, <code class="ic">expression</code>, <code class="ic">event_name</code></td></tr><tr><td><code class="ic">validate_screen</code></td><td><code class="ic">elements</code>, <code class="ic">timeout</code> (30), <code class="ic">rule</code> (any), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">get_interactive_elements</code></td><td><code class="ic">filter_config</code>, <code class="ic">compact</code> (False)</td></tr></tbody></table></div>
+<p>Separate several elements with <code class="ic">|</code>, for example <code class="ic">elements: "text=Trail Runner 2|text=Pace Knit"</code>. Each tool's description in your agent comes from the keyword's own documentation. See <a href="../../docs/reference/keywords/">Keywords</a> for what each parameter does.</p>
+<p>A tool returns the keyword's result. When self-heal recovers a step, it returns <code class="ic">{"result", "healed": true, "heal_summary", "suggested_steps"}</code> instead, so your agent can write the extra steps into the test.</p>
+<h3 id="hidden-coordinate-taps">Hidden coordinate taps<a class="anchor" href="#hidden-coordinate-taps" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">press_by_coordinates</code> and <code class="ic">press_by_percentage</code> are hidden by default, because agents that guess coordinates write fragile tests. To expose them, set <code class="ic">OPTICS_MCP_ALLOW_COORDINATE_TAPS=1</code> before you start the server.</p>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Parameters (defaults)</th></tr></thead><tbody><tr><td><code class="ic">press_by_coordinates</code></td><td><code class="ic">coor_x</code>, <code class="ic">coor_y</code>, <code class="ic">repeat</code> (1), <code class="ic">event_name</code></td></tr><tr><td><code class="ic">press_by_percentage</code></td><td><code class="ic">percent_x</code>, <code class="ic">percent_y</code>, <code class="ic">repeat</code> (1), <code class="ic">event_name</code></td></tr></tbody></table></div>
+<h2 id="resources">Resources<a class="anchor" href="#resources" aria-label="Link to this section">#</a></h2>
+<p>Resources are read-only data your agent can fetch by URI.</p>
+<div class="table-wrap"><table><thead><tr><th>URI</th><th>Type</th><th>What it returns</th></tr></thead><tbody><tr><td><code class="ic">optics://keywords</code></td><td>JSON</td><td>Every keyword, including flow control, with its description and parameters.</td></tr><tr><td><code class="ic">optics://project-format</code></td><td>Markdown</td><td>How to write a CSV project: the files, columns, <code class="ic">${name}</code> variables and flow-control keywords.</td></tr><tr><td><code class="ic">optics://session/{session_id}/screenshot</code></td><td>PNG</td><td>The current screen.</td></tr><tr><td><code class="ic">optics://session/{session_id}/source</code></td><td>JSON</td><td><code class="ic">{"page_source", "timestamp"}</code>: the UI tree or HTML.</td></tr><tr><td><code class="ic">optics://session/{session_id}/elements</code></td><td>JSON</td><td>A compact list of interactive elements on screen. Appium and Playwright only.</td></tr><tr><td><code class="ic">optics://session/{session_id}/screen_elements</code></td><td>JSON</td><td><code class="ic">{"screenshot", "elements"}</code>: a base64 PNG and the elements in the same frame.</td></tr></tbody></table></div>
+<p><code class="ic">Capture Screenshot</code>, <code class="ic">Capture Pagesource</code> and <code class="ic">Get Screen Elements</code> aren't tools; use these resources instead. There are no MCP prompts.</p>
+<h2 id="environment-variables">Environment variables<a class="anchor" href="#environment-variables" aria-label="Link to this section">#</a></h2>
+<p>Set these in the environment that starts <code class="ic">optics mcp</code>. In a JSON client config, add an <code class="ic">env</code> object next to <code class="ic">command</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">OPTICS_AI_SELF_HEAL</code></td><td><code class="ic">1</code>, <code class="ic">true</code>, <code class="ic">yes</code> or <code class="ic">on</code> turns self-heal on for every session unless <code class="ic">start_session</code> says otherwise.</td></tr><tr><td><code class="ic">OPTICS_LLM_PROVIDER</code></td><td>The default LLM engine: <code class="ic">gemini</code>, <code class="ic">openai</code> or <code class="ic">anthropic</code>.</td></tr><tr><td><code class="ic">OPTICS_LLM_MODEL</code></td><td>The default model. <code class="ic">openai</code> and <code class="ic">anthropic</code> need one.</td></tr><tr><td><code class="ic">OPTICS_MCP_ALLOW_COORDINATE_TAPS</code></td><td><code class="ic">1</code>, <code class="ic">true</code>, <code class="ic">yes</code> or <code class="ic">on</code> exposes the coordinate tap tools.</td></tr><tr><td><code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code></td><td>The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see <a href="../../docs/reference/config#llm-models">llm_models</a>.</td></tr><tr><td><code class="ic">OPENAI_BASE_URL</code></td><td>The server the <code class="ic">openai</code> engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from <code class="ic">OPENAI_API_KEY</code> or <code class="ic">api_key_env</code>.</td></tr></tbody></table></div>
+<h2 id="typical-agent-loop">Typical agent loop<a class="anchor" href="#typical-agent-loop" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="start-a-session">Start a session<a class="anchor" href="#start-a-session" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Call <code class="ic">start_session</code> with the driver, URL and capabilities, for example <code class="ic">driver: "appium"</code>, <code class="ic">capabilities: {"platformName": "Android", "appPackage": "com.birch.shop", ...}</code>. Keep the <code class="ic">session_id</code>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="look-at-the-screen">Look at the screen<a class="anchor" href="#look-at-the-screen" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Call <code class="ic">screenshot</code>, then read <code class="ic">optics://session/{session_id}/elements</code> (or call <code class="ic">get_interactive_elements</code>) for labels and positions. Read <code class="ic">/source</code> when you need XPaths.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="act">Act<a class="anchor" href="#act" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Call keyword tools with a locator: <code class="ic">press_element</code> with <code class="ic">element: "text=Sign in"</code>, <code class="ic">enter_text</code> with an XPath, or <code class="ic">detect_and_press</code> with a visible label. Look again after each action.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="save-the-run-as-a-test">Save the run as a test<a class="anchor" href="#save-the-run-as-a-test" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Read <code class="ic">optics://project-format</code>, then write the steps you ran into CSV files with a config.yaml. Run them with <code class="ic">optics execute &lt;folder&gt;</code>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h3 id="end-the-session">End the session<a class="anchor" href="#end-the-session" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Call <code class="ic">terminate_session</code>.</p></div></li></ol>
+<h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>No flow control.</strong> <code class="ic">Run Loop</code>, <code class="ic">Condition</code>, <code class="ic">Evaluate</code>, <code class="ic">Read Data</code>, <code class="ic">Invoke API</code> and the other flow-control keywords aren't tools. Your agent can still write them into CSV modules for <code class="ic">optics execute</code>.</li><li><strong>No recording or saving.</strong> There are no tools to record, save, replay, find devices or run doctor. The agent writes project files itself.</li><li><strong>Coordinate taps are hidden</strong> unless you set <code class="ic">OPTICS_MCP_ALLOW_COORDINATE_TAPS</code>. Self-heal can still tap by percentage when it recovers a step.</li><li><strong>Sessions aren't shared.</strong> Sessions live in the server's memory. <code class="ic">optics serve</code> and <code class="ic">optics live</code> can't see them, and restarting the server ends them.</li><li><strong>Images come from a project.</strong> There's no upload tool. Pass <code class="ic">project_path</code> to use template images.</li><li><strong>Selenium has no interactive element list.</strong> The elements resource and <code class="ic">get_interactive_elements</code> fail on Selenium; use <code class="ic">/source</code> instead.</li></ul>
+<h2 id="errors">Errors<a class="anchor" href="#errors" aria-label="Link to this section">#</a></h2>
+<p>A failing tool returns an error message. When Optics raises a coded error, the message starts with the code in brackets, for example <code class="ic">[Code.E0106] Driver session is no longer active ...</code>. The code can carry a <code class="ic">Code.</code> prefix; it's the same code. A step that fails after trying every element value arrives as <code class="ic">Execution failed: All fallback attempts failed for keyword ...</code>, with the code inside the text. See <a href="../../docs/reference/errors">Error codes</a>.</p>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20MCP%20server&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fmcp%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20MCP%20server&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fmcp%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/reference/engines"><span>Previous</span>Engines and extras</a><a class="pager-next" href="../../docs/reference/http-api"><span>Next</span>HTTP API</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/mcp.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#install">Install</a></li><li class="toc-l2"><a href="#start-the-server">Start the server</a></li><li class="toc-l2"><a href="#connect-your-agent">Connect your agent</a></li><li class="toc-l2"><a href="#session-tools">Session tools</a></li><li class="toc-l3"><a href="#start-session">start_session</a></li><li class="toc-l3"><a href="#terminate-session">terminate_session</a></li><li class="toc-l3"><a href="#screenshot">screenshot</a></li><li class="toc-l2"><a href="#keyword-tools">Keyword tools</a></li><li class="toc-l3"><a href="#hidden-coordinate-taps">Hidden coordinate taps</a></li><li class="toc-l2"><a href="#resources">Resources</a></li><li class="toc-l2"><a href="#environment-variables">Environment variables</a></li><li class="toc-l2"><a href="#typical-agent-loop">Typical agent loop</a></li><li class="toc-l3"><a href="#start-a-session">Start a session</a></li><li class="toc-l3"><a href="#look-at-the-screen">Look at the screen</a></li><li class="toc-l3"><a href="#act">Act</a></li><li class="toc-l3"><a href="#save-the-run-as-a-test">Save the run as a test</a></li><li class="toc-l3"><a href="#end-the-session">End the session</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#errors">Errors</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=6e19bed943" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
