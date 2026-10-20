@@ -94,6 +94,12 @@ jobs:
               rm -rf "$path"
             done
           else
+            # A branch named after a site path (docs, blog, about...) would overwrite
+            # that part of the live site.
+            if [ -e "out/$DEST" ] || [ -e "out/$DEST.html" ]; then
+              echo "::error::Branch preview path /$DEST is a page of the live site. Rename the branch."
+              exit 1
+            fi
             rm -rf "$DEST"
             mkdir -p "$DEST"
           fi
