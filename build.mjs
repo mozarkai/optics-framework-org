@@ -85,6 +85,28 @@ const fill = (file, marker, text) => {
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
 
+// Agent Skills discovery index (v0.2.0), one entry per <name>/SKILL.md, so each digest
+// always matches the file as published.
+const SKILLS = ".well-known/agent-skills";
+const skills = readdirSync(`site/${SKILLS}`, { withFileTypes: true })
+  .filter((e) => e.isDirectory())
+  .map(({ name }) => {
+    const file = readFileSync(`site/${SKILLS}/${name}/SKILL.md`);
+    const front = file.toString("utf8");
+    if (/^name: (.+)$/m.exec(front)?.[1] !== name) throw new Error(`${SKILLS}/${name}/SKILL.md must be named ${name}`);
+    return {
+      name,
+      type: "skill-md",
+      description: /^description: (.+)$/m.exec(front)[1],
+      url: `/${SKILLS}/${name}/SKILL.md`,
+      digest: `sha256:${createHash("sha256").update(file).digest("hex")}`,
+    };
+  });
+writeFileSync(
+  `out/${SKILLS}/index.json`,
+  JSON.stringify({ $schema: "https://schemas.agentskills.io/discovery/0.2.0/schema.json", skills }, null, 2) + "\n",
+);
+
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
 const docs = buildDocs({ lastModified });
 
