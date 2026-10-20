@@ -31,6 +31,8 @@
 .PARAMETER Uninstall
     Remove the managed install.
 #>
+# The parameters are read inside the `& { }` body below, which the analyzer does not follow.
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '')]
 [CmdletBinding()]
 param(
     [string] $Version      = $env:OPTICS_VERSION,
@@ -41,14 +43,19 @@ param(
     [switch] $Uninstall
 )
 
+# The body runs in a child scope and stops with `return`, never `exit`: under
+# `irm | iex` an exit would close the user's PowerShell window.
+try { & {
 $ErrorActionPreference = 'Stop'
 
 $Package = 'optics-framework'
 if (-not $Dir) { $Dir = Join-Path $HOME '.optics' }
+$Dir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Dir).TrimEnd('\', '/')
 if ($env:OPTICS_NO_MODIFY_PATH) { $NoModifyPath = $true }
 
 $Venv = Join-Path $Dir 'venv'
 $Bin  = Join-Path $Dir 'bin'
+$Shim = Join-Path $Bin 'optics.cmd'
 
 function Write-Step { param([string] $Message) Write-Host "  -> $Message" -ForegroundColor DarkGray }
 function Write-Ok   { param([string] $Message) Write-Host "  [ok] $Message" -ForegroundColor Green }
@@ -58,24 +65,69 @@ function Write-FatalError {
     Write-Host ''
     Write-Host "Cannot install: $Reason" -ForegroundColor Red
     foreach ($line in $Guidance) { Write-Host "  $line" }
-    exit 1
+    throw [System.OperationCanceledException]::new()
+}
+
+# Windows PowerShell 5.1 turns native stderr into a terminating error under
+# 'Stop' once it is redirected, so native calls run with a local 'Continue'.
+function Invoke-Native {
+    param([string] $Exe, [string[]] $Arguments = @())
+    $ErrorActionPreference = 'Continue'
+    $lines = @(& $Exe @Arguments 2>&1 | ForEach-Object { "$_" })
+    [pscustomobject]@{ Code = $LASTEXITCODE; Output = ($lines -join [Environment]::NewLine).Trim() }
+}
+
+# Read and written raw, so entries like %JAVA_HOME%\bin stay references
+# instead of being frozen to today's value.
+function Get-UserPath {
+    (Get-Item -Path 'HKCU:\Environment').GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+}
+
+function Save-UserPath {
+    param([string] $Value)
+    Set-ItemProperty -Path 'HKCU:\Environment' -Name Path -Value $Value -Type ExpandString
+    # Setting a variable through .NET broadcasts the change, so new terminals pick it up.
+    [Environment]::SetEnvironmentVariable('OPTICS_INSTALLER', '1', 'User')
+    [Environment]::SetEnvironmentVariable('OPTICS_INSTALLER', $null, 'User')
+}
+
+function Test-IsBin {
+    param([string] $Entry)
+    [Environment]::ExpandEnvironmentVariables($Entry).TrimEnd('\') -ieq $Bin
 }
 
 # ------------------------------------------------------------------ uninstall
 if ($Uninstall) {
-    if (-not (Test-Path $Dir)) {
-        Write-Host "Nothing to uninstall: $Dir does not exist."
-        exit 0
+    $pathEntries = @((Get-UserPath) -split ';' | Where-Object { $_ })
+    $keptEntries = @($pathEntries | Where-Object { -not (Test-IsBin $_) })
+    $onPath = $keptEntries.Count -ne $pathEntries.Count
+    $hasVenv = Test-Path $Venv
+    $hasShim = Test-Path $Shim
+    if (-not ($hasVenv -or $hasShim -or $onPath)) {
+        Write-Host "Nothing to uninstall: there is no Optics install in $Dir."
+        return
     }
     if ($DryRun) {
-        Write-Host "Would remove $Dir"
-        exit 0
+        if ($hasVenv) { Write-Host "Would remove $Venv" }
+        if ($hasShim) { Write-Host "Would remove $Shim" }
+        if ($onPath)  { Write-Host "Would remove $Bin from your user PATH" }
+        return
     }
-    Remove-Item -Recurse -Force $Dir
-    Write-Ok "Removed $Dir"
-    Write-Host ''
-    Write-Host 'If it was added to your PATH, remove it from your user environment variables.'
-    exit 0
+    if ($hasVenv) { Remove-Item -Recurse -Force $Venv }
+    if ($hasShim) { Remove-Item -Force $Shim }
+    foreach ($folder in $Bin, $Dir) {
+        if ((Test-Path $folder) -and -not (Get-ChildItem -Force $folder | Select-Object -First 1)) {
+            Remove-Item -Force $folder
+        }
+    }
+    Write-Ok "Removed Optics from $Dir"
+    if (Test-Path $Dir) { Write-Host "  $Dir holds other files, so it was left in place." }
+    if ($onPath) {
+        Save-UserPath ($keptEntries -join ';')
+        $env:Path = (@($env:Path -split ';' | Where-Object { $_ -and -not (Test-IsBin $_) })) -join ';'
+        Write-Ok "Removed $Bin from your user PATH"
+    }
+    return
 }
 
 Write-Host ''
@@ -89,10 +141,9 @@ Write-Host ''
 function Get-PythonVersion {
     param([string] $Exe, [string[]] $Prefix = @())
     try {
-        $probeArgs = $Prefix + @('-c', 'import sys; print("%d.%d.%d" % sys.version_info[:3])')
-        $output = & $Exe @probeArgs 2>$null
-        if ($LASTEXITCODE -ne 0 -or -not $output) { return $null }
-        return ($output | Select-Object -First 1).Trim()
+        $probe = Invoke-Native $Exe ($Prefix + @('-c', 'import sys; print("%d.%d.%d" % sys.version_info[:3])'))
+        if ($probe.Code -ne 0) { return $null }
+        return ($probe.Output -split '\r?\n' | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -Last 1)
     } catch {
         return $null
     }
@@ -147,7 +198,6 @@ if ($Version) { $Spec = "$Spec==$Version" }
 
 $VenvPython = Join-Path $Venv 'Scripts\python.exe'
 $VenvOptics = Join-Path $Venv 'Scripts\optics.exe'
-$Shim       = Join-Path $Bin 'optics.cmd'
 
 if ($DryRun) {
     Write-Host ''
@@ -157,7 +207,7 @@ if ($DryRun) {
     Write-Step "link the optics CLI into $Bin"
     if (-not $NoModifyPath) { Write-Step "add $Bin to your user PATH" }
     Write-Host ''
-    exit 0
+    return
 }
 
 # ----------------------------------------------------------------------- venv
@@ -166,18 +216,19 @@ if (Test-Path $VenvPython) {
 } else {
     Write-Step "Creating a virtual environment at $Venv"
     New-Item -ItemType Directory -Force -Path $Dir | Out-Null
-    $venvArgs = $python.Prefix + @('-m', 'venv', $Venv)
-    $venvLog = & $python.Exe @venvArgs 2>&1
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $VenvPython)) {
-        Write-FatalError "Could not create a virtual environment at $Venv." @('', ($venvLog | Out-String))
+    $venvRun = Invoke-Native $python.Exe ($python.Prefix + @('-m', 'venv', $Venv))
+    if ($venvRun.Code -ne 0 -or -not (Test-Path $VenvPython)) {
+        Write-FatalError "Could not create a virtual environment at $Venv." @('', $venvRun.Output)
     }
 }
 
 # -------------------------------------------------------------------- install
 Write-Step "Installing $Spec"
-& $VenvPython -m pip install --quiet --disable-pip-version-check --upgrade $Spec
-if ($LASTEXITCODE -ne 0) {
+$pip = Invoke-Native $VenvPython @('-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', $Spec)
+if ($pip.Code -ne 0) {
     Write-FatalError "pip could not install $Spec." @(
+        ''
+        $pip.Output
         ''
         'Re-run with -Version to pin a known-good release, or see'
         '  https://pypi.org/project/optics-framework/'
@@ -196,18 +247,18 @@ New-Item -ItemType Directory -Force -Path $Bin | Out-Null
 "%~dp0..\venv\Scripts\optics.exe" %*
 "@ | Set-Content -Path $Shim -Encoding ASCII
 
-$installed = (& $Shim --version 2>&1 | Out-String).Trim()
-if (-not $installed) {
+$check = Invoke-Native $Shim @('--version')
+if ($check.Code -ne 0) {
     Write-FatalError "Installed, but '$Shim --version' did not run." @(
-        '', 'Report this at https://github.com/mozarkai/optics-framework/issues'
+        '', $check.Output, '', 'Report this at https://github.com/mozarkai/optics-framework/issues'
     )
 }
-Write-Ok $installed
+Write-Ok $check.Output
 
 # ----------------------------------------------------------------------- PATH
 Write-Host ''
-$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
-$onPath = $userPath -split ';' | Where-Object { $_.TrimEnd('\') -ieq $Bin.TrimEnd('\') }
+$userPath = Get-UserPath
+$onPath = $userPath -split ';' | Where-Object { $_ -and (Test-IsBin $_) }
 
 if ($onPath) {
     Write-Ok "$Bin is already on your PATH"
@@ -217,7 +268,7 @@ if ($onPath) {
     Write-Host "  $Bin"
 } else {
     $updated = if ([string]::IsNullOrEmpty($userPath)) { $Bin } else { "$($userPath.TrimEnd(';'));$Bin" }
-    [Environment]::SetEnvironmentVariable('Path', $updated, 'User')
+    Save-UserPath $updated
     # The user-scope change only reaches processes started afterwards, so make
     # this session usable too rather than telling the user to reopen it.
     $env:Path = "$env:Path;$Bin"
@@ -230,3 +281,9 @@ Write-Host ''
 Write-Host 'Next: optics quickstart'
 Write-Host '      Builds a project, checks your setup, and runs your first test.' -ForegroundColor DarkGray
 Write-Host ''
+} } catch [System.OperationCanceledException] {
+    # The reason is already printed. A downloaded script reports failure to its
+    # caller; under iex the window must stay open, so only the exit code is set.
+    if ($PSCommandPath) { exit 1 }
+    $global:LASTEXITCODE = 1
+}

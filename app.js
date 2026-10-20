@@ -30,7 +30,10 @@
       execute: function (input) {
         var terms = String(input.query || "").toLowerCase().split(/\s+/).filter(Boolean);
         var docs = new URL("docs/", site);
-        index = index || fetch(new URL("search.json", docs)).then(function (r) { return r.json(); });
+        // A failed load is forgotten, so the next call retries instead of failing forever.
+        index = index || fetch(new URL("search.json", docs))
+          .then(function (r) { if (!r.ok) throw new Error("search index: HTTP " + r.status); return r.json(); })
+          .catch(function (e) { index = null; throw e; });
         return index.then(function (pages) {
           var hits = pages.map(function (p) {
             var score = 0, title = p.t.toLowerCase(), summary = (p.d || "").toLowerCase(), body = (p.x || "").toLowerCase();
@@ -39,7 +42,7 @@
             return { score: score, title: p.t, url: url.href, markdown: markdownUrl(url).href, summary: p.d };
           }).filter(function (h) { return h.score > 0; });
           hits.sort(function (a, b) { return b.score - a.score; });
-          return text(hits.slice(0, input.limit || 5).map(function (h) { delete h.score; return h; }));
+          return text(hits.slice(0, Math.min(Math.max(Number(input.limit) || 5, 1), 10)).map(function (h) { delete h.score; return h; }));
         });
       },
     },

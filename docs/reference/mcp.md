@@ -1,4 +1,4 @@
-# MCP server
+# MCP server reference
 
 > Tools and resources that `optics mcp` gives your AI agent.
 

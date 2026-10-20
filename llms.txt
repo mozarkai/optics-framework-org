@@ -33,6 +33,8 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Keyword reference](https://optics-framework.org/docs/reference/keywords/index.md): every keyword, its parameters and defaults.
 - [CLI reference](https://optics-framework.org/docs/reference/cli.md): every `optics` command and flag.
 - [Error codes](https://optics-framework.org/docs/reference/errors.md): what each code means and how to fix it.
+- [HTTP API reference](https://optics-framework.org/docs/reference/http-api.md): the endpoints `optics serve` exposes for sessions, keywords and streamed results.
+- [MCP server reference](https://optics-framework.org/docs/reference/mcp.md): the tools and resources `optics mcp` gives your AI agent.
 - [Error detection](https://optics-framework.org/docs/run/error-detection.md): fail a run on crash dialogs and error messages via `error_definitions.csv`.
 - [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting.md): fixes for common problems.
 

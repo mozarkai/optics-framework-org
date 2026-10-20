@@ -81,24 +81,62 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# The shim and the PATH line store this path, so it must be absolute. `--dir=~/x`
+# reaches us with the tilde unexpanded, because the shell only expands it at the
+# start of a word.
+case "$INSTALL_DIR" in \~|\~/*) INSTALL_DIR="$HOME${INSTALL_DIR#\~}" ;; esac
+case "$INSTALL_DIR" in /*) ;; *) INSTALL_DIR="$PWD/$INSTALL_DIR" ;; esac
+INSTALL_DIR="${INSTALL_DIR%/}"
+
 VENV="$INSTALL_DIR/venv"
 BIN="$INSTALL_DIR/bin"
+# shellcheck disable=SC2016  # $PATH must land in the profile literally
+PATH_LINE=$(printf 'export PATH="%s:$PATH"' "$BIN")
+FISH_LINE=$(printf 'fish_add_path "%s"' "$BIN")
+FISH_PROFILE="$HOME/.config/fish/conf.d/optics.fish"
+
+# Drop the "# Optics Framework" block this script appended to a profile: the
+# marker and the exact PATH line, nothing else. Rewritten in place with cat so a
+# symlinked dotfile stays a symlink.
+remove_path_block() {
+    [ -f "$1" ] && grep -qxF "$2" "$1" || return 1
+    LINE="$2" awk '
+        $0 == "# Optics Framework" { held = $0; next }
+        held != "" { if ($0 != ENVIRON["LINE"]) print held; held = "" }
+        $0 == ENVIRON["LINE"] { next }
+        { print }
+        END { if (held != "") print held }
+    ' "$1" > "$1.optics-tmp" && cat "$1.optics-tmp" > "$1" && rm -f "$1.optics-tmp"
+}
 
 # --------------------------------------------------------------- uninstall --
 if [ "$UNINSTALL" -eq 1 ]; then
-    if [ ! -d "$INSTALL_DIR" ]; then
-        say "Nothing to uninstall: $INSTALL_DIR does not exist."
+    # Only what this script created goes: --dir may point at a folder that holds
+    # other things, such as your home directory.
+    if [ ! -e "$VENV" ] && [ ! -e "$BIN/optics" ]; then
+        say "Nothing to uninstall: there is no Optics install in $INSTALL_DIR."
         exit 0
     fi
     if [ "$DRY_RUN" -eq 1 ]; then
-        say "Would remove $INSTALL_DIR"
+        say "Would remove $VENV and $BIN/optics, and the Optics PATH line from your shell profile."
         exit 0
     fi
-    rm -rf "$INSTALL_DIR"
-    ok "Removed $INSTALL_DIR"
+    rm -rf "$VENV"
+    rm -f "$BIN/optics"
+    rmdir "$BIN" "$INSTALL_DIR" 2>/dev/null || true
+    ok "Removed Optics from $INSTALL_DIR"
+    if [ -e "$INSTALL_DIR" ]; then
+        say "  ${DIM}$INSTALL_DIR holds other files, so it was left in place.${R}"
+    fi
+    for profile in "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.profile"; do
+        if remove_path_block "$profile" "$PATH_LINE"; then ok "Removed the PATH line from $profile"; fi
+    done
+    if remove_path_block "$FISH_PROFILE" "$FISH_LINE"; then
+        if ! grep -q '[^[:space:]]' "$FISH_PROFILE"; then rm -f "$FISH_PROFILE"; fi
+        ok "Removed the PATH line from $FISH_PROFILE"
+    fi
     say ""
-    say "If you added it to your PATH, remove the Optics Framework block from"
-    say "your shell profile."
+    say "Open a new terminal so the old PATH is gone there too."
     exit 0
 fi
 
@@ -242,14 +280,15 @@ elif [ "$MODIFY_PATH" -eq 0 ]; then
 else
     PROFILE=$(profile_for_shell)
     mkdir -p "$(dirname "$PROFILE")"
-    if grep -q 'Optics Framework' "$PROFILE" 2>/dev/null; then
+    case "$PROFILE" in
+        *fish*) LINE="$FISH_LINE" ;;
+        *)      LINE="$PATH_LINE" ;;
+    esac
+    # Match this install's own line: an earlier install elsewhere left a block
+    # pointing at a different folder.
+    if grep -qxF "$LINE" "$PROFILE" 2>/dev/null; then
         ok "Your PATH is already configured in $PROFILE"
     else
-        # shellcheck disable=SC2016  # $PATH must land in the profile literally
-        case "$PROFILE" in
-            *fish*) LINE=$(printf 'fish_add_path "%s"' "$BIN") ;;
-            *)      LINE=$(printf 'export PATH="%s:$PATH"' "$BIN") ;;
-        esac
         printf '\n# Optics Framework\n%s\n' "$LINE" >> "$PROFILE"
         ok "Added $BIN to your PATH in $PROFILE"
     fi

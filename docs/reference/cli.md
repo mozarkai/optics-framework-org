@@ -479,7 +479,7 @@ $ curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,easy
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Installs somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Leaves your shell profile alone. |
 | `--dry-run` | | Prints what would happen and changes nothing. |
-| `--uninstall` | | Removes the install folder. Remove the Optics block from your shell profile yourself. |
+| `--uninstall` | | Removes Optics and the PATH line it added to your shell profile. Other files in the folder are kept. |
 | `--help` | | Shows the options. |
 
 On Windows under Git Bash, MSYS2 or Cygwin, the script stops and points you to the PowerShell installer. Inside WSL, use this script.
@@ -503,7 +503,13 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 | `-Dir PATH` | `OPTICS_INSTALL_DIR` | Installs somewhere other than `~\.optics`. |
 | `-NoModifyPath` | `OPTICS_NO_MODIFY_PATH` | Leaves your PATH alone. |
 | `-DryRun` | | Prints what would happen and changes nothing. |
-| `-Uninstall` | | Removes the managed install. |
+| `-Uninstall` | | Removes Optics and its entry in your user PATH. Other files in the folder are kept. |
+
+To pass parameters without downloading the script, run it as a script block:
+
+```powershell
+PS> & ([scriptblock]::Create((irm https://optics-framework.org/install.ps1))) -Uninstall
+```
 **pip**
 
 ```shell

@@ -81,8 +81,8 @@
 - [config.yaml](https://optics-framework.org/docs/reference/config.md): Every setting in a project's config.yaml.
 - [Project files](https://optics-framework.org/docs/reference/files.md): The file formats Optics reads: test cases, modules, elements, error definitions and API definitions.
 - [Engines and extras](https://optics-framework.org/docs/reference/engines.md): Learn which drivers, element sources, OCR, image matching and LLM engines Optics supports, and which pip extra installs each one.
-- [MCP server](https://optics-framework.org/docs/reference/mcp.md): Tools and resources that `optics mcp` gives your AI agent.
-- [HTTP API](https://optics-framework.org/docs/reference/http-api.md): Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.
+- [MCP server reference](https://optics-framework.org/docs/reference/mcp.md): Tools and resources that `optics mcp` gives your AI agent.
+- [HTTP API reference](https://optics-framework.org/docs/reference/http-api.md): Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.
 - [Error codes](https://optics-framework.org/docs/reference/errors.md): Learn what each Optics error code means and how to fix it.
 
 ## Help

@@ -1,4 +1,4 @@
-# HTTP API
+# HTTP API reference
 
 > Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.
 
