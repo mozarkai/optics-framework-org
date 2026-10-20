@@ -89,62 +89,23 @@
 <p>You need:</p>
 <ul><li>A project that works in <a href="../../docs/create/record"><code class="ic">optics live</code></a>.</li><li>An API key for an AI model, or a local model server such as Ollama.</li></ul>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-the-ai-engine">Install the AI engine<a class="anchor" href="#install-the-ai-engine" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Pick the engine that matches the account you already have:</p>
-<div class="table-wrap"><table><thead><tr><th>You have</th><th>Install</th><th>Enable in config.yaml</th></tr></thead><tbody><tr><td>A Gemini API key, or Google Cloud Vertex AI</td><td><code class="ic">gemini</code></td><td><code class="ic">gemini</code></td></tr><tr><td>An OpenAI API key</td><td><code class="ic">openai</code></td><td><code class="ic">openai</code></td></tr><tr><td>An OpenRouter key, for any model it hosts</td><td><code class="ic">openai</code></td><td><code class="ic">openai</code>, with OpenRouter's <code class="ic">url</code></td></tr><tr><td>A local model in Ollama, vLLM or LM Studio</td><td><code class="ic">openai</code></td><td><code class="ic">openai</code>, with the server's <code class="ic">url</code></td></tr><tr><td>A Claude API key, or Claude on Amazon Bedrock or Vertex AI</td><td><code class="ic">anthropic</code></td><td><code class="ic">anthropic</code></td></tr></tbody></table></div>
-<p>Install it by the name in the Install column, for example:</p>
+<p>Pick the engine for the account you have:</p>
+<div class="table-wrap"><table><thead><tr><th>You have</th><th>Install</th></tr></thead><tbody><tr><td>A Gemini API key, or Google Cloud Vertex AI</td><td><code class="ic">gemini</code></td></tr><tr><td>An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio</td><td><code class="ic">openai</code></td></tr><tr><td>A Claude API key, or Claude on Amazon Bedrock or Vertex AI</td><td><code class="ic">anthropic</code></td></tr></tbody></table></div>
+<p>Install that name, for example:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install gemini">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> gemini</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="turn-it-on-in-configyaml">Turn it on in config.yaml<a class="anchor" href="#turn-it-on-in-configyaml" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Add an <code class="ic">llm_models</code> section to your project's <code class="ic">config.yaml</code>:</p>
-<div class="doc-tabs" data-group="llm"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-llm-t0" aria-controls="tabs-llm-p0" aria-selected="true"  data-tab="Gemini">Gemini</button><button class="os-tab" role="tab" id="tabs-llm-t1" aria-controls="tabs-llm-p1" aria-selected="false" tabindex="-1" data-tab="OpenAI">OpenAI</button><button class="os-tab" role="tab" id="tabs-llm-t2" aria-controls="tabs-llm-p2" aria-selected="false" tabindex="-1" data-tab="OpenRouter">OpenRouter</button><button class="os-tab" role="tab" id="tabs-llm-t3" aria-controls="tabs-llm-p3" aria-selected="false" tabindex="-1" data-tab="Ollama">Ollama</button><button class="os-tab" role="tab" id="tabs-llm-t4" aria-controls="tabs-llm-p4" aria-selected="false" tabindex="-1" data-tab="Claude">Claude</button></div><div class="tab-pane" role="tabpanel" id="tabs-llm-p0" aria-labelledby="tabs-llm-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
+<p>Add an <code class="ic">llm_models</code> section to your project's <code class="ic">config.yaml</code>, using the same name:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
   - gemini:
       enabled: true">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
   - <span class="c-mod">gemini</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-llm-p1" aria-labelledby="tabs-llm-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
-  - openai:
-      enabled: true
-      capabilities:
-        model: gpt-5-mini">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
-  - <span class="c-mod">openai</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
-      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
-        <span class="c-mod">model</span><span class="c-dim">:</span> gpt-5-mini</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-llm-p2" aria-labelledby="tabs-llm-t2" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
-  - openai:
-      enabled: true
-      url: https://openrouter.ai/api/v1
-      capabilities:
-        model: anthropic/claude-sonnet-5-5
-        api_key_env: OPENROUTER_API_KEY">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
-  - <span class="c-mod">openai</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
-      <span class="c-mod">url</span><span class="c-dim">:</span> https://openrouter.ai/api/v1
-      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
-        <span class="c-mod">model</span><span class="c-dim">:</span> anthropic/claude-sonnet-5-5
-        <span class="c-mod">api_key_env</span><span class="c-dim">:</span> OPENROUTER_API_KEY</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-llm-p3" aria-labelledby="tabs-llm-t3" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
-  - openai:
-      enabled: true
-      url: http://localhost:11434/v1
-      capabilities:
-        model: qwen2.5vl">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
-  - <span class="c-mod">openai</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
-      <span class="c-mod">url</span><span class="c-dim">:</span> http://localhost:11434/v1
-      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
-        <span class="c-mod">model</span><span class="c-dim">:</span> qwen2.5vl</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-llm-p4" aria-labelledby="tabs-llm-t4" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="llm_models:
-  - anthropic:
-      enabled: true
-      capabilities:
-        model: claude-sonnet-5-5">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
-  - <span class="c-mod">anthropic</span><span class="c-dim">:</span>
-      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
-      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
-        <span class="c-mod">model</span><span class="c-dim">:</span> claude-sonnet-5-5</code></pre></figure></div></div>
-<p>Gemini uses <code class="ic">gemini-2.5-flash</code> unless you set a <code class="ic">model</code>; the other engines need one. Optics sends the model screenshots, so pick one that accepts images. Every setting is listed under <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>For a server such as OpenRouter or Ollama, add its <code class="ic">url</code>. Gemini uses <code class="ic">gemini-2.5-flash</code> unless you set a <code class="ic">model</code>; the other engines need one. Pick a model that accepts screenshots. See <a href="../../docs/reference/config#llm-models">llm_models</a> for every setting.</p>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="give-optics-your-key">Give Optics your key<a class="anchor" href="#give-optics-your-key" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Set the key as an environment variable in the terminal you'll run <code class="ic">optics live</code> from:</p>
+<p>Set the engine's key in the terminal you run <code class="ic">optics live</code> from:</p>
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="export GEMINI_API_KEY=&quot;your-key&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>export</b> GEMINI_API_KEY="your-key"</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="$env:GEMINI_API_KEY = &quot;your-key&quot;">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>$env:GEMINI_API_KEY</b> = "your-key"</code></pre></figure></div></div>
-<p>Use the variable for your engine: <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the one you named in <code class="ic">api_key_env</code>. A local server such as Ollama needs no key.</p>
-<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Don't put API keys in <code class="ic">config.yaml</code>. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.</p></aside>
-<p>For Vertex AI or Amazon Bedrock, see <a href="../../docs/reference/config#llm-models">llm_models</a> for the settings and credentials each one needs.</p></div></li></ol>
+<p>Use <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable you named in <code class="ic">api_key_env</code>. A local server needs no key.</p>
+<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Don't put API keys in <code class="ic">config.yaml</code>. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.</p></aside></div></li></ol>
 <h2 id="describe-a-flow">Describe a flow<a class="anchor" href="#describe-a-flow" aria-label="Link to this section">#</a></h2>
 <p>Start <code class="ic">optics live</code>, then press <kbd>Ctrl</kbd>+<kbd>N</kbd>. The prompt changes from <code class="ic">›</code> to <code class="ic">ai ›</code>. Type what you want in plain English:</p>
 <figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="c-run">ai ›</span> <b>add trail runners to the cart</b>
@@ -174,7 +135,7 @@
 <ul><li><strong>Describe one outcome per instruction.</strong> <em>Sign in as ava@birch.shop</em> works better than a whole checkout in one sentence. Run several instructions in a row instead.</li><li><strong>Use the words on screen.</strong> <em>Tap Add to cart</em> is clearer than <em>buy it</em>.</li><li><strong>Give values explicitly.</strong> <em>Search for "trail runner"</em>, not <em>search for shoes</em>.</li></ul>
 <p>Each run stops after 15 steps, after 3 failed steps in a row, or when the model repeats gestures without getting closer. Break long flows into smaller goals.</p>
 <h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
-<ul><li>Each step is a call to the model, so a run costs API usage and takes several seconds per step.</li><li>Screenshots go to your model provider while the mode is on, unless the model runs on your own machine. Don't use a hosted model on screens that show data you can't send to a third party.</li></ul>
+<ul><li>Each step is a call to the model, so a run costs API usage and takes several seconds per step.</li><li>Screenshots go to your model provider while the mode is on, unless you run the model locally. Don't use a hosted model on screens that show data you can't send to a third party.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/create/record">Record a test</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a>, which uses the same model to recover a failing step during a run</li><li><a href="../../docs/create/agent">Let your AI agent build tests</a></li></ul>
         </div>

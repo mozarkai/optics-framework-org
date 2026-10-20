@@ -132,7 +132,7 @@ $ export GEMINI_API_KEY="your-key"
 $ optics mcp
 ```
 
-For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER` and `OPTICS_LLM_MODEL`. See [Environment variables](https://optics-framework.org/docs/reference/mcp#environment-variables).
+For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER`, `OPTICS_LLM_MODEL` and the engine's key. See [Environment variables](https://optics-framework.org/docs/reference/mcp#environment-variables).
 
 When a step is healed, the tool result includes `"healed": true` and the steps that worked, so the agent can update the suite.
 

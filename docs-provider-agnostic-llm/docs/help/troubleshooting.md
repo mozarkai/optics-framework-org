@@ -306,7 +306,7 @@ llm_models:
       enabled: true
 ```
 
-Use `openai` or `anthropic` instead if that's the account you have. See [Describe a test in plain English](https://optics-framework.org/docs/create/describe#before-you-begin).
+Use `openai` or `anthropic` for those providers. See [Describe a test in plain English](https://optics-framework.org/docs/create/describe#before-you-begin).
 
 ### `E0601`: the LLM engine requires an optional dependency
 
@@ -323,8 +323,6 @@ The `openai` and `anthropic` engines have no default model, so set `capabilities
 The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.
 
 Set your engine's key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`) in the terminal you run Optics from, and check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
-
-If a server used through the `openai` engine rejects the response format, set `response_format: json_object` in its `capabilities`.
 
 ### AI self-heal does nothing
 

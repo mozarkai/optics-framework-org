@@ -16,7 +16,7 @@ No, not by default. Optics has no telemetry and needs no account. Tests, screens
 
 Data leaves your machine only through features you turn on:
 
-- **The AI model** used by [plain-English mode](https://optics-framework.org/docs/create/describe) and [AI self-heal](https://optics-framework.org/docs/elements/self-heal) receives screenshots and the screen's UI tree. They go to the provider you configure (Google, OpenAI, Anthropic, or the server in your `url`), or stay on your machine with a local model.
+- **The AI features**, [plain-English mode](https://optics-framework.org/docs/create/describe) and [AI self-heal](https://optics-framework.org/docs/elements/self-heal), send screenshots and the screen's UI tree to the provider you configure: Google, OpenAI, Anthropic, or the server in your `url`. A local model keeps them on your machine.
 - **Google Cloud Vision** OCR sends screenshots to Google. EasyOCR and Tesseract run locally.
 - **Remote OCR and image engines** (`remote_ocr`, `remote_oir`) send screenshots to the URL you configure.
 - **Event reporting** sends the events you label with `event_name` to the `eventUrl` in your `event_attributes_json` file, if you set one up.

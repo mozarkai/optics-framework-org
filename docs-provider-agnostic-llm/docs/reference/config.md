@@ -121,17 +121,7 @@ Enable the sources that match your driver. We recommend all three for your drive
 
 ### llm_models
 
-Enable the engine that matches the account you already have. Each engine has an extra of the same name, and the `llm` bundle installs all three.
-
-| You have | Enable |
-|---|---|
-| A Gemini API key, or Google Cloud Vertex AI | `gemini` |
-| An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio | `openai` |
-| A Claude API key, or Claude on Amazon Bedrock or Google Vertex AI | `anthropic` |
-
-Each engine reads its key from an environment variable. Don't put a key in config.yaml, because the file usually ends up in version control. If you enable more than one entry, Optics tries them in list order and moves to the next one when a call fails.
-
-Plain-English mode and self-heal send screenshots, so choose a model that accepts images.
+Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. Use environment variables for keys, not `config.yaml`. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
 
 #### gemini
 
@@ -154,7 +144,7 @@ Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, s
 
 #### openai
 
-Works with OpenAI and with any server that offers an OpenAI-compatible Chat Completions API. Set the entry's `url` to the server's base URL, or leave it out to call OpenAI. `OPENAI_BASE_URL` works in place of `url`.
+Works with OpenAI and any server that offers an OpenAI-compatible Chat Completions API. Set the entry's `url` to the server's base URL, or leave it out to call OpenAI. `OPENAI_BASE_URL` works in place of `url`.
 
 | Setting | Default | What it does |
 |---|---|---|
@@ -168,7 +158,7 @@ Works with OpenAI and with any server that offers an OpenAI-compatible Chat Comp
 |---|---|---|
 | OpenAI | Leave it out | `OPENAI_API_KEY` |
 | OpenRouter | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY`, with `api_key_env: OPENROUTER_API_KEY` |
-| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable `api_key_env` names |
+| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable named by `api_key_env` |
 | Ollama | `http://localhost:11434/v1` | None |
 | vLLM, LM Studio | The server's `/v1` URL | None |
 
@@ -184,7 +174,7 @@ llm_models:
 
 #### anthropic
 
-Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedrock or Vertex AI, also install `anthropic[bedrock]` or `anthropic[vertex]` into the same Python environment as Optics.
+Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedrock or Vertex AI, also install `anthropic[bedrock]` or `anthropic[vertex]` into the same Python environment as Optics.
 
 | Setting | Default | What it does |
 |---|---|---|
@@ -201,14 +191,6 @@ Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedrock 
 | `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
 | `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
 | `vertex` | Google Cloud application default credentials |
-
-```yaml
-llm_models:
-  - anthropic:
-      enabled: true
-      capabilities:
-        model: claude-sonnet-5-5
-```
 
 ## Examples by platform
 

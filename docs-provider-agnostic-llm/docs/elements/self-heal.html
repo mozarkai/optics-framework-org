@@ -89,7 +89,7 @@
 <p>It isn't a substitute for good elements. A healed step <strong>passes</strong>, so a real change in the app can go unnoticed unless you read the logs. Fix the element afterwards, as described in <a href="#find-out-what-healed">Find out what healed</a>.</p>
 <h2 id="turn-it-on">Turn it on<a class="anchor" href="#turn-it-on" aria-label="Link to this section">#</a></h2>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-the-ai-engine-and-set-your-key">Install the AI engine and set your key<a class="anchor" href="#install-the-ai-engine-and-set-your-key" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<p>Self-heal uses the same AI engine and key as <a href="../../docs/create/describe#before-you-begin">plain-English mode</a>. Install the engine that matches your account (<code class="ic">gemini</code>, <code class="ic">openai</code> or <code class="ic">anthropic</code>) and set its key, for example:</p>
+<p>Self-heal uses the same AI engine and key as <a href="../../docs/create/describe#before-you-begin">plain-English mode</a>. Install it and set its key, for example:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install gemini
 export GEMINI_API_KEY=&quot;your-key&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> gemini
 <span class="prompt">$</span> <b>export</b> GEMINI_API_KEY="your-key"</code></pre></figure>
@@ -124,7 +124,7 @@ AI self-heal: recovered 'press_element' via keyword 'press_element'</code></pre>
 <p>Update the element with what the model used, here by adding <code class="ic">sign_in,Log in</code> to <code class="ic">elements.csv</code>.</p>
 <p>Over the <a href="../../docs/advanced/http-api">HTTP API</a> and <a href="../../docs/create/agent">MCP</a>, a healed step's result says so directly, with <code class="ic">"healed": true</code> and the steps that worked.</p>
 <h2 id="costs-and-limits">Costs and limits<a class="anchor" href="#costs-and-limits" aria-label="Link to this section">#</a></h2>
-<ul><li>Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.</li><li>Screenshots are sent to your model provider while self-heal runs, unless the model runs on your own machine. Don't use a hosted model on screens with data you can't share with a third party.</li><li>The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.</li></ul>
+<ul><li>Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.</li><li>Screenshots go to your model provider while self-heal runs, unless you run the model locally. Don't use a hosted model on screens with data you can't share with a third party.</li><li>The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/elements/">How Optics finds elements</a></li><li><a href="../../docs/create/describe">Describe a test in plain English</a></li><li><a href="../../docs/reference/config">config.yaml reference</a></li></ul>
         </div>

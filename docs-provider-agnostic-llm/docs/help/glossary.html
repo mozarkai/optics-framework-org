@@ -117,7 +117,7 @@
 <h3 id="execution-output">Execution output<a class="anchor" href="#execution-output" aria-label="Link to this section">#</a></h3>
 <p>The execution output is the <code class="ic">execution_output/</code> folder in a project, where each run writes its JUnit report, screenshots and logs. See <a href="../../docs/reference/files#outputs">Outputs</a>.</p>
 <h3 id="extra">Extra<a class="anchor" href="#extra" aria-label="Link to this section">#</a></h3>
-<p>An extra is the pip name for an optional engine, such as <code class="ic">appium</code>, <code class="ic">easyocr</code> or <code class="ic">gemini</code>, installed with <code class="ic">optics setup --install &lt;name&gt;</code> or <code class="ic">pip install "optics-framework[&lt;name&gt;]"</code>. Bundles such as <code class="ic">web</code> and <code class="ic">all</code> install several at once. See <a href="../../docs/reference/engines">Engines and extras</a>.</p>
+<p>An extra is the pip name for an optional engine, such as <code class="ic">appium</code>, <code class="ic">easyocr</code> or <code class="ic">gemini</code>, installed with <code class="ic">optics setup --install &lt;name&gt;</code> or <code class="ic">pip install "optics-framework[&lt;name&gt;]"</code>. Bundles such as <code class="ic">web</code>, <code class="ic">llm</code> and <code class="ic">all</code> install several at once. See <a href="../../docs/reference/engines">Engines and extras</a>.</p>
 <h2 id="f">F<a class="anchor" href="#f" aria-label="Link to this section">#</a></h2>
 <h3 id="fallback">Fallback<a class="anchor" href="#fallback" aria-label="Link to this section">#</a></h3>
 <p>A fallback is a second (or third) value for an element that Optics tries when the first one isn't found. For example, an element can have an XPath, then its text, then an image. See <a href="../../docs/elements/">How Optics finds elements</a>.</p>
@@ -136,7 +136,7 @@
 <p>A keyword is one action or check that a step performs, such as <code class="ic">Press Element</code>, <code class="ic">Enter Text</code> or <code class="ic">Assert Presence</code>. Run <code class="ic">optics list</code> to see them all. See <a href="../../docs/reference/keywords/">Keywords</a>.</p>
 <h2 id="l">L<a class="anchor" href="#l" aria-label="Link to this section">#</a></h2>
 <h3 id="llm">LLM<a class="anchor" href="#llm" aria-label="Link to this section">#</a></h3>
-<p>An LLM (large language model) is the AI model behind plain-English mode and self-heal. Optics works with Gemini, Claude, OpenAI and OpenAI-compatible servers, configured under <code class="ic">llm_models</code> in <code class="ic">config.yaml</code>. See <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
+<p>An LLM (large language model) is the AI model behind plain-English mode and self-heal. Optics works with Gemini, Claude and OpenAI, plus OpenAI-compatible servers such as OpenRouter or Ollama, configured under <code class="ic">llm_models</code> in <code class="ic">config.yaml</code>. See <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
 <h3 id="locator">Locator<a class="anchor" href="#locator" aria-label="Link to this section">#</a></h3>
 <p>A locator is a value that tells Optics how to find an element: an XPath, visible text, a CSS selector or an image file name. Locators live in the elements file. See <a href="../../docs/elements/define#choose-the-kind-of-value">Choose the kind of value</a>.</p>
 <h2 id="m">M<a class="anchor" href="#m" aria-label="Link to this section">#</a></h2>

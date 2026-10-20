@@ -15,17 +15,15 @@ You need:
 
 ### Install the AI engine
 
-Pick the engine that matches the account you already have:
+Pick the engine for the account you have:
 
-| You have | Install | Enable in config.yaml |
-|---|---|---|
-| A Gemini API key, or Google Cloud Vertex AI | `gemini` | `gemini` |
-| An OpenAI API key | `openai` | `openai` |
-| An OpenRouter key, for any model it hosts | `openai` | `openai`, with OpenRouter's `url` |
-| A local model in Ollama, vLLM or LM Studio | `openai` | `openai`, with the server's `url` |
-| A Claude API key, or Claude on Amazon Bedrock or Vertex AI | `anthropic` | `anthropic` |
+| You have | Install |
+|---|---|
+| A Gemini API key, or Google Cloud Vertex AI | `gemini` |
+| An OpenAI or OpenRouter key, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio | `openai` |
+| A Claude API key, or Claude on Amazon Bedrock or Vertex AI | `anthropic` |
 
-Install it by the name in the Install column, for example:
+Install that name, for example:
 
 ```shell
 $ optics setup --install gemini
@@ -33,9 +31,7 @@ $ optics setup --install gemini
 
 ### Turn it on in config.yaml
 
-Add an `llm_models` section to your project's `config.yaml`:
-
-**Gemini**
+Add an `llm_models` section to your project's `config.yaml`, using the same name:
 
 `config.yaml`:
 
@@ -44,59 +40,12 @@ llm_models:
   - gemini:
       enabled: true
 ```
-**OpenAI**
 
-`config.yaml`:
-
-```yaml
-llm_models:
-  - openai:
-      enabled: true
-      capabilities:
-        model: gpt-5-mini
-```
-**OpenRouter**
-
-`config.yaml`:
-
-```yaml
-llm_models:
-  - openai:
-      enabled: true
-      url: https://openrouter.ai/api/v1
-      capabilities:
-        model: anthropic/claude-sonnet-5-5
-        api_key_env: OPENROUTER_API_KEY
-```
-**Ollama**
-
-`config.yaml`:
-
-```yaml
-llm_models:
-  - openai:
-      enabled: true
-      url: http://localhost:11434/v1
-      capabilities:
-        model: qwen2.5vl
-```
-**Claude**
-
-`config.yaml`:
-
-```yaml
-llm_models:
-  - anthropic:
-      enabled: true
-      capabilities:
-        model: claude-sonnet-5-5
-```
-
-Gemini uses `gemini-2.5-flash` unless you set a `model`; the other engines need one. Optics sends the model screenshots, so pick one that accepts images. Every setting is listed under [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
+For a server such as OpenRouter or Ollama, add its `url`. Gemini uses `gemini-2.5-flash` unless you set a `model`; the other engines need one. Pick a model that accepts screenshots. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for every setting.
 
 ### Give Optics your key
 
-Set the key as an environment variable in the terminal you'll run `optics live` from:
+Set the engine's key in the terminal you run `optics live` from:
 
 **macOS and Linux**
 
@@ -109,12 +58,10 @@ $ export GEMINI_API_KEY="your-key"
 PS> $env:GEMINI_API_KEY = "your-key"
 ```
 
-Use the variable for your engine: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the one you named in `api_key_env`. A local server such as Ollama needs no key.
+Use `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable you named in `api_key_env`. A local server needs no key.
 
 **Warning:**
 Don't put API keys in `config.yaml`. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.
-
-For Vertex AI or Amazon Bedrock, see [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for the settings and credentials each one needs.
 
 ## Describe a flow
 
@@ -168,7 +115,7 @@ Each run stops after 15 steps, after 3 failed steps in a row, or when the model 
 ## Limits
 
 - Each step is a call to the model, so a run costs API usage and takes several seconds per step.
-- Screenshots go to your model provider while the mode is on, unless the model runs on your own machine. Don't use a hosted model on screens that show data you can't send to a third party.
+- Screenshots go to your model provider while the mode is on, unless you run the model locally. Don't use a hosted model on screens that show data you can't send to a third party.
 
 ## See also
 

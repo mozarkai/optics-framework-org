@@ -230,7 +230,7 @@
       enabled: true">Copy</button><pre><code><span class="c-mod">llm_models</span><span class="c-dim">:</span>
   - <span class="c-mod">gemini</span><span class="c-dim">:</span>
       <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
-<p>Use <code class="ic">openai</code> or <code class="ic">anthropic</code> instead if that's the account you have. See <a href="../../docs/create/describe#before-you-begin">Describe a test in plain English</a>.</p>
+<p>Use <code class="ic">openai</code> or <code class="ic">anthropic</code> for those providers. See <a href="../../docs/create/describe#before-you-begin">Describe a test in plain English</a>.</p>
 <h3 id="llm-not-installed"><code class="ic">E0601</code>: the LLM engine requires an optional dependency<a class="anchor" href="#llm-not-installed" aria-label="Link to this section">#</a></h3>
 <p>An engine is enabled under <code class="ic">llm_models</code>, but its extra isn't installed. The message names the engine.</p>
 <p>Install it by that name, for example <code class="ic">optics setup --install openai</code>.</p>
@@ -239,7 +239,6 @@
 <h3 id="llm-auth"><code class="ic">E0801</code> or authentication errors from the model<a class="anchor" href="#llm-auth" aria-label="Link to this section">#</a></h3>
 <p>The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.</p>
 <p>Set your engine's key (<code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable in <code class="ic">api_key_env</code>) in the terminal you run Optics from, and check your quota with the provider. See <a href="../../docs/reference/cli#environment-variables">Environment variables</a>.</p>
-<p>If a server used through the <code class="ic">openai</code> engine rejects the response format, set <code class="ic">response_format: json_object</code> in its <code class="ic">capabilities</code>.</p>
 <h3 id="self-heal-inactive">AI self-heal does nothing<a class="anchor" href="#self-heal-inactive" aria-label="Link to this section">#</a></h3>
 <p>Self-heal needs <code class="ic">ai_self_heal: true</code>, an enabled <code class="ic">llm_models</code> entry, the AI engine, a key, and a screenshot source. If any is missing, Optics logs "AI self-heal enabled but no usable LLM" or skips self-heal without a message.</p>
 <p>Check each item in <a href="../../docs/elements/self-heal#turn-it-on">Turn it on</a>. Self-heal only helps steps that find and act on an element; Assert Presence and other checks never self-heal.</p>
