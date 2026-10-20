@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Optics adds to Appium · Optics Framework docs</title>
+  <meta name="description" content="Optics is an open-source framework that runs on top of Appium. Keep your Appium server, drivers and capabilities, and add CSV suites, fallback locators, OCR and image matching, a live recorder and an MCP server for AI agents.">
+  <link rel="canonical" href="https://optics-framework.org/docs/guides/optics-and-appium">
+  <link rel="alternate" type="text/markdown" href="optics-and-appium.md" title="This page as Markdown">
+  <meta property="og:title" content="What Optics adds to Appium · Optics Framework docs">
+  <meta property="og:description" content="Optics is an open-source framework that runs on top of Appium. Keep your Appium server, drivers and capabilities, and add CSV suites, fallback locators, OCR and image matching, a live recorder and an MCP server for AI agents.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=fd620d4825">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab on" href="../../docs/guides/" aria-current="true">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section open" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium" aria-current="page">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/guides/">Guides</a><span class="sep" aria-hidden="true">/</span><span>Compare</span></nav>
+        <header class="doc-head">
+          <h1>What Optics adds to Appium</h1>
+          <p class="doc-summary">Optics runs on top of Appium. Keep your Appium server and devices, and add readable suites, fallback locators, OCR and AI agents.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="optics-and-appium.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="optics-and-appium.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics doesn't replace Appium. For Android, iOS and TV apps, Optics drives the device <strong>through</strong> an Appium server. Appium still talks to the device. Optics decides what to press, finds it on screen several ways, and turns the steps into a suite anyone on the team can read.</p>
+<p>If you already run Appium, you keep your server, drivers, devices and capabilities. Optics adds a layer on top.</p>
+<h2 id="what-stays-the-same">What stays the same<a class="anchor" href="#what-stays-the-same" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>The Appium server.</strong> You run it as before, locally or remotely. Set its address as <code class="ic">url</code> in <code class="ic">config.yaml</code>. A device farm works too, as long as you can reach its Appium server.</li><li><strong>The drivers.</strong> UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs.</li><li><strong>Your capabilities.</strong> Optics reads only <code class="ic">platformName</code> and the app id. It passes every other capability to Appium unchanged. See <a href="../../docs/reference/config#appium-capabilities">Appium capabilities</a>.</li><li><strong>Your inspector.</strong> <a href="https://github.com/appium/appium-inspector" rel="noopener">Appium Inspector</a> still shows each element's id, text and XPath.</li><li><strong>Driver commands.</strong> The Execute Script keyword runs Appium <code class="ic">mobile:</code> commands. See <a href="../../docs/reference/keywords/actions#execute-script">Execute Script</a>.</li></ul>
+<h2 id="what-optics-adds">What Optics adds<a class="anchor" href="#what-optics-adds" aria-label="Link to this section">#</a></h2>
+<h3 id="tests-anyone-can-read">Tests anyone can read<a class="anchor" href="#tests-anyone-can-read" aria-label="Link to this section">#</a></h3>
+<p>An Optics test is rows in CSV or YAML files, not code. Each row is a keyword and its values:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Sign in,Enter Text,${email_field},ava@birch.shop
+Sign in,Press Element,${sign_in}
+Sign in,Assert Presence,Picked for you,20">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${email_field}</span><span class="c-dim">,</span>ava@birch.shop
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_in}</span>
+<span class="c-mod">Sign in</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Picked for you<span class="c-dim">,</span>20</code></pre></figure>
+<p>Steps live in reusable modules, and test cases list the modules they run. Testers can write and review the suite in a spreadsheet. See <a href="../../docs/create/write">Write a test suite</a>.</p>
+<h3 id="locators-that-fall-back">Locators that fall back<a class="anchor" href="#locators-that-fall-back" aria-label="Link to this section">#</a></h3>
+<p>An Appium locator either matches or fails. In Optics, an element can have several values, and Optics tries them in order:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID
+sign_in,//*[@resource-id='com.birch.shop:id/login']
+sign_in,Sign in
+sign_in,sign_in.png">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID</span>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//*[@resource-id='com.birch.shop:id/login']</b>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>Sign in</b>
+<span class="c-mod">sign_in</span><span class="c-dim">,</span><b>sign_in.png</b></code></pre></figure>
+<p>When a redesign changes the id, the text value takes over. Name the element once, and every step that uses <code class="ic">${sign_in}</code> follows. See <a href="../../docs/elements/define">Define elements</a>.</p>
+<h3 id="ocr-and-image-matching">OCR and image matching<a class="anchor" href="#ocr-and-image-matching" aria-label="Link to this section">#</a></h3>
+<p>Text drawn inside an image, a canvas or a video player isn't in the UI tree, so Appium can't find it. Optics can. It reads text from a screenshot with OCR, and finds icons by matching a cropped picture. It uses them only after the UI tree fails, because they're slower. See <a href="../../docs/elements/text-and-images">Find elements by text and image</a>.</p>
+<p>Optional <a href="../../docs/elements/self-heal">AI self-heal</a> goes one step further. When every value fails, an AI model looks at the screen and tries to finish the step. It's off by default.</p>
+<h3 id="a-live-recorder">A live recorder<a class="anchor" href="#a-live-recorder" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics live</code> opens a terminal session next to the device. You type a step, it runs straight away, and the steps that work are saved as a module. You can also switch to plain-English mode and let an AI model drive. See <a href="../../docs/create/record">Record a test</a> and <a href="../../docs/create/describe">Describe a test</a>.</p>
+<h3 id="data-driven-tests">Data-driven tests<a class="anchor" href="#data-driven-tests" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">Run Loop</code> runs one module for each value in a list, such as each user or search term. See <a href="../../docs/advanced/data-driven">Run a flow with different data</a>.</p>
+<h3 id="an-mcp-server-for-ai-agents">An MCP server for AI agents<a class="anchor" href="#an-mcp-server-for-ai-agents" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics mcp</code> lets an AI agent such as Claude Code or Cursor drive the device through Optics keywords, then write the suite. See <a href="../../docs/guides/ai-agent-phone">Let your AI agent drive a real phone</a>.</p>
+<h3 id="results-and-error-screens">Results and error screens<a class="anchor" href="#results-and-error-screens" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">optics execute</code> writes a JUnit report and a screenshot of each step. See <a href="../../docs/run/results">Read the results</a>. <a href="../../docs/run/error-detection">Error detection</a> fails a run that ends on a crash dialog or an error message you list.</p>
+<h3 id="targets-beyond-appium">Targets beyond Appium<a class="anchor" href="#targets-beyond-appium" aria-label="Link to this section">#</a></h3>
+<p>The same keywords run on websites through <a href="../../docs/platforms/web">Playwright or Selenium</a>. Between phones and browsers, only <code class="ic">config.yaml</code> changes. On <a href="../../docs/platforms/production">locked devices</a>, Optics skips Appium and taps through a Bluetooth mouse and keyboard, with a camera watching the screen.</p>
+<h2 id="keep-your-code-if-you-want-it">Keep your code if you want it<a class="anchor" href="#keep-your-code-if-you-want-it" aria-label="Link to this section">#</a></h2>
+<p>If your team writes tests in Python, you don't have to give that up. The <code class="ic">Optics</code> class exposes every keyword as a method, so you keep the fallbacks, OCR and image matching inside pytest. Robot Framework works the same way. See <a href="../../docs/create/python">Use Optics from Python</a> and <a href="../../docs/create/robot">Use Optics in Robot Framework</a>.</p>
+<p><code class="ic">optics generate</code> goes the other way: it turns a CSV suite into a pytest or Robot Framework file. See <a href="../../docs/advanced/generate">Generate pytest or Robot code</a>.</p>
+<h2 id="move-existing-appium-tests">Move existing Appium tests<a class="anchor" href="#move-existing-appium-tests" aria-label="Link to this section">#</a></h2>
+<p>Optics has no importer for Appium scripts. Rebuild each flow by <a href="../../docs/create/record">recording</a> it in <code class="ic">optics live</code>, or ask an AI agent to explore the app and write the suite through <a href="../../docs/create/agent">MCP</a>. Your config can point at the Appium server and capabilities you already use.</p>
+<h2 id="get-started">Get started<a class="anchor" href="#get-started" aria-label="Link to this section">#</a></h2>
+<div class="cards cols-2"><a class="card" href="../../docs/platforms/android"><span class="card-title">Test Android apps</span><span class="card-text">Set up Appium and adb, then run on a phone or emulator.</span></a><a class="card" href="../../docs/platforms/ios"><span class="card-title">Test iOS apps</span><span class="card-text">Run on a simulator or a signed device with XCUITest.</span></a><a class="card" href="../../docs/platforms/tv"><span class="card-title">Test TV apps</span><span class="card-text">Drive Android TV, Samsung Tizen and LG webOS.</span></a><a class="card" href="../../docs/guides/optics-vs-maestro"><span class="card-title">Optics vs Maestro</span><span class="card-text">Compare Optics with a framework that doesn't use Appium.</span></a></div>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20What%20Optics%20adds%20to%20Appium&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fguides%2Foptics-and-appium%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20What%20Optics%20adds%20to%20Appium&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fguides%2Foptics-and-appium%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/guides/optics-vs-maestro"><span>Previous</span>Optics vs Maestro</a><a class="pager-next" href="../../docs/reference/"><span>Next</span>Reference</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/guides/optics-and-appium.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#what-stays-the-same">What stays the same</a></li><li class="toc-l2"><a href="#what-optics-adds">What Optics adds</a></li><li class="toc-l3"><a href="#tests-anyone-can-read">Tests anyone can read</a></li><li class="toc-l3"><a href="#locators-that-fall-back">Locators that fall back</a></li><li class="toc-l3"><a href="#ocr-and-image-matching">OCR and image matching</a></li><li class="toc-l3"><a href="#a-live-recorder">A live recorder</a></li><li class="toc-l3"><a href="#data-driven-tests">Data-driven tests</a></li><li class="toc-l3"><a href="#an-mcp-server-for-ai-agents">An MCP server for AI agents</a></li><li class="toc-l3"><a href="#results-and-error-screens">Results and error screens</a></li><li class="toc-l3"><a href="#targets-beyond-appium">Targets beyond Appium</a></li><li class="toc-l2"><a href="#keep-your-code-if-you-want-it">Keep your code if you want it</a></li><li class="toc-l2"><a href="#move-existing-appium-tests">Move existing Appium tests</a></li><li class="toc-l2"><a href="#get-started">Get started</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=5160aed22e" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>

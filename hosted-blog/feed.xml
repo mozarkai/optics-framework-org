@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Optics blog</title>
+    <link>https://optics-framework.org/blog</link>
+    <atom:link href="https://optics-framework.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Articles, videos and posts about Optics, the open-source test automation framework.</description>
+    <language>en</language>
+    <item>
+      <title>Your tests passed. Your app didn't.</title>
+      <link>https://optics-framework.org/blog/your-tests-passed-your-app-didnt</link>
+      <guid isPermaLink="true">https://optics-framework.org/blog/your-tests-passed-your-app-didnt</guid>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 GMT</pubDate>
+      <category>Article</category>
+      <description>Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</description>
+    </item>
+    <item>
+      <title>Introducing Optics: create a test your way, run it forever</title>
+      <link>https://optics-framework.org/blog/introducing-optics-framework</link>
+      <guid isPermaLink="true">https://optics-framework.org/blog/introducing-optics-framework</guid>
+      <pubDate>Sun, 11 Oct 2026 00:00:00 GMT</pubDate>
+      <category>Article</category>
+      <description>Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.</description>
+    </item>
+  </channel>
+</rss>
