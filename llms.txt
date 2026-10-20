@@ -48,6 +48,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics, from the team and the community. RSS at https://optics-framework.org/feed.xml.
 - [Introducing Optics Framework](https://optics-framework.org/blog/introducing-optics-framework.md): what Optics is, the CSV test format, the four ways to create a test, locator fallback and the supported platforms.
 - [Your tests passed. Your app didn't.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt.md): error definitions, which fail a run on crash dialogs and "Session expired" screens no step asserted.
+- [Your AI agent writes the test once](https://optics-framework.org/blog/ai-agent-writes-the-test-once.md): an AI agent drives a browser through the Optics MCP server and writes a CSV suite; 10 replays passed in about 3.3 s with 0 model calls.
 - [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
 
 ## Optional

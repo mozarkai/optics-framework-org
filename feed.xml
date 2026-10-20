@@ -7,6 +7,14 @@
     <description>Articles, videos and posts about Optics, the open-source test automation framework.</description>
     <language>en</language>
     <item>
+      <title>Your AI agent writes the test once. Optics runs it with no model.</title>
+      <link>https://optics-framework.org/blog/ai-agent-writes-the-test-once</link>
+      <guid isPermaLink="true">https://optics-framework.org/blog/ai-agent-writes-the-test-once</guid>
+      <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
+      <category>Article</category>
+      <description>An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.</description>
+    </item>
+    <item>
       <title>Your tests passed. Your app didn't.</title>
       <link>https://optics-framework.org/blog/your-tests-passed-your-app-didnt</link>
       <guid isPermaLink="true">https://optics-framework.org/blog/your-tests-passed-your-app-didnt</guid>
