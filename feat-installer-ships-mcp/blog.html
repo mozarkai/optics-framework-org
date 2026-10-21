@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Optics blog: articles, videos and posts</title>
+  <meta name="description" content="Articles, videos and posts about Optics, the open-source test automation framework. Guides and announcements from the Optics team, plus posts from the community.">
+  <link rel="canonical" href="https://optics-framework.org/blog">
+  <link rel="alternate" type="application/rss+xml" href="feed.xml" title="Optics blog">
+  <link rel="alternate" type="text/markdown" href="blog.md" title="Optics blog, as Markdown">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Optics blog",
+  "url": "https://optics-framework.org/blog",
+  "about": {
+    "@id": "https://optics-framework.org/#optics"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "BlogPosting",
+          "headline": "Your AI agent writes the test once. Optics runs it with no model.",
+          "description": "An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.",
+          "url": "https://optics-framework.org/blog/ai-agent-writes-the-test-once",
+          "datePublished": "2026-10-20",
+          "image": "https://optics-framework.org/media/blog/agent-writes-once.webp",
+          "author": {
+            "@type": "Person",
+            "name": "Chinmay Jha"
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "BlogPosting",
+          "headline": "Your tests passed. Your app didn't.",
+          "description": "Error definitions catch crash dialogs, \"Session expired\" and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.",
+          "url": "https://optics-framework.org/blog/your-tests-passed-your-app-didnt",
+          "datePublished": "2026-10-16",
+          "image": "https://optics-framework.org/media/blog/error-definitions.webp",
+          "author": {
+            "@type": "Person",
+            "name": "Chinmay Jha"
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "BlogPosting",
+          "headline": "Introducing Optics Framework: create a test your way, run it forever",
+          "description": "Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.",
+          "url": "https://optics-framework.org/blog/introducing-optics-framework",
+          "datePublished": "2026-10-11",
+          "image": "https://optics-framework.org/media/blog/introducing-optics.webp",
+          "author": {
+            "@type": "Person",
+            "name": "Chinmay Jha"
+          }
+        }
+      }
+    ]
+  }
+}
+  </script>
+  <meta property="og:title" content="Optics blog: articles, videos and posts">
+  <meta property="og:description" content="Articles, videos and posts about Optics, the open-source test automation framework. Guides and announcements from the Optics team, plus posts from the community.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=fc2d95b0c2">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="./" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="./#create">Create</a>
+        <a href="./#run">Run</a>
+        <a href="./#ladder">Locators</a>
+        <a href="docs/">Docs</a>
+        <a href="blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="./#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<header class="blog-head">
+        <h1 class="h2">Blog</h1>
+        <p class="lede">Articles, videos and posts about Optics Framework, from the team and the community.</p>
+        <p class="blog-rss"><a href="feed.xml"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5a14.5 14.5 0 0 1 14.5 14.5M5 10.5a8.5 8.5 0 0 1 8.5 8.5"/><circle cx="6" cy="18" r="1.6"/></svg>RSS feed</a></p>
+      </header>
+      <div class="blog-feed">
+      
+      <ul class="entries" role="list">
+<li class="entry entry-lead" data-type="article">
+  <div class="entry-media"><img src="media/blog/agent-writes-once.webp?v=e9a690dc76" alt="" loading="eager" decoding="async"></div>
+  <div class="entry-body">
+    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-20">20 Oct 2026</time></span><span>6 min read</span><span>Chinmay Jha</span></p>
+    <h2 class="entry-title"><a href="blog/ai-agent-writes-the-test-once">Your AI agent writes the test once. Optics runs it with no model.</a></h2>
+    <p class="entry-summary">An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.</p>
+    <p class="entry-cta">Read the article<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></p>
+  </div>
+</li>
+<li class="entry" data-type="article">
+  <div class="entry-media"><img src="media/blog/error-definitions.webp?v=b6295c6439" alt="" loading="lazy" decoding="async"></div>
+  <div class="entry-body">
+    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-16">16 Oct 2026</time></span><span>6 min read</span></p>
+    <h3 class="entry-title"><a href="blog/your-tests-passed-your-app-didnt">Your tests passed. Your app didn't.</a></h3>
+    <p class="entry-summary">Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</p>
+    <p class="entry-cta">Read the article<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></p>
+  </div>
+</li>
+<li class="entry" data-type="article">
+  <div class="entry-media"><img src="media/blog/introducing-optics.webp?v=3a05b8460c" alt="" loading="lazy" decoding="async"></div>
+  <div class="entry-body">
+    <p class="entry-meta"><span class="entry-type"><i></i>Article</span><span><time datetime="2026-10-11">11 Oct 2026</time></span><span>5 min read</span></p>
+    <h3 class="entry-title"><a href="blog/introducing-optics-framework">Introducing Optics Framework: create a test your way, run it forever</a></h3>
+    <p class="entry-summary">Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.</p>
+    <p class="entry-cta">Read the article<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></p>
+  </div>
+</li>
+</ul>
+      <p class="blog-status" role="status"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="./" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="docs/">Docs</a>
+        <a href="blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="about">About</a>
+        <a href="contact">Contact</a>
+        <a href="privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="app.js?v=5160aed22e" defer></script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verification keywords · Optics Framework docs</title>
+  <meta name="description" content="Learn which keyword to use for each check, and how long each one waits.">
+  <link rel="canonical" href="https://optics-framework.org/docs/reference/keywords/verification">
+  <link rel="alternate" type="text/markdown" href="verification.md" title="This page as Markdown">
+  <meta property="og:title" content="Verification keywords · Optics Framework docs">
+  <meta property="og:description" content="Learn which keyword to use for each check, and how long each one waits.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../../docs/get-started/">Get started</a><a class="dtab" href="../../../docs/create/">Create tests</a><a class="dtab" href="../../../docs/elements/">Find elements</a><a class="dtab" href="../../../docs/run/">Run and report</a><a class="dtab" href="../../../docs/platforms/">Platforms</a><a class="dtab" href="../../../docs/advanced/">Advanced</a><a class="dtab" href="../../../docs/guides/">Guides</a><a class="dtab on" href="../../../docs/reference/" aria-current="true">Reference</a><a class="dtab" href="../../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../../docs/get-started/">Overview</a></li><li><a href="../../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../../docs/create/write">Write it</a></li><li><a href="../../../docs/create/record">Record it</a></li><li><a href="../../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../../docs/create/python">Python</a></li><li><a href="../../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../../docs/create/organise">Organise a suite</a></li><li><a href="../../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../../docs/elements/">Overview</a></li><li><a href="../../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../../docs/run/">Overview</a></li><li><a href="../../../docs/run/results">Results</a></li><li><a href="../../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../../docs/run/ci">Run tests in CI</a></li><li><a href="../../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../../docs/platforms/android">Android</a></li><li><a href="../../../docs/platforms/ios">iOS</a></li><li><a href="../../../docs/platforms/web">Web</a></li><li><a href="../../../docs/platforms/tv">TV</a></li><li><a href="../../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../../docs/advanced/variables">Variables</a></li><li><a href="../../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section open" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../../docs/reference/keywords/">Keywords</a></li><li><a href="../../../docs/reference/keywords/app">App management</a></li><li><a href="../../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../../docs/reference/keywords/verification" aria-current="page">Verification</a></li><li><a href="../../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../../docs/reference/cli">CLI</a></li><li><a href="../../../docs/reference/config">config.yaml</a></li><li><a href="../../../docs/reference/files">Project files</a></li><li><a href="../../../docs/reference/engines">Engines and extras</a></li><li><a href="../../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../../docs/help/">Overview</a></li><li><a href="../../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../../docs/help/faq">FAQ</a></li><li><a href="../../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../../docs/reference/">Reference</a><span class="sep" aria-hidden="true">/</span><span>Keywords</span></nav>
+        <header class="doc-head">
+          <h1>Verification keywords</h1>
+          <p class="doc-summary">Learn which keyword to use for each check, and how long each one waits.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="verification.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="verification.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Verification keywords check what's on screen. Assertions wait up to a timeout for an element, so they're also how you wait for a screen to load before an action.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2,param_3
+Sign In,Press Element,${sign_in}
+Sign In,Assert Presence,Welcome|Trail Runner 2,20,any">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2,param_3</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${sign_in}</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome|Trail Runner 2<span class="c-dim">,</span>20<span class="c-dim">,</span>any</code></pre></figure>
+<p>We recommend Assert Presence for most checks. Use Assert Visibility when the element must be on screen right now, not only in the page. For how <code class="ic">element</code> values are read, see <a href="../../../docs/reference/keywords/#element-arguments">Element arguments</a>.</p>
+<h2 id="check-several-elements-at-once">Check several elements at once<a class="anchor" href="#check-several-elements-at-once" aria-label="Link to this section">#</a></h2>
+<p>Assert Presence, Assert Visibility, Validate Element and Validate Screen accept several elements separated by <code class="ic">|</code> (a pipe). <code class="ic">rule</code> decides whether <code class="ic">any</code> or <code class="ic">all</code> of them must be found.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Home,Assert Presence,Welcome|Trail Runner 2|Pace Knit,20,all">Copy</button><pre><code><span class="c-mod">Home</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome|Trail Runner 2|Pace Knit<span class="c-dim">,</span>20<span class="c-dim">,</span>all</code></pre></figure>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p>Separate elements with <code class="ic">|</code>, never commas. Don't put spaces around the pipe, and don't use <code class="ic">${name}</code> inside a pipe list: <code class="ic">${a}|${b}</code> searches for the literal text <code class="ic">${a}</code>. To reuse a list, store the whole <code class="ic">Welcome|Trail Runner 2</code> as the value of one element and pass <code class="ic">${home_markers}</code>.</p></aside>
+<h2 id="assertions">Assertions<a class="anchor" href="#assertions" aria-label="Link to this section">#</a></h2>
+<h3 id="assert-presence">Assert Presence<a class="anchor" href="#assert-presence" aria-label="Link to this section">#</a></h3>
+<p>Fails unless the elements exist in the app within the timeout.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">elements</code></td><td>Required</td><td>One element, or several separated by <code class="ic">|</code>.</td></tr><tr><td><code class="ic">timeout_str</code></td><td><code class="ic">30</code></td><td>Seconds to wait.</td></tr><tr><td><code class="ic">rule</code></td><td><code class="ic">any</code></td><td><code class="ic">any</code> passes when one element is found. <code class="ic">all</code> needs every element.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event. See <a href="../../../docs/reference/keywords/#event-names">Event names</a>.</td></tr><tr><td><code class="ic">fail</code></td><td><code class="ic">true</code></td><td>Has almost no effect. A missing element fails the step even when it's <code class="ic">false</code>.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Sign In,Assert Presence,Welcome
+Sign In,Assert Presence,Welcome,20
+Sign In,Assert Presence,${account_badge},timeout_str=20
+Home,Assert Presence,Trail Runner 2|Pace Knit,20,all">Copy</button><pre><code><span class="c-dim">Sign In,Assert Presence,Welcome</span>
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome<span class="c-dim">,</span>20
+<span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span><span class="c-var">${account_badge}</span><span class="c-dim">,</span>timeout_str=20
+<span class="c-mod">Home</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Trail Runner 2|Pace Knit<span class="c-dim">,</span>20<span class="c-dim">,</span>all</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Assert Presence Welcome 20
+- Assert Presence Welcome timeout_str=20">Copy</button><pre><code>- Assert Presence Welcome 20
+- Assert Presence Welcome timeout_str=20</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>The timeout parameter is called <code class="ic">timeout_str</code>, not <code class="ic">timeout</code>. <code class="ic">timeout=20</code> is passed as the text "timeout=20" and fails the step. Write <code class="ic">20</code> positionally or <code class="ic">timeout_str=20</code>.</li><li>"Present" means the element is in the app's UI tree, even if it's scrolled off screen. On Android, the UI tree usually leaves out off-screen items. To include them, set <code class="ic">appium:settings: {allowInvisibleElements: true}</code> in your <a href="../../../docs/reference/config">config</a>.</li><li>Elements are checked in groups: text first, then XPaths, then images. Each group gets the full timeout. With <code class="ic">rule=any</code>, a text group that isn't found fails the step before the XPaths are tried. Keep one kind of locator per assertion when you use <code class="ic">any</code>.</li><li>CSS selectors, <code class="ic">id:</code> locators and class names are skipped. If every element is one of those, the step passes without checking anything. Use text or an XPath.</li><li>In Python the parameter is <code class="ic">timeout</code>, its default is 60 seconds, and there's no <code class="ic">fail</code> parameter.</li></ul>
+<h3 id="assert-visibility">Assert Visibility<a class="anchor" href="#assert-visibility" aria-label="Link to this section">#</a></h3>
+<p>Fails unless the elements are on screen within the timeout. It takes the same parameters as Assert Presence.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">elements</code></td><td>Required</td><td>One element, or several separated by <code class="ic">|</code>.</td></tr><tr><td><code class="ic">timeout_str</code></td><td><code class="ic">30</code></td><td>Seconds to wait.</td></tr><tr><td><code class="ic">rule</code></td><td><code class="ic">any</code></td><td><code class="ic">any</code> or <code class="ic">all</code>.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr><tr><td><code class="ic">fail</code></td><td><code class="ic">true</code></td><td>Has almost no effect, as with Assert Presence.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Home,Assert Visibility,${promo_banner},10">Copy</button><pre><code><span class="c-mod">Home</span><span class="c-dim">,</span><b>Assert Visibility</b><span class="c-dim">,</span><span class="c-var">${promo_banner}</span><span class="c-dim">,</span>10</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Assert Visibility ${promo_banner} 10">Copy</button><pre><code>- Assert Visibility <span class="c-var">${promo_banner}</span> 10</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>On Appium, Optics checks that the element is rendered on screen. On Selenium and Playwright, only OCR and image matching can check visibility, so you need <a href="../../../docs/elements/text-and-images">text or image detection</a> configured. Without it, the step fails with "No strategies found".</li><li>OCR and image matches always count as visible, because they come from a screenshot.</li><li>The same grouping and CSS caveats as Assert Presence apply.</li></ul>
+<h3 id="validate-element">Validate Element<a class="anchor" href="#validate-element" aria-label="Link to this section">#</a></h3>
+<p>Fails unless an element exists within the timeout. It's Assert Presence with a shorter default timeout and <code class="ic">all</code> as the default rule.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">element</code></td><td>Required</td><td>One element, or several separated by <code class="ic">|</code>.</td></tr><tr><td><code class="ic">timeout</code></td><td><code class="ic">10</code></td><td>Seconds to wait.</td></tr><tr><td><code class="ic">rule</code></td><td><code class="ic">all</code></td><td><code class="ic">any</code> or <code class="ic">all</code>.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Home,Validate Element,${search_bar},15">Copy</button><pre><code><span class="c-mod">Home</span><span class="c-dim">,</span><b>Validate Element</b><span class="c-dim">,</span><span class="c-var">${search_bar}</span><span class="c-dim">,</span>15</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Validate Element ${search_bar} 15">Copy</button><pre><code>- Validate Element <span class="c-var">${search_bar}</span> 15</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>When <code class="ic">element</code> is <code class="ic">${name}</code> with several values, Optics tries each one until it finds the element.</li></ul>
+<h3 id="validate-screen">Validate Screen<a class="anchor" href="#validate-screen" aria-label="Link to this section">#</a></h3>
+<p>Checks whether elements are present, without failing the step.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">elements</code></td><td>Required</td><td>One element, or several separated by <code class="ic">|</code>.</td></tr><tr><td><code class="ic">timeout</code></td><td><code class="ic">30</code></td><td>Seconds to wait.</td></tr><tr><td><code class="ic">rule</code></td><td><code class="ic">any</code></td><td><code class="ic">any</code> or <code class="ic">all</code>.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Home,Validate Screen,Welcome|Trail Runner 2,10">Copy</button><pre><code><span class="c-mod">Home</span><span class="c-dim">,</span><b>Validate Screen</b><span class="c-dim">,</span>Welcome|Trail Runner 2<span class="c-dim">,</span>10</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Validate Screen Welcome|Trail Runner 2 10">Copy</button><pre><code>- Validate Screen Welcome|Trail Runner 2 10</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>Validate Screen never fails a step. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.</li><li>From Python, <code class="ic">optics serve</code> and MCP it returns true or false.</li></ul>
+<h3 id="is-element">Is Element<a class="anchor" href="#is-element" aria-label="Link to this section">#</a></h3>
+<p>Checks that an element is visible, invisible, enabled or disabled.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">element</code></td><td>Required</td><td>The element to check.</td></tr><tr><td><code class="ic">element_state</code></td><td>Required</td><td><code class="ic">visible</code>, <code class="ic">invisible</code>, <code class="ic">enabled</code> or <code class="ic">disabled</code>.</td></tr><tr><td><code class="ic">timeout</code></td><td>Required</td><td>Seconds to wait. Used for <code class="ic">visible</code> and <code class="ic">invisible</code> only.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Checkout,Is Element,${place_order},enabled,5
+Checkout,Is Element,${loading_spinner},invisible,15">Copy</button><pre><code><span class="c-mod">Checkout</span><span class="c-dim">,</span><b>Is Element</b><span class="c-dim">,</span><span class="c-var">${place_order}</span><span class="c-dim">,</span>enabled<span class="c-dim">,</span>5
+<span class="c-mod">Checkout</span><span class="c-dim">,</span><b>Is Element</b><span class="c-dim">,</span><span class="c-var">${loading_spinner}</span><span class="c-dim">,</span>invisible<span class="c-dim">,</span>15</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Is Element ${place_order} enabled 5">Copy</button><pre><code>- Is Element <span class="c-var">${place_order}</span> enabled 5</code></pre></figure>
+<p>Good to know:</p>
+<ul><li><code class="ic">visible</code> checks presence in the UI tree, the same way Assert Presence does.</li><li><code class="ic">invisible</code> doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.</li><li><code class="ic">enabled</code> and <code class="ic">disabled</code> need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.</li><li>You must give a timeout, even for <code class="ic">enabled</code> and <code class="ic">disabled</code>.</li></ul>
+<h3 id="assert-equality">Assert Equality<a class="anchor" href="#assert-equality" aria-label="Link to this section">#</a></h3>
+<p>Compares two values as text, after trimming spaces. It never fails the step.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">output</code></td><td>Required</td><td>The first value. Can be <code class="ic">${name}</code>.</td></tr><tr><td><code class="ic">expression</code></td><td>Required</td><td>The second value. Can be <code class="ic">${name}</code>.</td></tr><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event, recorded only when the values match.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Cart,Evaluate,total,${price} * 2
+Cart,Assert Equality,${total},240">Copy</button><pre><code><span class="c-mod">Cart</span><span class="c-dim">,</span><b>Evaluate</b><span class="c-dim">,</span>total<span class="c-dim">,</span><span class="c-var">${price}</span> * 2
+<span class="c-mod">Cart</span><span class="c-dim">,</span><b>Assert Equality</b><span class="c-dim">,</span><span class="c-var">${total}</span><span class="c-dim">,</span>240</code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Assert Equality ${total} 240">Copy</button><pre><code>- Assert Equality <span class="c-var">${total}</span> 240</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>A mismatch returns false but doesn't fail the test. To fail on a wrong value, check the text on screen with Assert Presence instead.</li><li>Nothing is evaluated. <code class="ic">2+2</code> and <code class="ic">4</code> don't match, and quotes are compared as characters.</li><li>When <code class="ic">${name}</code> has several values, only the first is used.</li></ul>
+<h2 id="capture-and-inspect">Capture and inspect<a class="anchor" href="#capture-and-inspect" aria-label="Link to this section">#</a></h2>
+<p>These keywords save what's on screen to the run's output folder. See <a href="../../../docs/run/results">Results</a>. The CSV and YAML runner can't store what they return. The return value reaches you over <code class="ic">optics serve</code>, MCP and <a href="../../../docs/create/python">Python</a>.</p>
+<h3 id="capture-screenshot">Capture Screenshot<a class="anchor" href="#capture-screenshot" aria-label="Link to this section">#</a></h3>
+<p>Takes a screenshot.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Checkout,Capture Screenshot">Copy</button><pre><code><span class="c-dim">Checkout,Capture Screenshot</span></code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Capture Screenshot">Copy</button><pre><code>- Capture Screenshot</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>The image is saved only when <code class="ic">save_captures</code> is <code class="ic">true</code> in your <a href="../../../docs/reference/config">config</a>. It's on by default.</li><li>The step fails with error E0303 if the screenshot fails or is completely black.</li></ul>
+<h3 id="capture-pagesource">Capture Pagesource<a class="anchor" href="#capture-pagesource" aria-label="Link to this section">#</a></h3>
+<p>Saves the current UI tree as XML (apps) or HTML (web).</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Checkout,Capture Pagesource">Copy</button><pre><code><span class="c-dim">Checkout,Capture Pagesource</span></code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Capture Pagesource">Copy</button><pre><code>- Capture Pagesource</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>Use it to find XPaths for your elements file. See <a href="../../../docs/elements/define">Define elements</a>.</li><li>The step fails if no page source is available.</li></ul>
+<h3 id="get-interactive-elements">Get Interactive Elements<a class="anchor" href="#get-interactive-elements" aria-label="Link to this section">#</a></h3>
+<p>Lists the elements on screen that you can tap or type into, and saves the list as a JSON file.</p>
+<div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">filter_config</code></td><td>Empty</td><td>Which elements to list: <code class="ic">all</code>, <code class="ic">interactive</code>, <code class="ic">buttons</code>, <code class="ic">inputs</code>, <code class="ic">images</code> or <code class="ic">text</code>. Empty lists all.</td></tr><tr><td><code class="ic">compact</code></td><td><code class="ic">false</code></td><td><code class="ic">true</code> returns a short form of each element: label, class, bounds and actions.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Debug,Get Interactive Elements,buttons">Copy</button><pre><code><span class="c-dim">Debug,Get Interactive Elements,buttons</span></code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Get Interactive Elements buttons compact=true">Copy</button><pre><code>- Get Interactive Elements buttons compact=true</code></pre></figure>
+<h3 id="get-screen-elements">Get Screen Elements<a class="anchor" href="#get-screen-elements" aria-label="Link to this section">#</a></h3>
+<p>Takes a screenshot and lists every element on screen in one step.</p>
+<p>This keyword takes no parameters.</p>
+<figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Debug,Get Screen Elements">Copy</button><pre><code><span class="c-dim">Debug,Get Screen Elements</span></code></pre></figure>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Get Screen Elements">Copy</button><pre><code>- Get Screen Elements</code></pre></figure>
+<p>Good to know:</p>
+<ul><li>Element positions are given in screenshot pixels, so they line up with the image.</li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Verification%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fverification%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Verification%20keywords&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Freference%2Fkeywords%2Fverification%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../../docs/reference/keywords/actions"><span>Previous</span>Actions</a><a class="pager-next" href="../../../docs/reference/keywords/flow"><span>Next</span>Flow control</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/reference/keywords/verification.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#check-several-elements-at-once">Check several elements at once</a></li><li class="toc-l2"><a href="#assertions">Assertions</a></li><li class="toc-l3"><a href="#assert-presence">Assert Presence</a></li><li class="toc-l3"><a href="#assert-visibility">Assert Visibility</a></li><li class="toc-l3"><a href="#validate-element">Validate Element</a></li><li class="toc-l3"><a href="#validate-screen">Validate Screen</a></li><li class="toc-l3"><a href="#is-element">Is Element</a></li><li class="toc-l3"><a href="#assert-equality">Assert Equality</a></li><li class="toc-l2"><a href="#capture-and-inspect">Capture and inspect</a></li><li class="toc-l3"><a href="#capture-screenshot">Capture Screenshot</a></li><li class="toc-l3"><a href="#capture-pagesource">Capture Pagesource</a></li><li class="toc-l3"><a href="#get-interactive-elements">Get Interactive Elements</a></li><li class="toc-l3"><a href="#get-screen-elements">Get Screen Elements</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../../docs/">Docs</a>
+        <a href="../../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../../about">About</a>
+        <a href="../../../contact">Contact</a>
+        <a href="../../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../../app.js?v=5160aed22e" defer></script>
+  <script src="../../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
