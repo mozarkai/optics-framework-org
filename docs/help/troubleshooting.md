@@ -41,7 +41,7 @@ Use the installer or a standard `venv` instead of Conda.
 
 `optics setup --install mcp` reports `Invalid engine(s): mcp`, and the `all` bundle leaves the MCP server out.
 
-Install it with pip: `pip install "optics-framework[mcp]"`. See [MCP server](/docs/reference/mcp#install).
+The install scripts include it. With pip, install it yourself: `pip install "optics-framework[mcp]"`. See [MCP server](/docs/reference/mcp#install).
 
 ## Setting up a project
 
