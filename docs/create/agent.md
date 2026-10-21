@@ -20,13 +20,11 @@ The agent is yours. Optics doesn't call any AI service in this mode, so it works
 :::steps
 ### Install the MCP server
 
-The MCP server is a separate extra. Install it with pip, in the same environment as Optics:
+The installer includes the MCP server, so if you used it there is nothing to do. With pip, install the `mcp` extra in the same environment as Optics:
 
 ```shell
 $ pip install "optics-framework[mcp]"
 ```
-
-If you used the installer, run `~/.optics/venv/bin/pip install "optics-framework[mcp]"` instead.
 
 ### Add Optics to your client
 

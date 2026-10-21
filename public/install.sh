@@ -10,7 +10,7 @@
 #
 # Options (curl ... | sh -s -- <options>):
 #   --version X.Y.Z    install a specific release        [$OPTICS_VERSION]
-#   --extra a,b        also install engine extras, e.g. --extra appium,llm
+#   --extra a,b        engine extras on top of mcp, e.g. --extra appium,llm
 #   --dir PATH         install somewhere else            [$OPTICS_INSTALL_DIR]
 #   --no-modify-path   do not touch your shell profile   [$OPTICS_NO_MODIFY_PATH]
 #   --dry-run          print what would happen, change nothing
@@ -52,7 +52,7 @@ Optics Framework installer
 
 Options (curl ... | sh -s -- <options>):
   --version X.Y.Z    install a specific release        [$OPTICS_VERSION]
-  --extra a,b        also install engine extras, e.g. --extra appium,llm
+  --extra a,b        engine extras on top of mcp, e.g. --extra appium,llm
   --dir PATH         install somewhere else            [$OPTICS_INSTALL_DIR]
   --no-modify-path   do not touch your shell profile   [$OPTICS_NO_MODIFY_PATH]
   --dry-run          print what would happen, change nothing
@@ -185,8 +185,7 @@ fi
 PY_VERSION=$("$PYTHON" -c 'import sys; print("%d.%d.%d" % sys.version_info[:3])')
 ok "Python $PY_VERSION at $PYTHON"
 
-SPEC="$PACKAGE"
-if [ -n "$EXTRAS" ]; then SPEC="${SPEC}[${EXTRAS}]"; fi
+SPEC="${PACKAGE}[mcp${EXTRAS:+,$EXTRAS}]"
 if [ -n "$VERSION" ]; then SPEC="${SPEC}==${VERSION}"; fi
 
 if [ "$DRY_RUN" -eq 1 ]; then

@@ -21,7 +21,7 @@
 .PARAMETER Version
     Install a specific release.                        [$env:OPTICS_VERSION]
 .PARAMETER Extra
-    Comma-separated engine extras, e.g. appium,llm.    [$env:OPTICS_EXTRA]
+    Engine extras on top of mcp, e.g. appium,llm.      [$env:OPTICS_EXTRA]
 .PARAMETER Dir
     Install somewhere else.                            [$env:OPTICS_INSTALL_DIR]
 .PARAMETER NoModifyPath
@@ -192,8 +192,7 @@ if (-not $python) {
 }
 Write-Ok "Python $($python.Version)"
 
-$Spec = $Package
-if ($Extra)   { $Spec = "$Spec[$Extra]" }
+$Spec = if ($Extra) { "$Package[mcp,$Extra]" } else { "$Package[mcp]" }
 if ($Version) { $Spec = "$Spec==$Version" }
 
 $VenvPython = Join-Path $Venv 'Scripts\python.exe'

@@ -50,6 +50,7 @@ jobs:
           set -eu
           "$HOME/.optics/bin/optics" --version
           "$HOME/.optics/bin/optics" list > /dev/null
+          "$HOME/.optics/venv/bin/python" -c 'import fastmcp'
 
       - name: re-running is idempotent
         run: sh public/install.sh --no-modify-path
@@ -115,6 +116,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'optics --version failed' }
           & $optics list | Out-Null
           if ($LASTEXITCODE -ne 0) { throw 'optics list failed' }
+          & (Join-Path $HOME '.optics\venv\Scripts\python.exe') -c 'import fastmcp'
+          if ($LASTEXITCODE -ne 0) { throw 'the MCP server extra is missing' }
 
       - name: re-running is idempotent
         shell: pwsh
