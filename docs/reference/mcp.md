@@ -8,7 +8,7 @@ For a guided walkthrough, see [Build tests with an AI agent](https://optics-fram
 
 ## Install
 
-The server needs the `mcp` extra. `optics setup` can't install it, and the `all` bundle doesn't include it.
+The server needs the `mcp` extra. The [install scripts](https://optics-framework.org/docs/reference/cli#install-scripts) always include it. With pip, add it yourself: `optics setup` can't install it, and the `all` bundle doesn't include it.
 
 ```shell
 $ pip install "optics-framework[mcp]"

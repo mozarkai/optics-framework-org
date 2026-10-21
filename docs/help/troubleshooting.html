@@ -101,7 +101,7 @@
 <p>Use the installer or a standard <code class="ic">venv</code> instead of Conda.</p>
 <h3 id="mcp-not-installed">The MCP server isn't installed by <code class="ic">optics setup</code><a class="anchor" href="#mcp-not-installed" aria-label="Link to this section">#</a></h3>
 <p><code class="ic">optics setup --install mcp</code> reports <code class="ic">Invalid engine(s): mcp</code>, and the <code class="ic">all</code> bundle leaves the MCP server out.</p>
-<p>Install it with pip: <code class="ic">pip install "optics-framework[mcp]"</code>. See <a href="../../docs/reference/mcp#install">MCP server</a>.</p>
+<p>The install scripts include it. With pip, install it yourself: <code class="ic">pip install "optics-framework[mcp]"</code>. See <a href="../../docs/reference/mcp#install">MCP server</a>.</p>
 <h2 id="setting-up-a-project">Setting up a project<a class="anchor" href="#setting-up-a-project" aria-label="Link to this section">#</a></h2>
 <h3 id="no-driver-enabled">"No driver enabled in …/config.yaml"<a class="anchor" href="#no-driver-enabled" aria-label="Link to this section">#</a></h3>
 <p>No entry under <code class="ic">driver_sources</code> has <code class="ic">enabled: true</code>. Optics also prints this when it couldn't read <code class="ic">config.yaml</code> at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults.</p>

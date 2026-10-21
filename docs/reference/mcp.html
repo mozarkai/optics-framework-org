@@ -85,7 +85,7 @@
 <p><code class="ic">optics mcp</code> runs a Model Context Protocol (MCP) server, a standard way for AI agents such as Claude, Cursor or VS Code to call outside tools. Your agent can start a session on a device or browser, look at the screen, and run Optics keywords one at a time.</p>
 <p>For a guided walkthrough, see <a href="../../docs/create/agent">Build tests with an AI agent</a>.</p>
 <h2 id="install">Install<a class="anchor" href="#install" aria-label="Link to this section">#</a></h2>
-<p>The server needs the <code class="ic">mcp</code> extra. <code class="ic">optics setup</code> can't install it, and the <code class="ic">all</code> bundle doesn't include it.</p>
+<p>The server needs the <code class="ic">mcp</code> extra. The <a href="../../docs/reference/cli#install-scripts">install scripts</a> always include it. With pip, add it yourself: <code class="ic">optics setup</code> can't install it, and the <code class="ic">all</code> bundle doesn't include it.</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install &quot;optics-framework[mcp]&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install "optics-framework[mcp]"</code></pre></figure>
 <p>You also need the extras for your driver, for example <code class="ic">appium</code> or <code class="ic">playwright</code>. See <a href="../../docs/reference/engines">Engines and extras</a>.</p>
 <h2 id="start-the-server">Start the server<a class="anchor" href="#start-the-server" aria-label="Link to this section">#</a></h2>

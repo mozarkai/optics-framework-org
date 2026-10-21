@@ -176,7 +176,7 @@ Names are case-insensitive. You can use an engine name (`appium`, `ble`, `seleni
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](https://optics-framework.org/docs/reference/engines#where-installs-are-refused).
 
-The MCP server isn't an engine here. Install it with `pip install "optics-framework[mcp]"`.
+The MCP server isn't an engine here. The install scripts include it; with pip, install it with `pip install "optics-framework[mcp]"`.
 
 ```shell
 $ optics setup --install appium easyocr
@@ -347,7 +347,7 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT]
 | `--host` | `127.0.0.1` | The address to listen on. `http` only. |
 | `--port` | `8090` | The port to listen on. `http` only. |
 
-It needs the `mcp` extra: `pip install "optics-framework[mcp]"`. The `all` bundle doesn't include it. Without the extra, the command exits with code 1 and prints the install command. See [MCP server](https://optics-framework.org/docs/reference/mcp).
+It needs the `mcp` extra, which the install scripts include. With pip: `pip install "optics-framework[mcp]"`. The `all` bundle doesn't include it. Without the extra, the command exits with code 1 and prints the install command. See [MCP server](https://optics-framework.org/docs/reference/mcp).
 
 ## `optics generate`
 
@@ -475,7 +475,7 @@ $ curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,easy
 | Option | Environment variable | What it does |
 |---|---|---|
 | `--version X.Y.Z` | `OPTICS_VERSION` | Installs a specific release. |
-| `--extra a,b` | | Also installs engine extras, for example `appium,llm`. |
+| `--extra a,b` | | Also installs engine extras, for example `appium,llm`. The `mcp` extra is always installed. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Installs somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Leaves your shell profile alone. |
 | `--dry-run` | | Prints what would happen and changes nothing. |
@@ -499,7 +499,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 | Parameter (downloaded script) | Environment variable | What it does |
 |---|---|---|
 | `-Version X.Y.Z` | `OPTICS_VERSION` | Installs a specific release. |
-| `-Extra a,b` | `OPTICS_EXTRA` | Also installs engine extras. |
+| `-Extra a,b` | `OPTICS_EXTRA` | Also installs engine extras. The `mcp` extra is always installed. |
 | `-Dir PATH` | `OPTICS_INSTALL_DIR` | Installs somewhere other than `~\.optics`. |
 | `-NoModifyPath` | `OPTICS_NO_MODIFY_PATH` | Leaves your PATH alone. |
 | `-DryRun` | | Prints what would happen and changes nothing. |
