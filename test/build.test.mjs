@@ -269,6 +269,12 @@ test("docs search index and agent index cover every page", () => {
   }
 });
 
+test("llms-full.txt holds the text of every docs page", () => {
+  const full = read("llms-full.txt");
+  for (const page of docsPages()) assert.ok(full.includes(`Source: ${ORIGIN}/${page.url}\n`), `llms-full.txt lacks ${page.id}`);
+  assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/llms-full\.txt\)/);
+});
+
 test("the homepage and every text page link to the docs", () => {
   for (const page of ["index.html", ...TRUST_PAGES.map((p) => `${p}.html`)]) {
     assert.match(read(page), /href="(\.\/)?docs\/"/, `${page} has no docs link`);
