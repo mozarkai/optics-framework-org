@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your tests passed. Your app didn't. · Optics blog</title>
+  <meta name="description" content="Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.">
+  <link rel="canonical" href="https://optics-framework.org/blog/your-tests-passed-your-app-didnt">
+  <link rel="stylesheet" href="../docs.css?v=f46a574929">
+  <link rel="alternate" type="text/markdown" href="your-tests-passed-your-app-didnt.md" title="Your tests passed. Your app didn't., as Markdown">
+  <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Your tests passed. Your app didn't.",
+  "description": "Error definitions catch crash dialogs, \"Session expired\" and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.",
+  "url": "https://optics-framework.org/blog/your-tests-passed-your-app-didnt",
+  "mainEntityOfPage": "https://optics-framework.org/blog/your-tests-passed-your-app-didnt",
+  "datePublished": "2026-10-16",
+  "dateModified": "2026-10-20",
+  "image": "https://optics-framework.org/media/blog/error-definitions.webp",
+  "author": {
+    "@type": "Person",
+    "name": "Chinmay Jha"
+  },
+  "about": {
+    "@id": "https://optics-framework.org/#optics"
+  },
+  "isPartOf": {
+    "@type": "Blog",
+    "name": "Optics blog",
+    "url": "https://optics-framework.org/blog"
+  }
+}
+  </script>
+  <meta property="og:title" content="Your tests passed. Your app didn't. · Optics blog">
+  <meta property="og:description" content="Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="../#create">Create</a>
+        <a href="../#run">Run</a>
+        <a href="../#ladder">Locators</a>
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="../#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<article class="post">
+        <p class="post-crumbs"><a href="../blog">Blog</a></p>
+        <h1 class="h2">Your tests passed. Your app didn't.</h1>
+        <p class="lede">Error definitions catch crash dialogs, &quot;Session expired&quot; and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.</p>
+        <p class="post-meta"><span><time datetime="2026-10-16">16 Oct 2026</time></span><span>Chinmay Jha</span><span>6 min read</span></p>
+        <img class="post-hero" src="../media/blog/error-definitions.webp?v=b6295c6439" alt="The headline Your tests passed. Your app didn't. beside a phone showing a Session expired dialog and a run that passed with an on-screen error" decoding="async">
+        <div class="prose">
+<p>A checkout test signs in, opens a pair of trail runners, adds them to the cart and checks that “Added to cart” appears. Every step passes. Then the app shows “Session expired”, because last night’s build broke the token refresh. The run ends green and nobody looks at the last screen.</p>
+<p><img src="../media/blog/green-run.webp?v=888a201ce4" alt="Animation: a checkout test where every step passes while the last screen shows a Session expired dialog" loading="lazy"></p>
+<p><em>Every step passes and CI goes green. The last screen says the shopper was signed out.</em></p>
+<p>A test checks for the things you expect to see. Error screens turn up wherever they like: Android’s “Birch has stopped” dialog, an “isn’t responding” prompt, a page that says “Something went wrong”, a “No internet connection” banner. You could assert against each one after every step, and your suite would double in size and still miss the next message someone adds.</p>
+<p>Optics Framework, the open-source test automation framework, has a feature for this called error definitions. You list the messages that mean something went wrong, and Optics looks for them on the screen at the end of every run.</p>
+<h2 id="the-error-definitions-file">The error definitions file<a class="anchor" href="#the-error-definitions-file" aria-label="Link to this section">#</a></h2>
+<p>Add a CSV anywhere in your Optics project:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>error_definitions.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="error_code,match_string,description,severity
+ERR_CRASH,has stopped,The app crashed,critical
+ERR_CRASH_AGAIN,keeps stopping,The app crashed again,critical
+ERR_ANR,isn't responding,The app froze,critical
+ERR_SESSION,Session expired,The user was signed out,high
+ERR_SERVER,Something went wrong,Server error page,high
+ERR_NETWORK,No internet connection,Offline,medium">Copy</button><pre><code><span class="c-dim">error_code,match_string,description,severity</span>
+<span class="c-mod">ERR_CRASH</span><span class="c-dim">,</span><b>has stopped</b><span class="c-dim">,</span>The app crashed<span class="c-dim">,</span>critical
+<span class="c-mod">ERR_CRASH_AGAIN</span><span class="c-dim">,</span><b>keeps stopping</b><span class="c-dim">,</span>The app crashed again<span class="c-dim">,</span>critical
+<span class="c-mod">ERR_ANR</span><span class="c-dim">,</span><b>isn't responding</b><span class="c-dim">,</span>The app froze<span class="c-dim">,</span>critical
+<span class="c-mod">ERR_SESSION</span><span class="c-dim">,</span><b>Session expired</b><span class="c-dim">,</span>The user was signed out<span class="c-dim">,</span>high
+<span class="c-mod">ERR_SERVER</span><span class="c-dim">,</span><b>Something went wrong</b><span class="c-dim">,</span>Server error page<span class="c-dim">,</span>high
+<span class="c-mod">ERR_NETWORK</span><span class="c-dim">,</span><b>No internet connection</b><span class="c-dim">,</span>Offline<span class="c-dim">,</span>medium</code></pre></figure>
+<p><code class="ic">match_string</code> is the text to look for, and <code class="ic">error_code</code> is the short name you'll see in reports. <code class="ic">description</code> and <code class="ic">severity</code> are optional. Optics copies them into the report so whoever reads a failure knows what it means.</p>
+<p>Optics recognises the file by its <code class="ic">error_code</code> and <code class="ic">match_string</code> columns, and <code class="ic">optics execute</code> uses it on every run. You don't switch anything on or call a keyword.</p>
+<h2 id="what-happens-at-the-end-of-a-run">What happens at the end of a run<a class="anchor" href="#what-happens-at-the-end-of-a-run" aria-label="Link to this section">#</a></h2>
+<p><img src="../media/blog/end-of-run.webp?v=85af6564b0" alt="Animation: after the last test case, Optics reads the final screen, finds Session expired and records the match" loading="lazy"></p>
+<p><em>After the last test case, Optics reads the final screen, finds “Session expired” and records the match. A CI step turns it into a failed build.</em></p>
+<p>After the last test case, Optics captures the screen once more and saves a screenshot and the page source with the run’s output. It then looks for every <code class="ic">match_string</code> in the screen's text. Matching ignores case and finds the text anywhere, so <code class="ic">Session expired</code> also matches "Your session expired. Please sign in again."</p>
+<p>For each match, Optics logs a warning to <code class="ic">execution_output/execution_logs.log</code> and writes the details to <code class="ic">execution_output/detected_errors_&lt;id&gt;.json</code>. The warning looks like this:</p>
+<figure class="code doc-code no-copy" data-lang="text"><pre><code>ON-SCREEN <span class="c-fail">ERROR</span> DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out</code></pre></figure>
+<p>Optics is also meant to add a failing test case named <code class="ic">on-screen-error-detection</code> to the JUnit report. In Optics Framework 1.11.0 that entry is missing when every test case passes, so use the JSON file as the signal, as shown below. The <a href="../docs/run/error-detection">error detection docs</a> track the fix.</p>
+<p>I ran a checkout test against a small web demo shop. The terminal said Passed: 1 | Failed: 0, and this file appeared next to the report:</p>
+<figure class="code doc-code no-copy" data-lang="json"><pre><code>{
+  <span class="c-mod">"timestamp"</span>: <span class="c-lit">"2026-10-16T06:<span class="c-info">05</span>:<span class="c-info">38.634183</span>+05:<span class="c-info">30</span>"</span>,
+  <span class="c-mod">"detected"</span>: [
+    {
+      <span class="c-mod">"error_code"</span>: <span class="c-lit">"ERR_SESSION"</span>,
+      <span class="c-mod">"matched_on"</span>: <span class="c-lit">"match_string"</span>,
+      <span class="c-mod">"match_string"</span>: <span class="c-lit">"Session expired"</span>,
+      <span class="c-mod">"description"</span>: <span class="c-lit">"The user was signed out"</span>,
+      <span class="c-mod">"severity"</span>: <span class="c-lit">"high"</span>,
+      <span class="c-mod">"detected_at"</span>: <span class="c-lit">"end_of_run"</span>
+    }
+  ]
+}</code></pre></figure>
+<h2 id="which-text-optics-reads">Which text Optics reads<a class="anchor" href="#which-text-optics-reads" aria-label="Link to this section">#</a></h2>
+<p><img src="../media/blog/visible-text.webp?v=63a019fd3e" alt="Diagram: Optics keeps only the visible text from the UI tree and checks it against every match_string" loading="lazy"></p>
+<p><em>Optics keeps only the text a person can see, then checks it against every match_string.</em></p>
+<p>The check reads the UI tree the driver already provides, with no OCR, and keeps the text a person can see. On Android and iOS that is the <code class="ic">text</code>, <code class="ic">content-desc</code>, <code class="ic">label</code>, <code class="ic">value</code>, <code class="ic">hint</code> and <code class="ic">name</code> attributes. On the web Optics strips every tag and keeps the page's text. It skips ids, class names and bounds, so a button with the id <code class="ic">error_retry</code> or a div with <code class="ic">class="error"</code> can't set off a match. The whole check costs one page-source call at the end of the run.</p>
+<p>Optics matches the <code class="ic">error_code</code> column too. If your app prints its own codes, such as "Error E1042", use <code class="ic">E1042</code> as the code and Optics will catch it even when the wording around it changes.</p>
+<h2 id="make-ci-fail-on-it">Make CI fail on it<a class="anchor" href="#make-ci-fail-on-it" aria-label="Link to this section">#</a></h2>
+<p>The JSON file appears only when something matched. To fail the job, add one step after the suite that fails when the file exists:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.github/workflows/e2e.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="- name: Run the suite
+  run: optics execute birch-tests
+- name: Fail on error screens
+  run: |
+    if compgen -G &quot;birch-tests/execution_output/detected_errors_*.json&quot; &gt; /dev/null; then
+      cat birch-tests/execution_output/detected_errors_*.json
+      exit 1
+    fi">Copy</button><pre><code>- <span class="c-mod">name</span><span class="c-dim">:</span> Run the suite
+  <span class="c-mod">run</span><span class="c-dim">:</span> optics execute birch-tests
+- <span class="c-mod">name</span><span class="c-dim">:</span> Fail on error screens
+  <span class="c-mod">run</span><span class="c-dim">:</span> |
+    if compgen -G <span class="c-lit">"birch-tests/execution_output/detected_errors_*.json"</span> &gt; /dev/null; then
+      cat birch-tests/execution_output/detected_errors_*.json
+      exit 1
+    fi</code></pre></figure>
+<p><img src="../media/blog/ci-step.webp?v=0ec0e6bdf9" alt="Screenshot: the suite step passes, and the next CI step fails and prints which message was on screen" loading="lazy"></p>
+<p><em>The suite step passes. The next step fails and prints which message was on screen.</em></p>
+<p>A clean run passes the step. When the build goes red, the job log already shows the error code and the message, and you don’t have to open a screenshot to find out why. Run it on a fresh checkout, since an old <code class="ic">execution_output</code> folder still holds the previous run's file.</p>
+<h2 id="why-it-helps">Why it helps<a class="anchor" href="#why-it-helps" aria-label="Link to this section">#</a></h2>
+<p>You get the check on every test you already have, and none of them change. One file covers a project’s Android, iOS, web and TV runs, because Optics reads each driver’s UI tree the same way. Anyone can keep the list up to date: when support starts seeing a new error in tickets, they add a row to a CSV and it goes through review like any other change. And when a run fails, the report says “Session expired”, which is what the user saw.</p>
+<p>Most teams do this by hand. In Playwright you write an <code class="ic">afterEach</code> hook that reads the page text. With Appium or Espresso you write a teardown that inspects the screen, or a script that searches logcat for <code class="ic">FATAL EXCEPTION</code>. Logcat catches a crash, but an app showing "Session expired" looks healthy to the operating system. Firebase Test Lab's Robo crawler reports crash dialogs it meets while it explores an Android app, which is useful, though it runs apart from your regression journeys. In Optics the list is a data file next to your tests, and it runs on every platform your suite runs on.</p>
+<h2 id="writing-good-match-strings">Writing good match strings<a class="anchor" href="#writing-good-match-strings" aria-label="Link to this section">#</a></h2>
+<ul><li>Pick a phrase that only an error would show. “has stopped” works. “Error” matches too much, such as a help page about error messages.</li><li>Copy the exact words from a screenshot of the error and keep them short. Matching is plain text, so <code class="ic">*</code> and <code class="ic">.*</code> match only themselves.</li><li>List both Android crash messages. Android says “Birch has stopped” the first time an app crashes and “Birch keeps stopping” when it crashes again.</li><li>Leave out text your app shows on purpose. A match anywhere on the last screen counts.</li></ul>
+<h2 id="tips">Tips<a class="anchor" href="#tips" aria-label="Link to this section">#</a></h2>
+<ul><li>Leave the app open at the end of the run, so Optics has a screen to read. If your Suite Teardown closes the app, move that step out of teardown.</li><li>Optics checks the screen where the run ends. For a message that can come and go in the middle of a flow, assert the screen you expect next.</li><li>In Python or Robot Framework, call <code class="ic">Add Error Definitions</code> once, then <code class="ic">Capture And Detect</code> anywhere you want a check, including halfway through a test.</li></ul>
+<h2 id="try-it">Try it<a class="anchor" href="#try-it" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh
+optics quickstart">Copy</button><pre><code>curl -fsSL https://optics-framework.org/install | sh
+optics quickstart</code></pre></figure>
+<p>Add <code class="ic">error_definitions.csv</code> to the project and run <code class="ic">optics execute</code>. The docs are at <a href="../docs/run/error-detection">optics-framework.org/docs/run/error-detection</a> and the source is at <a href="https://github.com/mozarkai/optics-framework" rel="noopener">github.com/mozarkai/optics-framework</a>. New to Optics? Start with <a href="../blog/introducing-optics-framework">Introducing Optics Framework</a>. Later posts in this series cover the locator fallbacks, AI agents over MCP, and testing phones that can’t run automation software.</p>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../about">About</a>
+        <a href="../contact">Contact</a>
+        <a href="../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../app.js?v=5160aed22e" defer></script>
+</body>
+</html>

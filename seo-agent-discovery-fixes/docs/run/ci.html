@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run tests in CI · Optics Framework docs</title>
+  <meta name="description" content="Run the same suite on every pull request and read the results in your CI system.">
+  <link rel="canonical" href="https://optics-framework.org/docs/run/ci">
+  <link rel="alternate" type="text/markdown" href="ci.md" title="This page as Markdown">
+  <meta property="og:title" content="Run tests in CI · Optics Framework docs">
+  <meta property="og:description" content="Run the same suite on every pull request and read the results in your CI system.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab on" href="../../docs/run/" aria-current="true">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section open" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci" aria-current="page">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/run/">Run and report</a><span class="sep" aria-hidden="true">/</span><span>Run every day</span></nav>
+        <header class="doc-head">
+          <h1>Run tests in CI</h1>
+          <p class="doc-summary">Run the same suite on every pull request and read the results in your CI system.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 15 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="ci.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="ci.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>A suite earns its keep when it runs on every change. In CI, Optics needs the same three things as on your machine: Optics itself, the engines in your <code class="ic">config.yaml</code>, and something to drive. It reports through its exit code and a JUnit file, which every major CI system understands.</p>
+<figure class="scene-fig"><div class="scene" data-scene="ci" role="img" aria-label="Every push installs Optics, runs the suite, and publishes the JUnit report as a check on the pull request."></div><figcaption>Every push installs Optics, runs the suite, and publishes the JUnit report as a check on the pull request.</figcaption></figure>
+<h2 id="run-a-web-suite">Run a web suite<a class="anchor" href="#run-a-web-suite" aria-label="Link to this section">#</a></h2>
+<p>Web suites are the easiest to run in CI, because the browser runs on the CI machine itself.</p>
+<div class="doc-tabs" data-group="ci"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-ci-t0" aria-controls="tabs-ci-p0" aria-selected="true"  data-tab="GitHub Actions">GitHub Actions</button><button class="os-tab" role="tab" id="tabs-ci-t1" aria-controls="tabs-ci-p1" aria-selected="false" tabindex="-1" data-tab="GitLab CI">GitLab CI</button></div><div class="tab-pane" role="tabpanel" id="tabs-ci-p0" aria-labelledby="tabs-ci-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.github/workflows/optics.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="name: Optics
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  checks: write   # lets the report step post a check
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: &quot;3.12&quot;
+
+      - name: Install Optics and the browser
+        run: |
+          pip install &quot;optics-framework[playwright]==1.10.5&quot;
+          python -m playwright install --with-deps chromium
+
+      - name: Run the suite
+        run: xvfb-run -a optics execute birch-tests --no-use-printer
+
+      - name: Publish results
+        if: always()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: birch-tests/execution_output/junit_output.xml
+
+      # Screenshot file names contain colons, which upload-artifact rejects,
+      # so the output folder is uploaded as one archive.
+      - name: Keep the run output
+        if: failure()
+        run: tar -czf optics-output.tgz birch-tests/execution_output
+
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: optics-output
+          path: optics-output.tgz">Copy</button><pre><code><span class="c-mod">name</span><span class="c-dim">:</span> Optics
+
+<span class="c-mod">on</span><span class="c-dim">:</span> [push, pull_request]
+
+<span class="c-mod">permissions</span><span class="c-dim">:</span>
+  <span class="c-mod">contents</span><span class="c-dim">:</span> read
+  <span class="c-mod">checks</span><span class="c-dim">:</span> write  <span class="c-dim"> # lets the report step post a check</span>
+
+<span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">web</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> ubuntu-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v7
+
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v7
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Install Optics and the browser
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
+          pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
+          python -m playwright install --with-deps chromium
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Run the suite
+        <span class="c-mod">run</span><span class="c-dim">:</span> xvfb-run -a optics execute birch-tests --no-use-printer
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Publish results
+        <span class="c-mod">if</span><span class="c-dim">:</span> always()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> mikepenz/action-junit-report@v6
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">report_paths</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml
+
+     <span class="c-dim"> # Screenshot file names contain colons, which upload-artifact rejects,</span>
+     <span class="c-dim"> # so the output folder is uploaded as one archive.</span>
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Keep the run output
+        <span class="c-mod">if</span><span class="c-dim">:</span> failure()
+        <span class="c-mod">run</span><span class="c-dim">:</span> tar -czf optics-output.tgz birch-tests/execution_output
+
+      - <span class="c-mod">if</span><span class="c-dim">:</span> failure()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> actions/upload-artifact@v7
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">name</span><span class="c-dim">:</span> optics-output
+          <span class="c-mod">path</span><span class="c-dim">:</span> optics-output.tgz</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-ci-p1" aria-labelledby="tabs-ci-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.gitlab-ci.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="optics-web:
+  image: python:3.12-bookworm
+  script:
+    - apt-get update &amp;&amp; apt-get install -y xvfb
+    - pip install &quot;optics-framework[playwright]==1.10.5&quot;
+    - python -m playwright install --with-deps chromium
+    - xvfb-run -a optics execute birch-tests --no-use-printer
+  artifacts:
+    when: always
+    paths:
+      - birch-tests/execution_output/
+    reports:
+      junit: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class="c-mod">optics-web</span><span class="c-dim">:</span>
+  <span class="c-mod">image</span><span class="c-dim">:</span> python:3.12-bookworm
+  <span class="c-mod">script</span><span class="c-dim">:</span>
+    - apt-get update &amp;&amp; apt-get install -y xvfb
+    - pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
+    - python -m playwright install --with-deps chromium
+    - xvfb-run -a optics execute birch-tests --no-use-printer
+  <span class="c-mod">artifacts</span><span class="c-dim">:</span>
+    <span class="c-mod">when</span><span class="c-dim">:</span> always
+    <span class="c-mod">paths</span><span class="c-dim">:</span>
+      - birch-tests/execution_output/
+    <span class="c-mod">reports</span><span class="c-dim">:</span>
+      <span class="c-mod">junit</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure></div></div>
+<p><code class="ic">xvfb-run</code> gives the browser a virtual screen. Optics 1.10.5 always opens a visible browser window, even with <code class="ic">headless: true</code> in <code class="ic">config.yaml</code>, and CI machines have no display. Once the fix in <a href="https://github.com/mozarkai/optics-framework/pull/600" rel="noopener">pull request #600</a> is released, <code class="ic">headless: true</code> works and you can drop <code class="ic">xvfb-run</code>.</p>
+<p>The <code class="ic">permissions</code> block lets the report step post its check. Without it, the step logs <code class="ic">Resource not accessible by integration</code> and no check appears. Pull requests from forks always get a read-only token, so on those the results are in the job log only.</p>
+<h2 id="run-an-android-suite">Run an Android suite<a class="anchor" href="#run-an-android-suite" aria-label="Link to this section">#</a></h2>
+<p>Android suites need an emulator and an Appium server on the CI machine. Linux runners with hardware acceleration, such as GitHub's <code class="ic">ubuntu-latest</code>, can run the Android emulator.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.github/workflows/optics-android.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="name: Optics Android
+
+on: [pull_request]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL==&quot;kvm&quot;, GROUP=&quot;kvm&quot;, MODE=&quot;0666&quot;, OPTIONS+=&quot;static_node=kvm&quot;' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: &quot;3.12&quot;
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install Optics and Appium
+        run: |
+          pip install &quot;optics-framework[appium]==1.10.5&quot;
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Run the suite on an emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          script: |
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            appium &gt; appium.log 2&gt;&amp;1 &amp;
+            sleep 5
+            optics execute birch-tests --no-use-printer
+
+      - name: Publish results
+        if: always()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: birch-tests/execution_output/junit_output.xml">Copy</button><pre><code><span class="c-mod">name</span><span class="c-dim">:</span> Optics Android
+
+<span class="c-mod">on</span><span class="c-dim">:</span> [pull_request]
+
+<span class="c-mod">permissions</span><span class="c-dim">:</span>
+  <span class="c-mod">contents</span><span class="c-dim">:</span> read
+  <span class="c-mod">checks</span><span class="c-dim">:</span> write
+
+<span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">android</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> ubuntu-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v7
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Enable KVM
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
+          echo <span class="c-lit">'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"'</span> | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v7
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-node@v7
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">node-version</span><span class="c-dim">:</span> <span class="c-info">22</span>
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Install Optics and Appium
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
+          pip install <span class="c-lit">"optics-framework[appium]==1.10.5"</span>
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Run the suite on an emulator
+        <span class="c-mod">uses</span><span class="c-dim">:</span> reactivecircus/android-emulator-runner@v2
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">api-level</span><span class="c-dim">:</span> <span class="c-info">34</span>
+          <span class="c-mod">arch</span><span class="c-dim">:</span> x86_64
+          <span class="c-mod">script</span><span class="c-dim">:</span> |
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            appium &gt; appium.log 2&gt;&amp;1 &amp;
+            sleep 5
+            optics execute birch-tests --no-use-printer
+
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Publish results
+        <span class="c-mod">if</span><span class="c-dim">:</span> always()
+        <span class="c-mod">uses</span><span class="c-dim">:</span> mikepenz/action-junit-report@v6
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">report_paths</span><span class="c-dim">:</span> birch-tests/execution_output/junit_output.xml</code></pre></figure>
+<p>Make sure <code class="ic">deviceName</code> in <code class="ic">config.yaml</code> matches the emulator (<code class="ic">emulator-5554</code> for the first one), and that <code class="ic">appPackage</code> and <code class="ic">appActivity</code> match the app you install.</p>
+<h2 id="decide-pass-or-fail">Decide pass or fail<a class="anchor" href="#decide-pass-or-fail" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">optics execute</code> exits with <code class="ic">1</code> when any test case fails, so the run step fails the job by itself.</p>
+<p>There's one case the exit code misses: <a href="../../docs/run/error-detection">error screens</a> found at the end of a run. They're added to the JUnit report as a failing test case but don't change the exit code. To fail the build on them, have your JUnit reporter fail on any failure. For example, with <code class="ic">mikepenz/action-junit-report</code>, add <code class="ic">fail_on_failure: true</code>.</p>
+<h2 id="make-ci-runs-reliable">Make CI runs reliable<a class="anchor" href="#make-ci-runs-reliable" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Pin the Optics version</strong> (<code class="ic">optics-framework==1.10.5</code>), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.</li><li>**Run <code class="ic">optics dry_run</code> first** in a fast job. It catches typos in seconds, before you pay for an emulator.</li><li><strong>Start from a clean output folder.</strong> CI checkouts usually are. On reused machines, delete <code class="ic">execution_output/</code> before the run.</li><li><strong>Keep the artifacts.</strong> Upload <code class="ic">execution_output/</code> when a run fails, as an archive (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.</li><li><strong>Keep secrets out of the suite.</strong> Pass model API keys such as <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code> or <code class="ic">ANTHROPIC_API_KEY</code> as CI secrets, in environment variables.</li><li><strong>Wait for screens to load.</strong> Runners are often slower than your laptop. Put <code class="ic">Assert Presence</code> before actions that follow a screen change, rather than adding <code class="ic">Sleep</code> steps.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/run/checklist">Readiness checklist</a></li><li><a href="../../docs/run/results">Read the results</a></li><li><a href="../../docs/platforms/android">Android</a> and <a href="../../docs/platforms/web">Web</a> setup</li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Run%20tests%20in%20CI&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fci%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Run%20tests%20in%20CI&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fci%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/run/error-detection"><span>Previous</span>Error detection</a><a class="pager-next" href="../../docs/run/checklist"><span>Next</span>Readiness checklist</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/ci.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#run-a-web-suite">Run a web suite</a></li><li class="toc-l2"><a href="#run-an-android-suite">Run an Android suite</a></li><li class="toc-l2"><a href="#decide-pass-or-fail">Decide pass or fail</a></li><li class="toc-l2"><a href="#make-ci-runs-reliable">Make CI runs reliable</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=5160aed22e" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+</body>
+</html>
