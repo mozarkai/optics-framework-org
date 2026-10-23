@@ -1,5 +1,5 @@
 ---
-title: Let your AI agent drive a real phone
+title: Let your AI agent drive a real phone over MCP
 nav: AI agent on a phone
 summary: Give Claude Code, Cursor or Codex eyes and hands on a real Android phone or iPhone over MCP.
 description: Let an AI coding agent such as Claude Code, Cursor or Codex tap, type and read the screen on a real phone over MCP with the open-source optics mcp server, then save the run as a test suite.
