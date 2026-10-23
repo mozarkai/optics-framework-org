@@ -62,7 +62,7 @@ Optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) go
 
 ### An MCP server for AI agents
 
-`optics mcp` lets an AI agent such as Claude Code or Cursor drive the device through Optics keywords, then write the suite. See [Let your AI agent drive a real phone](https://optics-framework.org/docs/guides/ai-agent-phone).
+`optics mcp` lets an AI agent such as Claude Code or Cursor drive the device through Optics keywords, then write the suite. See [Let your AI agent drive a real phone over MCP](https://optics-framework.org/docs/guides/ai-agent-phone).
 
 ### Results and error screens
 

@@ -63,9 +63,9 @@
 ## Guides
 
 - [Guides and comparisons](https://optics-framework.org/docs/guides/index.md): Find the page for a job you have in mind, or see how Optics compares with tools you already know.
-- [Automate smart TV apps](https://optics-framework.org/docs/guides/smart-tv-apps.md): Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
+- [Test Android TV, Samsung Tizen and LG webOS apps with one framework](https://optics-framework.org/docs/guides/smart-tv-apps.md): Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
 - [Test apps that block screenshots or USB debugging](https://optics-framework.org/docs/guides/protected-apps.md): Automate a banking or streaming app on a locked phone, with a Bluetooth dongle for input and a camera for eyes.
-- [Let your AI agent drive a real phone](https://optics-framework.org/docs/guides/ai-agent-phone.md): Give Claude Code, Cursor or Codex eyes and hands on a real Android phone or iPhone over MCP.
+- [Let your AI agent drive a real phone over MCP](https://optics-framework.org/docs/guides/ai-agent-phone.md): Give Claude Code, Cursor or Codex eyes and hands on a real Android phone or iPhone over MCP.
 - [Optics vs Maestro](https://optics-framework.org/docs/guides/optics-vs-maestro.md): Compare two open-source UI test frameworks on platforms, test format, finding elements, TVs, AI agents and where tests run.
 - [What Optics adds to Appium](https://optics-framework.org/docs/guides/optics-and-appium.md): Optics runs on top of Appium. Keep your Appium server and devices, and add readable suites, fallback locators, OCR and AI agents.
 

@@ -25,6 +25,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Docs
 
 - [Docs index for agents](https://optics-framework.org/docs/llms.txt): every docs page, as Markdown.
+- [Full docs in one file](https://optics-framework.org/llms-full.txt): the text of every docs page, in reading order.
 - [Get started](https://optics-framework.org/docs/get-started/index.md): what Optics is and what it tests.
 - [Quickstart](https://optics-framework.org/docs/get-started/quickstart.md): install and run a sample in a browser.
 - [Install Optics](https://optics-framework.org/docs/get-started/install.md): Python, the installer, and engines per platform.

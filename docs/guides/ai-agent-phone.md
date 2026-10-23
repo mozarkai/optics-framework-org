@@ -1,4 +1,4 @@
-# Let your AI agent drive a real phone
+# Let your AI agent drive a real phone over MCP
 
 > Give Claude Code, Cursor or Codex eyes and hands on a real Android phone or iPhone over MCP.
 

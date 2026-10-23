@@ -1,4 +1,4 @@
-# Automate smart TV apps
+# Test Android TV, Samsung Tizen and LG webOS apps with one framework
 
 > Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
 
