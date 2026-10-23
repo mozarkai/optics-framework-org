@@ -289,6 +289,12 @@ const blog = () => loadBlog();
 const cardHref = (i) => (i.slug ? `blog/${i.slug}` : i.url);
 const hosted = () => blog().items.filter((i) => i.slug);
 
+test("/blog/ redirects to /blog instead of a 404", () => {
+  const html = read("blog/index.html");
+  assert.match(html, /<meta http-equiv="refresh" content="0; url=\.\.\/blog">/);
+  assert.match(html, new RegExp(`<link rel="canonical" href="${ORIGIN}/blog">`));
+});
+
 test("the blog page lists every item, newest first, linking to where it lives", () => {
   const html = read("blog.html");
   assert.match(html, new RegExp(`<link rel="canonical" href="${ORIGIN}/blog">`));

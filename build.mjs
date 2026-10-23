@@ -102,6 +102,12 @@ for (const item of articles) {
   writeFileSync(`out/blog/${item.slug}.html`, render(page, { root: "../", home: "../", canonical: `${ORIGIN}/blog/${item.slug}` }));
   writeFileSync(`out/blog/${item.slug}.md`, markdown);
 }
+// out/blog/ exists for the articles, so Pages would answer /blog/ with a 404 instead of blog.html.
+writeFileSync(
+  "out/blog/index.html",
+  `<!doctype html>\n<meta charset="utf-8">\n<title>Optics blog</title>\n<link rel="canonical" href="${ORIGIN}/blog">\n<meta name="robots" content="noindex">\n<meta http-equiv="refresh" content="0; url=../blog">\n<a href="../blog">Optics blog</a>\n`,
+);
+writeFileSync("out/blog/index.md", blogMarkdown(blog, ORIGIN));
 const fill = (file, marker, text) => {
   const page = readFileSync(file, "utf8");
   if (!page.includes(marker)) throw new Error(`${file} lost its ${marker} marker`);
