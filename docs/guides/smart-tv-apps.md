@@ -1,5 +1,5 @@
 ---
-title: Automate smart TV apps
+title: Test Android TV, Samsung Tizen and LG webOS apps with one framework
 nav: Smart TV apps
 summary: Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
 description: Automate smart TV app testing on Android TV, Samsung Tizen and LG webOS with Optics, an open-source framework that drives TVs through Appium and remote-control keys.
