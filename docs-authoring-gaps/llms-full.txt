@@ -5664,7 +5664,7 @@ Good to know:
 - `offset_x` and `offset_y` apply only when the element was found by OCR or image. They're ignored for elements found in the UI tree.
 - When `element` is `${name}` with several values, Optics tries each one until it finds the element.
 - If [self-healing](https://optics-framework.org/docs/elements/self-heal) is turned on, it gets one try to recover before the step fails.
-- On the web, when a locator matches several elements, Optics uses the first visible one and the log says how many matched. Set `index` or use a more specific locator to pick another.
+- When a locator matches several elements, the log says how many matched and which one Optics used. Set `index` or use a more specific locator to pick another.
 
 ### Press By Percentage
 
@@ -5798,7 +5798,7 @@ Good to know:
 - When the field was found by OCR or image, Optics taps it, then types.
 - A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Selenium supports `<enter>`, `<tab>`, `<backspace>`, `<space>` and `<escape>`. An unknown name is typed literally.
 - Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing.
-- On the web, `element` can be the caption next to a field, such as `Mobile Number`. When only one field fits the caption, Optics types into that field.
+- `element` can be the caption next to a field, such as `Mobile Number`. When only one field fits the caption, Optics types into that field. This works on the web, Android and iOS.
 - In YAML, quote text that contains spaces.
 
 ### Enter Number
@@ -5889,7 +5889,7 @@ Search,Clear Element Text,${search_bar}
 Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
-- On the web, `element` can be the caption next to the field, the same as for Enter Text.
+- `element` can be the caption next to the field, the same as for Enter Text.
 
 ## Swipe and scroll
 
