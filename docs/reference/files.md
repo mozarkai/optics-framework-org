@@ -273,7 +273,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Backslash sequences.** In any cell, `\n` becomes a new line, `\t` a tab, `\r` a carriage return, and `\\` a single backslash.
 
-**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in log files. Appium, Selenium and BLE remove the prefix before typing. Playwright types the prefix too.
+**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in log files. Optics removes the prefix before typing.
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
