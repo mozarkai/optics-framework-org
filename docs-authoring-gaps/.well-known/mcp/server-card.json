@@ -1,0 +1,58 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "org.optics-framework/optics",
+  "title": "Optics",
+  "version": "1.11.0",
+  "description": "Drive Android, iOS, TV and web apps from an AI agent. Runs locally: `optics mcp`.",
+  "websiteUrl": "https://optics-framework.org/docs/reference/mcp",
+  "repository": {
+    "url": "https://github.com/mozarkai/optics-framework",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://optics-framework.org/logo.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:{port}/mcp",
+      "variables": {
+        "port": {
+          "description": "The --port given to `optics mcp --transport http`.",
+          "format": "number",
+          "default": "8090"
+        }
+      }
+    }
+  ],
+  "_meta": {
+    "org.optics-framework/local": {
+      "install": "pip install \"optics-framework[mcp]\"",
+      "stdio": {
+        "command": "optics",
+        "args": [
+          "mcp"
+        ]
+      }
+    }
+  },
+  "serverInfo": {
+    "name": "optics-framework",
+    "version": "1.11.0"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "http://127.0.0.1:8090/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  }
+}
