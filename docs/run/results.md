@@ -17,6 +17,7 @@ birch-tests/execution_output/
 ├── 2026-10-09T14-02-11-…-press_element_element_detection_result.jpg
 ├── 2026-10-09T14-02-15-…-end_of_run.jpg         # the last screen
 ├── page_sources_log.xml                          # the UI tree, captured during the run
+├── failed_steps_elements.json                    # the elements on screen when a step failed
 ├── internal_logs.log                             # with file_log: true
 ├── execution_logs.log                            # with file_log: true
 └── logs.json                                     # with json_log: true
@@ -32,6 +33,7 @@ birch-tests/execution_output/
 | `page_sources_log.xml` or `.html` | When the UI tree is read | Find the right XPath or text for an element. |
 | `internal_logs.log`, `execution_logs.log` | With `file_log: true` | Read every attempt Optics made, including which ways of finding an element failed. |
 | `logs.json` | With `json_log: true` | Feed results into your own dashboards. |
+| `failed_steps_elements.json` | When a step fails | Pick a working locator. It lists each element on that screen with its label and, on the web, a `loc` locator. |
 | `detected_errors_<id>.json` | When an [error screen](/docs/run/error-detection) was found | See which error definition matched. |
 
 ::scene{name="results" caption="On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it."}
@@ -40,8 +42,9 @@ birch-tests/execution_output/
 
 1. **Read the Failure details box** in the terminal. It names the test case, the step and the reason.
 2. **Open the last `pre_…` screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
-3. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
-4. **Reproduce it in `optics live`.** Run the steps before the failure, then try the failing step with different values until one works. See [Record a test](/docs/create/record).
+3. **Open `failed_steps_elements.json`** to see the elements that were on screen when the step failed. Use a `loc` or a label from it as the element's value.
+4. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
+5. **Reproduce it in `optics live`.** Run the steps before the failure, then try the failing step with different values until one works. See [Record a test](/docs/create/record).
 
 ## Turn on more logging
 

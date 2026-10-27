@@ -27,7 +27,7 @@ Search,Enter Text,${search_bar},${search_term}
 
 **As a whole value.** `${search_term}` on its own in a cell is replaced by the variable's value. When a variable has several values, they're tried in order, the same as [element fallbacks](/docs/elements/define).
 
-**Not inside other text.** `Hello ${name}` and `@:${password}` are used exactly as written; Optics doesn't replace part of a value. Store the whole value in a variable instead.
+**Inside other text.** `Hello ${name}` becomes `Hello Ava`. Inside a longer value, a variable gives its first value. Write `$${name}` to type the text `${name}` itself.
 
 **Inside expressions.** A few keywords read `${name}` anywhere in their text: the expressions in `Evaluate` and `Condition`, the query in `Read Data`, and the URL, headers and body of an API call in `Invoke API`. These use the variable's first value.
 
@@ -42,6 +42,7 @@ These keywords write a variable. Write the **name** of the variable on its own, 
 | `Read Data` | A value from a CSV or JSON file, or an environment variable | `Read Data,admin_email,test_data/users.csv,role == 'admin';select=email` |
 | `Invoke API` | Values from an API response | See [Call APIs in a test](/docs/advanced/api-calls) |
 | `Run Loop` | The current item, once per pass | See [Data-driven tests](/docs/advanced/data-driven) |
+| Any keyword with `store_as=name` | What the keyword returns | `Get Text,${price_label},store_as=price` |
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1,param_2,param_3
@@ -53,6 +54,19 @@ Check Total,Assert Presence,${expected_total}
 `Evaluate,${total},${price} + 5` doesn't create `total`. Optics replaces `${total}` before the keyword runs, so the step fails with "Element not found: total", or writes to a variable named after its old value. Write `Evaluate,total,${price} + 5`.
 :::
 
+### Keep what a keyword returns
+
+Add `store_as=name` to a step whose keyword returns a value, such as Get Text or Execute Script. Later steps use it as `${name}`:
+
+```csv title="modules/modules.csv"
+module_name,module_step,param_1,param_2
+Check Order,Get Text,${order_number_label},store_as=order_number
+Check Order,Enter Text,${search_bar},${order_number}
+Check Order,Assert Text,${first_result},Order ${order_number}
+```
+
+Get Text on a text field returns what the field holds, so you can copy a value from one field to another.
+
 ### Declare run-time variables for dry runs
 
 `optics dry_run` checks that every `${name}` is defined, but it doesn't run the keywords that create variables. Add a placeholder row for each variable a keyword creates, so the dry run passes. The keyword replaces the placeholder during the real run:
@@ -63,7 +77,7 @@ price,64
 expected_total,placeholder
 ```
 
-This works for `Evaluate`, `Read Data`, `Invoke API` and `Run Loop`. Don't add a placeholder for `Date Evaluate`: in Optics 1.10.5 it adds its result after the placeholder instead of replacing it, so `${delivery_date}` would give `placeholder`. The dry run reports the date variable as missing, which you can ignore.
+This works for `Evaluate`, `Read Data`, `Invoke API`, `Run Loop` and `store_as`. Don't add a placeholder for `Date Evaluate`: in Optics 1.10.5 it adds its result after the placeholder instead of replacing it, so `${delivery_date}` would give `placeholder`. The dry run reports the date variable as missing, which you can ignore.
 
 ## Values are text
 
@@ -76,7 +90,9 @@ Evaluate allows arithmetic (`+ - * / % **`), comparisons, `and`, `or`, `not` and
 
 ## Hide sensitive values
 
-Start a value with `@:` to keep it out of log files: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix, on Appium, Selenium and Bluetooth devices. Playwright types the prefix too.
+Start a value with `@:` to keep it out of log files: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
+
+Values that Read Data or `store_as` keep under a name such as `password`, `pin`, `otp`, `token`, `secret` or `api_key` are masked as `****` too.
 
 For real secrets, don't commit them at all. Read them from the environment at run time:
 

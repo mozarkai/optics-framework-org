@@ -123,7 +123,7 @@ Use [Detect And Press](/docs/reference/keywords/actions#detect-and-press) for po
 
 These keywords pass even when you might expect a failure. Don't rely on them as checks.
 
-- **Assert Equality** returns false on a mismatch but never fails.
+- **Assert Equality** returns false on a mismatch but never fails. Use Assert Text to check text on screen.
 - **Validate Screen** returns false when nothing is found but never fails.
 - **Detect And Press** passes and skips the tap when the element doesn't appear.
 - **Force Terminate App** on Appium logs any error and passes.
@@ -185,8 +185,9 @@ Keywords that return a value, such as Get Text, Execute Script and Capture Scree
 | Assert Visibility | Fail unless elements are on screen within a timeout | [Assert Visibility](/docs/reference/keywords/verification#assert-visibility) |
 | Validate Element | Fail unless one element exists within a timeout | [Validate Element](/docs/reference/keywords/verification#validate-element) |
 | Validate Screen | Check for elements without failing | [Validate Screen](/docs/reference/keywords/verification#validate-screen) |
-| Is Element | Check that an element is visible, invisible, enabled or disabled | [Is Element](/docs/reference/keywords/verification#is-element) |
+| Is Element | Check that an element is visible, invisible, enabled, disabled, checked or unchecked | [Is Element](/docs/reference/keywords/verification#is-element) |
 | Assert Equality | Compare two values without failing | [Assert Equality](/docs/reference/keywords/verification#assert-equality) |
+| Assert Text | Fail unless an element shows the expected text within a timeout | [Assert Text](/docs/reference/keywords/verification#assert-text) |
 | Capture Screenshot | Take a screenshot | [Capture Screenshot](/docs/reference/keywords/verification#capture-screenshot) |
 | Capture Pagesource | Save the current UI tree | [Capture Pagesource](/docs/reference/keywords/verification#capture-pagesource) |
 | Get Interactive Elements | List the elements you can tap or type into | [Get Interactive Elements](/docs/reference/keywords/verification#get-interactive-elements) |
