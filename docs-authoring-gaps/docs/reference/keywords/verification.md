@@ -213,6 +213,7 @@ Good to know:
 - The element must be in the UI tree, found by XPath, CSS or native text. An element found only by OCR or image fails the step at once.
 - If the element isn't found, the step fails with element not found, and Optics tries the next value of a `${name}` element.
 - If the text is still wrong at the timeout, the error shows the text the element had.
+- Start `expected` with `@:` to check a secret, such as a PIN. Optics compares it without the prefix and shows `****` in the error.
 
 ## Capture and inspect
 
