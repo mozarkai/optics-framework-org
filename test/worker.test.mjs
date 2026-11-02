@@ -5,8 +5,8 @@ import { handle, markdownPath, negotiate } from "../edge/worker.js";
 import { pagesOrigin } from "../pages-origin.mjs";
 
 const origin = pagesOrigin("out");
-const get = (path, accept, method = "GET") =>
-  handle(new Request(`https://optics-framework.org${path}`, { method, headers: accept ? { accept } : {} }), origin);
+const get = (path, accept, method = "GET", ua) =>
+  handle(new Request(`https://optics-framework.org${path}`, { method, headers: { ...(accept && { accept }), ...(ua && { "user-agent": ua }) } }), origin);
 
 test("negotiate picks markdown or JSON only when the client ranks it above HTML", () => {
   for (const accept of ["text/markdown", "text/markdown, text/html;q=0.9", "text/markdown, */*", "text/x-markdown", "TEXT/MARKDOWN; charset=utf-8"]) {
@@ -23,10 +23,18 @@ test("negotiate picks markdown or JSON only when the client ranks it above HTML"
     "text/html, application/json",
     "text/markdown;q=0.5, */*",
     "application/json;q=0.5, */*",
-    "text/markdown;q=0",
     "text/markdown;q=abc",
   ]) {
     assert.equal(negotiate(accept), "html", String(accept));
+  }
+  for (const accept of ["image/png", "text/markdown;q=0", "text/html;q=0, text/markdown;q=0"]) {
+    assert.equal(negotiate(accept), "none", accept);
+  }
+  for (const accept of [null, "*/*", "text/html, text/markdown", "text/markdown"]) {
+    assert.equal(negotiate(accept, { bot: true }), "markdown", String(accept));
+  }
+  for (const accept of ["text/html", "text/html,application/xhtml+xml,*/*;q=0.8"]) {
+    assert.equal(negotiate(accept, { bot: true }), "html", accept);
   }
   assert.equal(negotiate("text/markdown, application/json;q=0.9"), "markdown");
   assert.equal(negotiate("application/json, text/markdown;q=0.9"), "json");
@@ -46,7 +54,7 @@ test("the homepage answers Accept: text/markdown with Markdown and Vary: Accept"
   const res = await get("/", "text/markdown");
   assert.equal(res.status, 200);
   assert.match(res.headers.get("content-type"), /^text\/markdown/);
-  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept");
+  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept, User-Agent");
   assert.equal(await res.text(), readFileSync("out/index.md", "utf8"));
 });
 
@@ -65,7 +73,8 @@ test("a missing page answers Markdown agents with a Markdown 404", async () => {
   const res = await get("/__ora-404-probe-9s1x6rf4", "text/markdown");
   assert.equal(res.status, 404);
   assert.match(res.headers.get("content-type"), /^text\/markdown/);
-  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept");
+  assert.equal(res.headers.get("vary"), "Accept-Encoding, Accept, User-Agent");
+  assert.match(res.headers.get("x-robots-tag"), /noindex/);
   const body = await res.text();
   assert.ok(body.length >= 20);
   assert.match(body, /https:\/\/optics-framework\.org\/llms\.txt/);
@@ -142,7 +151,9 @@ test("assets and non-GET requests pass through untouched", async () => {
 test("HTML pages advertise the API catalog and agent resources in a Link header", async () => {
   const res = await get("/");
   assert.match(res.headers.get("link"), /<\/\.well-known\/api-catalog>; rel="api-catalog"/);
-  assert.match(res.headers.get("link"), /<\/llms\.txt>; rel="describedby"/);
+  for (const file of ["llms.txt", "llms-full.txt", "ai.txt"]) {
+    assert.match(res.headers.get("link"), new RegExp(`</${file.replace(".", "\\.")}>; rel="describedby"`), file);
+  }
   assert.match(res.headers.get("link"), /<\/index\.md>; rel="alternate"; type="text\/markdown"/);
   assert.match((await get("/docs/create/")).headers.get("link"), /<\/docs\/create\/index\.md>; rel="alternate"/);
   assert.doesNotMatch((await get("/no-such-page")).headers.get("link") ?? "", /alternate/);
@@ -156,7 +167,9 @@ test("a section URL with .md appended finds the section's index.md", async () =>
     assert.match(res.headers.get("content-type"), /^text\/markdown/);
     assert.equal(await res.text(), readFileSync(`out/${file}`, "utf8"));
   }
-  assert.equal((await get("/nope.md")).status, 404);
+  const missing = await get("/nope.md");
+  assert.equal(missing.status, 404);
+  assert.match(missing.headers.get("content-type"), /^text\/markdown/);
 });
 
 test("the API catalog is served as an RFC 9727 linkset", async () => {
@@ -170,4 +183,51 @@ test("the API catalog is served as an RFC 9727 linkset", async () => {
 test("the AI catalog and MCP server card carry their own media types", async () => {
   assert.equal((await get("/.well-known/ai-catalog.json")).headers.get("content-type"), "application/ai-catalog+json");
   assert.equal((await get("/.well-known/mcp/server-card.json")).headers.get("content-type"), "application/mcp-server-card+json");
+});
+
+test("Markdown responses stay out of search indexes and name their HTML page", async () => {
+  for (const [path, accept, canonical, file] of [
+    ["/", "text/markdown", "/", "index.md"],
+    ["/about.html", "text/markdown", "/about", "about.md"],
+    ["/about.md", undefined, "/about", "about.md"],
+    ["/docs.md", undefined, "/docs/", "docs/index.md"],
+  ]) {
+    for (const method of ["GET", "HEAD"]) {
+      const res = await get(path, accept, method);
+      assert.equal(res.status, 200, path);
+      assert.equal(res.headers.get("content-type"), "text/markdown; charset=utf-8");
+      assert.match(res.headers.get("x-robots-tag"), /^noindex\b/);
+      assert.equal(res.headers.get("link"), `<https://optics-framework.org${canonical}>; rel="canonical"`);
+      assert.match(res.headers.get("x-markdown-tokens"), /^[1-9]\d*$/);
+      assert.equal(res.headers.get("x-content-type-options"), "nosniff");
+      assert.equal(res.headers.get("x-aeo-version"), "1.0");
+      assert.match(res.headers.get("vary"), /(^|, )Accept($|,)/);
+      assert.equal(await res.text(), method === "HEAD" ? "" : readFileSync(`out/${file}`, "utf8"), `${method} ${path}`);
+    }
+  }
+  const skill = await get("/.well-known/agent-skills/optics-framework/SKILL.md");
+  assert.equal(skill.headers.get("x-robots-tag"), null);
+});
+
+test("AI crawlers get Markdown unless they ask for HTML", async () => {
+  const bot = await get("/", "*/*", "GET", "Mozilla/5.0 GPTBot/1.0");
+  assert.match(bot.headers.get("content-type"), /^text\/markdown/);
+  assert.match(bot.headers.get("vary"), /User-Agent/);
+  assert.match((await get("/docs/create/", undefined, "GET", "ClaudeBot/1.0")).headers.get("content-type"), /^text\/markdown/);
+  assert.match((await get("/", "text/html", "GET", "Mozilla/5.0 GPTBot/1.0")).headers.get("content-type"), /^text\/html/);
+  const person = await get("/", "*/*", "GET", "Mozilla/5.0 (Macintosh) Safari/605.1.15");
+  assert.match(person.headers.get("content-type"), /^text\/html/);
+  assert.match(person.headers.get("vary"), /User-Agent/);
+  assert.match((await get("/styles.css", "*/*", "GET", "GPTBot/1.0")).headers.get("content-type"), /^text\/css/);
+});
+
+test("a page asked for in neither HTML nor Markdown answers 406", async () => {
+  const res = await get("/", "image/png");
+  assert.equal(res.status, 406);
+  assert.equal(res.headers.get("content-type"), "text/plain; charset=utf-8");
+  assert.match(res.headers.get("vary"), /Accept/);
+  assert.match(await res.text(), /text\/html, text\/markdown/);
+  assert.equal((await get("/", "image/png", "HEAD")).status, 406);
+  assert.equal((await get("/logo.svg", "image/png")).status, 200);
+  assert.equal((await get("/no-such-page", "image/png")).status, 404);
 });

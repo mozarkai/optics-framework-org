@@ -59,7 +59,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const origin = pagesOrigin("out");
   const port = Number(process.env.PORT ?? 4173);
   createServer(async (req, res) => {
-    const request = new Request(new URL(req.url, `http://${req.headers.host}`), { method: req.method, headers: { accept: req.headers.accept ?? "*/*" } });
+    const request = new Request(new URL(req.url, `http://${req.headers.host}`), { method: req.method, headers: { accept: req.headers.accept ?? "*/*", "user-agent": req.headers["user-agent"] ?? "" } });
     const response = await handle(request, origin);
     res.writeHead(response.status, Object.fromEntries(response.headers));
     res.end(Buffer.from(await response.arrayBuffer()));
