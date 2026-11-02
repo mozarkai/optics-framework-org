@@ -22,4 +22,4 @@ The framework is released under the [Apache License 2.0](https://github.com/moza
 
 ## Learn more
 
-Start with the [quickstart](docs/get-started/quickstart), browse the full [documentation](docs/), or see the [contact page](contact) for how to reach the maintainers.
+Start with the [quickstart](https://optics-framework.org/docs/get-started/quickstart), browse the full [documentation](https://optics-framework.org/docs/), or see the [contact page](https://optics-framework.org/contact) for how to reach the maintainers.
