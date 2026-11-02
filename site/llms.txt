@@ -25,7 +25,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Docs
 
 - [Docs index for agents](https://optics-framework.org/docs/llms.txt): every docs page, as Markdown.
-- [Full docs in one file](https://optics-framework.org/llms-full.txt): the text of every docs page, in reading order.
+- [Full text in one file](https://optics-framework.org/llms-full.txt): the homepage, the about, contact and privacy pages and every docs page, in reading order.
 - [Get started](https://optics-framework.org/docs/get-started/index.md): what Optics is and what it tests.
 - [Quickstart](https://optics-framework.org/docs/get-started/quickstart.md): install and run a sample in a browser.
 - [Install Optics](https://optics-framework.org/docs/get-started/install.md): Python, the installer, and engines per platform.
@@ -47,13 +47,12 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
 - [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
 - [Blog](https://optics-framework.org/blog.md): articles, videos and posts about Optics, from the team and the community. RSS at https://optics-framework.org/feed.xml.
-- [Introducing Optics Framework](https://optics-framework.org/blog/introducing-optics-framework.md): what Optics is, the CSV test format, the four ways to create a test, locator fallback and the supported platforms.
-- [Your tests passed. Your app didn't.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt.md): error definitions, which fail a run on crash dialogs and "Session expired" screens no step asserted.
-- [Your AI agent writes the test once](https://optics-framework.org/blog/ai-agent-writes-the-test-once.md): an AI agent drives a browser through the Optics MCP server and writes a CSV suite; 10 replays passed in about 3.3 s with 0 model calls.
-- [Contact](https://optics-framework.org/contact): where to report bugs, ask questions and disclose vulnerabilities.
+<!-- blog:articles -->
+- [Contact](https://optics-framework.org/contact.md): where to report bugs, ask questions and disclose vulnerabilities.
+- [AI usage policy](https://optics-framework.org/ai.txt): what AI systems may do with the content of this site, and how to cite it.
 
 ## Optional
 
-- [About](https://optics-framework.org/about): who builds Optics.
-- [Privacy](https://optics-framework.org/privacy): what this site and the installers collect.
+- [About](https://optics-framework.org/about.md): who builds Optics.
+- [Privacy](https://optics-framework.org/privacy.md): what this site and the installers collect.
 - [Contributing guide](https://github.com/mozarkai/optics-framework/blob/main/CONTRIBUTING.md): contributing to Optics.
