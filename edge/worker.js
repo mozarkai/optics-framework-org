@@ -1,8 +1,10 @@
 // Content negotiation in front of GitHub Pages, which cannot vary a response on the
-// Accept header. A request that prefers text/markdown gets the page's Markdown twin
-// (`/` -> `/index.md`, `/about` -> `/about.md`) and a missing page gets `/404.md` with a
-// 404; a request that prefers JSON gets a missing page as an RFC 9457 problem document.
-// Everything else passes through untouched apart from `Vary: Accept` (so caches keep the
+// Accept header. A request that prefers text/markdown, or comes from an AI crawler that
+// does not ask for HTML, gets the page's Markdown twin (`/` -> `/index.md`, `/about` ->
+// `/about.md`) and a missing page gets `/404.md` with a 404; a request that prefers JSON
+// gets a missing page as an RFC 9457 problem document, and one that accepts neither HTML
+// nor Markdown gets a 406. Markdown responses carry the AEO headers (dualmark.dev/docs/spec).
+// Everything else passes through untouched apart from `Vary` (so caches keep the
 // representations apart) and discovery `Link` headers on HTML, and the media types of
 // the discovery documents.
 
@@ -22,24 +24,59 @@ export const LINK = [
   `<${API_CATALOG}>; rel="api-catalog"`,
   '</docs/>; rel="service-doc"',
   '</llms.txt>; rel="describedby"; type="text/plain"',
+  '</llms-full.txt>; rel="describedby"; type="text/plain"',
+  '</ai.txt>; rel="describedby"; type="text/plain"',
 ].join(", ");
 
-// "markdown" or "json" when the client ranks that type above HTML, otherwise "html". A tie
-// with explicit HTML goes to HTML so browsers are never affected; an explicit entry beats
-// a wildcard.
-export function negotiate(accept) {
-  if (!accept) return "html";
-  let markdown = 0, json = 0, html = 0, wildcard = 0;
-  for (const range of accept.toLowerCase().split(",")) {
-    const [type, ...params] = range.split(";").map((s) => s.trim());
-    const qParam = params.find((p) => p.startsWith("q="));
-    const q = qParam ? Number(qParam.slice(2)) : 1;
-    if (!(q >= 0 && q <= 1)) continue;
-    if (type === "text/markdown" || type === "text/x-markdown") markdown = Math.max(markdown, q);
-    else if (type === "application/json" || type === "application/problem+json") json = Math.max(json, q);
-    else if (type === "text/html" || type === "application/xhtml+xml") html = Math.max(html, q);
-    else if (type === "*/*" || type === "text/*" || type === "application/*") wildcard = Math.max(wildcard, q);
-  }
+// AI crawlers and agents, matched as case-insensitive substrings of the User-Agent.
+const AI_BOTS = [
+  "GPTBot", "ChatGPT-User", "OAI-SearchBot", "ClaudeBot", "Anthropic-ai", "Claude-Web", "Claude-SearchBot",
+  "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "cohere-ai",
+  "CCBot", "Bytespider", "DeepSeekBot", "Amazonbot", "YouBot", "Diffbot", "ImagesiftBot", "Omgilibot",
+  "DuckAssistBot", "meta-externalagent", "meta-externalfetcher",
+].map((bot) => bot.toLowerCase());
+
+export const isAiBot = (ua) => AI_BOTS.some((bot) => (ua ?? "").toLowerCase().includes(bot));
+
+const KINDS = {
+  "text/markdown": "markdown",
+  "text/x-markdown": "markdown",
+  "application/json": "json",
+  "application/problem+json": "json",
+  "text/html": "html",
+  "application/xhtml+xml": "html",
+  "*/*": "wildcard",
+  "text/*": "wildcard",
+  "application/*": "wildcard",
+};
+
+function mediaRange(range) {
+  const [type, ...params] = range.split(";").map((s) => s.trim());
+  const q = params.find((p) => p.startsWith("q="));
+  return [type, q ? Number(q.slice(2)) : 1];
+}
+
+// The highest q the Accept header gives each kind of response. A missing or unreadable
+// header accepts anything.
+function weights(accept) {
+  const w = { markdown: 0, json: 0, html: 0, wildcard: 0 };
+  const ranges = (accept ?? "").toLowerCase().split(",").map(mediaRange).filter(([type, q]) => type && q >= 0 && q <= 1);
+  if (!ranges.length) return { ...w, wildcard: 1 };
+  for (const [type, q] of ranges) if (KINDS[type]) w[KINDS[type]] = Math.max(w[KINDS[type]], q);
+  return w;
+}
+
+// A bot gets Markdown on a tie or a wildcard, but an explicit text/html still wins.
+const botPrefersMarkdown = ({ markdown, json, html, wildcard }) => Math.max(markdown, wildcard) >= html && markdown >= json;
+
+// "markdown" or "json" when the client ranks that type above HTML, "none" when it accepts
+// none of them, otherwise "html". A tie with explicit HTML goes to HTML so browsers are
+// never affected; an explicit entry beats a wildcard.
+export function negotiate(accept, { bot = false } = {}) {
+  const w = weights(accept);
+  const { markdown, json, html, wildcard } = w;
+  if (Math.max(markdown, json, html, wildcard) === 0) return "none";
+  if (bot && botPrefersMarkdown(w)) return "markdown";
   const best = Math.max(markdown, json);
   if (best === 0 || best <= html || best < wildcard) return "html";
   return markdown >= json ? "markdown" : "json";
@@ -53,26 +90,50 @@ export function markdownPath(pathname) {
   return `${pathname}.md`;
 }
 
-function addVaryAccept(headers) {
-  const vary = headers.get("vary");
-  if (!vary || !/(^|,)\s*accept\s*(,|$)/i.test(vary)) headers.set("vary", vary ? `${vary}, Accept` : "Accept");
+// The page a Markdown twin stands for: /index.md -> /, /about.md -> /about.
+const pagePath = (twin) => twin.replace(/(^|\/)index\.md$/, "$1").replace(/\.md$/, "");
+
+// The Markdown files that may answer this request, in the order to try them. A section's
+// twin lives at <section>/index.md, but agents append .md to the URL they see, so /docs.md
+// has to find /docs/index.md.
+function twinPaths(pathname, wants) {
+  if (pathname.startsWith("/.well-known/")) return [];
+  if (pathname.endsWith(".md")) return [pathname, `${pathname.slice(0, -3)}/index.md`];
+  const twin = wants === "markdown" && markdownPath(pathname);
+  return twin ? [twin] : [];
 }
 
+function addVary(headers, tokens) {
+  const vary = headers.get("vary") ?? "";
+  const missing = tokens.filter((t) => !new RegExp(`(^|,)\\s*${t}\\s*(,|$)`, "i").test(vary));
+  if (missing.length) headers.set("vary", [vary, ...missing].filter(Boolean).join(", "));
+}
+
+// A page's answer depends on the User-Agent too, since AI crawlers get Markdown.
+const varyFor = (url) => (url.pathname.endsWith(".md") ? ["Accept"] : ["Accept", "User-Agent"]);
+
 // A page's own Markdown twin is linked only when the page exists, so a 404 never points at one.
-function asHtml(response, pathname) {
+function asHtml(response, url) {
   const out = new Response(response.body, response);
-  addVaryAccept(out.headers);
-  const twin = response.ok && markdownPath(pathname);
+  addVary(out.headers, varyFor(url));
+  const twin = response.ok && markdownPath(url.pathname);
   out.headers.set("link", twin ? `${LINK}, <${twin}>; rel="alternate"; type="text/markdown"` : LINK);
   return out;
 }
 
-function asMarkdown(response, status) {
-  const out = new Response(response.body, { status, headers: response.headers });
-  out.headers.set("content-type", MARKDOWN);
-  out.headers.delete("content-length");
-  addVaryAccept(out.headers);
-  return out;
+// noindex keeps search engines on the HTML page, which the canonical Link names.
+async function asMarkdown(response, { url, method, status = 200, canonical }) {
+  const body = await response.text();
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  headers.set("content-type", MARKDOWN);
+  headers.set("x-content-type-options", "nosniff");
+  headers.set("x-robots-tag", "noindex, follow");
+  headers.set("x-markdown-tokens", String(Math.max(1, Math.ceil(body.length / 4))));
+  headers.set("x-aeo-version", "1.0");
+  if (canonical) headers.set("link", `<${new URL(canonical, url).href}>; rel="canonical"`);
+  addVary(headers, varyFor(url));
+  return new Response(method === "HEAD" ? null : body, { status, headers });
 }
 
 function notFoundProblem(url, method) {
@@ -99,38 +160,54 @@ function notFoundProblem(url, method) {
   });
 }
 
-export async function handle(request, upstream = fetch) {
-  const url = new URL(request.url);
-  const { method } = request;
-  const readable = method === "GET" || method === "HEAD";
-  const wants = readable ? negotiate(request.headers.get("accept")) : "html";
-  const page = markdownPath(url.pathname);
+function notAcceptable(method) {
+  return new Response(method === "HEAD" ? null : "Not Acceptable\n\nSupported types: text/html, text/markdown\n", {
+    status: 406,
+    headers: { "content-type": "text/plain; charset=utf-8", vary: "Accept" },
+  });
+}
 
-  if (wants === "markdown" && page) {
-    const twin = await upstream(new Request(new URL(page, url), { method }));
-    if (twin.ok) return asMarkdown(twin, 200);
+// Twins are fetched with GET even for HEAD, so the token count is always known.
+async function serveTwin(ctx) {
+  for (const path of twinPaths(ctx.url.pathname, ctx.wants)) {
+    const twin = await ctx.get(path);
+    if (twin.ok) return asMarkdown(twin, { ...ctx, canonical: pagePath(path) });
   }
+  return null;
+}
 
-  // No Markdown twin: serve the resource itself if it exists, otherwise the negotiated 404.
-  const response = await upstream(request);
-  // A section's twin lives at <section>/index.md, but agents append .md to the URL they
-  // see, so /docs.md has to find /docs/index.md.
-  if (response.status === 404 && readable && url.pathname.endsWith(".md")) {
-    const sectionTwin = await upstream(new Request(new URL(`${url.pathname.slice(0, -3)}/index.md`, url), { method }));
-    if (sectionTwin.ok) return asMarkdown(sectionTwin, 200);
-  }
-  if (response.status === 404 && wants === "json") return notFoundProblem(url, method);
-  if (response.status === 404 && wants === "markdown") {
-    const notFound = await upstream(new Request(new URL("/404.md", url), { method }));
-    if (notFound.ok) return asMarkdown(notFound, 404);
-  }
+// A missing .md URL was a request for Markdown whatever the Accept header said.
+async function notFound(ctx) {
+  if (ctx.wants === "json") return notFoundProblem(ctx.url, ctx.method);
+  const page = (ctx.wants === "markdown" || ctx.url.pathname.endsWith(".md")) && (await ctx.get("/404.md"));
+  return page?.ok ? asMarkdown(page, { ...ctx, status: 404 }) : null;
+}
+
+function present(response, { url, wants, method }) {
   if (MEDIA_TYPES[url.pathname] && response.ok) {
     const out = new Response(response.body, response);
     out.headers.set("content-type", MEDIA_TYPES[url.pathname]);
     return out;
   }
-  const isHtml = (response.headers.get("content-type") ?? "").startsWith("text/html");
-  return readable && isHtml ? asHtml(response, url.pathname) : response;
+  if (!(response.headers.get("content-type") ?? "").startsWith("text/html")) return response;
+  return wants === "none" && response.ok ? notAcceptable(method) : asHtml(response, url);
+}
+
+export async function handle(request, upstream = fetch) {
+  const { method } = request;
+  if (method !== "GET" && method !== "HEAD") return upstream(request);
+  const url = new URL(request.url);
+  const ctx = {
+    url,
+    method,
+    wants: negotiate(request.headers.get("accept"), { bot: isAiBot(request.headers.get("user-agent")) }),
+    get: (path) => upstream(new Request(new URL(path, url))),
+  };
+  const twin = await serveTwin(ctx);
+  if (twin) return twin;
+  const response = await upstream(request);
+  const missing = response.status === 404 && (await notFound(ctx));
+  return missing || present(response, ctx);
 }
 
 export default {
