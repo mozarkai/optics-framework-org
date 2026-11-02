@@ -6,7 +6,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
-import { blogArticle, blogBand, blogFeed, blogJsonLd, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
+import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -54,9 +54,10 @@ function sitemap(entries) {
 
 // The Markdown twin of a text page. Those pages use only headings, paragraphs, links and
 // inline code; any other tag stops the build rather than being dropped from the twin.
+// Links become absolute so the text still works inside llms-full.txt.
 function pageMarkdown(html) {
   const md = html
-    .replace(/<a [^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g, "[$2]($1)")
+    .replace(/<a [^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g, (_, href, text) => `[${text}](${new URL(href, `${ORIGIN}/`).href})`)
     .replace(/<code[^>]*>([\s\S]*?)<\/code>/g, "`$1`")
     .replace(/\s*<h([1-6])[^>]*>([\s\S]*?)<\/h\1>\s*/g, (_, level, text) => `\n\n${"#".repeat(level)} ${text}\n\n`)
     .replace(/\s*<p[^>]*>([\s\S]*?)<\/p>\s*/g, "\n\n$1\n\n");
@@ -72,7 +73,8 @@ cpSync("site", "out", { recursive: true });
 cpSync("public", "out", { recursive: true });
 
 for (const page of PAGES) {
-  writeFileSync(`out/${page.path}.html`, render(page, { root: "", home: "./", canonical: `${ORIGIN}/${page.path}` }));
+  const head = `<link rel="alternate" type="text/markdown" href="${page.path}.md" title="${page.title}, as Markdown">`;
+  writeFileSync(`out/${page.path}.html`, render({ ...page, head }, { root: "", home: "./", canonical: `${ORIGIN}/${page.path}` }));
   writeFileSync(`out/${page.path}.md`, pageMarkdown(readFileSync(page.src, "utf8")));
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
@@ -115,6 +117,8 @@ const fill = (file, marker, text) => {
 };
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
+fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
+fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
 
 // Agent Skills discovery index (v0.2.0), one entry per <name>/SKILL.md, so each digest
 // always matches the file as published.
@@ -141,6 +145,20 @@ writeFileSync(
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
 const docs = buildDocs({ lastModified });
 
+// Every page in one file for agents: the homepage, about and contact, the docs in reading
+// order, then privacy. The articles stay out to keep the file under about 500 KB.
+const fullText = (path, file) => `Source: ${ORIGIN}/${path}\n\n${readFileSync(file, "utf8").trim()}\n`;
+const llmsFull = [
+  `# Optics, full text\n\n> Every page of optics-framework.org in one file: the homepage, about and contact, every docs page in reading order, then privacy. The docs index is ${ORIGIN}/docs/llms.txt and the blog articles are listed at ${ORIGIN}/blog.md.\n`,
+  fullText("", "out/index.md"),
+  fullText("about", "out/about.md"),
+  fullText("contact", "out/contact.md"),
+  ...docs.markdown,
+  fullText("privacy", "out/privacy.md"),
+].join("\n---\n\n");
+if (llmsFull.length > 500_000) console.warn(`llms-full.txt is ${llmsFull.length} characters, over the 500,000 budget`);
+writeFileSync("out/llms-full.txt", llmsFull);
+
 writeFileSync(
   "out/sitemap.xml",
   sitemap([
@@ -148,7 +166,7 @@ writeFileSync(
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
-    ...docs,
+    ...docs.entries,
   ]),
 );
 

@@ -59,6 +59,15 @@ test("the homepage JSON-LD names a contact for the project", () => {
   assert.ok(org.contactPoint.contactType);
 });
 
+test("the homepage JSON-LD names the website and its publisher", () => {
+  const nodes = jsonLd(read("index.html"));
+  const site = nodes.find((d) => d["@type"] === "WebSite");
+  const org = nodes.find((d) => d["@type"] === "Organization");
+  assert.equal(site.url, `${ORIGIN}/`);
+  assert.equal(site.name, org.name);
+  assert.equal(site.publisher["@id"], org["@id"]);
+});
+
 // Optics is not a Mozark product: the name may appear only inside URLs and addresses.
 test("no page attributes Optics to Mozark", () => {
   const files = readdirSync("out").filter((f) => /\.(html|md|txt|xml|json)$/.test(f));
@@ -150,6 +159,28 @@ test("robots.txt allows crawling and names the sitemap", () => {
   assert.match(robots, /^User-agent: \*$/m);
   assert.match(robots, /^Sitemap: https:\/\/optics-framework\.org\/sitemap\.xml$/m);
   for (const signal of ["search", "ai-input", "ai-train"]) assert.match(robots, new RegExp(`^Content-Signal: .*\\b${signal}=yes`, "m"));
+  for (const bot of ["OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User"]) {
+    assert.match(robots, new RegExp(`^User-agent: ${bot}$`, "m"));
+  }
+  assert.doesNotMatch(robots, /^Disallow: \/$/m);
+  assert.match(robots, /https:\/\/optics-framework\.org\/llms\.txt/);
+  assert.match(robots, /https:\/\/optics-framework\.org\/ai\.txt/);
+});
+
+test("ai.txt states how AI systems may use the site", () => {
+  const text = read("ai.txt");
+  const [title] = text.split("\n").filter((l) => !l.startsWith("#") || l.startsWith("# "));
+  assert.match(title, /^# \S/);
+  assert.match(text, /^Website: https:\/\/optics-framework\.org\/$/m);
+  assert.match(text, /^Last Updated: \d{4}-\d{2}-\d{2}$/m);
+  for (const section of ["Permissions", "Restrictions"]) {
+    assert.match(text, new RegExp(`^## ${section}\\n\\n- \\S`, "m"), `${section} has no items`);
+  }
+  for (const [, url] of text.matchAll(/(https:\/\/optics-framework\.org\/(?:[^\s)]*[^\s).,])?)/g)) {
+    const path = url.slice(ORIGIN.length + 1);
+    assert.ok(!path || existsSync(`out/${path}`) || existsSync(`out/${path}.html`), `ai.txt links missing ${url}`);
+  }
+  assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/ai\.txt\)/);
 });
 
 test("agent discovery documents are published and point at real files", () => {
@@ -191,6 +222,9 @@ test("llms.txt follows the llmstxt.org layout and says when to use Optics", () =
   }
   for (const [, path] of text.matchAll(/\]\(https:\/\/optics-framework\.org\/([^)]+)\)/g)) {
     assert.ok(existsSync(`out/${path}`) || existsSync(`out/${path}.html`), `llms.txt links missing ${path}`);
+  }
+  for (const item of blog().items.filter((i) => i.slug)) {
+    assert.ok(text.includes(`(${ORIGIN}/blog/${item.slug}.md)`), `llms.txt lacks the article ${item.slug}`);
   }
 });
 
@@ -269,9 +303,12 @@ test("docs search index and agent index cover every page", () => {
   }
 });
 
-test("llms-full.txt holds the text of every docs page", () => {
+test("llms-full.txt holds the text of the homepage, the text pages and every docs page", () => {
   const full = read("llms-full.txt");
-  for (const page of docsPages()) assert.ok(full.includes(`Source: ${ORIGIN}/${page.url}\n`), `llms-full.txt lacks ${page.id}`);
+  for (const url of ["", ...TRUST_PAGES, ...docsPages().map((p) => p.url)]) {
+    assert.ok(full.includes(`Source: ${ORIGIN}/${url}\n`), `llms-full.txt lacks /${url}`);
+  }
+  assert.doesNotMatch(full, /\]\((?!https?:|mailto:|#)[^)]+\)/, "llms-full.txt has a relative link");
   assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/llms-full\.txt\)/);
 });
 
@@ -399,6 +436,10 @@ test("every HTML page has a Markdown twin for agents", () => {
     e.isDirectory() ? html(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : []);
   for (const page of html(".")) {
     assert.ok(existsSync(page.replace(/^\./, "out").replace(/\.html$/, ".md")), `${page} has no .md twin`);
+    if (["./404.html", "./blog/index.html"].includes(page)) continue;
+    const html = read(page);
+    assert.match(html, /<link rel="alternate" type="text\/markdown" href="[^"]+\.md"/, `${page} does not link its twin`);
+    assert.match(html, /<meta name="ai-summary" content="[^"]{20,}">/, `${page} has no ai-summary`);
   }
   assert.match(read("about.md"), /^# About Optics\n/);
 });
