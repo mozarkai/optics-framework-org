@@ -198,7 +198,6 @@ driver_sources:
 - **"Cannot start" with "No Selenium/WebDriver server reachable".** Start the server, and check that `url` points to it.
 - **Swipe fails on Selenium.** Selenium has no Swipe. Use Scroll, which moves one screen in any direction.
 - **A step acts before the page loads.** Actions don't wait. Put `Assert Presence` on something from the new page before you act on it.
-- **A password typed in Playwright starts with `@:`.** Playwright doesn't strip the secret prefix. Leave it off for Playwright.
 
 ## See also
 

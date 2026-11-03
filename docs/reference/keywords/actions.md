@@ -57,6 +57,7 @@ Good to know:
 - `offset_x` and `offset_y` apply only when the element was found by OCR or image. They're ignored for elements found in the UI tree.
 - When `element` is `${name}` with several values, Optics tries each one until it finds the element.
 - If [self-healing](/docs/elements/self-heal) is turned on, it gets one try to recover before the step fails.
+- When a locator matches several elements, the log says how many matched and which one Optics used. Set `index` or use a more specific locator to pick another.
 
 ### Press By Percentage
 
@@ -189,8 +190,8 @@ Good to know:
 - `event_name` comes before `index` here, unlike Press Element. Set `index` by name: `index=1`.
 - When the field was found by OCR or image, Optics taps it, then types.
 - A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Selenium supports `<enter>`, `<tab>`, `<backspace>`, `<space>` and `<escape>`. An unknown name is typed literally.
-- Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. Playwright doesn't remove it and types `@:` too.
-- `${name}` inside a longer value isn't replaced, so `@:${password}` doesn't work. Put `@:pw-ana` as the value in your elements file, then pass `${password}`.
+- Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing.
+- `element` can be the caption next to a field, such as `Mobile Number`. When only one field fits the caption, Optics types into that field. This works on the web, Android and iOS.
 - In YAML, quote text that contains spaces.
 
 ### Enter Number
@@ -234,6 +235,7 @@ Search,Enter Text Direct,pace knit
 Good to know:
 
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
+- It types at once, into whatever has focus. To type into a known field, use Enter Text with its locator. On the web, Enter Text waits until the field accepts input.
 
 ### Enter Text Using Keyboard
 
@@ -280,6 +282,7 @@ Search,Clear Element Text,${search_bar}
 Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
+- `element` can be the caption next to the field, the same as for Enter Text.
 
 ## Swipe and scroll
 
@@ -526,7 +529,7 @@ Good to know:
 
 ### Get Text
 
-Reads the text of an element.
+Reads the text of an element. For a text field on the web, it reads what the field holds.
 
 | Parameter | Default | What it does |
 |---|---|---|
@@ -544,7 +547,8 @@ Product,Get Text,//android.widget.TextView[@resource-id="com.birch.shop:id/price
 
 Good to know:
 
-- The CSV and YAML runner can't store the text in a variable. To check text on screen, use [Assert Presence](/docs/reference/keywords/verification#assert-presence) with the text you expect.
+- Add `store_as=name` to keep the text for later steps as `${name}`. See [Keep what a keyword returns](/docs/advanced/variables#keep-what-a-keyword-returns).
+- To fail the step when the text is wrong, use [Assert Text](/docs/reference/keywords/verification#assert-text).
 - When the element is found only by OCR or image, Get Text returns nothing and the step still passes.
 - In Python, Get Text takes `element` only and returns the text.
 

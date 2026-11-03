@@ -23,7 +23,7 @@ Home,Assert Presence,Welcome|Trail Runner 2|Pace Knit,20,all
 ```
 
 :::mistake
-Separate elements with `|`, never commas. Don't put spaces around the pipe, and don't use `${name}` inside a pipe list: `${a}|${b}` searches for the literal text `${a}`. To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
+Separate elements with `|`, never commas. Don't put spaces around the pipe. In a pipe list, `${a}|${b}` uses the first value of each variable. To try each value of a variable, store the whole `Welcome|Trail Runner 2` as one value and pass `${home_markers}`.
 :::
 
 ## Assertions
@@ -135,18 +135,19 @@ Good to know:
 
 ### Is Element
 
-Checks that an element is visible, invisible, enabled or disabled.
+Checks that an element is visible, invisible, enabled, disabled, checked or unchecked.
 
 | Parameter | Default | What it does |
 |---|---|---|
 | `element` | Required | The element to check. |
-| `element_state` | Required | `visible`, `invisible`, `enabled` or `disabled`. |
+| `element_state` | Required | `visible`, `invisible`, `enabled`, `disabled`, `checked` or `unchecked`. |
 | `timeout` | Required | Seconds to wait. Used for `visible` and `invisible` only. |
 | `event_name` | Empty | Label for a timed event. |
 
 ```csv
 Checkout,Is Element,${place_order},enabled,5
 Checkout,Is Element,${loading_spinner},invisible,15
+Checkout,Is Element,${accept_terms},checked,5
 ```
 
 ```yaml
@@ -157,8 +158,10 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled` and `disabled` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
-- You must give a timeout, even for `enabled` and `disabled`.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
+- `checked` and `unchecked` work for checkboxes, radio buttons and switches.
+- On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts as checked.
+- You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 
 ### Assert Equality
 
@@ -181,13 +184,41 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch returns false but doesn't fail the test. To fail on a wrong value, check the text on screen with Assert Presence instead.
+- A mismatch returns false but doesn't fail the test. To fail on a wrong value on screen, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 
+### Assert Text
+
+Checks that an element shows the text you expect, and fails the step if it doesn't. For a text field, it checks what the field holds.
+
+| Parameter | Default | What it does |
+|---|---|---|
+| `element` | Required | The element to read, by XPath, CSS or text. |
+| `expected` | Required | The text to expect. Can be `${name}`. |
+| `timeout` | `10` | Seconds to wait for the text. |
+| `event_name` | Empty | Label for a timed event. |
+
+```csv
+Cart,Assert Text,${cart_total},$128.00
+Profile,Assert Text,${email_field},${email},5
+```
+
+```yaml
+- Assert Text ${cart_total} $128.00
+```
+
+Good to know:
+
+- Spaces at the start and end are ignored on both sides.
+- The element must be in the UI tree, found by XPath, CSS or native text. An element found only by OCR or image fails the step at once.
+- If the element isn't found, the step fails with element not found, and Optics tries the next value of a `${name}` element.
+- If the text is still wrong at the timeout, the error shows the text the element had.
+- Start `expected` with `@:` to check a secret, such as a PIN. Optics compares it without the prefix and shows `****` in the error.
+
 ## Capture and inspect
 
-These keywords save what's on screen to the run's output folder. See [Results](/docs/run/results). The CSV and YAML runner can't store what they return. The return value reaches you over `optics serve`, MCP and [Python](/docs/create/python).
+These keywords save what's on screen to the run's output folder. See [Results](/docs/run/results). The return value reaches you over `optics serve`, MCP and [Python](/docs/create/python).
 
 ### Capture Screenshot
 

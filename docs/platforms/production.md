@@ -147,7 +147,7 @@ Calibrate again whenever you move the camera, change the device, or change its d
 |---|---|
 | Launch App, Launch Other App | Start the app by hand, or tap its icon on the home screen with Press Element. |
 | XPath and UI-tree text | There's no UI tree. Use visible text, which OCR reads, or images. |
-| Get Text, Get App Version, Execute Script | Not available over Bluetooth. |
+| Get Text, Assert Text, Get App Version, Execute Script | Not available over Bluetooth. Use Assert Presence with the text you expect. |
 | Back, Volume, Power and other phone-only keys | A Bluetooth keyboard has no such keys. Tap the app's own back button. |
 | Named keys such as `Enter` | On 1.10.5, `Press Keycode,Enter` and `<enter>` type the letters of the key's name. Tap the on-screen key instead. |
 | [Error detection](/docs/run/error-detection) at the end of a run | It needs the page source, which a camera can't provide. Add Assert Presence checks for error messages you care about. |

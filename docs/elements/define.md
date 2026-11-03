@@ -96,7 +96,7 @@ To look in one part of the screen instead, use an [area of interest](/docs/eleme
 
 Elements can hold any value a step needs, not only locators: an email address, a search term, a URL. Keeping them together means one file holds everything that changes between environments.
 
-To keep a password out of log files, start its value with `@:`, for example `password,@:correct-horse`. Optics masks it as `****` in logs and types it without the prefix on Appium, Selenium and Bluetooth devices. Playwright types the prefix too, so don't use `@:` with Playwright.
+To keep a password out of log files, start its value with `@:`, for example `password,@:correct-horse`. Optics masks it as `****` in logs and types it without the prefix.
 
 To put a line break or tab inside a value, write `\n` or `\t`. Write `\\` for a literal backslash.
 

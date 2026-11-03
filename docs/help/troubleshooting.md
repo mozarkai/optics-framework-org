@@ -223,7 +223,7 @@ List modules in `test_cases.csv`, and put keywords inside modules in `modules.cs
 
 Assert Equality and Validate Screen return false on a mismatch but never fail a step.
 
-Use Assert Presence or Validate Element to check what's on screen. See [Keywords that never fail a step](/docs/reference/keywords/#keywords-that-never-fail-a-step).
+Use Assert Text to check the text of an element, and Assert Presence or Validate Element to check that an element is there. See [Keywords that never fail a step](/docs/reference/keywords/#keywords-that-never-fail-a-step).
 
 ### Screenshots are missing on Windows {#windows-screenshots}
 
@@ -369,12 +369,6 @@ There's no workaround in config. On a Linux CI machine without a display, run Op
 `optics doctor` shows ⚠️ on the `playwright browser` row, or Playwright fails to launch Chromium.
 
 Run `optics setup --install playwright` again. It downloads the Chromium build Playwright needs.
-
-### A password typed with `@:` shows the prefix {#playwright-at-prefix}
-
-Playwright types the `@:` prefix that masks secrets in logs, unlike Appium and Selenium.
-
-Don't use `@:` with Playwright. Use test accounts whose passwords are safe to appear in logs, and keep log files private.
 
 ## CI
 
