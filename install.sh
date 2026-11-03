@@ -298,4 +298,5 @@ fi
 say ""
 say "${B}Next:${R} optics quickstart"
 say "      ${DIM}Builds a project, checks your setup, and runs your first test.${R}"
+say "${B}Docs:${R} https://optics-framework.org/docs/get-started/first-test?ref=installer"
 say ""
