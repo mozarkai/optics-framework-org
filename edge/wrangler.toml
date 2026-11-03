@@ -1,4 +1,15 @@
 name = "optics-framework-org-markdown"
 main = "worker.js"
 compatibility_date = "2026-10-01"
+workers_dev = false
+preview_urls = false
 routes = [{ pattern = "optics-framework.org/*", zone_name = "optics-framework.org" }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "optics-analytics"
+database_id = "7b05bbb3-0cca-4e43-892f-6a066dd46545"
+migrations_dir = "migrations"
+
+[triggers]
+crons = ["17 4 * * *"]

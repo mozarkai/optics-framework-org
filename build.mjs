@@ -52,13 +52,14 @@ function sitemap(entries) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
-// The Markdown twin of a text page. Those pages use only headings, paragraphs, links and
-// inline code; any other tag stops the build rather than being dropped from the twin.
+// The Markdown twin of a text page. Those pages use only headings, paragraphs, links,
+// bold and inline code; any other tag stops the build rather than being dropped from the twin.
 // Links become absolute so the text still works inside llms-full.txt.
 function pageMarkdown(html) {
   const md = html
     .replace(/<a [^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g, (_, href, text) => `[${text}](${new URL(href, `${ORIGIN}/`).href})`)
     .replace(/<code[^>]*>([\s\S]*?)<\/code>/g, "`$1`")
+    .replace(/<strong>([\s\S]*?)<\/strong>/g, "**$1**")
     .replace(/\s*<h([1-6])[^>]*>([\s\S]*?)<\/h\1>\s*/g, (_, level, text) => `\n\n${"#".repeat(level)} ${text}\n\n`)
     .replace(/\s*<p[^>]*>([\s\S]*?)<\/p>\s*/g, "\n\n$1\n\n");
   const leftover = /<\/?[a-z][^>]*>/i.exec(md);
@@ -180,7 +181,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);

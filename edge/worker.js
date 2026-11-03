@@ -8,6 +8,12 @@
 // representations apart) and discovery `Link` headers on HTML, and the media types of
 // the discovery documents.
 
+import { isAiBot } from "./agents.js";
+import { collect, isBeacon, recordHit } from "./analytics.js";
+import { snapshot } from "./snapshot.js";
+
+export { isAiBot };
+
 const MARKDOWN = "text/markdown; charset=utf-8";
 const PROBLEM_JSON = "application/problem+json";
 const API_CATALOG = "/.well-known/api-catalog";
@@ -27,16 +33,6 @@ export const LINK = [
   '</llms-full.txt>; rel="describedby"; type="text/plain"',
   '</ai.txt>; rel="describedby"; type="text/plain"',
 ].join(", ");
-
-// AI crawlers and agents, matched as case-insensitive substrings of the User-Agent.
-const AI_BOTS = [
-  "GPTBot", "ChatGPT-User", "OAI-SearchBot", "ClaudeBot", "Anthropic-ai", "Claude-Web", "Claude-SearchBot",
-  "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "cohere-ai",
-  "CCBot", "Bytespider", "DeepSeekBot", "Amazonbot", "YouBot", "Diffbot", "ImagesiftBot", "Omgilibot",
-  "DuckAssistBot", "meta-externalagent", "meta-externalfetcher",
-].map((bot) => bot.toLowerCase());
-
-export const isAiBot = (ua) => AI_BOTS.some((bot) => (ua ?? "").toLowerCase().includes(bot));
 
 const KINDS = {
   "text/markdown": "markdown",
@@ -210,6 +206,15 @@ export async function handle(request, upstream = fetch) {
   return missing || present(response, ctx);
 }
 
+// Analytics writes run after the response is sent and never fail it.
+export async function serve(request, env, ctx, upstream = fetch) {
+  if (isBeacon(request)) return collect(request, env);
+  const response = await handle(request, upstream);
+  ctx?.waitUntil(recordHit(env, request, response));
+  return response;
+}
+
 export default {
-  fetch: (request) => handle(request),
+  fetch: (request, env, ctx) => serve(request, env, ctx),
+  scheduled: (event, env, ctx) => ctx.waitUntil(snapshot(env)),
 };
