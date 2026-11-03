@@ -279,6 +279,7 @@ if ($onPath) {
 Write-Host ''
 Write-Host 'Next: optics quickstart'
 Write-Host '      Builds a project, checks your setup, and runs your first test.' -ForegroundColor DarkGray
+Write-Host 'Docs: https://optics-framework.org/docs/get-started/first-test?ref=installer'
 Write-Host ''
 } } catch [System.OperationCanceledException] {
     # The reason is already printed. A downloaded script reports failure to its
