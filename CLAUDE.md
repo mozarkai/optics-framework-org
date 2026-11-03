@@ -37,3 +37,12 @@ The docs live at `/docs/` and are built from Markdown by `lib/docs.mjs` and `lib
 ## Markdown for agents (`edge/`)
 
 GitHub Pages cannot vary a response on the `Accept` header, so `edge/worker.js` is a Cloudflare Worker meant to sit in front of it on `optics-framework.org/*`. A request preferring `text/markdown` gets the page's `.md` twin (`/` → `/index.md`), or `/404.md` with a 404 for a missing page; a request preferring JSON gets a missing page as an RFC 9457 `application/problem+json` document. Both carry `Vary: Accept`; everything else passes through, with `Vary: Accept` and the discovery `Link` header added to HTML. It only takes effect once the domain is proxied through Cloudflare and the worker is deployed (`npx wrangler deploy` from `edge/`). Until then, agents can still fetch `/index.md` and `/llms.txt` directly.
+
+## Analytics (`edge/analytics.js`, `site/track.js`, D1)
+
+First-party only: nothing loads from another server, no cookies, no IP addresses. The worker writes one `hits` row per request it answers (assets that loaded are skipped), with the client sorted by `edge/agents.js` into `browser`, `ai-user` (an assistant fetching for a person), `ai-crawler`, `search`, `script`, `bot` or `prefetch`. `site/track.js`, loaded on every page, posts interaction events to `POST /e` with a per-tab visit id; the worker checks each batch and writes `events` rows. A daily cron (`edge/snapshot.js`) upserts PyPI downloads (public ClickHouse dataset) and GitHub counters into `pypi` and `github`; GitHub traffic needs a `GITHUB_TOKEN` worker secret, and `npm run stats` collects it through your own `gh` login instead.
+
+- The store is the D1 database `optics-analytics` (schema in `edge/migrations/`, applied with `npx wrangler d1 migrations apply optics-analytics --remote` from `edge/`).
+- `npm run stats [-- --days 30]` refreshes PyPI and GitHub, then writes `stats/report.html` and `stats/report.json` (gitignored). It needs the `cf` CLI signed in.
+- A new event name goes in `track.js`, in `EVENTS` in `edge/analytics.js` and on `pages/privacy.html`; a test fails until all three agree.
+- Cloudflare Web Analytics is off for this zone: its beacon loads from another server, which the privacy page rules out.
