@@ -386,7 +386,7 @@ The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or
 
 ## include and exclude
 
-Run a subset of test cases. There are no CLI flags for this.
+Run a subset of test cases. To pick them for one run without editing this file, pass `--include` or `--exclude` to [`optics execute`](/docs/reference/cli#pick-test-cases) instead. The flags replace both lists for that run.
 
 ```yaml
 include:
@@ -397,7 +397,8 @@ exclude:
   - Shopper can check out
 ```
 
-- Names match the `test_case` column exactly, ignoring case.
+- Names match the whole `test_case` name, ignoring case and extra spaces.
+- A name that matches no test case prints a warning, and the run goes on.
 - Set one of the two. Setting both fails with [E0403](/docs/reference/errors#e04-keywords-and-parameters).
 - Test cases with "setup" or "teardown" in their names always run.
 
