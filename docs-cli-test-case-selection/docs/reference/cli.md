@@ -280,7 +280,7 @@ $ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --no-use-printer
 
 ### Pick test cases
 
-Run some of the test cases without editing config.yaml:
+The usual place to choose test cases is `include` or `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude), so the choice stays with the suite. To change it for one run without editing config.yaml, pass `--include` or `--exclude`:
 
 ```shell
 $ optics execute ./birch-tests --include "Shopper can sign in"
@@ -292,7 +292,6 @@ $ optics execute ./birch-tests --exclude "Shopper can pay with a gift card"
 - Give several names after one flag, or repeat the flag. Quote names that contain spaces.
 - Use `--include` or `--exclude`, not both.
 - Either flag replaces `include` and `exclude` from [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
-- Test cases with "setup" or "teardown" in their names always run.
 - Put the folder before the flag. Everything after `--include` is read as names until the next flag.
 
 Before the run starts, Optics prints the selection:
@@ -301,12 +300,20 @@ Before the run starts, Optics prints the selection:
 Selected 1 of 4 test cases: Shopper can sign in
 ```
 
-A name that matches no test case stops the run before anything starts, with exit code 3:
+A name that matches no test case stops the run before anything starts:
 
 ```terminal
-No test case named 'Shopper can sign on' in /home/me/birch-tests.
+Error: No test case named 'Shopper can sign on' in /path/to/birch-tests.
   Did you mean 'Shopper can sign in'?
 ```
+
+| Exit code | When |
+|---|---|
+| 3 | A name matches no test case, `--exclude` removes every test case, or `--include` names only setup or teardown test cases. The message starts with `Error:`. |
+| 2 | The command line is wrong: a blank name, `--include` and `--exclude` together, or a flag with no name after it. |
+
+**Warning:**
+Any test case with "setup" or "teardown" in its name, in any case, always runs. Neither the flags nor config.yaml can skip it. Keep those words out of the names of ordinary test cases: "Shopper can finish setup" would run every time.
 
 To see the names, or to check what a selection will run, add `--list`. It prints the test cases one per line and exits. It doesn't start a session or check the device, so it works before a device is set up:
 

@@ -133,7 +133,16 @@
       <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
       <span class="c-mod">capabilities</span><span class="c-dim">:</span>
         <span class="c-mod">model</span><span class="c-dim">:</span> gemini-2.5-flash</code></pre></figure>
-<p>Gemini reads its key from <code class="ic">GEMINI_API_KEY</code> or <code class="ic">GOOGLE_API_KEY</code>. For Vertex AI, set <code class="ic">GOOGLE_GENAI_USE_VERTEXAI=true</code> with <code class="ic">GOOGLE_CLOUD_PROJECT</code>, <code class="ic">GOOGLE_CLOUD_LOCATION</code> and <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code>. Optics accepts <code class="ic">api_key</code> in <code class="ic">capabilities</code> too, but warns when you use it.</p>
+<p>The <code class="ic">gemini</code> extra installs Google's <code class="ic">google-genai</code> package.</p>
+<p>With the Gemini API, Optics reads the key from <code class="ic">GEMINI_API_KEY</code> or <code class="ic">GOOGLE_API_KEY</code>. With Vertex AI, no API key is needed: set these four variables instead, and Google's library signs in with the credentials file.</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="export GOOGLE_GENAI_USE_VERTEXAI=true
+export GOOGLE_CLOUD_PROJECT=&lt;your-project-id&gt;
+export GOOGLE_CLOUD_LOCATION=&lt;your-region&gt;
+export GOOGLE_APPLICATION_CREDENTIALS=&lt;path-to-your-credentials.json&gt;">Copy</button><pre><code><span class="prompt">$</span> <b>export</b> GOOGLE_GENAI_USE_VERTEXAI=true
+<span class="prompt">$</span> <b>export</b> GOOGLE_CLOUD_PROJECT=&lt;your-project-id&gt;
+<span class="prompt">$</span> <b>export</b> GOOGLE_CLOUD_LOCATION=&lt;your-region&gt;
+<span class="prompt">$</span> <b>export</b> GOOGLE_APPLICATION_CREDENTIALS=&lt;path-to-your-credentials.json&gt;</code></pre></figure>
+<p>Optics accepts <code class="ic">api_key</code> in <code class="ic">capabilities</code> too, but warns when you use it.</p>
 <h4 id="openai">openai<a class="anchor" href="#openai" aria-label="Link to this section">#</a></h4>
 <p>Works with OpenAI and any server that offers an OpenAI-compatible Chat Completions API. Set the entry's <code class="ic">url</code> to the server's base URL, or leave it out to call OpenAI. <code class="ic">OPENAI_BASE_URL</code> works in place of <code class="ic">url</code>.</p>
 <div class="table-wrap"><table><thead><tr><th>Setting</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">model</code></td><td>None (required)</td><td>The model name as the server spells it, for example <code class="ic">gpt-5-mini</code>, or <code class="ic">anthropic/claude-sonnet-5-5</code> on OpenRouter.</td></tr><tr><td><code class="ic">api_key_env</code></td><td><code class="ic">OPENAI_API_KEY</code></td><td>The environment variable that holds the key.</td></tr><tr><td><code class="ic">response_format</code></td><td><code class="ic">json_schema</code></td><td>Set <code class="ic">json_object</code> if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead.</td></tr><tr><td><code class="ic">max_tokens</code></td><td>The server's limit</td><td>The longest reply the model may write.</td></tr><tr><td><code class="ic">temperature</code></td><td>The model's default</td><td>Sampling temperature.</td></tr></tbody></table></div>
