@@ -69,14 +69,13 @@ To test several devices at once, start a separate `optics execute` process for e
 
 ### How do I run only one test?
 
-There's no command-line flag for it. List the test cases to run under `include:` in `config.yaml`, or the ones to skip under `exclude:`:
+Pass its name to `--include`:
 
-```yaml title="config.yaml"
-include:
-  - Shopper can sign in
+```shell
+$ optics execute ./birch-tests --include "Shopper can sign in"
 ```
 
-Names match exactly, ignoring case. Suite Setup and Suite Teardown always run. See [Run only some test cases](/docs/create/organise#run-only-some-test-cases).
+Names match the whole name, ignoring case. Add `--list` to print every test case name. Suite Setup and Suite Teardown always run. To keep the choice in the project, list it under `include:` in `config.yaml`. See [Run only some test cases](/docs/create/organise#run-only-some-test-cases).
 
 ### Does Optics retry failed tests?
 

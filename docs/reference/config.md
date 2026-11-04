@@ -144,7 +144,18 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` in `capabilities` too, but warns when you use it.
+The `gemini` extra installs Google's `google-genai` package.
+
+With the Gemini API, Optics reads the key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. With Vertex AI, no API key is needed: set these four variables instead, and Google's library signs in with the credentials file.
+
+```shell
+$ export GOOGLE_GENAI_USE_VERTEXAI=true
+$ export GOOGLE_CLOUD_PROJECT=<your-project-id>
+$ export GOOGLE_CLOUD_LOCATION=<your-region>
+$ export GOOGLE_APPLICATION_CREDENTIALS=<path-to-your-credentials.json>
+```
+
+Optics accepts `api_key` in `capabilities` too, but warns when you use it.
 
 #### openai
 
@@ -386,7 +397,7 @@ The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or
 
 ## include and exclude
 
-Run a subset of test cases. There are no CLI flags for this.
+Run a subset of test cases. To pick them for one run without editing this file, pass `--include` or `--exclude` to [`optics execute`](/docs/reference/cli#pick-test-cases) instead. The flags replace both lists for that run.
 
 ```yaml
 include:
@@ -397,7 +408,8 @@ exclude:
   - Shopper can check out
 ```
 
-- Names match the `test_case` column exactly, ignoring case.
+- Names match the whole `test_case` name, ignoring case and extra spaces.
+- A name that matches no test case prints a warning, and the run goes on.
 - Set one of the two. Setting both fails with [E0403](/docs/reference/errors#e04-keywords-and-parameters).
 - Test cases with "setup" or "teardown" in their names always run.
 

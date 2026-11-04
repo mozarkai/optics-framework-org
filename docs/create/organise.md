@@ -78,7 +78,16 @@ Optics also reads files inside `execution_output/`. Keep stray CSV or YAML files
 
 ## Run only some test cases
 
-There's no command-line flag for this. List the test cases to run, or to skip, in `config.yaml`:
+Name them on the command line:
+
+```shell
+$ optics execute ./birch-tests --include "Shopper can sign in" "Shopper can search"
+$ optics execute ./birch-tests --exclude "Shopper can pay with a gift card"
+```
+
+Run `optics execute ./birch-tests --list` to print every test case name.
+
+To make the choice part of the project, list the test cases to run, or to skip, in `config.yaml`:
 
 ```yaml title="config.yaml"
 include:
@@ -91,7 +100,7 @@ exclude:
   - Shopper can pay with a gift card
 ```
 
-Names match exactly, ignoring case. Use `include` or `exclude`, not both. Suite Setup and Suite Teardown always run.
+Names match the whole name, ignoring case. Use include or exclude, not both. The command-line flags replace the `config.yaml` lists for that run. Suite Setup and Suite Teardown always run.
 
 ## Run the same suite on different devices
 

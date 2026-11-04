@@ -195,6 +195,7 @@ Checks a project for mistakes without running any step on a device.
 
 ```text
 optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
+               [--include NAME ... | --exclude NAME ...] [--list]
 ```
 
 | Argument | Default | What it does |
@@ -202,6 +203,9 @@ optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. Leave the default. |
 | `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. |
+| `--include NAME ...` | None | Checks only these test cases. See [Pick test cases](#pick-test-cases). |
+| `--exclude NAME ...` | None | Checks every test case except these. |
+| `--list` | Off | Prints the test cases it would check, one per line, and exits. |
 
 A dry run checks that:
 
@@ -223,6 +227,7 @@ Runs every test case in a project on the real device, browser or app, and record
 
 ```text
 optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
+               [--include NAME ... | --exclude NAME ...] [--list]
 ```
 
 | Argument | Default | What it does |
@@ -230,13 +235,16 @@ optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. We recommend the default. `pytest` is also accepted, but it needs the `pytest-cov` package installed. |
 | `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. Turn it off for plain CI logs. |
+| `--include NAME ...` | None | Runs only these test cases. See [Pick test cases](#pick-test-cases). |
+| `--exclude NAME ...` | None | Runs every test case except these. |
+| `--list` | Off | Prints the test cases it would run, one per line, and exits without running them. |
 
-There are no flags to pick tests or tags. To run a subset, use `include` or `exclude` in [config.yaml](/docs/reference/config#include-and-exclude).
+To run some of the test cases, see [Pick test cases](#pick-test-cases). There are no tags.
 
 What happens, in order:
 
 1. Optics walks the whole folder and finds your files by their content (see [Project files](/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
-2. It loads the config and stops if no driver is enabled.
+2. It loads the config and picks the test cases to run (see [Pick test cases](#pick-test-cases)). Then it stops if no driver is enabled.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL and, on Android, checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
 4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
 5. It saves a final screenshot and page source, and runs [error detection](/docs/run/error-detection) if the project has an error definitions file.
@@ -266,6 +274,7 @@ Results go to `execution_output/` in the project: `junit_output.xml`, screenshot
 |---|---|
 | 0 | Every test case passed. |
 | 1 | Any test case failed, required files are missing, no driver is enabled, the preflight failed, or the folder doesn't exist. |
+| 3 | A name given to `--include` or `--exclude` matches no test case, or the selection leaves nothing to run. |
 
 On-screen errors found by error detection appear in `junit_output.xml` as a failing test case, but they don't change the exit code.
 
@@ -273,6 +282,53 @@ On-screen errors found by error detection appear in `junit_output.xml` as a fail
 $ optics execute ./birch-tests
 $ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --no-use-printer
 ```
+
+### Pick test cases
+
+The usual place to choose test cases is `include` or `exclude` in [config.yaml](/docs/reference/config#include-and-exclude), so the choice stays with the suite. To change it for one run without editing config.yaml, pass `--include` or `--exclude`:
+
+```shell
+$ optics execute ./birch-tests --include "Shopper can sign in"
+$ optics execute ./birch-tests --include "Shopper can sign in" "Shopper can search"
+$ optics execute ./birch-tests --exclude "Shopper can pay with a gift card"
+```
+
+- Names match the whole test case name, ignoring case and extra spaces. `"shopper can SIGN in"` works, `"sign in"` doesn't.
+- Give several names after one flag, or repeat the flag. Quote names that contain spaces.
+- Use `--include` or `--exclude`, not both.
+- Either flag replaces `include` and `exclude` from [config.yaml](/docs/reference/config#include-and-exclude) for that run.
+- Put the folder before the flag. Everything after `--include` is read as names until the next flag.
+
+Before the run starts, Optics prints the selection:
+
+```terminal
+Selected 1 of 4 test cases: Shopper can sign in
+```
+
+A name that matches no test case stops the run before anything starts:
+
+```terminal
+Error: No test case named 'Shopper can sign on' in /path/to/birch-tests.
+  Did you mean 'Shopper can sign in'?
+```
+
+| Exit code | When |
+|---|---|
+| 3 | A name matches no test case, `--exclude` removes every test case, or `--include` names only setup or teardown test cases. The message starts with `Error:`. |
+| 2 | The command line is wrong: a blank name, `--include` and `--exclude` together, or a flag with no name after it. |
+
+:::warning
+Any test case with "setup" or "teardown" in its name, in any case, always runs. Neither the flags nor config.yaml can skip it. Keep those words out of the names of ordinary test cases: "Shopper can finish setup" would run every time.
+:::
+
+To see the names, or to check what a selection will run, add `--list`. It prints the test cases one per line and exits. It doesn't start a session or check the device, so it works before a device is set up:
+
+```shell
+$ optics execute ./birch-tests --list
+$ optics execute ./birch-tests --exclude "Shopper can pay with a gift card" --list
+```
+
+`optics dry_run` takes the same three flags.
 
 ## `optics live`
 
@@ -437,12 +493,12 @@ It prints a deprecation notice, then runs guided `optics configure` on the curre
 | `0` | Success. For `optics execute` and `optics dry_run`, every test case passed. |
 | `1` | A test case failed, a check failed (`optics doctor --check`, preflight), a required file or setting is missing, or an unexpected error occurred. |
 | `2` | The command line was invalid, for example an unknown flag or a missing argument. |
-| `3` | The input was invalid, for example a project that already exists, an unknown template, or files `optics generate` needs. The message starts with `Error:`. |
+| `3` | The input was invalid, for example a project that already exists, an unknown template, files `optics generate` needs, or a test case name that `--include` or `--exclude` doesn't match. |
 | `130` | You pressed [[Ctrl]]+[[C]]. Optics prints `Operation cancelled by user.` |
 
 ## Environment variables
 
-None of these override config.yaml. Settings for `optics execute`, `dry_run` and `live` come only from the project's config.yaml.
+None of these override config.yaml. Settings for `optics execute`, `dry_run` and `live` come only from the project's config.yaml and the command's flags.
 
 | Variable | Used by | What it does |
 |---|---|---|

@@ -59,19 +59,28 @@ Test Suite
 |---|---|
 | `0` | Every test case passed. |
 | `1` | At least one test case failed, or the run couldn't start (no driver enabled, server unreachable, missing files). |
+| `3` | A test case named with `--include` or `--exclude` doesn't exist, or the selection leaves nothing to run. |
 
 CI systems use this to mark a build as passed or failed.
 
 ## Choose which test cases run
 
-List test cases to run, or to skip, in `config.yaml`. Names match exactly, ignoring case:
+Name the test cases to run with `--include`, or the ones to skip with `--exclude`. Names match the whole name, ignoring case:
+
+```shell
+$ optics execute ./birch-tests --include "Shopper can sign in"
+```
+
+Add `--list` to print every test case name, or to check what a selection will run before you start it.
+
+To keep a selection with the project, list the names in `config.yaml` instead:
 
 ```yaml title="config.yaml"
 include:
   - Shopper can sign in
 ```
 
-Use `include` or `exclude`, not both. Suite Setup and Suite Teardown always run. There's no command-line option for this, so a common pattern in CI is a small config per job. See [Organise a suite](/docs/create/organise#run-the-same-suite-on-different-devices).
+Use include or exclude, not both. The flags replace the `config.yaml` lists for that run, so each CI job can pass its own. Suite Setup and Suite Teardown always run. See [Pick test cases](/docs/reference/cli#pick-test-cases).
 
 ## Options
 
@@ -79,6 +88,8 @@ Use `include` or `exclude`, not both. Suite Setup and Suite Teardown always run.
 |---|---|
 | `--no-use-printer` | Print plain log output instead of the live tree. Useful when a CI log viewer garbles the tree. |
 | `--runner pytest` | Run the suite through pytest instead of Optics' own runner. Most projects don't need this. |
+| `--include NAME ...` / `--exclude NAME ...` | Run only these test cases, or all except these. See [Choose which test cases run](#choose-which-test-cases-run). |
+| `--list` | Print the test cases the run would include, then exit. |
 
 To skip the reachability check, for example when the server is behind a proxy the check can't see, set `OPTICS_SKIP_PREFLIGHT=1`.
 

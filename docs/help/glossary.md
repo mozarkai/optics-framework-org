@@ -89,7 +89,7 @@ Image detection finds an element by matching a small picture of it, called a tem
 
 ### Include and exclude {#include-exclude}
 
-Include and exclude are `config.yaml` lists that pick which test cases a run includes or skips, by name. Optics has no command-line flag for this. See [include and exclude](/docs/reference/config#include-and-exclude).
+Include and exclude pick which test cases a run includes or skips, by name: either the `--include` and `--exclude` flags on `optics execute` and `optics dry_run`, or the `include` and `exclude` lists in `config.yaml`. See [Pick test cases](/docs/reference/cli#pick-test-cases).
 
 ### Index {#index}
 

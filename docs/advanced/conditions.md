@@ -90,7 +90,7 @@ Modules run by `Condition`, `Execute Module` and [`Run Loop`](/docs/advanced/dat
 - **`name=value` parameters aren't available.** Give values in order: `Assert Presence,Picked for you,5`, not `timeout_str=5`.
 - Their steps don't appear separately in the run tree. A failure message names the step that failed.
 
-If a branch needs fallbacks, give it its own test case instead and choose which test cases run with `include` and `exclude` in `config.yaml`.
+If a branch needs fallbacks, give it its own test case instead and choose which test cases run with `--include` and `--exclude`, or with `include` and `exclude` in `config.yaml`.
 
 ## See also
 
