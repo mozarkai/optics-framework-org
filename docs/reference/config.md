@@ -144,7 +144,18 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` in `capabilities` too, but warns when you use it.
+The `gemini` extra installs Google's `google-genai` package.
+
+With the Gemini API, Optics reads the key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. With Vertex AI, no API key is needed: set these four variables instead, and Google's library signs in with the credentials file.
+
+```shell
+$ export GOOGLE_GENAI_USE_VERTEXAI=true
+$ export GOOGLE_CLOUD_PROJECT=<your-project-id>
+$ export GOOGLE_CLOUD_LOCATION=<your-region>
+$ export GOOGLE_APPLICATION_CREDENTIALS=<path-to-your-credentials.json>
+```
+
+Optics accepts `api_key` in `capabilities` too, but warns when you use it.
 
 #### openai
 
