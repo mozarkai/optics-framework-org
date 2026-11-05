@@ -22,8 +22,8 @@ Assert Presence, Assert Visibility, Validate Element and Validate Screen accept 
 Home,Assert Presence,Welcome|Trail Runner 2|Pace Knit,20,all
 ```
 
-**Common mistake:**
-Separate elements with `|`, never commas. Don't put spaces around the pipe. In a pipe list such as `Welcome|${b}`, each variable gives only its first value. A list that starts and ends with a variable, such as `${a}|${b}`, fails with "Element not found". To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
+**Note:**
+Separate elements with `|`, never commas. Do not put spaces around the pipe. In a pipe list such as `${a}|${b}`, each variable gives its first value. To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
 
 ## Assertions
 
@@ -188,17 +188,14 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. An element found only by OCR or image fails the step.
 - On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts for checked.
 - Another state fails with error E0403.
 - You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 
-**CSS and DOM XPath on mobile web:**
-On web pages on Appium, Assert Text fails for a `css=` or DOM XPath locator. The `enabled`, `disabled`, `checked` and `unchecked` states of Is Element also fail. Until the fix ships, use the HTML id or the visible text. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web#locators-for-web-pages).
-
 ### Assert Equality
 
-Compares two values as text, after trimming spaces. It never fails the step.
+Compares two values as text, without spaces at the start and end. The step fails when the values are different.
 
 | Parameter | Default | What it does |
 |---|---|---|
@@ -217,7 +214,7 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch returns false but doesn't fail the test. To fail on wrong text on screen, use [Assert Text](#assert-text).
+- A mismatch fails with error E0401, such as `'480' does not equal '240'.` To check the text that an element shows, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 

@@ -1241,8 +1241,8 @@ Names in `/save` can't contain spaces. Use underscores, or rename the module in 
 
 `/save` does not write a value that you type into a secret field, such as a password. The step `enter_text ${password_field} "correct horse"` is saved as `Enter Text,${password_field},${password_field_value}`. The elements CSV gets the row `password_field_value,<redacted>`. Before you run the test, put the real value in that row, or read it with `Read Data`. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
-**Common mistake:**
-When you type into a raw locator, such as `enter_text css=#user-name ava`, on a screen with a password field, `/save` also writes that value as `<redacted>`. Until the fix ships, type into named elements, such as `${email_field}`.
+**Tip:**
+When a password field is on screen, `/save` also hides a value that you type into a raw locator, such as `enter_text css=#user-name ava`. This makes sure that no password goes into your files. To keep the value, press the field first, or type into a named element, such as `${email_field}`.
 
 ## Commands and keys
 
@@ -1827,10 +1827,10 @@ Close Birch,Close And Terminate App
 
 Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so `Birch Suite Setup` works too. Setup and teardown always run, even when you [select which tests run](#run-only-some-test-cases).
 
-**Per-test Setup and Teardown:**
-Test cases named just **Setup** or **Teardown** are meant to run around every test case. They wrap only the first test case, so do not rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as `Sign In` is above.
+A test case named just **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give every test a fresh start.
 
-Avoid "setup" and "teardown" in ordinary test names for the same reason: a test called *Setup wizard works* is treated as the per-test setup.
+**Tip:**
+Do not use "setup" or "teardown" in other test names. A test called *Setup wizard works* becomes the per-test setup.
 
 ## Reuse modules
 
@@ -2001,16 +2001,11 @@ A step that is exactly a module name runs that module.
 
 ### Expressions with = in them
 
-Optics splits a quoted value on its first `=` to support named values. That breaks quoted expressions that contain `==`. Write such expressions without spaces, and without quotes:
+Quote an expression that contains spaces, the same as any other value. Optics removes the quotes:
 
 ```yaml
-# Works
-- Condition ${status}=='ready' "Go Home" "Sign In"
-# Doesn't work: the quotes around the expression are kept
 - Condition "${status} == 'ready'" "Go Home" "Sign In"
 ```
-
-Quoted values without `=` are fine, such as `"Go Home"`.
 
 ### Module names as values
 
@@ -3944,8 +3939,7 @@ An XPath that names a native class or attribute, such as `android.widget.Button`
 
 Assert Presence with a web locator checks the page, so an element that is off screen passes. Assert Visibility passes only when the element is in the visible part of the page.
 
-**Assert Text and Is Element reject CSS and DOM XPath on mobile web:**
-Assert Text and the `enabled`, `disabled`, `checked` and `unchecked` states of Is Element fail for a `css=` or DOM XPath locator. Assert Text says "it was found only by OCR or image". Until the fix ships, give these keywords the HTML id or the visible text: `Assert Text,firstHeading,${title}`.
+Assert Text reads the text of a web element. Is Element checks the `enabled`, `disabled`, `checked` and `unchecked` states of a web control, and `aria-disabled` and `aria-checked` count too.
 
 ## Move between apps and the browser
 
@@ -4463,14 +4457,11 @@ Search,Enter Text,${search_bar},${search_term}
 | You write | Optics uses |
 |---|---|
 | `${search_term}` as the whole cell | Each value in turn, the same as [element fallbacks](https://optics-framework.org/docs/elements/define) |
-| `Hi ${first}!` inside other text | The first value. An unknown name fails the step. |
+| `Hi ${first}!` or `${first} ${last}` | The first value of each name. An unknown name fails the step. |
 | `$${first}` | The text `${first}`, not the value |
 | `@:${password}` | The value, typed without `@:` and hidden in logs |
 
 `Evaluate`, `Condition`, the query of `Read Data` and the URL, headers and body of `Invoke API` put in the first value themselves. [Values are text](#values-are-text) shows how they quote it.
-
-**Two variables fill a whole cell:**
-A cell that starts with `${` and ends with `}`, such as `${first} ${last}`, fails with "Element not found: first} ${last". The dry run does not find this. Until the fix ships, put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first.
 
 ## Keep a value for later
 
@@ -4521,8 +4512,7 @@ Check Total,Evaluate,${expected_total},${price} * 2
 Check Total,Assert Presence,${expected_total}
 ```
 
-**Loop count from a variable:**
-`Run Loop,Add One Item,${n}` fails with "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number: `Run Loop,Add One Item,3`.
+`Run Loop` takes its count from a variable too: `Run Loop,Add One Item,${n}`.
 
 ## How long a value lasts
 
@@ -4541,9 +4531,6 @@ A value lasts for the whole run. A value set in one test case is available in la
 Element_Name,Element_ID
 access_token,placeholder
 ```
-
-**Placeholder for Date Evaluate:**
-Do not add a placeholder row for a `Date Evaluate` name. Date Evaluate adds its result after the old value, so `${delivery_date}` gives `placeholder`. The dry run defines the name without a row.
 
 ## Values are text
 
@@ -5151,7 +5138,7 @@ $ pytest test_generated.py
 - **Flow-control keywords** (Run Loop, Condition, Read Data, Evaluate, Invoke API and others) and a few more, such as Select Dropdown Option, aren't converted. Steps that use them are left out of the generated code silently. Check the output against your modules.
 - **`store_as` cells** are passed to the method as plain text, such as `get_text(..., 'store_as=price')`, which breaks the call. Use the return value instead. See [Use Optics from Python](https://optics-framework.org/docs/create/python).
 - **`${name}` inside other text** is written as typed: `'Hi ${first}!'`.
-- **A `${name}` that only exists during the run**, such as a value from `store_as` or Evaluate, stops `optics generate` with "Element 'name' not found in elements".
+- **Every `${name}` comes from the elements file.** A suite that sets values during the run, with Evaluate, Date Evaluate or `store_as`, runs as it is with `optics execute`.
 - **Suite Setup and Suite Teardown** become ordinary tests.
 - **Image templates** are copied only if they're in an `input_templates/` folder at the project's top level.
 
@@ -5819,14 +5806,6 @@ Profile,Enter Text,${note_field},$${first}
 
 With `first` set to `Ava` and `last` set to `Lee`, the first step types `Hi Ava Lee!` and the second step types `${first}`. Condition, Read Data and Evaluate use their own rules for `${name}`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
 
-**Common mistake:**
-A cell that starts with `${` and ends with `}` is read as one variable. `${first} ${last}` fails with "Element not found: first} ${last". Until the fix ships, make the value with Evaluate first, then use the new variable:
-
-```csv
-Profile,Evaluate,${full},'${first}' + ' ' + '${last}'
-Profile,Enter Text,${name_field},${full}
-```
-
 See [Variables](https://optics-framework.org/docs/advanced/variables) for how values are stored and passed between steps.
 
 ## Areas of interest
@@ -5872,7 +5851,6 @@ Use [Detect And Press](https://optics-framework.org/docs/reference/keywords/acti
 
 These keywords pass even when you might expect a failure. Don't rely on them as checks.
 
-- **Assert Equality** returns false on a mismatch but never fails.
 - **Validate Screen** returns false when nothing is found but never fails.
 - **Detect And Press** passes and skips the tap when the element doesn't appear.
 - **Force Terminate App** on Appium logs any error and passes.
@@ -5893,7 +5871,7 @@ These keywords return a value:
 
 - Launch App, Get App Version and Get Driver Session Id
 - Get Text and Execute Script
-- Assert Presence, Assert Visibility, Assert Equality and Validate Screen, which return `True` or `False`
+- Assert Presence, Assert Visibility and Validate Screen, which return `True` or `False`, and Assert Equality, which returns `True`
 - Capture Screenshot, Capture Pagesource, Get Interactive Elements and Get Screen Elements
 
 Lists and objects are kept as JSON.
@@ -5958,7 +5936,7 @@ Over [`optics serve`](https://optics-framework.org/docs/reference/cli), MCP and 
 | Validate Screen | Check for elements without failing | [Validate Screen](https://optics-framework.org/docs/reference/keywords/verification#validate-screen) |
 | Is Element | Check that an element is visible, invisible, enabled, disabled, checked or unchecked | [Is Element](https://optics-framework.org/docs/reference/keywords/verification#is-element) |
 | Assert Text | Fail unless an element's text or a field's value is the expected text | [Assert Text](https://optics-framework.org/docs/reference/keywords/verification#assert-text) |
-| Assert Equality | Compare two values without failing | [Assert Equality](https://optics-framework.org/docs/reference/keywords/verification#assert-equality) |
+| Assert Equality | Fail when two values differ | [Assert Equality](https://optics-framework.org/docs/reference/keywords/verification#assert-equality) |
 | Capture Screenshot | Take a screenshot | [Capture Screenshot](https://optics-framework.org/docs/reference/keywords/verification#capture-screenshot) |
 | Capture Pagesource | Save the current UI tree | [Capture Pagesource](https://optics-framework.org/docs/reference/keywords/verification#capture-pagesource) |
 | Get Interactive Elements | List the elements you can tap or type into | [Get Interactive Elements](https://optics-framework.org/docs/reference/keywords/verification#get-interactive-elements) |
@@ -6730,7 +6708,8 @@ Good to know:
 
 - In CSV, wrap a value that contains commas in double quotes, and double every quote inside it.
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
-- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as). On Playwright, give an expression such as `document.title`, not a `return` statement.
+- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
+- On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
 - The BLE driver doesn't support it.
 
 ## Read and wait
@@ -6848,8 +6827,8 @@ Assert Presence, Assert Visibility, Validate Element and Validate Screen accept 
 Home,Assert Presence,Welcome|Trail Runner 2|Pace Knit,20,all
 ```
 
-**Common mistake:**
-Separate elements with `|`, never commas. Don't put spaces around the pipe. In a pipe list such as `Welcome|${b}`, each variable gives only its first value. A list that starts and ends with a variable, such as `${a}|${b}`, fails with "Element not found". To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
+**Note:**
+Separate elements with `|`, never commas. Do not put spaces around the pipe. In a pipe list such as `${a}|${b}`, each variable gives its first value. To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
 
 ## Assertions
 
@@ -7014,17 +6993,14 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. An element found only by OCR or image fails the step.
 - On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts for checked.
 - Another state fails with error E0403.
 - You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 
-**CSS and DOM XPath on mobile web:**
-On web pages on Appium, Assert Text fails for a `css=` or DOM XPath locator. The `enabled`, `disabled`, `checked` and `unchecked` states of Is Element also fail. Until the fix ships, use the HTML id or the visible text. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web#locators-for-web-pages).
-
 ### Assert Equality
 
-Compares two values as text, after trimming spaces. It never fails the step.
+Compares two values as text, without spaces at the start and end. The step fails when the values are different.
 
 | Parameter | Default | What it does |
 |---|---|---|
@@ -7043,7 +7019,7 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch returns false but doesn't fail the test. To fail on wrong text on screen, use [Assert Text](#assert-text).
+- A mismatch fails with error E0401, such as `'480' does not equal '240'.` To check the text that an element shows, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 
@@ -7224,10 +7200,8 @@ Good to know:
 - With several lists, the loop runs as many times as the shortest list.
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
+- The count can be a variable: `Run Loop,Add Trail Runner,${n}`.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
-
-**Common mistake:**
-A count from a variable, such as `Run Loop,Add Trail Runner,${n}`, fails with error E0403 "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number.
 
 ## Branch
 
@@ -7262,7 +7236,7 @@ Good to know:
 - A module condition really runs its steps. Use one that only checks, such as a module with a single Assert Presence.
 - If no condition is true and there's no else target, the step passes and nothing runs.
 - If the target module fails, the step fails.
-- In YAML, write the expression without spaces: `${payment}=='card'`. A quoted expression that contains `=` keeps its quotes and fails.
+- In YAML, quote an expression that contains spaces: `"${payment} == 'card'"`.
 
 ### Compare numbers
 
@@ -7321,7 +7295,7 @@ Good to know:
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
 - **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
-- In YAML, write filters without spaces.
+- In YAML, quote a filter that contains spaces: `"role == 'admin';select=email"`.
 
 ### Evaluate
 
@@ -7387,7 +7361,7 @@ Good to know:
 - Only days work. `+1 week` fails with error E0403. Put a space between the number and `days`.
 - `today` and `now` don't read the clock. They keep the start date as it is, which is useful to reformat a date.
 - An ambiguous date such as `03/04/2026` is read as March 4.
-- Use a variable name that has no value yet, and don't add it to your elements file. If the name already has a value, Date Evaluate adds the new date after it, and `${name}` keeps giving the old value. For the same reason, don't reuse the name inside a loop.
+- The new date replaces the earlier value of the variable, so you can use the same name in a loop.
 - Common format codes are `%d` day, `%m` month number, `%B` month name, `%b` short month name and `%Y` year.
 
 ### Invoke API
@@ -7948,6 +7922,7 @@ Generate has stricter needs than `optics execute`:
 
 - The config file must be named exactly `config.yaml`.
 - The project needs an elements file. Only the `Element_ID` column is used; fallback columns are ignored.
+- Every `${name}` must come from the elements file. Run a suite that sets values with Evaluate, Date Evaluate or `store_as` with `optics execute`.
 - Flow-control keywords (`Run Loop`, `Condition`, `Evaluate` and the rest) and a few others are skipped without a warning.
 - Suite Setup and Suite Teardown become ordinary tests.
 
@@ -8740,10 +8715,8 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 |---|---|---|
 | `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
 | `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Meant to run before each test. It runs only before the first test case. |
-| `teardown` without `suite` | Per-test teardown | Meant to run after each test. It runs only after the first test case. |
-
-We recommend `Suite Setup` and `Suite Teardown`, which work as expected. Avoid per-test `Setup` and `Teardown` until this is fixed; open and close the app inside each test case's own modules if you need that.
+| `setup` without `suite` | Per-test setup | Before each test case. |
+| `teardown` without `suite` | Per-test teardown | After each test case. |
 
 - A failing setup doesn't stop the test cases after it.
 - The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
@@ -8801,13 +8774,10 @@ Parameter rules:
 
 - **Empty cells are dropped**, and the values after them move left. You can't skip a parameter by leaving its cell blank. Use a named parameter instead.
 - **Named parameters** are written `name=value`, for example `index=0` or `timeout_str=20`. They work only when `name` is a real parameter of that keyword. Anything else, such as `text=Sign in` or `css=#search`, stays a positional value.
-- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!`, is replaced with its first value. An unknown name fails the step with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
+- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!` or `${first} ${last}`, is replaced with its first value. An unknown name fails the step with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
 - **Locators first.** If a keyword's first parameter is `element`, a first value that starts with `text=`, `css=` or `xpath=` is the element. `Enter Text,text=Name,Ava` types `Ava` into the element `text=Name`.
 - **store_as.** Add `store_as=<name>` to a step to save the keyword's result as `${name}` for later steps and test cases. Lists and dictionaries are saved as JSON. See [Store a result](https://optics-framework.org/docs/reference/keywords/#store-as).
 - Values starting with `/`, `//` or `(` are always positional, so XPaths are never mistaken for named parameters.
-
-**Common mistake:**
-A cell can start with `${`, end with `}` and hold more than one variable, such as `${first} ${last}`. This cell fails at run time with `Element not found`, but `dry_run` passes. Until the fix ships, put text before the first variable or after the last one, or build the value with `Evaluate` first.
 
 In YAML, a step is one string. The keyword name is matched first, and the rest is split on spaces. Wrap a value with spaces in quotes: `"Trail Runner 2"`. Wrap multi-word module names you pass as parameters in quotes too: `Run Loop "Add To Cart" 3`.
 
@@ -8939,7 +8909,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
-**YAML quoting.** A quoted value that contains `=` keeps its quotes. Write conditions without spaces instead: `Condition ${size}=='9' "Pick Size" "Show Error"`.
+**YAML quoting.** Optics removes the quotes around a value, also when the value contains `=`: `Condition "${size} == '9'" "Pick Size" "Show Error"`.
 
 ## Outputs
 
@@ -10159,29 +10129,17 @@ Condition compares values as text, so `${count} > 5` can't be evaluated.
 
 Compare with quoted values: `${count} == '7'` or `${status} == 'ready'`. For greater-than or less-than, compute the result with Evaluate first, then test it: see [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
 
-### "Element not found: first} ${last}"
-
-A cell that starts with `${` and ends with `}` holds more than one variable, such as `${first} ${last}`. Optics reads the whole cell as one name. The dry run does not find this.
-
-Put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first. See [Variables](https://optics-framework.org/docs/advanced/variables#where-name-works).
-
-### "Expected an integer for loop count, got '${n}'"
-
-`Run Loop` does not read its count from a variable.
-
-Write the count as a number: `Run Loop,Add One Item,3`.
-
 ### `ValueError: invalid literal for int()`
 
 A parameter that must be a whole number got something else. Two causes are common: a timeout or count with a decimal point, such as `2.5`, and an empty cell. Empty cells are dropped, so the values after them shift left into the wrong parameter.
 
 Use whole numbers. To skip a parameter, name the next one instead of leaving a gap: `Press Element,${sign_in},index=1`.
 
-### Per-test Setup runs only around the first test case
+### A test runs as setup or teardown
 
-A test case named `Setup` or `Teardown` (without "suite") runs only before or after the first regular test case, not around each one.
+A test case with "setup" or "teardown" in its name, such as *Setup wizard works*, runs before or after every other test case.
 
-Use `Suite Setup` and `Suite Teardown`, which run once and work as expected. If each test needs a fresh start, open and close the app inside that test's own modules. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
+Remove those words from the name. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 
 ### Every step takes about 10 seconds on Appium
 
@@ -10205,11 +10163,11 @@ A test case step that names a keyword instead of a module passes without doing a
 
 List modules in `test_cases.csv`, and put keywords inside modules in `modules.csv`.
 
-### Assert Equality never fails
+### Validate Screen never fails
 
-Assert Equality and Validate Screen return false on a mismatch but never fail a step.
+Validate Screen returns false when it finds nothing, but it does not fail the step.
 
-To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
+To fail on a missing element, use Assert Presence. To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
 
 ### Screenshots are missing from a custom output folder
 

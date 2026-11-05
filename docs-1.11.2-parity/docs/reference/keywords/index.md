@@ -89,14 +89,6 @@ Profile,Enter Text,${note_field},$${first}
 
 With `first` set to `Ava` and `last` set to `Lee`, the first step types `Hi Ava Lee!` and the second step types `${first}`. Condition, Read Data and Evaluate use their own rules for `${name}`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
 
-**Common mistake:**
-A cell that starts with `${` and ends with `}` is read as one variable. `${first} ${last}` fails with "Element not found: first} ${last". Until the fix ships, make the value with Evaluate first, then use the new variable:
-
-```csv
-Profile,Evaluate,${full},'${first}' + ' ' + '${last}'
-Profile,Enter Text,${name_field},${full}
-```
-
 See [Variables](https://optics-framework.org/docs/advanced/variables) for how values are stored and passed between steps.
 
 ## Areas of interest
@@ -142,7 +134,6 @@ Use [Detect And Press](https://optics-framework.org/docs/reference/keywords/acti
 
 These keywords pass even when you might expect a failure. Don't rely on them as checks.
 
-- **Assert Equality** returns false on a mismatch but never fails.
 - **Validate Screen** returns false when nothing is found but never fails.
 - **Detect And Press** passes and skips the tap when the element doesn't appear.
 - **Force Terminate App** on Appium logs any error and passes.
@@ -163,7 +154,7 @@ These keywords return a value:
 
 - Launch App, Get App Version and Get Driver Session Id
 - Get Text and Execute Script
-- Assert Presence, Assert Visibility, Assert Equality and Validate Screen, which return `True` or `False`
+- Assert Presence, Assert Visibility and Validate Screen, which return `True` or `False`, and Assert Equality, which returns `True`
 - Capture Screenshot, Capture Pagesource, Get Interactive Elements and Get Screen Elements
 
 Lists and objects are kept as JSON.
@@ -228,7 +219,7 @@ Over [`optics serve`](https://optics-framework.org/docs/reference/cli), MCP and 
 | Validate Screen | Check for elements without failing | [Validate Screen](https://optics-framework.org/docs/reference/keywords/verification#validate-screen) |
 | Is Element | Check that an element is visible, invisible, enabled, disabled, checked or unchecked | [Is Element](https://optics-framework.org/docs/reference/keywords/verification#is-element) |
 | Assert Text | Fail unless an element's text or a field's value is the expected text | [Assert Text](https://optics-framework.org/docs/reference/keywords/verification#assert-text) |
-| Assert Equality | Compare two values without failing | [Assert Equality](https://optics-framework.org/docs/reference/keywords/verification#assert-equality) |
+| Assert Equality | Fail when two values differ | [Assert Equality](https://optics-framework.org/docs/reference/keywords/verification#assert-equality) |
 | Capture Screenshot | Take a screenshot | [Capture Screenshot](https://optics-framework.org/docs/reference/keywords/verification#capture-screenshot) |
 | Capture Pagesource | Save the current UI tree | [Capture Pagesource](https://optics-framework.org/docs/reference/keywords/verification#capture-pagesource) |
 | Get Interactive Elements | List the elements you can tap or type into | [Get Interactive Elements](https://optics-framework.org/docs/reference/keywords/verification#get-interactive-elements) |

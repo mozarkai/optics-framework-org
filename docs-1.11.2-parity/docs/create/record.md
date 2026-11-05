@@ -80,8 +80,8 @@ Names in `/save` can't contain spaces. Use underscores, or rename the module in 
 
 `/save` does not write a value that you type into a secret field, such as a password. The step `enter_text ${password_field} "correct horse"` is saved as `Enter Text,${password_field},${password_field_value}`. The elements CSV gets the row `password_field_value,<redacted>`. Before you run the test, put the real value in that row, or read it with `Read Data`. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
-**Common mistake:**
-When you type into a raw locator, such as `enter_text css=#user-name ava`, on a screen with a password field, `/save` also writes that value as `<redacted>`. Until the fix ships, type into named elements, such as `${email_field}`.
+**Tip:**
+When a password field is on screen, `/save` also hides a value that you type into a raw locator, such as `enter_text css=#user-name ava`. This makes sure that no password goes into your files. To keep the value, press the field first, or type into a named element, such as `${email_field}`.
 
 ## Commands and keys
 

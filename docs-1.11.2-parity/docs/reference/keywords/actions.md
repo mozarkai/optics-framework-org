@@ -542,7 +542,8 @@ Good to know:
 
 - In CSV, wrap a value that contains commas in double quotes, and double every quote inside it.
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
-- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as). On Playwright, give an expression such as `document.title`, not a `return` statement.
+- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
+- On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
 - The BLE driver doesn't support it.
 
 ## Read and wait

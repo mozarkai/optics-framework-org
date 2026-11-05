@@ -127,8 +127,7 @@ An XPath that names a native class or attribute, such as `android.widget.Button`
 
 Assert Presence with a web locator checks the page, so an element that is off screen passes. Assert Visibility passes only when the element is in the visible part of the page.
 
-**Assert Text and Is Element reject CSS and DOM XPath on mobile web:**
-Assert Text and the `enabled`, `disabled`, `checked` and `unchecked` states of Is Element fail for a `css=` or DOM XPath locator. Assert Text says "it was found only by OCR or image". Until the fix ships, give these keywords the HTML id or the visible text: `Assert Text,firstHeading,${title}`.
+Assert Text reads the text of a web element. Is Element checks the `enabled`, `disabled`, `checked` and `unchecked` states of a web control, and `aria-disabled` and `aria-checked` count too.
 
 ## Move between apps and the browser
 

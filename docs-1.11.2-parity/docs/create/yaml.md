@@ -65,16 +65,11 @@ A step that is exactly a module name runs that module.
 
 ### Expressions with = in them
 
-Optics splits a quoted value on its first `=` to support named values. That breaks quoted expressions that contain `==`. Write such expressions without spaces, and without quotes:
+Quote an expression that contains spaces, the same as any other value. Optics removes the quotes:
 
 ```yaml
-# Works
-- Condition ${status}=='ready' "Go Home" "Sign In"
-# Doesn't work: the quotes around the expression are kept
 - Condition "${status} == 'ready'" "Go Home" "Sign In"
 ```
-
-Quoted values without `=` are fine, such as `"Go Home"`.
 
 ### Module names as values
 

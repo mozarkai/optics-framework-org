@@ -29,10 +29,10 @@ Close Birch,Close And Terminate App
 
 Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so `Birch Suite Setup` works too. Setup and teardown always run, even when you [select which tests run](#run-only-some-test-cases).
 
-**Per-test Setup and Teardown:**
-Test cases named just **Setup** or **Teardown** are meant to run around every test case. They wrap only the first test case, so do not rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as `Sign In` is above.
+A test case named just **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give every test a fresh start.
 
-Avoid "setup" and "teardown" in ordinary test names for the same reason: a test called *Setup wizard works* is treated as the per-test setup.
+**Tip:**
+Do not use "setup" or "teardown" in other test names. A test called *Setup wizard works* becomes the per-test setup.
 
 ## Reuse modules
 

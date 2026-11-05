@@ -416,6 +416,7 @@ Generate has stricter needs than `optics execute`:
 
 - The config file must be named exactly `config.yaml`.
 - The project needs an elements file. Only the `Element_ID` column is used; fallback columns are ignored.
+- Every `${name}` must come from the elements file. Run a suite that sets values with Evaluate, Date Evaluate or `store_as` with `optics execute`.
 - Flow-control keywords (`Run Loop`, `Condition`, `Evaluate` and the rest) and a few others are skipped without a warning.
 - Suite Setup and Suite Teardown become ordinary tests.
 
