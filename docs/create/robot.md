@@ -55,6 +55,8 @@ $ robot checkout.robot
 - **Pass fallbacks as a list.** `Create List` builds the values to try in order. Writing several plain arguments fills the keyword's next parameters instead.
 - **Separate several elements with a pipe** inside one argument: `Picked for you|Search Birch`.
 - **Named arguments use the Python names**: `timeout=20`, `rule=any`, `index=1`.
+- **There is no `store_as`.** Keep the return value in a Robot variable: `${price}=    Get Text    ${PRICE_LABEL}`, then `Assert Text    ${CART_TOTAL}    ${price}`. Assert Text fails on different text.
+- **`Go Back`** goes back one screen, and **`Is Element`** accepts the states `checked` and `unchecked`.
 - **Robot replaces `${…}` itself.** To pass an Optics variable to `Evaluate` or `Condition`, escape it: `\${total}`.
 - **`Sleep` and `Evaluate` exist in Robot's BuiltIn library too.** Robot warns and uses the Optics version, which only accepts whole seconds. Write `BuiltIn.Sleep    2s` or `Optics.Sleep    2` to be explicit.
 

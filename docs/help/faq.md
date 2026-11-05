@@ -2,7 +2,7 @@
 
 > Learn what Optics can and can't do, with short answers to the questions people ask most.
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.10.5.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.2.
 
 ## About Optics
 
@@ -67,16 +67,13 @@ To test several devices at once, start a separate `optics execute` process for e
 
 ### How do I run only one test?
 
-There's no command-line flag for it. List the test cases to run under `include:` in `config.yaml`, or the ones to skip under `exclude:`:
+Give its name with `--include`. Case does not matter, and `*` and `?` work as wildcards:
 
-`config.yaml`:
-
-```yaml
-include:
-  - Shopper can sign in
+```shell
+$ optics execute birch-tests --include "Shopper can sign in"
 ```
 
-Names match exactly, ignoring case. Suite Setup and Suite Teardown always run. See [Run only some test cases](https://optics-framework.org/docs/create/organise#run-only-some-test-cases).
+Suite Setup and Suite Teardown always run. You can also list names under `include:` and `exclude:` in `config.yaml`. See [Run only some test cases](https://optics-framework.org/docs/create/organise#run-only-some-test-cases) and the [CLI reference](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 
 ### Does Optics retry failed tests?
 
@@ -86,7 +83,7 @@ Before adding retries, look for the cause. Most flaky steps act before the scree
 
 ### Can I run the browser headless?
 
-Not with Playwright in 1.10.5. It ignores the `headless` setting and always opens a visible Chromium window. On a Linux machine without a display, such as a CI runner, run Optics under a virtual display: `xvfb-run optics execute my-project`.
+Yes. With Playwright, set `headless: true` under the driver's `capabilities`. See [Run in CI without a screen](https://optics-framework.org/docs/platforms/web#run-in-ci-without-a-screen).
 
 With Selenium, the browser runs wherever your Selenium server runs. A Selenium server in Docker runs the browser inside the container, so no window opens on your machine. See [Web](https://optics-framework.org/docs/platforms/web).
 

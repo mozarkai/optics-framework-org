@@ -31,18 +31,19 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `text_detection` | All disabled | OCR engines for finding elements by on-screen text. |
 | `image_detection` | All disabled | Engines for finding elements by image templates. |
 | `llm_models` | All disabled | The LLM for AI self-heal and the plain-English mode of `optics live`. |
+| `nl_agent` | See [nl_agent](#nl-agent) | Settings for the plain-English mode of `optics live`. |
 | `log_level` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR` or `CRITICAL`, any case. Unknown values become `INFO`. |
 | `file_log` | `false` | Writes `internal_logs.log` and `execution_logs.log` to the output folder. |
 | `log_path` | None | One file for both logs instead of two. Used only with `file_log: true`. |
 | `json_log` | `false` | Writes a JSON array of every test, module and keyword event to `logs.json` at the end of the run. |
 | `json_path` | None | Where to write the JSON events instead of `<output>/logs.json`. `~` is expanded. |
-| `console` | `true` | **Has no effect in 1.10.5.** Nothing reads it. Use `log_level` to control console output. |
+| `console` | `true` | **Has no effect.** Nothing reads it. Use `log_level` to control console output. |
 | `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. Relative paths are relative to the folder you run `optics` from. |
 | `include` | None | Run only these test cases. See [include and exclude](#include-and-exclude). |
 | `exclude` | None | Skip these test cases. |
 | `ai_self_heal` | `false` | Lets an LLM try to recover when an element can't be found. See [ai_self_heal](#ai-self-heal). |
 | `strict_element_match` | `false` | Turns off fuzzy and partial text matching. See [strict_element_match](#strict-element-match). |
-| `save_captures` | `true` | Whether `Capture Screenshot`, `Capture Pagesource` and `Get Screen Elements` write files. See [save_captures](#save-captures). |
+| `save_captures` | `true` | Whether Optics writes screenshots of steps and captures. See [save_captures](#save-captures). |
 | `halt_duration` | `0.1` | Seconds to wait after a keyword fails every fallback. It isn't a pause between steps. |
 | `event_attributes_json` | None | Path to a JSON file of event attributes. When it includes an `eventUrl`, events you label with `event_name` are sent there at the end of the session. |
 | `project_path` | The project folder | The CLI always sets this to the folder you pass, so leave it out. It only matters for the Python SDK. |
@@ -81,22 +82,23 @@ Enable one driver. `optics live` refuses more than one, and `optics doctor` warn
 |---|---|---|
 | `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps through an Appium server. |
 | `selenium` | `selenium` | Chrome or Firefox through a Selenium server or Grid. |
-| `playwright` | `playwright` | A local Chromium browser. No server needed. |
+| `playwright` | `playwright` | Chromium, Firefox or WebKit, on this computer or a remote browser. See [Playwright capabilities](#playwright-capabilities). |
 | `ble` | `ble` | Any device paired with a Bluetooth mouse-and-keyboard dongle. For devices with no automation access. |
 
 ### elements_sources
 
-Enable the sources that match your driver. We recommend all three for your driver: locators, page source and screenshots.
+Enable the sources that match your driver. We recommend the locator, page source and screenshot sources for your driver. With Appium, add `appium_web` to find elements in web pages.
 
 | Name | Needs driver | What it gives you |
 |---|---|---|
 | `appium_find_element` | `appium` | Finds elements by XPath, accessibility id and class. |
 | `appium_page_source` | `appium` | Searches the UI tree by XPath and text, with fuzzy matching. Lists interactive elements. |
 | `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. |
+| `appium_web` | `appium` | Finds `css=` and DOM XPath locators in Chrome and WebViews on Android, and in Safari and WebViews on iOS. Lists the page's interactive elements. It does not tap an element that another element covers. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS and link text. |
 | `selenium_page_source` | `selenium` | Searches the page HTML. Doesn't list interactive elements. |
 | `selenium_screenshot` | `selenium` | Screenshots for OCR and image matching. |
-| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=` and `text=` locators. |
+| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
 | `camera_screenshot` | Any | Frames from a webcam or a TCP frame server. Used with `ble`. |
@@ -123,6 +125,8 @@ Enable the sources that match your driver. We recommend all three for your drive
 
 Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. Use environment variables for keys, not `config.yaml`. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
 
+Each engine also takes `timeout_s` under `capabilities`: the seconds that one request can take, default `60`. A value that is not a positive number fails with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines).
+
 #### gemini
 
 | Setting | Default | What it does |
@@ -140,7 +144,7 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` in `capabilities` too, but warns when you use it.
+Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
 
 #### openai
 
@@ -182,7 +186,7 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
 | `region` | From the environment | The Bedrock or Vertex AI region. |
 | `project` | From the environment | The Vertex AI project. |
-| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. |
+| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. |
 | `max_tokens` | `4096` | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
@@ -191,6 +195,25 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
 | `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
 | `vertex` | Google Cloud application default credentials |
+
+The entry's `url`, if you set it, replaces the API address on all three platforms.
+
+### nl_agent
+
+Settings for the plain-English mode of `optics live`. They apply only when an `llm_models` entry is enabled.
+
+```yaml
+nl_agent:
+  vision: auto
+  max_steps: 15
+  escalation_model: ""
+```
+
+| Setting | Default | What it does |
+|---|---|---|
+| `vision` | `auto` | When Optics sends a screenshot with the screen elements. `auto` sends one when the element list is not sufficient, for example after a failed step. `always` and `never` do what they say. |
+| `max_steps` | `15` | The maximum number of steps for one instruction. It must be 1 or more. |
+| `escalation_model` | `""` | A stronger model for difficult steps, such as a retry after a failure. It uses the engine of the first enabled `llm_models` entry. Empty uses the same model for all steps. |
 
 ## Examples by platform
 
@@ -223,7 +246,7 @@ file_log: true
 json_log: true
 ```
 
-Before `optics execute`, Optics checks that the Appium server answers and that `adb devices` lists a device.
+Before `optics execute`, Optics checks that the Appium server answers. If the server is on this computer, it also checks that `adb devices` lists a device.
 **iOS**
 
 `config.yaml`:
@@ -259,17 +282,14 @@ driver_sources:
   - playwright:
       enabled: true                        # no url and no server
       capabilities:
-        browser: chromium                  # currently ignored, see the note below
-        headless: false                    # currently ignored
+        browser: chromium                  # or firefox, webkit
+        headless: false                    # true: no window
 elements_sources:
   - playwright_find_element: {enabled: true}
   - playwright_page_source:  {enabled: true}
   - playwright_screenshot:   {enabled: true}
 log_level: INFO
 ```
-
-**Note:**
-In 1.10.5 the Playwright driver ignores `browser`, `headless` and `viewport` under `capabilities`. It always opens a visible Chromium window at 1280×800, and waits up to 60 seconds for each page to load.
 
 Open your site with a module step such as `Launch App,https://birch.example`.
 
@@ -294,16 +314,56 @@ Selenium won't start with empty `capabilities` or without `browserName`. The fil
 
 ### Appium capabilities
 
-Optics reads only `platformName` and the app id; it passes every other capability to Appium unchanged. You can write any key with the `appium:` prefix, for example `appium:udid`.
+Optics reads `platformName`, the app id and `browserName`. It passes every other capability to Appium unchanged. You can write any key with the `appium:` prefix, for example `appium:udid`.
 
 | platformName | App id capability | Defaults Optics adds (your values win) |
 |---|---|---|
-| `Android` | `appPackage` and `appActivity` | `noReset`, `newCommandTimeout: 3600`, `forceAppLaunch`, `shouldTerminateApp`, `ignoreHiddenApiPolicyError` and a few others |
-| `iOS` | `bundleId` | The same mobile defaults, without `ignoreHiddenApiPolicyError` |
+| `Android` | `appPackage` and `appActivity` | `noReset`, `newCommandTimeout: 3600`, `forceAppLaunch`, `shouldTerminateApp`, `ignoreHiddenApiPolicyError`, `settings: {waitForIdleTimeout: 1000}` and a few others |
+| `iOS` | `bundleId` | The same mobile defaults without `ignoreHiddenApiPolicyError`, and `settings: {waitForIdleTimeout: 1}` |
 | `TizenTV` | `appPackage` | `newCommandTimeout: 3600`, `rcMode: remote`, `noReset: true` |
 | `LGTV` | `appId` | `newCommandTimeout: 600`, `rcMode: rc`, `useSecureWebsocket: true`, `autoExtendDevMode: false`, `noReset: true` |
 
 Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). To attach to an Appium session that's already running, add `appium:existingSessionId`. Optics starts a new session if it can't attach.
+
+**Idle wait.** Before each action, Appium waits until the app is idle. `waitForIdleTimeout` sets the limit: 1000 ms on Android and 1 s on iOS. Optics merges your `appium:settings` with its defaults key by key. Set `0` to turn off the wait:
+
+```yaml
+capabilities:
+  appium:settings:
+    waitForIdleTimeout: 0
+```
+
+**Web pages.** These defaults let `appium_web` read web pages quickly:
+
+| platformName | Defaults |
+|---|---|
+| `Android` | `ensureWebviewsHavePages: false`, `extractChromeAndroidPackageFromContextName: true` |
+| `iOS` | `includeSafariInWebviews: true`, `additionalWebviewBundleIds: ["*"]`, `webviewConnectRetries: 1`, `webviewAtomWaitTimeout: 5000` |
+
+The iOS defaults apply only to app sessions. With `browserName` or `autoWebview`, the session starts in the browser and Optics leaves them out. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web).
+
+### Playwright capabilities
+
+Optics reads each key from `capabilities` or from the top level of the `playwright` entry. [Web](https://optics-framework.org/docs/platforms/web) shows how to use them.
+
+| Capability | Default | What it does |
+|---|---|---|
+| `browser` | `chromium` | `chromium`, `firefox` or `webkit`. `optics setup` downloads only Chromium. |
+| `headless` | `false` | `true` starts the browser without a window. A remote browser ignores it. |
+| `viewport` | `{width: 1280, height: 800}` | The page size. It replaces the screen size of a `device`. |
+| `device` | None | A Playwright device name, such as `"iPhone 15"`. It sets the screen size, user agent and touch input. An unknown name fails with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). |
+| `storage_state` | None | A browser state file that Playwright saved, relative to the project folder. The run starts with its cookies and storage. See [Start signed in](https://optics-framework.org/docs/platforms/web#start-signed-in). |
+| `protocol` | `cdp` | How Optics connects to the browser in `url`: `cdp` (Chromium only) or `playwright`. See [Use a remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
+| `headers` | None | HTTP headers for the connection to a remote browser, as `{name: value}`. |
+| `context` | `new` | `existing` uses the remote browser's own context and open tab. You cannot use it with `device` or `storage_state`. |
+| `element_timeout_ms` | `10000` | The wait for an element before an action. |
+| `navigation_timeout_ms` | `60000` | The limit for a page load from Launch App or Go Back. |
+| `navigation_wait_until` | `domcontentloaded` | The load event that a page load waits for: `domcontentloaded`, `load`, `networkidle` or `commit`. |
+| `settle_timeout_ms` | `3000` | The wait for the page to stop changes before Optics reads it. `0` turns it off. |
+| `connect_timeout_ms` | `90000` | The limit for the connection to a remote browser. |
+| `action_timeout_ms` | `15000` | The limit for each other browser call, such as a key press or a screenshot. |
+
+Set `url` on the entry to connect to a remote browser instead of starting one. `${NAME}` in `url` or in a `headers` value is read from the environment. If the variable is not set, the run stops with E0501. `optics serve` and `optics mcp` refuse `${NAME}` and a `storage_state` file path.
 
 ## TV
 
@@ -396,20 +456,19 @@ The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or
 
 ## include and exclude
 
-Run a subset of test cases. There are no CLI flags for this.
+Run a subset of test cases. The [`--include` and `--exclude` flags](https://optics-framework.org/docs/reference/cli#pick-test-cases) do the same for one run and replace these keys.
 
 ```yaml
 include:
-  - Shopper can sign in
-  - Shopper can add Trail Runner 2 to the cart
-# or
+  - Shopper can*
 exclude:
   - Shopper can check out
 ```
 
-- Names match the `test_case` column exactly, ignoring case.
-- Set one of the two. Setting both fails with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters).
-- Test cases with "setup" or "teardown" in their names always run.
+- A name must match the full `test_case` name. Matching ignores case and extra spaces. `*` and `?` are wildcards.
+- You can set both. Optics applies `include` first, then removes the `exclude` matches.
+- Each name must match a test case. A name that matches nothing stops the run before it starts, with a suggestion for the name.
+- Suite Setup, Suite Teardown and the per-test setup and teardown always run. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 
 ## Logging
 
@@ -420,11 +479,16 @@ exclude:
 | `log_path` | None | Sends both logs to this one file. |
 | `json_log` | `false` | Writes `logs.json`: a list of events with name, status, timings and log lines for each test case, module and keyword. |
 | `json_path` | None | Writes the JSON events here instead. |
-| `console` | `true` | No effect in 1.10.5. |
+| `console` | `true` | No effect. |
 
 With `file_log: true` and no `execution_output_path`, Optics also writes a copy of both logs to `logs/` in the folder you ran `optics` from.
 
-Values you write with the `@:` prefix, such as `@:s3cret`, are masked as `****` in log files. See [Read results](https://optics-framework.org/docs/run/results).
+Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
+
+- Values you write with the `@:` prefix, such as `@:s3cret`.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key` or `apikey`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+
+See [Read results](https://optics-framework.org/docs/run/results).
 
 ## ai_self_heal
 
@@ -457,7 +521,13 @@ By default the page-source element sources (`appium_page_source`, `selenium_page
 save_captures: false
 ```
 
-When `false`, `Capture Screenshot`, `Capture Pagesource` and `Get Screen Elements` stop writing files. Optics still saves the screenshot it takes before each action, the annotated screenshots and the page source logs. `optics serve` always turns captures off.
+When `false`, Optics does not write:
+
+- the files from `Capture Screenshot`, `Capture Pagesource` and `Get Screen Elements`,
+- the screenshot before each action, the detection screenshots and the area-of-interest screenshots,
+- `failed_steps_elements.json`.
+
+Optics still writes the page source logs and the end-of-run screenshot. `optics serve` always turns captures off.
 
 ## Starter config
 

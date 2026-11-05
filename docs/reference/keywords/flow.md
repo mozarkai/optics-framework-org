@@ -9,17 +9,18 @@ Flow control keywords run other modules, repeat them, choose between them, and c
 ```csv
 module_name,module_step,param_1,param_2,param_3
 Checkout Flow,Execute Module,Sign In
-Checkout Flow,Run Loop,Add Product,product,Trail Runner 2|Pace Knit
+Checkout Flow,Run Loop,Add Product,${product},Trail Runner 2|Pace Knit
 Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 ```
 
 ## Rules for every flow keyword
 
 - **Targets are module names.** Execute Module, Run Loop and Condition run modules, not single keywords. Multi-word names are fine in CSV. In YAML, quote them: `"Add Product"`.
-- **Write the variable you create as a bare name.** Read Data, Evaluate, Date Evaluate and Run Loop take the name of a variable to write. Write `total`, not `${total}`. A `${total}` cell is replaced before the keyword runs, so the step fails if `total` doesn't exist yet. The log shows a harmless warning about the bare name.
+- **Write the variable you create as `${name}`.** Read Data, Evaluate, Date Evaluate and Run Loop take the name of a variable to write. Write `${total}`. Optics does not replace this cell before the keyword runs. A bare name such as `total` also works, but the log shows a warning.
+- **Dry runs know these variables.** `optics dry_run` counts a name that Read Data, Evaluate, Date Evaluate or `store_as` writes as defined.
 - **Values are text.** Every variable holds text. Compare with quoted literals: `${status} == 'ready'`, `${count} == '3'`. A numeric comparison such as `${count} > 3` fails in Condition. See [Compare numbers](#compare-numbers) for the workaround.
 - **Lists use pipes.** Separate values with `|`: `Trail Runner 2|Pace Knit`.
-- **Steps inside a target are stricter.** In a module run by Execute Module, Run Loop or Condition, write every parameter positionally, because `name=value` isn't recognized there. `${name}` uses only the first value, with no fallback to the next one. Any error inside is reported as error E0401.
+- **Steps inside a target are stricter.** In a module run by Execute Module, Run Loop or Condition, write every parameter positionally, because `name=value` isn't recognized there. Only [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as) works. `${name}` uses only the first value, with no fallback to the next one. Any error inside is reported as error E0401.
 
 Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, `optics live`, `optics serve` and [Python](https://optics-framework.org/docs/create/python).
 
@@ -56,7 +57,7 @@ Runs a module a number of times, or once for each value in one or more lists.
 |---|---|---|
 | `target` | Required | The module to run. |
 | then one of: | | |
-| `count` | | A whole number of times to run, 1 or more. |
+| `count` | | A whole number of times to run, 1 or more. Write the number itself. |
 | `variable`, `values`, … | | Pairs of a variable name and its list of values. Add as many pairs as you need. |
 
 `values` can be:
@@ -67,12 +68,12 @@ Runs a module a number of times, or once for each value in one or more lists.
 
 ```csv
 Fill Cart,Run Loop,Add Trail Runner,3
-Fill Cart,Run Loop,Add Product,product,Trail Runner 2|Pace Knit
-Fill Cart,Run Loop,Add Product,product,${featured},size,US 9|US 10
+Fill Cart,Run Loop,Add Product,${product},Trail Runner 2|Pace Knit
+Fill Cart,Run Loop,Add Product,${product},${featured},${size},US 9|US 10
 ```
 
 ```yaml
-- Run Loop "Add Product" product "Trail Runner 2|Pace Knit"
+- Run Loop "Add Product" ${product} "Trail Runner 2|Pace Knit"
 ```
 
 Inside the target module, use `${product}` to read the current value:
@@ -90,6 +91,9 @@ Good to know:
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
+
+**Common mistake:**
+A count from a variable, such as `Run Loop,Add Trail Runner,${n}`, fails with error E0403 "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number.
 
 ## Branch
 
@@ -131,7 +135,7 @@ Good to know:
 Condition compares text, so `${count} > 3` fails. Compute the comparison with [Evaluate](#evaluate) first, which does arithmetic, then test its `True` or `False` result:
 
 ```csv
-Shipping,Evaluate,free_shipping,${item_count} > 3
+Shipping,Evaluate,${free_shipping},${item_count} > 3
 Shipping,Condition,${free_shipping} == 'True',Expect Free Shipping,Expect Paid Shipping
 ```
 
@@ -143,7 +147,7 @@ Loads a value from a CSV or JSON file, or an environment variable, into a variab
 
 | Parameter | Default | What it does |
 |---|---|---|
-| `input_element` | Required | The variable to write. Write a bare name. |
+| `input_element` | Required | The variable to write, as `${name}`. |
 | `file_path` | Required | A `.csv` or `.json` file, or `ENV:NAME` for an environment variable. Relative paths start at the project folder. |
 | `query` | Empty | Which rows and columns to keep. See below. |
 
@@ -164,13 +168,13 @@ ben@birch.example,pw-ben,basic
 ```
 
 ```csv
-Load User,Read Data,gold_email,test_data/users.csv,tier == 'gold';select=email
-Load User,Read Data,ana_tier,test_data/users.csv,email == 'ana@birch.example';select=tier
-Load Token,Read Data,api_token,ENV:BIRCH_API_TOKEN
+Load User,Read Data,${gold_email},test_data/users.csv,tier == 'gold';select=email
+Load User,Read Data,${ana_tier},test_data/users.csv,email == 'ana@birch.example';select=tier
+Load Token,Read Data,${api_token},ENV:BIRCH_API_TOKEN
 ```
 
 ```yaml
-- Read Data gold_email test_data/users.csv tier=='gold';select=email
+- Read Data ${gold_email} test_data/users.csv tier=='gold';select=email
 ```
 
 After these steps, `${gold_email}` is `ana@birch.example` and `${ana_tier}` is `gold`.
@@ -191,17 +195,17 @@ Computes an expression and saves the result in a variable.
 
 | Parameter | Default | What it does |
 |---|---|---|
-| `param1` | Required | The variable to write. Write a bare name. |
+| `param1` | Required | The variable to write, as `${name}`. |
 | `param2` | Required | The expression to compute. |
 
 ```csv
-Cart,Evaluate,total,${price} * 2
-Cart,Evaluate,label,'free' if ${total} > 100 else 'paid'
-Cart,Evaluate,greeting,'Hello ' + '${first_name}'
+Cart,Evaluate,${total},${price} * 2
+Cart,Evaluate,${label},'free' if ${total} > 100 else 'paid'
+Cart,Evaluate,${greeting},'Hello ' + '${first_name}'
 ```
 
 ```yaml
-- Evaluate total "${price} * 2"
+- Evaluate ${total} "${price} * 2"
 ```
 
 Good to know:
@@ -218,7 +222,7 @@ Adds or subtracts days from a date and saves the result, formatted the way you c
 
 | Parameter | Default | What it does |
 |---|---|---|
-| `param1` | Required | The variable to write. Write a bare name. |
+| `param1` | Required | The variable to write, as `${name}`. |
 | `param2` | Required | The start date. |
 | `param3` | Required | `+N days`, `-N days`, `today` or `now`. |
 | `param4` | `%d %B` | The output format, such as `%Y-%m-%d`. |
@@ -234,12 +238,12 @@ The start date can be in any of these forms. They're tried in this order:
 | Year/month/day | `2026/10/24` |
 
 ```csv
-Delivery,Date Evaluate,delivery_date,${order_date},+5 days
+Delivery,Date Evaluate,${delivery_date},${order_date},+5 days
 Delivery,Assert Presence,${delivery_date},10
 ```
 
 ```yaml
-- Date Evaluate delivery_date ${order_date} "+5 days" "%d %B"
+- Date Evaluate ${delivery_date} ${order_date} "+5 days" "%d %B"
 ```
 
 With `order_date` set to `2026-10-10` in your elements file, `${delivery_date}` is `15 October`.
@@ -342,13 +346,13 @@ Sign In Every User,Sign In Everyone
 ```csv
 module_name,module_step,param_1,param_2,param_3,param_4,param_5
 Open Birch,Launch App,com.birch.shop
-Sign In Everyone,Run Loop,Sign In As,email,ana@birch.example|ben@birch.example,password,pw-ana|pw-ben
+Sign In Everyone,Run Loop,Sign In As,${email},ana@birch.example|ben@birch.example,${password},pw-ana|pw-ben
 Sign In As,Assert Presence,${email_field},15
 Sign In As,Enter Text,${email_field},${email}
 Sign In As,Enter Text,${password_field},${password}
 Sign In As,Press Element,${sign_in}
 Sign In As,Assert Presence,Welcome,20
-Sign In As,Read Data,tier,test_data/users.csv,email == ${email};select=tier
+Sign In As,Read Data,${tier},test_data/users.csv,email == ${email};select=tier
 Sign In As,Condition,${tier} == 'gold',Check Gold Badge
 Sign In As,Press Element,${sign_out}
 Check Gold Badge,Assert Presence,Gold member,10
@@ -376,7 +380,7 @@ How it works:
 
 - Run Loop runs `Sign In As` twice. It sets `email` and `password` to the next pair of values each time.
 - Steps in `Sign In As` are positional, because it runs inside Run Loop. `Assert Presence,Welcome,20` is correct there. `timeout_str=20` wouldn't be.
-- Read Data writes the bare name `tier`. Its query replaces `${email}` with the current email in quotes.
+- Read Data writes `${tier}`. Its query replaces `${email}` with the current email in quotes.
 - Condition compares `${tier}` with the quoted literal `'gold'`. For Ben the condition is false, so nothing runs and the step passes.
 - Inside the loop, `${email_field}` uses only its first value, the XPath. The `Email` fallback is used only by steps outside a loop.
 

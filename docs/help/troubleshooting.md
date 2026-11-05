@@ -56,7 +56,7 @@ No entry under `driver_sources` has `enabled: true`. Optics also prints this whe
 
 Optics finds files by their header row, not their names, and found no test cases file or no modules file.
 
-Check that the first line of each file is exactly right: `test_case,test_step` for test cases and `module_name,module_step,param_1,…` for modules. A spreadsheet app can add an invisible character to the first cell when it saves as "CSV UTF-8", so save as plain CSV. See [How Optics finds your files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files).
+Check the first line of each file: `test_case,test_step` for test cases and `module_name,module_step,param_1,…` for modules. Case does not matter. A spreadsheet app can add an invisible character to the first cell when it saves as "CSV UTF-8", so save as plain CSV. See [How Optics finds your files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files).
 
 ### "Cannot start" panel: "No Appium server reachable at …"
 
@@ -88,12 +88,6 @@ A YAML file with `test_cases:` at the top is recognized as a test cases file but
 
 Use `Test Cases:`, `Modules:` and `Elements:`, with that capitalization and spacing. See [Section names are exact](https://optics-framework.org/docs/create/yaml#section-names-are-exact).
 
-### Elements file loads no elements
-
-The header must start with exactly `Element_Name`. A file headed `element_name,element_id` is recognized as an elements file but loads nothing, so every `${name}` fails with "Element not found".
-
-Change the header to `Element_Name,Element_ID`. Extra value columns must also start with `Element_ID`, such as `Element_ID_text`. See [Define elements](https://optics-framework.org/docs/elements/define#write-elements).
-
 ### My config.yaml changes have no effect
 
 Optics ignores keys it doesn't know, so a typo such as `driver_source` is skipped without a warning. If your project folder holds more than one YAML file with `driver_sources` and `elements_sources`, `optics execute` uses the last one it finds, which may not be the one you edited.
@@ -107,8 +101,8 @@ Check the spelling against [config.yaml](https://optics-framework.org/docs/refer
 A step uses `${name}`, and no elements file defines `name`. The step fails before Optics looks at the screen.
 
 - Add a row for `name` to `test_data/elements.csv`, and check the spelling and case.
-- If a step creates the value while running, such as `Evaluate` or `Read Data`, add a placeholder row (`order_total,placeholder`) so `optics dry_run` accepts it.
-- If every name fails, check the elements header. See [Elements file loads no elements](#elements-header-case).
+- If an `Invoke API` `extract` creates the value, add a placeholder row (`access_token,placeholder`) so `optics dry_run` accepts it. Other keywords that write a variable need no row. See [Dry runs](https://optics-framework.org/docs/advanced/variables#dry-runs).
+- If every name fails, check that the elements file starts with `Element_Name,Element_ID` and that you saved it as plain CSV.
 
 ### `[E0201]` No valid strategies found
 
@@ -118,8 +112,15 @@ Optics looked for the element every way it could and didn't find it on the curre
 - If the element appears late, put `Assert Presence` before the step. Actions don't wait.
 - For text drawn inside images, enable a [text detection engine](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr) and a screenshot source.
 - Add fallback values, so a second way can take over when the first breaks.
+- Open `execution_output/failed_steps_elements.json`. It lists the elements that were on screen when the step failed.
 
 See [`E0201` and `X0201`](https://optics-framework.org/docs/reference/errors#e02-elements).
+
+### "OCR was not tried: no text_detection engine is configured"
+
+The step did not find the element in the UI tree. Optics did not read the screenshot, because no OCR engine is enabled.
+
+If the text is in the UI tree, fix the value. If the text is drawn inside an image, [turn on OCR](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr).
 
 ### A text value is treated as an XPath or CSS selector
 
@@ -182,23 +183,23 @@ Action keywords act on the screen as it is at that moment. They don't wait for a
 
 Put `Assert Presence` before the action, which waits up to 30 seconds by default: `Search,Assert Presence,${search_bar},15`. Use `Detect And Press` for pop-ups that may or may not appear. See [Action keywords don't wait](https://optics-framework.org/docs/reference/keywords/#action-keywords-dont-wait).
 
-### `${name}` is typed literally
-
-Optics substitutes `${name}` only when it fills the whole cell. `Hello ${name}` is typed exactly as written.
-
-Put the complete value in the elements file and use it on its own: `greeting,Hello Ava`, then `Enter Text,${message_field},${greeting}`. To build a value from parts, use [Evaluate](https://optics-framework.org/docs/reference/keywords/flow#evaluate), which substitutes inside expressions.
-
 ### Condition with numbers fails with `E0403`
 
 Condition compares values as text, so `${count} > 5` can't be evaluated.
 
 Compare with quoted values: `${count} == '7'` or `${status} == 'ready'`. For greater-than or less-than, compute the result with Evaluate first, then test it: see [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
 
-### Evaluate or Read Data fails when the target is `${x}`
+### "Element not found: first} ${last}"
 
-The first value of Evaluate, Date Evaluate and Read Data, and the variable names in Run Loop, name a variable to write. Written as `${total}`, Optics tries to read `total` first and fails with "Element not found: total".
+A cell that starts with `${` and ends with `}` holds more than one variable, such as `${first} ${last}`. Optics reads the whole cell as one name. The dry run does not find this.
 
-Write the name without `${}`: `Calc,Evaluate,total,${price} + 3`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
+Put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first. See [Variables](https://optics-framework.org/docs/advanced/variables#where-name-works).
+
+### "Expected an integer for loop count, got '${n}'"
+
+`Run Loop` does not read its count from a variable.
+
+Write the count as a number: `Run Loop,Add One Item,3`.
 
 ### `ValueError: invalid literal for int()`
 
@@ -208,9 +209,25 @@ Use whole numbers. To skip a parameter, name the next one instead of leaving a g
 
 ### Per-test Setup runs only around the first test case
 
-In 1.10.5, a test case named `Setup` or `Teardown` (without "suite") runs only before or after the first regular test case, not around each one.
+A test case named `Setup` or `Teardown` (without "suite") runs only before or after the first regular test case, not around each one.
 
 Use `Suite Setup` and `Suite Teardown`, which run once and work as expected. If each test needs a fresh start, open and close the app inside that test's own modules. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
+
+### Every step takes about 10 seconds on Appium
+
+Appium waits for the app to be idle before each step. An app with animations or a video is never idle, so each wait runs to its limit. Optics sets this limit to 1 second.
+
+To remove the wait, set it to 0 in the Appium capabilities:
+
+`config.yaml`:
+
+```yaml
+capabilities:
+  appium:settings:
+    waitForIdleTimeout: 0
+```
+
+See [Appium capabilities](https://optics-framework.org/docs/reference/config#appium-capabilities).
 
 ### A test step runs nothing
 
@@ -222,13 +239,7 @@ List modules in `test_cases.csv`, and put keywords inside modules in `modules.cs
 
 Assert Equality and Validate Screen return false on a mismatch but never fail a step.
 
-Use Assert Presence or Validate Element to check what's on screen. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
-
-### Screenshots are missing on Windows
-
-Some screenshot names contain a time with colons, such as `+05:30`. Windows doesn't allow colons in file names, so those images may not be saved. The run itself isn't affected.
-
-The screenshots Optics takes before each step use names without colons, so they're still saved. Use those and `junit_output.xml` to see what happened.
+To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
 
 ### Screenshots are missing from a custom output folder
 
@@ -332,54 +343,17 @@ Check each item in [Turn it on](https://optics-framework.org/docs/elements/self-
 
 ### A plain-English instruction stops before it's done
 
-Each instruction stops after 15 steps, after 3 failed steps in a row, or after repeated taps and swipes that don't get closer ("Repeated gesture/coordinate actions did not reach the goal").
+Each instruction stops after 15 steps, after 3 failed steps in a row, or after 3 taps, swipes or scrolls in a row that are not checked ("Repeated gesture/coordinate actions did not reach the goal"). It also stops when 4 actions in a row do not change the screen ("No progress: the screen did not change after repeated actions.").
 
 Break the goal into smaller instructions, and use the words shown on screen. See [Write goals the model can finish](https://optics-framework.org/docs/create/describe#write-goals-the-model-can-finish).
 
 ## Web and Playwright
-
-### "Object of type Locator is not JSON serializable"
-
-On Optics 1.10.5, Enter Text and Get Text fail in Playwright with this error. The fix ([pull request #600](https://github.com/mozarkai/optics-framework/pull/600)) ships in the next release.
-
-Until you upgrade, click the field and type in two steps:
-
-`modules/modules.csv`:
-
-```csv
-Sign In,Press Element,${email_field}
-Sign In,Enter Text Direct,ava@birch.shop
-```
-
-### The Playwright sample's "TC1 Verify Landing" fails
-
-On 1.10.5, the `playwright` sample checks for text that example.com no longer shows.
-
-Open `test_data/elements.csv` in the project and replace the `Heading` row with:
-
-`test_data/elements.csv`:
-
-```csv
-Heading,text=This domain is for use in documentation examples
-```
-
-### Playwright ignores `headless`, `browser` and `viewport`
-
-In 1.10.5, Playwright reads none of the settings under `capabilities`. It always opens a visible Chromium window at 1280×800.
-
-There's no workaround in config. On a Linux CI machine without a display, run Optics under a virtual display such as `xvfb-run optics execute my-project`.
 
 ### The Playwright browser isn't installed
 
 `optics doctor` shows ⚠️ on the `playwright browser` row, or Playwright fails to launch Chromium.
 
 Run `optics setup --install playwright` again. It downloads the Chromium build Playwright needs.
-
-### A password typed with `@:` shows the prefix
-
-Playwright types the `@:` prefix that masks secrets in logs, unlike Appium and Selenium.
-
-Don't use `@:` with Playwright. Use test accounts whose passwords are safe to appear in logs, and keep log files private.
 
 ## CI
 

@@ -56,7 +56,7 @@ An element source is a way for Optics to look at the screen: ask the app for an 
 
 ### Elements file
 
-An elements file is a CSV whose header starts with `Element_Name,Element_ID`, listing each element's name and values. The project template keeps it in `test_data/elements.csv`. See [Elements](https://optics-framework.org/docs/reference/files#elements).
+An elements file is a CSV whose header is `Element_Name,Element_ID`, in any case, listing each element's name and values. The project template keeps it in `test_data/elements.csv`. See [Elements](https://optics-framework.org/docs/reference/files#elements).
 
 ### Engine
 
@@ -88,7 +88,7 @@ Image detection finds an element by matching a small picture of it, called a tem
 
 ### Include and exclude
 
-Include and exclude are `config.yaml` lists that pick which test cases a run includes or skips, by name. Optics has no command-line flag for this. See [include and exclude](https://optics-framework.org/docs/reference/config#include-and-exclude).
+Include and exclude pick which test cases a run includes or skips, by name. Give them as `--include` and `--exclude` on the command line, or as lists in `config.yaml`. See [Run only some test cases](https://optics-framework.org/docs/create/organise#run-only-some-test-cases).
 
 ### Index
 
@@ -172,6 +172,10 @@ A session is one connection between Optics and a device or browser, from when th
 
 A step is one row in a module: a keyword plus the values it needs, such as `Enter Text,${search_bar},Trail Runner 2`. See [Write the steps as modules](https://optics-framework.org/docs/create/write#write-the-steps-as-modules).
 
+### store_as
+
+`store_as=name` is a cell that keeps the value a keyword returns, such as the text from Get Text. Later steps use it as `${name}`. See [Keep a value for later](https://optics-framework.org/docs/advanced/variables#keep-a-value-for-later).
+
 ### Suite
 
 A suite is all the test cases in one project, run together by `optics execute`. See [how to organize a suite](https://optics-framework.org/docs/create/organise).
@@ -204,7 +208,7 @@ The UI tree is the structure of everything an app or web page shows, with each e
 
 ### Variable
 
-A variable is a named value written as `${name}` in a step, defined in the elements file or created by a step such as `Evaluate`. Optics replaces it only when it fills a whole cell. See [Variables](https://optics-framework.org/docs/advanced/variables).
+A variable is a named value written as `${name}` in a step, defined in the elements file or created by a step such as `Evaluate`. Optics replaces it in a whole cell and inside other text. See [Variables](https://optics-framework.org/docs/advanced/variables).
 
 ## X
 

@@ -47,6 +47,7 @@
 - [Test Android apps](https://optics-framework.org/docs/platforms/android.md): Set up Appium and adb, then run your tests on an Android phone or emulator.
 - [Test iOS apps](https://optics-framework.org/docs/platforms/ios.md): Set up Appium with the XCUITest driver, then run your tests on an iOS simulator or device.
 - [Test websites](https://optics-framework.org/docs/platforms/web.md): Set up Playwright or Selenium, then run your tests in a browser.
+- [Test mobile websites and WebViews](https://optics-framework.org/docs/platforms/mobile-web.md): Test web pages in Chrome, Safari and in-app WebViews on a real phone, in the same session as the native app.
 - [Test TV apps](https://optics-framework.org/docs/platforms/tv.md): Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.
 - [Test production devices](https://optics-framework.org/docs/platforms/production.md): Test locked devices and live apps through a Bluetooth mouse and keyboard and a camera.
 

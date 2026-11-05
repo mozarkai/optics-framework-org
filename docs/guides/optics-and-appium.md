@@ -10,7 +10,7 @@ If you already run Appium, you keep your server, drivers, devices and capabiliti
 
 - **The Appium server.** You run it as before, locally or remotely. Set its address as `url` in `config.yaml`. A device farm works too, as long as you can reach its Appium server.
 - **The drivers.** UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs.
-- **Your capabilities.** Optics reads only `platformName` and the app id. It passes every other capability to Appium unchanged. See [Appium capabilities](https://optics-framework.org/docs/reference/config#appium-capabilities).
+- **Your capabilities.** Optics passes your capabilities to Appium. It adds a few defaults, such as a 1-second idle wait, and your own values replace them. See [Appium capabilities](https://optics-framework.org/docs/reference/config#appium-capabilities).
 - **Your inspector.** [Appium Inspector](https://github.com/appium/appium-inspector) still shows each element's id, text and XPath.
 - **Driver commands.** The Execute Script keyword runs Appium `mobile:` commands. See [Execute Script](https://optics-framework.org/docs/reference/keywords/actions#execute-script).
 
@@ -63,6 +63,10 @@ Optional [AI self-heal](https://optics-framework.org/docs/elements/self-heal) go
 ### An MCP server for AI agents
 
 `optics mcp` lets an AI agent such as Claude Code or Cursor drive the device through Optics keywords, then write the suite. See [Let your AI agent drive a real phone over MCP](https://optics-framework.org/docs/guides/ai-agent-phone).
+
+### Web pages without context switches
+
+In Appium, a test that enters a WebView or Chrome must switch contexts and back. Optics stays in the native context. A `css=` or DOM XPath locator finds the element in Chrome, Safari or a WebView, and the tap is native. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web).
 
 ### Results and error screens
 

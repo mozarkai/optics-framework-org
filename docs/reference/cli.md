@@ -2,7 +2,7 @@
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.10.5.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.2.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -14,7 +14,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.10.5` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -60,12 +60,12 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `gmail_web`, `playwright`, `youtube`. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
 
-In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web and Playwright Web. Press Enter on a blank answer to cancel.
+In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web, Playwright Web and Mobile Web. Press Enter on a blank answer to cancel.
 
 A blank project contains:
 
@@ -85,6 +85,7 @@ birch-tests/
 | `youtube` | YouTube on Android | Appium, EasyOCR, image templates. Shows `Condition`. |
 | `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. |
 | `playwright` | `https://example.com` | Playwright. Needs no device or server. |
+| `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
 
 Example:
 
@@ -116,7 +117,7 @@ optics configure [folder] [--edit]
 | `web-selenium` | Selenium server URL (`http://127.0.0.1:4444/wd/hub`) |
 | `web-playwright` | Browser (`chromium`), headless (no) |
 
-Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
+For `android` and `ios`, Optics also enables the `appium_web` element source. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
 
 **Warning:**
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform).
@@ -137,17 +138,17 @@ optics doctor [folder] [--check]
 
 | Argument | Default | What it does |
 |---|---|---|
-| `folder` | None | The project to validate. Without it, doctor checks your environment only and doesn't validate any config.yaml. |
+| `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. |
 | `--check` | Off | Exits with code 1 if any row is ❌. Use it in CI. |
 
-Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a `→` hint with the fix.
+Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a `→` hint with the fix. If the terminal cannot show emoji, doctor writes `OK`, `WARN`, `FAIL` and `->` instead.
 
 | Section | What it checks |
 |---|---|
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
-| Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. |
+| Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
 | Project | With a folder: config.yaml parses, exactly one driver is enabled, the driver's element sources are enabled, and the driver has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
 
 Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without `--check`, doctor always exits with 0.
@@ -172,7 +173,7 @@ optics setup [--install NAME [NAME ...]] [--list]
 | `--list` | Prints every engine and bundle you can install. Wins if you also pass `--install`. |
 | `--install` | Installs the named engines or bundles. |
 
-Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin a version with a standard specifier such as `appium==5.0.0` or `"easyocr>=1.7,<2.0"`.
+Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](https://optics-framework.org/docs/reference/engines#where-installs-are-refused).
 
@@ -183,7 +184,7 @@ $ optics setup --install appium easyocr
 $ optics setup --install web gemini
 ```
 
-Exit code 1 if a name is unknown, a version specifier is malformed (`appium=5.0.0`), or the install fails.
+Exit code 1 if a name is unknown, a version specifier is malformed (`appium=6.1.2`), or the install fails.
 
 ## `optics dry_run`
 
@@ -191,6 +192,7 @@ Checks a project for mistakes without running any step on a device.
 
 ```text
 optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
+               [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
 | Argument | Default | What it does |
@@ -198,17 +200,17 @@ optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. Leave the default. |
 | `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. |
+| `--include`, `--exclude` | All test cases | Checks only some test cases. See [Pick test cases](#pick-test-cases). |
 
 A dry run checks that:
 
 - Each test step names a module (or a keyword).
 - Each module step names a real keyword. A typo gets a suggestion: `Did you mean 'Press Element'?`
-- Each whole-cell `${name}` is defined in your elements files.
+- Each `${name}` is defined, as a whole cell or inside a longer value. An unknown name fails with `Variable '${name}' in '<value>' is not defined.`
+
+A dry run counts a variable as defined when an earlier step creates it: the first parameter of `Read Data`, `Evaluate` and `Date Evaluate`, and each `store_as=` name. Do not add placeholder rows for them.
 
 It doesn't run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium `capabilities`).
-
-**Common mistake:**
-Variables that a step creates while running, such as the target of `Evaluate` or `Read Data`, don't exist yet during a dry run. Declare them in elements.csv with a placeholder value, for example `order_total,placeholder`, so the dry run passes.
 
 The output and exit codes are the same as [`optics execute`](#optics-execute). Dry runs write `junit_output.xml` to `execution_output/` but no screenshots.
 
@@ -218,6 +220,7 @@ Runs every test case in a project on the real device, browser or app, and record
 
 ```text
 optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
+               [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
 | Argument | Default | What it does |
@@ -225,14 +228,47 @@ optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. We recommend the default. `pytest` is also accepted, but it needs the `pytest-cov` package installed. |
 | `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. Turn it off for plain CI logs. |
+| `--include` | All test cases | Runs only the test cases with these names. |
+| `--exclude` | None | Skips the test cases with these names. |
 
-There are no flags to pick tests or tags. To run a subset, use `include` or `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude).
+### Pick test cases
 
-What happens, in order:
+`--include` and `--exclude` work the same on `optics execute` and `optics dry_run`. Put the folder before them.
+
+```shell
+$ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can check out"
+```
+
+- Each flag takes one or more names. You can also give a flag more than once.
+- Matching ignores case and extra spaces, and must match the full name. `*` and `?` are wildcards.
+- You can use both flags. Optics applies `--include` first, then removes the `--exclude` matches.
+- Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
+- Either flag replaces `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
+
+Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 1:
+
+```terminal
+╭──────────────────────────────── Cannot start ────────────────────────────────╮
+│ include 'Shoper can sign in' matches no test case. Did you mean 'Shopper can │
+│ sign in' or 'Shopper can check out'?                                         │
+│                                                                              │
+│ Available test cases:                                                        │
+│   - Shopper can sign in                                                      │
+│   - Shopper can add a backpack                                               │
+│   - Shopper can check out                                                    │
+│                                                                              │
+│ Fix the names given via --include/--exclude; matching ignores case and       │
+│ accepts * and ? wildcards.                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+Optics also stops when a name matches only setup or teardown test cases, or when no test case is left to run.
+
+### How a run works
 
 1. Optics walks the whole folder and finds your files by their content (see [Project files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
-2. It loads the config and stops if no driver is enabled.
-3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL and, on Android, checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
+2. It loads the config and stops if no driver is enabled. Then it checks the test case selection.
+3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
 4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
 5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file.
 
@@ -255,12 +291,18 @@ When a step fails, a "Failure details" box names the test, the step and the reas
 Shopper can add a backpack → step 'Press Elemnt (//input[@id='login-button'])' — Keyword not found: Press Elemnt. Did you mean 'Press Element'? (run `optics list` to see all keywords)
 ```
 
-Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs).
+The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If every fallback value failed, it is `Keyword '<keyword>' failed after fallback attempts; last error: <error>`. If the error has a deeper cause, `(cause: …)` comes at the end:
+
+```terminal
+Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
+```
+
+Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs).
 
 | Exit code | When |
 |---|---|
 | 0 | Every test case passed. |
-| 1 | Any test case failed, required files are missing, no driver is enabled, the preflight failed, or the folder doesn't exist. |
+| 1 | Any test case failed, required files are missing, no driver is enabled, the test case selection is not valid, the preflight failed, or the folder doesn't exist. |
 
 On-screen errors found by error detection appear in `junit_output.xml` as a failing test case, but they don't change the exit code.
 
@@ -304,7 +346,7 @@ Type a keyword with its parameters, for example `press_element ${sign_in}` or `e
 | Tab / Shift+Tab | Completes keyword names. |
 | `${` | Suggests element names. |
 | Ctrl+K | Opens the keyword browser. |
-| Ctrl+N | Switches to plain-English mode. Needs an enabled `llm_models` entry. |
+| Ctrl+N | Switches to plain-English mode. Needs an enabled `llm_models` entry. Tune it with [`nl_agent`](https://optics-framework.org/docs/reference/config#nl-agent). |
 | Ctrl+X | Stops a running plain-English instruction. |
 | Ctrl+C | Quits. |
 
@@ -338,7 +380,7 @@ $ optics serve --port 8000
 Starts the MCP server, which lets an AI agent such as Claude or Cursor drive a device with Optics keywords.
 
 ```text
-optics mcp [--transport stdio|http] [--host HOST] [--port PORT]
+optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|full]
 ```
 
 | Flag | Default | What it does |
@@ -346,6 +388,7 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT]
 | `--transport` | `stdio` | `stdio` for agents that start the server themselves; `http` to serve at `http://<host>:<port>/mcp`. |
 | `--host` | `127.0.0.1` | The address to listen on. `http` only. |
 | `--port` | `8090` | The port to listen on. `http` only. |
+| `--toolset` | `core`, or `OPTICS_MCP_TOOLSET` | `core` gives the agent a small set of tools. `full` also adds one tool for each keyword. |
 
 It needs the `mcp` extra, which the install scripts include. With pip: `pip install "optics-framework[mcp]"`. The `all` bundle doesn't include it. Without the extra, the command exits with code 1 and prints the install command. See [MCP server](https://optics-framework.org/docs/reference/mcp).
 
@@ -445,7 +488,10 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_AI_SELF_HEAL` | `serve`, `mcp` | Set to `1`, `true`, `yes` or `on` to turn on AI self-heal for every session by default. |
 | `OPTICS_LLM_PROVIDER` | `serve`, `mcp` | The LLM engine for self-heal: `gemini` (default), `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | `serve`, `mcp` | The model for self-heal. Gemini defaults to `gemini-2.5-flash`; `openai` and `anthropic` need one. |
-| `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | `mcp` | Set to `1`, `true`, `yes` or `on` to expose the `press_by_coordinates` and `press_by_percentage` tools. |
+| `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | `mcp` | Set to `1`, `true`, `yes` or `on` to let the agent use `press_by_coordinates`, `press_by_percentage` and `swipe`. |
+| `OPTICS_MCP_TOOLSET` | `mcp` | The default for `--toolset`: `core` or `full`. Any other value stops the server. |
+| `OPTICS_MCP_SESSION_IDLE_S` | `mcp` | Seconds before an unused session ends. Default `900`. `0` keeps sessions open. |
+| `OPTICS_MCP_CALL_TIMEOUT_S` | `mcp` | Seconds that one tool call can take. Default `100`. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
 | `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. |
@@ -453,8 +499,9 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. Set `api_key_env` in config.yaml to read another variable. |
 | `OPENAI_BASE_URL` | `openai` engine | The server to call when the entry has no `url`, such as OpenRouter or a local Ollama. |
 | `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. |
+| Any name in `${NAME}` | Playwright | A `${NAME}` in the Playwright `url` or in a `headers` value is read from the environment. If it is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). |
 
-`Read Data` can also read any variable with `ENV:<NAME>`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
+`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
 
 ## Install scripts
 

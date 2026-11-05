@@ -125,7 +125,8 @@ Creating the order through the API takes a second. Going through the checkout sc
 - **Responses must be JSON** when an endpoint has `expected_result`. Other responses fail the step.
 - **Check status codes with an assertion.** `expected_status` and `json_schema` are accepted in the file but not checked yet. Check a field in the body instead.
 - **Every request times out after 30 seconds.** `request.timeout` isn't used yet.
-- **Keep credentials out of the file.** Put them in variables and read them from the environment with `Read Data,api_password,ENV:BIRCH_API_PASSWORD`. See [Variables](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
+- **Keep credentials out of the file.** Put them in variables and read them from the environment with `Read Data,${api_password},ENV:BIRCH_API_PASSWORD`. See [Variables](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
+- **API logs are not masked.** `api_details.log` and `api_details.har` show requests and responses in clear text, secrets included. Values from `extract` are not hidden in other logs either.
 - **The top-level key must be `api:`.** A file starting with `apis:` is recognised but loads nothing.
 
 ## See also

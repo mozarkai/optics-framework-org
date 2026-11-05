@@ -13,7 +13,7 @@ This page sets out the facts so you can pick the one that fits your apps. Maestr
 | Licence | Apache 2.0. No paid edition. | Apache 2.0 for the open-source CLI. [Maestro Cloud](https://docs.maestro.dev/maestro-cloud) is a hosted service that needs an account. |
 | Android | Emulators and real phones, through Appium | Emulators and physical devices |
 | iOS | Simulators and signed real devices, through Appium | Simulators. Its README says physical iOS devices aren't supported yet. |
-| Web | Playwright (Chromium) or Selenium (Chrome or Firefox) | Beta, Chromium only |
+| Web | Playwright (Chromium, Firefox, WebKit, local or remote, with phone emulation) or Selenium (Chrome or Firefox). Real Chrome and Safari on phones through Appium. | Beta, Chromium only |
 | TV | Android TV, Samsung Tizen and LG webOS | Android TV remote keys in `pressKey`. Tizen and webOS aren't listed as supported platforms. |
 | Locked devices | Bluetooth mouse and keyboard plus a camera, no software on the device | Not covered in its docs |
 | How it drives the app | Through a driver you run: Appium, Playwright, Selenium or a BLE dongle | A single binary that drives the app through the accessibility layer, with no separate drivers. The CLI needs Java 17 or newer. |
@@ -62,7 +62,7 @@ Maestro finds elements through the accessibility layer, with [selectors](https:/
 
 Maestro [waits automatically](https://docs.maestro.dev/get-started/what-is-maestro) for content and animations, so you rarely add sleeps.
 
-In Optics, assertions such as Assert Presence wait up to their timeout, but action keywords don't wait. Put an assertion before a step that needs a new screen. See [Action keywords don't wait](https://optics-framework.org/docs/reference/keywords/#action-keywords-dont-wait).
+In Optics, assertions such as Assert Presence wait up to their timeout. On Playwright, actions also wait up to 10 seconds for their element. On Appium and Selenium, actions do not wait, so put an assertion before a step that needs a new screen. See [Action keywords don't wait](https://optics-framework.org/docs/reference/keywords/#action-keywords-dont-wait).
 
 ## Creating tests and AI agents
 
@@ -73,7 +73,7 @@ Optics has four ways to create a test, and each writes the same files:
 - [Describe it](https://optics-framework.org/docs/create/describe) in plain English, and an AI model drives the app.
 - [Delegate it](https://optics-framework.org/docs/create/agent) to your AI agent through `optics mcp`.
 
-The `optics mcp` server gives the agent a tool for each keyword and resources for the screenshot, the elements on screen and the project format. The agent then writes a suite for `optics execute`. See the [MCP server reference](https://optics-framework.org/docs/reference/mcp).
+The `optics mcp` server gives the agent ten tools to look, tap, type, scroll and check, plus `run_keyword` for every other keyword. Each action returns what changed on screen. After the run, the agent reads the recorded steps as a ready suite for `optics execute`. See the [MCP server reference](https://optics-framework.org/docs/reference/mcp).
 
 Maestro has [Maestro Studio](https://docs.maestro.dev/maestro-studio), a desktop app for building and debugging flows visually. Its [MCP server](https://docs.maestro.dev/get-started/maestro-mcp) ships inside the CLI. It lets the agent inspect the screen, take screenshots, run inline YAML and submit runs to Maestro Cloud, and it includes Maestro Viewer, a web view of the device.
 

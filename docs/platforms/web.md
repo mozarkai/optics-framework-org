@@ -25,30 +25,18 @@ driver_sources:
   - playwright:
       enabled: true                          # no url and no server needed
       capabilities:
-        browser: chromium                    # ignored on 1.10.5: always Chromium
-        headless: false                      # ignored on 1.10.5: always a visible window
-        # viewport: {width: 1280, height: 800}  # ignored on 1.10.5: always 1280×800
+        browser: chromium                    # or firefox, webkit
+        headless: false                      # true: no window
+        # viewport: {width: 1280, height: 800}
 elements_sources:
   - playwright_find_element: {enabled: true}
   - playwright_page_source:  {enabled: true}
   - playwright_screenshot:   {enabled: true}
 ```
 
-**Note:**
-On Optics 1.10.5, Playwright ignores `browser`, `headless` and `viewport` under `capabilities`. It always opens a visible Chromium window at 1280×800. You can leave the keys in place for when they take effect.
+`optics setup` downloads only Chromium. For Firefox or WebKit, run `python -m playwright install firefox` or `webkit` in the Optics environment.
 
 There's no server to start, so `optics execute` skips its preflight check for Playwright.
-
-**Enter Text and Get Text fail in browsers on Optics 1.10.5:**
-On 1.10.5, Enter Text and Get Text fail in Playwright with `Object of type Locator is not JSON serializable`. Both are fixed in the next release ([pull request #600](https://github.com/mozarkai/optics-framework/pull/600)). Until you upgrade, click the field, then type into it:
-
-`modules/modules.csv`:
-
-```csv
-module_name,module_step,param_1,param_2
-Sign in,Press Element,${username_field}
-Sign in,Enter Text Direct,standard_user
-```
 
 **Selenium**
 
@@ -109,7 +97,7 @@ We recommend putting the URL in the Launch App step. Then the same module works 
 
 ## Write steps for the web
 
-Here is a full sign-in test for the Sauce Labs demo store. It works with both drivers on Optics 1.10.5:
+Here is a full sign-in test for the Sauce Labs demo store. It works with both drivers:
 
 `test_data/elements.csv`:
 
@@ -127,10 +115,8 @@ backpack_add_button,//button[@id='add-to-cart-sauce-labs-backpack']
 module_name,module_step,param_1,param_2
 Open the store,Launch App,https://www.saucedemo.com
 Open the store,Assert Presence,Swag Labs,15
-Sign in,Press Element,${username_field}
-Sign in,Enter Text Direct,standard_user
-Sign in,Press Element,${password_field}
-Sign in,Enter Text Direct,secret_sauce
+Sign in,Enter Text,${username_field},standard_user
+Sign in,Enter Text,${password_field},secret_sauce
 Sign in,Press Element,${login_button}
 Sign in,Assert Presence,Products,10
 Add the backpack,Press Element,${backpack_add_button}
@@ -152,35 +138,109 @@ Shopper can add a backpack,Add the backpack
 |---|---|---|---|
 | XPath | `//input[@id='user-name']` | Yes, also with `xpath=` | Yes. Leave out `xpath=`. |
 | Visible text | `Products`, `text=Add to cart` | Yes | Yes |
-| Bare id or name | `user-name` | No | Yes. Tried as an id, name, class or link text when no text matches. |
+| Bare id or name | `user-name` | No. Write `id=user-name`. | Yes. Tried as an id, name, class or link text when no text matches. |
 | CSS selector | `#user-name`, `.inventory_item_name`, `css=button[data-test='login-button']` | Yes | No |
+| Attribute prefix | `id=user-name`, `data-test=login-button`, `label=Username`, `placeholder=Username`, `role=button` | Yes | No |
 | Image | `cart_icon.png` | With image matching on | With image matching on |
 
 We recommend XPath for web elements. It's the one kind of value that works the same way with both drivers, so you can switch drivers without editing elements.
 
-To see an element's id or attributes, right-click it in Chrome and choose **Inspect**. [Define elements](https://optics-framework.org/docs/elements/define) explains each kind of value.
+On Playwright, actions wait up to 10 seconds for the element to show. When a locator matches several elements, the log names the count and the one Optics used. Add `index=` or a more specific locator to pick another.
 
-**Assertions skip CSS selectors:**
-Assert Presence and Assert Visibility only check text, XPath and image values, even on Playwright. A CSS value such as `#user-name` is skipped without an error. Use visible text or an XPath in assertions.
+To see an element's id or attributes, right-click it in Chrome and choose **Inspect**. [Define elements](https://optics-framework.org/docs/elements/define) explains each kind of value.
 
 ## Press keys
 
 | Driver | How to press Enter | Other keys |
 |---|---|---|
-| Playwright | `Press Keycode,Enter` | `Tab`, `Escape`, `Backspace`, `Delete`, `Space`, `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, and other [Playwright key names](https://playwright.dev/docs/api/class-keyboard#keyboard-press) |
+| Playwright | `Press Keycode,Enter` or `Enter Text Using Keyboard,<enter>` | `Tab`, `Escape`, `Backspace`, `Delete`, `Space`, `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, and other [Playwright key names](https://playwright.dev/docs/api/class-keyboard#keyboard-press) |
 | Selenium | `Enter Text Using Keyboard,<enter>` | `<tab>`, `<backspace>`, `<space>`, `<escape>` |
 
 Press Keycode isn't supported on Selenium. The keys go to whichever field has focus, so press the field first.
 
-## Run in CI without a screen
+## Emulate a phone
 
-On Optics 1.10.5, Playwright always opens a visible window, even when you set `headless: true`. On a Linux CI machine with no display, run Optics under a virtual display:
+Set `device` to a [Playwright device name](https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/server/deviceDescriptorsSource.json). The page gets that phone's screen size, user agent and touch input:
 
-```shell
-$ xvfb-run optics execute my-web-tests
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        browser: chromium     # webkit for an iPhone, to get Safari's engine
+        device: "iPhone 15"
 ```
 
-With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments. They replace the arguments Optics adds, so keep the ones you need:
+An emulated phone is still a desktop browser. To test the real Chrome or Safari on a phone, see [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web).
+
+## Start signed in
+
+Sign in once, save the browser state to a file, and every run starts signed in. Sign in by hand in the window that opens, then close it:
+
+```shell
+$ python -m playwright open --save-storage=auth.json https://www.saucedemo.com
+```
+
+Then point `storage_state` at the file. The path is relative to the project folder:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        storage_state: auth.json
+```
+
+**Warning:**
+The file holds live session cookies. Do not commit it to version control.
+
+## Use a remote browser
+
+Set `url` to a browser's endpoint, and Optics connects to that browser instead of starting one. You do not need to download a browser.
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      url: "wss://grid.example.com/session"
+      capabilities:
+        protocol: cdp                 # or playwright
+        headers:
+          Authorization: Bearer ${GRID_TOKEN}
+```
+
+| `protocol` | Connects to |
+|---|---|
+| `cdp` (default) | A Chrome DevTools Protocol endpoint, such as Browserless or Chrome started with `--remote-debugging-port=9222` (`url: "http://127.0.0.1:9222"`). Chromium only. |
+| `playwright` | A Playwright server, such as `npx playwright run-server`, BrowserStack or LambdaTest. The server's Playwright version must match. |
+
+`${NAME}` in `url` or in a header is read from that environment variable when the browser starts, so your credentials stay out of the suite. If the variable is not set, the run stops and names it.
+
+Optics opens a new context in the remote browser. To use the browser's own context and open tab instead, for example to use a profile that is signed in, set `context: existing`.
+
+## Timeouts
+
+All values are in milliseconds, under `capabilities`:
+
+| Capability | Default | Limits |
+|---|---|---|
+| `element_timeout_ms` | `10000` | The wait for an element before an action |
+| `navigation_timeout_ms` | `60000` | Page loads from Launch App and Go Back |
+| `settle_timeout_ms` | `3000` | The wait for the page to stop changes before Optics reads it. `0` turns it off. |
+| `connect_timeout_ms` | `90000` | The connection to a remote browser |
+| `action_timeout_ms` | `15000` | Each other browser call, such as a key press or a screenshot |
+
+`navigation_wait_until` sets the load event that a page load waits for: `domcontentloaded` (default), `load`, `networkidle` or `commit`.
+
+## Run in CI without a screen
+
+With Playwright, set `headless: true`. With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments. They replace the arguments Optics adds, so keep the ones you need:
 
 `config.yaml`:
 
@@ -199,16 +259,17 @@ driver_sources:
 
 ## If it isn't working
 
-- **"Object of type Locator is not JSON serializable".** Enter Text or Get Text ran in Playwright on 1.10.5. Use Press Element, then Enter Text Direct. See [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting#locator-not-serializable).
 - **The Playwright browser isn't installed.** Run `optics setup --install playwright` again. `optics doctor` shows a ✅ for `playwright browser` once Chromium is downloaded.
 - **"Selenium capabilities not found in config".** Add `browserName: chrome` or `browserName: firefox` under `capabilities`.
 - **"Cannot start" with "No Selenium/WebDriver server reachable".** Start the server, and check that `url` points to it.
 - **Swipe fails on Selenium.** Selenium has no Swipe. Use Scroll, which moves one screen in any direction.
-- **A step acts before the page loads.** Actions don't wait. Put `Assert Presence` on something from the new page before you act on it.
-- **A password typed in Playwright starts with `@:`.** Playwright doesn't strip the secret prefix. Leave it off for Playwright.
+- **A step acts before the page loads.** Selenium actions do not wait. Put `Assert Presence` on something from the new page before you act on it.
+- **"Unknown device".** The `device` name is not a Playwright device. Copy the name exactly, with its capitals and spaces.
+- **A connect timeout with a remote browser.** The `protocol` does not match the provider. Try the other value.
 
 ## See also
 
+- [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web)
 - [Write your first test](https://optics-framework.org/docs/get-started/first-test)
 - [Define elements](https://optics-framework.org/docs/elements/define)
 - [Run tests in CI](https://optics-framework.org/docs/run/ci)

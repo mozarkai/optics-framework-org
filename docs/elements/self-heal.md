@@ -46,7 +46,7 @@ If the AI engine isn't installed or the key is missing, Optics logs a warning an
 When a step that finds an element fails, Optics gives the model:
 
 - the step that failed and the element it was looking for,
-- a screenshot of the screen, and the UI tree if there is one,
+- a screenshot and a list of the elements on screen, each with a reference such as `e7` that the model can name. The UI tree is sent only when that list is empty or leaves elements out,
 - the steps that ran just before.
 
 The model can take up to five actions to finish the step, using only six keywords: Press Element, Enter Text, Scroll, Swipe By Percentage, Press Keycode and Press By Percentage. Each action goes through Optics' normal ways of finding elements. If the step is done within five actions, it passes. If not, it fails with the original error.

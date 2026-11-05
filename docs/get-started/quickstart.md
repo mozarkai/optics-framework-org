@@ -28,7 +28,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.10.5
+Optics Framework 1.11.2
 ```
 
 ### Create a project
@@ -60,66 +60,54 @@ When Optics asks **Run your first test now?**, answer yes. You can also run it y
 $ optics execute my-optics-project
 ```
 
-A browser window opens, visits example.com, looks for some text and closes. On Optics 1.10.5 this first run fails, and that's worth seeing: it shows you how Optics reports a failure.
+A browser window opens, visits example.com, looks for some text and closes. Every step passes:
 
 ```terminal
 Test Suite
-├── Playwright Suite Setup                               |      1.54s |    PASS
-│   └── Open Example Page                                |      1.54s |    PASS
-│       └── Launch App (https://example.com)             |      1.54s |    PASS
-├── TC1 Verify Landing                                   |      7.38s |    FAIL
-│   └── Verify Example Page                              |      7.38s |    FAIL
-│       └── Validate Element (text=Example Domain)       |      7.17s |    FAIL
-└── Playwright Suite Teardown                            |      0.14s |    PASS
-    └── Close Browser                                    |      0.13s |    PASS
-        └── Close And Terminate App                      |      0.13s |    PASS
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Total Test Cases: 3 | Passed: 2 | Failed: 1                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭────────────────────────────── Failure details ───────────────────────────────╮
-│ TC1 Verify Landing → step 'Validate Element (text=Example Domain)' — Keyword │
-│ 'Validate Element' failed after fallback attempts                            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
-
-The tree shows where the run broke: the test case `TC1 Verify Landing`, its module `Verify Example Page`, and the step `Validate Element`. **Failure details** names the step and the value it looked for, `text=Example Domain`. Optics tried every way it knows to find that text, and the page doesn't show it: example.com dropped its "Example Domain" heading after 1.10.5 shipped.
-
-### Fix the element and run again
-
-Steps refer to things on screen by name, and the names live in one file, so the fix is one line. Open `my-optics-project/test_data/elements.csv` and change the `Heading` row to text the page does show:
-
-`test_data/elements.csv`:
-
-```csv
-Element_Name,Element_ID
-Heading,text=This domain is for use in documentation examples
-```
-
-Run it again:
-
-```shell
-$ optics execute my-optics-project
-```
-
-Every step passes:
-
-```terminal
-Test Suite
-├── Playwright Suite Setup                               |      1.39s |    PASS
-│   └── Open Example Page                                |      1.39s |    PASS
-│       └── Launch App (https://example.com)             |      1.39s |    PASS
+├── Playwright Suite Setup                               |      3.03s |    PASS
+│   └── Open Example Page                                |      3.03s |    PASS
+│       └── Launch App (https://example.com)             |      3.03s |    PASS
 ├── TC1 Verify Landing                                   |      0.12s |    PASS
 │   └── Verify Example Page                              |      0.12s |    PASS
 │       └── Validate Element (text=This domain is for... |      0.12s |    PASS
-└── Playwright Suite Teardown                            |      0.10s |    PASS
-    └── Close Browser                                    |      0.10s |    PASS
-        └── Close And Terminate App                      |      0.10s |    PASS
+└── Playwright Suite Teardown                            |      0.06s |    PASS
+    └── Close Browser                                    |      0.06s |    PASS
+        └── Close And Terminate App                      |      0.06s |    PASS
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │ Total Test Cases: 3 | Passed: 3 | Failed: 0                                  │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The next release ships the corrected sample. On a newer version the first run passes, and you can skip this step.
+### Break the test on purpose
+
+This step is optional. It shows you how Optics reports a failure. Open `my-optics-project/test_data/elements.csv` and change the `Description` row to text that the page does not show:
+
+`test_data/elements.csv`:
+
+```csv
+Element_Name,Element_ID
+Description,text=Welcome to Example
+```
+
+Run the test again. This time it fails:
+
+```terminal
+├── TC1 Verify Landing                                   |     10.74s |    FAIL
+│   └── Verify Example Page                              |     10.74s |    FAIL
+│       └── Validate Element (text=Welcome to Example)   |     10.01s |    FAIL
+...
+│ Total Test Cases: 3 | Passed: 2 | Failed: 1                                  │
+╭────────────────────────────── Failure details ───────────────────────────────╮
+│ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
+│ Keyword 'Validate Element' failed after fallback attempts; last error:       │
+│ Code.E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR   │
+│ was not tried: no text_detection engine is configured.                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+The tree shows where the run stopped: the test case `TC1 Verify Landing`, its module `Verify Example Page`, and the step `Validate Element`. **Failure details** gives the step, the value it looked for and the last error. Optics waited for the text, and the page did not show it. The OCR note tells you that Optics did not also read the screenshot, because no [OCR engine](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr) is configured.
+
+Change the `Description` row back to its original text. Run the test again, and every step passes.
 
 ## What just happened
 
@@ -141,11 +129,11 @@ Open `modules/modules.csv` in any editor or spreadsheet app. Each row is one ste
 ```csv
 module_name,module_step,param_1,param_2
 Open Example Page,Launch App,https://example.com
-Verify Example Page,Validate Element,${Heading}
+Verify Example Page,Validate Element,${Description}
 Close Browser,Close And Terminate App
 ```
 
-`${Heading}` is a name defined in `elements.csv`. Steps refer to things on screen by name, so when the page changes you update one line in `elements.csv` instead of every test.
+`${Description}` is a name defined in `elements.csv`. Steps refer to things on screen by name, so when the page changes you update one line in `elements.csv` instead of every test.
 
 ## Testing a phone app instead
 

@@ -22,7 +22,7 @@ Starts the app or browser under test, or brings the app to the front.
 
 | Parameter | Default | What it does |
 |---|---|---|
-| `app_identifier` | Empty | Appium: the Android package or iOS bundle id. Playwright and Selenium: the URL to open. Empty uses the app from your config. |
+| `app_identifier` | Empty | Appium: the Android package or iOS bundle id, or a URL or deep link. Playwright and Selenium: the URL to open. Empty uses the app from your config. |
 | `app_activity` | Empty | Appium on Android: the activity to start. Selenium: the browser name, `chrome` or `firefox`. |
 | `event_name` | Empty | Label for a timed event. See [Event names](https://optics-framework.org/docs/reference/keywords/#event-names). |
 
@@ -39,9 +39,10 @@ Open Birch Web,Launch App,https://birch.example
 Good to know:
 
 - On Appium, Launch App starts a session if none is running. If a session is already running and you give an identifier, it brings that app to the front.
-- With no parameters, Launch App uses the app, URL and browser from your [config](https://optics-framework.org/docs/reference/config).
+- On Appium, a value that contains `://` opens as a URL or deep link. A web address opens in the device browser. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web).
+- With no parameters, Launch App uses the app, URL and browser from your [config](https://optics-framework.org/docs/reference/config). On Playwright, it opens the browser and no page.
 - On Selenium, `app_identifier` and `app_activity` apply only when Launch App starts the session. Later calls reopen the configured URL.
-- On Playwright, the browser is always Chromium in a visible 1280×800 window. The `browser`, `headless` and `viewport` capabilities are currently ignored.
+- On Playwright, a second Launch App opens the URL in the same browser. The `browser`, `headless`, `viewport` and `device` capabilities set the browser. See [Web](https://optics-framework.org/docs/platforms/web#emulate-a-phone).
 - The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.
 
 ### Start Appium Session
@@ -142,12 +143,12 @@ App Info,Get App Version,com.birch.shop
 Good to know:
 
 - On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.
-- The CSV and YAML runner can't store the version in a variable. The value is returned over `optics serve`, MCP and [Python](https://optics-framework.org/docs/create/python).
+- To keep the version in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
 - Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing `app_package` fails the step.
 
 ### Get Driver Session Id
 
-Returns the id of the current driver session, or nothing when no session is running.
+Returns the id of the current driver session.
 
 This keyword takes no parameters.
 
@@ -157,7 +158,8 @@ App Info,Get Driver Session Id
 
 Good to know:
 
-- The CSV and YAML runner discards the id. It's useful from Python, `optics serve` and MCP.
+- To keep the id in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
+- On Playwright, it returns nothing, so `store_as` fails. Selenium and the BLE driver do not support it, and the step fails.
 
 ### Initialise Setup
 

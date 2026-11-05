@@ -139,6 +139,7 @@ TVs have no touch screen, so touch and typing keywords fail with **E0105** ("not
 - Swipe, Swipe By Percentage, Swipe From Element, Swipe Until Element Appears
 - Scroll, Scroll From Element, Scroll Until Element Appears
 - Enter Text, Enter Text Direct, Enter Text Using Keyboard, Enter Number, Clear Element Text, Get Text
+- Go Back. Use `Press Keycode,BACK` instead.
 
 These still work: Launch App, Press Keycode, Assert Presence, Assert Visibility, Validate Element, Validate Screen, Is Element, Capture Screenshot, Sleep, Execute Script, the flow keywords, and Close And Terminate App.
 

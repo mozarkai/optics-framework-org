@@ -30,7 +30,7 @@ Close Birch,Close And Terminate App
 Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so `Birch Suite Setup` works too. Setup and teardown always run, even when you [select which tests run](#run-only-some-test-cases).
 
 **Per-test Setup and Teardown:**
-Test cases named just **Setup** or **Teardown** are meant to run around every test case. In Optics 1.10.5 they only wrap the first test case, so don't rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as `Sign In` is above.
+Test cases named just **Setup** or **Teardown** are meant to run around every test case. They wrap only the first test case, so do not rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as `Sign In` is above.
 
 Avoid "setup" and "teardown" in ordinary test names for the same reason: a test called *Setup wizard works* is treated as the per-test setup.
 
@@ -79,7 +79,13 @@ Optics also reads files inside `execution_output/`. Keep stray CSV or YAML files
 
 ## Run only some test cases
 
-There's no command-line flag for this. List the test cases to run, or to skip, in `config.yaml`:
+Name the test cases to run, or to skip, on the command line. Wildcards `*` and `?` work, and case does not matter:
+
+```shell
+$ optics execute birch-tests --include "shopper can*" --exclude "Shopper can pay with a gift card"
+```
+
+For a fixed selection, list the names in `config.yaml` instead. A flag replaces these lists for that run:
 
 `config.yaml`:
 
@@ -87,16 +93,11 @@ There's no command-line flag for this. List the test cases to run, or to skip, i
 include:
   - Shopper can sign in
   - Shopper can search
-```
-
-`config.yaml`:
-
-```yaml
 exclude:
   - Shopper can pay with a gift card
 ```
 
-Names match exactly, ignoring case. Use `include` or `exclude`, not both. Suite Setup and Suite Teardown always run.
+Optics applies `include` first, then removes the `exclude` matches. Suite Setup and Suite Teardown always run. A name that matches no test case stops the run before it starts. [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases) gives the full rules.
 
 ## Run the same suite on different devices
 

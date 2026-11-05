@@ -59,7 +59,9 @@ A step that is exactly a module name runs that module.
 
 ### Named values
 
-`name=value` sets one parameter by name, like `timeout_str=10` above. Quote the value if it contains spaces: `event_name="tap sign in"`.
+`name=value` sets one parameter by name, like `timeout_str=10` above. Quote the value if it contains spaces: `event_name="tap sign in"`. A first value that starts with `text=`, `css=` or `xpath=` is a locator, not a named value: `Enter Text text=Email ava@birch.shop`.
+
+`store_as=name` keeps the value that the keyword returns: `Get Text ${price_label} store_as=price`. See [Keep a value for later](https://optics-framework.org/docs/advanced/variables#keep-a-value-for-later).
 
 ### Expressions with = in them
 
@@ -76,7 +78,7 @@ Quoted values without `=` are fine, such as `"Go Home"`.
 
 ### Module names as values
 
-When a keyword takes a module name, such as `Run Loop` or `Execute Module`, quote names that contain spaces: `Run Loop "Search One" term "trail runner|pace knit"`.
+When a keyword takes a module name, such as `Run Loop` or `Execute Module`, quote names that contain spaces: `Run Loop "Search One" ${term} "trail runner|pace knit"`.
 
 ### Elements
 

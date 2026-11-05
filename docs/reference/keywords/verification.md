@@ -23,7 +23,7 @@ Home,Assert Presence,Welcome|Trail Runner 2|Pace Knit,20,all
 ```
 
 **Common mistake:**
-Separate elements with `|`, never commas. Don't put spaces around the pipe, and don't use `${name}` inside a pipe list: `${a}|${b}` searches for the literal text `${a}`. To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
+Separate elements with `|`, never commas. Don't put spaces around the pipe. In a pipe list such as `Welcome|${b}`, each variable gives only its first value. A list that starts and ends with a variable, such as `${a}|${b}`, fails with "Element not found". To reuse a list, store the whole `Welcome|Trail Runner 2` as the value of one element and pass `${home_markers}`.
 
 ## Assertions
 
@@ -55,8 +55,10 @@ Good to know:
 
 - The timeout parameter is called `timeout_str`, not `timeout`. `timeout=20` is passed as the text "timeout=20" and fails the step. Write `20` positionally or `timeout_str=20`.
 - "Present" means the element is in the app's UI tree, even if it's scrolled off screen. On Android, the UI tree usually leaves out off-screen items. To include them, set `appium:settings: {allowInvisibleElements: true}` in your [config](https://optics-framework.org/docs/reference/config).
-- Elements are checked in groups: text first, then XPaths, then images. Each group gets the full timeout. With `rule=any`, a text group that isn't found fails the step before the XPaths are tried. Keep one kind of locator per assertion when you use `any`.
-- CSS selectors, `id:` locators and class names are skipped. If every element is one of those, the step passes without checking anything. Use text or an XPath.
+- Elements are checked in groups: text and CSS first, then XPaths, then images. Each group gets the full timeout. With `rule=any`, a text group that isn't found fails the step before the XPaths are tried. Keep one kind of locator per assertion when you use `any`.
+- In a group, every element source checks every element in each round, about every half second. A match from any source counts. OCR and image matching run last, at most every 2 seconds, and only when the screen changed.
+- When no text detection engine is configured, a miss ends with "OCR was not tried: no text_detection engine is configured."
+- `id:` locators and class names are skipped. If every element is one of those, the step passes without checking anything. Use text, CSS or an XPath.
 - In Python the parameter is `timeout`, its default is 60 seconds, and there's no `fail` parameter.
 
 ### Assert Visibility
@@ -81,9 +83,9 @@ Home,Assert Visibility,${promo_banner},10
 
 Good to know:
 
-- On Appium, Optics checks that the element is rendered on screen. On Selenium and Playwright, only OCR and image matching can check visibility, so you need [text or image detection](https://optics-framework.org/docs/elements/text-and-images) configured. Without it, the step fails with "No strategies found".
+- On Appium and Playwright, Optics checks that the element is on screen. On Selenium, only OCR and image matching can check visibility, so you need [text or image detection](https://optics-framework.org/docs/elements/text-and-images) configured. Without it, the step fails with "No strategies found".
 - OCR and image matches always count as visible, because they come from a screenshot.
-- The same grouping and CSS caveats as Assert Presence apply.
+- The same grouping caveats as Assert Presence apply.
 
 ### Validate Element
 
@@ -132,20 +134,50 @@ Good to know:
 - Validate Screen never fails a step. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.
 - From Python, `optics serve` and MCP it returns true or false.
 
+### Assert Text
+
+Fails unless the text of an element, or the value of a web field, is the expected text within the timeout.
+
+| Parameter | Default | What it does |
+|---|---|---|
+| `element` | Required | The element to read: text, an XPath or a CSS selector. |
+| `expected` | Required | The text to expect. |
+| `timeout` | `10` | Seconds to wait. Decimals are allowed. |
+| `event_name` | Empty | Label for a timed event, recorded only when the step passes. |
+
+```csv
+Cart,Assert Text,${cart_count},2
+Cart,Assert Text,${cart_total},${price},5
+```
+
+```yaml
+- Assert Text ${cart_count} 2
+```
+
+Good to know:
+
+- Optics reads the element about every half second until the text is the same as `expected`. The comparison is exact and case-sensitive. Spaces at the start and end are ignored.
+- Wrong text at the timeout fails with error E0401, such as `Element 'css=h3' shows 'Checkboxes' but expected 'Radio Buttons'.` The next value of `${name}` is not tried.
+- An element that is never found fails with error E0201, so Optics tries the next value of `${name}`.
+- An element found only by OCR or image fails at once with error E0401.
+- With an `@:` prefix on `expected`, both texts show as `****` in the error.
+- AI self-heal does not cover Assert Text.
+
 ### Is Element
 
-Checks that an element is visible, invisible, enabled or disabled.
+Checks that an element is visible, invisible, enabled, disabled, checked or unchecked.
 
 | Parameter | Default | What it does |
 |---|---|---|
 | `element` | Required | The element to check. |
-| `element_state` | Required | `visible`, `invisible`, `enabled` or `disabled`. |
+| `element_state` | Required | `visible`, `invisible`, `enabled`, `disabled`, `checked` or `unchecked`. |
 | `timeout` | Required | Seconds to wait. Used for `visible` and `invisible` only. |
 | `event_name` | Empty | Label for a timed event. |
 
 ```csv
 Checkout,Is Element,${place_order},enabled,5
 Checkout,Is Element,${loading_spinner},invisible,15
+Checkout,Is Element,${terms_checkbox},checked,5
 ```
 
 ```yaml
@@ -156,8 +188,13 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled` and `disabled` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
-- You must give a timeout, even for `enabled` and `disabled`.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree, by XPath or native text. An element found only by OCR or image fails the step.
+- On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts for checked.
+- Another state fails with error E0403.
+- You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
+
+**CSS and DOM XPath on mobile web:**
+On web pages on Appium, Assert Text fails for a `css=` or DOM XPath locator. The `enabled`, `disabled`, `checked` and `unchecked` states of Is Element also fail. Until the fix ships, use the HTML id or the visible text. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web#locators-for-web-pages).
 
 ### Assert Equality
 
@@ -170,7 +207,7 @@ Compares two values as text, after trimming spaces. It never fails the step.
 | `event_name` | Empty | Label for a timed event, recorded only when the values match. |
 
 ```csv
-Cart,Evaluate,total,${price} * 2
+Cart,Evaluate,${total},${price} * 2
 Cart,Assert Equality,${total},240
 ```
 
@@ -180,13 +217,13 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch returns false but doesn't fail the test. To fail on a wrong value, check the text on screen with Assert Presence instead.
+- A mismatch returns false but doesn't fail the test. To fail on wrong text on screen, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 
 ## Capture and inspect
 
-These keywords save what's on screen to the run's output folder. See [Results](https://optics-framework.org/docs/run/results). The CSV and YAML runner can't store what they return. The return value reaches you over `optics serve`, MCP and [Python](https://optics-framework.org/docs/create/python).
+These keywords save what's on screen to the run's output folder. See [Results](https://optics-framework.org/docs/run/results). To keep what they return in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as). Capture Screenshot returns the image as base64 text, and Capture Pagesource returns JSON.
 
 ### Capture Screenshot
 
@@ -237,7 +274,7 @@ Lists the elements on screen that you can tap or type into, and saves the list a
 | Parameter | Default | What it does |
 |---|---|---|
 | `filter_config` | Empty | Which elements to list: `all`, `interactive`, `buttons`, `inputs`, `images` or `text`. Empty lists all. |
-| `compact` | `false` | `true` returns a short form of each element: label, class, bounds and actions. |
+| `compact` | `false` | `true` returns a short form of each element: label, class, bounds and actions. On the web, `loc` is a locator that matches only that element, and `offscreen` marks an element that is scrolled out of view. |
 
 ```csv
 Debug,Get Interactive Elements,buttons

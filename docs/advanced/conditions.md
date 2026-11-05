@@ -67,11 +67,11 @@ Because values are compared as text, `${count} > 5` fails. Compute the compariso
 
 ```csv
 module_name,module_step,param_1,param_2,param_3
-Check Cart,Evaluate,cart_is_big,${count} > 5
+Check Cart,Evaluate,${cart_is_big},${count} > 5
 Check Cart,Condition,${cart_is_big} == 'True',Offer Free Shipping
 ```
 
-`Evaluate` puts values into the expression without quotes, so `${count} > 5` works there and stores `True` or `False`. Declare `cart_is_big,placeholder` in your elements file for dry runs.
+`Evaluate` puts values into the expression without quotes, so `${count} > 5` works there and stores `True` or `False`.
 
 ## Run one module from another
 
@@ -96,7 +96,7 @@ Modules run by `Condition`, `Execute Module` and [`Run Loop`](https://optics-fra
 - **`name=value` parameters aren't available.** Give values in order: `Assert Presence,Picked for you,5`, not `timeout_str=5`.
 - Their steps don't appear separately in the run tree. A failure message names the step that failed.
 
-If a branch needs fallbacks, give it its own test case instead and choose which test cases run with `include` and `exclude` in `config.yaml`.
+If a branch needs fallbacks, give it its own test case instead and choose which test cases run with [`--include` and `--exclude`](https://optics-framework.org/docs/create/organise#run-only-some-test-cases).
 
 ## See also
 

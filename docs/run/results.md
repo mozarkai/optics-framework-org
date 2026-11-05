@@ -13,6 +13,7 @@ birch-tests/execution_output/
 ├── 2026-10-09T14-02-11-…-press_element_element_detection_result.jpg
 ├── 2026-10-09T14-02-15-…-end_of_run.jpg         # the last screen
 ├── page_sources_log.xml                          # the UI tree, captured during the run
+├── failed_steps_elements.json                    # the elements on screen when a step failed
 ├── internal_logs.log                             # with file_log: true
 ├── execution_logs.log                            # with file_log: true
 └── logs.json                                     # with json_log: true
@@ -21,21 +22,23 @@ birch-tests/execution_output/
 | File | When it's written | Use it to |
 |---|---|---|
 | `junit_output.xml` | Every run | Show results in CI. Standard JUnit XML that GitHub Actions, GitLab, Jenkins and others read. |
-| `…pre_<keyword>.jpg` | Before each step that finds an element | See what was on screen when the step started. |
-| `…_detection_result.jpg` | When Optics found an element by position | See exactly what Optics found, boxed in green. |
-| `…_with_aoi.jpg` | When a step uses an [area of interest](https://optics-framework.org/docs/elements/area-of-interest) | Check the area covers the right part of the screen. It's drawn in blue. |
+| `…pre_<keyword>.jpg` | Before each step that finds an element, with `save_captures: true` | See what was on screen when the step started. |
+| `…_detection_result.jpg` | When Optics found an element by position, with `save_captures: true` | See exactly what Optics found, boxed in green. |
+| `…_with_aoi.jpg` | When a step uses an [area of interest](https://optics-framework.org/docs/elements/area-of-interest), with `save_captures: true` | Check the area covers the right part of the screen. It's drawn in blue. |
 | `…end_of_run.jpg` | At the end of the run | See where the app was left. |
-| `page_sources_log.xml` or `.html` | When the UI tree is read | Find the right XPath or text for an element. |
+| `page_sources_log.xml` or `.html` | When the UI tree is read. Web pages go to `.html`. | Find the right XPath or text for an element. |
+| `failed_steps_elements.json` | When a step fails, with `save_captures: true` | See each element on the screen of the failed step, with its label and bounds. |
 | `internal_logs.log`, `execution_logs.log` | With `file_log: true` | Read every attempt Optics made, including which ways of finding an element failed. |
 | `logs.json` | With `json_log: true` | Feed results into your own dashboards. |
 | `detected_errors_<id>.json` | When an [error screen](https://optics-framework.org/docs/run/error-detection) was found | See which error definition matched. |
 
 ## Investigate a failure
 
-1. **Read the Failure details box** in the terminal. It names the test case, the step and the reason.
-2. **Open the last `pre_…` screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
-3. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
-4. **Reproduce it in `optics live`.** Run the steps before the failure, then try the failing step with different values until one works. See [Record a test](https://optics-framework.org/docs/create/record).
+1. **Read the Failure details box** in the terminal. It names the test case, the step and the reason. `last error:` gives the error of the last fallback value, and `(cause: …)` gives the root cause.
+2. **Open `failed_steps_elements.json`** to see the elements on the screen when the step failed. On a web page, each element has a `loc` locator that you can copy into your elements file.
+3. **Open the last `pre_…` screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
+4. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
+5. **Reproduce it in `optics live`.** Run the steps before the failure, then try the failing step with different values until one works. See [Record a test](https://optics-framework.org/docs/create/record).
 
 ## Turn on more logging
 

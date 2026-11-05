@@ -14,7 +14,7 @@ A dry run reads every file and checks that:
 
 - every test step names a module or keyword that exists,
 - every keyword in every module exists, with a suggestion when you mistype one,
-- every `${name}` is defined in an elements file.
+- every `${name}` is defined in an elements file or by an earlier step, such as `Evaluate`, `Read Data` or `store_as`. This includes a `${name}` inside a longer value.
 
 It doesn't tap, type or open anything, so it's quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled.
 
@@ -24,7 +24,7 @@ It doesn't tap, type or open anything, so it's quick and safe to run before ever
 $ optics execute birch-tests
 ```
 
-Before the run, Optics checks that the target is reachable: for Appium, that the server answers and (on Android) that a device is connected; for Selenium, that the server answers. If not, it stops with a message saying what to start. Playwright needs no check.
+Before the run, Optics checks that the target is reachable: for Appium, that the server answers and, for a local server on Android, that a device is connected; for Selenium, that the server answers. If not, it stops with a message saying what to start. Playwright needs no check.
 
 Then it runs **Suite Setup**, each test case in order, and **Suite Teardown**, and prints a live tree:
 
@@ -59,37 +59,41 @@ CI systems use this to mark a build as passed or failed.
 
 ## Choose which test cases run
 
-List test cases to run, or to skip, in `config.yaml`. Names match exactly, ignoring case:
+Name the test cases to run with `--include`, or the ones to skip with `--exclude`:
 
-`config.yaml`:
-
-```yaml
-include:
-  - Shopper can sign in
+```shell
+$ optics execute birch-tests --include "shopper can*" --exclude "Shopper can check out"
 ```
 
-Use `include` or `exclude`, not both. Suite Setup and Suite Teardown always run. There's no command-line option for this, so a common pattern in CI is a small config per job. See [Organise a suite](https://optics-framework.org/docs/create/organise#run-the-same-suite-on-different-devices).
+- Matching ignores case. `*` and `?` are wildcards.
+- You can use both flags. Optics applies `--include` first.
+- Suite Setup and Suite Teardown always run.
+- A name that matches no test case stops the run before it starts. The message suggests the correct name.
+
+`optics dry_run` takes the same flags. To keep a selection for every run, put `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude). The flags replace them for one run.
 
 ## Options
 
 | Option | What it does |
 |---|---|
 | `--no-use-printer` | Print plain log output instead of the live tree. Useful when a CI log viewer garbles the tree. |
+| `--include NAME ...` | Run only these test cases. |
+| `--exclude NAME ...` | Skip these test cases. |
 | `--runner pytest` | Run the suite through pytest instead of Optics' own runner. Most projects don't need this. |
 
 To skip the reachability check, for example when the server is behind a proxy the check can't see, set `OPTICS_SKIP_PREFLIGHT=1`.
 
 ## How long steps wait
 
-Action keywords act on the screen as it is. They don't wait for it to change. Checks wait:
+On Appium and Selenium, action keywords act on the screen as it is. They don't wait for it to change. On Playwright, an action waits up to 10 seconds for its element (`element_timeout_ms`). Checks wait:
 
 | Keyword | Waits up to |
 |---|---|
-| `Assert Presence`, `Assert Visibility` | 30 seconds |
-| `Validate Element` | 10 seconds |
+| `Assert Presence`, `Assert Visibility`, `Validate Screen` | 30 seconds |
+| `Validate Element`, `Assert Text` | 10 seconds |
 | `Detect And Press` | 30 seconds, then carries on without failing |
 
-Pass a different time as the second value: `Assert Presence,Welcome,60`. Put a check after any step that loads a new screen, so the next action doesn't run too early.
+Pass a different time as the second value: `Assert Presence,Welcome,60`. For `Assert Text`, the time is the third value. Put a check after any step that loads a new screen, so the next action doesn't run too early.
 
 ## See also
 
