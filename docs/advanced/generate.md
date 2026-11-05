@@ -65,7 +65,7 @@ $ pytest test_generated.py
 - **Flow-control keywords** (Run Loop, Condition, Read Data, Evaluate, Invoke API and others) and a few more, such as Select Dropdown Option, aren't converted. Steps that use them are left out of the generated code silently. Check the output against your modules.
 - **`store_as` cells** are passed to the method as plain text, such as `get_text(..., 'store_as=price')`, which breaks the call. Use the return value instead. See [Use Optics from Python](/docs/create/python).
 - **`${name}` inside other text** is written as typed: `'Hi ${first}!'`.
-- **A `${name}` that only exists during the run**, such as a value from `store_as` or Evaluate, stops `optics generate` with "Element 'name' not found in elements".
+- **Every `${name}` comes from the elements file.** A suite that sets values during the run, with Evaluate, Date Evaluate or `store_as`, runs as it is with `optics execute`.
 - **Suite Setup and Suite Teardown** become ordinary tests.
 - **Image templates** are copied only if they're in an `input_templates/` folder at the project's top level.
 

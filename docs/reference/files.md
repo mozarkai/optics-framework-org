@@ -95,10 +95,8 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 |---|---|---|
 | `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
 | `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Meant to run before each test. It runs only before the first test case. |
-| `teardown` without `suite` | Per-test teardown | Meant to run after each test. It runs only after the first test case. |
-
-We recommend `Suite Setup` and `Suite Teardown`, which work as expected. Avoid per-test `Setup` and `Teardown` until this is fixed; open and close the app inside each test case's own modules if you need that.
+| `setup` without `suite` | Per-test setup | Before each test case. |
+| `teardown` without `suite` | Per-test teardown | After each test case. |
 
 - A failing setup doesn't stop the test cases after it.
 - The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
@@ -152,14 +150,10 @@ Parameter rules:
 
 - **Empty cells are dropped**, and the values after them move left. You can't skip a parameter by leaving its cell blank. Use a named parameter instead.
 - **Named parameters** are written `name=value`, for example `index=0` or `timeout_str=20`. They work only when `name` is a real parameter of that keyword. Anything else, such as `text=Sign in` or `css=#search`, stays a positional value.
-- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!`, is replaced with its first value. An unknown name fails the step with [E0403](/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
+- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!` or `${first} ${last}`, is replaced with its first value. An unknown name fails the step with [E0403](/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
 - **Locators first.** If a keyword's first parameter is `element`, a first value that starts with `text=`, `css=` or `xpath=` is the element. `Enter Text,text=Name,Ava` types `Ava` into the element `text=Name`.
 - **store_as.** Add `store_as=<name>` to a step to save the keyword's result as `${name}` for later steps and test cases. Lists and dictionaries are saved as JSON. See [Store a result](/docs/reference/keywords/#store-as).
 - Values starting with `/`, `//` or `(` are always positional, so XPaths are never mistaken for named parameters.
-
-:::mistake
-A cell can start with `${`, end with `}` and hold more than one variable, such as `${first} ${last}`. This cell fails at run time with `Element not found`, but `dry_run` passes. Until the fix ships, put text before the first variable or after the last one, or build the value with `Evaluate` first.
-:::
 
 In YAML, a step is one string. The keyword name is matched first, and the rest is split on spaces. Wrap a value with spaces in quotes: `"Trail Runner 2"`. Wrap multi-word module names you pass as parameters in quotes too: `Run Loop "Add To Cart" 3`.
 
@@ -283,7 +277,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
-**YAML quoting.** A quoted value that contains `=` keeps its quotes. Write conditions without spaces instead: `Condition ${size}=='9' "Pick Size" "Show Error"`.
+**YAML quoting.** Optics removes the quotes around a value, also when the value contains `=`: `Condition "${size} == '9'" "Pick Size" "Show Error"`.
 
 ## Outputs
 

@@ -190,29 +190,17 @@ Condition compares values as text, so `${count} > 5` can't be evaluated.
 
 Compare with quoted values: `${count} == '7'` or `${status} == 'ready'`. For greater-than or less-than, compute the result with Evaluate first, then test it: see [Compare numbers](/docs/reference/keywords/flow#compare-numbers).
 
-### "Element not found: first} ${last}" {#two-variables-one-cell}
-
-A cell that starts with `${` and ends with `}` holds more than one variable, such as `${first} ${last}`. Optics reads the whole cell as one name. The dry run does not find this.
-
-Put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first. See [Variables](/docs/advanced/variables#where-name-works).
-
-### "Expected an integer for loop count, got '${n}'" {#loop-count-variable}
-
-`Run Loop` does not read its count from a variable.
-
-Write the count as a number: `Run Loop,Add One Item,3`.
-
 ### `ValueError: invalid literal for int()` {#invalid-literal-int}
 
 A parameter that must be a whole number got something else. Two causes are common: a timeout or count with a decimal point, such as `2.5`, and an empty cell. Empty cells are dropped, so the values after them shift left into the wrong parameter.
 
 Use whole numbers. To skip a parameter, name the next one instead of leaving a gap: `Press Element,${sign_in},index=1`.
 
-### Per-test Setup runs only around the first test case {#per-test-setup}
+### A test runs as setup or teardown {#per-test-setup}
 
-A test case named `Setup` or `Teardown` (without "suite") runs only before or after the first regular test case, not around each one.
+A test case with "setup" or "teardown" in its name, such as *Setup wizard works*, runs before or after every other test case.
 
-Use `Suite Setup` and `Suite Teardown`, which run once and work as expected. If each test needs a fresh start, open and close the app inside that test's own modules. See [Setup and teardown](/docs/reference/files#setup-and-teardown).
+Remove those words from the name. See [Setup and teardown](/docs/reference/files#setup-and-teardown).
 
 ### Every step takes about 10 seconds on Appium {#appium-slow-steps}
 
@@ -234,11 +222,11 @@ A test case step that names a keyword instead of a module passes without doing a
 
 List modules in `test_cases.csv`, and put keywords inside modules in `modules.csv`.
 
-### Assert Equality never fails {#assert-equality}
+### Validate Screen never fails {#validate-screen}
 
-Assert Equality and Validate Screen return false on a mismatch but never fail a step.
+Validate Screen returns false when it finds nothing, but it does not fail the step.
 
-To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](/docs/reference/keywords/#keywords-that-never-fail-a-step).
+To fail on a missing element, use Assert Presence. To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](/docs/reference/keywords/#keywords-that-never-fail-a-step).
 
 ### Screenshots are missing from a custom output folder {#output-folder-missing}
 

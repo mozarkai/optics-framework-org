@@ -90,11 +90,8 @@ Good to know:
 - With several lists, the loop runs as many times as the shortest list.
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
+- The count can be a variable: `Run Loop,Add Trail Runner,${n}`.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
-
-:::mistake
-A count from a variable, such as `Run Loop,Add Trail Runner,${n}`, fails with error E0403 "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number.
-:::
 
 ## Branch
 
@@ -129,7 +126,7 @@ Good to know:
 - A module condition really runs its steps. Use one that only checks, such as a module with a single Assert Presence.
 - If no condition is true and there's no else target, the step passes and nothing runs.
 - If the target module fails, the step fails.
-- In YAML, write the expression without spaces: `${payment}=='card'`. A quoted expression that contains `=` keeps its quotes and fails.
+- In YAML, quote an expression that contains spaces: `"${payment} == 'card'"`.
 
 ### Compare numbers
 
@@ -186,7 +183,7 @@ Good to know:
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
 - **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
-- In YAML, write filters without spaces.
+- In YAML, quote a filter that contains spaces: `"role == 'admin';select=email"`.
 
 ### Evaluate
 
@@ -252,7 +249,7 @@ Good to know:
 - Only days work. `+1 week` fails with error E0403. Put a space between the number and `days`.
 - `today` and `now` don't read the clock. They keep the start date as it is, which is useful to reformat a date.
 - An ambiguous date such as `03/04/2026` is read as March 4.
-- Use a variable name that has no value yet, and don't add it to your elements file. If the name already has a value, Date Evaluate adds the new date after it, and `${name}` keeps giving the old value. For the same reason, don't reuse the name inside a loop.
+- The new date replaces the earlier value of the variable, so you can use the same name in a loop.
 - Common format codes are `%d` day, `%m` month number, `%B` month name, `%b` short month name and `%Y` year.
 
 ### Invoke API
