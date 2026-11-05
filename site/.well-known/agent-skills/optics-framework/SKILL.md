@@ -19,30 +19,32 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
 - config.yaml: https://optics-framework.org/docs/reference/config.md
 - CLI: https://optics-framework.org/docs/reference/cli.md
 - Error codes: https://optics-framework.org/docs/reference/errors.md
+- Mobile web (Chrome, Safari, WebViews): https://optics-framework.org/docs/platforms/mobile-web.md
 
 ## Drive a device or browser over MCP
 
-1. `start_session` with `driver` (`appium`, `playwright`, `selenium` or `ble`), `url` and
-   `capabilities`. Keep the returned `session_id`; every other tool needs it.
-   - Web: `driver: "playwright"`, `capabilities: {"headless": false}`, then
-     `launch_app` with `app_identifier: "<url>"`.
+1. `start_session` with `driver` (`appium`, `playwright`, `selenium` or `ble`), `url`,
+   `capabilities` and, to open something at once, `app`. It returns the screen as rows with
+   refs: `e4 input "Login" [tap] #login-button`. With one session open, `session_id` is optional.
+   - Web: `driver: "playwright"`, `capabilities: {"headless": true}`, `app: "<url>"`.
+     Phone emulation: `capabilities: {"device": "Pixel 7"}`.
    - Mobile and TV: an Appium server must already be running (default
      `http://127.0.0.1:4723`); the device goes in the capabilities (`udid`, `deviceName`, ...).
-2. Look before you act: read `optics://session/{session_id}/elements` or call
-   `get_interactive_elements`, and take a `screenshot`. Read `/source` when you need XPaths.
-3. Act with the keyword tools (`press_element`, `enter_text`, `swipe`, `assert_presence`, ...).
-   Pass a locator (`xpath=...`, `text=...`, an id) or a label from the elements list. Prefer a
-   web element's `loc` value when it has one. Do not tap by coordinates.
-   `detect_and_press` is for optional taps: it succeeds even when the target never appears.
-4. Look again after each action. Action keywords do not wait for a screen to load; verification
-   keywords such as `assert_presence` do (30 s default).
-5. `terminate_session` when done. Sessions live only inside this server process.
+2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
+   `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
+   Every action returns what changed on screen; call `observe` only to search the rows
+   (`query`), get a screenshot, or list every row.
+3. `check` waits for text to be present or absent. `run_keyword` runs any other keyword, such as
+   `assert_text` or `select_dropdown_option`; an element parameter can be a ref.
+4. A failure returns `[E0201] …`, a `Next:` hint and the current rows. Do not repeat the same
+   failed call: the server refuses a fourth identical try. Do not tap by coordinates.
+5. Read `optics://session/{session_id}/steps` for the run as ready `modules_csv` and
+   `elements_csv`. Secrets come back as `<redacted>`; replace them with `@:value` or a
+   `Read Data,${name},ENV:NAME` step.
+6. `terminate_session` when done. Idle sessions end after 900 s. Sessions live only inside this
+   server process.
 
-Every parameter value is a string. Separate several elements with `|`. A coded failure starts
-with the code, e.g. `[Code.E0201]`; look it up in the error codes page.
-
-The MCP server has no flow-control, record or replay tools. To make a run repeatable, read
-`optics://project-format` and write the steps you ran as a suite.
+`optics mcp --toolset full` adds one tool per keyword. Look up codes on the error codes page.
 
 ## Write a suite
 
@@ -59,14 +61,17 @@ A CSV is classified by its header row:
 | `Element_Name,Element_ID` | elements; repeat a name for fallback locators, tried in order |
 | `error_code,match_string` | error definitions (CSV only, no YAML form) |
 
-Write the headers exactly as shown, case included. A file with a wrong-case header is still
-recognised but its columns are read as empty, so it loads nothing and the run fails later with
-an unrelated-looking error such as an element not found.
+Header names are read in any case. A byte order mark (BOM) at the start of the file breaks
+detection, so save CSV files as plain UTF-8.
 
 Step rules:
 
 - Keyword names are case-insensitive: `Press Element`, `press_element`.
-- `${name}` is replaced by the element called `name`, only when it is the whole value.
+- `${name}` is replaced by the element called `name`. As the whole value, each fallback is tried;
+  inside longer text, the first value is used. `$${name}` gives a literal `${name}`.
+- `store_as=<name>` keeps a keyword's return value (e.g. `Get Text,${price_label},store_as=price`)
+  for later steps and test cases.
+- Assert Text fails the step on wrong text. Assert Equality and Validate Screen never fail it.
 - `name=value` sets a parameter by its real name (e.g. `timeout_str=20`).
 - Wrap a CSV value that contains commas in double quotes.
 

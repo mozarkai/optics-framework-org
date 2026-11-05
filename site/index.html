@@ -255,12 +255,12 @@
 
             <div class="panel" role="tabpanel" id="panel-delegate" aria-labelledby="tab-delegate" data-way="delegate" hidden>
               <h3 class="panel-title">Delegate it</h3>
-              <p>Add <code class="ic">optics mcp</code> to any MCP client. Every keyword becomes a tool and the screen becomes a resource, so your agent can explore the app and write the suite files itself. The agent is yours; Optics gives it eyes and hands.</p>
+              <p>Add <code class="ic">optics mcp</code> to any MCP client. Your agent looks, taps, types and checks through ten tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite. The agent is yours; Optics gives it eyes and hands.</p>
               <figure class="code">
                 <figcaption>your agent</figcaption>
 <pre><code><span class="c-dim">⏺</span> optics · <b>start_session</b><span class="c-dim">(driver="appium")</span>
-<span class="c-dim">⏺</span> optics · <b>press_element</b><span class="c-dim">(session_id="7f3c…", element="Sign in")</span>
-<span class="c-dim">⏺</span> Read <b>optics://project-format</b>
+<span class="c-dim">⏺</span> optics · <b>tap</b><span class="c-dim">(target="e4", expect_present=["Products"])</span>
+<span class="c-dim">⏺</span> Read <b>optics://session/7f3c…/steps</b>
 <span class="c-dim">⏺</span> Write <b>checkout/modules/modules.csv</b> <span class="c-pass">+18</span>
 <span class="c-pass">●</span> Suite ready: 3 modules, 14 steps.</code></pre>
               </figure>
@@ -431,9 +431,9 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       - <span class="c-dim">uses:</span> actions/setup-python@v7
         <span class="c-dim">with:</span>
           <span class="c-dim">python-version:</span> <span class="c-lit">"3.12"</span>
-      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.10.5"</span>
+      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.11.2"</span>
       - <span class="c-dim">run:</span> python -m playwright install --with-deps chromium
-      - <span class="c-dim">run:</span> xvfb-run -a <b>optics execute birch-tests</b> --no-use-printer
+      - <span class="c-dim">run:</span> <b>optics execute birch-tests</b> --no-use-printer
       - <span class="c-dim">if:</span> always()
         <span class="c-dim">uses:</span> mikepenz/action-junit-report@v6
         <span class="c-dim">with:</span>
