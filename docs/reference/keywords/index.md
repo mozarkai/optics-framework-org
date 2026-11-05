@@ -34,15 +34,15 @@ Here `index=1` sets the fifth parameter of Press Element and leaves `repeat`, `o
 Leaving a cell empty doesn't skip a parameter. Empty cells are dropped, so the next value slides into the empty slot. `Press By Percentage,50,90,,tap_cta` sets `repeat` to `tap_cta` and fails. Write `Press By Percentage,50,90,event_name=tap_cta` instead.
 :::
 
-A value like `text=Sign in` or `css=#cart` stays positional, because `text` and `css` aren't parameter names. Values that start with `/`, `//` or `(` are never treated as named, and `==`, `!=`, `<=` and `>=` don't count as `=`.
+A value like `css=#cart` stays positional, because `css` is not a parameter name. When a keyword's first parameter is `element`, its first `text=`, `css=` or `xpath=` value is the element, unless you also write `element=`. For example, `Enter Text,text=Name,Ava` types `Ava` into the field `text=Name`. Values that start with `/`, `//` or `(` are never treated as named, and `==`, `!=`, `<=` and `>=` don't count as `=`.
 
 :::note
-Steps inside a module that runs through [Execute Module, Run Loop or Condition](/docs/reference/keywords/flow) don't support `name=value`. Write every parameter positionally there.
+Steps inside a module that runs through [Execute Module, Run Loop or Condition](/docs/reference/keywords/flow) don't support `name=value`, except `store_as=`. Write every parameter positionally there.
 :::
 
 ### Every value is a string
 
-Each keyword receives its parameters as text and converts them itself. Timeouts, counts, `index`, `repeat`, lengths and swipe percentages must be whole numbers. A decimal such as `2.5` fails the step. Timeouts are always in seconds.
+Each keyword receives its parameters as text and converts them itself. Timeouts, counts, `index`, `repeat`, lengths and swipe percentages must be whole numbers. A decimal such as `2.5` fails the step. The exceptions are the `aoi_*` values and the `timeout` of Assert Text and Select Dropdown Option. Timeouts are always in seconds.
 
 ## Element arguments {#element-arguments}
 
@@ -55,8 +55,9 @@ Many keywords take an `element`. Optics looks at the text you pass and decides w
 | ends with `.png`, `.jpg`, `.jpeg` or `.bmp` | An image file name to find on screen |
 | starts with `css=` | A CSS selector |
 | starts with `xpath=`, `/`, `//` or `(` | An XPath, a path through the app's UI tree |
+| starts with `id:` | An id locator, which no element source supports |
 | starts with `android.` or `xcui` | A UI class name |
-| contains `[` and `]`, starts with `.`, or starts with `#` followed by a letter | A CSS selector |
+| contains `[` and `]`, starts with `.`, starts with `#` followed by a letter, `_` or `-`, or starts with a tag such as `input`, `button`, `div` or `h1` followed by `[`, `#` or `.` | A CSS selector |
 | anything else | Text to find on screen |
 
 Text is matched against the app's UI tree first, then with OCR if you configured text detection. Image file names are matched by file name only, and Optics finds the file anywhere in your project folder. See [Text and images](/docs/elements/text-and-images) for how matching works.
@@ -69,19 +70,34 @@ Other pitfalls:
 
 - `id:` locators always fail. No element source supports them. Use an XPath such as `//*[@resource-id="com.birch.shop:id/cart"]`.
 - The `text=` prefix is understood by the Appium and Playwright element sources. OCR and Selenium search for the whole value, including `text=`, so use it only where you need it.
-- The `xpath=` prefix works only on Playwright. Use a bare `//…` XPath on Appium and Selenium.
+- The `xpath=` prefix works on Playwright and in web pages on Appium. Use a bare `//…` XPath for native apps and on Selenium.
+- On Playwright, the prefixes `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` also work. See [Locators for web pages](/docs/platforms/web#locators-for-web-pages).
 - `.tif` and `.tiff` files aren't treated as images. Save templates as `.png`.
 
 Most of the time you pass `${name}` instead and define the locator in your elements file. See [Define elements](/docs/elements/define).
 
 ## Variables
 
-A cell that is exactly `${name}` is replaced with the value of `name` from your elements file, or from a keyword that wrote it ([Read Data, Evaluate, Run Loop, Invoke API](/docs/reference/keywords/flow)).
+A cell that is exactly `${name}` is replaced with the value of `name` from your elements file, from a keyword that wrote it ([Read Data, Evaluate, Date Evaluate, Run Loop, Invoke API](/docs/reference/keywords/flow)), or from [`store_as`](#store-as).
 
 When an element has several values, Optics tries each one in order until the element is found. It moves on only when the element isn't found. Any other error fails the step at once. If `name` isn't defined anywhere, the step fails before the keyword runs.
 
+`${name}` inside a longer cell is replaced with the first value of `name`. If `name` is not defined, the step fails with error E0403. Write `$${name}` to keep the text `${name}` as it is.
+
+```csv
+Profile,Enter Text,${name_field},Hi ${first} ${last}!
+Profile,Enter Text,${note_field},$${first}
+```
+
+With `first` set to `Ava` and `last` set to `Lee`, the first step types `Hi Ava Lee!` and the second step types `${first}`. Condition, Read Data and Evaluate use their own rules for `${name}`. See [Flow control keywords](/docs/reference/keywords/flow).
+
 :::mistake
-`${name}` is replaced only when it's the whole cell. `Hello ${name}` is typed literally, as `Hello ${name}`. The exceptions are expressions and queries in Evaluate, Condition, Read Data and Invoke API, which replace `${name}` anywhere inside them.
+A cell that starts with `${` and ends with `}` is read as one variable. `${first} ${last}` fails with "Element not found: first} ${last". Until the fix ships, make the value with Evaluate first, then use the new variable:
+
+```csv
+Profile,Evaluate,${full},'${first}' + ' ' + '${last}'
+Profile,Enter Text,${name_field},${full}
+```
 :::
 
 See [Variables](/docs/advanced/variables) for how values are stored and passed between steps.
@@ -101,23 +117,29 @@ This searches the bottom half of the screen only. Assertion keywords don't take 
 `index` picks which match to use when more than one element matches. It starts at `0`, the first match. `index=1` is the second match.
 
 - Image matches are counted top to bottom, then left to right.
-- On Appium, `index` doesn't apply to XPath. Write `(//android.widget.Button[@text="Add to cart"])[2]` to pick the second XPath match. XPath counts from 1.
+- On Appium, text matches are counted in UI tree order.
+- On Playwright, visible matches of every kind of locator are counted in page order.
+- On Appium, `index` doesn't apply to XPath in native apps. Write `(//android.widget.Button[@text="Add to cart"])[2]` to pick the second XPath match. XPath counts from 1.
 - On Selenium, a non-zero `index` skips the native lookup, so only OCR and image matching can use it.
+
+A text locator on Appium, or any locator on Playwright, can match more than one element. Then the log shows a warning, such as `'Add to cart' matches 6 elements; using the one at index 1.` Add `index=` or a more specific locator to pick another.
 
 ## Event names
 
 Most action and app keywords take an optional `event_name`. When you set it, Optics records a timestamped event with that label right before the action. Events show in the live console and are sent to an events endpoint if you configured one. They never change whether a step passes.
 
-## Action keywords don't wait
+## When action keywords wait {#action-keywords-dont-wait}
 
-Press Element, Enter Text and the other action keywords look at the current screen once. If the element isn't there yet, the step fails at once. Put an assertion before an action when the screen may still be loading:
+On Playwright, Press Element, Enter Text and the other action keywords wait for the element up to `element_timeout_ms`, which is 10 seconds by default. See [Timeouts](/docs/platforms/web#timeouts).
+
+On Appium and Selenium, action keywords look at the current screen once. If the element is not there yet, the step fails at once. Put an assertion before an action when the next screen can be slow to load:
 
 ```csv
 Search,Assert Presence,${search_bar},15
 Search,Enter Text,${search_bar},Trail Runner 2
 ```
 
-Use [Detect And Press](/docs/reference/keywords/actions#detect-and-press) for pop-ups that may or may not appear. Assertion keywords are the only ones that wait. See [Verification keywords](/docs/reference/keywords/verification).
+Use [Detect And Press](/docs/reference/keywords/actions#detect-and-press) for pop-ups that may or may not appear. See [Verification keywords](/docs/reference/keywords/verification).
 
 ## Keywords that never fail a step
 
@@ -127,11 +149,32 @@ These keywords pass even when you might expect a failure. Don't rely on them as 
 - **Validate Screen** returns false when nothing is found but never fails.
 - **Detect And Press** passes and skips the tap when the element doesn't appear.
 - **Force Terminate App** on Appium logs any error and passes.
-- **Swipe**, **Press By Coordinates** and **Scroll** on Appium log driver errors and pass. Scroll left or right on Appium does nothing and passes.
-- **Assert Presence** and **Assert Visibility** pass without checking when every element you give is a CSS selector, an `id:` locator or a class name.
+- **Swipe** and **Scroll** on Appium log driver errors and pass.
+- **Assert Presence** and **Assert Visibility** pass without checking when every element you give is an `id:` locator or a class name.
 - **Initialise Setup** does nothing.
 
-Keywords that return a value, such as Get Text, Execute Script and Capture Screenshot, can't store it in a variable from CSV or YAML. The value is returned to you over [`optics serve`](/docs/reference/cli), MCP and [Python](/docs/create/python).
+## Store a result {#store-as}
+
+Add `store_as=name` to a step to keep what the keyword returns in the variable `name`. Later steps read it as `${name}`, also in later test cases. A new value replaces the old value.
+
+```csv
+Product,Get Text,${price_label},store_as=price
+Cart,Assert Text,${cart_total},${price}
+```
+
+These keywords return a value:
+
+- Launch App, Get App Version and Get Driver Session Id
+- Get Text and Execute Script
+- Assert Presence, Assert Visibility, Assert Equality and Validate Screen, which return `True` or `False`
+- Capture Screenshot, Capture Pagesource, Get Interactive Elements and Get Screen Elements
+
+Lists and objects are kept as JSON.
+
+- `store_as=` with no name fails with error E0403 "store_as needs a name, e.g. store_as=balance."
+- A keyword that returns nothing fails with error E0403 "Cannot store 'price': the keyword returned no value." Action keywords, Validate Element, Is Element and Assert Text return nothing.
+
+Over [`optics serve`](/docs/reference/cli), MCP and [Python](/docs/create/python), the value is also returned to you.
 
 ## All keywords
 
@@ -166,9 +209,10 @@ Keywords that return a value, such as Get Text, Execute Script and Capture Scree
 | Swipe By Percentage | Swipe from a point given in percent | [Swipe By Percentage](/docs/reference/keywords/actions#swipe-by-percentage) |
 | Swipe From Element | Swipe starting on an element | [Swipe From Element](/docs/reference/keywords/actions#swipe-from-element) |
 | Swipe Until Element Appears | Swipe until an element shows up | [Swipe Until Element Appears](/docs/reference/keywords/actions#swipe-until-element-appears) |
-| Scroll | Scroll the screen up or down | [Scroll](/docs/reference/keywords/actions#scroll) |
+| Scroll | Scroll the screen up, down, left or right | [Scroll](/docs/reference/keywords/actions#scroll) |
 | Scroll From Element | Scroll starting on an element | [Scroll From Element](/docs/reference/keywords/actions#scroll-from-element) |
 | Scroll Until Element Appears | Scroll until an element shows up | [Scroll Until Element Appears](/docs/reference/keywords/actions#scroll-until-element-appears) |
+| Go Back | Go back one screen or one page | [Go Back](/docs/reference/keywords/actions#go-back) |
 | Press Keycode | Send a hardware, system or remote key | [Press Keycode](/docs/reference/keywords/actions#press-keycode) |
 | Execute Script | Run a driver command or browser JavaScript | [Execute Script](/docs/reference/keywords/actions#execute-script) |
 | Get Text | Read an element's text | [Get Text](/docs/reference/keywords/actions#get-text) |
@@ -185,7 +229,8 @@ Keywords that return a value, such as Get Text, Execute Script and Capture Scree
 | Assert Visibility | Fail unless elements are on screen within a timeout | [Assert Visibility](/docs/reference/keywords/verification#assert-visibility) |
 | Validate Element | Fail unless one element exists within a timeout | [Validate Element](/docs/reference/keywords/verification#validate-element) |
 | Validate Screen | Check for elements without failing | [Validate Screen](/docs/reference/keywords/verification#validate-screen) |
-| Is Element | Check that an element is visible, invisible, enabled or disabled | [Is Element](/docs/reference/keywords/verification#is-element) |
+| Is Element | Check that an element is visible, invisible, enabled, disabled, checked or unchecked | [Is Element](/docs/reference/keywords/verification#is-element) |
+| Assert Text | Fail unless an element's text or a field's value is the expected text | [Assert Text](/docs/reference/keywords/verification#assert-text) |
 | Assert Equality | Compare two values without failing | [Assert Equality](/docs/reference/keywords/verification#assert-equality) |
 | Capture Screenshot | Take a screenshot | [Capture Screenshot](/docs/reference/keywords/verification#capture-screenshot) |
 | Capture Pagesource | Save the current UI tree | [Capture Pagesource](/docs/reference/keywords/verification#capture-pagesource) |
@@ -211,7 +256,7 @@ Press Checkbox and Press Radio Button still work but log a warning. Use [Press E
 ## Where each keyword works
 
 - **CSV and YAML suites, `optics live` and `optics serve`** have every keyword on this page.
-- **The MCP server** has every keyword except the flow-control ones. Press By Coordinates and Press By Percentage are hidden there unless you turn them on.
+- **The MCP server** gives 10 core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](/docs/reference/mcp).
 - **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See [Write tests in Python](/docs/create/python).
 - **`optics generate`** skips flow-control keywords and a few others when it converts a suite to code.
 

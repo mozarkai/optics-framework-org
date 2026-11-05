@@ -32,13 +32,14 @@ Optics looks at a value and decides what kind it is, then tries the ways that fi
 | An XPath, such as `//*[@resource-id='login']` | The UI tree | A driver that exposes a UI tree |
 | Text, such as `Sign in` | 1. The UI tree<br>2. OCR on a screenshot | OCR needs a [text detection engine](/docs/elements/text-and-images) |
 | An image file, such as `sign_in.png` | Image matching on a screenshot | An [image detection engine](/docs/elements/text-and-images) |
+| CSS, such as `css=#login` | The web page | Playwright, or a web page on Appium. See [Mobile web](/docs/platforms/mobile-web). |
 | `text_only:Sign in` | OCR only, skipping the UI tree | A text detection engine |
 
 Looking something up in the UI tree takes milliseconds. OCR and image matching read a screenshot, which takes longer, so Optics only uses them when the tree can't help. [Define elements](/docs/elements/define) shows every kind of value.
 
 ### 3. Each element source, in config order
 
-`config.yaml` lists **element sources**: the ways Optics may look at the screen, such as asking the app directly, reading its UI tree, or taking a screenshot. Optics tries them in the order they're listed. If you enable more than one driver, each is tried in turn as well.
+`config.yaml` lists **element sources**: the ways Optics may look at the screen, such as asking the app directly, reading its UI tree, or taking a screenshot. For an action, Optics tries them in the order of the list, with each way that fits in each source. Assertions always try the UI tree sources before OCR and image matching. If you enable more than one driver, each is tried in turn as well.
 
 ### Last resort: AI self-heal
 
@@ -49,7 +50,7 @@ If everything above fails and you've switched it on, an AI model looks at the sc
 Optics records how it found each element, so you can tell when a test is passing on a fallback:
 
 - `optics live` shows it after each step: `0.31s  [Text]`.
-- Screenshots in `execution_output/` show a box around the element Optics found, for drivers that report element positions. See [Read the results](/docs/run/results).
+- When `save_captures` is `true`, screenshots in `execution_output/` show a box around the element Optics found, for drivers that report element positions. See [Read the results](/docs/run/results).
 
 If a test keeps passing on its second or third value, the first one is probably out of date. Update it while you still know why.
 

@@ -32,8 +32,10 @@ birch-tests/
 
 A project needs at least one test cases file and one modules file. Elements, error definitions and API files are optional. You can split each type across several files.
 
+CSV column names match in any case, and Optics ignores spaces around them. `element_name` works as well as `Element_Name`.
+
 :::mistake
-Write column names and YAML keys exactly as shown. Optics recognizes `element_name` or `test_cases:` as the right file type, but then reads nothing from it, because the reader expects `Element_Name` and `Test Cases`.
+Write YAML keys exactly as shown. Optics recognizes `test_cases:` as a test cases file, but then reads nothing from it, because the reader expects `Test Cases`.
 :::
 
 When two files define the same thing:
@@ -93,13 +95,13 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 |---|---|---|
 | `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
 | `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Meant to run before each test. In 1.10.5 it runs only before the first test case. |
-| `teardown` without `suite` | Per-test teardown | Meant to run after each test. In 1.10.5 it runs only after the first test case. |
+| `setup` without `suite` | Per-test setup | Meant to run before each test. It runs only before the first test case. |
+| `teardown` without `suite` | Per-test teardown | Meant to run after each test. It runs only after the first test case. |
 
 We recommend `Suite Setup` and `Suite Teardown`, which work as expected. Avoid per-test `Setup` and `Teardown` until this is fixed; open and close the app inside each test case's own modules if you need that.
 
 - A failing setup doesn't stop the test cases after it.
-- Test cases whose names contain "setup" or "teardown" always run, even when `include` or `exclude` would skip them.
+- The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
 - Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
 
 ## Modules
@@ -150,8 +152,14 @@ Parameter rules:
 
 - **Empty cells are dropped**, and the values after them move left. You can't skip a parameter by leaving its cell blank. Use a named parameter instead.
 - **Named parameters** are written `name=value`, for example `index=0` or `timeout_str=20`. They work only when `name` is a real parameter of that keyword. Anything else, such as `text=Sign in` or `css=#search`, stays a positional value.
-- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. `Hello ${name}` isn't substituted; Optics types it as written.
+- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!`, is replaced with its first value. An unknown name fails the step with [E0403](/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
+- **Locators first.** If a keyword's first parameter is `element`, a first value that starts with `text=`, `css=` or `xpath=` is the element. `Enter Text,text=Name,Ava` types `Ava` into the element `text=Name`.
+- **store_as.** Add `store_as=<name>` to a step to save the keyword's result as `${name}` for later steps and test cases. Lists and dictionaries are saved as JSON. See [Store a result](/docs/reference/keywords/#store-as).
 - Values starting with `/`, `//` or `(` are always positional, so XPaths are never mistaken for named parameters.
+
+:::mistake
+A cell can start with `${`, end with `}` and hold more than one variable, such as `${first} ${last}`. This cell fails at run time with `Element not found`, but `dry_run` passes. Until the fix ships, put text before the first variable or after the last one, or build the value with `Evaluate` first.
+:::
 
 In YAML, a step is one string. The keyword name is matched first, and the rest is split on spaces. Wrap a value with spaces in quotes: `"Trail Runner 2"`. Wrap multi-word module names you pass as parameters in quotes too: `Run Loop "Add To Cart" 3`.
 
@@ -170,7 +178,6 @@ password_field,//android.widget.EditText[@resource-id='com.birch.shop:id/passwor
 sign_in,//android.widget.Button[@text='Sign in'],Sign in,sign_in.png
 search_bar,//*[@resource-id='com.birch.shop:id/search'],Search,
 add_to_cart,text=Add to cart,,add_to_cart.png
-order_total,placeholder,,
 ```
 ::tab[YAML]
 ```yaml title="test_data/elements.yaml"
@@ -181,20 +188,19 @@ Elements:
   sign_in: ["//android.widget.Button[@text='Sign in']", "Sign in", "sign_in.png"]
   search_bar: "//*[@resource-id='com.birch.shop:id/search']"
   add_to_cart: ["text=Add to cart", "add_to_cart.png"]
-  order_total: placeholder
 ```
 :::
 
 | Column | What it holds |
 |---|---|
-| `Element_Name` | The name. Write the header exactly like this. |
+| `Element_Name` | The name. |
 | `Element_ID` | The first locator or value. Required. |
 | `Element_ID_*` | Fallbacks. Any column whose header starts with `Element_ID`, such as `Element_ID_text`, `Element_ID_image` or `Element_ID_2`, adds another value. They're tried in column order. |
 
 - Empty cells are ignored. Columns that don't start with `Element_ID`, such as `Element_Text`, are ignored.
 - A second row with the same name adds more fallback values.
 - When a step uses `${name}`, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside `Run Loop`, `Condition` and `Execute Module` use only the first value.
-- Variables a step creates while running, such as the target of `Evaluate` or `Read Data`, need a row with a placeholder value so `optics dry_run` passes.
+- Variables that a step creates while running, such as the target of `Evaluate`, `Read Data` or `store_as`, need no row. Do not add a placeholder row for them.
 
 Optics decides what kind of locator a value is from its form:
 
@@ -273,7 +279,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Backslash sequences.** In any cell, `\n` becomes a new line, `\t` a tab, `\r` a carriage return, and `\\` a single backslash.
 
-**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in log files. Appium, Selenium and BLE remove the prefix before typing. Playwright types the prefix too.
+**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files and the result tree. Every driver removes the prefix before typing. Optics also masks values saved under secret names. See [Logging](/docs/reference/config#logging).
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
@@ -293,6 +299,7 @@ birch-tests/execution_output/
 ├── ...-press_element_element_detection_result.jpg
 ├── ...-end_of_run.jpg
 ├── page_sources_log.xml
+├── failed_steps_elements.json                     # when a step fails
 └── detected_errors_<session_id>.json              # only when error definitions match
 ```
 
@@ -301,19 +308,20 @@ birch-tests/execution_output/
 | `junit_output.xml` | Every run, including dry runs | One test case per test, with each module and keyword, their status, timings and log lines. Error detection adds a failing `on-screen-error-detection` test case. If another session is already writing the file, Optics names it `junit_output_<session_id>.xml`. |
 | `logs.json` | `json_log: true` | A JSON list of every test case, module and keyword event with status and timings. |
 | `internal_logs.log`, `execution_logs.log` | `file_log: true` | Text logs. Each rotates at 10 MB. |
-| `<time>-pre_<keyword>.jpg` | Every keyword that finds an element | The screen before Optics looked for the element. |
-| `<time>-<keyword>_element_detection_result.jpg` | An element was found in the UI tree | The screen with a green box around the element. |
-| `<time>-<keyword>_image_detection_result.jpg` | An element was found by OCR or image | The screen with a green box, and a red dot at the tap point for text. |
-| `<time>-<keyword>_with_aoi.jpg` | The step used an area of interest | The screen with the area drawn in blue. |
+| `<time>-pre_<keyword>.jpg` | Every keyword that finds an element, with `save_captures: true` | The screen before Optics looked for the element. |
+| `<time>-<keyword>_element_detection_result.jpg` | An element was found in the UI tree, with `save_captures: true` | The screen with a green box around the element. |
+| `<time>-<keyword>_image_detection_result.jpg` | An element was found by OCR or image, with `save_captures: true` | The screen with a green box, and a red dot at the tap point for text. |
+| `<time>-<keyword>_with_aoi.jpg` | The step used an area of interest, with `save_captures: true` | The screen with the area drawn in blue. |
 | `<time>-<keyword>.jpg` | Gestures and coordinate keywords, such as `Swipe`, `Scroll`, `Press By Percentage`, `Press Keycode` | The screen when the step ran. |
 | `<time>-capture_screenshot.jpg` | `Capture Screenshot`, `Get Screen Elements` | Only when `save_captures` is `true`. |
 | `<time>-end_of_run.jpg` | End of `optics execute`, if the app is still open | The final screen. |
 | `page_sources_log.xml` | Appium page source reads and the end of the run | Each UI tree, with a timestamp. |
-| `page_sources_log.html` | Selenium page source reads and the end of the run | Each page's HTML, with a timestamp. |
+| `page_sources_log.html` | Web page source reads and the end of the run | Each page's HTML, with a timestamp. |
+| `failed_steps_elements.json` | A step failed, with `save_captures: true` | For each failed step: the test case, the step and the elements on the screen, with secrets masked. Use it to fix the locator. |
 | `interactable_elements.json` | `Get Interactive Elements`, `Get Screen Elements` | The latest list of elements on screen. |
 | `api_details.log`, `api_details.har` | `Invoke API` | Each request and response. |
 | `detected_errors_<session_id>.json` | Error definitions matched at the end of the run | The codes, matched text, descriptions and severities. |
 
-Screenshots are JPEG files named `<timestamp>-<name>.jpg`. The detection-result screenshots use a timestamp with colons in it, which Windows doesn't allow in file names, so they may be missing on Windows.
+Screenshots are JPEG files named `<timestamp>-<name>.jpg`.
 
 `optics live` writes elsewhere: `screenshots/session_<time>/` and `logs/optics_live_<time>.log` in the project. See [Read results](/docs/run/results).

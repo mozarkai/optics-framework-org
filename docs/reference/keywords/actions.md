@@ -5,7 +5,7 @@ summary: Learn how to tap, type, swipe, scroll and send keys in a step.
 layout: wide
 ---
 
-Action keywords do something to the app: tap, type, swipe, scroll or press a key. Each one looks at the current screen once and fails if the element isn't there. They don't wait.
+Action keywords do something to the app: tap, type, swipe, scroll or press a key. On Playwright, each one waits up to 10 seconds for its element. On Appium and Selenium, each one looks at the current screen once and fails if the element is not there.
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1,param_2
@@ -15,13 +15,13 @@ Sign In,Enter Text,${password_field},@:pw-ana
 Sign In,Press Element,${sign_in}
 ```
 
-Put an [Assert Presence](/docs/reference/keywords/verification#assert-presence) before an action when the screen may still be loading. For how `element`, `index`, `${name}` and the `aoi_*` parameters work, see [Keywords](/docs/reference/keywords/).
+On Appium and Selenium, put an [Assert Presence](/docs/reference/keywords/verification#assert-presence) before an action when the next screen can be slow to load. For how `element`, `index`, `${name}` and the `aoi_*` parameters work, see [Keywords](/docs/reference/keywords/).
 
 :::note[TV platforms]
 On Samsung Tizen and LG webOS TVs, keywords that tap, swipe, scroll or type fail with error E0105. Use [Press Keycode](#press-keycode) to move focus and select. Android TV works like Android. See [TV](/docs/platforms/tv).
 :::
 
-Before each action, Optics saves a screenshot to the run's output folder. See [Results](/docs/run/results).
+When `save_captures` is `true`, Optics saves a screenshot before each action to the run's output folder. See [Results](/docs/run/results).
 
 ## Tap
 
@@ -33,8 +33,8 @@ Taps or clicks an element found by XPath, text, OCR or image.
 |---|---|---|
 | `element` | Required | The element to tap. See [Element arguments](/docs/reference/keywords/#element-arguments). |
 | `repeat` | `1` | How many times to tap. |
-| `offset_x` | `0` | Pixels to add to the tap point horizontally. |
-| `offset_y` | `0` | Pixels to add to the tap point vertically. |
+| `offset_x` | `0` | Screen points to add to the tap point horizontally. |
+| `offset_y` | `0` | Screen points to add to the tap point vertically. |
 | `index` | `0` | Which match to tap when several match. `0` is the first. |
 | `aoi_x`, `aoi_y`, `aoi_width`, `aoi_height` | `0`, `0`, `100`, `100` | Area of the screen to search, in percent. See [Area of interest](/docs/elements/area-of-interest). |
 | `event_name` | Empty | Label for a timed event. See [Event names](/docs/reference/keywords/#event-names). |
@@ -52,7 +52,7 @@ Add To Cart,Press Element,${add_to_cart},event_name=tap_add_to_cart
 
 Good to know:
 
-- Press Element doesn't wait. If the element isn't on screen yet, the step fails.
+- On Appium and Selenium, Press Element does not wait. If the element is not on screen yet, the step fails. On Playwright, it waits up to 10 seconds.
 - `repeat` taps several times only when the element was found in the app's UI tree, by XPath or native text. An element found by OCR or image is tapped once.
 - `offset_x` and `offset_y` apply only when the element was found by OCR or image. They're ignored for elements found in the UI tree.
 - When `element` is `${name}` with several values, Optics tries each one until it finds the element.
@@ -105,7 +105,7 @@ Promo,Press By Coordinates,540,1600
 
 Good to know:
 
-- On Appium, a failed tap is logged and the step passes. Follow it with an assertion to confirm the tap worked.
+- On Appium, a failed tap fails the step with error E0401.
 - On Selenium, Optics clicks whatever element is at that point of the page.
 - To set `event_name`, write it by name: `Press By Coordinates,540,1600,event_name=tap_promo`.
 
@@ -185,12 +185,12 @@ Sign In,Enter Text,${password_field},@:pw-ana
 
 Good to know:
 
-- Enter Text doesn't clear the field first. Use [Clear Element Text](#clear-element-text) before it if the field may have text.
+- On Appium, Enter Text does not clear the field first. Use [Clear Element Text](#clear-element-text) before it if the field can have text. Playwright and Selenium replace the text in the field.
+- When the element is a caption or label, such as `Email`, Optics types into the field that it names.
 - `event_name` comes before `index` here, unlike Press Element. Set `index` by name: `index=1`.
 - When the field was found by OCR or image, Optics taps it, then types.
-- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Selenium supports `<enter>`, `<tab>`, `<backspace>`, `<space>` and `<escape>`. An unknown name is typed literally.
-- Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. Playwright doesn't remove it and types `@:` too.
-- `${name}` inside a longer value isn't replaced, so `@:${password}` doesn't work. Put `@:pw-ana` as the value in your elements file, then pass `${password}`.
+- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. An unknown name is typed literally.
+- Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. `@:${password}` also works.
 - In YAML, quote text that contains spaces.
 
 ### Enter Number
@@ -234,6 +234,7 @@ Search,Enter Text Direct,pace knit
 Good to know:
 
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
+- On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
 
 ### Enter Text Using Keyboard
 
@@ -280,6 +281,7 @@ Search,Clear Element Text,${search_bar}
 Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
+- When the element is a caption or label, Optics clears the field that it names.
 
 ## Swipe and scroll
 
@@ -395,7 +397,7 @@ Scrolls the screen once.
 
 | Parameter | Default | What it does |
 |---|---|---|
-| `direction` | Required | `down` to reveal content below, `up` to reveal content above. |
+| `direction` | Required | `down` to reveal content below, `up` to reveal content above. `right` and `left` reveal content at the side. |
 | `event_name` | Empty | Label for a timed event. |
 
 ```csv
@@ -408,10 +410,10 @@ Browse,Scroll,down
 
 Good to know:
 
-- On Appium, only `up` and `down` work. `left` and `right` do nothing and the step passes.
-- On Appium, one scroll drags from 80 % to 20 % of the screen height.
-- On Selenium, one scroll moves one window's height or width, in any of the four directions.
-- On Playwright, one scroll moves about 240 pixels.
+- On Appium, one scroll drags from 80 % to 20 % of the screen height, or of the width for `left` and `right`.
+- On Selenium, one scroll moves one window's height or width.
+- On Playwright, one scroll moves about 2000 pixels.
+- The BLE driver ignores `left` and `right`.
 - In Python, `direction` defaults to `down`.
 
 ### Scroll From Element
@@ -447,7 +449,7 @@ Scrolls again and again until an element is on screen.
 | Parameter | Default | What it does |
 |---|---|---|
 | `element` | Required | The element to look for. |
-| `direction` | Required | `down` or `up`. |
+| `direction` | Required | `down`, `up`, `left` or `right`. |
 | `timeout` | Required | Seconds to keep trying. |
 | `event_name` | Empty | Label for a timed event. |
 
@@ -466,6 +468,29 @@ Good to know:
 - In Python, `direction` defaults to `down` and `timeout` to `30`.
 
 ## Keys and scripts
+
+### Go Back
+
+Goes back one screen, or one page in a browser.
+
+| Parameter | Default | What it does |
+|---|---|---|
+| `event_name` | Empty | Label for a timed event. |
+
+```csv
+Product,Go Back
+```
+
+```yaml
+- Go Back
+```
+
+Good to know:
+
+- On Playwright and Selenium, Go Back goes back one page in the browser history. Playwright waits for the page to load, up to `navigation_timeout_ms`. See [Timeouts](/docs/platforms/web#timeouts).
+- On Android, it presses the system Back button.
+- On iOS, it taps the back button in the navigation bar. If the screen has no such button, the step fails with error E0401.
+- Samsung Tizen and LG webOS TVs and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV.
 
 ### Press Keycode
 
@@ -519,14 +544,14 @@ Good to know:
 
 - In CSV, wrap a value that contains commas in double quotes, and double every quote inside it.
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
-- The CSV and YAML runner can't store the result. It's returned over `optics serve`, MCP and [Python](/docs/create/python).
+- To keep the result, add [`store_as=name`](/docs/reference/keywords/#store-as). On Playwright, give an expression such as `document.title`, not a `return` statement.
 - The BLE driver doesn't support it.
 
 ## Read and wait
 
 ### Get Text
 
-Reads the text of an element.
+Reads the text of an element. On the web, it reads the value of a field.
 
 | Parameter | Default | What it does |
 |---|---|---|
@@ -535,17 +560,17 @@ Reads the text of an element.
 | `aoi_x`, `aoi_y`, `aoi_width`, `aoi_height` | `0`, `0`, `100`, `100` | Area of the screen to search, in percent. |
 
 ```csv
-Product,Get Text,//android.widget.TextView[@resource-id="com.birch.shop:id/price"]
+Product,Get Text,//android.widget.TextView[@resource-id="com.birch.shop:id/price"],store_as=price
 ```
 
 ```yaml
-- Get Text //android.widget.TextView[@resource-id="com.birch.shop:id/price"]
+- Get Text //android.widget.TextView[@resource-id="com.birch.shop:id/price"] store_as=price
 ```
 
 Good to know:
 
-- The CSV and YAML runner can't store the text in a variable. To check text on screen, use [Assert Presence](/docs/reference/keywords/verification#assert-presence) with the text you expect.
-- When the element is found only by OCR or image, Get Text returns nothing and the step still passes.
+- Add [`store_as=name`](/docs/reference/keywords/#store-as) to keep the text in a variable. To check text, use [Assert Text](/docs/reference/keywords/verification#assert-text).
+- When the element is found only by OCR or image, Get Text returns nothing and the step still passes. With `store_as`, the step fails.
 - In Python, Get Text takes `element` only and returns the text.
 
 ### Sleep

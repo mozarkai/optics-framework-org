@@ -95,17 +95,6 @@ Add the backpack to the cart,Assert Presence,Remove
 
 Read each row left to right: the module it belongs to, a **keyword** (the action), then the values the keyword needs. `${username_field}` refers to the name you defined in the previous step. `Products` and `Remove` are plain text that should appear on screen: the products page title, and the label the backpack's button changes to once it's in the cart.
 
-:::mistake[Enter Text fails in browsers on Optics 1.10.5]
-On 1.10.5, every Enter Text in a browser fails with `Object of type Locator is not JSON serializable`. A fix is on its way in the next release. Until you upgrade, click the field and type into it in two steps. Replace the two `Enter Text` rows with these four:
-
-```csv title="modules/modules.csv"
-Sign in,Press Element,${username_field}
-Sign in,Enter Text Direct,standard_user
-Sign in,Press Element,${password_field}
-Sign in,Enter Text Direct,secret_sauce
-```
-:::
-
 ### Turn the modules into a test case
 
 A **test case** is a named flow made of modules, run in order. Open `test_cases/test_cases.csv`:
@@ -170,20 +159,23 @@ You've written and run a test. Everything Optics produced is in `first-test/exec
 A test is only useful if it fails when the app is broken. Pretend the store renamed its button: change the last row of `modules.csv` to look for `Removed` instead of `Remove`, then run the test again.
 
 ```terminal
-    └── Add the backpack to the cart                               | 20.74s |    FAIL
-        ├── Press Element (//button[@id='add-to-cart-sauce-labs... |  0.12s |    PASS
-        └── Assert Presence (Removed)                              | 20.51s |    FAIL
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 1 | Passed: 0 | Failed: 1          │
-╰──────────────────────────────────────────────────────╯
-╭─────────────────── Failure details ──────────────────╮
-│ Shopper can add a backpack → step 'Assert Presence   │
-│ (Removed)' — Keyword 'Assert Presence' failed after  │
-│ fallback attempts                                    │
-╰──────────────────────────────────────────────────────╯
+    └── Add the backpack to the cart                     |     30.77s |    FAIL
+        ├── Press Element (//button[@id='add-to-cart-... |      0.10s |    PASS
+        └── Assert Presence (Removed)                    |     30.01s |    FAIL
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 1 | Passed: 0 | Failed: 1                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭────────────────────────────── Failure details ───────────────────────────────╮
+│ Shopper can add a backpack → step 'Assert Presence (Removed)' — Keyword      │
+│ 'Assert Presence' failed after fallback attempts; last error: Code.E0201:    │
+│ ['Removed'] not found based on rule 'any'. OCR was not tried: no             │
+│ text_detection engine is configured.                                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The run is slower this time because Assert Presence keeps looking for the text, in case the page is still loading, before it gives up. The tree shows exactly which step failed, and the **Failure details** box names it. The command also exits with code `1`, which is how CI knows to mark the build red. Change `Removed` back to `Remove` before you continue.
+The run is slower this time because Assert Presence waits up to its 30-second timeout for the text to appear. The tree shows exactly which step failed, and the **Failure details** box names it with the last error. The command also exits with code `1`, which is how CI knows to mark the build red.
+
+Optics also writes `execution_output/failed_steps_elements.json`. It lists the elements that were on screen when the step failed, so you can see the text that the page showed instead. Change `Removed` back to `Remove` before you continue.
 
 ## Make the test survive a redesign
 

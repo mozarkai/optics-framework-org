@@ -57,7 +57,7 @@ An element source is a way for Optics to look at the screen: ask the app for an 
 
 ### Elements file {#elements-file}
 
-An elements file is a CSV whose header starts with `Element_Name,Element_ID`, listing each element's name and values. The project template keeps it in `test_data/elements.csv`. See [Elements](/docs/reference/files#elements).
+An elements file is a CSV whose header is `Element_Name,Element_ID`, in any case, listing each element's name and values. The project template keeps it in `test_data/elements.csv`. See [Elements](/docs/reference/files#elements).
 
 ### Engine {#engine}
 
@@ -89,7 +89,7 @@ Image detection finds an element by matching a small picture of it, called a tem
 
 ### Include and exclude {#include-exclude}
 
-Include and exclude are `config.yaml` lists that pick which test cases a run includes or skips, by name. Optics has no command-line flag for this. See [include and exclude](/docs/reference/config#include-and-exclude).
+Include and exclude pick which test cases a run includes or skips, by name. Give them as `--include` and `--exclude` on the command line, or as lists in `config.yaml`. See [Run only some test cases](/docs/create/organise#run-only-some-test-cases).
 
 ### Index {#index}
 
@@ -173,6 +173,10 @@ A session is one connection between Optics and a device or browser, from when th
 
 A step is one row in a module: a keyword plus the values it needs, such as `Enter Text,${search_bar},Trail Runner 2`. See [Write the steps as modules](/docs/create/write#write-the-steps-as-modules).
 
+### store_as {#store-as}
+
+`store_as=name` is a cell that keeps the value a keyword returns, such as the text from Get Text. Later steps use it as `${name}`. See [Keep a value for later](/docs/advanced/variables#keep-a-value-for-later).
+
 ### Suite {#suite}
 
 A suite is all the test cases in one project, run together by `optics execute`. See [how to organize a suite](/docs/create/organise).
@@ -205,7 +209,7 @@ The UI tree is the structure of everything an app or web page shows, with each e
 
 ### Variable {#variable}
 
-A variable is a named value written as `${name}` in a step, defined in the elements file or created by a step such as `Evaluate`. Optics replaces it only when it fills a whole cell. See [Variables](/docs/advanced/variables).
+A variable is a named value written as `${name}` in a step, defined in the elements file or created by a step such as `Evaluate`. Optics replaces it in a whole cell and inside other text. See [Variables](/docs/advanced/variables).
 
 ## X
 

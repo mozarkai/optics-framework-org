@@ -59,14 +59,13 @@ $ cd birch-tests/generated/Tests
 $ pytest test_generated.py
 ```
 
-:::mistake[Generated code fails to run on Optics 1.10.5]
-In 1.10.5, the generated file uses config names that `Optics.setup()` doesn't accept, and values containing single quotes break the Python syntax. A fix is on its way in the next release. Until then, in the generated file, rename `driver_config` to `driver_sources`, `element_source_config` to `elements_sources`, `text_config` to `text_detection` and `image_config` to `image_detection`, and write XPaths in your elements file with double quotes, such as `//input[@id="user-name"]`.
-:::
-
 ## What isn't converted
 
 - **Only the first value of each element** is used. Fallbacks are dropped. Pass a list to keep them: `optics.press_element([ELEMENTS['login_button'], 'Login'])`.
 - **Flow-control keywords** (Run Loop, Condition, Read Data, Evaluate, Invoke API and others) and a few more, such as Select Dropdown Option, aren't converted. Steps that use them are left out of the generated code silently. Check the output against your modules.
+- **`store_as` cells** are passed to the method as plain text, such as `get_text(..., 'store_as=price')`, which breaks the call. Use the return value instead. See [Use Optics from Python](/docs/create/python).
+- **`${name}` inside other text** is written as typed: `'Hi ${first}!'`.
+- **A `${name}` that only exists during the run**, such as a value from `store_as` or Evaluate, stops `optics generate` with "Element 'name' not found in elements".
 - **Suite Setup and Suite Teardown** become ordinary tests.
 - **Image templates** are copied only if they're in an `input_templates/` folder at the project's top level.
 
