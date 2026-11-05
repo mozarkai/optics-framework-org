@@ -28,8 +28,8 @@ spec["info"]["description"] = (
 )
 spec["servers"] = [{"url": "http://127.0.0.1:8000", "description": "optics serve on your own machine (default host and port)"}]
 spec["externalDocs"] = {
-    "description": "REST API usage guide",
-    "url": "https://mozarkai.github.io/optics-framework/usage/REST_API_usage/",
+    "description": "HTTP API reference",
+    "url": "https://optics-framework.org/docs/reference/http-api",
 }
 target.write_text(json.dumps(spec, indent=2) + "\n")
 print(f"wrote {target} from optics-framework {VERSION}")
