@@ -46,7 +46,7 @@ llm_models:
       enabled: true
 ```
 
-For a server such as OpenRouter or Ollama, add its `url`. Gemini uses `gemini-2.5-flash` unless you set a `model`; the other engines need one. Pick a model that accepts screenshots. See [llm_models](/docs/reference/config#llm-models) for every setting.
+For a server such as OpenRouter or Ollama, add its `url`. Gemini uses `gemini-2.5-flash` unless you set a `model`. The other engines need one. Pick a model that accepts images, or set `vision: never` in [Agent settings](#agent-settings). See [llm_models](/docs/reference/config#llm-models) for every setting.
 
 ### Give Optics your key
 
@@ -78,26 +78,30 @@ Start `optics live`, then press [[Ctrl]]+[[N]]. The prompt changes from `›` to
 ai › add trail runners to the cart
   ⋯ [ai] add trail runners to the cart
      thinking: open search and look for the shoes
-    ✓ press_element "Search Birch"
-       0.42s  [Text]
-    ✓ enter_text "Search Birch" "trail runner"
-       0.51s  [Text]
+    ✓ press_element '//*[@resource-id="com.birch.shop:id/search"]'
+       0.42s  [XPath]
+    ✓ enter_text '//*[@resource-id="com.birch.shop:id/search_input"]' 'trail runner'
+       0.51s  [XPath]
      thinking: Trail Runner 2 is the first result
-    ✓ press_element "Trail Runner 2"
-       0.88s  [OCR]
-    ✓ press_element "Add to cart"
-       0.37s  [Text]
+    ✓ press_element '//android.widget.TextView[@text="Trail Runner 2"]'
+       0.88s  [XPath]
+    ✓ press_element '//*[@resource-id="com.birch.shop:id/add_to_cart"]'
+       0.37s  [XPath]
   ✓ [ai] add trail runners to the cart
      done · 4 step(s) · 9.4s · recorded 4 (/save to keep)
 ```
 
-Each turn, the model sees a screenshot, the list of elements on screen, your project's element names and the steps so far. Its reasoning appears as `thinking:` lines. Every action is a normal keyword, so it uses the same ways of finding elements as a test you wrote yourself.
+Each turn, the model sees the screen as rows, such as `e7 button "Search Birch" [tap] #search`. It also sees the last 8 steps, your project's element names and the keyword list. The model picks one action on a ref, such as `e7`, and names the text that the next screen must show. Optics runs the action with a locator that matches only that element. Then it reads the screen again and judges the step as pass, fail or unknown.
+
+The model's thoughts appear as `thinking:` lines. Every action is a normal keyword, and the history shows the locator it used.
 
 Press [[Ctrl]]+[[X]] to stop a run, or [[Ctrl]]+[[N]] again to go back to typing keywords. You can mix both modes in one session.
 
 ## Keep the steps
 
-When the goal is reached, Optics asks the model to drop dead ends and detours, so the recording keeps only the steps that mattered. If it pruned anything, the summary says so, for example `(kept 4 of 6 steps)`.
+The model ends a run with `done` and the text that proves the goal. Optics accepts `done` only when that text is on the screen. If the model gives no text, the run ends as `PASS (unverified)`. Check the app yourself before you keep those steps.
+
+When the run ends with `done`, Optics asks the model to remove dead ends and detours. Only the steps that mattered stay.
 
 Save the steps the same way as a manual recording:
 
@@ -105,11 +109,11 @@ Save the steps the same way as a manual recording:
 ai › /save Checkout Add_To_Cart
 ```
 
-Only runs that finish successfully are recorded. If the model gives up, hits its step limit, or you stop it, nothing from that run is saved.
+Optics records only runs that end with `done` or `PASS (unverified)`. If the model gives up, reaches its step limit, or you stop it, Optics records nothing from that run.
 
 ### Review what you saved
 
-Open `modules/modules.csv` and read the new rows before you commit them. The model names elements by their visible text, such as `"Add to cart"`. For steps that matter, replace the text with a named element from `elements.csv` and add a fallback, as described in [Define elements](/docs/elements/define).
+The agent turns each element it acts on into a named element, such as `${add_to_cart_button}`. Its values are the element's locators, then its label as the last fallback. If a project element has the same first locator, the agent uses that element. `/save` writes the steps to `modules/modules.csv` and the new elements to your elements CSV. Read both before you commit them. See [Define elements](/docs/elements/define).
 
 ## Write goals the model can finish
 
@@ -117,12 +121,38 @@ Open `modules/modules.csv` and read the new rows before you commit them. The mod
 - **Use the words on screen.** *Tap Add to cart* is clearer than *buy it*.
 - **Give values explicitly.** *Search for "trail runner"*, not *search for shoes*.
 
-Each run stops after 15 steps, after 3 failed steps in a row, or when the model repeats gestures without getting closer. Break long flows into smaller goals.
+A run stops when one of these occurs:
+
+- It reaches `max_steps` steps (15 by default).
+- 3 steps in a row fail.
+- The model asks for a fourth blind action in a row, such as a scroll, a swipe, a key press or a coordinate tap.
+- The screen does not change after 4 actions in a row.
+- Optics rejects `done` two times, because the goal text is not on the screen.
+
+Break long flows into smaller goals.
+
+## Agent settings
+
+Add an `nl_agent` section to `config.yaml` to change how the model works:
+
+```yaml title="config.yaml"
+nl_agent:
+  vision: auto
+  max_steps: 15
+  escalation_model: ""
+```
+
+| Setting | Default | What it does |
+|---|---|---|
+| `vision` | `auto` | When the model gets a screenshot. `auto`: on the first turn, after a step that did not pass, when the screen has fewer than 3 controls or a control without a label, and when Optics cannot read the rows. `always`: every turn. `never`: no screenshots, so a text-only model works. |
+| `max_steps` | `15` | The most steps in one run. The minimum is 1. |
+| `escalation_model` | `""` | A second model of the same engine for hard turns: a retry after a bad reply, a turn after 2 failures in a row, and a turn after a warning. Empty uses one model for all turns. |
 
 ## Limits
 
 - Each step is a call to the model, so a run costs API usage and takes several seconds per step.
-- Screenshots go to your model provider while the mode is on, unless you run the model locally. Don't use a hosted model on screens that show data you can't send to a third party.
+- The screen rows, and some screenshots unless `vision` is `never`, go to your model provider. Run the model locally for screens that show data you cannot send to a third party.
+- AI self-heal is off during a plain-English run, so every step the model takes shows in the history.
 
 ## See also
 

@@ -82,6 +82,7 @@ driver_sources:
 elements_sources:
   - appium_find_element: {enabled: true}
   - appium_page_source:  {enabled: true}
+  - appium_web:          {enabled: true}     # finds css= and DOM XPath in web pages
   - appium_screenshot:   {enabled: true}
 ```
 
@@ -98,7 +99,7 @@ Without `bundleId`, the doctor shows a failure, because XCUITest has nothing to 
 ```terminal
 Project
   ✅ config: driver                    appium enabled
-  ✅ config: appium element source     enabled: appium_find_element, appium_page_source, appium_screenshot
+  ✅ config: appium element source     enabled: appium_find_element, appium_page_source, appium_screenshot, appium_web
   ❌ config: appium settings           bundleId missing in capabilities
       → Edit config.yaml in this project folder.
 ```
@@ -160,9 +161,9 @@ To see the real names in your app, open it in [`optics live`](/docs/create/recor
 
 ## Keys on iOS
 
-iOS has no Back key and no Android key numbers, so Press Keycode doesn't work on iOS. Instead:
+iOS has no Back key and no Android key numbers, so Press Keycode does not work on iOS. Instead:
 
-- **Go back.** Tap the app's own back button, such as `${back_button}` above.
+- **Go back.** Use Go Back. It taps the back button in the navigation bar. If the screen has no such button, the step fails with E0401. Then tap the app's own button, such as `${back_button}` above.
 - **Press Home.** Run XCUITest's `mobile: pressButton` command with Execute Script. Its buttons are `home`, `volumeup` and `volumedown`:
 
   ```csv title="modules/modules.csv"
@@ -170,7 +171,7 @@ iOS has no Back key and no Android key numbers, so Press Keycode doesn't work on
   Go home,Execute Script,"{""script"": ""mobile: pressButton"", ""args"": {""name"": ""home""}}"
   ```
 
-- **Type and submit.** Type with Enter Text on a field, then tap the keyboard's own submit key by its label. Enter Text Direct, Enter Text Using Keyboard and `<enter>`-style keys are built on Android key commands.
+- **Type and submit.** Type with Enter Text on a field, then tap the keyboard's own submit key by its label. Enter Text Direct and Enter Text Using Keyboard type into the field that has focus, so tap the field first. They accept `<enter>`, `<tab>`, `<backspace>` and `<space>`. Other keys fail with E0401.
 
 ## If it isn't working
 
@@ -180,10 +181,12 @@ iOS has no Back key and no Android key numbers, so Press Keycode doesn't work on
 - **Appium can't find the simulator.** Make `deviceName` match a name from `xcrun simctl list devices`, and add `platformVersion` if several iOS versions are installed.
 - **WebDriverAgent fails to build or install on a device.** This is a signing problem. See the [XCUITest driver docs](https://appium.github.io/appium-xcuitest-driver/latest/).
 - **`E0104` "Unsupported platform".** Check the spelling of `platformName`. Use `iOS`.
+- **Each step takes about 10 seconds.** The app never stops changing, for example a timer. Optics limits XCUITest's idle wait to 1 second. To turn it off, set `appium:settings: {waitForIdleTimeout: 0}`.
 - **An element isn't found.** Actions don't wait, so put `Assert Presence` before them. [Troubleshooting](/docs/help/troubleshooting) covers more cases.
 
 ## See also
 
+- [Test mobile websites](/docs/platforms/mobile-web)
 - [Test Android apps](/docs/platforms/android)
 - [Define elements](/docs/elements/define)
 - [Run tests in CI](/docs/run/ci)

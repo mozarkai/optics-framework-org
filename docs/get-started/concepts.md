@@ -18,7 +18,7 @@ A **keyword** is one action or check, such as `Press Element`, `Enter Text` or `
 |---|---|---|
 | App management | Open and close the app or website | `Launch App`, `Close And Terminate App` |
 | Actions | Tap, type, swipe and press keys | `Press Element`, `Enter Text`, `Scroll` |
-| Verification | Check what's on screen | `Assert Presence`, `Validate Element` |
+| Verification | Check what's on screen | `Assert Presence`, `Assert Text`, `Validate Element` |
 | Flow control | Repeat steps, branch, read data, call APIs | `Run Loop`, `Condition`, `Read Data` |
 
 The same keywords work on every platform. `Press Element` taps on a phone and clicks in a browser. The [keyword reference](/docs/reference/keywords/) lists all of them, and `optics list` prints them in your terminal.

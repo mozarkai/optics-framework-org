@@ -16,7 +16,7 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 |---|---|---|---|
 | `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
-| `playwright` | `playwright` | Websites in a local Chromium browser, with no server to run. | Web |
+| `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, and emulate a phone. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
 The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android) and [Test iOS apps](/docs/platforms/ios).
@@ -30,15 +30,16 @@ An element source is how Optics looks at the screen for a driver. They need no e
 | `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV |
 | `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV |
 | `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV |
+| `appium_web` | `appium` | Finds `css=` and DOM XPath locators in web pages in the phone's browser and in WebViews. Lists interactive elements. | Android, iOS |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
 | `selenium_screenshot` | `selenium` | Screenshots for OCR and image matching. | Web |
-| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=` and `text=` locators. | Web |
+| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `role=`, `id=` and other locators. | Web |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. | Web |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. | Web |
 | `camera_screenshot` | None | Frames from a webcam or a TCP frame server. | Any, usually with `ble` |
 
-Only `appium_page_source` and `playwright_page_source` can list interactive elements. With Selenium, `Get Interactive Elements`, the HTTP `/elements` endpoint and the MCP elements resource fail with [E0202](/docs/reference/errors#e02-elements).
+Only `appium_page_source`, `appium_web` and `playwright_page_source` can list interactive elements. With Selenium, `Get Interactive Elements`, the HTTP `/elements` endpoint and the MCP elements resource fail with [E0202](/docs/reference/errors#e02-elements).
 
 ## Text recognition (OCR)
 
@@ -105,13 +106,13 @@ Without flags, it opens a picker with a checkbox for each engine. In scripts and
 ```shell
 $ optics setup --install appium easyocr
 $ optics setup --install web gemini
-$ optics setup --install appium==5.0.0
+$ optics setup --install appium==6.1.2
 ```
 
 - Names are case-insensitive. Use an extra name, a display name such as `Gemini` or `Google Vision`, or a bundle.
-- Pin the engine's main package with a version specifier: `appium==5.0.0`, `"easyocr>=1.7,<2.0"`. Use an operator such as `==`; `appium=5.0.0` is an error. Bundles can't take a version.
+- Pin the engine's main package with a version specifier: `appium==6.1.2`, `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports. Use an operator such as `==`; `appium=6.1.2` is an error. Bundles can't take a version.
 - Optics keeps itself at the version you have, so installing an engine never upgrades Optics.
-- Installing `playwright` also downloads the Chromium browser.
+- Installing `playwright` also downloads the Chromium browser. A [remote browser](/docs/platforms/web#use-a-remote-browser) needs no download.
 
 `optics setup --list` prints every name:
 
@@ -140,8 +141,6 @@ Bundles (install several at once):
   vision          (easyocr, pytesseract, google-vision)
   llm             (gemini, openai, anthropic)
   all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
-
-Pin a version by appending a specifier, e.g. `optics setup --install appium==5.0.0`.
 ```
 
 On success, Optics reminds you that services such as the Appium server still need to be started separately. Run `optics doctor` to confirm each engine shows ✅.

@@ -148,8 +148,8 @@ Calibrate again whenever you move the camera, change the device, or change its d
 | Launch App, Launch Other App | Start the app by hand, or tap its icon on the home screen with Press Element. |
 | XPath and UI-tree text | There's no UI tree. Use visible text, which OCR reads, or images. |
 | Get Text, Get App Version, Execute Script | Not available over Bluetooth. |
-| Back, Volume, Power and other phone-only keys | A Bluetooth keyboard has no such keys. Tap the app's own back button. |
-| Named keys such as `Enter` | On 1.10.5, `Press Keycode,Enter` and `<enter>` type the letters of the key's name. Tap the on-screen key instead. |
+| Go Back, and Back, Volume, Power and other phone-only keys | A Bluetooth keyboard has no such keys. Go Back fails with E0105. Tap the app's own back button. |
+| Named keys such as `Enter` | `Press Keycode,Enter` and `<enter>` type the letters of the key's name. Tap the on-screen key instead. |
 | [Error detection](/docs/run/error-detection) at the end of a run | It needs the page source, which a camera can't provide. Add Assert Presence checks for error messages you care about. |
 
 `optics live`, `optics serve` and `optics mcp` run Launch App when they start, so that first step fails with this setup. Start the app by hand before you begin.
@@ -170,7 +170,7 @@ The first step taps the Birch icon on the home screen, so the run starts from th
 
 ## Known gaps
 
-- **Camera correction isn't applied.** `deskew_corners`, `rotation`, `out_width` and `out_height` under `camera_screenshot` have no effect in 1.10.5. Frame the camera straight on, with the screen upright, instead.
+- **Camera correction isn't applied.** `deskew_corners`, `rotation`, `out_width` and `out_height` under `camera_screenshot` have no effect. Frame the camera straight on, with the screen upright, instead.
 - **The doctor reports a failure.** `optics doctor` expects an element source whose name starts with `ble_`, and none exists. It shows ❌ for `config: ble element source`. Ignore that row, and don't use `optics doctor --check` on this project in CI.
 
 ## If it isn't working

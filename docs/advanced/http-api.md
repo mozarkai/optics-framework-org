@@ -23,7 +23,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.10.5"}
+{"status":"Optics Framework API is running","version":"1.11.2"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.
@@ -71,6 +71,8 @@ $ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \
 
 Keyword names work in any case: `Assert Presence` or `assert_presence`. `params` can also be an object of named values, such as `{"element": "Login", "index": "1"}`. A list inside it gives fallbacks: `{"element": ["//input[@id='login-button']", "Login"]}`.
 
+A keyword that fails returns an error status with the Optics code, for example `404` with `E0201` for an element that is not found. See [Errors](/docs/reference/http-api#errors).
+
 ### Look at the screen
 
 ```shell
@@ -78,7 +80,7 @@ $ curl http://127.0.0.1:8000/v1/sessions/$SESSION/screenshot \
     | python3 -c 'import sys,json,base64; open("screen.png","wb").write(base64.b64decode(json.load(sys.stdin)["data"]["result"]))'
 ```
 
-`/elements` lists the elements on screen, and `/source` returns the UI tree.
+`/elements?compact=true` lists the elements on screen. Each one has `loc`, a locator that matches only that element. `/source` returns the UI tree.
 
 ### Stop the session
 
@@ -108,6 +110,7 @@ The server has **no authentication**, and it accepts requests from any web page 
 - Keep the default `--host 127.0.0.1`, so only your machine can reach it.
 - If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.
 - Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.
+- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, and `Read Data` with `ENV:`.
 
 ## See also
 

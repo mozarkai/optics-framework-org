@@ -44,9 +44,9 @@ The edges must stay on the screen: `aoi_x` plus `aoi_width`, and `aoi_y` plus `a
 ## How it works
 
 - **OCR and image matching** crop the screenshot to the area before they search. They read less, so they're faster too.
-- **The UI tree** can't be cropped. Optics finds the element as usual, then keeps it only if its centre is inside the area.
+- **The UI tree** can't be cropped. Optics finds the element as usual, then keeps it only if its centre is inside the area. This also applies to web pages on Appium. If the match is outside the area, Optics tries the next way, such as OCR.
 
-Each step that uses an area saves a screenshot with the rectangle drawn on it (`…_with_aoi.jpg` in `execution_output/`), so you can check you chose the right part of the screen.
+When `save_captures` is `true`, each step that uses an area saves a screenshot with the rectangle on it: `…_with_aoi.jpg` in `execution_output/`. Use it to make sure that you chose the right part of the screen.
 
 ## Keywords that accept an area
 
@@ -56,7 +56,9 @@ In the Python library, only `press_element` accepts area parameters.
 
 ## Area or index?
 
-Both pick one match out of several. Use `index` when you know which match you want by order (the second *Add to cart* button). Use an area when you know *where* it is, which keeps working when items are added or reordered. You can combine them.
+Both pick one match out of several. Use `index` when you know which match you want by order (the second *Add to cart* button). Use an area when you know *where* it is, which keeps working when items are added or reordered.
+
+You can combine them, but the order differs. For UI tree and web matches, `index` picks a match on the full screen first, and then the area is applied. OCR and image matching count `index` inside the area.
 
 ## See also
 

@@ -14,7 +14,7 @@ If CSV or YAML files can express your test, prefer them. Anyone on the team can 
 
 ## Write a test with pytest
 
-This test signs in to the Sauce Labs demo store, adds a backpack to the cart, and reads the cart badge. It runs as written with `pip install "optics-framework[playwright]" pytest`.
+This test signs in to the Sauce Labs demo store, adds a backpack to the cart, and checks the cart badge and the price in the cart. It runs as written with `pip install "optics-framework[playwright]" pytest`.
 
 ```python title="test_checkout.py"
 import pytest
@@ -42,18 +42,16 @@ def test_shopper_can_add_a_backpack(optics):
     optics.enter_text("//input[@id='password']", "secret_sauce")
     optics.press_element(["//input[@id='login-button']", "Login"])  # fallbacks
     optics.assert_presence("Products", timeout="10")
+    price = optics.get_text("//div[@data-test='inventory-item-price']")
     optics.press_element("//button[@id='add-to-cart-sauce-labs-backpack']")
-    badge = optics.get_text("//span[@data-test='shopping-cart-badge']")
-    assert badge == "1"
+    optics.assert_text("//span[@data-test='shopping-cart-badge']", "1")
+    optics.press_element("//a[@data-test='shopping-cart-link']")
+    optics.assert_text("//div[@data-test='inventory-item-price']", price)
 ```
 
 ```shell
 $ pytest test_checkout.py
 ```
-
-:::mistake[Typing and reading text in browsers on Optics 1.10.5]
-On 1.10.5, `enter_text` and `get_text` fail with Playwright (`Object of type Locator is not JSON serializable`). The next release fixes it. Until then, click the field with `press_element` and type with `enter_text_direct`.
-:::
 
 ## Configure the session
 
@@ -88,7 +86,9 @@ Settings such as `ai_self_heal`, `llm_models` and `log_level` aren't read by the
 - **Pass every value as a string.** `optics.press_by_coordinates("540", "1600")` works; numbers raise `TypeError`.
 - **A list means "try these in order".** `press_element(["//button[@id='login']", "Login"])` tries the XPath, then the text. To check several elements at once, separate them with a pipe in one string: `assert_presence("Products|Your Cart")`.
 - **`${name}` isn't looked up** in action methods. Pass the locator itself, or keep your own dict of locators.
+- **There is no `store_as`.** Keep a return value in a Python variable, as `price` above.
 - **Methods return values.** `get_text` returns the text, `capture_screenshot` returns a base64 PNG, and `assert_presence` returns `True`. A failed check raises an exception, which fails the pytest test.
+- **`assert_text`, `is_element` and `go_back`.** `assert_text(element, expected)` fails on different text. `is_element(element, state, timeout)` accepts `visible`, `invisible`, `enabled`, `disabled`, `checked` and `unchecked`. `go_back()` goes back one screen.
 - **Some defaults differ.** `assert_presence` and `assert_visibility` wait 60 seconds by default, and `detect_and_press` waits 10.
 
 ## Python-only methods

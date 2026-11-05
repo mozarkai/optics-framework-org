@@ -9,7 +9,7 @@ An element is a name for something on screen, plus one or more values that tell 
 
 ## Write elements
 
-Elements live in any CSV whose header starts with `Element_Name,Element_ID`. The project template puts them in `test_data/elements.csv`.
+Elements live in any CSV whose header starts with `Element_Name,Element_ID`, in any case. The project template puts them in `test_data/elements.csv`.
 
 ```csv title="test_data/elements.csv"
 Element_Name,Element_ID
@@ -29,10 +29,6 @@ sign_in,//*[@resource-id='com.birch.shop:id/login'],Sign in,sign_in.png
 
 Both layouts mean the same thing. Use whichever is easier to read for your team. Empty cells are ignored.
 
-:::mistake[The header is exact]
-The first column must be named exactly `Element_Name`, with that capitalization. A file headed `element_name,element_id` is recognised as an elements file but loads no elements, and every `${name}` then fails with "Element not found".
-:::
-
 ## Choose the kind of value
 
 Optics decides what a value is from how it looks:
@@ -43,8 +39,10 @@ Optics decides what a value is from how it looks:
 | Plain words | Text: UI tree first, then OCR on a screenshot | `Sign in` |
 | `text_only:` then words | Text, OCR only | `text_only:Sign in` |
 | Ends in `.png`, `.jpg`, `.jpeg` or `.bmp` | An image to match on a screenshot | `cart_icon.png` |
-| `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Works with Playwright, not Selenium | `#login-button` |
+| `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Playwright and web pages on Appium only | `#login-button` |
 | Starts with `android.` or `XCUI` | A class name | `android.widget.Switch` |
+
+On Playwright, you can also write `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` values. See [Locators for web pages](/docs/platforms/web#locators-for-web-pages).
 
 ### XPath
 
@@ -63,7 +61,7 @@ Plain text matches an element showing that text, or with that accessibility labe
 Text matching in the UI tree tolerates small differences. To require exact matches, set `strict_element_match: true` in `config.yaml`.
 
 :::mistake[Text that looks like something else]
-A value is checked against the rules in the table above, top to bottom. Text that happens to start with `(` or `/`, or contains `[` and `]`, is read as an XPath or CSS selector: `(optional)`, `Price [USD]`, `.com`. On Appium and Playwright, put `text=` in front to force text: `text=(optional)`.
+A value is checked against the rules in the table above, top to bottom. Text that happens to start with `(` or `/`, or contains `[` and `]`, is read as an XPath or CSS selector: `(optional)`, `Price [USD]`, `.com`. On Appium and Playwright, put `text=` in front to force text: `text=(optional)`. On Playwright, a value that looks like CSS, such as `.com`, is also tried as visible text.
 :::
 
 ### Images
@@ -73,6 +71,8 @@ An image value is the file name of a cropped picture of the element. Put the pic
 ### Values to avoid
 
 `id:` values, such as `id:login`, aren't supported by any element source and always fail. Use an XPath on the id instead.
+
+Assert Presence, Assert Visibility, Validate Element and Validate Screen skip class names. If every element in the check is a class name, the step passes without a check.
 
 ## Find the right locator
 
@@ -90,13 +90,17 @@ module_name,module_step,param_1,param_2
 Add Second Product,Press Element,Add to cart,index=1
 ```
 
+On Appium, `index` picks among the elements with the same text, in UI tree order. When a locator matches more than one element, the log shows how many matched and which one Optics used.
+
 To look in one part of the screen instead, use an [area of interest](/docs/elements/area-of-interest).
 
 ## Keep data in elements too
 
 Elements can hold any value a step needs, not only locators: an email address, a search term, a URL. Keeping them together means one file holds everything that changes between environments.
 
-To keep a password out of log files, start its value with `@:`, for example `password,@:correct-horse`. Optics masks it as `****` in logs and types it without the prefix on Appium, Selenium and Bluetooth devices. Playwright types the prefix too, so don't use `@:` with Playwright.
+To keep a password out of log files, start its value with `@:`, for example `password,@:correct-horse`. Optics masks it as `****` in logs and types it without the prefix. `@:${password}` also works.
+
+Optics also masks a value that `store_as` or Read Data writes to a secret name. A secret name contains a word such as `password`, `pin`, `otp`, `secret`, `token` or `key`, for example `api_token` or `myPassword`. The value must have 4 or more characters.
 
 To put a line break or tab inside a value, write `\n` or `\t`. Write `\\` for a literal backslash.
 

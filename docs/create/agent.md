@@ -6,7 +6,7 @@ level: Intermediate
 time: 10 min
 ---
 
-`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV or browser: every Optics keyword becomes a tool the agent can call, and the screen becomes something it can read. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
+`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV or browser. The agent reads the screen as a list of rows, acts on a row by its reference, and sees what changed after each action. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
 
 ::scene{name="agent" caption="The agent drives the app through Optics tools, reads the project format, and writes the suite files. You run them like any other suite."}
 
@@ -93,18 +93,20 @@ $ optics execute checkout
 
 The server gives the agent:
 
-- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app), `screenshot` and `terminate_session`.
-- **A tool for each keyword**, such as `press_element`, `enter_text`, `assert_presence` and `launch_app`. Each takes the session id plus the keyword's values.
-- **Resources to read**: the current screen as an image, the list of elements on screen, the raw UI tree, the keyword catalogue, and `optics://project-format`, which teaches the agent how to write suite files.
+- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
+- **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app` and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
+- **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files.
 
-A typical session goes: start a session, look at the screen, act with keywords, read the project format, write the files, run `optics dry_run`, and end the session. The [MCP reference](/docs/reference/mcp) lists every tool and resource.
+The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict.
+
+A typical session goes: start a session, act on rows, check the result, read the steps and the project format, write the files, run `optics dry_run`, and end the session. The [MCP reference](/docs/reference/mcp) lists every tool and resource. For one tool per keyword, start the server with `--toolset full`.
 
 ## Keep the agent on track
 
-- **Agents tap by name, not by position.** Tapping raw screen coordinates is hidden by default, because those tests break on any other screen size. Set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before starting the server if you really need it.
-- **Saving is the agent's job.** There's no record button in MCP. The agent writes the files using `optics://project-format`. Ask it to run `optics dry_run` before it finishes.
+- **Agents tap by reference, not by position.** The server hides coordinate taps by default, because those tests break on any other screen size. To allow them, set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before you start the server.
+- **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run` before it finishes.
 - **Loops and conditions** (`Run Loop`, `Condition`, `Read Data` and the rest) aren't tools, because they only make sense inside suite files. The agent can still write them into modules.
-- **Sessions are private to the server.** A session started over MCP isn't visible to `optics serve` or `optics live`, and it ends when the server stops.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call.
 
 :::details[Run the server over HTTP]
 By default the server talks to one client over standard input and output. To share it on a network, or run it in a container, start it in HTTP mode:
@@ -133,7 +135,7 @@ $ optics mcp
 
 For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER`, `OPTICS_LLM_MODEL` and the engine's key. See [Environment variables](/docs/reference/mcp#environment-variables).
 
-When a step is healed, the tool result includes `"healed": true` and the steps that worked, so the agent can update the suite.
+When a step is healed, the `result` of the reply includes `"healed": true` and the steps that worked, so the agent can update the suite.
 :::
 
 ## See also

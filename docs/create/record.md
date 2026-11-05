@@ -53,6 +53,8 @@ Type a keyword and its values, separated by spaces, and press [[Enter]]:
 - Write keyword names in `snake_case` or in words: `press_element`, `Press Element` and `press element` all work.
 - Put quotes around a value that contains spaces.
 - Type `${` to pick from the elements already defined in your project.
+- Type `name=value` to give a parameter by name. For example, `press_element "Add to cart" index=1` presses the second match. On Appium, `index=` also picks among native elements with the same text.
+- Type `go_back` to go back one screen. Type `assert_text ${greeting} "Hi, Ava"` to fail the step when the element shows other text.
 - Press [[Tab]] to complete a keyword name. The rest of its parameters appear in grey as a hint.
 - Press [[Ctrl]]+[[K]] to browse every keyword.
 
@@ -70,6 +72,7 @@ When the flow works, save it with a test case name and a module name:
 Optics then:
 
 - appends the steps to `modules/modules.csv` as the module `Sign_In`,
+- adds new elements to your elements CSV, or creates `elements/elements.csv` when the project has none,
 - adds a `Checkout,Sign_In` row to `test_cases/test_cases.csv`,
 - copies the session's screenshots to `execution_output/Sign_In/`,
 - clears the recording, so the next steps you run become the next module.
@@ -80,7 +83,13 @@ Run more steps, then `/save Checkout Add_To_Cart` to add a second module to the 
 Names in `/save` can't contain spaces. Use underscores, or rename the module in `modules.csv` afterwards. If the module or test case already exists, Optics asks you to run the same `/save` again to confirm that you want to append to it.
 :::
 
-`/save` writes the steps exactly as you typed them. If you typed `press_element "Sign in"`, the module uses the text `Sign in`. To use a named element instead, type `${sign_in}`, or edit `modules.csv` afterwards and add the element to `elements.csv`. `/save` always writes CSV, even in a project that uses YAML.
+`/save` writes the steps as you typed them. If you typed `press_element "Sign in"`, the module uses the text `Sign in`. To use a named element instead, type `${sign_in}`, or edit `modules.csv` afterwards and add the element to `elements.csv`. `/save` always writes CSV, even in a project that uses YAML.
+
+`/save` does not write a value that you type into a secret field, such as a password. The step `enter_text ${password_field} "correct horse"` is saved as `Enter Text,${password_field},${password_field_value}`. The elements CSV gets the row `password_field_value,<redacted>`. Before you run the test, put the real value in that row, or read it with `Read Data`. See [Hide sensitive values](/docs/advanced/variables#hide-sensitive-values).
+
+:::mistake
+When you type into a raw locator, such as `enter_text css=#user-name ava`, on a screen with a password field, `/save` also writes that value as `<redacted>`. Until the fix ships, type into named elements, such as `${email_field}`.
+:::
 
 ## Commands and keys
 

@@ -36,11 +36,11 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.10.5"
+          pip install "optics-framework[playwright]==1.11.2"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
-        run: xvfb-run -a optics execute birch-tests --no-use-printer
+        run: optics execute birch-tests --no-use-printer
 
       - name: Publish results
         if: always()
@@ -48,27 +48,21 @@ jobs:
         with:
           report_paths: birch-tests/execution_output/junit_output.xml
 
-      # Screenshot file names contain colons, which upload-artifact rejects,
-      # so the output folder is uploaded as one archive.
       - name: Keep the run output
         if: failure()
-        run: tar -czf optics-output.tgz birch-tests/execution_output
-
-      - if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: optics-output
-          path: optics-output.tgz
+          path: birch-tests/execution_output/
 ```
 ::tab[GitLab CI]
 ```yaml title=".gitlab-ci.yml"
 optics-web:
   image: python:3.12-bookworm
   script:
-    - apt-get update && apt-get install -y xvfb
-    - pip install "optics-framework[playwright]==1.10.5"
+    - pip install "optics-framework[playwright]==1.11.2"
     - python -m playwright install --with-deps chromium
-    - xvfb-run -a optics execute birch-tests --no-use-printer
+    - optics execute birch-tests --no-use-printer
   artifacts:
     when: always
     paths:
@@ -78,7 +72,18 @@ optics-web:
 ```
 :::
 
-`xvfb-run` gives the browser a virtual screen. Optics 1.10.5 always opens a visible browser window, even with `headless: true` in `config.yaml`, and CI machines have no display. Once the fix in [pull request #600](https://github.com/mozarkai/optics-framework/pull/600) is released, `headless: true` works and you can drop `xvfb-run`.
+CI machines have no display, so set `headless: true` under the Playwright `capabilities` in `config.yaml`:
+
+```yaml title="config.yaml"
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        browser: chromium
+        headless: true
+```
+
+To use a browser grid instead of a local browser, set the Playwright `url` and keep the token in a CI secret. Then you do not need `playwright install`. See [Use a remote browser](/docs/platforms/web#use-a-remote-browser).
 
 The `permissions` block lets the report step post its check. Without it, the step logs `Resource not accessible by integration` and no check appears. Pull requests from forks always get a read-only token, so on those the results are in the job log only.
 
@@ -116,7 +121,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.10.5"
+          pip install "optics-framework[appium]==1.11.2"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -148,10 +153,11 @@ There's one case the exit code misses: [error screens](/docs/run/error-detection
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.10.5`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Pin the Optics version** (`optics-framework==1.11.2`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
+- **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
-- **Keep the artifacts.** Upload `execution_output/` when a run fails, as an archive (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
+- **Keep the artifacts.** Upload `execution_output/` when a run fails (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
 - **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables.
 - **Wait for screens to load.** Runners are often slower than your laptop. Put `Assert Presence` before actions that follow a screen change, rather than adding `Sleep` steps.
 

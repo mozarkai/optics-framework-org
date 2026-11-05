@@ -22,13 +22,12 @@ login_button,//input[@id='login-button']
 menu_button,//button[@id='react-burger-menu-btn']
 logout_link,//a[@id='logout_sidebar_link']
 shoppers,standard_user|visual_user|problem_user
-username,placeholder
 ```
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1,param_2,param_3
 Open the store,Launch App,https://www.saucedemo.com
-Sign In Each Shopper,Run Loop,Sign In And Out,username,${shoppers}
+Sign In Each Shopper,Run Loop,Sign In And Out,${username},${shoppers}
 Sign In And Out,Enter Text,${username_field},${username}
 Sign In And Out,Enter Text,${password_field},secret_sauce
 Sign In And Out,Press Element,${login_button}
@@ -45,21 +44,20 @@ Suite Setup,Open the store
 Every shopper can sign in,Sign In Each Shopper
 ```
 
-`Run Loop,Sign In And Out,username,${shoppers}` reads: *run the module **Sign In And Out** once for each value in `shoppers`, and set `username` to that value each time.* Inside the module, `${username}` is the current shopper.
+`Run Loop,Sign In And Out,${username},${shoppers}` reads: *run the module **Sign In And Out** once for each value in `shoppers`, and set `username` to that value each time.* Inside the module, `${username}` is the current shopper.
 
 A few details make this work:
 
-- **`username` is written without `${}`** in the Run Loop step, because the loop writes it. See [Variables](/docs/advanced/variables).
-- **`username,placeholder`** in the elements file lets `optics dry_run` accept `${username}`. The loop replaces it.
-- **The values are separated by `|`.** You can also write them straight into the step: `Run Loop,Sign In And Out,username,standard_user|visual_user`.
+- **The loop sets `${username}`.** You do not need an elements row for it. See [Variables](/docs/advanced/variables).
+- **The values are separated by `|`.** You can also write them straight into the step: `Run Loop,Sign In And Out,${username},standard_user|visual_user`.
 - **`Sleep,1`** waits for the menu to slide open. Prefer a check such as `Assert Presence` to wait for a new screen, but use a short sleep for an animation on an element that's already on the page.
 
 The run shows the loop as one step. If any pass fails, the loop stops and the step fails with the reason:
 
 ```terminal
-└── Every shopper can sign in                                     |  5.86s |    PASS
-    └── Sign In Each Shopper                                      |  5.86s |    PASS
-        └── Run Loop (Sign In And Out, username, standard_user… |  5.86s |    PASS
+└── Every shopper can sign in                            |      7.26s |    PASS
+    └── Sign In Each Shopper                             |      7.26s |    PASS
+        └── Run Loop (Sign In And Out, ${username}, s... |      7.26s |    PASS
 ```
 
 ## Loop over several lists at once
@@ -68,13 +66,13 @@ Give more name and list pairs to set several variables per pass. The lists are r
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1,param_2,param_3,param_4,param_5
-Every Search,Run Loop,Search And Check,term,trail|pace|ridge,expected,Trail Runner 2|Pace Knit|Ridge GTX
+Every Search,Run Loop,Search And Check,${term},trail|pace|ridge,${expected},Trail Runner 2|Pace Knit|Ridge GTX
 Search And Check,Press Element,${search_bar}
 Search And Check,Enter Text Direct,${term}
 Search And Check,Assert Presence,${expected}
 ```
 
-Each pass sets `term` and `expected` from the same position in their lists: first `trail` and `Trail Runner 2`, then `pace` and `Pace Knit`, and so on. Add `term,placeholder` and `expected,placeholder` to your elements file for dry runs.
+Each pass sets `term` and `expected` from the same position in their lists: first `trail` and `Trail Runner 2`, then `pace` and `Pace Knit`, and so on.
 
 ## Repeat a module a number of times
 
@@ -84,6 +82,8 @@ Give a count instead of lists:
 module_name,module_step,param_1,param_2
 Fill Cart,Run Loop,Add One Item,3
 ```
+
+Write the count as a number. A count from a variable, such as `${n}`, [does not work yet](/docs/advanced/variables#create-variables-during-a-run).
 
 ## Keep the data in a file
 
@@ -97,11 +97,11 @@ ben,ben@birch.shop,shopper
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1,param_2,param_3
-Sign In As Admin,Read Data,admin_email,test_data/users.csv,role == 'admin';select=email
+Sign In As Admin,Read Data,${admin_email},test_data/users.csv,role == 'admin';select=email
 Sign In As Admin,Enter Text,${email_field},${admin_email}
 ```
 
-The query picks rows with a filter (`role == 'admin'`) and columns with `select=`. Compare values as quoted text, because every value in the file is read as text. `Read Data` is designed to fetch one row; with several matching rows, the variable gets a combined value that's hard to use.
+The query picks rows with a filter (`role == 'admin'`) and columns with `select=`. Compare values as quoted text, because every value in the file is read as text. A variable in the query, such as `username == ${user}`, gets its quotes from Optics. `Read Data` is designed to fetch one row; with several matching rows, the variable gets a combined value that's hard to use.
 
 ## Rules inside a loop
 

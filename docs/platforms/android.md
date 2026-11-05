@@ -104,6 +104,7 @@ driver_sources:
 elements_sources:
   - appium_find_element: {enabled: true}     # asks Appium for XPaths, ids and text
   - appium_page_source:  {enabled: true}     # searches the app's UI tree
+  - appium_web:          {enabled: true}     # finds css= and DOM XPath in web pages
   - appium_screenshot:   {enabled: true}     # screenshots for OCR and image matching
 text_detection:
   - easyocr: {enabled: true}                 # needs: optics setup --install easyocr
@@ -131,7 +132,7 @@ Mobile
 
 Project
   ✅ config: driver                    appium enabled
-  ✅ config: appium element source     enabled: appium_find_element, appium_page_source, appium_screenshot
+  ✅ config: appium element source     enabled: appium_find_element, appium_page_source, appium_screenshot, appium_web
   ✅ config: appium settings           required settings present
 ```
 
@@ -199,7 +200,7 @@ Start one in another terminal:  appium
 Then re-run:  optics execute birch-android
 ```
 
-The adb checks only run when the plain `platformName` key is `Android`, in any capitalization. Optics doesn't read `appium:platformName` for this check. To skip the preflight, for example when Appium and the devices run on a remote device farm, set `OPTICS_SKIP_PREFLIGHT`:
+The adb checks run only when the plain `platformName` key is `Android`, in any capitalization, and `url` points to this machine (`localhost`, `127.0.0.1`, `::1` or `0.0.0.0`). For a remote device farm, Optics checks only that the server answers. To skip the preflight completely, set `OPTICS_SKIP_PREFLIGHT`:
 
 ```shell
 $ OPTICS_SKIP_PREFLIGHT=1 optics execute birch-android
@@ -223,13 +224,16 @@ Press Keycode sends an Android key by its number:
 
 ```csv title="modules/modules.csv"
 module_name,module_step,param_1
-Go back,Press Keycode,4
+Open home,Press Keycode,3
 ```
+
+To press Back, use the Go Back keyword.
 
 Android's [KeyEvent list](https://developer.android.com/reference/android/view/KeyEvent) has every number. To press Enter after typing, you can also write `Enter Text Using Keyboard,<enter>`. See [Press Keycode](/docs/reference/keywords/actions#press-keycode) for details.
 
 ## Tips
 
+- **Steps do not wait for an idle screen.** UiAutomator2 waits up to 10 seconds for the app to stop changing before each command. Optics sets this limit to 1 second. To change it, set `waitForIdleTimeout` in milliseconds under `appium:settings`. `0` turns the wait off.
 - **App data is kept between runs.** Optics starts each session with `noReset: true`, so Appium doesn't clear the app's data and a signed-in user stays signed in. Add `noReset: false` to `capabilities` to start every run from a fresh app.
 - **Pick a device with `udid`.** When several devices are connected, set `udid` to the serial from `adb devices`. `deviceName` is only a label.
 - **Include off-screen elements.** Android leaves elements that are scrolled out of view out of the UI tree. Add `appium:settings: {allowInvisibleElements: true}` under `capabilities` to include them.
@@ -244,11 +248,12 @@ Android's [KeyEvent list](https://developer.android.com/reference/android/view/K
 - **`E0104` "Unsupported platform".** Check the spelling of `platformName`. Use `Android`.
 - **Appium can't find the UiAutomator2 driver, or complains about `ANDROID_HOME`.** Run `appium driver install uiautomator2`, set `ANDROID_HOME`, and check with `appium driver doctor uiautomator2`.
 - **The app opens on the wrong screen.** Check `appActivity`. If the app remembers an old state, set `noReset: false`.
-- **A swipe or scroll passes but nothing moves.** Appium gesture errors are logged, not raised. Check the screenshots in `execution_output/`, and only use `up` and `down` with Scroll.
+- **A swipe or scroll passes but nothing moves.** Appium gesture errors are logged, not raised. Check the screenshots in `execution_output/`.
 - **An element isn't found.** Actions don't wait, so put `Assert Presence` before them. [Troubleshooting](/docs/help/troubleshooting) covers more cases.
 
 ## See also
 
+- [Test mobile websites](/docs/platforms/mobile-web)
 - [Test TV apps](/docs/platforms/tv)
 - [Define elements](/docs/elements/define)
 - [Run tests in CI](/docs/run/ci)

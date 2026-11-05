@@ -12,12 +12,13 @@ Optics runs the same tests on phones, TVs, browsers and locked production device
 
 | Platform | Driver | Element sources | Notes |
 |---|---|---|---|
-| Android | `appium` (UiAutomator2) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Needs the Appium server, adb, and a phone or emulator. |
-| iOS | `appium` (XCUITest) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Needs a Mac with Xcode, and a simulator or a signed real device. |
+| Android | `appium` (UiAutomator2) | `appium_find_element`, `appium_page_source`, `appium_web`, `appium_screenshot` | Needs the Appium server, adb, and a phone or emulator. |
+| iOS | `appium` (XCUITest) | `appium_find_element`, `appium_page_source`, `appium_web`, `appium_screenshot` | Needs a Mac with Xcode, and a simulator or a signed real device. |
+| Mobile web (Chrome, Safari, WebViews) | `appium` | `appium_web` with the Android or iOS sources | Same setup as Android or iOS. Finds `css=` and DOM XPath locators in the page. |
 | Android TV | `appium` (UiAutomator2) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Same setup as Android. Move around with D-pad key numbers. |
 | Samsung Tizen | `appium` (`platformName: TizenTV`) | `appium_page_source`, `appium_screenshot` | Remote keys only. Touch and typing keywords fail with E0105. |
 | LG webOS | `appium` (`platformName: LGTV`) | `appium_screenshot`, plus OCR | Remote keys only. Touch and typing keywords fail with E0105. |
-| Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Installs and opens its own Chromium. |
+| Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone. |
 | Web (Selenium) | `selenium` | `selenium_find_element`, `selenium_page_source`, `selenium_screenshot` | Needs a WebDriver server or Grid. Chrome or Firefox. |
 | Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera. |
 
@@ -54,10 +55,9 @@ Most keywords work on every platform. These are the exceptions:
 |---|---|
 | Press Element, Enter Text, Swipe, Scroll and other touch or typing keywords | Fail with E0105 on Samsung Tizen and LG webOS. Use Press Keycode with remote keys instead. |
 | Press Keycode | Takes Android key numbers on Android and Android TV, remote key names on Tizen and webOS, and key names such as `Enter` on Playwright. Not supported on Selenium or iOS. |
-| Swipe | Not supported on Selenium. On Playwright it turns the mouse wheel. |
-| Scroll | Up and down only on Appium. Left and right are ignored. |
-| Launch App | Opens a package or bundle id on Appium and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |
-| Enter Text, Get Text | Fail in Playwright on Optics 1.10.5. See [Test websites](/docs/platforms/web) for the workaround. |
+| Swipe | Not supported on Selenium. On Playwright it scrolls the page up or down. |
+| Launch App | Opens a package, a bundle id or a URL on Appium, and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |
+| Go Back | Goes back one page in a browser, and presses Back on Android. On iOS it taps the navigation bar's back button. Fails with E0105 on TVs and production devices. |
 | XPath and UI-tree text | Not available on production devices, which only have camera pictures. Use OCR and images. |
 | [Error detection](/docs/run/error-detection) | Needs the page source, so it doesn't run on production devices. |
 
@@ -69,6 +69,7 @@ The [keyword reference](/docs/reference/keywords/) lists each keyword's behavior
 - [Android](/docs/platforms/android): Set up Appium and adb, then run on a phone or emulator.
 - [iOS](/docs/platforms/ios): Run on a simulator or a signed device with XCUITest.
 - [Web](/docs/platforms/web): Test websites with Playwright or Selenium. {Recommended}
+- [Mobile web](/docs/platforms/mobile-web): Test Chrome, Safari and WebViews on a real phone.
 - [TV](/docs/platforms/tv): Drive Android TV, Samsung Tizen and LG webOS with remote keys.
 - [Production devices](/docs/platforms/production): Test locked devices through Bluetooth and a camera. {Advanced}
 :::

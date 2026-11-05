@@ -32,7 +32,7 @@ The server doesn't read config.yaml or your project's test files. Each session g
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.10.5"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.2"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -40,13 +40,36 @@ The server doesn't read config.yaml or your project's test files. Each session g
 | `GET` | `/v1/sessions/{id}/screenshot` | The current screen. `data.result` is a base64 PNG without a `data:` prefix, or `""` if the capture failed. |
 | `GET` | `/v1/sessions/{id}/driver-id` | The driver's own session id in `data.result`. |
 | `GET` | `/v1/sessions/{id}/variables` | Every variable in the session: `{"variables": {"name": ["value", ...]}}`. |
-| `GET` | `/v1/sessions/{id}/elements` | Elements on screen in `data.result`. Query: `filter_config` (`all`, `interactive`, `buttons`, `inputs`, `images`, `text`; repeatable) and `compact=true`. `compact` ignores the filter. Appium and Playwright only. |
+| `GET` | `/v1/sessions/{id}/elements` | Elements on screen in `data.result`. Query: `filter_config` (`all`, `interactive`, `buttons`, `inputs`, `images`, `text`; repeatable) and `compact=true`. `compact` ignores the filter. Appium, Appium web and Playwright only. See [Compact elements](#compact-elements). |
 | `GET` | `/v1/sessions/{id}/source` | The UI tree or HTML. `data` is `{"page_source", "timestamp"}` directly, not under `result`. |
 | `GET` | `/v1/sessions/{id}/screen_elements` | A screenshot and its elements from the same frame. `data` is `{"screenshot", "elements"}` directly, not under `result`. |
 | `GET` | `/v1/sessions/{id}/events` | A stream of keyword events. See [Streams](#streams). |
 | `GET` | `/v1/sessions/{id}/workspace/stream` | A stream of screenshots and elements whenever the screen changes. See [Streams](#streams). |
-| `GET` | `/v1/keywords` | Every keyword, including flow control, with its description and parameters. |
+| `GET` | `/v1/keywords` | Every keyword, including flow control. See [Keyword list](#keyword-list). |
 | `DELETE` | `/v1/sessions/{id}/stop` | Closes the app and ends the session. Returns `{"status": "terminated"}`. |
+
+### Compact elements
+
+With `compact=true`, each element is one row:
+
+```json
+{"i": 1, "label": "Username", "cls": "input", "bounds": [494, 154, 786, 193], "act": ["tap", "input"], "rid": "user-name", "loc": "css=[data-test=\"username\"]"}
+```
+
+- `act` lists what the element accepts: `tap`, `long`, `toggle`, `input` or `scroll`. An empty list is read-only text.
+- `rid` is the element's id, when it has one.
+- `loc` is a locator that matches only this element. Use it as the element of a keyword.
+- `offscreen: true` marks a web element that is on the page but scrolled out of view.
+
+### Keyword list
+
+Each item of `/v1/keywords` has the keyword's name, slug, description and parameters:
+
+```json
+{"keyword": "Get Text", "keyword_slug": "get_text", "description": "Get the text from a specified element. ...", "parameters": [{"name": "element", "type": "<class 'str'>", "default": null}, {"name": "index", "type": "<class 'str'>", "default": "0"}, ...], "returns": true, "deprecated": false}
+```
+
+`returns` is true when the keyword gives back a value. `deprecated` is true for a keyword you must not use in new tests, such as `Press Checkbox`.
 
 ## SessionConfig
 
@@ -67,6 +90,13 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
 Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). See [Environment variables](/docs/reference/cli#environment-variables).
+
+The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
+
+- A `${NAME}` reference in a driver `url` or in a `capabilities.headers` value. Send the value itself.
+- A file path in `capabilities.storage_state`. Send the state as a JSON object.
+
+The session log shows only the scheme and host of a URL, and masks header values and `storage_state`.
 
 ## ExecuteRequest
 
@@ -104,12 +134,22 @@ Unlike `optics execute`, the HTTP API returns keyword results, so `Get Text`, `A
 | Status | When | Body |
 |---|---|---|
 | `400` | `mode` isn't `"keyword"`, a template image isn't valid base64, or `api_data` is invalid. | `{"detail": "<message>"}` |
+| `400` | The request asks the server to read its own environment or files. See below. | A coded error with `E0501`. |
 | `404` | The session doesn't exist. | `{"detail": "Session not found"}` |
-| `404` | The keyword doesn't exist. | `{"detail": {"type": "optics:keyword", "code": "Code.E0402", "status": 404, "message": "Keyword ... not found", ...}}` |
-| `4xx`/`5xx` | Optics raised a coded error. The status depends on the code. | `{"detail": {"type", "code", "status", "message", "details", "meta"}}` |
-| `500` | A keyword failed. | `{"detail": "Execution failed: All fallback attempts failed for keyword '...': ..."}`. The Optics code is inside the text. |
+| `404` | The keyword doesn't exist. | A coded error with `E0402`. |
+| `4xx`/`5xx` | A keyword failed with an Optics error. The status comes from the code, for example `404` for `E0201`. | `{"detail": {"type", "code", "status", "message", "details", "meta", "cause"}}` |
+| `500` | A keyword failed with an error that has no Optics code. | `{"detail": "Execution failed: <message>"}` |
 | `500` | The session couldn't start. | `{"detail": "Session creation failed: ..."}` or a coded error. |
 
+A keyword that does not find its element returns `404`:
+
+```json
+{"detail": {"type": "optics:element", "code": "Code.E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "Code.E0201: Element 'css=#nope' not found."}}
+```
+
+- `cause` is the error that caused this one, or `null`.
+- When you send several values for one parameter and each one fails, the message is `All fallback values failed for keyword '<keyword>':` and lists each try. The code and status are those of the last try.
+- `Read Data` with an `ENV:` file path returns `400` with `E0501`: `Read Data ENV: is only available to project runs, not API callers`.
 - The `code` field can carry a `Code.` prefix, as in `Code.E0402`. It's the same code. See [Error codes](/docs/reference/errors).
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
@@ -215,7 +255,7 @@ Optics writes `junit_output.xml` for the session to `execution_output/` in the p
 
 ## Limits
 
-- Sessions live in memory. Restarting the server ends them, and `optics live` and `optics mcp` can't see them.
+- Sessions live in memory. `optics live` and `optics mcp` cannot see them. When the server stops, it ends every session and closes its drivers.
 - There's no record or save endpoint. Write the steps you ran into [project files](/docs/reference/files) to replay them with `optics execute`.
 - Error detection doesn't run over HTTP.
 - With the `ble` driver, the automatic `launch_app` at session start fails, because BLE can't launch apps.

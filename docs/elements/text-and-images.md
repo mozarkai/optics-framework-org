@@ -44,6 +44,8 @@ text_detection:
 ### Use text values
 
 Nothing changes in your tests. Any text value, such as `Press Element,Trail Runner 2`, is tried in the UI tree first and with OCR second. To skip the UI tree and use OCR straight away, write `text_only:Trail Runner 2`.
+
+Without an OCR engine, a text miss ends with "OCR was not tried: no text_detection engine is configured."
 :::
 
 ### OCR engines
@@ -81,11 +83,13 @@ The picture is called a **template**. How you crop it decides whether matching w
 
 1. Take a screenshot on the same kind of device you test on. Run the test once and use a `pre_…` screenshot from `execution_output/`, or run `/screenshot` in `optics live`.
 2. Crop tightly around the element. Include its distinctive shape, and as little background as possible.
-3. Don't resize the crop. Matching works best at the screen's own resolution, though it tolerates some scaling and rotation.
+3. Don't resize the crop. Matching works best at the screen's own resolution, though it tolerates some scaling and rotation. Playwright screenshots are at CSS pixel scale, so crop Playwright templates from a Playwright run.
 4. Save it as PNG anywhere in the project folder. The templates use `test_data/input_templates/`.
 5. Refer to it by file name only: `cart_icon.png`, not a path. File names must be unique across the project.
 
 Optics also picks up images inside `execution_output/`. Give templates distinctive names, so they never clash with a screenshot's name.
+
+Before a tap, Optics changes the position of an OCR or image match from screenshot pixels to screen points, so that taps land correctly on iOS and on scaled screens.
 
 ## When to use which
 
@@ -99,7 +103,7 @@ Optics also picks up images inside `execution_output/`. Give templates distincti
 
 ## Speed things up
 
-- **Keep the UI tree first.** List page source and element sources before screenshot sources, so vision only runs when it's needed.
+- **Keep the UI tree first.** List page source and element sources before screenshot sources, so vision only runs when it's needed. Assertions always check the UI tree first. They run OCR and image matching at most every 2 seconds, and only when the screen changed.
 - **Search part of the screen.** An [area of interest](/docs/elements/area-of-interest) crops the screenshot before OCR or matching runs.
 - **Turn off what you don't use.** An enabled OCR engine is loaded at the start of every run, even by `optics dry_run`.
 
