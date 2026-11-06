@@ -21,6 +21,10 @@ Appium is the open-source automation server Optics uses to drive Android, iOS an
 
 The BLE driver makes Optics act as a Bluetooth mouse and keyboard, for devices that allow no automation software. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](/docs/platforms/production).
 
+### Browser profile {#browser-profile}
+
+A browser profile is the set of sign-ins, cookies and settings that Chrome or Edge keeps for one person. Set `profile` in the Playwright capabilities, and Optics starts the browser with a temporary copy of it. See [Start signed in with a browser profile](/docs/platforms/web#start-signed-in-with-a-browser-profile).
+
 ## C
 
 ### Capabilities {#capabilities}
@@ -127,6 +131,12 @@ MCP (Model Context Protocol) is an open standard that lets AI agents use outside
 
 A module is a named, reusable list of steps, such as *Sign In* or *Add To Cart*. Test cases are made of modules. See [Modules](/docs/get-started/concepts#modules).
 
+## N
+
+### NOT_RUN {#not-run}
+
+`NOT_RUN` is the status of a step or test case that did not start, because an earlier failure or a stop kept it from running. It shows in `junit_output.xml`. See [What each outcome writes](/docs/run/results#what-each-outcome-writes).
+
 ## O
 
 ### OCR {#ocr}
@@ -156,6 +166,10 @@ The preflight is the check `optics execute` runs before a test starts, to make s
 A project is a folder that holds one suite: its `config.yaml`, test cases, modules and elements. Optics finds files anywhere in the folder by their header row. See [Project files](/docs/reference/files).
 
 ## S
+
+### Secret masking {#secret-masking}
+
+Secret masking is the rule that Optics writes `****` in place of a secret in the console, the logs and the reports. A value is secret when its name has a word such as `token`, `password` or `key`. See [Use environment variables and project paths](/docs/reference/config#use-environment-variables-and-project-paths).
 
 ### Selenium {#selenium}
 
