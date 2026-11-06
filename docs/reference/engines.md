@@ -16,7 +16,7 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 |---|---|---|---|
 | `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
-| `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, and emulate a phone. | Web |
+| `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
 The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android) and [Test iOS apps](/docs/platforms/ios).
@@ -34,10 +34,10 @@ An element source is how Optics looks at the screen for a driver. They need no e
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
 | `selenium_screenshot` | `selenium` | Screenshots for OCR and image matching. | Web |
-| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `role=`, `id=` and other locators. | Web |
+| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `alt=`, `title=`, `role=`, `id=`, `testid=` and other locators. | Web |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. | Web |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. | Web |
-| `camera_screenshot` | None | Frames from a webcam or a TCP frame server. | Any, usually with `ble` |
+| `camera_screenshot` | None | Frames from a webcam, an HTTP(S) screenshot URL (with an optional bearer token) or a TCP frame server. | Any, usually with `ble` |
 
 Only `appium_page_source`, `appium_web` and `playwright_page_source` can list interactive elements. With Selenium, `Get Interactive Elements`, the HTTP `/elements` endpoint and the MCP elements resource fail with [E0202](/docs/reference/errors#e02-elements).
 
@@ -49,7 +49,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials in `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `easyocr` to start with. It needs nothing else installed.
@@ -69,7 +69,7 @@ An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mod
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `gemini` | `gemini` | Google Gemini, through the Gemini API or Vertex AI. Default model `gemini-2.5-flash`. | All |
+| `gemini` | `gemini` | Google Gemini, through the Gemini API or Vertex AI. Set `credentials_path` to a service account key file to use Vertex AI. Default model `gemini-2.5-flash`. | All |
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 

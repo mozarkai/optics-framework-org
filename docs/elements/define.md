@@ -42,7 +42,19 @@ Optics decides what a value is from how it looks:
 | `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Playwright and web pages on Appium only | `#login-button` |
 | Starts with `android.` or `XCUI` | A class name | `android.widget.Switch` |
 
-On Playwright, you can also write `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` values. See [Locators for web pages](/docs/platforms/web#locators-for-web-pages).
+On Playwright, you can also write these prefixes. A prefix can be in any case:
+
+| Write | Finds |
+|---|---|
+| `id=login`, `data-testid=save`, `data-test=save`, `data-test-id=save` | An element by its id or test attribute |
+| `testid=save` | The same as `data-testid=save` |
+| `label=Email`, `placeholder=Search Birch` | A field by its label or placeholder |
+| `alt=Birch logo`, `title=Open the cart` | An element by its alt text or title |
+| `role=button[name="Save"]` | An element by its role and name |
+| `text="Save"` | An element with exactly this text. `text=Save` also matches `Save changes`. |
+| `loc=css:button.save`, `loc=role:button[name="Save"]`, `loc=href:/next` | The same as `css=`, `role=` and a link with this `href`. Agent browsers write locators in this form. |
+
+See [Locators for web pages](/docs/platforms/web#locators-for-web-pages).
 
 ### XPath
 

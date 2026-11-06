@@ -40,6 +40,8 @@ elements_sources:
 
 There's no server to start, so `optics execute` skips its preflight check for Playwright.
 
+Chromium starts without the automation flags, so `navigator.webdriver` is `false`, as in a browser that a person opens. Selenium Chrome starts in the same way.
+
 ::tab[Selenium]
 Install the engine:
 
@@ -135,9 +137,15 @@ Shopper can add a backpack,Add the backpack
 | Bare id or name | `user-name` | No. Write `id=user-name`. | Yes. Tried as an id, name, class or link text when no text matches. |
 | CSS selector | `#user-name`, `.inventory_item_name`, `css=button[data-test='login-button']` | Yes | No |
 | Attribute prefix | `id=user-name`, `data-test=login-button`, `label=Username`, `placeholder=Username`, `role=button` | Yes | No |
+| Alt text and title | `alt=Birch logo`, `title=Open the cart` | Yes | No |
+| Test id | `testid=save-btn`, `data-testid=save-btn` | Yes | No |
+| Exact text | `text="Save"` | Yes. It does not match `Save changes`. | No |
+| Locators from other agent browsers | `loc=css:button.save`, `loc=role:button[name="Save changes"]`, `loc=href:/next` | Yes | No |
 | Image | `cart_icon.png` | With image matching on | With image matching on |
 
 We recommend XPath for web elements. It's the one kind of value that works the same way with both drivers, so you can switch drivers without editing elements.
+
+A prefix can be in any case. `Get Interactive Elements` lists an element with a pointer cursor as tappable, even when it has no role, link or click attribute.
 
 On Playwright, actions wait up to 10 seconds for the element to show. When a locator matches several elements, the log names the count and the one Optics used. Add `index=` or a more specific locator to pick another.
 
@@ -151,6 +159,8 @@ To see an element's id or attributes, right-click it in Chrome and choose **Insp
 | Selenium | `Enter Text Using Keyboard,<enter>` | `<tab>`, `<backspace>`, `<space>`, `<escape>` |
 
 Press Keycode isn't supported on Selenium. The keys go to whichever field has focus, so press the field first.
+
+On Playwright, Press Keycode accepts a key name in any case. `ESC`, `arrowdown` and `KEYCODE_ENTER` work in the same way as `Escape`, `ArrowDown` and `Enter`. A name that Optics does not know fails with [E0403](/docs/reference/errors#e04-keywords-and-parameters) and lists the valid names.
 
 ## Emulate a phone
 
@@ -167,7 +177,7 @@ driver_sources:
 
 An emulated phone is still a desktop browser. To test the real Chrome or Safari on a phone, see [Test mobile websites](/docs/platforms/mobile-web).
 
-## Start signed in
+## Start signed in from a saved file
 
 Sign in once, save the browser state to a file, and every run starts signed in. Sign in by hand in the window that opens, then close it:
 
@@ -188,6 +198,45 @@ driver_sources:
 :::warning
 The file holds live session cookies. Do not commit it to version control.
 :::
+
+## Start signed in with a browser profile
+
+Use a browser profile when you are signed in to the site in Chrome or Edge on the same computer. Optics copies the sign-ins of that profile, so you do not sign in again. Each of the three options keeps sign-ins in a different place:
+
+| Option | Use it when | Sign-ins come from |
+|---|---|---|
+| `storage_state` | The run must work on any computer, in CI, with `device` or in a remote browser. | A file that Playwright saved. See [Start signed in from a saved file](#start-signed-in-from-a-saved-file). |
+| `profile` | You are signed in to Chrome or Edge on this computer. | A temporary copy of that profile. Optics deletes the copy at the end of the session. |
+| `user_data_dir` | You want to sign in once in the Optics browser and keep the sign-in for later runs. | A folder that stays between runs. |
+
+Set `profile` to the directory of the profile (`Default`, `Profile 1`), its name or its account email:
+
+```yaml title="config.yaml"
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        profile: me@example.com
+        channel: chrome
+```
+
+Optics copies the cookies, local storage and preferences of the profile into a temporary folder. It starts the browser with the copy. The real profile does not change. `channel` is `chrome`, `chrome-beta` or `msedge`. Without it, Optics uses the browser that owns the profile.
+
+Most site sign-ins carry over. Google accounts are signed out in a copy. If the value matches no profile, or more than one, the run stops with [E0501](/docs/reference/errors#e05-files-and-config) and lists the profiles that Optics found:
+
+```terminal
+No browser profile 'nobody@example.com'. Profiles: chrome 'Default' (Person 1, not signed in); chrome 'Profile 1' (Birch tester, tester@birch.example)
+```
+
+To keep the sign-in between runs, set `user_data_dir` to a folder, for example `~/optics-browser`. Sign in once in the window that opens. A path that starts with `./` is relative to the project folder and must exist.
+
+`profile` and `user_data_dir` apply to a browser that Optics starts. Each of these stops the run with E0501:
+
+- `profile` or `user_data_dir` with a remote `url`.
+- `profile` with `user_data_dir`.
+- `profile` or `user_data_dir` with `storage_state`.
+
+`optics serve` refuses `profile`. `optics mcp --transport http` refuses it too, and no session API accepts `user_data_dir`. A local `optics mcp` on stdio lists the profiles in the `optics://browser-profiles` resource. See [MCP server reference](/docs/reference/mcp).
 
 ## Use a remote browser
 
@@ -229,7 +278,7 @@ All values are in milliseconds, under `capabilities`:
 
 ## Run in CI without a screen
 
-With Playwright, set `headless: true`. With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments. They replace the arguments Optics adds, so keep the ones you need:
+With Playwright, set `headless: true`. With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments in `goog:chromeOptions`. Optics adds them to its own. In a Linux container or in CI, add `--no-sandbox` and `--disable-dev-shm-usage`:
 
 ```yaml title="config.yaml"
 driver_sources:
