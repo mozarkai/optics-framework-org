@@ -61,6 +61,10 @@ Yes, two ways. [Describe a flow](/docs/create/describe) in plain English inside 
 
 ## Running tests
 
+### Can I run tests without a device or browser?
+
+Yes, for a suite that uses only [flow control keywords](/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`. Optics needs no driver for it. `optics dry_run` checks any suite without a device, but it still loads the engines in `config.yaml`.
+
 ### Can I run tests in parallel?
 
 Not within one run. `optics execute` runs test cases one after another on one device or browser.
@@ -75,7 +79,7 @@ Give its name with `--include`. Case does not matter, and `*` and `?` work as wi
 $ optics execute birch-tests --include "Shopper can sign in"
 ```
 
-Suite Setup and Suite Teardown always run. You can also list names under `include:` and `exclude:` in `config.yaml`. See [Run only some test cases](/docs/create/organise#run-only-some-test-cases) and the [CLI reference](/docs/reference/cli#pick-test-cases).
+Suite Setup and Suite Teardown always run. You can also list names under `include:` and `exclude:` in `config.yaml`. A name that matches no test case stops the run with exit code `3`. See [Run only some test cases](/docs/create/organise#run-only-some-test-cases) and the [CLI reference](/docs/reference/cli#pick-test-cases).
 
 ### Does Optics retry failed tests?
 
@@ -93,9 +97,17 @@ With Selenium, the browser runs wherever your Selenium server runs. A Selenium s
 
 Yes. Set `url` under the `appium` driver to any Appium server you can reach. `optics execute` checks that the server answers before the run starts. See [config.yaml](/docs/reference/config#driver-sources).
 
+### What exit code does `optics execute` return?
+
+`0` when every test case passes, and `1` when a test case fails, an error screen is found or the run cannot start. Exit code `2` means that the command line is not valid. Exit code `3` means that `--include` or `--exclude` matches no test case. Optics returns `130` after [[Ctrl]]+[[C]] and `143` after SIGTERM, and still writes the JUnit report. See [Exit codes](/docs/reference/cli#exit-codes).
+
 ### Where do the results go?
 
 To `execution_output/` in the project: a `junit_output.xml` report that any CI system can read, screenshots of each step, and logs if you turn them on. See [Read the results](/docs/run/results).
+
+### Does Optics hide passwords and keys in its output?
+
+Yes. Optics writes `****` in place of a secret in the console, the logs, `logs.json` and `junit_output.xml`. It masks these items: values that you save under a secret name, values that start with `@:`, secret values in `config.yaml`, passwords in URLs, and secret query parameters. See [Hide sensitive values](/docs/advanced/variables#hide-sensitive-values).
 
 ## AI features
 

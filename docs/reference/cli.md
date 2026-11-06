@@ -17,13 +17,15 @@ optics [--version] [--help] <command> [options]
 | Flag | What it does |
 |---|---|
 | `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
-| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
+| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
 
 When you run `optics` with no command for the first time, it prints a welcome panel that points to `optics quickstart`, `optics doctor` and `optics --help`. After that, it prints a one-line reminder. Optics remembers the first run in a small marker file under `~/.optics` (or `$OPTICS_HOME`).
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
+
+When a run cannot start for another reason, the panel title includes the error code, for example `Cannot start: E0501`. See [Error codes](/docs/reference/errors).
 
 When a command fails unexpectedly, Optics prints `Unexpected error (<type>): <message>` and suggests running `optics doctor`. See [Exit codes](#exit-codes).
 
@@ -142,7 +144,7 @@ optics doctor [folder] [--check]
 
 | Argument | Default | What it does |
 |---|---|---|
-| `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. |
+| `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. With a folder that has no config.yaml, it shows a ❌ row. |
 | `--check` | Off | Exits with code 1 if any row is ❌. Use it in CI. |
 
 Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a `→` hint with the fix. If the terminal cannot show emoji, doctor writes `OK`, `WARN`, `FAIL` and `->` instead.
@@ -153,7 +155,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
-| Project | With a folder: config.yaml parses, exactly one driver is enabled, the driver's element sources are enabled, and the driver has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
+| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
 
 Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without `--check`, doctor always exits with 0.
 
@@ -199,6 +201,8 @@ optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
                [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
+`optics dry-run` is the same command.
+
 | Argument | Default | What it does |
 |---|---|---|
 | `folder` | Required | The project folder. It must exist. |
@@ -214,9 +218,9 @@ A dry run checks that:
 
 A dry run counts a variable as defined when an earlier step creates it: the first parameter of `Read Data`, `Evaluate` and `Date Evaluate`, and each `store_as=` name. Do not add placeholder rows for them.
 
-It doesn't run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium `capabilities`).
+It does not run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium `capabilities`). A suite that uses only [flow control keywords](/docs/reference/keywords/flow) needs no driver.
 
-The output and exit codes are the same as [`optics execute`](#optics-execute). Dry runs write `junit_output.xml` to `execution_output/` but no screenshots.
+The output and exit codes are the same as [`optics execute`](#optics-execute). In the report, each keyword that passes the check ends as `PASS`. Dry runs write `junit_output.xml` to `execution_output/` but no screenshots.
 
 ## `optics execute`
 
@@ -249,10 +253,10 @@ $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can c
 - Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](/docs/reference/config#include-and-exclude) for that run.
 
-Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 1:
+Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 3. This also applies to `include` and `exclude` in config.yaml:
 
 ```terminal
-╭──────────────────────────────── Cannot start ────────────────────────────────╮
+╭──────────────────────────── Cannot start: E0702 ─────────────────────────────╮
 │ include 'Shoper can sign in' matches no test case. Did you mean 'Shopper can │
 │ sign in' or 'Shopper can check out'?                                         │
 │                                                                              │
@@ -271,10 +275,10 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 ### How a run works
 
 1. Optics walks the whole folder and finds your files by their content (see [Project files](/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
-2. It loads the config and stops if no driver is enabled. Then it checks the test case selection.
+2. It loads the config and checks the test case selection. Then it stops if no driver is enabled and the selected test cases use a keyword that needs one. A suite that uses only [flow control keywords](/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`, runs with no driver.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
 4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
-5. It saves a final screenshot and page source, and runs [error detection](/docs/run/error-detection) if the project has an error definitions file.
+5. It saves a final screenshot and page source, and runs [error detection](/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
 The printer shows a live tree, then a summary:
 
@@ -301,14 +305,20 @@ The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If ever
 Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
 ```
 
-Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](/docs/reference/files#outputs).
+Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](/docs/reference/files#outputs) and [Read the results](/docs/run/results#what-each-outcome-writes).
 
 | Exit code | When |
 |---|---|
 | 0 | Every test case passed. |
-| 1 | Any test case failed, required files are missing, no driver is enabled, the test case selection is not valid, the preflight failed, or the folder doesn't exist. |
+| 1 | A test case failed, error detection found an on-screen error, or the run could not start. Causes are missing files, no driver, a failed preflight or a missing folder. |
+| 2 | The command line is not valid. |
+| 3 | The test case selection is not valid. |
+| 130 | You pressed [[Ctrl]]+[[C]]. |
+| 143 | Optics received SIGTERM. |
 
-On-screen errors found by error detection appear in `junit_output.xml` as a failing test case, but they don't change the exit code.
+Optics also writes `junit_output.xml` when you stop the run with [[Ctrl]]+[[C]] or SIGTERM. The test case in progress ends as `ERROR`. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
+
+On-screen errors found by error detection appear in `junit_output.xml` as a failing test case. They count as a failed test case, so the exit code is 1.
 
 ```shell
 $ optics execute ./birch-tests
@@ -461,7 +471,7 @@ Turns on tab completion for `optics` in bash or zsh.
 optics completion
 ```
 
-It writes `~/.optics/optics_completion.sh` and `~/.optics/optics_completion.zsh`, then offers to add a `source` line to `~/.zshrc` or `~/.bashrc`, based on `$SHELL`. Other shells aren't supported. Restart your shell, or run `source ~/.zshrc`, to use it. To remove it, delete the line from your shell profile.
+It writes `~/.optics/optics_completion.sh` and `~/.optics/optics_completion.zsh`, then asks before it adds a `# Optics CLI autocompletion` comment and a `source` line to `~/.zshrc` or `~/.bashrc`, based on `$SHELL`. If you decline, or the terminal is not interactive, Optics leaves the file alone and prints the line to add. Other shells are not supported. Restart your shell, or run `source ~/.zshrc`, to use it. To remove it, delete the comment and the `source` line from your shell profile.
 
 ## `optics config`
 
@@ -478,10 +488,11 @@ It prints a deprecation notice, then runs guided `optics configure` on the curre
 | Code | Meaning |
 |---|---|
 | `0` | Success. For `optics execute` and `optics dry_run`, every test case passed. |
-| `1` | A test case failed, a check failed (`optics doctor --check`, preflight), a required file or setting is missing, or an unexpected error occurred. |
+| `1` | A test case failed, error detection found an on-screen error, a check failed (`optics doctor --check`, preflight), a required file or setting is missing, or an unexpected error occurred. |
 | `2` | The command line was invalid, for example an unknown flag or a missing argument. |
-| `3` | The input was invalid, for example a project that already exists, an unknown template, or files `optics generate` needs. The message starts with `Error:`. |
+| `3` | The input was invalid. For `optics execute` and `optics dry_run`, a name in `--include`, `--exclude` or the config `include` and `exclude` matches no test case, or no test case is left. For other commands, it is a project that already exists, an unknown template, or files `optics generate` needs. The message starts with `Error:`. |
 | `130` | You pressed [[Ctrl]]+[[C]]. Optics prints `Operation cancelled by user.` |
+| `143` | Optics received SIGTERM. `optics execute` and `optics dry_run` write `junit_output.xml` before they exit. |
 
 ## Environment variables
 

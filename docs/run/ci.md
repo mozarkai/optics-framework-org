@@ -147,9 +147,19 @@ Make sure `deviceName` in `config.yaml` matches the emulator (`emulator-5554` fo
 
 ## Decide pass or fail
 
-`optics execute` exits with `1` when any test case fails, so the run step fails the job by itself.
+`optics execute` exits with a non-zero code when a run does not pass, so the run step fails the job by itself:
 
-There's one case the exit code misses: [error screens](/docs/run/error-detection) found at the end of a run. They're added to the JUnit report as a failing test case but don't change the exit code. To fail the build on them, have your JUnit reporter fail on any failure. For example, with `mikepenz/action-junit-report`, add `fail_on_failure: true`.
+| Code | Meaning |
+|---|---|
+| `0` | Every test case passed. |
+| `1` | A test case failed, or an [error screen](/docs/run/error-detection) was found. The run also exits with `1` when it cannot start, for example when the server is not reachable. |
+| `2` | The command line is not valid. |
+| `3` | A name in `--include`, `--exclude` or the config `include` and `exclude` matches no test case. |
+| `130` or `143` | A person or the CI system stopped the run with [[Ctrl]]+[[C]] or SIGTERM. |
+
+Optics also writes `junit_output.xml` when it stops with `130` or `143`. A run that cannot start because of the project, such as a bad config, writes no report. See [What each outcome writes](/docs/run/results#what-each-outcome-writes).
+
+An error screen adds a failing `on-screen-error-detection` test case to the report and changes the exit code to `1`. You do not need extra settings to fail the build on it.
 
 ## Make CI runs reliable
 
@@ -158,7 +168,7 @@ There's one case the exit code misses: [error screens](/docs/run/error-detection
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
 - **Keep the artifacts.** Upload `execution_output/` when a run fails (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
-- **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables.
+- **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables. Optics writes `****` in place of a secret in the console, the logs and the JUnit report. See [Hide sensitive values](/docs/advanced/variables#hide-sensitive-values).
 - **Wait for screens to load.** Runners are often slower than your laptop. Put `Assert Presence` before actions that follow a screen change, rather than adding `Sleep` steps.
 
 ## See also
