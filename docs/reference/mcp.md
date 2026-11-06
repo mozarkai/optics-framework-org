@@ -83,7 +83,7 @@ A tap on a ref uses a locator that matches only that element. The agent can also
 
 ## Core tools
 
-The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open.
+The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -93,7 +93,7 @@ The default toolset has 10 tools. Every tool except `start_session` takes `sessi
 | `tap` | `target`, `repeat` (1, 1–20) | Runs `press_element`. Refuses a row that has no `tap`, `long`, `toggle` or `input`. |
 | `type_text` | `target`, `text`, `clear_first` (false) | Runs `enter_text`, after `clear_element_text` when `clear_first` is true. Refuses a row without `input`. |
 | `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
-| `press_key` | `key` | `back` runs `go_back` on any driver. Another value, such as an Android key number, runs `press_keycode`. |
+| `press_key` | `key` | `back` runs `go_back` on any driver. Another value runs `press_keycode`: a key name such as `Enter`, `Escape`, `esc` or `ArrowDown`, or an Android KeyEvent number such as `66`. On the web, case and a `KEYCODE_` prefix do not matter. A ref is refused with a hint to use `tap`. |
 | `launch_app` | `app` ("") | Opens an app id or a URL. Empty opens the configured app. |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–30) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
@@ -113,7 +113,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app` and 
 | `driver` | `appium` | `appium`, `selenium`, `playwright` or `ble`. |
 | `app` | "" | An app id or URL to open after the session starts. |
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](/docs/platforms/web#use-a-remote-browser). |
-| `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](/docs/platforms/web#emulate-a-phone). |
+| `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. Passing `[]` makes the session fail to start. |
 | `text_detection` | `[]` | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | `[]` | Image engines, for example `["templatematch"]`. |
@@ -140,6 +140,28 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
+### Sign in with a browser profile
+
+A web flow that needs a sign-in can start with the sign-ins of a local Chrome or Edge profile. The agent reads the `optics://browser-profiles` resource and shows the list to you. Each entry has a `channel`, a `directory`, a `name` and the `email` of the account:
+
+```json
+[{"channel": "chrome", "directory": "Default", "name": "Work", "email": "me@example.com"}]
+```
+
+After you choose a profile, the agent passes its `directory`, `name` or `email` as `capabilities.profile`:
+
+```json
+{
+  "driver": "playwright",
+  "capabilities": {"profile": "me@example.com"},
+  "app": "https://app.example.com"
+}
+```
+
+The browser starts with the sign-ins of that profile. If you choose no profile, the agent asks you for the credentials and types them with `type_text`. A `profile` that matches none, or more than one, fails with `E0501` and lists the profiles. Add `channel` (`chrome`, `chrome-beta` or `msedge`) to choose between browsers.
+
+A profile holds the sign-ins of the person who runs the server. For this reason only a `stdio` server lists and accepts profiles. The `http` transport and `optics serve` refuse `profile`. Every API session refuses `user_data_dir`. Set both in the `config.yaml` of a project instead. See [Start signed in with a browser profile](/docs/platforms/web#start-signed-in-with-a-browser-profile) for what a profile carries over.
+
 ### Action replies
 
 Each tool that acts replies with one head line, the check lines, then the screen:
@@ -156,10 +178,13 @@ e13 span "Products"
 
 - `ok` means only that the keyword ran. The word in brackets is the strategy that found the element.
 - `verified` is `pass`, `fail` or `unknown`. It is `pass` only when every expectation is met and the action caused it. Without `expect_present` or `expect_absent`, it stays `unknown`.
+- An action waits up to 5 seconds for `expect_present` and `expect_absent` before it judges them. A page that loads after a redirect can still pass.
 - `note:` lines tell the agent what to trust less. For example, a `scroll` is `ok` even when nothing moved, and a row with no unique locator is found by its label.
 - `run_keyword` adds a `result:` line with the keyword's return value, cut at 400 characters.
 
-The structured reply is `{"ok", "verified", "verb", "keyword", "checks", "target", "result", "screen", "error"}`. `screen` holds `digest`, `changed`, `new_screen`, `added`, `removed` and `relabelled`, plus all `rows` on a new screen. The reply text is cut at 8,000 characters.
+After an action, the server reads the screen until it stops changing. A screen with no rows counts as a page that is still loading, so the server reads it again for up to 6 seconds. A keyword that only reads, and `execute_script` when the screen stays the same, are read once.
+
+The structured reply is `{"ok", "verified", "verb", "keyword", "checks", "target", "result", "screen", "error"}`. `screen` holds `digest`, `changed`, `new_screen`, `added`, `removed` and `relabelled`. On a new screen, `screen` holds all `rows` and no `added` or `removed` lists. With `screen="none"`, `screen` holds only `digest`, `changed` and `new_screen`. The reply text is cut at 8,000 characters.
 
 When self-heal recovers a step, `result` is `{"result", "healed": true, "heal_summary", "suggested_steps"}`, so your agent can write the extra steps into the test.
 
@@ -220,6 +245,7 @@ Resources are read-only data your agent can fetch by URI.
 |---|---|---|
 | `optics://keywords` | JSON | The keywords `run_keyword` accepts, with the description, parameters, `returns` and `deprecated` of each. |
 | `optics://project-format` | Markdown | How to write a CSV project: the files, columns, `${name}` variables, secrets and flow-control keywords. |
+| `optics://browser-profiles` | JSON | The Chrome and Edge profiles on the machine that runs the server, as `{channel, directory, name, email}`. Use one as `capabilities.profile`. |
 | `optics://session/{session_id}/screenshot` | PNG | The current screen. |
 | `optics://session/{session_id}/source` | JSON | `{"page_source", "timestamp"}`: the UI tree or HTML. |
 | `optics://session/{session_id}/elements` | JSON | The elements on the screen as `{i, label, cls, bounds, act, rid, loc, offscreen}`. Appium, Appium web and Playwright only. It has no refs. |
@@ -316,13 +342,14 @@ The structured reply has `error: {"code", "kind", "message"}`. An error without 
 | `ambiguous` | The target matches more than one row. |
 | `no_locator` | The row has no locator that matches only it. |
 | `invalid_params` | A parameter is missing or wrong, such as `type_text` on a row without `input`. The reply shows an example call. |
-| `silent_failure` | The keyword logged an error but did not fail (`E0401`). Read the screen before you continue. |
+| `silent_failure` | The keyword reported an error but did not fail (`E0401` or `E0405`). The message reads `[E0401] <keyword> reported an error: ...`. Read the screen before you continue. |
 | `unsupported` | The platform does not support the keyword. |
 | `loop` | The same action ran 3 times in a row without progress. The fourth try does not run. |
 | `timeout` | The call took longer than `OPTICS_MCP_CALL_TIMEOUT_S`. |
 | `busy` | An earlier call on the session still runs. |
 | `session_lost` | The driver session ended. Start a new session. |
-| `unknown_session` | The session ended after the idle lease, or never started. |
+| `unknown_session` | No such session, or none is open. When the idle lease ended it, the message says so. |
+| `session_required` | More than one session is open, and `session_id` was left out. The message lists the ids. |
 | `other` | Any other error, such as a refused `start_session`. |
 
 A tool in the full toolset raises its error as `[E0201] message`. A keyword with several fallback values fails with `All fallback values failed for keyword '…'` and the code of the last try.

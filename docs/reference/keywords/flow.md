@@ -24,6 +24,8 @@ Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 
 Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, `optics live`, `optics serve` and [Python](/docs/create/python).
 
+A suite that uses only flow control keywords needs no driver. Set every `driver_sources` entry to `enabled: false` and run it with `optics execute`. If a module that the selected test cases reach uses an action, app or verification keyword, the run stops with `E0104` and the message `No driver enabled`. Assert Equality is a verification keyword.
+
 ## Reuse and repeat
 
 ### Execute Module
@@ -57,7 +59,7 @@ Runs a module a number of times, or once for each value in one or more lists.
 |---|---|---|
 | `target` | Required | The module to run. |
 | then one of: | | |
-| `count` | | A whole number of times to run, 1 or more. Write the number itself. |
+| `count` | | A whole number of times to run, 1 or more, or a `${name}` that holds one. |
 | `variable`, `values`, … | | Pairs of a variable name and its list of values. Add as many pairs as you need. |
 
 `values` can be:
@@ -90,7 +92,7 @@ Good to know:
 - With several lists, the loop runs as many times as the shortest list.
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
-- The count can be a variable: `Run Loop,Add Trail Runner,${n}`.
+- The count can be a variable: `Run Loop,Add Trail Runner,${n}`. Optics reads the value of `n` when the step runs.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
 
 ## Branch
@@ -316,7 +318,8 @@ Good to know:
 - The body is sent as JSON. Every request has a 30-second timeout.
 - `extract` maps a variable name to a JSONPath. `$.a.b`, `a.b` and `[0]` indexing all work.
 - Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step.
-- `expected_status`, `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
+- With `expected_result.expected_status` set, the step fails when the response has another HTTP status, such as `API 'Ping' returned status 200, expected 201.` The check runs before Optics extracts a value or runs an assertion. The failure has no error code.
+- `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
 - With `expected_result`, a response that isn't JSON fails the step with error E0403.
 - Each call is logged to `api_details.log` and `api_details.har` in the run's output folder. See [Results](/docs/run/results).
 - The top-level key must be `api:`. A file that starts with `apis:` is ignored.

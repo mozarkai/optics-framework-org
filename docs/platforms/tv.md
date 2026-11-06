@@ -1,18 +1,18 @@
 ---
 title: Test TV apps
 nav: TV
-summary: Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.
+summary: Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.
 level: Intermediate
 time: 20 min
 ---
 
-Optics tests TV apps through **Appium**, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with `platformName` in `config.yaml`. On a TV you move around with remote-control keys and check what's on screen with assertions.
+Optics tests TV apps through **Appium**, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with `platformName` in `config.yaml`. On a TV you move around with remote-control keys and check what is on screen with assertions. On Tizen and webOS, the element keywords also work. They move the remote focus for you.
 
 | TV platform | `platformName` | Appium driver | How you move around |
 |---|---|---|---|
 | Android TV | `Android` | UiAutomator2 | Android key numbers, plus taps and typing |
-| Samsung Tizen | `TizenTV` | [appium-tizen-tv-driver](https://github.com/headspinio/appium-tizen-tv-driver) | Remote key names only |
-| LG webOS | `LGTV` | [appium-lg-webos-driver](https://github.com/headspinio/appium-lg-webos-driver) | Remote key names only |
+| Samsung Tizen | `TizenTV` | [appium-tizen-tv-driver](https://github.com/headspinio/appium-tizen-tv-driver) | Remote key names, and element keywords that move focus |
+| LG webOS | `LGTV` | [appium-lg-webos-driver](https://github.com/headspinio/appium-lg-webos-driver) | Remote key names, and element keywords that move focus |
 
 The examples use a TV app for Birch, a sample shoe store, with rows of shoes such as "Trail Runner 2" and "Pace Knit".
 
@@ -29,7 +29,7 @@ Each TV also needs its own setup: developer mode on the TV, the vendor's tools, 
 
 ## Android TV
 
-Android TV uses the same setup as an Android phone. Follow [Test Android apps](/docs/platforms/android), with `platformName: Android` and the TV's serial from `adb devices` as `udid`. Connect to the TV with `adb connect <tv-ip>` when it isn't on a cable.
+Android TV uses the same setup as an Android phone. Follow [Test Android apps](/docs/platforms/android), with `platformName: Android` and the TV's serial from `adb devices` as `udid`. Connect to the TV with `adb connect <tv-ip>` when it is not on a cable.
 
 Touch and typing keywords work on Android TV, but most TV apps expect the D-pad. Send it with Press Keycode and Android key numbers:
 
@@ -41,7 +41,7 @@ Touch and typing keywords work on Android TV, but most TV apps expect the D-pad.
 | Home | `3` |
 | Play/pause | `85` |
 
-Remote key names such as `UP` don't work on Android TV. They only apply to Tizen and webOS.
+Remote key names such as `UP` do not work on Android TV. They only apply to Tizen and webOS.
 
 ## Samsung Tizen
 
@@ -67,11 +67,12 @@ driver_sources:
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
-  - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}
+  - appium_find_element: {enabled: true}
 ```
 
 Optics reads `platformName` and the app id (`appPackage`, with or without the `appium:` prefix). It passes every other capability to the Tizen driver unchanged. The [driver's README](https://github.com/headspinio/appium-tizen-tv-driver) explains each one, including how to get the `rcToken`.
+
+A native screenshot makes a Tizen TV stop answering, so `appium_screenshot` refuses to take one there. To capture the screen, add the `camera_screenshot` element source. See [BLE and camera](/docs/reference/config#ble-and-camera) for its settings.
 
 ## LG webOS
 
@@ -97,12 +98,11 @@ driver_sources:
         appium:useSecureWebsocket: true
         appium:newCommandTimeout: 600
 elements_sources:
+  - appium_find_element: {enabled: true}
   - appium_screenshot: {enabled: true}
-text_detection:
-  - easyocr: {enabled: true}               # reads text on the TV screenshot
 ```
 
-This setup finds things on screen with screenshots only, so add an OCR engine (`optics setup --install easyocr`) to check text, or [image matching](/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
+`appium_find_element` finds text in the app's DOM. Add an OCR engine (`optics setup --install easyocr`) to read text that the app draws as an image, or [image matching](/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
 
 ## Check the setup
 
@@ -114,7 +114,7 @@ $ optics doctor birch-tv
 
 The doctor's checks are written for phones. On Tizen and webOS it warns that `deviceName`, `appPackage` or `appActivity` is missing. You can ignore those warnings, and the `adb` rows, as long as `config: driver` and `config: appium element source` show ✅.
 
-Before each run, `optics execute` checks that the Appium server answers at `url`. It doesn't check the TV itself.
+Before each run, `optics execute` checks that the Appium server answers at `url`. It does not check the TV itself.
 
 ## Move around with remote keys
 
@@ -129,21 +129,91 @@ On Tizen and webOS, Press Keycode takes the name of a remote button:
 | `PLAY`, `PAUSE`, `STOP` | Playback |
 | `REWIND`, `FF` | Rewind and fast-forward. `FAST_FORWARD` also works. |
 
-Names aren't case-sensitive. On Tizen, any raw Samsung key name that starts with `KEY_`, such as `KEY_MENU`, is also sent as is. On webOS, unknown names are passed to the TV unchanged.
+On webOS, these names also work:
 
-## What doesn't work on Tizen and webOS
+| Key name | Button |
+|---|---|
+| `VOL_UP` or `VOLUME_UP` | Volume up |
+| `VOL_DOWN` or `VOLUME_DOWN` | Volume down |
+| `MUTE`, `UNMUTE` | Mute and unmute |
+| `CHAN_UP`, `CHAN_DOWN` | Channel up and down |
 
-TVs have no touch screen, so touch and typing keywords fail with **E0105** ("not supported") on Tizen and webOS:
+Names are not case-sensitive. On Tizen and webOS, a name that starts with `KEY_`, such as `KEY_MENU`, is sent as is. Any other name fails with **E0104**. The message lists the names that Optics knows.
 
-- Press Element, Detect And Press, Press By Coordinates, Press By Percentage, Select Dropdown Option
+## Find elements and move focus
+
+A Tizen or webOS app is a web page, so `appium_find_element` finds elements in its DOM. Use these locators:
+
+| Locator | What it matches |
+|---|---|
+| `Featured` or `text=Featured` | An element whose visible text, `aria-label`, `title` or `alt` is exactly this text |
+| `css=.tile.active` | An element that a CSS selector matches |
+
+A TV has no touch screen, so the element keywords press remote keys instead of taps:
+
+| Keyword | What it does on a TV |
+|---|---|
+| Press Element | Presses the arrow keys until the element has focus, then presses `ENTER`. |
+| Enter Text | Types into the element. See [Type on a TV](#type-on-a-tv). |
+| Clear Element Text | Presses the backspace key of the on-screen keyboard until the field stops changing. |
+| Get Text | Reads the text of the element, or the value of a field. |
+| Assert Presence | Waits for the element to appear. Use it in place of Sleep. |
+
+Optics reads the focus from the page after each key press, so you do not count presses. Each focus move costs one key press, and a key press takes 1 to 2 seconds on a TV. When 60 key presses do not bring the focus to the element, the step fails with `E0201`. The same error shows when the element is not on the screen.
+
+## Type on a TV
+
+Enter Text works on a TV in two ways. Optics picks the way from the element:
+
+- **A real `<input>` or `<textarea>`.** Optics types the text into the field directly.
+- **A field that the app draws itself.** Optics moves the focus over the on-screen keyboard and presses each key. When the keyboard does not show a character, Optics switches the layer (`123`, `abc`) and looks again.
+
+```csv title="modules/modules.csv"
+module_name,module_step,param_1,param_2
+Search,Enter Text,Search box,trail runner
+Search,Enter Text,Search box,<enter>
+```
+
+After the last key, Optics reads the field. If the field does not show the text, the step fails with **E0405**. No fallback value types the text a second time. A different letter case gives only a warning. Some apps choose the case themselves, for example a capital first letter.
+
+Enter Text also takes special keys in angle brackets:
+
+| Text | What it presses |
+|---|---|
+| `<space>`, `<backspace>`, `<enter>` | The key with that name on the on-screen keyboard |
+| `<escape>`, `<up>`, `<down>`, `<left>`, `<right>` | The `BACK` or arrow key of the remote |
+
+Other special keys, such as `<tab>`, fail with E0105 on an app keyboard.
+
+:::tip
+When the screen has more than one field, press the field first with Press Element. Then Optics types into the field that has focus.
+:::
+
+## Keywords that fail on Tizen and webOS
+
+Some keywords do not apply to a TV. They fail with **E0105** ("not supported"):
+
+- Press By Coordinates, Press By Percentage
 - Swipe, Swipe By Percentage, Swipe From Element, Swipe Until Element Appears
 - Scroll, Scroll From Element, Scroll Until Element Appears
-- Enter Text, Enter Text Direct, Enter Text Using Keyboard, Enter Number, Clear Element Text, Get Text
+- Select Dropdown Option
+- Is Element with the `checked` or `unchecked` state
+- Enter Text Direct, Enter Text Using Keyboard and any keyword that enters text without an element
 - Go Back. Use `Press Keycode,BACK` instead.
 
-These still work: Launch App, Press Keycode, Assert Presence, Assert Visibility, Validate Element, Validate Screen, Is Element, Capture Screenshot, Sleep, Execute Script, the flow keywords, and Close And Terminate App.
+Move the focus with an arrow key, or with Press Element on the element that you need.
 
-To type on a TV, move over the on-screen keyboard with arrow keys and press `ENTER` on each letter.
+These keywords work:
+
+- Launch App, Press Keycode, Close And Terminate App, Sleep, Execute Script and the flow keywords
+- Press Element, Detect And Press, Enter Text, Enter Number, Clear Element Text and Get Text
+- Assert Presence, Assert Visibility, Validate Element, Validate Screen and Is Element
+
+## Know the limits of screenshots and video
+
+A native screenshot makes a Tizen TV stop answering. For this reason `appium_screenshot` refuses it there with **E0303**. Use `camera_screenshot` to capture the screen, and see [BLE and camera](/docs/reference/config#ble-and-camera) for its settings.
+
+DRM-protected video appears black in a screenshot. To check playback, check elements in the app, such as a pause button or a progress bar.
 
 ## Example: open a title from a grid
 
@@ -176,10 +246,11 @@ Watch a shoe video,Go home
 
 A few habits make TV tests reliable:
 
-- **Assert after each page change.** Keys don't wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.
-- **Start from a known place.** Begin each test with Launch App and an assertion on the first screen. Don't rely on where an earlier test left the focus.
-- **Remember that Validate Screen never fails a step.** Use it for checks that are nice to have, and Assert Presence for checks that must pass.
-- **Use text you can see.** On webOS, Assert Presence reads the screen with OCR, so check words that are drawn large and clear.
+- **Assert after each page change.** Keys do not wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.
+- **Start from a known place.** Begin each test with Launch App and an assertion on the first screen. Do not rely on where an earlier test left the focus.
+- **Remember that Validate Screen never fails a step.** Use it for optional checks. Use Assert Presence for checks that must pass.
+- **Use the text that the page holds.** A text locator must match the element text, `aria-label`, `title` or `alt` exactly.
+- **Let Optics move the focus.** Press Element moves the focus for you. It still works when the layout changes.
 
 ## See also
 

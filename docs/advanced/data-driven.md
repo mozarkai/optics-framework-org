@@ -83,7 +83,7 @@ module_name,module_step,param_1,param_2
 Fill Cart,Run Loop,Add One Item,3
 ```
 
-Write the count as a number. A count from a variable, such as `${n}`, [does not work yet](/docs/advanced/variables#create-variables-during-a-run).
+Write the count as a number, or as a variable such as `${n}`. Optics reads the value of the variable when the step runs.
 
 ## Keep the data in a file
 
