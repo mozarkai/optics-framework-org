@@ -40,7 +40,7 @@ For each match, Optics logs a warning to `execution_output/execution_logs.log` a
 ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out
 ```
 
-Optics is also meant to add a failing test case named `on-screen-error-detection` to the JUnit report. In Optics Framework 1.11.0 that entry is missing when every test case passes, so use the JSON file as the signal, as shown below. The [error detection docs](/docs/run/error-detection) track the fix.
+Optics is also meant to add a failing test case named `on-screen-error-detection` to the JUnit report. In Optics Framework 1.11.0 that entry is missing when every test case passes, so use the JSON file as the signal, as shown below. Version 1.11.1 and later add the entry. The [error detection docs](/docs/run/error-detection) describe the current behavior.
 
 I ran a checkout test against a small web demo shop. The terminal said Passed: 1 | Failed: 0, and this file appeared next to the report:
 
