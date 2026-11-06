@@ -19,7 +19,7 @@
   "url": "https://optics-framework.org/blog/your-tests-passed-your-app-didnt",
   "mainEntityOfPage": "https://optics-framework.org/blog/your-tests-passed-your-app-didnt",
   "datePublished": "2026-10-16",
-  "dateModified": "2026-10-20",
+  "dateModified": "2026-11-06",
   "image": "https://optics-framework.org/media/blog/error-definitions.webp",
   "author": {
     "@type": "Person",
@@ -116,7 +116,7 @@ ERR_NETWORK,No internet connection,Offline,medium">Copy</button><pre><code><span
 <p>After the last test case, Optics captures the screen once more and saves a screenshot and the page source with the run’s output. It then looks for every <code class="ic">match_string</code> in the screen's text. Matching ignores case and finds the text anywhere, so <code class="ic">Session expired</code> also matches "Your session expired. Please sign in again."</p>
 <p>For each match, Optics logs a warning to <code class="ic">execution_output/execution_logs.log</code> and writes the details to <code class="ic">execution_output/detected_errors_&lt;id&gt;.json</code>. The warning looks like this:</p>
 <figure class="code doc-code no-copy" data-lang="text"><pre><code>ON-SCREEN <span class="c-fail">ERROR</span> DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out</code></pre></figure>
-<p>Optics is also meant to add a failing test case named <code class="ic">on-screen-error-detection</code> to the JUnit report. In Optics Framework 1.11.0 that entry is missing when every test case passes, so use the JSON file as the signal, as shown below. The <a href="../docs/run/error-detection">error detection docs</a> track the fix.</p>
+<p>Optics is also meant to add a failing test case named <code class="ic">on-screen-error-detection</code> to the JUnit report. In Optics Framework 1.11.0 that entry is missing when every test case passes, so use the JSON file as the signal, as shown below. Version 1.11.1 and later add the entry. The <a href="../docs/run/error-detection">error detection docs</a> describe the current behavior.</p>
 <p>I ran a checkout test against a small web demo shop. The terminal said Passed: 1 | Failed: 0, and this file appeared next to the report:</p>
 <figure class="code doc-code no-copy" data-lang="json"><pre><code>{
   <span class="c-mod">"timestamp"</span>: <span class="c-lit">"2026-10-16T06:<span class="c-info">05</span>:<span class="c-info">38.634183</span>+05:<span class="c-info">30</span>"</span>,

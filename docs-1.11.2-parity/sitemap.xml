@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/blog/your-tests-passed-your-app-didnt</loc>
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/blog/introducing-optics-framework</loc>
@@ -66,11 +66,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/create/write</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/create/record</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/create/describe</loc>
@@ -78,7 +78,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/create/agent</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/create/python</loc>
@@ -102,11 +102,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/elements/define</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/elements/text-and-images</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/elements/area-of-interest</loc>
@@ -118,27 +118,27 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/results</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/error-detection</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/ci</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/run/checklist</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/android</loc>
@@ -150,7 +150,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/web</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/mobile-web</loc>
@@ -158,11 +158,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/tv</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/production</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/</loc>
@@ -170,11 +170,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/variables</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/data-driven</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/conditions</loc>
@@ -182,11 +182,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/api-calls</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/http-api</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/advanced/generate</loc>
@@ -198,7 +198,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/smart-tv-apps</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/protected-apps</loc>
@@ -206,11 +206,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/ai-agent-phone</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/optics-vs-maestro</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/optics-and-appium</loc>
@@ -222,7 +222,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/app</loc>
@@ -230,43 +230,43 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/actions</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/verification</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/flow</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/cli</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/config</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/files</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/engines</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/mcp</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/http-api</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/errors</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/</loc>
@@ -274,14 +274,14 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/troubleshooting</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/faq</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/glossary</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
   </url>
 </urlset>

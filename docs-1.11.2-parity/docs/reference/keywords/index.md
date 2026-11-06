@@ -71,6 +71,7 @@ Other pitfalls:
 - The `xpath=` prefix works on Playwright and in web pages on Appium. Use a bare `//…` XPath for native apps and on Selenium.
 - On Playwright, the prefixes `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` also work. See [Locators for web pages](https://optics-framework.org/docs/platforms/web#locators-for-web-pages).
 - `.tif` and `.tiff` files aren't treated as images. Save templates as `.png`.
+- On Samsung Tizen and LG webOS TVs, `text=` and `css=` locators search the app's DOM. `text=` matches the visible text, `aria-label`, `title` or `alt` of an element exactly. See [TV](https://optics-framework.org/docs/platforms/tv#find-elements-and-move-focus).
 
 Most of the time you pass `${name}` instead and define the locator in your elements file. See [Define elements](https://optics-framework.org/docs/elements/define).
 
@@ -80,7 +81,7 @@ A cell that is exactly `${name}` is replaced with the value of `name` from your 
 
 When an element has several values, Optics tries each one in order until the element is found. It moves on only when the element isn't found. Any other error fails the step at once. If `name` isn't defined anywhere, the step fails before the keyword runs.
 
-`${name}` inside a longer cell is replaced with the first value of `name`. If `name` is not defined, the step fails with error E0403. Write `$${name}` to keep the text `${name}` as it is.
+Each `${name}` inside a longer cell is replaced with the first value of `name` when the step runs. A cell can hold several variables, such as `${a}-${b}`. If a `name` is not defined, the step fails with error E0403. Write `$${name}` to keep the text `${name}` as it is.
 
 ```csv
 Profile,Enter Text,${name_field},Hi ${first} ${last}!

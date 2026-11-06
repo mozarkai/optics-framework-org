@@ -150,7 +150,7 @@ Search And Check,Assert Presence,${expected}">Copy</button><pre><code><span clas
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
 Fill Cart,Run Loop,Add One Item,3">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
 <span class="c-mod">Fill Cart</span><span class="c-dim">,</span><b>Run Loop</b><span class="c-dim">,</span>Add One Item<span class="c-dim">,</span>3</code></pre></figure>
-<p>Write the count as a number. A count from a variable, such as <code class="ic">${n}</code>, <a href="../../docs/advanced/variables#create-variables-during-a-run">does not work yet</a>.</p>
+<p>Write the count as a number, or as a variable such as <code class="ic">${n}</code>. Optics reads the value of the variable when the step runs.</p>
 <h2 id="keep-the-data-in-a-file">Keep the data in a file<a class="anchor" href="#keep-the-data-in-a-file" aria-label="Link to this section">#</a></h2>
 <p>Lists can live in an elements file, as <code class="ic">shoppers</code> does above, or as a JSON list: <code class="ic">sizes,"[""8"",""9"",""10""]"</code>. For a single value from a larger data file, such as the email address of the admin user, use <code class="ic">Read Data</code>:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/users.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="username,email,role
@@ -233,6 +233,6 @@ Sign In As Admin,Enter Text,${email_field},${admin_email}">Copy</button><pre><co
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

@@ -160,6 +160,7 @@ Good to know:
 - Wrong text at the timeout fails with error E0401, such as `Element 'css=h3' shows 'Checkboxes' but expected 'Radio Buttons'.` The next value of `${name}` is not tried.
 - An element that is never found fails with error E0201, so Optics tries the next value of `${name}`.
 - An element found only by OCR or image fails at once with error E0401.
+- On a web page that Appium drives in a mobile browser, Assert Text reads the text of the web element.
 - With an `@:` prefix on `expected`, both texts show as `****` in the error.
 - AI self-heal does not cover Assert Text.
 
@@ -188,8 +189,9 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. An element found only by OCR or image fails the step.
-- On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts for checked.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. OCR and image matches do not have these states. An element found only by OCR or image fails the step with error E0401: `Cannot check the <state> state of '<element>': it was found only by OCR or image.`
+- On a web page, Optics reads the state from the page. This includes a web page that Appium drives in a mobile browser. `disabled` and `aria-disabled="true"` count as disabled. `aria-checked`, `checked` and `selected` count as checked.
+- On Samsung Tizen and LG webOS TVs, `checked` and `unchecked` fail with error E0105. See [TV](https://optics-framework.org/docs/platforms/tv).
 - Another state fails with error E0403.
 - You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 
@@ -214,7 +216,7 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch fails with error E0401, such as `'480' does not equal '240'.` To check the text that an element shows, use [Assert Text](#assert-text).
+- A mismatch fails with error E0401, such as `Expected '240', got '480'.` `Expected` shows the second value. `got` shows the first value. To check the text that an element shows, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 
@@ -242,6 +244,7 @@ Good to know:
 
 - The image is saved only when `save_captures` is `true` in your [config](https://optics-framework.org/docs/reference/config). It's on by default.
 - The step fails with error E0303 if the screenshot fails or is completely black.
+- On a Samsung Tizen TV, `appium_screenshot` refuses the screenshot with error E0303. Use `camera_screenshot`. See [TV](https://optics-framework.org/docs/platforms/tv#know-the-limits-of-screenshots-and-video).
 
 ### Capture Pagesource
 

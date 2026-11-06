@@ -22,7 +22,7 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 ## The run
 
 - [ ] **Error screens are defined.** Add the crash, timeout and "something went wrong" messages your app can show to an [error definitions file](https://optics-framework.org/docs/run/error-detection).
-- [ ] **CI fails on JUnit failures, not only the exit code.** Detected error screens only show up in the JUnit report. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
+- [ ] **CI reads the exit code and the JUnit report.** An error screen gives exit code `1` and adds a failing test case to the report. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
 - [ ] **Screenshots are kept when a run fails.** Upload `execution_output/` as a CI artifact.
 - [ ] **File logs are on for CI runs.** `file_log: true` gives you every locator attempt when a failure is hard to explain.
 - [ ] **Someone owns the failures.** Decide who looks at a red run, and how fast. A suite people learn to ignore is worse than no suite.

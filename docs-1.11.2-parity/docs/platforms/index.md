@@ -12,8 +12,8 @@ Optics runs the same tests on phones, TVs, browsers and locked production device
 | iOS | `appium` (XCUITest) | `appium_find_element`, `appium_page_source`, `appium_web`, `appium_screenshot` | Needs a Mac with Xcode, and a simulator or a signed real device. |
 | Mobile web (Chrome, Safari, WebViews) | `appium` | `appium_web` with the Android or iOS sources | Same setup as Android or iOS. Finds `css=` and DOM XPath locators in the page. |
 | Android TV | `appium` (UiAutomator2) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Same setup as Android. Move around with D-pad key numbers. |
-| Samsung Tizen | `appium` (`platformName: TizenTV`) | `appium_page_source`, `appium_screenshot` | Remote keys only. Touch and typing keywords fail with E0105. |
-| LG webOS | `appium` (`platformName: LGTV`) | `appium_screenshot`, plus OCR | Remote keys only. Touch and typing keywords fail with E0105. |
+| Samsung Tizen | `appium` (`platformName: TizenTV`) | `appium_find_element`, `camera_screenshot` | Element keywords move the remote focus. Touch keywords fail with E0105. |
+| LG webOS | `appium` (`platformName: LGTV`) | `appium_find_element`, plus OCR | Element keywords move the remote focus. Touch keywords fail with E0105. |
 | Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone. |
 | Web (Selenium) | `selenium` | `selenium_find_element`, `selenium_page_source`, `selenium_screenshot` | Needs a WebDriver server or Grid. Chrome or Firefox. |
 | Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera. |
@@ -30,7 +30,7 @@ Use **Selenium** when you already run a Selenium Grid, or need Firefox or a real
 
 Between phones and browsers, only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
 
-TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so Press Element and the typing keywords fail with E0105 there. Write those flows with Press Keycode steps that move the focus, such as `Press Keycode,RIGHT` and then `Press Keycode,ENTER`. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the key names.
+TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so the element keywords press remote keys to move the focus. Touch keywords such as Swipe and Scroll fail with E0105 there. Use Press Keycode for single remote keys. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the locators and key names.
 
 Element values usually do change, because each platform names things differently. Give an element one row per platform, and Optics tries each value in turn:
 
@@ -51,7 +51,7 @@ Most keywords work on every platform. These are the exceptions:
 
 | Keyword | Where it differs |
 |---|---|
-| Press Element, Enter Text, Swipe, Scroll and other touch or typing keywords | Fail with E0105 on Samsung Tizen and LG webOS. Use Press Keycode with remote keys instead. |
+| Swipe, Scroll and other touch keywords | Fail with E0105 on Samsung Tizen and LG webOS. Press Element and Enter Text move the remote focus instead. |
 | Press Keycode | Takes Android key numbers on Android and Android TV, remote key names on Tizen and webOS, and key names such as `Enter` on Playwright. Not supported on Selenium or iOS. |
 | Swipe | Not supported on Selenium. On Playwright it scrolls the page up or down. |
 | Launch App | Opens a package, a bundle id or a URL on Appium, and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |

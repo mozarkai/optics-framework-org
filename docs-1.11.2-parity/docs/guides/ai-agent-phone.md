@@ -91,8 +91,8 @@ For an iPhone, use `platformName iOS`, the phone's `udid` and the app's `bundleI
 A typical session goes like this:
 
 1. **Start a session.** `start_session` connects to Appium with your capabilities, opens the app and returns the first screen as rows, such as `e7 button "Sign in" [tap] #sign_in`.
-2. **Act.** The agent calls `tap`, `type_text` and `scroll` on a ref such as `e7`. Optics uses a locator that matches only that element. Each reply shows what changed on the screen.
-3. **Check.** It calls `check` with the text that proves the step worked, such as `present: ["1 item"]`.
+2. **Act.** The agent calls `tap`, `type_text` and `scroll` on a ref such as `e7`. Optics uses a locator that matches only that element. Each reply shows what changed on the screen. For a system key, the agent calls `press_key` with `back` or an Android key number such as `66`. `press_key` refuses a ref.
+3. **Check.** It calls `check` with the text that proves the step worked, such as `present: ["1 item"]`. An action that has `expect_present` or `expect_absent` waits up to 5 seconds for the text.
 4. **End the session.** `terminate_session` closes the app.
 
 The agent taps by reference, not by position. The server hides coordinate taps by default, because tests that guess positions break on any other screen size. See [Coordinate taps](https://optics-framework.org/docs/reference/mcp#coordinate-taps).
@@ -119,7 +119,7 @@ The run writes a JUnit report and screenshots to `execution_output/`. See [Read 
 
 - **No loops or conditions as tools.** `Run Loop`, `Condition` and the other flow-control keywords only work inside suite files. The agent can still write them there.
 - **No save tool.** The agent writes the suite files from the steps resource and `optics://project-format`.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call. With two phones open, the agent must pass `session_id` on each call.
 - **Apps that block screenshots.** The agent sees what the driver sees. For an app that blocks screenshots, see [Test apps that block screenshots](https://optics-framework.org/docs/guides/protected-apps).
 
 ## See also

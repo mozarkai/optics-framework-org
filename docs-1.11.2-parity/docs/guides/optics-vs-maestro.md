@@ -32,7 +32,7 @@ Maestro's [supported platforms](https://docs.maestro.dev/get-started/supported-p
 
 ## TV apps
 
-Optics tests [Android TV, Samsung Tizen and LG webOS](https://optics-framework.org/docs/platforms/tv) through Appium, with remote-control keys. On Tizen and webOS, you move the focus with key names such as `UP` and `ENTER`, and touch keywords fail with E0105.
+Optics tests [Android TV, Samsung Tizen and LG webOS](https://optics-framework.org/docs/platforms/tv) through Appium, with remote-control keys. On Tizen and webOS, Press Element and Enter Text move the focus for you, Press Keycode sends keys such as `UP` and `ENTER`, and touch keywords fail with E0105.
 
 Maestro's [`pressKey`](https://docs.maestro.dev/reference/commands-available/presskey) command includes Android TV remote keys, such as `Remote Dpad Up` and `Remote Media Play Pause`. Its supported platforms page doesn't list Tizen or webOS.
 

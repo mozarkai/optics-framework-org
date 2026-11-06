@@ -90,10 +90,16 @@ Engine names are the same as in [config.yaml](https://optics-framework.org/docs/
 
 The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
 
-- A `${NAME}` reference in a driver `url` or in a `capabilities.headers` value. Send the value itself.
+- A `$NAME` or `${NAME}` reference in a driver `url` or in a `capabilities.headers` value. Send the value itself.
 - A file path in `capabilities.storage_state`. Send the state as a JSON object.
+- `capabilities.user_data_dir`. Set it in a project's config.yaml instead.
+- `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
 
-The session log shows only the scheme and host of a URL, and masks header values and `storage_state`.
+```terminal
+{"detail":{"type":"optics:config","code":"Code.E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
+```
+
+The session log shows only the scheme and host of a URL. It masks header values, `storage_state` and every value with a secret name, such as `token` or `password`.
 
 ## ExecuteRequest
 

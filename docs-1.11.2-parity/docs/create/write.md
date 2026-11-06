@@ -116,7 +116,7 @@ How a step is read:
 
 - **Keyword names** are case-insensitive. `Press Element`, `press element` and `press_element` all work.
 - **Values** fill the keyword's parameters in order. Add more `param_3`, `param_4` columns when a keyword needs them. Empty cells are skipped.
-- **`${name}`** is replaced by the element or variable called `name`. A whole cell such as `${email_field}` tries each fallback in turn. Inside other text, such as `Hello ${name}`, Optics uses the first value. [Variables](https://optics-framework.org/docs/advanced/variables) gives the full rules.
+- **`${name}`** is replaced by the element or variable called `name`. A whole cell such as `${email_field}` tries each fallback in turn. Inside other text, such as `Hello ${first} ${last}`, Optics replaces each variable with its first value when the step runs. [Variables](https://optics-framework.org/docs/advanced/variables) gives the full rules.
 - **Named values** like `index=1` or `timeout_str=20` set one parameter by name, so you can skip the ones in between. They only work with the keyword's real parameter names, which the [keyword reference](https://optics-framework.org/docs/reference/keywords/) lists. A first cell that starts with `text=`, `css=` or `xpath=` is a locator, not a named value: `Enter Text,text=Email,ava@birch.shop` types into the field that shows "Email".
 - **`store_as=name`** keeps the value that the keyword returns, so later steps can use `${name}`. [Keep a value for later](https://optics-framework.org/docs/advanced/variables#keep-a-value-for-later) shows how.
 - **Plain text** such as `Add to cart` is used as-is. For `Press Element`, plain text means "the element showing this text".

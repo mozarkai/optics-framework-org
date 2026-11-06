@@ -1093,7 +1093,7 @@ How a step is read:
 
 - **Keyword names** are case-insensitive. `Press Element`, `press element` and `press_element` all work.
 - **Values** fill the keyword's parameters in order. Add more `param_3`, `param_4` columns when a keyword needs them. Empty cells are skipped.
-- **`${name}`** is replaced by the element or variable called `name`. A whole cell such as `${email_field}` tries each fallback in turn. Inside other text, such as `Hello ${name}`, Optics uses the first value. [Variables](https://optics-framework.org/docs/advanced/variables) gives the full rules.
+- **`${name}`** is replaced by the element or variable called `name`. A whole cell such as `${email_field}` tries each fallback in turn. Inside other text, such as `Hello ${first} ${last}`, Optics replaces each variable with its first value when the step runs. [Variables](https://optics-framework.org/docs/advanced/variables) gives the full rules.
 - **Named values** like `index=1` or `timeout_str=20` set one parameter by name, so you can skip the ones in between. They only work with the keyword's real parameter names, which the [keyword reference](https://optics-framework.org/docs/reference/keywords/) lists. A first cell that starts with `text=`, `css=` or `xpath=` is a locator, not a named value: `Enter Text,text=Email,ava@birch.shop` types into the field that shows "Email".
 - **`store_as=name`** keeps the value that the keyword returns, so later steps can use `${name}`. [Keep a value for later](https://optics-framework.org/docs/advanced/variables#keep-a-value-for-later) shows how.
 - **Plain text** such as `Add to cart` is used as-is. For `Press Element`, plain text means "the element showing this text".
@@ -1208,6 +1208,7 @@ Type a keyword and its values, separated by spaces, and press Enter:
 - Write keyword names in `snake_case` or in words: `press_element`, `Press Element` and `press element` all work.
 - Put quotes around a value that contains spaces.
 - Type `${` to pick from the elements already defined in your project.
+- Put a name inside a longer value, such as `enter_text ${email_field} "ava+${tag}@birch.shop"`. Live uses the first value of `tag`. A name that is not defined fails the step.
 - Type `name=value` to give a parameter by name. For example, `press_element "Add to cart" index=1` presses the second match. On Appium, `index=` also picks among native elements with the same text.
 - Type `go_back` to go back one screen. Type `assert_text ${greeting} "Hi, Ava"` to fail the step when the element shows other text.
 - Press Tab to complete a keyword name. The rest of its parameters appear in grey as a hint.
@@ -1550,18 +1551,19 @@ The server gives the agent:
 
 - **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
 - **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app` and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
-- **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files.
+- **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
 
-The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict.
+The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict. Optics waits up to 5 seconds for that text, so a page that loads late can still pass.
 
 A typical session goes: start a session, act on rows, check the result, read the steps and the project format, write the files, run `optics dry_run`, and end the session. The [MCP reference](https://optics-framework.org/docs/reference/mcp) lists every tool and resource. For one tool per keyword, start the server with `--toolset full`.
 
 ## Keep the agent on track
 
+- **The agent asks you before it signs in.** For a website that needs a sign-in, the agent reads `optics://browser-profiles`. It asks you which profile to use. If you choose none, it asks you for the credentials. Only a server that starts with the default `stdio` transport accepts a profile. See [Sign in with a browser profile](https://optics-framework.org/docs/reference/mcp#sign-in-with-a-browser-profile).
 - **Agents tap by reference, not by position.** The server hides coordinate taps by default, because those tests break on any other screen size. To allow them, set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before you start the server.
 - **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run` before it finishes.
 - **Loops and conditions** (`Run Loop`, `Condition`, `Read Data` and the rest) aren't tools, because they only make sense inside suite files. The agent can still write them into modules.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call. When more than one session is open, the agent must pass `session_id`. The error lists the ids.
 
 **Run the server over HTTP**
 By default the server talks to one client over standard input and output. To share it on a network, or run it in a container, start it in HTTP mode:
@@ -2153,7 +2155,19 @@ Optics decides what a value is from how it looks:
 | `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Playwright and web pages on Appium only | `#login-button` |
 | Starts with `android.` or `XCUI` | A class name | `android.widget.Switch` |
 
-On Playwright, you can also write `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` values. See [Locators for web pages](https://optics-framework.org/docs/platforms/web#locators-for-web-pages).
+On Playwright, you can also write these prefixes. A prefix can be in any case:
+
+| Write | Finds |
+|---|---|
+| `id=login`, `data-testid=save`, `data-test=save`, `data-test-id=save` | An element by its id or test attribute |
+| `testid=save` | The same as `data-testid=save` |
+| `label=Email`, `placeholder=Search Birch` | A field by its label or placeholder |
+| `alt=Birch logo`, `title=Open the cart` | An element by its alt text or title |
+| `role=button[name="Save"]` | An element by its role and name |
+| `text="Save"` | An element with exactly this text. `text=Save` also matches `Save changes`. |
+| `loc=css:button.save`, `loc=role:button[name="Save"]`, `loc=href:/next` | The same as `css=`, `role=` and a link with this `href`. Agent browsers write locators in this form. |
+
+See [Locators for web pages](https://optics-framework.org/docs/platforms/web#locators-for-web-pages).
 
 ### XPath
 
@@ -2278,10 +2292,14 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 |---|---|---|---|
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
 | Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
-| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `GOOGLE_APPLICATION_CREDENTIALS` to a service account key. Screenshots leave your machine. |
+| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
 List more than one engine and Optics tries them in order.
+
+### Pictures from a camera
+
+The `camera_screenshot` source gives OCR and image matching a picture. The picture comes from one of three places: a webcam (`camera_index`), an HTTP(S) URL (`url`, with an optional `token`) or a TCP frame server (`url: ip:port`). See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera).
 
 ## Turn on image matching
 
@@ -2524,7 +2542,9 @@ A dry run reads every file and checks that:
 - every keyword in every module exists, with a suggestion when you mistype one,
 - every `${name}` is defined in an elements file or by an earlier step, such as `Evaluate`, `Read Data` or `store_as`. This includes a `${name}` inside a longer value.
 
-It doesn't tap, type or open anything, so it's quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled.
+It does not tap, type or open anything, so it is quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled. `optics dry-run` is the same command.
+
+A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate` and `Condition`, needs no driver. `optics execute` follows the same rule.
 
 ## Run it
 
@@ -2561,9 +2581,13 @@ Test Suite
 | Code | Meaning |
 |---|---|
 | `0` | Every test case passed. |
-| `1` | At least one test case failed, or the run couldn't start (no driver enabled, server unreachable, missing files). |
+| `1` | At least one test case failed, error detection found an on-screen error, or the run couldn't start (no driver enabled, server unreachable, missing files). |
+| `2` | The command line is not valid, for example an unknown flag. |
+| `3` | The test case selection is not valid. |
+| `130` | You pressed Ctrl+C. |
+| `143` | Optics received SIGTERM. |
 
-CI systems use this to mark a build as passed or failed.
+CI systems use this to mark a build as passed or failed. Optics also writes the JUnit report when you stop a run with Ctrl+C or SIGTERM. See [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
 
 ## Choose which test cases run
 
@@ -2576,7 +2600,7 @@ $ optics execute birch-tests --include "shopper can*" --exclude "Shopper can che
 - Matching ignores case. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first.
 - Suite Setup and Suite Teardown always run.
-- A name that matches no test case stops the run before it starts. The message suggests the correct name.
+- A name that matches no test case stops the run before it starts, with exit code `3`. The message suggests the correct name.
 
 `optics dry_run` takes the same flags. To keep a selection for every run, put `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude). The flags replace them for one run.
 
@@ -2626,6 +2650,8 @@ birch-tests/execution_output/
 ├── junit_output.xml                              # pass/fail for every test, for CI
 ├── 2026-10-09T14-02-11-…-pre_press_element.jpg  # the screen before each step
 ├── 2026-10-09T14-02-11-…-press_element_element_detection_result.jpg
+├── 2026-10-09T14-02-14-…-failure_Shopper can sign in.jpg   # the screen of a failed test case
+├── 2026-10-09T14-02-14-…-failure_Shopper can sign in.xml   # its UI tree
 ├── 2026-10-09T14-02-15-…-end_of_run.jpg         # the last screen
 ├── page_sources_log.xml                          # the UI tree, captured during the run
 ├── failed_steps_elements.json                    # the elements on screen when a step failed
@@ -2640,7 +2666,8 @@ birch-tests/execution_output/
 | `…pre_<keyword>.jpg` | Before each step that finds an element, with `save_captures: true` | See what was on screen when the step started. |
 | `…_detection_result.jpg` | When Optics found an element by position, with `save_captures: true` | See exactly what Optics found, boxed in green. |
 | `…_with_aoi.jpg` | When a step uses an [area of interest](https://optics-framework.org/docs/elements/area-of-interest), with `save_captures: true` | Check the area covers the right part of the screen. It's drawn in blue. |
-| `…end_of_run.jpg` | At the end of the run | See where the app was left. |
+| `…failure_<test case>.jpg` and `.xml` | When a test case fails. Web pages write `.html`. | See the screen and the UI tree where the test case ended. |
+| `…end_of_run.jpg` | At the end of the run, before Suite Teardown | See where the app was left. |
 | `page_sources_log.xml` or `.html` | When the UI tree is read. Web pages go to `.html`. | Find the right XPath or text for an element. |
 | `failed_steps_elements.json` | When a step fails, with `save_captures: true` | See each element on the screen of the failed step, with its label and bounds. |
 | `internal_logs.log`, `execution_logs.log` | With `file_log: true` | Read every attempt Optics made, including which ways of finding an element failed. |
@@ -2651,7 +2678,7 @@ birch-tests/execution_output/
 
 1. **Read the Failure details box** in the terminal. It names the test case, the step and the reason. `last error:` gives the error of the last fallback value, and `(cause: …)` gives the root cause.
 2. **Open `failed_steps_elements.json`** to see the elements on the screen when the step failed. On a web page, each element has a `loc` locator that you can copy into your elements file.
-3. **Open the last `pre_…` screenshot** before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
+3. **Open the `failure_<test case>` screenshot.** It shows where the test case ended. Then open the last `pre_…` screenshot before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
 4. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
 5. **Reproduce it in `optics live`.** Run the steps before the failure, then try the failing step with different values until one works. See [Record a test](https://optics-framework.org/docs/create/record).
 
@@ -2671,9 +2698,54 @@ log_level: DEBUG    # more detail in the terminal and log files
 
 ## Read the JUnit report
 
-`junit_output.xml` has one `<testcase>` per test case, with a `<failure>` when it failed. Inside each, Optics records every module and keyword with its status and timing, so CI tools that show nested steps display the same tree you saw in the terminal.
+`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+
+Inside each test case, every module and keyword is a `<kw>` with `status`, `starttime`, `endtime` and `elapsed`. CI tools that show nested steps display the same tree you saw in the terminal.
+
+```xml
+<testcase name="Shopper can find a missing link" classname="birch-tests" time="3.79" ... status="FAIL">
+  <kw name="Verify Missing Link" type="setup" status="FAIL" ...>
+    <kw name="Assert Presence" status="FAIL" ... elapsed="3.01">
+    ...
+    </kw>
+    <kw name="Validate Element" status="NOT_RUN"/>
+  </kw>
+  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure">...</failure>
+</testcase>
+```
+
+A status is one of these:
+
+| Status | Meaning |
+|---|---|
+| `PASS` | The test case, module or keyword passed. |
+| `FAIL` | A check or an action failed. |
+| `ERROR` | The run could not do its work, for example because the driver session was lost or the run stopped. |
+| `NOT_RUN` | A failure or a stop kept it from running. |
+
+After a failure, the steps that did not run are `NOT_RUN`. A test case that never started is `NOT_RUN` with a `<skipped>` element. A per-test setup or teardown has its own result, named `Setup (<test case>)` or `Teardown (<test case>)`. If a per-test setup fails, the test case still runs.
 
 If error screens were detected, the report has an extra failing test case called `on-screen-error-detection`. See [Catch error screens](https://optics-framework.org/docs/run/error-detection).
+
+## What each outcome writes
+
+Each outcome has an exit code and a result in `junit_output.xml`. A run that cannot start because of the project writes no report. Examples are a bad config and a test selection that is not valid.
+
+| Outcome | Exit code | `junit_output.xml` |
+|---|---|---|
+| Every test case passed | `0` | Every test case is `PASS`. |
+| A test case failed | `1` | That test case is `FAIL` with a `<failure>`. The steps after the failed step are `NOT_RUN`. |
+| An error screen matched | `1` | An extra `on-screen-error-detection` test case has one `<failure>` for each match. |
+| Config error, missing files or no driver enabled | `1` | Not written. |
+| Test selection not valid | `3` | Not written. |
+| The Appium or Selenium server cannot be reached, or no Android device is attached | `1` | Each test case is `ERROR` with an `<error>` that names the problem. Their steps are `NOT_RUN`. |
+| The driver session is lost during the run | `1` | The test case in progress and each later one is `ERROR` with an `<error>` that has `E0106`. |
+| You press Ctrl+C | `130` | Finished test cases keep their results. The one in progress is `ERROR`. Later ones and Suite Teardown are `NOT_RUN` with `<skipped>`. |
+| Optics receives SIGTERM | `143` | The same as Ctrl+C. |
+
+A session is lost when the Appium server or the Selenium server stops, or drops the session, during a run. The terminal summary shows the affected test cases as failed.
+
+If two sessions in one process share an output folder, such as with the Python SDK or `optics serve`, the second report is `junit_output_<session_id>.xml`. `optics execute` and `optics dry_run` always write `junit_output.xml`.
 
 ## Keep the folder tidy
 
@@ -2700,7 +2772,7 @@ Source: https://optics-framework.org/docs/run/error-detection
 
 > Fail a run in CI when the app ends on a crash dialog, a "Session expired" message or any other error you define.
 
-Some failures don't break a step. The app shows *Session expired*, or Android shows *Birch has stopped*, and the test still passes because no step looked for that message. Error detection catches these. You list the messages that mean something went wrong, and Optics checks the screen for them at the end of every run.
+Some failures do not break a step. The app shows *Session expired*, or Android shows *Birch has stopped*, and the test still passes because no step looked for that message. Error detection catches these. You list the messages that mean something went wrong, and Optics checks the final screen for them in every run.
 
 ### List the error messages
 
@@ -2734,18 +2806,25 @@ There's nothing to switch on. If the project has an error definitions file, Opti
 
 ## What happens at the end of a run
 
-After the last test case, Optics captures the screen one more time, reads all the text in the app's UI tree, and looks for each `match_string`. Matching ignores case and finds the text anywhere: `session expired` matches *Your session expired. Please sign in again.*
+Optics captures the screen once, reads all the text in the app's UI tree, and looks for each `match_string`. It does this before Suite Teardown when the suite has one, because a teardown often closes the app. Otherwise it does this after the last test case. Matching ignores case and finds the text anywhere: `session expired` matches *Your session expired. Please sign in again.*
 
 For each match, Optics:
 
 - logs a warning, which you can read in `execution_logs.log` when `file_log: true` is set: `ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The user was signed out`,
-- adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, with one failure per match,
+- adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, after the other test cases, with one failure per match,
 - writes the details to `execution_output/detected_errors_<id>.json`.
 
-CI tools that read the JUnit report then show the run as failed, even when every step passed.
+The terminal tree shows `on-screen-error-detection` as `FAIL` and counts it in the summary:
 
-**The exit code doesn't change:**
-A detected error appears in the JUnit report but doesn't change the exit code of `optics execute`. If your CI decides pass or fail from the exit code alone, have it read the JUnit report as well. See [Run tests in CI](https://optics-framework.org/docs/run/ci).
+```terminal
+└── on-screen-error-detection                            |      0.00s |    FAIL
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 4 | Passed: 3 | Failed: 1                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+**A detected error fails the run:**
+A detected error counts as a failed test case, so `optics execute` exits with code `1`. CI tools that read the exit code or the JUnit report show the run as failed, even when every step passed. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
 
 ## Write good match strings
 
@@ -2757,7 +2836,7 @@ A detected error appears in the JUnit report but doesn't change the exit code of
 
 - The check runs once, on the last screen. If the app recovers before the run ends, the error isn't seen. Add an explicit check in your test for errors that can appear and disappear mid-flow, such as `Assert Presence` on the screen you expect next.
 - It needs the app's UI tree. On [production devices](https://optics-framework.org/docs/platforms/production) driven through a camera, there's no tree to read.
-- It's skipped if the session is already closed, for example when Suite Teardown ran `Close And Terminate App`. To keep the check, don't close the app in Suite Teardown.
+- Optics skips the check if the app is already closed when it reads the final screen. This happens when the last test case ran `Close And Terminate App` and the suite has no Suite Teardown. Close the app in Suite Teardown instead.
 - Definitions are CSV only. `optics dry_run`, `optics live`, the HTTP API and MCP don't run the check.
 
 ## See also
@@ -2922,9 +3001,19 @@ Make sure `deviceName` in `config.yaml` matches the emulator (`emulator-5554` fo
 
 ## Decide pass or fail
 
-`optics execute` exits with `1` when any test case fails, so the run step fails the job by itself.
+`optics execute` exits with a non-zero code when a run does not pass, so the run step fails the job by itself:
 
-There's one case the exit code misses: [error screens](https://optics-framework.org/docs/run/error-detection) found at the end of a run. They're added to the JUnit report as a failing test case but don't change the exit code. To fail the build on them, have your JUnit reporter fail on any failure. For example, with `mikepenz/action-junit-report`, add `fail_on_failure: true`.
+| Code | Meaning |
+|---|---|
+| `0` | Every test case passed. |
+| `1` | A test case failed, or an [error screen](https://optics-framework.org/docs/run/error-detection) was found. The run also exits with `1` when it cannot start, for example when the server is not reachable. |
+| `2` | The command line is not valid. |
+| `3` | A name in `--include`, `--exclude` or the config `include` and `exclude` matches no test case. |
+| `130` or `143` | A person or the CI system stopped the run with Ctrl+C or SIGTERM. |
+
+Optics also writes `junit_output.xml` when it stops with `130` or `143`. A run that cannot start because of the project, such as a bad config, writes no report. See [What each outcome writes](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
+
+An error screen adds a failing `on-screen-error-detection` test case to the report and changes the exit code to `1`. You do not need extra settings to fail the build on it.
 
 ## Make CI runs reliable
 
@@ -2933,7 +3022,7 @@ There's one case the exit code misses: [error screens](https://optics-framework.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
 - **Keep the artifacts.** Upload `execution_output/` when a run fails (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.
-- **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables.
+- **Keep secrets out of the suite.** Pass model API keys such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` as CI secrets, in environment variables. Optics writes `****` in place of a secret in the console, the logs and the JUnit report. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 - **Wait for screens to load.** Runners are often slower than your laptop. Put `Assert Presence` before actions that follow a screen change, rather than adding `Sleep` steps.
 
 ## See also
@@ -2970,7 +3059,7 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 ## The run
 
 - [ ] **Error screens are defined.** Add the crash, timeout and "something went wrong" messages your app can show to an [error definitions file](https://optics-framework.org/docs/run/error-detection).
-- [ ] **CI fails on JUnit failures, not only the exit code.** Detected error screens only show up in the JUnit report. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
+- [ ] **CI reads the exit code and the JUnit report.** An error screen gives exit code `1` and adds a failing test case to the report. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
 - [ ] **Screenshots are kept when a run fails.** Upload `execution_output/` as a CI artifact.
 - [ ] **File logs are on for CI runs.** `file_log: true` gives you every locator attempt when a failure is hard to explain.
 - [ ] **Someone owns the failures.** Decide who looks at a red run, and how fast. A suite people learn to ignore is worse than no suite.
@@ -2998,8 +3087,8 @@ Optics runs the same tests on phones, TVs, browsers and locked production device
 | iOS | `appium` (XCUITest) | `appium_find_element`, `appium_page_source`, `appium_web`, `appium_screenshot` | Needs a Mac with Xcode, and a simulator or a signed real device. |
 | Mobile web (Chrome, Safari, WebViews) | `appium` | `appium_web` with the Android or iOS sources | Same setup as Android or iOS. Finds `css=` and DOM XPath locators in the page. |
 | Android TV | `appium` (UiAutomator2) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Same setup as Android. Move around with D-pad key numbers. |
-| Samsung Tizen | `appium` (`platformName: TizenTV`) | `appium_page_source`, `appium_screenshot` | Remote keys only. Touch and typing keywords fail with E0105. |
-| LG webOS | `appium` (`platformName: LGTV`) | `appium_screenshot`, plus OCR | Remote keys only. Touch and typing keywords fail with E0105. |
+| Samsung Tizen | `appium` (`platformName: TizenTV`) | `appium_find_element`, `camera_screenshot` | Element keywords move the remote focus. Touch keywords fail with E0105. |
+| LG webOS | `appium` (`platformName: LGTV`) | `appium_find_element`, plus OCR | Element keywords move the remote focus. Touch keywords fail with E0105. |
 | Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone. |
 | Web (Selenium) | `selenium` | `selenium_find_element`, `selenium_page_source`, `selenium_screenshot` | Needs a WebDriver server or Grid. Chrome or Firefox. |
 | Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera. |
@@ -3016,7 +3105,7 @@ Use **Selenium** when you already run a Selenium Grid, or need Firefox or a real
 
 Between phones and browsers, only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
 
-TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so Press Element and the typing keywords fail with E0105 there. Write those flows with Press Keycode steps that move the focus, such as `Press Keycode,RIGHT` and then `Press Keycode,ENTER`. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the key names.
+TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so the element keywords press remote keys to move the focus. Touch keywords such as Swipe and Scroll fail with E0105 there. Use Press Keycode for single remote keys. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the locators and key names.
 
 Element values usually do change, because each platform names things differently. Give an element one row per platform, and Optics tries each value in turn:
 
@@ -3037,7 +3126,7 @@ Most keywords work on every platform. These are the exceptions:
 
 | Keyword | Where it differs |
 |---|---|
-| Press Element, Enter Text, Swipe, Scroll and other touch or typing keywords | Fail with E0105 on Samsung Tizen and LG webOS. Use Press Keycode with remote keys instead. |
+| Swipe, Scroll and other touch keywords | Fail with E0105 on Samsung Tizen and LG webOS. Press Element and Enter Text move the remote focus instead. |
 | Press Keycode | Takes Android key numbers on Android and Android TV, remote key names on Tizen and webOS, and key names such as `Enter` on Playwright. Not supported on Selenium or iOS. |
 | Swipe | Not supported on Selenium. On Playwright it scrolls the page up or down. |
 | Launch App | Opens a package, a bundle id or a URL on Appium, and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |
@@ -3568,6 +3657,8 @@ elements_sources:
 
 There's no server to start, so `optics execute` skips its preflight check for Playwright.
 
+Chromium starts without the automation flags, so `navigator.webdriver` is `false`, as in a browser that a person opens. Selenium Chrome starts in the same way.
+
 **Selenium**
 
 Install the engine:
@@ -3671,9 +3762,15 @@ Shopper can add a backpack,Add the backpack
 | Bare id or name | `user-name` | No. Write `id=user-name`. | Yes. Tried as an id, name, class or link text when no text matches. |
 | CSS selector | `#user-name`, `.inventory_item_name`, `css=button[data-test='login-button']` | Yes | No |
 | Attribute prefix | `id=user-name`, `data-test=login-button`, `label=Username`, `placeholder=Username`, `role=button` | Yes | No |
+| Alt text and title | `alt=Birch logo`, `title=Open the cart` | Yes | No |
+| Test id | `testid=save-btn`, `data-testid=save-btn` | Yes | No |
+| Exact text | `text="Save"` | Yes. It does not match `Save changes`. | No |
+| Locators from other agent browsers | `loc=css:button.save`, `loc=role:button[name="Save changes"]`, `loc=href:/next` | Yes | No |
 | Image | `cart_icon.png` | With image matching on | With image matching on |
 
 We recommend XPath for web elements. It's the one kind of value that works the same way with both drivers, so you can switch drivers without editing elements.
+
+A prefix can be in any case. `Get Interactive Elements` lists an element with a pointer cursor as tappable, even when it has no role, link or click attribute.
 
 On Playwright, actions wait up to 10 seconds for the element to show. When a locator matches several elements, the log names the count and the one Optics used. Add `index=` or a more specific locator to pick another.
 
@@ -3687,6 +3784,8 @@ To see an element's id or attributes, right-click it in Chrome and choose **Insp
 | Selenium | `Enter Text Using Keyboard,<enter>` | `<tab>`, `<backspace>`, `<space>`, `<escape>` |
 
 Press Keycode isn't supported on Selenium. The keys go to whichever field has focus, so press the field first.
+
+On Playwright, Press Keycode accepts a key name in any case. `ESC`, `arrowdown` and `KEYCODE_ENTER` work in the same way as `Escape`, `ArrowDown` and `Enter`. A name that Optics does not know fails with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters) and lists the valid names.
 
 ## Emulate a phone
 
@@ -3705,7 +3804,7 @@ driver_sources:
 
 An emulated phone is still a desktop browser. To test the real Chrome or Safari on a phone, see [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web).
 
-## Start signed in
+## Start signed in from a saved file
 
 Sign in once, save the browser state to a file, and every run starts signed in. Sign in by hand in the window that opens, then close it:
 
@@ -3727,6 +3826,47 @@ driver_sources:
 
 **Warning:**
 The file holds live session cookies. Do not commit it to version control.
+
+## Start signed in with a browser profile
+
+Use a browser profile when you are signed in to the site in Chrome or Edge on the same computer. Optics copies the sign-ins of that profile, so you do not sign in again. Each of the three options keeps sign-ins in a different place:
+
+| Option | Use it when | Sign-ins come from |
+|---|---|---|
+| `storage_state` | The run must work on any computer, in CI, with `device` or in a remote browser. | A file that Playwright saved. See [Start signed in from a saved file](#start-signed-in-from-a-saved-file). |
+| `profile` | You are signed in to Chrome or Edge on this computer. | A temporary copy of that profile. Optics deletes the copy at the end of the session. |
+| `user_data_dir` | You want to sign in once in the Optics browser and keep the sign-in for later runs. | A folder that stays between runs. |
+
+Set `profile` to the directory of the profile (`Default`, `Profile 1`), its name or its account email:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        profile: me@example.com
+        channel: chrome
+```
+
+Optics copies the cookies, local storage and preferences of the profile into a temporary folder. It starts the browser with the copy. The real profile does not change. `channel` is `chrome`, `chrome-beta` or `msedge`. Without it, Optics uses the browser that owns the profile.
+
+Most site sign-ins carry over. Google accounts are signed out in a copy. If the value matches no profile, or more than one, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config) and lists the profiles that Optics found:
+
+```terminal
+No browser profile 'nobody@example.com'. Profiles: chrome 'Default' (Person 1, not signed in); chrome 'Profile 1' (Birch tester, tester@birch.example)
+```
+
+To keep the sign-in between runs, set `user_data_dir` to a folder, for example `~/optics-browser`. Sign in once in the window that opens. A path that starts with `./` is relative to the project folder and must exist.
+
+`profile` and `user_data_dir` apply to a browser that Optics starts. Each of these stops the run with E0501:
+
+- `profile` or `user_data_dir` with a remote `url`.
+- `profile` with `user_data_dir`.
+- `profile` or `user_data_dir` with `storage_state`.
+
+`optics serve` refuses `profile`. `optics mcp --transport http` refuses it too, and no session API accepts `user_data_dir`. A local `optics mcp` on stdio lists the profiles in the `optics://browser-profiles` resource. See [MCP server reference](https://optics-framework.org/docs/reference/mcp).
 
 ## Use a remote browser
 
@@ -3770,7 +3910,7 @@ All values are in milliseconds, under `capabilities`:
 
 ## Run in CI without a screen
 
-With Playwright, set `headless: true`. With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments. They replace the arguments Optics adds, so keep the ones you need:
+With Playwright, set `headless: true`. With Selenium in Docker, the browser runs inside the container, so the CI machine needs no display. To run Chrome headless on a Grid, pass Chrome's own arguments in `goog:chromeOptions`. Optics adds them to its own. In a Linux container or in CI, add `--no-sandbox` and `--disable-dev-shm-usage`:
 
 `config.yaml`:
 
@@ -4011,15 +4151,15 @@ Source: https://optics-framework.org/docs/platforms/tv
 
 # Test TV apps
 
-> Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.
+> Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.
 
-Optics tests TV apps through **Appium**, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with `platformName` in `config.yaml`. On a TV you move around with remote-control keys and check what's on screen with assertions.
+Optics tests TV apps through **Appium**, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with `platformName` in `config.yaml`. On a TV you move around with remote-control keys and check what is on screen with assertions. On Tizen and webOS, the element keywords also work. They move the remote focus for you.
 
 | TV platform | `platformName` | Appium driver | How you move around |
 |---|---|---|---|
 | Android TV | `Android` | UiAutomator2 | Android key numbers, plus taps and typing |
-| Samsung Tizen | `TizenTV` | [appium-tizen-tv-driver](https://github.com/headspinio/appium-tizen-tv-driver) | Remote key names only |
-| LG webOS | `LGTV` | [appium-lg-webos-driver](https://github.com/headspinio/appium-lg-webos-driver) | Remote key names only |
+| Samsung Tizen | `TizenTV` | [appium-tizen-tv-driver](https://github.com/headspinio/appium-tizen-tv-driver) | Remote key names, and element keywords that move focus |
+| LG webOS | `LGTV` | [appium-lg-webos-driver](https://github.com/headspinio/appium-lg-webos-driver) | Remote key names, and element keywords that move focus |
 
 The examples use a TV app for Birch, a sample shoe store, with rows of shoes such as "Trail Runner 2" and "Pace Knit".
 
@@ -4036,7 +4176,7 @@ Each TV also needs its own setup: developer mode on the TV, the vendor's tools, 
 
 ## Android TV
 
-Android TV uses the same setup as an Android phone. Follow [Test Android apps](https://optics-framework.org/docs/platforms/android), with `platformName: Android` and the TV's serial from `adb devices` as `udid`. Connect to the TV with `adb connect <tv-ip>` when it isn't on a cable.
+Android TV uses the same setup as an Android phone. Follow [Test Android apps](https://optics-framework.org/docs/platforms/android), with `platformName: Android` and the TV's serial from `adb devices` as `udid`. Connect to the TV with `adb connect <tv-ip>` when it is not on a cable.
 
 Touch and typing keywords work on Android TV, but most TV apps expect the D-pad. Send it with Press Keycode and Android key numbers:
 
@@ -4048,7 +4188,7 @@ Touch and typing keywords work on Android TV, but most TV apps expect the D-pad.
 | Home | `3` |
 | Play/pause | `85` |
 
-Remote key names such as `UP` don't work on Android TV. They only apply to Tizen and webOS.
+Remote key names such as `UP` do not work on Android TV. They only apply to Tizen and webOS.
 
 ## Samsung Tizen
 
@@ -4076,11 +4216,12 @@ driver_sources:
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
-  - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}
+  - appium_find_element: {enabled: true}
 ```
 
 Optics reads `platformName` and the app id (`appPackage`, with or without the `appium:` prefix). It passes every other capability to the Tizen driver unchanged. The [driver's README](https://github.com/headspinio/appium-tizen-tv-driver) explains each one, including how to get the `rcToken`.
+
+A native screenshot makes a Tizen TV stop answering, so `appium_screenshot` refuses to take one there. To capture the screen, add the `camera_screenshot` element source. See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera) for its settings.
 
 ## LG webOS
 
@@ -4108,12 +4249,11 @@ driver_sources:
         appium:useSecureWebsocket: true
         appium:newCommandTimeout: 600
 elements_sources:
+  - appium_find_element: {enabled: true}
   - appium_screenshot: {enabled: true}
-text_detection:
-  - easyocr: {enabled: true}               # reads text on the TV screenshot
 ```
 
-This setup finds things on screen with screenshots only, so add an OCR engine (`optics setup --install easyocr`) to check text, or [image matching](https://optics-framework.org/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
+`appium_find_element` finds text in the app's DOM. Add an OCR engine (`optics setup --install easyocr`) to read text that the app draws as an image, or [image matching](https://optics-framework.org/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
 
 ## Check the setup
 
@@ -4125,7 +4265,7 @@ $ optics doctor birch-tv
 
 The doctor's checks are written for phones. On Tizen and webOS it warns that `deviceName`, `appPackage` or `appActivity` is missing. You can ignore those warnings, and the `adb` rows, as long as `config: driver` and `config: appium element source` show ✅.
 
-Before each run, `optics execute` checks that the Appium server answers at `url`. It doesn't check the TV itself.
+Before each run, `optics execute` checks that the Appium server answers at `url`. It does not check the TV itself.
 
 ## Move around with remote keys
 
@@ -4140,21 +4280,92 @@ On Tizen and webOS, Press Keycode takes the name of a remote button:
 | `PLAY`, `PAUSE`, `STOP` | Playback |
 | `REWIND`, `FF` | Rewind and fast-forward. `FAST_FORWARD` also works. |
 
-Names aren't case-sensitive. On Tizen, any raw Samsung key name that starts with `KEY_`, such as `KEY_MENU`, is also sent as is. On webOS, unknown names are passed to the TV unchanged.
+On webOS, these names also work:
 
-## What doesn't work on Tizen and webOS
+| Key name | Button |
+|---|---|
+| `VOL_UP` or `VOLUME_UP` | Volume up |
+| `VOL_DOWN` or `VOLUME_DOWN` | Volume down |
+| `MUTE`, `UNMUTE` | Mute and unmute |
+| `CHAN_UP`, `CHAN_DOWN` | Channel up and down |
 
-TVs have no touch screen, so touch and typing keywords fail with **E0105** ("not supported") on Tizen and webOS:
+Names are not case-sensitive. On Tizen and webOS, a name that starts with `KEY_`, such as `KEY_MENU`, is sent as is. Any other name fails with **E0104**. The message lists the names that Optics knows.
 
-- Press Element, Detect And Press, Press By Coordinates, Press By Percentage, Select Dropdown Option
+## Find elements and move focus
+
+A Tizen or webOS app is a web page, so `appium_find_element` finds elements in its DOM. Use these locators:
+
+| Locator | What it matches |
+|---|---|
+| `Featured` or `text=Featured` | An element whose visible text, `aria-label`, `title` or `alt` is exactly this text |
+| `css=.tile.active` | An element that a CSS selector matches |
+
+A TV has no touch screen, so the element keywords press remote keys instead of taps:
+
+| Keyword | What it does on a TV |
+|---|---|
+| Press Element | Presses the arrow keys until the element has focus, then presses `ENTER`. |
+| Enter Text | Types into the element. See [Type on a TV](#type-on-a-tv). |
+| Clear Element Text | Presses the backspace key of the on-screen keyboard until the field stops changing. |
+| Get Text | Reads the text of the element, or the value of a field. |
+| Assert Presence | Waits for the element to appear. Use it in place of Sleep. |
+
+Optics reads the focus from the page after each key press, so you do not count presses. Each focus move costs one key press, and a key press takes 1 to 2 seconds on a TV. When 60 key presses do not bring the focus to the element, the step fails with `E0201`. The same error shows when the element is not on the screen.
+
+## Type on a TV
+
+Enter Text works on a TV in two ways. Optics picks the way from the element:
+
+- **A real `<input>` or `<textarea>`.** Optics types the text into the field directly.
+- **A field that the app draws itself.** Optics moves the focus over the on-screen keyboard and presses each key. When the keyboard does not show a character, Optics switches the layer (`123`, `abc`) and looks again.
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2
+Search,Enter Text,Search box,trail runner
+Search,Enter Text,Search box,<enter>
+```
+
+After the last key, Optics reads the field. If the field does not show the text, the step fails with **E0405**. No fallback value types the text a second time. A different letter case gives only a warning. Some apps choose the case themselves, for example a capital first letter.
+
+Enter Text also takes special keys in angle brackets:
+
+| Text | What it presses |
+|---|---|
+| `<space>`, `<backspace>`, `<enter>` | The key with that name on the on-screen keyboard |
+| `<escape>`, `<up>`, `<down>`, `<left>`, `<right>` | The `BACK` or arrow key of the remote |
+
+Other special keys, such as `<tab>`, fail with E0105 on an app keyboard.
+
+**Tip:**
+When the screen has more than one field, press the field first with Press Element. Then Optics types into the field that has focus.
+
+## Keywords that fail on Tizen and webOS
+
+Some keywords do not apply to a TV. They fail with **E0105** ("not supported"):
+
+- Press By Coordinates, Press By Percentage
 - Swipe, Swipe By Percentage, Swipe From Element, Swipe Until Element Appears
 - Scroll, Scroll From Element, Scroll Until Element Appears
-- Enter Text, Enter Text Direct, Enter Text Using Keyboard, Enter Number, Clear Element Text, Get Text
+- Select Dropdown Option
+- Is Element with the `checked` or `unchecked` state
+- Enter Text Direct, Enter Text Using Keyboard and any keyword that enters text without an element
 - Go Back. Use `Press Keycode,BACK` instead.
 
-These still work: Launch App, Press Keycode, Assert Presence, Assert Visibility, Validate Element, Validate Screen, Is Element, Capture Screenshot, Sleep, Execute Script, the flow keywords, and Close And Terminate App.
+Move the focus with an arrow key, or with Press Element on the element that you need.
 
-To type on a TV, move over the on-screen keyboard with arrow keys and press `ENTER` on each letter.
+These keywords work:
+
+- Launch App, Press Keycode, Close And Terminate App, Sleep, Execute Script and the flow keywords
+- Press Element, Detect And Press, Enter Text, Enter Number, Clear Element Text and Get Text
+- Assert Presence, Assert Visibility, Validate Element, Validate Screen and Is Element
+
+## Know the limits of screenshots and video
+
+A native screenshot makes a Tizen TV stop answering. For this reason `appium_screenshot` refuses it there with **E0303**. Use `camera_screenshot` to capture the screen, and see [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera) for its settings.
+
+DRM-protected video appears black in a screenshot. To check playback, check elements in the app, such as a pause button or a progress bar.
 
 ## Example: open a title from a grid
 
@@ -4191,10 +4402,11 @@ Watch a shoe video,Go home
 
 A few habits make TV tests reliable:
 
-- **Assert after each page change.** Keys don't wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.
-- **Start from a known place.** Begin each test with Launch App and an assertion on the first screen. Don't rely on where an earlier test left the focus.
-- **Remember that Validate Screen never fails a step.** Use it for checks that are nice to have, and Assert Presence for checks that must pass.
-- **Use text you can see.** On webOS, Assert Presence reads the screen with OCR, so check words that are drawn large and clear.
+- **Assert after each page change.** Keys do not wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.
+- **Start from a known place.** Begin each test with Launch App and an assertion on the first screen. Do not rely on where an earlier test left the focus.
+- **Remember that Validate Screen never fails a step.** Use it for optional checks. Use Assert Presence for checks that must pass.
+- **Use the text that the page holds.** A text locator must match the element text, `aria-label`, `title` or `alt` exactly.
+- **Let Optics move the focus.** Press Element moves the focus for you. It still works when the layout changes.
 
 ## See also
 
@@ -4227,7 +4439,7 @@ If you can use Appium or a browser driver, do. They're faster, read the UI tree 
 ## What you need
 
 - **A USB serial BLE HID dongle.** It plugs into your machine as a serial port, and pairs with the device as a Bluetooth mouse and keyboard.
-- **A way to see the screen.** Either a camera or capture card that your machine sees as a webcam, or a TCP frame server that sends a picture on request.
+- **A way to see the screen.** Use one of these: a camera or capture card that your machine sees as a webcam, an HTTP(S) URL that returns a picture, or a TCP frame server.
 - **An OCR engine**, such as EasyOCR, to read text in the camera picture.
 - **Image templates** (optional), cropped pictures of icons that have no text. See [Find elements by text and image](https://optics-framework.org/docs/elements/text-and-images).
 - **A stand** that holds the camera square over the screen, so the picture doesn't shift between runs.
@@ -4281,7 +4493,7 @@ elements_sources:
   - camera_screenshot:
       enabled: true
       capabilities:
-        camera_index: 0                      # or url: "192.168.1.20:9000" for a frame server
+        camera_index: 0                      # or url: a screenshot URL, or "192.168.1.20:9000" for a frame server
 text_detection:
   - easyocr: {enabled: true}
 image_detection:
@@ -4315,11 +4527,22 @@ There's no preflight for this setup, so check the dongle and camera before you s
 | Name | Default | What it does |
 |---|---|---|
 | `camera_index` | None | The webcam or capture card to use. `0` is the first one your system finds. |
-| `url` | None | A TCP frame server as `host:port`. Use instead of `camera_index`. |
+| `url` | None | An `http://` or `https://` URL, or a TCP frame server as `ip:port`. Use instead of `camera_index`. |
+| `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | Frame server only. The length of the size header in bytes, `4` or `8`. |
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
 
-Set either `camera_index` or `url`. With neither, Optics stops with "No camera_index or valid URL provided".
+Set either `camera_index` or `url`. With neither, Optics reads the environment variables below. If these are not set, Optics stops with "No camera_index or valid URL provided".
+
+For an HTTP URL, Optics sends a `GET` request and decodes the reply as an image. A status other than 200 fails, and the log shows the status with the `code` and `message` of the JSON reply. Optics does not follow redirects, because a redirect will send the token again.
+
+| Variable | Used for |
+|---|---|
+| `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when `url` is set and `token` is not. |
+| `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
+
+A value in config.yaml wins over a variable. Write `token: ${CAMERA_TOKEN}` to keep the token out of the file.
 
 A frame server receives the line `screenshot`, then replies with the picture's size in a `header_size`-byte unsigned number, followed by the picture as JPEG or PNG.
 
@@ -4463,6 +4686,8 @@ Search,Enter Text,${search_bar},${search_term}
 
 `Evaluate`, `Condition`, the query of `Read Data` and the URL, headers and body of `Invoke API` put in the first value themselves. [Values are text](#values-are-text) shows how they quote it.
 
+`optics live` follows the same rules, so a name inside a longer value works in a recorded step too.
+
 ## Keep a value for later
 
 Add `store_as=<name>` to a step to keep the value that its keyword returns. Later steps use the value as `${name}`:
@@ -4544,13 +4769,19 @@ Evaluate allows arithmetic (`+ - * / % **`), comparisons, `and`, `or`, `not` and
 
 ## Hide sensitive values
 
-Optics shows `****` in place of a secret value in logs, in the run tree and in `failed_steps_elements.json`. A value is secret when all of these are true:
+Optics writes `****` in place of a secret in the console, the log files, `logs.json`, `junit_output.xml`, `failed_steps_elements.json`, the run tree and error output. Optics masks these items:
 
-- `store_as` or `Read Data` set the value.
-- The name contains a secret word: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key` or `apikey`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
-- The value has 4 or more characters.
+- A value that `store_as` or `Read Data` sets under a secret name.
+- A value in the elements file or a step that starts with `@:`.
+- A text value in `config.yaml` under a secret name, such as `api_key`. This includes a value that the config reads from an environment variable with a secret name.
+- A password in a URL: `https://user:****@host`.
+- A query parameter with a secret name: `?token=****`.
 
-Values from the elements file, `Evaluate`, `Run Loop` and an `Invoke API` `extract` are not hidden. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
+A name is secret when it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
+
+A stored value or a config value must have 4 or more characters to be masked.
+
+Optics does not hide a value from the elements file, `Evaluate`, `Run Loop` or an `Invoke API` `extract` by its name. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
 
 For real secrets, do not commit them. Read them from the environment at run time:
 
@@ -4663,7 +4894,7 @@ module_name,module_step,param_1,param_2
 Fill Cart,Run Loop,Add One Item,3
 ```
 
-Write the count as a number. A count from a variable, such as `${n}`, [does not work yet](https://optics-framework.org/docs/advanced/variables#create-variables-during-a-run).
+Write the count as a number, or as a variable such as `${n}`. Optics reads the value of the variable when the step runs.
 
 ## Keep the data in a file
 
@@ -4848,6 +5079,7 @@ api:
               username: "${api_username}"
               password: "${api_password}"
           expected_result:
+            expected_status: 200
             jsonpath_assertions:
               - path: $.accessToken
                 condition: "len($) > 0"
@@ -4866,6 +5098,7 @@ api:
 ```
 
 - **`request`** sets the method, headers and a JSON body. `${name}` is replaced anywhere in the endpoint, headers and body.
+- **`expected_status`** is the HTTP status that the response must have. The step fails when the status is different, before Optics runs any other check or extracts any value.
 - **`jsonpath_assertions`** checks the response. `path` picks a value, and `condition` is a small expression where `$` stands for that value. A false condition fails the step.
 - **`extract`** saves values from the response as variables, using JSONPath: `$.accessToken`, `$.customer.id`, `$.items[0].name`.
 
@@ -4906,7 +5139,7 @@ API sign in works,Sign In Over The API
 
 The first call signs in and saves `access_token`. The second sends the token and saves the account's `email`. From here, any step can use `${email}`: type it into a field, check it on screen, or compare it in a [condition](https://optics-framework.org/docs/advanced/conditions).
 
-A project with only API steps still needs a `config.yaml` with a driver enabled, but the driver doesn't open anything unless a step asks it to.
+A project with only API and other flow control steps needs no driver. Set every `driver_sources` entry in `config.yaml` to `enabled: false`. If a step uses an action, app or verification keyword, enable a driver.
 
 ### Run it
 
@@ -4941,7 +5174,7 @@ Creating the order through the API takes a second. Going through the checkout sc
 ## Good to know
 
 - **Responses must be JSON** when an endpoint has `expected_result`. Other responses fail the step.
-- **Check status codes with an assertion.** `expected_status` and `json_schema` are accepted in the file but not checked yet. Check a field in the body instead.
+- **A different status fails the step.** With `expected_status` set, the failure reads, for example, `API 'Sign in' returned status 200, expected 401.` It has no error code. `json_schema` is accepted in the file but not checked yet. Check a field in the body instead.
 - **Every request times out after 30 seconds.** `request.timeout` isn't used yet.
 - **Keep credentials out of the file.** Put them in variables and read them from the environment with `Read Data,${api_password},ENV:BIRCH_API_PASSWORD`. See [Variables](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 - **API logs are not masked.** `api_details.log` and `api_details.har` show requests and responses in clear text, secrets included. Values from `extract` are not hidden in other logs either.
@@ -5061,7 +5294,7 @@ The server has **no authentication**, and it accepts requests from any web page 
 - Keep the default `--host 127.0.0.1`, so only your machine can reach it.
 - If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.
 - Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.
-- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, and `Read Data` with `ENV:`.
+- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, `user_data_dir`, a browser `profile`, and `Read Data` with `ENV:`.
 
 ## See also
 
@@ -5177,7 +5410,7 @@ Source: https://optics-framework.org/docs/guides/smart-tv-apps
 
 > Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
 
-You can test a TV app the way a viewer uses it: press arrow keys on the remote, open a tile, start playback and check what's on screen. Optics drives Android TV, Samsung Tizen and LG webOS through **Appium**, the same server it uses for phones. Your tests are rows in CSV files, so one suite style covers your phone, web and TV apps.
+You can test a TV app the way a viewer uses it: press arrow keys on the remote, open a tile, start playback and check what is on screen. Optics drives Android TV, Samsung Tizen and LG webOS through **Appium**, the same server it uses for phones. Your tests are rows in CSV files, so one suite style covers your phone, web and TV apps.
 
 This page walks you through the job and links to the pages that hold the details. [Test TV apps](https://optics-framework.org/docs/platforms/tv) is the full reference.
 
@@ -5188,10 +5421,10 @@ Each TV platform has its own Appium driver. You pick it with `platformName` in `
 | TV platform | `platformName` | How you move around | How Optics sees the screen |
 |---|---|---|---|
 | Android TV | `Android` | Android key numbers, plus taps and typing | UI tree and screenshots, like an Android phone |
-| Samsung Tizen | `TizenTV` | Remote key names only | Page source and screenshots |
-| LG webOS | `LGTV` | Remote key names only | Screenshots, plus OCR to read text |
+| Samsung Tizen | `TizenTV` | Remote key names, and element keywords that move focus | The app's DOM, and a camera for screenshots |
+| LG webOS | `LGTV` | Remote key names, and element keywords that move focus | The app's DOM, and screenshots |
 
-Tizen and webOS TVs have no touch screen. Touch and typing keywords, such as Press Element, Swipe and Enter Text, fail with **E0105** there. You move the focus with Press Keycode instead. [What doesn't work on Tizen and webOS](https://optics-framework.org/docs/platforms/tv#what-doesnt-work-on-tizen-and-webos) lists every keyword.
+Tizen and webOS TVs have no touch screen. Press Element and Enter Text still work there. They press remote keys until the focus reaches the element. Touch keywords, such as Swipe and Scroll, fail with **E0105**. [Keywords that fail on Tizen and webOS](https://optics-framework.org/docs/platforms/tv#keywords-that-fail-on-tizen-and-webos) lists every keyword.
 
 ## Set up
 
@@ -5212,13 +5445,13 @@ Turn on developer mode on the TV, install the vendor's tools, and put the TV on 
 
 - **Android TV** uses the same setup as an Android phone. Follow [Test Android apps](https://optics-framework.org/docs/platforms/android) and connect with `adb connect <tv-ip>`.
 - **Samsung Tizen**: `appium driver install --source=npm appium-tizen-tv-driver`, then copy the [Tizen config](https://optics-framework.org/docs/platforms/tv#samsung-tizen).
-- **LG webOS**: `appium driver install --source=npm appium-lg-webos-driver`, then copy the [webOS config](https://optics-framework.org/docs/platforms/tv#lg-webos) and add an OCR engine with `optics setup --install easyocr`.
+- **LG webOS**: `appium driver install --source=npm appium-lg-webos-driver`, then copy the [webOS config](https://optics-framework.org/docs/platforms/tv#lg-webos).
 
 ### Check the setup
 
 Start `appium` in another terminal, then run `optics doctor` on your project. On Tizen and webOS, the doctor warns about phone settings such as `appActivity`. You can ignore those warnings as long as `config: driver` and `config: appium element source` show ✅. See [Check the setup](https://optics-framework.org/docs/platforms/tv#check-the-setup).
 
-## Write the test with remote keys
+## Write the test with remote keys and focus
 
 A TV test is a list of key presses with a check after each page change. This module opens the second tile in a row and checks the title:
 
@@ -5236,18 +5469,28 @@ Open the second shoe,Assert Presence,Trail Runner 2,10
 
 On Tizen and webOS, Press Keycode takes key names such as `UP`, `ENTER`, `BACK` and `PLAY`. On Android TV, it takes Android key numbers instead: `19` to `22` for the arrows and `23` for Select. [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys) has both tables.
 
-To type on a Tizen or webOS TV, move over the on-screen keyboard with arrow keys and press `ENTER` on each letter.
+On Tizen and webOS, you can also name the element and let Optics move the focus. Press Element presses the arrow keys until the element has focus, then presses `ENTER`:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2
+Open the second shoe,Press Element,Trail Runner 2
+Open the second shoe,Assert Presence,Add to cart,10
+```
+
+To type on a Tizen or webOS TV, use Enter Text. Optics types into a real `<input>`, or presses the keys of the on-screen keyboard one by one. If the field does not show the text, the step fails with **E0405**. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv).
 
 ## Keep TV tests reliable
 
-- **Assert after each page change.** Keys don't wait for the app. Assert Presence waits for the next page, so the next key lands in the right place.
+- **Assert after each page change.** Keys do not wait for the app. Assert Presence waits for the next page, so the next key lands in the right place.
 - **Start from a known place.** Begin each test with Launch App and an assertion on the first screen.
-- **Check text that's drawn large and clear.** On webOS, Assert Presence reads the screen with OCR.
+- **Expect each focus move to take time.** Each focus move is one key press, and a key press takes 1 to 2 seconds.
 - **Use images for icons.** Add [image matching](https://optics-framework.org/docs/elements/text-and-images) when a tile or button has no text.
 
 ## Run it on every build
 
-Run the suite with `optics execute`, as you would a phone suite. Before each run, Optics checks that the Appium server answers. It doesn't check the TV itself, so make sure the TV is on and reachable. [Run tests in CI](https://optics-framework.org/docs/run/ci) covers the JUnit report your CI system reads.
+Run the suite with `optics execute`, as you would a phone suite. Before each run, Optics checks that the Appium server answers. It does not check the TV itself, so make sure that the TV is on and reachable. [Run tests in CI](https://optics-framework.org/docs/run/ci) covers the JUnit report your CI system reads.
 
 ## See also
 
@@ -5442,8 +5685,8 @@ For an iPhone, use `platformName iOS`, the phone's `udid` and the app's `bundleI
 A typical session goes like this:
 
 1. **Start a session.** `start_session` connects to Appium with your capabilities, opens the app and returns the first screen as rows, such as `e7 button "Sign in" [tap] #sign_in`.
-2. **Act.** The agent calls `tap`, `type_text` and `scroll` on a ref such as `e7`. Optics uses a locator that matches only that element. Each reply shows what changed on the screen.
-3. **Check.** It calls `check` with the text that proves the step worked, such as `present: ["1 item"]`.
+2. **Act.** The agent calls `tap`, `type_text` and `scroll` on a ref such as `e7`. Optics uses a locator that matches only that element. Each reply shows what changed on the screen. For a system key, the agent calls `press_key` with `back` or an Android key number such as `66`. `press_key` refuses a ref.
+3. **Check.** It calls `check` with the text that proves the step worked, such as `present: ["1 item"]`. An action that has `expect_present` or `expect_absent` waits up to 5 seconds for the text.
 4. **End the session.** `terminate_session` closes the app.
 
 The agent taps by reference, not by position. The server hides coordinate taps by default, because tests that guess positions break on any other screen size. See [Coordinate taps](https://optics-framework.org/docs/reference/mcp#coordinate-taps).
@@ -5470,7 +5713,7 @@ The run writes a JUnit report and screenshots to `execution_output/`. See [Read 
 
 - **No loops or conditions as tools.** `Run Loop`, `Condition` and the other flow-control keywords only work inside suite files. The agent can still write them there.
 - **No save tool.** The agent writes the suite files from the steps resource and `optics://project-format`.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call. With two phones open, the agent must pass `session_id` on each call.
 - **Apps that block screenshots.** The agent sees what the driver sees. For an app that blocks screenshots, see [Test apps that block screenshots](https://optics-framework.org/docs/guides/protected-apps).
 
 ## See also
@@ -5518,7 +5761,7 @@ Maestro's [supported platforms](https://docs.maestro.dev/get-started/supported-p
 
 ## TV apps
 
-Optics tests [Android TV, Samsung Tizen and LG webOS](https://optics-framework.org/docs/platforms/tv) through Appium, with remote-control keys. On Tizen and webOS, you move the focus with key names such as `UP` and `ENTER`, and touch keywords fail with E0105.
+Optics tests [Android TV, Samsung Tizen and LG webOS](https://optics-framework.org/docs/platforms/tv) through Appium, with remote-control keys. On Tizen and webOS, Press Element and Enter Text move the focus for you, Press Keycode sends keys such as `UP` and `ENTER`, and touch keywords fail with E0105.
 
 Maestro's [`pressKey`](https://docs.maestro.dev/reference/commands-available/presskey) command includes Android TV remote keys, such as `Remote Dpad Up` and `Remote Media Play Pause`. Its supported platforms page doesn't list Tizen or webOS.
 
@@ -5788,6 +6031,7 @@ Other pitfalls:
 - The `xpath=` prefix works on Playwright and in web pages on Appium. Use a bare `//…` XPath for native apps and on Selenium.
 - On Playwright, the prefixes `id=`, `label=`, `placeholder=`, `role=`, `data-testid=`, `data-test=` and `data-test-id=` also work. See [Locators for web pages](https://optics-framework.org/docs/platforms/web#locators-for-web-pages).
 - `.tif` and `.tiff` files aren't treated as images. Save templates as `.png`.
+- On Samsung Tizen and LG webOS TVs, `text=` and `css=` locators search the app's DOM. `text=` matches the visible text, `aria-label`, `title` or `alt` of an element exactly. See [TV](https://optics-framework.org/docs/platforms/tv#find-elements-and-move-focus).
 
 Most of the time you pass `${name}` instead and define the locator in your elements file. See [Define elements](https://optics-framework.org/docs/elements/define).
 
@@ -5797,7 +6041,7 @@ A cell that is exactly `${name}` is replaced with the value of `name` from your 
 
 When an element has several values, Optics tries each one in order until the element is found. It moves on only when the element isn't found. Any other error fails the step at once. If `name` isn't defined anywhere, the step fails before the keyword runs.
 
-`${name}` inside a longer cell is replaced with the first value of `name`. If `name` is not defined, the step fails with error E0403. Write `$${name}` to keep the text `${name}` as it is.
+Each `${name}` inside a longer cell is replaced with the first value of `name` when the step runs. A cell can hold several variables, such as `${a}-${b}`. If a `name` is not defined, the step fails with error E0403. Write `$${name}` to keep the text `${name}` as it is.
 
 ```csv
 Profile,Enter Text,${name_field},Hi ${first} ${last}!
@@ -6183,7 +6427,7 @@ Sign In,Press Element,${sign_in}
 On Appium and Selenium, put an [Assert Presence](https://optics-framework.org/docs/reference/keywords/verification#assert-presence) before an action when the next screen can be slow to load. For how `element`, `index`, `${name}` and the `aoi_*` parameters work, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
 
 **TV platforms:**
-On Samsung Tizen and LG webOS TVs, keywords that tap, swipe, scroll or type fail with error E0105. Use [Press Keycode](#press-keycode) to move focus and select. Android TV works like Android. See [TV](https://optics-framework.org/docs/platforms/tv).
+On Samsung Tizen and LG webOS TVs, Press Element, Enter Text and Clear Element Text press remote keys to move the focus. Keywords that tap a point, swipe or scroll fail with error E0105. Use [Press Keycode](#press-keycode) to press a single key. Android TV works like Android. See [TV](https://optics-framework.org/docs/platforms/tv).
 
 When `save_captures` is `true`, Optics saves a screenshot before each action to the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 
@@ -6221,6 +6465,7 @@ Good to know:
 - `offset_x` and `offset_y` apply only when the element was found by OCR or image. They're ignored for elements found in the UI tree.
 - When `element` is `${name}` with several values, Optics tries each one until it finds the element.
 - If [self-healing](https://optics-framework.org/docs/elements/self-heal) is turned on, it gets one try to recover before the step fails.
+- On Samsung Tizen and LG webOS TVs, Press Element presses the arrow keys until the element has focus. Then it presses `ENTER`. `repeat` presses `ENTER` that many times.
 
 ### Press By Percentage
 
@@ -6247,6 +6492,7 @@ Good to know:
 - Values are 0–100, not 0–1. `0.5` means half a percent, which taps the edge of the screen.
 - On Appium, decimals are cut off: `50.7` taps at 50 %.
 - We recommend Press Element instead. A fixed point breaks when the layout changes.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ### Press By Coordinates
 
@@ -6272,6 +6518,7 @@ Good to know:
 - On Appium, a failed tap fails the step with error E0401.
 - On Selenium, Optics clicks whatever element is at that point of the page.
 - To set `event_name`, write it by name: `Press By Coordinates,540,1600,event_name=tap_promo`.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ### Detect And Press
 
@@ -6297,6 +6544,7 @@ Good to know:
 - Use it for pop-ups that appear only sometimes, such as permission prompts or a newsletter sign-up.
 - Keep the timeout short. When the element never appears, the step waits the full timeout.
 - In Python the default timeout is 10 seconds.
+- On Samsung Tizen and LG webOS TVs, it moves the focus to the element and presses `ENTER`, as Press Element does.
 
 ### Select Dropdown Option
 
@@ -6322,6 +6570,7 @@ Good to know:
 - Optics taps the dropdown and picks the option if it's visible. Otherwise it finds the list that opened and scrolls it down half a list at a time, until the option appears or the list stops moving.
 - It assumes the list opens with its first option visible.
 - If the option isn't found, the error lists the options Optics did see.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ## Type
 
@@ -6356,6 +6605,7 @@ Good to know:
 - A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. An unknown name is typed literally.
 - Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. `@:${password}` also works.
 - In YAML, quote text that contains spaces.
+- On Samsung Tizen and LG webOS TVs, Optics types into a real `<input>` directly. For a field that the app draws, it presses the keys of the on-screen keyboard one by one. If the field does not show the text afterward, the step fails with error E0405 and no fallback value types the text again. `<space>`, `<backspace>` and `<enter>` press that key of the on-screen keyboard. `<escape>` and the arrow keys press remote keys. Other special keys fail with error E0105. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv).
 
 ### Enter Number
 
@@ -6399,6 +6649,7 @@ Good to know:
 
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
 - On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
 
 ### Enter Text Using Keyboard
 
@@ -6422,6 +6673,7 @@ Good to know:
 
 - Write special keys in angle brackets. `enter` without brackets types the word "enter".
 - Use it for apps that ignore text sent all at once, such as search fields that react to each key press.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
 
 ### Clear Element Text
 
@@ -6446,10 +6698,13 @@ Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
 - When the element is a caption or label, Optics clears the field that it names.
+- On Samsung Tizen and LG webOS TVs, Optics presses the backspace key of the on-screen keyboard until the field stops changing. If text stays in the field, the step fails with error E0405.
 
 ## Swipe and scroll
 
 Directions don't all mean the same thing. For the swipe keywords and Scroll From Element on Appium, the direction is the way your finger moves: `up` reveals content further down. Scroll, Scroll Until Element Appears and every Playwright gesture use the page's direction instead: `down` reveals content further down.
+
+Samsung Tizen and LG webOS TVs have no touch screen. Every keyword in this section fails there with error E0105. Press an arrow key with [Press Keycode](#press-keycode), or use Press Element to move the focus.
 
 ### Swipe
 
@@ -6684,7 +6939,9 @@ TV Browse,Press Keycode,ENTER
 Good to know:
 
 - Selenium doesn't support it. Use Enter Text with `<enter>` or `<tab>` instead.
-- On TVs, this is how you move focus and select. See [TV](https://optics-framework.org/docs/platforms/tv).
+- On Playwright, case and a `KEYCODE_` prefix do not matter: `esc`, `ARROWDOWN` and `KEYCODE_ENTER` work. An unknown name fails with error E0403 and lists the names that Optics knows.
+- On Tizen and webOS, an unknown remote key name fails with error E0104. The message lists the names that Optics knows. See [TV](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys) for the names.
+- On TVs, this is how you press one remote key. To move the focus to an element, use Press Element.
 
 ### Execute Script
 
@@ -6698,6 +6955,7 @@ Runs a driver command, such as an Appium `mobile:` command, or JavaScript in the
 ```csv
 Device,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"": 3}}"
 Web,Execute Script,"window.scrollTo(0, 0)"
+Web,Execute Script,return document.title.length,store_as=title_length
 ```
 
 ```yaml
@@ -6736,6 +6994,8 @@ Good to know:
 
 - Add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as) to keep the text in a variable. To check text, use [Assert Text](https://optics-framework.org/docs/reference/keywords/verification#assert-text).
 - When the element is found only by OCR or image, Get Text returns nothing and the step still passes. With `store_as`, the step fails.
+- On a web page that Appium drives in a mobile browser, Get Text reads the text of the web element.
+- On Samsung Tizen and LG webOS TVs, Get Text reads the text of the element, or the value of a field.
 - In Python, Get Text takes `element` only and returns the text.
 
 ### Sleep
@@ -6965,6 +7225,7 @@ Good to know:
 - Wrong text at the timeout fails with error E0401, such as `Element 'css=h3' shows 'Checkboxes' but expected 'Radio Buttons'.` The next value of `${name}` is not tried.
 - An element that is never found fails with error E0201, so Optics tries the next value of `${name}`.
 - An element found only by OCR or image fails at once with error E0401.
+- On a web page that Appium drives in a mobile browser, Assert Text reads the text of the web element.
 - With an `@:` prefix on `expected`, both texts show as `****` in the error.
 - AI self-heal does not cover Assert Text.
 
@@ -6993,8 +7254,9 @@ Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
 - `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
-- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. An element found only by OCR or image fails the step.
-- On the web, `aria-disabled="true"` counts as disabled, and `aria-checked` counts for checked.
+- `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. OCR and image matches do not have these states. An element found only by OCR or image fails the step with error E0401: `Cannot check the <state> state of '<element>': it was found only by OCR or image.`
+- On a web page, Optics reads the state from the page. This includes a web page that Appium drives in a mobile browser. `disabled` and `aria-disabled="true"` count as disabled. `aria-checked`, `checked` and `selected` count as checked.
+- On Samsung Tizen and LG webOS TVs, `checked` and `unchecked` fail with error E0105. See [TV](https://optics-framework.org/docs/platforms/tv).
 - Another state fails with error E0403.
 - You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 
@@ -7019,7 +7281,7 @@ Cart,Assert Equality,${total},240
 
 Good to know:
 
-- A mismatch fails with error E0401, such as `'480' does not equal '240'.` To check the text that an element shows, use [Assert Text](#assert-text).
+- A mismatch fails with error E0401, such as `Expected '240', got '480'.` `Expected` shows the second value. `got` shows the first value. To check the text that an element shows, use [Assert Text](#assert-text).
 - Nothing is evaluated. `2+2` and `4` don't match, and quotes are compared as characters.
 - When `${name}` has several values, only the first is used.
 
@@ -7047,6 +7309,7 @@ Good to know:
 
 - The image is saved only when `save_captures` is `true` in your [config](https://optics-framework.org/docs/reference/config). It's on by default.
 - The step fails with error E0303 if the screenshot fails or is completely black.
+- On a Samsung Tizen TV, `appium_screenshot` refuses the screenshot with error E0303. Use `camera_screenshot`. See [TV](https://optics-framework.org/docs/platforms/tv#know-the-limits-of-screenshots-and-video).
 
 ### Capture Pagesource
 
@@ -7134,6 +7397,8 @@ Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 
 Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, `optics live`, `optics serve` and [Python](https://optics-framework.org/docs/create/python).
 
+A suite that uses only flow control keywords needs no driver. Set every `driver_sources` entry to `enabled: false` and run it with `optics execute`. If a module that the selected test cases reach uses an action, app or verification keyword, the run stops with `E0104` and the message `No driver enabled`. Assert Equality is a verification keyword.
+
 ## Reuse and repeat
 
 ### Execute Module
@@ -7167,7 +7432,7 @@ Runs a module a number of times, or once for each value in one or more lists.
 |---|---|---|
 | `target` | Required | The module to run. |
 | then one of: | | |
-| `count` | | A whole number of times to run, 1 or more. Write the number itself. |
+| `count` | | A whole number of times to run, 1 or more, or a `${name}` that holds one. |
 | `variable`, `values`, … | | Pairs of a variable name and its list of values. Add as many pairs as you need. |
 
 `values` can be:
@@ -7200,7 +7465,7 @@ Good to know:
 - With several lists, the loop runs as many times as the shortest list.
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
-- The count can be a variable: `Run Loop,Add Trail Runner,${n}`.
+- The count can be a variable: `Run Loop,Add Trail Runner,${n}`. Optics reads the value of `n` when the step runs.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
 
 ## Branch
@@ -7430,7 +7695,8 @@ Good to know:
 - The body is sent as JSON. Every request has a 30-second timeout.
 - `extract` maps a variable name to a JSONPath. `$.a.b`, `a.b` and `[0]` indexing all work.
 - Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step.
-- `expected_status`, `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
+- With `expected_result.expected_status` set, the step fails when the response has another HTTP status, such as `API 'Ping' returned status 200, expected 201.` The check runs before Optics extracts a value or runs an assertion. The failure has no error code.
+- `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
 - With `expected_result`, a response that isn't JSON fails the step with error E0403.
 - Each call is logged to `api_details.log` and `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 - The top-level key must be `api:`. A file that starts with `apis:` is ignored.
@@ -7521,13 +7787,15 @@ optics [--version] [--help] <command> [options]
 | Flag | What it does |
 |---|---|
 | `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
-| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
+| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
 
 When you run `optics` with no command for the first time, it prints a welcome panel that points to `optics quickstart`, `optics doctor` and `optics --help`. After that, it prints a one-line reminder. Optics remembers the first run in a small marker file under `~/.optics` (or `$OPTICS_HOME`).
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
+
+When a run cannot start for another reason, the panel title includes the error code, for example `Cannot start: E0501`. See [Error codes](https://optics-framework.org/docs/reference/errors).
 
 When a command fails unexpectedly, Optics prints `Unexpected error (<type>): <message>` and suggests running `optics doctor`. See [Exit codes](#exit-codes).
 
@@ -7644,7 +7912,7 @@ optics doctor [folder] [--check]
 
 | Argument | Default | What it does |
 |---|---|---|
-| `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. |
+| `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. With a folder that has no config.yaml, it shows a ❌ row. |
 | `--check` | Off | Exits with code 1 if any row is ❌. Use it in CI. |
 
 Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a `→` hint with the fix. If the terminal cannot show emoji, doctor writes `OK`, `WARN`, `FAIL` and `->` instead.
@@ -7655,7 +7923,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
-| Project | With a folder: config.yaml parses, exactly one driver is enabled, the driver's element sources are enabled, and the driver has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
+| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
 
 Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without `--check`, doctor always exits with 0.
 
@@ -7701,6 +7969,8 @@ optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
                [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
+`optics dry-run` is the same command.
+
 | Argument | Default | What it does |
 |---|---|---|
 | `folder` | Required | The project folder. It must exist. |
@@ -7716,9 +7986,9 @@ A dry run checks that:
 
 A dry run counts a variable as defined when an earlier step creates it: the first parameter of `Read Data`, `Evaluate` and `Date Evaluate`, and each `store_as=` name. Do not add placeholder rows for them.
 
-It doesn't run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium `capabilities`).
+It does not run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium `capabilities`). A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow) needs no driver.
 
-The output and exit codes are the same as [`optics execute`](#optics-execute). Dry runs write `junit_output.xml` to `execution_output/` but no screenshots.
+The output and exit codes are the same as [`optics execute`](#optics-execute). In the report, each keyword that passes the check ends as `PASS`. Dry runs write `junit_output.xml` to `execution_output/` but no screenshots.
 
 ## `optics execute`
 
@@ -7751,10 +8021,10 @@ $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can c
 - Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
 
-Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 1:
+Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 3. This also applies to `include` and `exclude` in config.yaml:
 
 ```terminal
-╭──────────────────────────────── Cannot start ────────────────────────────────╮
+╭──────────────────────────── Cannot start: E0702 ─────────────────────────────╮
 │ include 'Shoper can sign in' matches no test case. Did you mean 'Shopper can │
 │ sign in' or 'Shopper can check out'?                                         │
 │                                                                              │
@@ -7773,10 +8043,10 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 ### How a run works
 
 1. Optics walks the whole folder and finds your files by their content (see [Project files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
-2. It loads the config and stops if no driver is enabled. Then it checks the test case selection.
+2. It loads the config and checks the test case selection. Then it stops if no driver is enabled and the selected test cases use a keyword that needs one. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`, runs with no driver.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
 4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
-5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file.
+5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
 The printer shows a live tree, then a summary:
 
@@ -7803,14 +8073,20 @@ The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If ever
 Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
 ```
 
-Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs).
+Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs) and [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
 
 | Exit code | When |
 |---|---|
 | 0 | Every test case passed. |
-| 1 | Any test case failed, required files are missing, no driver is enabled, the test case selection is not valid, the preflight failed, or the folder doesn't exist. |
+| 1 | A test case failed, error detection found an on-screen error, or the run could not start. Causes are missing files, no driver, a failed preflight or a missing folder. |
+| 2 | The command line is not valid. |
+| 3 | The test case selection is not valid. |
+| 130 | You pressed Ctrl+C. |
+| 143 | Optics received SIGTERM. |
 
-On-screen errors found by error detection appear in `junit_output.xml` as a failing test case, but they don't change the exit code.
+Optics also writes `junit_output.xml` when you stop the run with Ctrl+C or SIGTERM. The test case in progress ends as `ERROR`. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
+
+On-screen errors found by error detection appear in `junit_output.xml` as a failing test case. They count as a failed test case, so the exit code is 1.
 
 ```shell
 $ optics execute ./birch-tests
@@ -7962,7 +8238,7 @@ Turns on tab completion for `optics` in bash or zsh.
 optics completion
 ```
 
-It writes `~/.optics/optics_completion.sh` and `~/.optics/optics_completion.zsh`, then offers to add a `source` line to `~/.zshrc` or `~/.bashrc`, based on `$SHELL`. Other shells aren't supported. Restart your shell, or run `source ~/.zshrc`, to use it. To remove it, delete the line from your shell profile.
+It writes `~/.optics/optics_completion.sh` and `~/.optics/optics_completion.zsh`, then asks before it adds a `# Optics CLI autocompletion` comment and a `source` line to `~/.zshrc` or `~/.bashrc`, based on `$SHELL`. If you decline, or the terminal is not interactive, Optics leaves the file alone and prints the line to add. Other shells are not supported. Restart your shell, or run `source ~/.zshrc`, to use it. To remove it, delete the comment and the `source` line from your shell profile.
 
 ## `optics config`
 
@@ -7979,10 +8255,11 @@ It prints a deprecation notice, then runs guided `optics configure` on the curre
 | Code | Meaning |
 |---|---|
 | `0` | Success. For `optics execute` and `optics dry_run`, every test case passed. |
-| `1` | A test case failed, a check failed (`optics doctor --check`, preflight), a required file or setting is missing, or an unexpected error occurred. |
+| `1` | A test case failed, error detection found an on-screen error, a check failed (`optics doctor --check`, preflight), a required file or setting is missing, or an unexpected error occurred. |
 | `2` | The command line was invalid, for example an unknown flag or a missing argument. |
-| `3` | The input was invalid, for example a project that already exists, an unknown template, or files `optics generate` needs. The message starts with `Error:`. |
+| `3` | The input was invalid. For `optics execute` and `optics dry_run`, a name in `--include`, `--exclude` or the config `include` and `exclude` matches no test case, or no test case is left. For other commands, it is a project that already exists, an unknown template, or files `optics generate` needs. The message starts with `Error:`. |
 | `130` | You pressed Ctrl+C. Optics prints `Operation cancelled by user.` |
+| `143` | Optics received SIGTERM. `optics execute` and `optics dry_run` write `junit_output.xml` before they exit. |
 
 ## Environment variables
 
@@ -8119,7 +8396,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `json_log` | `false` | Writes a JSON array of every test, module and keyword event to `logs.json` at the end of the run. |
 | `json_path` | None | Where to write the JSON events instead of `<output>/logs.json`. `~` is expanded. |
 | `console` | `true` | **Has no effect.** Nothing reads it. Use `log_level` to control console output. |
-| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. Relative paths are relative to the folder you run `optics` from. |
+| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. A path that starts with `./` or `../` is relative to the project folder. Other relative paths are relative to the folder you run `optics` from. |
 | `include` | None | Run only these test cases. See [include and exclude](#include-and-exclude). |
 | `exclude` | None | Skip these test cases. |
 | `ai_self_heal` | `false` | Lets an LLM try to recover when an element can't be found. See [ai_self_heal](#ai-self-heal). |
@@ -8130,7 +8407,60 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `project_path` | The project folder | The CLI always sets this to the folder you pass, so leave it out. It only matters for the Python SDK. |
 
 **Note:**
-If you set `execution_output_path` yourself, create the folder first. JUnit results and logs create their own folders, but screenshots fail to save without a warning if the folder is missing.
+If you set `execution_output_path` yourself, create the folder first. This applies to a `./` path too. JUnit results and logs create their own folders, but screenshots fail to save without a warning if the folder is missing.
+
+## Use environment variables and project paths
+
+Any text value in config.yaml can name an environment variable or a file in the project. Use this to keep secrets out of the file, and to keep a project runnable after you copy it to another computer. Optics resolves each reference when it reads the file.
+
+| Write | Optics uses |
+|---|---|
+| `$NAME` or `${NAME}` | The value of `NAME`. If `NAME` is not set or is empty, the command stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). |
+| `${NAME:-default}` | The value of `NAME`, or `default` when `NAME` is not set or is empty. |
+| `$$` | A literal `$`. |
+| `./file` or `../file` | The full path of the file, counted from the project folder and not from the folder you run `optics` in. |
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        $from: $PW_CAPS
+        viewport: {width: 800, height: 600}
+        storage_state: ./auth.json
+execution_output_path: ./out/run2
+log_level: ${LEVEL:-INFO}
+```
+
+- A reference can be part of a longer string, for example `https://${HUB_HOST}/wd/hub`.
+- A variable can hold a `./` path. Optics resolves it in the same way.
+- A `./` path must point to a file or folder that exists. The output paths `execution_output_path`, `log_path`, `json_path` and `project_path` do not need to exist.
+- The result is always a string. Optics converts it for its own settings, such as `enabled`, `file_log` and `halt_duration`. A driver capability that needs a number or a boolean gets the text. For example, `headless: ${HEADLESS:-true}` fails on Playwright with `headless: expected boolean, got string`. Use `$from` for such values.
+
+To take a whole map from one variable, write `$from` in the map and set the variable to a JSON object. The keys next to `$from` replace the keys of the object. Optics does not resolve references or paths inside the object, and the JSON types stay as they are:
+
+```shell
+$ export PW_CAPS='{"browser": "chromium", "headless": true, "viewport": {"width": 100, "height": 100}}'
+```
+
+With this variable, the example above starts Chromium without a window and with an 800 x 600 page.
+
+If a reference or path fails, the command stops before the first test and names the problem. These are the messages that `optics execute` and `optics doctor` show:
+
+```terminal
+The config uses $LEVEL, but the LEVEL environment variable is not set or is empty.
+The config refers to ./missing.json, but /home/ava/birch-tests/missing.json does not exist.
+The config takes $from: $PW_CAPS, but its value is not a JSON object.
+```
+
+The last message does not show the value of the variable.
+
+**Note:**
+The commands `optics execute`, `optics dry_run`, `optics live` and `optics doctor` resolve references. The Python SDK, `optics serve` and `optics mcp` take the settings as data and resolve nothing. `optics configure --edit` keeps references as you wrote them when it saves the file.
+
+A Playwright `url` and `capabilities.headers` are the exception. The driver resolves them when it connects, so it can mask the values in its errors. An unset variable in them still stops the command when it reads the file. Do not use `$from` in `headers`. Write each header on its own line.
 
 ## Engine lists
 
@@ -8182,7 +8512,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam or a TCP frame server. Used with `ble`. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`. |
 
 `optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
 
@@ -8192,7 +8522,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 |---|---|---|
 | `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | None. Credentials come from `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.credentials_path`: a service account key file. Without it, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -8216,6 +8546,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `use_vertexai` | From `GOOGLE_GENAI_USE_VERTEXAI` | `true` uses Vertex AI instead of the Gemini API. |
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
+| `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
 
 ```yaml
 llm_models:
@@ -8226,6 +8557,19 @@ llm_models:
 ```
 
 Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
+
+To use a service account key file, set `credentials_path` and leave out the API key:
+
+```yaml
+llm_models:
+  - gemini:
+      enabled: true
+      capabilities:
+        credentials_path: ./credentials/vertex.json
+        location: us-east4
+```
+
+`credentials_path` selects Vertex AI. The project is the `project_id` of the key, unless you set `project`. The location is `global`, unless you set `location`. If the file is missing or is not a service account key, Optics stops with E0501. This happens before the first test when `ai_self_heal` is `true`.
 
 #### openai
 
@@ -8393,18 +8737,35 @@ log_level: INFO
 
 Selenium won't start with empty `capabilities` or without `browserName`. The file `optics configure` writes for `web-selenium` has `capabilities: {}`, so add `browserName` before you run.
 
+Chrome starts with `--disable-blink-features=AutomationControlled` and without the automation switch, so `navigator.webdriver` is `false`. Optics adds no other Chrome argument. In a Linux container or in CI, pass `--no-sandbox` and `--disable-dev-shm-usage` in `goog:chromeOptions`:
+
+`config.yaml (Selenium in a container)`:
+
+```yaml
+driver_sources:
+  - selenium:
+      enabled: true
+      url: "http://localhost:4444/wd/hub"
+      capabilities:
+        browserName: chrome
+        goog:chromeOptions:
+          args: ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage"]
+```
+
+Optics sends these arguments with its own. It sends the other keys of `goog:chromeOptions`, such as `excludeSwitches`, to the browser as well.
+
 ### Appium capabilities
 
 Optics reads `platformName`, the app id and `browserName`. It passes every other capability to Appium unchanged. You can write any key with the `appium:` prefix, for example `appium:udid`.
 
 | platformName | App id capability | Defaults Optics adds (your values win) |
 |---|---|---|
-| `Android` | `appPackage` and `appActivity` | `noReset`, `newCommandTimeout: 3600`, `forceAppLaunch`, `shouldTerminateApp`, `ignoreHiddenApiPolicyError`, `settings: {waitForIdleTimeout: 1000}` and a few others |
-| `iOS` | `bundleId` | The same mobile defaults without `ignoreHiddenApiPolicyError`, and `settings: {waitForIdleTimeout: 1}` |
+| `Android` | `appPackage` and `appActivity` | `newCommandTimeout: 3600`, `noReset: true`, `forceAppLaunch: true`, `shouldTerminateApp: true`, `nativeWebScreenshot: true`, `connectHardwareKeyboard: true`, `ignoreHiddenApiPolicyError: true` and `settings: {waitForIdleTimeout: 1000}` |
+| `iOS` | `bundleId` | The same defaults without `ignoreHiddenApiPolicyError`, with `ensureWebviewsHavePages: true` and `settings: {waitForIdleTimeout: 1}` |
 | `TizenTV` | `appPackage` | `newCommandTimeout: 3600`, `rcMode: remote`, `noReset: true` |
 | `LGTV` | `appId` | `newCommandTimeout: 600`, `rcMode: rc`, `useSecureWebsocket: true`, `autoExtendDevMode: false`, `noReset: true` |
 
-Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). To attach to an Appium session that's already running, add `appium:existingSessionId`. Optics starts a new session if it can't attach.
+Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Optics waits up to 300 seconds for Appium to create a session. To attach to an Appium session that is already running, add `appium:existingSessionId`. Optics starts a new session if it cannot attach.
 
 **Idle wait.** Before each action, Appium waits until the app is idle. `waitForIdleTimeout` sets the limit: 1000 ms on Android and 1 s on iOS. Optics merges your `appium:settings` with its defaults key by key. Set `0` to turn off the wait:
 
@@ -8431,9 +8792,12 @@ Optics reads each key from `capabilities` or from the top level of the `playwrig
 |---|---|---|
 | `browser` | `chromium` | `chromium`, `firefox` or `webkit`. `optics setup` downloads only Chromium. |
 | `headless` | `false` | `true` starts the browser without a window. A remote browser ignores it. |
+| `channel` | None | `chrome`, `chrome-beta` or `msedge`. Starts that installed browser in place of Playwright's Chromium. A remote browser ignores it. |
+| `profile` | None | A local Chrome or Edge profile: its directory (`Default`, `Profile 1`), its name or its account email. The run starts with a copy of its sign-ins. Not with `url`, `storage_state` or `user_data_dir`. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). |
+| `user_data_dir` | None | A folder that the browser keeps as its user data directory. Sign-ins stay from run to run. Not with `url`, `storage_state` or `profile`. A path that starts with `./` must exist. |
 | `viewport` | `{width: 1280, height: 800}` | The page size. It replaces the screen size of a `device`. |
 | `device` | None | A Playwright device name, such as `"iPhone 15"`. It sets the screen size, user agent and touch input. An unknown name fails with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). |
-| `storage_state` | None | A browser state file that Playwright saved, relative to the project folder. The run starts with its cookies and storage. See [Start signed in](https://optics-framework.org/docs/platforms/web#start-signed-in). |
+| `storage_state` | None | A browser state file that Playwright saved, relative to the project folder. The run starts with its cookies and storage. Not with `profile` or `user_data_dir`. See [Start signed in from a saved file](https://optics-framework.org/docs/platforms/web#start-signed-in-from-a-saved-file). |
 | `protocol` | `cdp` | How Optics connects to the browser in `url`: `cdp` (Chromium only) or `playwright`. See [Use a remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
 | `headers` | None | HTTP headers for the connection to a remote browser, as `{name: value}`. |
 | `context` | `new` | `existing` uses the remote browser's own context and open tab. You cannot use it with `device` or `storage_state`. |
@@ -8444,7 +8808,9 @@ Optics reads each key from `capabilities` or from the top level of the `playwrig
 | `connect_timeout_ms` | `90000` | The limit for the connection to a remote browser. |
 | `action_timeout_ms` | `15000` | The limit for each other browser call, such as a key press or a screenshot. |
 
-Set `url` on the entry to connect to a remote browser instead of starting one. `${NAME}` in `url` or in a `headers` value is read from the environment. If the variable is not set, the run stops with E0501. `optics serve` and `optics mcp` refuse `${NAME}` and a `storage_state` file path.
+Optics ignores a capability that it does not know and logs a warning. Local Chromium starts without the automation flags, so `navigator.webdriver` is `false`.
+
+Set `url` on the entry to connect to a remote browser instead of starting one. `${NAME}` in `url` or in a `headers` value is read from the environment. If the variable is not set, the run stops with E0501. Sessions that `optics serve` and `optics mcp` start refuse `${NAME}` in `url` and `headers`, a `storage_state` file path and `user_data_dir`. They accept `profile` only from `optics mcp` on stdio.
 
 ## TV
 
@@ -8466,8 +8832,7 @@ driver_sources:
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
-  - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}
+  - appium_find_element: {enabled: true}
 ```
 
 `config.yaml (LG webOS)`:
@@ -8483,10 +8848,11 @@ driver_sources:
         appium:deviceHost: 192.168.1.50
         appium:appId: com.birch.tv
 elements_sources:
+  - appium_find_element: {enabled: true}
   - appium_screenshot: {enabled: true}
 ```
 
-On Tizen and webOS, touch and typing keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Move around with `Press Keycode` and remote keys: `UP`, `DOWN`, `LEFT`, `RIGHT`, `ENTER`, `BACK`, `HOME`, `PLAY`, `PAUSE`, `STOP`, `REWIND`, `FF`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
+On Tizen and webOS, `appium_find_element` finds `text=` and `css=` locators in the app's DOM, and the element keywords press remote keys to move the focus. Touch keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). A Tizen TV needs `camera_screenshot` in place of `appium_screenshot`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
 
 ## BLE and camera
 
@@ -8511,7 +8877,7 @@ elements_sources:
   - camera_screenshot:
       enabled: true
       capabilities:
-        camera_index: 0                   # a webcam, or url: "192.168.1.20:9000" for a TCP frame server
+        camera_index: 0                   # a webcam, or url: for a screenshot URL or a TCP frame server
 text_detection:
   - easyocr: {enabled: true}
 image_detection:
@@ -8529,9 +8895,22 @@ image_detection:
 | `camera_screenshot` capability | Default | What it does |
 |---|---|---|
 | `camera_index` | None | The webcam number. Use this or `url`. |
-| `url` | None | A TCP frame server as `host:port`. |
-| `header_size` | `8` | Bytes in the frame server's length header: `4` or `8`. |
-| `byte_order` | `little` | The length header's byte order: `little` or `big`. |
+| `url` | None | An `http://` or `https://` URL that Optics fetches with `GET`, or a TCP frame server as `ip:port`. |
+| `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
+| `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
+| `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
+
+With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
+
+If you set neither `url` nor `camera_index`, Optics reads these environment variables. A value in config.yaml wins over a variable.
+
+| Variable | Used for |
+|---|---|
+| `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
+| `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
+
+Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
 
 The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](https://optics-framework.org/docs/platforms/production).
 
@@ -8567,7 +8946,11 @@ With `file_log: true` and no `execution_output_path`, Optics also writes a copy 
 Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
 
 - Values you write with the `@:` prefix, such as `@:s3cret`.
-- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key` or `apikey`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Text values in config.yaml under a secret name, such as `appium:keystorePassword`. Also the values of environment variables with a secret name, such as `HUB_TOKEN`. A key that ends in `_env`, such as `api_key_env`, holds the name of a variable and is not a secret.
+- Passwords in URLs (`https://user:****@host`) and query parameters with a secret name (`?token=****`).
+
+Optics also masks secret-named capability values in the debug logs of Appium and Selenium sessions.
 
 See [Read results](https://optics-framework.org/docs/run/results).
 
@@ -8721,6 +9104,7 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 - A failing setup doesn't stop the test cases after it.
 - The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
 - Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
+- Each run of a per-test setup or teardown has its own result in the report, named `Setup (<test case>)` or `Teardown (<test case>)`.
 
 ## Modules
 
@@ -8840,7 +9224,7 @@ Text like `(optional)` or `Size [US]` is read as XPath or CSS. Add `text=` in fr
 
 ## Error definitions
 
-A CSV file of messages that mean your app is in a bad state. At the end of `optics execute`, Optics checks the text on the final screen against each `match_string`.
+A CSV file of messages that mean your app is in a bad state. In `optics execute`, Optics checks the text on the final screen against each `match_string`. It reads the screen before Suite Teardown when the suite has one.
 
 `test_data/error_definitions.csv`:
 
@@ -8858,7 +9242,7 @@ BIRCH_003,Out of stock,Product page shows out of stock,medium
 | `description` | No | Free text, shown in the results. |
 | `severity` | No | Free text, for example `critical`, `high` or `medium`. |
 
-There's no YAML form. A match adds a failing test case to `junit_output.xml` but doesn't change the exit code. See [Detect on-screen errors](https://optics-framework.org/docs/run/error-detection).
+There is no YAML form. A match adds a failing test case to `junit_output.xml` and gives exit code `1`. See [Catch error screens](https://optics-framework.org/docs/run/error-detection).
 
 ## API definitions
 
@@ -8905,7 +9289,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Backslash sequences.** In any cell, `\n` becomes a new line, `\t` a tab, `\r` a carriage return, and `\\` a single backslash.
 
-**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files and the result tree. Every driver removes the prefix before typing. Optics also masks values saved under secret names. See [Logging](https://optics-framework.org/docs/reference/config#logging).
+**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files, `logs.json`, `junit_output.xml`, the result tree and error output. Every driver removes the prefix before typing. Optics also masks these items: values saved under secret names, passwords in URLs, and secret values from config.yaml. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
@@ -8923,6 +9307,8 @@ birch-tests/execution_output/
 ├── execution_logs.log                             # file_log: true
 ├── 2026-10-09T15-04-05-123456-pre_press_element.jpg
 ├── ...-press_element_element_detection_result.jpg
+├── ...-failure_<test case>.jpg                    # when a test case fails
+├── ...-failure_<test case>.xml                    # when a test case fails
 ├── ...-end_of_run.jpg
 ├── page_sources_log.xml
 ├── failed_steps_elements.json                     # when a step fails
@@ -8931,7 +9317,7 @@ birch-tests/execution_output/
 
 | File | When it's written | What it holds |
 |---|---|---|
-| `junit_output.xml` | Every run, including dry runs | One test case per test, with each module and keyword, their status, timings and log lines. Error detection adds a failing `on-screen-error-detection` test case. If another session is already writing the file, Optics names it `junit_output_<session_id>.xml`. |
+| `junit_output.xml` | Every run that starts, including dry runs. It is also written when you stop the run with Ctrl+C or SIGTERM. | One test case per test, with each module and keyword, their status (`PASS`, `FAIL`, `ERROR` or `NOT_RUN`), start and end times, and log lines. The suite and every `classname` are named after the project folder. Error detection adds a failing `on-screen-error-detection` test case. If another session in the same process is already writing the file, Optics names it `junit_output_<session_id>.xml`. See [Read the results](https://optics-framework.org/docs/run/results#read-the-junit-report). |
 | `logs.json` | `json_log: true` | A JSON list of every test case, module and keyword event with status and timings. |
 | `internal_logs.log`, `execution_logs.log` | `file_log: true` | Text logs. Each rotates at 10 MB. |
 | `<time>-pre_<keyword>.jpg` | Every keyword that finds an element, with `save_captures: true` | The screen before Optics looked for the element. |
@@ -8940,7 +9326,8 @@ birch-tests/execution_output/
 | `<time>-<keyword>_with_aoi.jpg` | The step used an area of interest, with `save_captures: true` | The screen with the area drawn in blue. |
 | `<time>-<keyword>.jpg` | Gestures and coordinate keywords, such as `Swipe`, `Scroll`, `Press By Percentage`, `Press Keycode` | The screen when the step ran. |
 | `<time>-capture_screenshot.jpg` | `Capture Screenshot`, `Get Screen Elements` | Only when `save_captures` is `true`. |
-| `<time>-end_of_run.jpg` | End of `optics execute`, if the app is still open | The final screen. |
+| `<time>-failure_<test case>.jpg` and `.xml` | A test case failed, with `save_captures: true`. Web pages write `.html`. | The screen and the UI tree where the test case ended. |
+| `<time>-end_of_run.jpg` | End of `optics execute`, before Suite Teardown, if the app is still open | The final screen. |
 | `page_sources_log.xml` | Appium page source reads and the end of the run | Each UI tree, with a timestamp. |
 | `page_sources_log.html` | Web page source reads and the end of the run | Each page's HTML, with a timestamp. |
 | `failed_steps_elements.json` | A step failed, with `save_captures: true` | For each failed step: the test case, the step and the elements on the screen, with secrets masked. Use it to fix the locator. |
@@ -8972,7 +9359,7 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 |---|---|---|---|
 | `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
-| `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, and emulate a phone. | Web |
+| `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
 The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](https://optics-framework.org/docs/platforms/android) and [Test iOS apps](https://optics-framework.org/docs/platforms/ios).
@@ -8990,10 +9377,10 @@ An element source is how Optics looks at the screen for a driver. They need no e
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
 | `selenium_screenshot` | `selenium` | Screenshots for OCR and image matching. | Web |
-| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `role=`, `id=` and other locators. | Web |
+| `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `alt=`, `title=`, `role=`, `id=`, `testid=` and other locators. | Web |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. | Web |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. | Web |
-| `camera_screenshot` | None | Frames from a webcam or a TCP frame server. | Any, usually with `ble` |
+| `camera_screenshot` | None | Frames from a webcam, an HTTP(S) screenshot URL (with an optional bearer token) or a TCP frame server. | Any, usually with `ble` |
 
 Only `appium_page_source`, `appium_web` and `playwright_page_source` can list interactive elements. With Selenium, `Get Interactive Elements`, the HTTP `/elements` endpoint and the MCP elements resource fail with [E0202](https://optics-framework.org/docs/reference/errors#e02-elements).
 
@@ -9005,7 +9392,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials in `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `easyocr` to start with. It needs nothing else installed.
@@ -9025,7 +9412,7 @@ An LLM powers [AI self-heal](https://optics-framework.org/docs/elements/self-hea
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `gemini` | `gemini` | Google Gemini, through the Gemini API or Vertex AI. Default model `gemini-2.5-flash`. | All |
+| `gemini` | `gemini` | Google Gemini, through the Gemini API or Vertex AI. Set `credentials_path` to a service account key file to use Vertex AI. Default model `gemini-2.5-flash`. | All |
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
@@ -9233,7 +9620,7 @@ A tap on a ref uses a locator that matches only that element. The agent can also
 
 ## Core tools
 
-The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open.
+The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -9243,7 +9630,7 @@ The default toolset has 10 tools. Every tool except `start_session` takes `sessi
 | `tap` | `target`, `repeat` (1, 1–20) | Runs `press_element`. Refuses a row that has no `tap`, `long`, `toggle` or `input`. |
 | `type_text` | `target`, `text`, `clear_first` (false) | Runs `enter_text`, after `clear_element_text` when `clear_first` is true. Refuses a row without `input`. |
 | `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
-| `press_key` | `key` | `back` runs `go_back` on any driver. Another value, such as an Android key number, runs `press_keycode`. |
+| `press_key` | `key` | `back` runs `go_back` on any driver. Another value runs `press_keycode`: a key name such as `Enter`, `Escape`, `esc` or `ArrowDown`, or an Android KeyEvent number such as `66`. On the web, case and a `KEYCODE_` prefix do not matter. A ref is refused with a hint to use `tap`. |
 | `launch_app` | `app` ("") | Opens an app id or a URL. Empty opens the configured app. |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–30) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
@@ -9263,7 +9650,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app` and 
 | `driver` | `appium` | `appium`, `selenium`, `playwright` or `ble`. |
 | `app` | "" | An app id or URL to open after the session starts. |
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
-| `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). |
+| `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. Passing `[]` makes the session fail to start. |
 | `text_detection` | `[]` | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | `[]` | Image engines, for example `["templatematch"]`. |
@@ -9290,6 +9677,28 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
+### Sign in with a browser profile
+
+A web flow that needs a sign-in can start with the sign-ins of a local Chrome or Edge profile. The agent reads the `optics://browser-profiles` resource and shows the list to you. Each entry has a `channel`, a `directory`, a `name` and the `email` of the account:
+
+```json
+[{"channel": "chrome", "directory": "Default", "name": "Work", "email": "me@example.com"}]
+```
+
+After you choose a profile, the agent passes its `directory`, `name` or `email` as `capabilities.profile`:
+
+```json
+{
+  "driver": "playwright",
+  "capabilities": {"profile": "me@example.com"},
+  "app": "https://app.example.com"
+}
+```
+
+The browser starts with the sign-ins of that profile. If you choose no profile, the agent asks you for the credentials and types them with `type_text`. A `profile` that matches none, or more than one, fails with `E0501` and lists the profiles. Add `channel` (`chrome`, `chrome-beta` or `msedge`) to choose between browsers.
+
+A profile holds the sign-ins of the person who runs the server. For this reason only a `stdio` server lists and accepts profiles. The `http` transport and `optics serve` refuse `profile`. Every API session refuses `user_data_dir`. Set both in the `config.yaml` of a project instead. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile) for what a profile carries over.
+
 ### Action replies
 
 Each tool that acts replies with one head line, the check lines, then the screen:
@@ -9306,10 +9715,13 @@ e13 span "Products"
 
 - `ok` means only that the keyword ran. The word in brackets is the strategy that found the element.
 - `verified` is `pass`, `fail` or `unknown`. It is `pass` only when every expectation is met and the action caused it. Without `expect_present` or `expect_absent`, it stays `unknown`.
+- An action waits up to 5 seconds for `expect_present` and `expect_absent` before it judges them. A page that loads after a redirect can still pass.
 - `note:` lines tell the agent what to trust less. For example, a `scroll` is `ok` even when nothing moved, and a row with no unique locator is found by its label.
 - `run_keyword` adds a `result:` line with the keyword's return value, cut at 400 characters.
 
-The structured reply is `{"ok", "verified", "verb", "keyword", "checks", "target", "result", "screen", "error"}`. `screen` holds `digest`, `changed`, `new_screen`, `added`, `removed` and `relabelled`, plus all `rows` on a new screen. The reply text is cut at 8,000 characters.
+After an action, the server reads the screen until it stops changing. A screen with no rows counts as a page that is still loading, so the server reads it again for up to 6 seconds. A keyword that only reads, and `execute_script` when the screen stays the same, are read once.
+
+The structured reply is `{"ok", "verified", "verb", "keyword", "checks", "target", "result", "screen", "error"}`. `screen` holds `digest`, `changed`, `new_screen`, `added`, `removed` and `relabelled`. On a new screen, `screen` holds all `rows` and no `added` or `removed` lists. With `screen="none"`, `screen` holds only `digest`, `changed` and `new_screen`. The reply text is cut at 8,000 characters.
 
 When self-heal recovers a step, `result` is `{"result", "healed": true, "heal_summary", "suggested_steps"}`, so your agent can write the extra steps into the test.
 
@@ -9370,6 +9782,7 @@ Resources are read-only data your agent can fetch by URI.
 |---|---|---|
 | `optics://keywords` | JSON | The keywords `run_keyword` accepts, with the description, parameters, `returns` and `deprecated` of each. |
 | `optics://project-format` | Markdown | How to write a CSV project: the files, columns, `${name}` variables, secrets and flow-control keywords. |
+| `optics://browser-profiles` | JSON | The Chrome and Edge profiles on the machine that runs the server, as `{channel, directory, name, email}`. Use one as `capabilities.profile`. |
 | `optics://session/{session_id}/screenshot` | PNG | The current screen. |
 | `optics://session/{session_id}/source` | JSON | `{"page_source", "timestamp"}`: the UI tree or HTML. |
 | `optics://session/{session_id}/elements` | JSON | The elements on the screen as `{i, label, cls, bounds, act, rid, loc, offscreen}`. Appium, Appium web and Playwright only. It has no refs. |
@@ -9468,13 +9881,14 @@ The structured reply has `error: {"code", "kind", "message"}`. An error without 
 | `ambiguous` | The target matches more than one row. |
 | `no_locator` | The row has no locator that matches only it. |
 | `invalid_params` | A parameter is missing or wrong, such as `type_text` on a row without `input`. The reply shows an example call. |
-| `silent_failure` | The keyword logged an error but did not fail (`E0401`). Read the screen before you continue. |
+| `silent_failure` | The keyword reported an error but did not fail (`E0401` or `E0405`). The message reads `[E0401] <keyword> reported an error: ...`. Read the screen before you continue. |
 | `unsupported` | The platform does not support the keyword. |
 | `loop` | The same action ran 3 times in a row without progress. The fourth try does not run. |
 | `timeout` | The call took longer than `OPTICS_MCP_CALL_TIMEOUT_S`. |
 | `busy` | An earlier call on the session still runs. |
 | `session_lost` | The driver session ended. Start a new session. |
-| `unknown_session` | The session ended after the idle lease, or never started. |
+| `unknown_session` | No such session, or none is open. When the idle lease ended it, the message says so. |
+| `session_required` | More than one session is open, and `session_id` was left out. The message lists the ids. |
 | `other` | Any other error, such as a refused `start_session`. |
 
 A tool in the full toolset raises its error as `[E0201] message`. A keyword with several fallback values fails with `All fallback values failed for keyword '…'` and the code of the last try.
@@ -9575,10 +9989,16 @@ Engine names are the same as in [config.yaml](https://optics-framework.org/docs/
 
 The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
 
-- A `${NAME}` reference in a driver `url` or in a `capabilities.headers` value. Send the value itself.
+- A `$NAME` or `${NAME}` reference in a driver `url` or in a `capabilities.headers` value. Send the value itself.
 - A file path in `capabilities.storage_state`. Send the state as a JSON object.
+- `capabilities.user_data_dir`. Set it in a project's config.yaml instead.
+- `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
 
-The session log shows only the scheme and host of a URL, and masks header values and `storage_state`.
+```terminal
+{"detail":{"type":"optics:config","code":"Code.E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
+```
+
+The session log shows only the scheme and host of a URL. It masks header values, `storage_state` and every value with a secret name, such as `token` or `password`.
 
 ## ExecuteRequest
 
@@ -9785,9 +10205,9 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 |---|---|---|
 | `E0101` | **Driver not initialized.** A keyword ran before the driver session started. In `optics live` this happens when the automatic `launch_app` failed. | Start with `Launch App`. In `optics live`, run `launch_app` again and read its error first. |
 | `E0102` | **Failed to start session.** The driver couldn't create a session. The Appium server refused it, Playwright couldn't open or connect to the browser, or the request took too long. On Playwright, each call has a limit of `action_timeout_ms` (15 seconds). Launch App can take up to `connect_timeout_ms` + `navigation_timeout_ms` + `action_timeout_ms` (165 seconds). | Check that the server is running and the device is connected with `optics doctor <folder>`. Check the capabilities, especially `appPackage`, `appActivity` or `bundleId`. Read the Appium server's own log for the cause. For a remote browser, check the `url` and `headers`. Raise the [Playwright timeouts](https://optics-framework.org/docs/reference/config#playwright-capabilities) for slow pages. |
-| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV` or `LGTV`. |
-| `E0105` | **Keyword not supported on this device platform.** You used a touch or typing keyword on a Samsung or LG TV, where Appium has no touch screen. Also raised by `Go Back` on a driver without it (`'go_back' is not supported by the <Driver> driver.`) and by a special key that Playwright cannot map. | Navigate with `Press Keycode` and remote keys such as `UP`, `DOWN` and `ENTER`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv). |
-| `E0106` | **Driver session is no longer active.** The Appium or Selenium server dropped the session, for example after a timeout, a device disconnect or a server restart. Optics doesn't reconnect. Also raised when Appium cannot go back to the app after it read a web page. | Run the tests again. Over HTTP or MCP, end the session and start a new one. If it keeps happening, raise `newCommandTimeout` in the capabilities. |
+| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. Also raised when `Press Keycode` gets a remote key name that a Samsung or LG TV does not know (`Unknown remote key '<name>' for <TV>. Known keys: ...`). The message lists the names that work. | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV` or `LGTV`. For a TV key, use a name from [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys). |
+| `E0105` | **Keyword not supported on this device platform.** You used a keyword on a Samsung or LG TV that needs a touch screen: a coordinate tap, a swipe, a scroll, `Select Dropdown Option`, the `checked` state of `Is Element`, typing without an element, or `Go Back`. Also raised by `Enter Text` with a special key that an app keyboard does not have, such as `<tab>`. Also raised by `Go Back` on a driver without it (`'go_back' is not supported by the <Driver> driver.`) and by a special key that Playwright cannot map. | Move the focus with `Press Element`, or press a remote key with `Press Keycode`, such as `UP`, `DOWN`, `ENTER` or `BACK`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv#keywords-that-fail-on-tizen-and-webos). |
+| `E0106` | **Driver session is no longer active.** The Appium or Selenium server dropped the session, for example after a timeout, a device disconnect or a server restart. A refused connection to the server in the middle of a run also counts. Optics doesn't reconnect. Also raised when Appium cannot go back to the app after it read a web page. In `optics execute`, a keyword with this error ends as `ERROR`, not `FAIL`, and its test case does the same. | Run the tests again. Over HTTP or MCP, end the session and start a new one. If it keeps happening, raise `newCommandTimeout` in the capabilities. |
 
 ## E02: Elements
 
@@ -9802,21 +10222,22 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0303` | **Screenshot empty or black.** Optics couldn't take a screenshot, got a black image, or has no screenshot source enabled. | Enable the screenshot source for your driver, such as `appium_screenshot`. Check that the device screen is on and unlocked. Some apps block screenshots on secure screens. |
+| `E0303` | **Screenshot empty or black.** Optics couldn't take a screenshot, got a black image, or has no screenshot source enabled. Also raised when `appium_screenshot` runs on a Samsung Tizen TV: `This TV cannot take a screenshot through Appium; use camera_screenshot`. | Enable the screenshot source for your driver, such as `appium_screenshot`. Check that the device screen is on and unlocked. Some apps block screenshots on secure screens. For a Tizen TV, use `camera_screenshot`. See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera). |
 
 ## E04: Keywords and parameters
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0401` | **Action failed.** The keyword ran but couldn't complete: an app didn't launch, an element wasn't visible or enabled for `Is Element`, typing failed, a script failed, an API request failed, or a module run by `Run Loop`, `Condition` or `Execute Module` failed. Also raised when `Assert Text` finds other text (`Element '<element>' shows '<text>' but expected '<expected>'.`), when `Is Element` finds the wrong checked state, when iOS `Go Back` finds no back button, or when a deep link does not open. In `optics live`, also shown for errors a keyword logged without failing. | Read the message after the code; it names the cause. For nested modules, the inner error is included. |
+| `E0401` | **Action failed.** The keyword ran but couldn't complete: an app didn't launch, an element wasn't visible or enabled for `Is Element`, typing failed, a script failed, an API request failed, or a module run by `Run Loop`, `Condition` or `Execute Module` failed. Also raised when `Assert Text` finds other text (`Element '<element>' shows '<text>' but expected '<expected>'.`), when `Assert Equality` finds two different values (`Expected '<expected>', got '<actual>'.`), when `Is Element` finds the wrong state or finds the element only by OCR or image, when iOS `Go Back` finds no back button, or when a deep link does not open. In `optics live`, also shown for errors a keyword logged without failing. | Read the message after the code; it names the cause. For nested modules, the inner error is included. |
 | `E0402` | **Keyword not found.** No keyword has that name. | Check the spelling with `optics list`. Case and spaces don't matter. |
-| `E0403` | **Invalid keyword parameters.** A parameter has the wrong form: an expression that can't be evaluated, a numeric comparison on string values, a bad loop count, a query that matches no data, an `Invoke API` id without a dot. Also raised for an unknown `${name}` inside a longer value (`Variable '${name}' in '<value>' is not defined.`), for a `store_as` with no name or no value to store, or when the page source can't be read. | Read the message. In `Condition` and `Evaluate`, compare with quoted values: `${size} == '9'`, not `${size} > 5`. Use `collection.api` for `Invoke API`. Write `store_as=<name>` only on a keyword that returns a value. See [Keywords](https://optics-framework.org/docs/reference/keywords/). |
+| `E0403` | **Invalid keyword parameters.** A parameter has the wrong form: an expression that can't be evaluated, a numeric comparison on string values, a bad loop count, a query that matches no data, an `Invoke API` id without a dot, an `Invoke API` response that is not JSON, a key name that Playwright does not know. Also raised for an unknown `${name}` inside a longer value (`Variable '${name}' in '<value>' is not defined.`), for a `store_as` with no name or no value to store, or when the page source can't be read. | Read the message. In `Condition` and `Evaluate`, compare with quoted values: `${size} == '9'`, not `${size} > 5`. Use `collection.api` for `Invoke API`. Write `store_as=<name>` only on a keyword that returns a value. See [Keywords](https://optics-framework.org/docs/reference/keywords/). |
+| `E0405` | **Action ran, but the screen does not show its result.** The action ran, but the check after it failed. On a Samsung or LG TV, `Enter Text` types on the on-screen keyboard and then reads the field. The error shows when the field does not show the text or typing stopped part way. It also shows when `Clear Element Text` leaves text in the field. No fallback value runs the action again, because the action already ran. In `optics mcp`, this error has the kind `silent_failure`. | Read the message. Check the field on the TV. Press the field with `Press Element` first when the screen has more than one field. Then run the step again. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv). |
 
 ## E05: Files and config
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0501` | **Missing required files.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set (`Environment variable NAME is not set`), and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
+| `E0501` | **Missing required files.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set (`Environment variable NAME is not set`), and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty, and for a `./` path in config.yaml that does not exist. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
 | `E0503` | **Config parser error.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists) and [API definitions](https://optics-framework.org/docs/reference/files#api-definitions). |
 
 ## E06: Modules and engines
@@ -9878,8 +10299,9 @@ These common `optics execute` and `optics dry_run` failures have no code.
 | `Unknown keyword or module: '<name>'` | A test step names neither a module nor a keyword. | Check the module name in modules.csv, including case. |
 | `Element not found: <name>` | A step uses `${name}`, and no elements file defines it. | Add the name to elements.csv, or create it in an earlier step. |
 | `Keyword '<name>' failed after fallback attempts; last error: <error>` | Every fallback value of the element failed. | Check each value in the element's row. See `E0201` and `X0201` above. |
+| `API '<name>' returned status 200, expected 404.` | An `Invoke API` call got another HTTP status than `expected_status`. | Check the status in the API definition. See [Invoke API](https://optics-framework.org/docs/reference/keywords/flow#invoke-api). |
 | `Missing required files in <folder>: test_cases, modules` | Optics found no test cases file or no modules file. | Check the header rows. See [Project files](https://optics-framework.org/docs/reference/files). |
-| `No driver enabled in <folder>/config.yaml` | No `driver_sources` entry has `enabled: true`, or config.yaml couldn't be read. | Run `optics configure <folder>`, or `optics doctor <folder>` to find the problem. |
+| `No driver enabled in <folder>/config.yaml` | A module that the run reaches uses an action, app or verification keyword, and no `driver_sources` entry has `enabled: true`. The panel title is `Cannot start: E0104`. A suite of flow control keywords needs no driver. | Run `optics configure <folder>`, or `optics doctor <folder>` to find the problem. |
 | `Cannot start` panel | The preflight couldn't reach the Appium or Selenium server, or found no Android device. Also shown for `include` or `exclude` names that are not valid. | Follow the command in the panel, for example start `appium`. Set `OPTICS_SKIP_PREFLIGHT=1` to skip the check. For test case names, see [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases). |
 
 Plain Python errors, such as `ValueError: invalid literal for int()` when a timeout is `2.5`, also fail a step without a code. Timeouts and counts must be whole numbers. See [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting).
@@ -9984,29 +10406,29 @@ The install scripts include it. With pip, install it yourself: `pip install "opt
 
 ## Setting up a project
 
-### "No driver enabled in …/config.yaml"
+### "Cannot start: E0104": No driver enabled in …/config.yaml
 
-No entry under `driver_sources` has `enabled: true`. Optics also prints this when it couldn't read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults.
+No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow) needs no driver.
 
 - Run `optics doctor <project>`. Its `config: file` row shows whether the file parses.
 - Set `enabled: true` on one driver, or run `optics configure <project>` to write a working config.
 - Check indentation: each engine is a list item, as in `- appium:` followed by its settings indented below.
 
-### "Missing required files in …: test_cases, modules"
+### "Cannot start: E0501": Missing required files in …: test_cases, modules
 
 Optics finds files by their header row, not their names, and found no test cases file or no modules file.
 
 Check the first line of each file: `test_case,test_step` for test cases and `module_name,module_step,param_1,…` for modules. Case does not matter. A spreadsheet app can add an invisible character to the first cell when it saves as "CSV UTF-8", so save as plain CSV. See [How Optics finds your files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files).
 
-### "Cannot start" panel: "No Appium server reachable at …"
+### "Cannot start: E0102": No Appium server reachable at …
 
-Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there.
+Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
 Start the server in another terminal with `appium`, then run again. If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
 
-### "Cannot start" panel for Selenium
+### "Cannot start: E0102": No Selenium/WebDriver server reachable at …
 
-No Selenium server answers at the `url` in `config.yaml`.
+No Selenium server answers at the `url` in `config.yaml`. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
 Start one, for example with Docker: `docker run -d -p 4444:4444 selenium/standalone-chrome`. Check that `url` in `config.yaml` points to it, usually `http://localhost:4444/wd/hub`.
 
@@ -10024,7 +10446,7 @@ Fill in the capabilities for your platform. Run `optics configure <project>` to 
 
 ### YAML test cases load nothing
 
-A YAML file with `test_cases:` at the top is recognized as a test cases file but loads no tests. The run then stops with "No test cases to run". Section names in YAML suites are exact.
+A YAML file with `test_cases:` at the top is recognized as a test cases file but loads no tests. The run then stops with "Cannot start: E0702" and the text "No test cases to run". Section names in YAML suites are exact.
 
 Use `Test Cases:`, `Modules:` and `Elements:`, with that capitalization and spacing. See [Section names are exact](https://optics-framework.org/docs/create/yaml#section-names-are-exact).
 
@@ -10116,6 +10538,24 @@ Fix the spelling. Case and spaces don't matter, so `Press Element` and `press el
 A module step that names another module is read as a keyword name.
 
 Call the other module with `Execute Module`: `Checkout,Execute Module,Sign In`. See [Execute Module](https://optics-framework.org/docs/reference/keywords/flow#execute-module).
+
+### "Cannot start: E0702": include matches no test case
+
+A name in `--include`, `--exclude` or the `include` and `exclude` lists of `config.yaml` matches no test case. Optics also stops when no test case is left to run. The exit code is `3`, and Optics writes no report.
+
+Read the suggestion and the list of available test cases in the panel. Matching ignores case and uses `*` and `?` as wildcards. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
+
+### The run stopped, and the report shows ERROR and NOT_RUN
+
+Someone pressed Ctrl+C (exit code `130`), or the CI system sent SIGTERM (exit code `143`). Optics stops at once and still writes `junit_output.xml`. The test case in progress is `ERROR`. The test cases that did not start, and Suite Teardown, are `NOT_RUN`.
+
+Run the suite again. A CI job that you cancel on purpose gives the same result. See [What each outcome writes](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
+
+### Test cases end as ERROR with `E0106`
+
+The driver session ended during the run. The Appium or Selenium server stopped, or it dropped the session. The test case in progress and each later test case is `ERROR` in the report. Optics does not reconnect.
+
+Find out why the server stopped, start it again, and run the suite. See [`E0106`](https://optics-framework.org/docs/reference/errors#e01-driver-and-session).
 
 ### Enter Text or Press Element acts before the page loads
 
@@ -10285,9 +10725,9 @@ Run `optics setup --install playwright` again. It downloads the Chromium build P
 
 ## CI
 
-### The run passes, but CI shows a failed test
+### Every step passes, but the run fails with `on-screen-error-detection`
 
-When your project has an [error definitions file](https://optics-framework.org/docs/run/error-detection), Optics checks the last screen for known error messages at the end of `optics execute`. A match adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, but doesn't change the exit code or the summary in the terminal.
+When your project has an [error definitions file](https://optics-framework.org/docs/run/error-detection), Optics checks the final screen for known error messages in `optics execute`. A match adds a failing test case named `on-screen-error-detection` to `junit_output.xml` and to the summary in the terminal. The exit code is `1`.
 
 Open `execution_output/detected_errors_<session>.json` to see which message matched. Fix the app, or the definition if it matched by mistake.
 
@@ -10301,7 +10741,7 @@ Always pass the project: `optics doctor ./my-project --check`.
 
 Your CI starts the Appium or Selenium server in a way the preflight check can't reach, or starts it after Optics.
 
-Wait for the server before running Optics. If you're sure it's reachable, set `OPTICS_SKIP_PREFLIGHT=1` to skip the check.
+Wait for the server before running Optics. If you know that it is reachable, set `OPTICS_SKIP_PREFLIGHT=1` to skip the check. When the check fails, the report shows each test case as `ERROR` with code `E0102`.
 
 ### `junit_output.xml` is cut short
 
@@ -10386,6 +10826,10 @@ Yes, two ways. [Describe a flow](https://optics-framework.org/docs/create/descri
 
 ## Running tests
 
+### Can I run tests without a device or browser?
+
+Yes, for a suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`. Optics needs no driver for it. `optics dry_run` checks any suite without a device, but it still loads the engines in `config.yaml`.
+
 ### Can I run tests in parallel?
 
 Not within one run. `optics execute` runs test cases one after another on one device or browser.
@@ -10400,7 +10844,7 @@ Give its name with `--include`. Case does not matter, and `*` and `?` work as wi
 $ optics execute birch-tests --include "Shopper can sign in"
 ```
 
-Suite Setup and Suite Teardown always run. You can also list names under `include:` and `exclude:` in `config.yaml`. See [Run only some test cases](https://optics-framework.org/docs/create/organise#run-only-some-test-cases) and the [CLI reference](https://optics-framework.org/docs/reference/cli#pick-test-cases).
+Suite Setup and Suite Teardown always run. You can also list names under `include:` and `exclude:` in `config.yaml`. A name that matches no test case stops the run with exit code `3`. See [Run only some test cases](https://optics-framework.org/docs/create/organise#run-only-some-test-cases) and the [CLI reference](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 
 ### Does Optics retry failed tests?
 
@@ -10418,9 +10862,17 @@ With Selenium, the browser runs wherever your Selenium server runs. A Selenium s
 
 Yes. Set `url` under the `appium` driver to any Appium server you can reach. `optics execute` checks that the server answers before the run starts. See [config.yaml](https://optics-framework.org/docs/reference/config#driver-sources).
 
+### What exit code does `optics execute` return?
+
+`0` when every test case passes, and `1` when a test case fails, an error screen is found or the run cannot start. Exit code `2` means that the command line is not valid. Exit code `3` means that `--include` or `--exclude` matches no test case. Optics returns `130` after Ctrl+C and `143` after SIGTERM, and still writes the JUnit report. See [Exit codes](https://optics-framework.org/docs/reference/cli#exit-codes).
+
 ### Where do the results go?
 
 To `execution_output/` in the project: a `junit_output.xml` report that any CI system can read, screenshots of each step, and logs if you turn them on. See [Read the results](https://optics-framework.org/docs/run/results).
+
+### Does Optics hide passwords and keys in its output?
+
+Yes. Optics writes `****` in place of a secret in the console, the logs, `logs.json` and `junit_output.xml`. It masks these items: values that you save under a secret name, values that start with `@:`, secret values in `config.yaml`, passwords in URLs, and secret query parameters. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
 ## AI features
 
@@ -10485,6 +10937,10 @@ Appium is the open-source automation server Optics uses to drive Android, iOS an
 ### BLE driver
 
 The BLE driver makes Optics act as a Bluetooth mouse and keyboard, for devices that allow no automation software. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](https://optics-framework.org/docs/platforms/production).
+
+### Browser profile
+
+A browser profile is the set of sign-ins, cookies and settings that Chrome or Edge keeps for one person. Set `profile` in the Playwright capabilities, and Optics starts the browser with a temporary copy of it. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile).
 
 ## C
 
@@ -10592,6 +11048,12 @@ MCP (Model Context Protocol) is an open standard that lets AI agents use outside
 
 A module is a named, reusable list of steps, such as *Sign In* or *Add To Cart*. Test cases are made of modules. See [Modules](https://optics-framework.org/docs/get-started/concepts#modules).
 
+## N
+
+### NOT_RUN
+
+`NOT_RUN` is the status of a step or test case that did not start, because an earlier failure or a stop kept it from running. It shows in `junit_output.xml`. See [What each outcome writes](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
+
 ## O
 
 ### OCR
@@ -10621,6 +11083,10 @@ The preflight is the check `optics execute` runs before a test starts, to make s
 A project is a folder that holds one suite: its `config.yaml`, test cases, modules and elements. Optics finds files anywhere in the folder by their header row. See [Project files](https://optics-framework.org/docs/reference/files).
 
 ## S
+
+### Secret masking
+
+Secret masking is the rule that Optics writes `****` in place of a secret in the console, the logs and the reports. A value is secret when its name has a word such as `token`, `password` or `key`. See [Use environment variables and project paths](https://optics-framework.org/docs/reference/config#use-environment-variables-and-project-paths).
 
 ### Selenium
 
