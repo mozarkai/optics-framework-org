@@ -33,6 +33,7 @@ api:
               username: "${api_username}"
               password: "${api_password}"
           expected_result:
+            expected_status: 200
             jsonpath_assertions:
               - path: $.accessToken
                 condition: "len($) > 0"
@@ -51,6 +52,7 @@ api:
 ```
 
 - **`request`** sets the method, headers and a JSON body. `${name}` is replaced anywhere in the endpoint, headers and body.
+- **`expected_status`** is the HTTP status that the response must have. The step fails when the status is different, before Optics runs any other check or extracts any value.
 - **`jsonpath_assertions`** checks the response. `path` picks a value, and `condition` is a small expression where `$` stands for that value. A false condition fails the step.
 - **`extract`** saves values from the response as variables, using JSONPath: `$.accessToken`, `$.customer.id`, `$.items[0].name`.
 
@@ -85,7 +87,7 @@ API sign in works,Sign In Over The API
 
 The first call signs in and saves `access_token`. The second sends the token and saves the account's `email`. From here, any step can use `${email}`: type it into a field, check it on screen, or compare it in a [condition](/docs/advanced/conditions).
 
-A project with only API steps still needs a `config.yaml` with a driver enabled, but the driver doesn't open anything unless a step asks it to.
+A project with only API and other flow control steps needs no driver. Set every `driver_sources` entry in `config.yaml` to `enabled: false`. If a step uses an action, app or verification keyword, enable a driver.
 
 ### Run it
 
@@ -119,7 +121,7 @@ Creating the order through the API takes a second. Going through the checkout sc
 ## Good to know
 
 - **Responses must be JSON** when an endpoint has `expected_result`. Other responses fail the step.
-- **Check status codes with an assertion.** `expected_status` and `json_schema` are accepted in the file but not checked yet. Check a field in the body instead.
+- **A different status fails the step.** With `expected_status` set, the failure reads, for example, `API 'Sign in' returned status 200, expected 401.` It has no error code. `json_schema` is accepted in the file but not checked yet. Check a field in the body instead.
 - **Every request times out after 30 seconds.** `request.timeout` isn't used yet.
 - **Keep credentials out of the file.** Put them in variables and read them from the environment with `Read Data,${api_password},ENV:BIRCH_API_PASSWORD`. See [Variables](/docs/advanced/variables#hide-sensitive-values).
 - **API logs are not masked.** `api_details.log` and `api_details.har` show requests and responses in clear text, secrets included. Values from `extract` are not hidden in other logs either.

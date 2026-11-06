@@ -95,18 +95,19 @@ The server gives the agent:
 
 - **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
 - **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app` and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
-- **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files.
+- **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
 
-The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict.
+The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict. Optics waits up to 5 seconds for that text, so a page that loads late can still pass.
 
 A typical session goes: start a session, act on rows, check the result, read the steps and the project format, write the files, run `optics dry_run`, and end the session. The [MCP reference](/docs/reference/mcp) lists every tool and resource. For one tool per keyword, start the server with `--toolset full`.
 
 ## Keep the agent on track
 
+- **The agent asks you before it signs in.** For a website that needs a sign-in, the agent reads `optics://browser-profiles`. It asks you which profile to use. If you choose none, it asks you for the credentials. Only a server that starts with the default `stdio` transport accepts a profile. See [Sign in with a browser profile](/docs/reference/mcp#sign-in-with-a-browser-profile).
 - **Agents tap by reference, not by position.** The server hides coordinate taps by default, because those tests break on any other screen size. To allow them, set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before you start the server.
 - **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run` before it finishes.
 - **Loops and conditions** (`Run Loop`, `Condition`, `Read Data` and the rest) aren't tools, because they only make sense inside suite files. The agent can still write them into modules.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call. When more than one session is open, the agent must pass `session_id`. The error lists the ids.
 
 :::details[Run the server over HTTP]
 By default the server talks to one client over standard input and output. To share it on a network, or run it in a container, start it in HTTP mode:
