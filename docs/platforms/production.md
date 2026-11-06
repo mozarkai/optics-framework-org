@@ -17,7 +17,7 @@ If you can use Appium or a browser driver, do. They're faster, read the UI tree 
 ## What you need
 
 - **A USB serial BLE HID dongle.** It plugs into your machine as a serial port, and pairs with the device as a Bluetooth mouse and keyboard.
-- **A way to see the screen.** Either a camera or capture card that your machine sees as a webcam, or a TCP frame server that sends a picture on request.
+- **A way to see the screen.** Use one of these: a camera or capture card that your machine sees as a webcam, an HTTP(S) URL that returns a picture, or a TCP frame server.
 - **An OCR engine**, such as EasyOCR, to read text in the camera picture.
 - **Image templates** (optional), cropped pictures of icons that have no text. See [Find elements by text and image](https://optics-framework.org/docs/elements/text-and-images).
 - **A stand** that holds the camera square over the screen, so the picture doesn't shift between runs.
@@ -71,7 +71,7 @@ elements_sources:
   - camera_screenshot:
       enabled: true
       capabilities:
-        camera_index: 0                      # or url: "192.168.1.20:9000" for a frame server
+        camera_index: 0                      # or url: a screenshot URL, or "192.168.1.20:9000" for a frame server
 text_detection:
   - easyocr: {enabled: true}
 image_detection:
@@ -105,11 +105,22 @@ There's no preflight for this setup, so check the dongle and camera before you s
 | Name | Default | What it does |
 |---|---|---|
 | `camera_index` | None | The webcam or capture card to use. `0` is the first one your system finds. |
-| `url` | None | A TCP frame server as `host:port`. Use instead of `camera_index`. |
+| `url` | None | An `http://` or `https://` URL, or a TCP frame server as `ip:port`. Use instead of `camera_index`. |
+| `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | Frame server only. The length of the size header in bytes, `4` or `8`. |
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
 
-Set either `camera_index` or `url`. With neither, Optics stops with "No camera_index or valid URL provided".
+Set either `camera_index` or `url`. With neither, Optics reads the environment variables below. If these are not set, Optics stops with "No camera_index or valid URL provided".
+
+For an HTTP URL, Optics sends a `GET` request and decodes the reply as an image. A status other than 200 fails, and the log shows the status with the `code` and `message` of the JSON reply. Optics does not follow redirects, because a redirect will send the token again.
+
+| Variable | Used for |
+|---|---|
+| `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when `url` is set and `token` is not. |
+| `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
+
+A value in config.yaml wins over a variable. Write `token: ${CAMERA_TOKEN}` to keep the token out of the file.
 
 A frame server receives the line `screenshot`, then replies with the picture's size in a `header_size`-byte unsigned number, followed by the picture as JPEG or PNG.
 

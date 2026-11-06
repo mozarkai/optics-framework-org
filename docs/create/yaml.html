@@ -152,15 +152,8 @@ Elements:
 <p><code class="ic">name=value</code> sets one parameter by name, like <code class="ic">timeout_str=10</code> above. Quote the value if it contains spaces: <code class="ic">event_name="tap sign in"</code>. A first value that starts with <code class="ic">text=</code>, <code class="ic">css=</code> or <code class="ic">xpath=</code> is a locator, not a named value: <code class="ic">Enter Text text=Email ava@birch.shop</code>.</p>
 <p><code class="ic">store_as=name</code> keeps the value that the keyword returns: <code class="ic">Get Text ${price_label} store_as=price</code>. See <a href="../../docs/advanced/variables#keep-a-value-for-later">Keep a value for later</a>.</p>
 <h3 id="expressions-with-in-them">Expressions with = in them<a class="anchor" href="#expressions-with-in-them" aria-label="Link to this section">#</a></h3>
-<p>Optics splits a quoted value on its first <code class="ic">=</code> to support named values. That breaks quoted expressions that contain <code class="ic">==</code>. Write such expressions without spaces, and without quotes:</p>
-<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="# Works
-- Condition ${status}=='ready' &quot;Go Home&quot; &quot;Sign In&quot;
-# Doesn't work: the quotes around the expression are kept
-- Condition &quot;${status} == 'ready'&quot; &quot;Go Home&quot; &quot;Sign In&quot;">Copy</button><pre><code><span class="c-dim"># Works</span>
-- Condition <span class="c-var">${status}</span>==<span class="c-lit">'ready'</span> <span class="c-lit">"Go Home"</span> <span class="c-lit">"Sign In"</span>
-<span class="c-dim"># Doesn't work: the quotes around the expression are kept</span>
-- Condition <span class="c-lit">"<span class="c-var">${status}</span> == 'ready'"</span> <span class="c-lit">"Go Home"</span> <span class="c-lit">"Sign In"</span></code></pre></figure>
-<p>Quoted values without <code class="ic">=</code> are fine, such as <code class="ic">"Go Home"</code>.</p>
+<p>Quote an expression that contains spaces, the same as any other value. Optics removes the quotes:</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Condition &quot;${status} == 'ready'&quot; &quot;Go Home&quot; &quot;Sign In&quot;">Copy</button><pre><code>- Condition <span class="c-lit">"<span class="c-var">${status}</span> == 'ready'"</span> <span class="c-lit">"Go Home"</span> <span class="c-lit">"Sign In"</span></code></pre></figure>
 <h3 id="module-names-as-values">Module names as values<a class="anchor" href="#module-names-as-values" aria-label="Link to this section">#</a></h3>
 <p>When a keyword takes a module name, such as <code class="ic">Run Loop</code> or <code class="ic">Execute Module</code>, quote names that contain spaces: <code class="ic">Run Loop "Search One" ${term} "trail runner|pace knit"</code>.</p>
 <h3 id="elements">Elements<a class="anchor" href="#elements" aria-label="Link to this section">#</a></h3>
@@ -237,6 +230,6 @@ Elements:
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

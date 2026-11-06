@@ -141,7 +141,7 @@ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -N http://127.0.0.1:8000/v1/sessions/$SESSION/events">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-N</span> http://127.0.0.1:8000/v1/sessions/$SESSION/events</code></pre></figure>
 <h2 id="keep-the-server-safe">Keep the server safe<a class="anchor" href="#keep-the-server-safe" aria-label="Link to this section">#</a></h2>
 <p>The server has <strong>no authentication</strong>, and it accepts requests from any web page your browser opens. Anyone who can reach it can control the connected device.</p>
-<ul><li>Keep the default <code class="ic">--host 127.0.0.1</code>, so only your machine can reach it.</li><li>If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.</li><li>Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.</li><li>The server does not read its own environment or files for a caller. It refuses <code class="ic">${NAME}</code> in a driver URL or header, a <code class="ic">storage_state</code> file path, and <code class="ic">Read Data</code> with <code class="ic">ENV:</code>.</li></ul>
+<ul><li>Keep the default <code class="ic">--host 127.0.0.1</code>, so only your machine can reach it.</li><li>If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.</li><li>Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.</li><li>The server does not read its own environment or files for a caller. It refuses <code class="ic">${NAME}</code> in a driver URL or header, a <code class="ic">storage_state</code> file path, <code class="ic">user_data_dir</code>, a browser <code class="ic">profile</code>, and <code class="ic">Read Data</code> with <code class="ic">ENV:</code>.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/reference/http-api">HTTP API reference</a>, with every endpoint and field</li><li>The <a href="https://optics-framework.org/openapi.json" rel="noopener">OpenAPI document</a>, for generating a client</li><li><a href="../../docs/create/agent">Let your AI agent build tests</a></li></ul>
         </div>
@@ -208,6 +208,6 @@ curl -X POST http://127.0.0.1:8000/v1/sessions/$SESSION/action \">Copy</button><
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

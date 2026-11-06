@@ -92,7 +92,7 @@
 <p>Maestro's <a href="https://docs.maestro.dev/get-started/supported-platform" rel="noopener">supported platforms</a> page lists Android emulators and physical devices, iOS simulators, and web. Its <a href="https://docs.maestro.dev/get-started/supported-platform/web-browser" rel="noopener">web support</a> is in beta and runs on Chromium only. Maestro works with native, React Native and Flutter apps, and its docs cover moving between apps and into system settings.</p>
 <p><strong>If you need to test on a physical iPhone, Optics supports it today.</strong> Maestro's README says that physical iOS devices aren't supported yet.</p>
 <h2 id="tv-apps">TV apps<a class="anchor" href="#tv-apps" aria-label="Link to this section">#</a></h2>
-<p>Optics tests <a href="../../docs/platforms/tv">Android TV, Samsung Tizen and LG webOS</a> through Appium, with remote-control keys. On Tizen and webOS, you move the focus with key names such as <code class="ic">UP</code> and <code class="ic">ENTER</code>, and touch keywords fail with E0105.</p>
+<p>Optics tests <a href="../../docs/platforms/tv">Android TV, Samsung Tizen and LG webOS</a> through Appium, with remote-control keys. On Tizen and webOS, Press Element and Enter Text move the focus for you, Press Keycode sends keys such as <code class="ic">UP</code> and <code class="ic">ENTER</code>, and touch keywords fail with E0105.</p>
 <p>Maestro's <a href="https://docs.maestro.dev/reference/commands-available/presskey" rel="noopener"><code class="ic">pressKey</code></a> command includes Android TV remote keys, such as <code class="ic">Remote Dpad Up</code> and <code class="ic">Remote Media Play Pause</code>. Its supported platforms page doesn't list Tizen or webOS.</p>
 <h2 id="locked-devices-and-apps-that-block-screenshots">Locked devices and apps that block screenshots<a class="anchor" href="#locked-devices-and-apps-that-block-screenshots" aria-label="Link to this section">#</a></h2>
 <p>Optics can test a device that has no automation software on it. A <a href="../../docs/platforms/production">BLE dongle</a> pairs with it as a Bluetooth mouse and keyboard, and a camera shows Optics the screen. This works when USB debugging is off or the app blocks screenshots. See <a href="../../docs/guides/protected-apps">Test apps that block screenshots</a>.</p>
@@ -187,6 +187,6 @@
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

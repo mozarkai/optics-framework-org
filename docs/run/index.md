@@ -16,7 +16,9 @@ A dry run reads every file and checks that:
 - every keyword in every module exists, with a suggestion when you mistype one,
 - every `${name}` is defined in an elements file or by an earlier step, such as `Evaluate`, `Read Data` or `store_as`. This includes a `${name}` inside a longer value.
 
-It doesn't tap, type or open anything, so it's quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled.
+It does not tap, type or open anything, so it is quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled. `optics dry-run` is the same command.
+
+A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate` and `Condition`, needs no driver. `optics execute` follows the same rule.
 
 ## Run it
 
@@ -53,9 +55,13 @@ Test Suite
 | Code | Meaning |
 |---|---|
 | `0` | Every test case passed. |
-| `1` | At least one test case failed, or the run couldn't start (no driver enabled, server unreachable, missing files). |
+| `1` | At least one test case failed, error detection found an on-screen error, or the run couldn't start (no driver enabled, server unreachable, missing files). |
+| `2` | The command line is not valid, for example an unknown flag. |
+| `3` | The test case selection is not valid. |
+| `130` | You pressed Ctrl+C. |
+| `143` | Optics received SIGTERM. |
 
-CI systems use this to mark a build as passed or failed.
+CI systems use this to mark a build as passed or failed. Optics also writes the JUnit report when you stop a run with Ctrl+C or SIGTERM. See [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
 
 ## Choose which test cases run
 
@@ -68,7 +74,7 @@ $ optics execute birch-tests --include "shopper can*" --exclude "Shopper can che
 - Matching ignores case. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first.
 - Suite Setup and Suite Teardown always run.
-- A name that matches no test case stops the run before it starts. The message suggests the correct name.
+- A name that matches no test case stops the run before it starts, with exit code `3`. The message suggests the correct name.
 
 `optics dry_run` takes the same flags. To keep a selection for every run, put `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude). The flags replace them for one run.
 

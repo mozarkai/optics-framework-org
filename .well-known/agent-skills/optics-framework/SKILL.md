@@ -71,7 +71,7 @@ Step rules:
   inside longer text, the first value is used. `$${name}` gives a literal `${name}`.
 - `store_as=<name>` keeps a keyword's return value (e.g. `Get Text,${price_label},store_as=price`)
   for later steps and test cases.
-- Assert Text fails the step on wrong text. Assert Equality and Validate Screen never fail it.
+- Assert Text fails the step on wrong text, and Assert Equality on different values. Validate Screen never fails it.
 - `name=value` sets a parameter by its real name (e.g. `timeout_str=20`).
 - Wrap a CSV value that contains commas in double quotes.
 

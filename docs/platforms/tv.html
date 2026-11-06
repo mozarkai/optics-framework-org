@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Test TV apps · Optics Framework docs</title>
-  <meta name="description" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.">
-  <meta name="ai-summary" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.">
+  <meta name="description" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.">
+  <meta name="ai-summary" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.">
   <link rel="canonical" href="https://optics-framework.org/docs/platforms/tv">
   <link rel="alternate" type="text/markdown" href="tv.md" title="This page as Markdown">
   <meta property="og:title" content="Test TV apps · Optics Framework docs">
-  <meta property="og:description" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.">
+  <meta property="og:description" content="Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
@@ -67,7 +67,7 @@
         <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/platforms/">Platforms</a><span class="sep" aria-hidden="true">/</span><span>Targets</span></nav>
         <header class="doc-head">
           <h1>Test TV apps</h1>
-          <p class="doc-summary">Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys.</p>
+          <p class="doc-summary">Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.</p>
           <div class="doc-meta">
             <p class="doc-level">Intermediate, about 20 min</p>
             <div class="page-actions">
@@ -83,8 +83,8 @@
           </div>
         </header>
         <div class="prose">
-<p>Optics tests TV apps through <strong>Appium</strong>, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with <code class="ic">platformName</code> in <code class="ic">config.yaml</code>. On a TV you move around with remote-control keys and check what's on screen with assertions.</p>
-<div class="table-wrap"><table><thead><tr><th>TV platform</th><th><code class="ic">platformName</code></th><th>Appium driver</th><th>How you move around</th></tr></thead><tbody><tr><td>Android TV</td><td><code class="ic">Android</code></td><td>UiAutomator2</td><td>Android key numbers, plus taps and typing</td></tr><tr><td>Samsung Tizen</td><td><code class="ic">TizenTV</code></td><td><a href="https://github.com/headspinio/appium-tizen-tv-driver" rel="noopener">appium-tizen-tv-driver</a></td><td>Remote key names only</td></tr><tr><td>LG webOS</td><td><code class="ic">LGTV</code></td><td><a href="https://github.com/headspinio/appium-lg-webos-driver" rel="noopener">appium-lg-webos-driver</a></td><td>Remote key names only</td></tr></tbody></table></div>
+<p>Optics tests TV apps through <strong>Appium</strong>, the same server it uses for phones. Each TV platform has its own Appium driver, and you pick it with <code class="ic">platformName</code> in <code class="ic">config.yaml</code>. On a TV you move around with remote-control keys and check what is on screen with assertions. On Tizen and webOS, the element keywords also work. They move the remote focus for you.</p>
+<div class="table-wrap"><table><thead><tr><th>TV platform</th><th><code class="ic">platformName</code></th><th>Appium driver</th><th>How you move around</th></tr></thead><tbody><tr><td>Android TV</td><td><code class="ic">Android</code></td><td>UiAutomator2</td><td>Android key numbers, plus taps and typing</td></tr><tr><td>Samsung Tizen</td><td><code class="ic">TizenTV</code></td><td><a href="https://github.com/headspinio/appium-tizen-tv-driver" rel="noopener">appium-tizen-tv-driver</a></td><td>Remote key names, and element keywords that move focus</td></tr><tr><td>LG webOS</td><td><code class="ic">LGTV</code></td><td><a href="https://github.com/headspinio/appium-lg-webos-driver" rel="noopener">appium-lg-webos-driver</a></td><td>Remote key names, and element keywords that move focus</td></tr></tbody></table></div>
 <p>The examples use a TV app for Birch, a sample shoe store, with rows of shoes such as "Trail Runner 2" and "Pace Knit".</p>
 <h2 id="before-you-begin">Before you begin<a class="anchor" href="#before-you-begin" aria-label="Link to this section">#</a></h2>
 <p>You need Optics with the Appium engine and the Appium server:</p>
@@ -93,10 +93,10 @@ npm install -g appium">Copy</button><pre><code><span class="prompt">$</span> <b>
 <span class="prompt">$</span> <b>npm</b> install <span class="c-info">-g</span> appium</code></pre></figure>
 <p>Each TV also needs its own setup: developer mode on the TV, the vendor's tools, and the TV on the same network as your machine. Those steps belong to each Appium driver, and its project page covers them.</p>
 <h2 id="android-tv">Android TV<a class="anchor" href="#android-tv" aria-label="Link to this section">#</a></h2>
-<p>Android TV uses the same setup as an Android phone. Follow <a href="../../docs/platforms/android">Test Android apps</a>, with <code class="ic">platformName: Android</code> and the TV's serial from <code class="ic">adb devices</code> as <code class="ic">udid</code>. Connect to the TV with <code class="ic">adb connect &lt;tv-ip&gt;</code> when it isn't on a cable.</p>
+<p>Android TV uses the same setup as an Android phone. Follow <a href="../../docs/platforms/android">Test Android apps</a>, with <code class="ic">platformName: Android</code> and the TV's serial from <code class="ic">adb devices</code> as <code class="ic">udid</code>. Connect to the TV with <code class="ic">adb connect &lt;tv-ip&gt;</code> when it is not on a cable.</p>
 <p>Touch and typing keywords work on Android TV, but most TV apps expect the D-pad. Send it with Press Keycode and Android key numbers:</p>
 <div class="table-wrap"><table><thead><tr><th>Remote button</th><th>Number</th></tr></thead><tbody><tr><td>Up / Down / Left / Right</td><td><code class="ic">19</code> / <code class="ic">20</code> / <code class="ic">21</code> / <code class="ic">22</code></td></tr><tr><td>Select (center)</td><td><code class="ic">23</code></td></tr><tr><td>Back</td><td><code class="ic">4</code></td></tr><tr><td>Home</td><td><code class="ic">3</code></td></tr><tr><td>Play/pause</td><td><code class="ic">85</code></td></tr></tbody></table></div>
-<p>Remote key names such as <code class="ic">UP</code> don't work on Android TV. They only apply to Tizen and webOS.</p>
+<p>Remote key names such as <code class="ic">UP</code> do not work on Android TV. They only apply to Tizen and webOS.</p>
 <h2 id="samsung-tizen">Samsung Tizen<a class="anchor" href="#samsung-tizen" aria-label="Link to this section">#</a></h2>
 <p>Install the Tizen driver into Appium:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="appium driver install --source=npm appium-tizen-tv-driver">Copy</button><pre><code><span class="prompt">$</span> <b>appium</b> driver install <span class="c-info">--source</span>=npm appium-tizen-tv-driver</code></pre></figure>
@@ -114,8 +114,7 @@ npm install -g appium">Copy</button><pre><code><span class="prompt">$</span> <b>
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
-  - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - appium_find_element: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
   - <span class="c-mod">appium</span><span class="c-dim">:</span>
       <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
       <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
@@ -128,9 +127,9 @@ elements_sources:
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 <span class="c-mod">elements_sources</span><span class="c-dim">:</span>
-  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span> {enabled: true}
-  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>  {enabled: true}</code></pre></figure>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
 <p>Optics reads <code class="ic">platformName</code> and the app id (<code class="ic">appPackage</code>, with or without the <code class="ic">appium:</code> prefix). It passes every other capability to the Tizen driver unchanged. The <a href="https://github.com/headspinio/appium-tizen-tv-driver" rel="noopener">driver's README</a> explains each one, including how to get the <code class="ic">rcToken</code>.</p>
+<p>A native screenshot makes a Tizen TV stop answering, so <code class="ic">appium_screenshot</code> refuses to take one there. To capture the screen, add the <code class="ic">camera_screenshot</code> element source. See <a href="../../docs/reference/config#ble-and-camera">BLE and camera</a> for its settings.</p>
 <h2 id="lg-webos">LG webOS<a class="anchor" href="#lg-webos" aria-label="Link to this section">#</a></h2>
 <p>Install the webOS driver into Appium:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="appium driver install --source=npm appium-lg-webos-driver">Copy</button><pre><code><span class="prompt">$</span> <b>appium</b> driver install <span class="c-info">--source</span>=npm appium-lg-webos-driver</code></pre></figure>
@@ -148,9 +147,8 @@ elements_sources:
         appium:useSecureWebsocket: true
         appium:newCommandTimeout: 600
 elements_sources:
-  - appium_screenshot: {enabled: true}
-text_detection:
-  - easyocr: {enabled: true}               # reads text on the TV screenshot">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - appium_find_element: {enabled: true}
+  - appium_screenshot: {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
   - <span class="c-mod">appium</span><span class="c-dim">:</span>
       <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
       <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
@@ -163,24 +161,48 @@ text_detection:
         appium:useSecureWebsocket: true
         appium:newCommandTimeout: 600
 <span class="c-mod">elements_sources</span><span class="c-dim">:</span>
-  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span> {enabled: true}
-<span class="c-mod">text_detection</span><span class="c-dim">:</span>
-  - <span class="c-mod">easyocr</span><span class="c-dim">:</span> {enabled: true}              <span class="c-dim"> # reads text on the TV screenshot</span></code></pre></figure>
-<p>This setup finds things on screen with screenshots only, so add an OCR engine (<code class="ic">optics setup --install easyocr</code>) to check text, or <a href="../../docs/elements/text-and-images">image matching</a> for icons. The <a href="https://github.com/headspinio/appium-lg-webos-driver" rel="noopener">driver's README</a> explains the capabilities.</p>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span> {enabled: true}</code></pre></figure>
+<p><code class="ic">appium_find_element</code> finds text in the app's DOM. Add an OCR engine (<code class="ic">optics setup --install easyocr</code>) to read text that the app draws as an image, or <a href="../../docs/elements/text-and-images">image matching</a> for icons. The <a href="https://github.com/headspinio/appium-lg-webos-driver" rel="noopener">driver's README</a> explains the capabilities.</p>
 <h2 id="check-the-setup">Check the setup<a class="anchor" href="#check-the-setup" aria-label="Link to this section">#</a></h2>
 <p>Start <code class="ic">appium</code> in another terminal, then run the doctor:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor birch-tv">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> doctor birch-tv</code></pre></figure>
 <p>The doctor's checks are written for phones. On Tizen and webOS it warns that <code class="ic">deviceName</code>, <code class="ic">appPackage</code> or <code class="ic">appActivity</code> is missing. You can ignore those warnings, and the <code class="ic">adb</code> rows, as long as <code class="ic">config: driver</code> and <code class="ic">config: appium element source</code> show ✅.</p>
-<p>Before each run, <code class="ic">optics execute</code> checks that the Appium server answers at <code class="ic">url</code>. It doesn't check the TV itself.</p>
+<p>Before each run, <code class="ic">optics execute</code> checks that the Appium server answers at <code class="ic">url</code>. It does not check the TV itself.</p>
 <h2 id="move-around-with-remote-keys">Move around with remote keys<a class="anchor" href="#move-around-with-remote-keys" aria-label="Link to this section">#</a></h2>
 <p>On Tizen and webOS, Press Keycode takes the name of a remote button:</p>
 <div class="table-wrap"><table><thead><tr><th>Key name</th><th>Button</th></tr></thead><tbody><tr><td><code class="ic">UP</code>, <code class="ic">DOWN</code>, <code class="ic">LEFT</code>, <code class="ic">RIGHT</code></td><td>Arrow keys</td></tr><tr><td><code class="ic">ENTER</code>, <code class="ic">OK</code>, <code class="ic">SELECT</code></td><td>OK, the center button</td></tr><tr><td><code class="ic">BACK</code></td><td>Back</td></tr><tr><td><code class="ic">HOME</code></td><td>Home</td></tr><tr><td><code class="ic">PLAY</code>, <code class="ic">PAUSE</code>, <code class="ic">STOP</code></td><td>Playback</td></tr><tr><td><code class="ic">REWIND</code>, <code class="ic">FF</code></td><td>Rewind and fast-forward. <code class="ic">FAST_FORWARD</code> also works.</td></tr></tbody></table></div>
-<p>Names aren't case-sensitive. On Tizen, any raw Samsung key name that starts with <code class="ic">KEY_</code>, such as <code class="ic">KEY_MENU</code>, is also sent as is. On webOS, unknown names are passed to the TV unchanged.</p>
-<h2 id="what-doesnt-work-on-tizen-and-webos">What doesn't work on Tizen and webOS<a class="anchor" href="#what-doesnt-work-on-tizen-and-webos" aria-label="Link to this section">#</a></h2>
-<p>TVs have no touch screen, so touch and typing keywords fail with <strong>E0105</strong> ("not supported") on Tizen and webOS:</p>
-<ul><li>Press Element, Detect And Press, Press By Coordinates, Press By Percentage, Select Dropdown Option</li><li>Swipe, Swipe By Percentage, Swipe From Element, Swipe Until Element Appears</li><li>Scroll, Scroll From Element, Scroll Until Element Appears</li><li>Enter Text, Enter Text Direct, Enter Text Using Keyboard, Enter Number, Clear Element Text, Get Text</li><li>Go Back. Use <code class="ic">Press Keycode,BACK</code> instead.</li></ul>
-<p>These still work: Launch App, Press Keycode, Assert Presence, Assert Visibility, Validate Element, Validate Screen, Is Element, Capture Screenshot, Sleep, Execute Script, the flow keywords, and Close And Terminate App.</p>
-<p>To type on a TV, move over the on-screen keyboard with arrow keys and press <code class="ic">ENTER</code> on each letter.</p>
+<p>On webOS, these names also work:</p>
+<div class="table-wrap"><table><thead><tr><th>Key name</th><th>Button</th></tr></thead><tbody><tr><td><code class="ic">VOL_UP</code> or <code class="ic">VOLUME_UP</code></td><td>Volume up</td></tr><tr><td><code class="ic">VOL_DOWN</code> or <code class="ic">VOLUME_DOWN</code></td><td>Volume down</td></tr><tr><td><code class="ic">MUTE</code>, <code class="ic">UNMUTE</code></td><td>Mute and unmute</td></tr><tr><td><code class="ic">CHAN_UP</code>, <code class="ic">CHAN_DOWN</code></td><td>Channel up and down</td></tr></tbody></table></div>
+<p>Names are not case-sensitive. On Tizen and webOS, a name that starts with <code class="ic">KEY_</code>, such as <code class="ic">KEY_MENU</code>, is sent as is. Any other name fails with <strong>E0104</strong>. The message lists the names that Optics knows.</p>
+<h2 id="find-elements-and-move-focus">Find elements and move focus<a class="anchor" href="#find-elements-and-move-focus" aria-label="Link to this section">#</a></h2>
+<p>A Tizen or webOS app is a web page, so <code class="ic">appium_find_element</code> finds elements in its DOM. Use these locators:</p>
+<div class="table-wrap"><table><thead><tr><th>Locator</th><th>What it matches</th></tr></thead><tbody><tr><td><code class="ic">Featured</code> or <code class="ic">text=Featured</code></td><td>An element whose visible text, <code class="ic">aria-label</code>, <code class="ic">title</code> or <code class="ic">alt</code> is exactly this text</td></tr><tr><td><code class="ic">css=.tile.active</code></td><td>An element that a CSS selector matches</td></tr></tbody></table></div>
+<p>A TV has no touch screen, so the element keywords press remote keys instead of taps:</p>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does on a TV</th></tr></thead><tbody><tr><td>Press Element</td><td>Presses the arrow keys until the element has focus, then presses <code class="ic">ENTER</code>.</td></tr><tr><td>Enter Text</td><td>Types into the element. See <a href="#type-on-a-tv">Type on a TV</a>.</td></tr><tr><td>Clear Element Text</td><td>Presses the backspace key of the on-screen keyboard until the field stops changing.</td></tr><tr><td>Get Text</td><td>Reads the text of the element, or the value of a field.</td></tr><tr><td>Assert Presence</td><td>Waits for the element to appear. Use it in place of Sleep.</td></tr></tbody></table></div>
+<p>Optics reads the focus from the page after each key press, so you do not count presses. Each focus move costs one key press, and a key press takes 1 to 2 seconds on a TV. When 60 key presses do not bring the focus to the element, the step fails with <code class="ic">E0201</code>. The same error shows when the element is not on the screen.</p>
+<h2 id="type-on-a-tv">Type on a TV<a class="anchor" href="#type-on-a-tv" aria-label="Link to this section">#</a></h2>
+<p>Enter Text works on a TV in two ways. Optics picks the way from the element:</p>
+<ul><li>**A real <code class="ic">&lt;input&gt;</code> or <code class="ic">&lt;textarea&gt;</code>.** Optics types the text into the field directly.</li><li><strong>A field that the app draws itself.</strong> Optics moves the focus over the on-screen keyboard and presses each key. When the keyboard does not show a character, Optics switches the layer (<code class="ic">123</code>, <code class="ic">abc</code>) and looks again.</li></ul>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Search,Enter Text,Search box,trail runner
+Search,Enter Text,Search box,&lt;enter&gt;">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Search</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span>Search box<span class="c-dim">,</span>trail runner
+<span class="c-mod">Search</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span>Search box<span class="c-dim">,</span>&lt;enter&gt;</code></pre></figure>
+<p>After the last key, Optics reads the field. If the field does not show the text, the step fails with <strong>E0405</strong>. No fallback value types the text a second time. A different letter case gives only a warning. Some apps choose the case themselves, for example a capital first letter.</p>
+<p>Enter Text also takes special keys in angle brackets:</p>
+<div class="table-wrap"><table><thead><tr><th>Text</th><th>What it presses</th></tr></thead><tbody><tr><td><code class="ic">&lt;space&gt;</code>, <code class="ic">&lt;backspace&gt;</code>, <code class="ic">&lt;enter&gt;</code></td><td>The key with that name on the on-screen keyboard</td></tr><tr><td><code class="ic">&lt;escape&gt;</code>, <code class="ic">&lt;up&gt;</code>, <code class="ic">&lt;down&gt;</code>, <code class="ic">&lt;left&gt;</code>, <code class="ic">&lt;right&gt;</code></td><td>The <code class="ic">BACK</code> or arrow key of the remote</td></tr></tbody></table></div>
+<p>Other special keys, such as <code class="ic">&lt;tab&gt;</code>, fail with E0105 on an app keyboard.</p>
+<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>When the screen has more than one field, press the field first with Press Element. Then Optics types into the field that has focus.</p></aside>
+<h2 id="keywords-that-fail-on-tizen-and-webos">Keywords that fail on Tizen and webOS<a class="anchor" href="#keywords-that-fail-on-tizen-and-webos" aria-label="Link to this section">#</a></h2>
+<p>Some keywords do not apply to a TV. They fail with <strong>E0105</strong> ("not supported"):</p>
+<ul><li>Press By Coordinates, Press By Percentage</li><li>Swipe, Swipe By Percentage, Swipe From Element, Swipe Until Element Appears</li><li>Scroll, Scroll From Element, Scroll Until Element Appears</li><li>Select Dropdown Option</li><li>Is Element with the <code class="ic">checked</code> or <code class="ic">unchecked</code> state</li><li>Enter Text Direct, Enter Text Using Keyboard and any keyword that enters text without an element</li><li>Go Back. Use <code class="ic">Press Keycode,BACK</code> instead.</li></ul>
+<p>Move the focus with an arrow key, or with Press Element on the element that you need.</p>
+<p>These keywords work:</p>
+<ul><li>Launch App, Press Keycode, Close And Terminate App, Sleep, Execute Script and the flow keywords</li><li>Press Element, Detect And Press, Enter Text, Enter Number, Clear Element Text and Get Text</li><li>Assert Presence, Assert Visibility, Validate Element, Validate Screen and Is Element</li></ul>
+<h2 id="know-the-limits-of-screenshots-and-video">Know the limits of screenshots and video<a class="anchor" href="#know-the-limits-of-screenshots-and-video" aria-label="Link to this section">#</a></h2>
+<p>A native screenshot makes a Tizen TV stop answering. For this reason <code class="ic">appium_screenshot</code> refuses it there with <strong>E0303</strong>. Use <code class="ic">camera_screenshot</code> to capture the screen, and see <a href="../../docs/reference/config#ble-and-camera">BLE and camera</a> for its settings.</p>
+<p>DRM-protected video appears black in a screenshot. To check playback, check elements in the app, such as a pause button or a progress bar.</p>
 <h2 id="example-open-a-title-from-a-grid">Example: open a title from a grid<a class="anchor" href="#example-open-a-title-from-a-grid" aria-label="Link to this section">#</a></h2>
 <p>A TV app usually shows rows of tiles. This module moves down one row, right one tile, opens it and starts playback. It checks the screen after each move that changes the page:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
@@ -220,7 +242,7 @@ Watch a shoe video,Go home">Copy</button><pre><code><span class="c-dim">test_cas
 <span class="c-mod">Watch a shoe video</span><span class="c-dim">,</span><b>Watch the video</b>
 <span class="c-mod">Watch a shoe video</span><span class="c-dim">,</span><b>Go home</b></code></pre></figure>
 <p>A few habits make TV tests reliable:</p>
-<ul><li><strong>Assert after each page change.</strong> Keys don't wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.</li><li><strong>Start from a known place.</strong> Begin each test with Launch App and an assertion on the first screen. Don't rely on where an earlier test left the focus.</li><li><strong>Remember that Validate Screen never fails a step.</strong> Use it for checks that are nice to have, and Assert Presence for checks that must pass.</li><li><strong>Use text you can see.</strong> On webOS, Assert Presence reads the screen with OCR, so check words that are drawn large and clear.</li></ul>
+<ul><li><strong>Assert after each page change.</strong> Keys do not wait for the app. Assert Presence waits for the next page, so the following key lands in the right place.</li><li><strong>Start from a known place.</strong> Begin each test with Launch App and an assertion on the first screen. Do not rely on where an earlier test left the focus.</li><li><strong>Remember that Validate Screen never fails a step.</strong> Use it for optional checks. Use Assert Presence for checks that must pass.</li><li><strong>Use the text that the page holds.</strong> A text locator must match the element text, <code class="ic">aria-label</code>, <code class="ic">title</code> or <code class="ic">alt</code> exactly.</li><li><strong>Let Optics move the focus.</strong> Press Element moves the focus for you. It still works when the layout changes.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/platforms/android">Test Android apps</a></li><li><a href="../../docs/elements/text-and-images">Find elements by text and image</a></li><li><a href="../../docs/reference/keywords/actions#press-keycode">Press Keycode</a></li><li><a href="../../docs/reference/keywords/verification">Verification keywords</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul>
         </div>
@@ -237,7 +259,7 @@ Watch a shoe video,Go home">Copy</button><pre><code><span class="c-dim">test_cas
           <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/platforms/tv.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
         </footer>
       </article>
-      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#before-you-begin">Before you begin</a></li><li class="toc-l2"><a href="#android-tv">Android TV</a></li><li class="toc-l2"><a href="#samsung-tizen">Samsung Tizen</a></li><li class="toc-l2"><a href="#lg-webos">LG webOS</a></li><li class="toc-l2"><a href="#check-the-setup">Check the setup</a></li><li class="toc-l2"><a href="#move-around-with-remote-keys">Move around with remote keys</a></li><li class="toc-l2"><a href="#what-doesnt-work-on-tizen-and-webos">What doesn't work on Tizen and webOS</a></li><li class="toc-l2"><a href="#example-open-a-title-from-a-grid">Example: open a title from a grid</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#before-you-begin">Before you begin</a></li><li class="toc-l2"><a href="#android-tv">Android TV</a></li><li class="toc-l2"><a href="#samsung-tizen">Samsung Tizen</a></li><li class="toc-l2"><a href="#lg-webos">LG webOS</a></li><li class="toc-l2"><a href="#check-the-setup">Check the setup</a></li><li class="toc-l2"><a href="#move-around-with-remote-keys">Move around with remote keys</a></li><li class="toc-l2"><a href="#find-elements-and-move-focus">Find elements and move focus</a></li><li class="toc-l2"><a href="#type-on-a-tv">Type on a TV</a></li><li class="toc-l2"><a href="#keywords-that-fail-on-tizen-and-webos">Keywords that fail on Tizen and webOS</a></li><li class="toc-l2"><a href="#know-the-limits-of-screenshots-and-video">Know the limits of screenshots and video</a></li><li class="toc-l2"><a href="#example-open-a-title-from-a-grid">Example: open a title from a grid</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
     </main>
   </div>
 
@@ -287,6 +309,6 @@ Watch a shoe video,Go home">Copy</button><pre><code><span class="c-dim">test_cas
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

@@ -17,7 +17,7 @@ Sign In,Press Element,${sign_in}
 On Appium and Selenium, put an [Assert Presence](https://optics-framework.org/docs/reference/keywords/verification#assert-presence) before an action when the next screen can be slow to load. For how `element`, `index`, `${name}` and the `aoi_*` parameters work, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
 
 **TV platforms:**
-On Samsung Tizen and LG webOS TVs, keywords that tap, swipe, scroll or type fail with error E0105. Use [Press Keycode](#press-keycode) to move focus and select. Android TV works like Android. See [TV](https://optics-framework.org/docs/platforms/tv).
+On Samsung Tizen and LG webOS TVs, Press Element, Enter Text and Clear Element Text press remote keys to move the focus. Keywords that tap a point, swipe or scroll fail with error E0105. Use [Press Keycode](#press-keycode) to press a single key. Android TV works like Android. See [TV](https://optics-framework.org/docs/platforms/tv).
 
 When `save_captures` is `true`, Optics saves a screenshot before each action to the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 
@@ -55,6 +55,7 @@ Good to know:
 - `offset_x` and `offset_y` apply only when the element was found by OCR or image. They're ignored for elements found in the UI tree.
 - When `element` is `${name}` with several values, Optics tries each one until it finds the element.
 - If [self-healing](https://optics-framework.org/docs/elements/self-heal) is turned on, it gets one try to recover before the step fails.
+- On Samsung Tizen and LG webOS TVs, Press Element presses the arrow keys until the element has focus. Then it presses `ENTER`. `repeat` presses `ENTER` that many times.
 
 ### Press By Percentage
 
@@ -81,6 +82,7 @@ Good to know:
 - Values are 0–100, not 0–1. `0.5` means half a percent, which taps the edge of the screen.
 - On Appium, decimals are cut off: `50.7` taps at 50 %.
 - We recommend Press Element instead. A fixed point breaks when the layout changes.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ### Press By Coordinates
 
@@ -106,6 +108,7 @@ Good to know:
 - On Appium, a failed tap fails the step with error E0401.
 - On Selenium, Optics clicks whatever element is at that point of the page.
 - To set `event_name`, write it by name: `Press By Coordinates,540,1600,event_name=tap_promo`.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ### Detect And Press
 
@@ -131,6 +134,7 @@ Good to know:
 - Use it for pop-ups that appear only sometimes, such as permission prompts or a newsletter sign-up.
 - Keep the timeout short. When the element never appears, the step waits the full timeout.
 - In Python the default timeout is 10 seconds.
+- On Samsung Tizen and LG webOS TVs, it moves the focus to the element and presses `ENTER`, as Press Element does.
 
 ### Select Dropdown Option
 
@@ -156,6 +160,7 @@ Good to know:
 - Optics taps the dropdown and picks the option if it's visible. Otherwise it finds the list that opened and scrolls it down half a list at a time, until the option appears or the list stops moving.
 - It assumes the list opens with its first option visible.
 - If the option isn't found, the error lists the options Optics did see.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ## Type
 
@@ -190,6 +195,7 @@ Good to know:
 - A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. An unknown name is typed literally.
 - Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. `@:${password}` also works.
 - In YAML, quote text that contains spaces.
+- On Samsung Tizen and LG webOS TVs, Optics types into a real `<input>` directly. For a field that the app draws, it presses the keys of the on-screen keyboard one by one. If the field does not show the text afterward, the step fails with error E0405 and no fallback value types the text again. `<space>`, `<backspace>` and `<enter>` press that key of the on-screen keyboard. `<escape>` and the arrow keys press remote keys. Other special keys fail with error E0105. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv).
 
 ### Enter Number
 
@@ -233,6 +239,7 @@ Good to know:
 
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
 - On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
 
 ### Enter Text Using Keyboard
 
@@ -256,6 +263,7 @@ Good to know:
 
 - Write special keys in angle brackets. `enter` without brackets types the word "enter".
 - Use it for apps that ignore text sent all at once, such as search fields that react to each key press.
+- On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
 
 ### Clear Element Text
 
@@ -280,10 +288,13 @@ Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
 - When the element is a caption or label, Optics clears the field that it names.
+- On Samsung Tizen and LG webOS TVs, Optics presses the backspace key of the on-screen keyboard until the field stops changing. If text stays in the field, the step fails with error E0405.
 
 ## Swipe and scroll
 
 Directions don't all mean the same thing. For the swipe keywords and Scroll From Element on Appium, the direction is the way your finger moves: `up` reveals content further down. Scroll, Scroll Until Element Appears and every Playwright gesture use the page's direction instead: `down` reveals content further down.
+
+Samsung Tizen and LG webOS TVs have no touch screen. Every keyword in this section fails there with error E0105. Press an arrow key with [Press Keycode](#press-keycode), or use Press Element to move the focus.
 
 ### Swipe
 
@@ -518,7 +529,9 @@ TV Browse,Press Keycode,ENTER
 Good to know:
 
 - Selenium doesn't support it. Use Enter Text with `<enter>` or `<tab>` instead.
-- On TVs, this is how you move focus and select. See [TV](https://optics-framework.org/docs/platforms/tv).
+- On Playwright, case and a `KEYCODE_` prefix do not matter: `esc`, `ARROWDOWN` and `KEYCODE_ENTER` work. An unknown name fails with error E0403 and lists the names that Optics knows.
+- On Tizen and webOS, an unknown remote key name fails with error E0104. The message lists the names that Optics knows. See [TV](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys) for the names.
+- On TVs, this is how you press one remote key. To move the focus to an element, use Press Element.
 
 ### Execute Script
 
@@ -532,6 +545,7 @@ Runs a driver command, such as an Appium `mobile:` command, or JavaScript in the
 ```csv
 Device,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"": 3}}"
 Web,Execute Script,"window.scrollTo(0, 0)"
+Web,Execute Script,return document.title.length,store_as=title_length
 ```
 
 ```yaml
@@ -542,7 +556,8 @@ Good to know:
 
 - In CSV, wrap a value that contains commas in double quotes, and double every quote inside it.
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
-- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as). On Playwright, give an expression such as `document.title`, not a `return` statement.
+- To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
+- On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
 - The BLE driver doesn't support it.
 
 ## Read and wait
@@ -569,6 +584,8 @@ Good to know:
 
 - Add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as) to keep the text in a variable. To check text, use [Assert Text](https://optics-framework.org/docs/reference/keywords/verification#assert-text).
 - When the element is found only by OCR or image, Get Text returns nothing and the step still passes. With `store_as`, the step fails.
+- On a web page that Appium drives in a mobile browser, Get Text reads the text of the web element.
+- On Samsung Tizen and LG webOS TVs, Get Text reads the text of the element, or the value of a field.
 - In Python, Get Text takes `element` only and returns the text.
 
 ### Sleep

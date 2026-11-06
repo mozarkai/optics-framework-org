@@ -47,6 +47,7 @@ Type a keyword and its values, separated by spaces, and press Enter:
 - Write keyword names in `snake_case` or in words: `press_element`, `Press Element` and `press element` all work.
 - Put quotes around a value that contains spaces.
 - Type `${` to pick from the elements already defined in your project.
+- Put a name inside a longer value, such as `enter_text ${email_field} "ava+${tag}@birch.shop"`. Live uses the first value of `tag`. A name that is not defined fails the step.
 - Type `name=value` to give a parameter by name. For example, `press_element "Add to cart" index=1` presses the second match. On Appium, `index=` also picks among native elements with the same text.
 - Type `go_back` to go back one screen. Type `assert_text ${greeting} "Hi, Ava"` to fail the step when the element shows other text.
 - Press Tab to complete a keyword name. The rest of its parameters appear in grey as a hint.
@@ -80,8 +81,8 @@ Names in `/save` can't contain spaces. Use underscores, or rename the module in 
 
 `/save` does not write a value that you type into a secret field, such as a password. The step `enter_text ${password_field} "correct horse"` is saved as `Enter Text,${password_field},${password_field_value}`. The elements CSV gets the row `password_field_value,<redacted>`. Before you run the test, put the real value in that row, or read it with `Read Data`. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
-**Common mistake:**
-When you type into a raw locator, such as `enter_text css=#user-name ava`, on a screen with a password field, `/save` also writes that value as `<redacted>`. Until the fix ships, type into named elements, such as `${email_field}`.
+**Tip:**
+When a password field is on screen, `/save` also hides a value that you type into a raw locator, such as `enter_text css=#user-name ava`. This makes sure that no password goes into your files. To keep the value, press the field first, or type into a named element, such as `${email_field}`.
 
 ## Commands and keys
 

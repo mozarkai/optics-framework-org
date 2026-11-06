@@ -95,14 +95,13 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 |---|---|---|
 | `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
 | `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Meant to run before each test. It runs only before the first test case. |
-| `teardown` without `suite` | Per-test teardown | Meant to run after each test. It runs only after the first test case. |
-
-We recommend `Suite Setup` and `Suite Teardown`, which work as expected. Avoid per-test `Setup` and `Teardown` until this is fixed; open and close the app inside each test case's own modules if you need that.
+| `setup` without `suite` | Per-test setup | Before each test case. |
+| `teardown` without `suite` | Per-test teardown | After each test case. |
 
 - A failing setup doesn't stop the test cases after it.
 - The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
 - Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
+- Each run of a per-test setup or teardown has its own result in the report, named `Setup (<test case>)` or `Teardown (<test case>)`.
 
 ## Modules
 
@@ -156,13 +155,10 @@ Parameter rules:
 
 - **Empty cells are dropped**, and the values after them move left. You can't skip a parameter by leaving its cell blank. Use a named parameter instead.
 - **Named parameters** are written `name=value`, for example `index=0` or `timeout_str=20`. They work only when `name` is a real parameter of that keyword. Anything else, such as `text=Sign in` or `css=#search`, stays a positional value.
-- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!`, is replaced with its first value. An unknown name fails the step with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
+- **Variables** written as a whole cell, `${email_field}`, are replaced with the element's values. A variable inside a longer value, as in `Hello ${name}!` or `${first} ${last}`, is replaced with its first value. An unknown name fails the step with [E0403](https://optics-framework.org/docs/reference/errors#e04-keywords-and-parameters). Write `$${name}` to type a literal `${name}`.
 - **Locators first.** If a keyword's first parameter is `element`, a first value that starts with `text=`, `css=` or `xpath=` is the element. `Enter Text,text=Name,Ava` types `Ava` into the element `text=Name`.
 - **store_as.** Add `store_as=<name>` to a step to save the keyword's result as `${name}` for later steps and test cases. Lists and dictionaries are saved as JSON. See [Store a result](https://optics-framework.org/docs/reference/keywords/#store-as).
 - Values starting with `/`, `//` or `(` are always positional, so XPaths are never mistaken for named parameters.
-
-**Common mistake:**
-A cell can start with `${`, end with `}` and hold more than one variable, such as `${first} ${last}`. This cell fails at run time with `Element not found`, but `dry_run` passes. Until the fix ships, put text before the first variable or after the last one, or build the value with `Evaluate` first.
 
 In YAML, a step is one string. The keyword name is matched first, and the rest is split on spaces. Wrap a value with spaces in quotes: `"Trail Runner 2"`. Wrap multi-word module names you pass as parameters in quotes too: `Run Loop "Add To Cart" 3`.
 
@@ -225,7 +221,7 @@ Text like `(optional)` or `Size [US]` is read as XPath or CSS. Add `text=` in fr
 
 ## Error definitions
 
-A CSV file of messages that mean your app is in a bad state. At the end of `optics execute`, Optics checks the text on the final screen against each `match_string`.
+A CSV file of messages that mean your app is in a bad state. In `optics execute`, Optics checks the text on the final screen against each `match_string`. It reads the screen before Suite Teardown when the suite has one.
 
 `test_data/error_definitions.csv`:
 
@@ -243,7 +239,7 @@ BIRCH_003,Out of stock,Product page shows out of stock,medium
 | `description` | No | Free text, shown in the results. |
 | `severity` | No | Free text, for example `critical`, `high` or `medium`. |
 
-There's no YAML form. A match adds a failing test case to `junit_output.xml` but doesn't change the exit code. See [Detect on-screen errors](https://optics-framework.org/docs/run/error-detection).
+There is no YAML form. A match adds a failing test case to `junit_output.xml` and gives exit code `1`. See [Catch error screens](https://optics-framework.org/docs/run/error-detection).
 
 ## API definitions
 
@@ -290,11 +286,11 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Backslash sequences.** In any cell, `\n` becomes a new line, `\t` a tab, `\r` a carriage return, and `\\` a single backslash.
 
-**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files and the result tree. Every driver removes the prefix before typing. Optics also masks values saved under secret names. See [Logging](https://optics-framework.org/docs/reference/config#logging).
+**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files, `logs.json`, `junit_output.xml`, the result tree and error output. Every driver removes the prefix before typing. Optics also masks these items: values saved under secret names, passwords in URLs, and secret values from config.yaml. See [Hide sensitive values](https://optics-framework.org/docs/advanced/variables#hide-sensitive-values).
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
-**YAML quoting.** A quoted value that contains `=` keeps its quotes. Write conditions without spaces instead: `Condition ${size}=='9' "Pick Size" "Show Error"`.
+**YAML quoting.** Optics removes the quotes around a value, also when the value contains `=`: `Condition "${size} == '9'" "Pick Size" "Show Error"`.
 
 ## Outputs
 
@@ -308,6 +304,8 @@ birch-tests/execution_output/
 ├── execution_logs.log                             # file_log: true
 ├── 2026-10-09T15-04-05-123456-pre_press_element.jpg
 ├── ...-press_element_element_detection_result.jpg
+├── ...-failure_<test case>.jpg                    # when a test case fails
+├── ...-failure_<test case>.xml                    # when a test case fails
 ├── ...-end_of_run.jpg
 ├── page_sources_log.xml
 ├── failed_steps_elements.json                     # when a step fails
@@ -316,7 +314,7 @@ birch-tests/execution_output/
 
 | File | When it's written | What it holds |
 |---|---|---|
-| `junit_output.xml` | Every run, including dry runs | One test case per test, with each module and keyword, their status, timings and log lines. Error detection adds a failing `on-screen-error-detection` test case. If another session is already writing the file, Optics names it `junit_output_<session_id>.xml`. |
+| `junit_output.xml` | Every run that starts, including dry runs. It is also written when you stop the run with Ctrl+C or SIGTERM. | One test case per test, with each module and keyword, their status (`PASS`, `FAIL`, `ERROR` or `NOT_RUN`), start and end times, and log lines. The suite and every `classname` are named after the project folder. Error detection adds a failing `on-screen-error-detection` test case. If another session in the same process is already writing the file, Optics names it `junit_output_<session_id>.xml`. See [Read the results](https://optics-framework.org/docs/run/results#read-the-junit-report). |
 | `logs.json` | `json_log: true` | A JSON list of every test case, module and keyword event with status and timings. |
 | `internal_logs.log`, `execution_logs.log` | `file_log: true` | Text logs. Each rotates at 10 MB. |
 | `<time>-pre_<keyword>.jpg` | Every keyword that finds an element, with `save_captures: true` | The screen before Optics looked for the element. |
@@ -325,7 +323,8 @@ birch-tests/execution_output/
 | `<time>-<keyword>_with_aoi.jpg` | The step used an area of interest, with `save_captures: true` | The screen with the area drawn in blue. |
 | `<time>-<keyword>.jpg` | Gestures and coordinate keywords, such as `Swipe`, `Scroll`, `Press By Percentage`, `Press Keycode` | The screen when the step ran. |
 | `<time>-capture_screenshot.jpg` | `Capture Screenshot`, `Get Screen Elements` | Only when `save_captures` is `true`. |
-| `<time>-end_of_run.jpg` | End of `optics execute`, if the app is still open | The final screen. |
+| `<time>-failure_<test case>.jpg` and `.xml` | A test case failed, with `save_captures: true`. Web pages write `.html`. | The screen and the UI tree where the test case ended. |
+| `<time>-end_of_run.jpg` | End of `optics execute`, before Suite Teardown, if the app is still open | The final screen. |
 | `page_sources_log.xml` | Appium page source reads and the end of the run | Each UI tree, with a timestamp. |
 | `page_sources_log.html` | Web page source reads and the end of the run | Each page's HTML, with a timestamp. |
 | `failed_steps_elements.json` | A step failed, with `save_captures: true` | For each failed step: the test case, the step and the elements on the screen, with secrets masked. Use it to fix the locator. |

@@ -38,7 +38,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `json_log` | `false` | Writes a JSON array of every test, module and keyword event to `logs.json` at the end of the run. |
 | `json_path` | None | Where to write the JSON events instead of `<output>/logs.json`. `~` is expanded. |
 | `console` | `true` | **Has no effect.** Nothing reads it. Use `log_level` to control console output. |
-| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. Relative paths are relative to the folder you run `optics` from. |
+| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. A path that starts with `./` or `../` is relative to the project folder. Other relative paths are relative to the folder you run `optics` from. |
 | `include` | None | Run only these test cases. See [include and exclude](#include-and-exclude). |
 | `exclude` | None | Skip these test cases. |
 | `ai_self_heal` | `false` | Lets an LLM try to recover when an element can't be found. See [ai_self_heal](#ai-self-heal). |
@@ -49,7 +49,60 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `project_path` | The project folder | The CLI always sets this to the folder you pass, so leave it out. It only matters for the Python SDK. |
 
 **Note:**
-If you set `execution_output_path` yourself, create the folder first. JUnit results and logs create their own folders, but screenshots fail to save without a warning if the folder is missing.
+If you set `execution_output_path` yourself, create the folder first. This applies to a `./` path too. JUnit results and logs create their own folders, but screenshots fail to save without a warning if the folder is missing.
+
+## Use environment variables and project paths
+
+Any text value in config.yaml can name an environment variable or a file in the project. Use this to keep secrets out of the file, and to keep a project runnable after you copy it to another computer. Optics resolves each reference when it reads the file.
+
+| Write | Optics uses |
+|---|---|
+| `$NAME` or `${NAME}` | The value of `NAME`. If `NAME` is not set or is empty, the command stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). |
+| `${NAME:-default}` | The value of `NAME`, or `default` when `NAME` is not set or is empty. |
+| `$$` | A literal `$`. |
+| `./file` or `../file` | The full path of the file, counted from the project folder and not from the folder you run `optics` in. |
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        $from: $PW_CAPS
+        viewport: {width: 800, height: 600}
+        storage_state: ./auth.json
+execution_output_path: ./out/run2
+log_level: ${LEVEL:-INFO}
+```
+
+- A reference can be part of a longer string, for example `https://${HUB_HOST}/wd/hub`.
+- A variable can hold a `./` path. Optics resolves it in the same way.
+- A `./` path must point to a file or folder that exists. The output paths `execution_output_path`, `log_path`, `json_path` and `project_path` do not need to exist.
+- The result is always a string. Optics converts it for its own settings, such as `enabled`, `file_log` and `halt_duration`. A driver capability that needs a number or a boolean gets the text. For example, `headless: ${HEADLESS:-true}` fails on Playwright with `headless: expected boolean, got string`. Use `$from` for such values.
+
+To take a whole map from one variable, write `$from` in the map and set the variable to a JSON object. The keys next to `$from` replace the keys of the object. Optics does not resolve references or paths inside the object, and the JSON types stay as they are:
+
+```shell
+$ export PW_CAPS='{"browser": "chromium", "headless": true, "viewport": {"width": 100, "height": 100}}'
+```
+
+With this variable, the example above starts Chromium without a window and with an 800 x 600 page.
+
+If a reference or path fails, the command stops before the first test and names the problem. These are the messages that `optics execute` and `optics doctor` show:
+
+```terminal
+The config uses $LEVEL, but the LEVEL environment variable is not set or is empty.
+The config refers to ./missing.json, but /home/ava/birch-tests/missing.json does not exist.
+The config takes $from: $PW_CAPS, but its value is not a JSON object.
+```
+
+The last message does not show the value of the variable.
+
+**Note:**
+The commands `optics execute`, `optics dry_run`, `optics live` and `optics doctor` resolve references. The Python SDK, `optics serve` and `optics mcp` take the settings as data and resolve nothing. `optics configure --edit` keeps references as you wrote them when it saves the file.
+
+A Playwright `url` and `capabilities.headers` are the exception. The driver resolves them when it connects, so it can mask the values in its errors. An unset variable in them still stops the command when it reads the file. Do not use `$from` in `headers`. Write each header on its own line.
 
 ## Engine lists
 
@@ -101,7 +154,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam or a TCP frame server. Used with `ble`. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`. |
 
 `optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
 
@@ -111,7 +164,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 |---|---|---|
 | `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | None. Credentials come from `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.credentials_path`: a service account key file. Without it, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -135,6 +188,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `use_vertexai` | From `GOOGLE_GENAI_USE_VERTEXAI` | `true` uses Vertex AI instead of the Gemini API. |
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
+| `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
 
 ```yaml
 llm_models:
@@ -145,6 +199,19 @@ llm_models:
 ```
 
 Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
+
+To use a service account key file, set `credentials_path` and leave out the API key:
+
+```yaml
+llm_models:
+  - gemini:
+      enabled: true
+      capabilities:
+        credentials_path: ./credentials/vertex.json
+        location: us-east4
+```
+
+`credentials_path` selects Vertex AI. The project is the `project_id` of the key, unless you set `project`. The location is `global`, unless you set `location`. If the file is missing or is not a service account key, Optics stops with E0501. This happens before the first test when `ai_self_heal` is `true`.
 
 #### openai
 
@@ -312,18 +379,35 @@ log_level: INFO
 
 Selenium won't start with empty `capabilities` or without `browserName`. The file `optics configure` writes for `web-selenium` has `capabilities: {}`, so add `browserName` before you run.
 
+Chrome starts with `--disable-blink-features=AutomationControlled` and without the automation switch, so `navigator.webdriver` is `false`. Optics adds no other Chrome argument. In a Linux container or in CI, pass `--no-sandbox` and `--disable-dev-shm-usage` in `goog:chromeOptions`:
+
+`config.yaml (Selenium in a container)`:
+
+```yaml
+driver_sources:
+  - selenium:
+      enabled: true
+      url: "http://localhost:4444/wd/hub"
+      capabilities:
+        browserName: chrome
+        goog:chromeOptions:
+          args: ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage"]
+```
+
+Optics sends these arguments with its own. It sends the other keys of `goog:chromeOptions`, such as `excludeSwitches`, to the browser as well.
+
 ### Appium capabilities
 
 Optics reads `platformName`, the app id and `browserName`. It passes every other capability to Appium unchanged. You can write any key with the `appium:` prefix, for example `appium:udid`.
 
 | platformName | App id capability | Defaults Optics adds (your values win) |
 |---|---|---|
-| `Android` | `appPackage` and `appActivity` | `noReset`, `newCommandTimeout: 3600`, `forceAppLaunch`, `shouldTerminateApp`, `ignoreHiddenApiPolicyError`, `settings: {waitForIdleTimeout: 1000}` and a few others |
-| `iOS` | `bundleId` | The same mobile defaults without `ignoreHiddenApiPolicyError`, and `settings: {waitForIdleTimeout: 1}` |
+| `Android` | `appPackage` and `appActivity` | `newCommandTimeout: 3600`, `noReset: true`, `forceAppLaunch: true`, `shouldTerminateApp: true`, `nativeWebScreenshot: true`, `connectHardwareKeyboard: true`, `ignoreHiddenApiPolicyError: true` and `settings: {waitForIdleTimeout: 1000}` |
+| `iOS` | `bundleId` | The same defaults without `ignoreHiddenApiPolicyError`, with `ensureWebviewsHavePages: true` and `settings: {waitForIdleTimeout: 1}` |
 | `TizenTV` | `appPackage` | `newCommandTimeout: 3600`, `rcMode: remote`, `noReset: true` |
 | `LGTV` | `appId` | `newCommandTimeout: 600`, `rcMode: rc`, `useSecureWebsocket: true`, `autoExtendDevMode: false`, `noReset: true` |
 
-Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). To attach to an Appium session that's already running, add `appium:existingSessionId`. Optics starts a new session if it can't attach.
+Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Optics waits up to 300 seconds for Appium to create a session. To attach to an Appium session that is already running, add `appium:existingSessionId`. Optics starts a new session if it cannot attach.
 
 **Idle wait.** Before each action, Appium waits until the app is idle. `waitForIdleTimeout` sets the limit: 1000 ms on Android and 1 s on iOS. Optics merges your `appium:settings` with its defaults key by key. Set `0` to turn off the wait:
 
@@ -350,9 +434,12 @@ Optics reads each key from `capabilities` or from the top level of the `playwrig
 |---|---|---|
 | `browser` | `chromium` | `chromium`, `firefox` or `webkit`. `optics setup` downloads only Chromium. |
 | `headless` | `false` | `true` starts the browser without a window. A remote browser ignores it. |
+| `channel` | None | `chrome`, `chrome-beta` or `msedge`. Starts that installed browser in place of Playwright's Chromium. A remote browser ignores it. |
+| `profile` | None | A local Chrome or Edge profile: its directory (`Default`, `Profile 1`), its name or its account email. The run starts with a copy of its sign-ins. Not with `url`, `storage_state` or `user_data_dir`. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). |
+| `user_data_dir` | None | A folder that the browser keeps as its user data directory. Sign-ins stay from run to run. Not with `url`, `storage_state` or `profile`. A path that starts with `./` must exist. |
 | `viewport` | `{width: 1280, height: 800}` | The page size. It replaces the screen size of a `device`. |
 | `device` | None | A Playwright device name, such as `"iPhone 15"`. It sets the screen size, user agent and touch input. An unknown name fails with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). |
-| `storage_state` | None | A browser state file that Playwright saved, relative to the project folder. The run starts with its cookies and storage. See [Start signed in](https://optics-framework.org/docs/platforms/web#start-signed-in). |
+| `storage_state` | None | A browser state file that Playwright saved, relative to the project folder. The run starts with its cookies and storage. Not with `profile` or `user_data_dir`. See [Start signed in from a saved file](https://optics-framework.org/docs/platforms/web#start-signed-in-from-a-saved-file). |
 | `protocol` | `cdp` | How Optics connects to the browser in `url`: `cdp` (Chromium only) or `playwright`. See [Use a remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
 | `headers` | None | HTTP headers for the connection to a remote browser, as `{name: value}`. |
 | `context` | `new` | `existing` uses the remote browser's own context and open tab. You cannot use it with `device` or `storage_state`. |
@@ -363,7 +450,9 @@ Optics reads each key from `capabilities` or from the top level of the `playwrig
 | `connect_timeout_ms` | `90000` | The limit for the connection to a remote browser. |
 | `action_timeout_ms` | `15000` | The limit for each other browser call, such as a key press or a screenshot. |
 
-Set `url` on the entry to connect to a remote browser instead of starting one. `${NAME}` in `url` or in a `headers` value is read from the environment. If the variable is not set, the run stops with E0501. `optics serve` and `optics mcp` refuse `${NAME}` and a `storage_state` file path.
+Optics ignores a capability that it does not know and logs a warning. Local Chromium starts without the automation flags, so `navigator.webdriver` is `false`.
+
+Set `url` on the entry to connect to a remote browser instead of starting one. `${NAME}` in `url` or in a `headers` value is read from the environment. If the variable is not set, the run stops with E0501. Sessions that `optics serve` and `optics mcp` start refuse `${NAME}` in `url` and `headers`, a `storage_state` file path and `user_data_dir`. They accept `profile` only from `optics mcp` on stdio.
 
 ## TV
 
@@ -385,8 +474,7 @@ driver_sources:
         appium:app: /path/to/birch.wgt
         appium:chromedriverExecutableDir: /path/to/chromedrivers
 elements_sources:
-  - appium_page_source: {enabled: true}
-  - appium_screenshot:  {enabled: true}
+  - appium_find_element: {enabled: true}
 ```
 
 `config.yaml (LG webOS)`:
@@ -402,10 +490,11 @@ driver_sources:
         appium:deviceHost: 192.168.1.50
         appium:appId: com.birch.tv
 elements_sources:
+  - appium_find_element: {enabled: true}
   - appium_screenshot: {enabled: true}
 ```
 
-On Tizen and webOS, touch and typing keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Move around with `Press Keycode` and remote keys: `UP`, `DOWN`, `LEFT`, `RIGHT`, `ENTER`, `BACK`, `HOME`, `PLAY`, `PAUSE`, `STOP`, `REWIND`, `FF`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
+On Tizen and webOS, `appium_find_element` finds `text=` and `css=` locators in the app's DOM, and the element keywords press remote keys to move the focus. Touch keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). A Tizen TV needs `camera_screenshot` in place of `appium_screenshot`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
 
 ## BLE and camera
 
@@ -430,7 +519,7 @@ elements_sources:
   - camera_screenshot:
       enabled: true
       capabilities:
-        camera_index: 0                   # a webcam, or url: "192.168.1.20:9000" for a TCP frame server
+        camera_index: 0                   # a webcam, or url: for a screenshot URL or a TCP frame server
 text_detection:
   - easyocr: {enabled: true}
 image_detection:
@@ -448,9 +537,22 @@ image_detection:
 | `camera_screenshot` capability | Default | What it does |
 |---|---|---|
 | `camera_index` | None | The webcam number. Use this or `url`. |
-| `url` | None | A TCP frame server as `host:port`. |
-| `header_size` | `8` | Bytes in the frame server's length header: `4` or `8`. |
-| `byte_order` | `little` | The length header's byte order: `little` or `big`. |
+| `url` | None | An `http://` or `https://` URL that Optics fetches with `GET`, or a TCP frame server as `ip:port`. |
+| `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
+| `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
+| `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
+
+With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
+
+If you set neither `url` nor `camera_index`, Optics reads these environment variables. A value in config.yaml wins over a variable.
+
+| Variable | Used for |
+|---|---|
+| `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
+| `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
+
+Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
 
 The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](https://optics-framework.org/docs/platforms/production).
 
@@ -486,7 +588,11 @@ With `file_log: true` and no `execution_output_path`, Optics also writes a copy 
 Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
 
 - Values you write with the `@:` prefix, such as `@:s3cret`.
-- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key` or `apikey`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Text values in config.yaml under a secret name, such as `appium:keystorePassword`. Also the values of environment variables with a secret name, such as `HUB_TOKEN`. A key that ends in `_env`, such as `api_key_env`, holds the name of a variable and is not a secret.
+- Passwords in URLs (`https://user:****@host`) and query parameters with a secret name (`?token=****`).
+
+Optics also masks secret-named capability values in the debug logs of Appium and Selenium sessions.
 
 See [Read results](https://optics-framework.org/docs/run/results).
 

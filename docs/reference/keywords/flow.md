@@ -24,6 +24,8 @@ Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 
 Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, `optics live`, `optics serve` and [Python](https://optics-framework.org/docs/create/python).
 
+A suite that uses only flow control keywords needs no driver. Set every `driver_sources` entry to `enabled: false` and run it with `optics execute`. If a module that the selected test cases reach uses an action, app or verification keyword, the run stops with `E0104` and the message `No driver enabled`. Assert Equality is a verification keyword.
+
 ## Reuse and repeat
 
 ### Execute Module
@@ -57,7 +59,7 @@ Runs a module a number of times, or once for each value in one or more lists.
 |---|---|---|
 | `target` | Required | The module to run. |
 | then one of: | | |
-| `count` | | A whole number of times to run, 1 or more. Write the number itself. |
+| `count` | | A whole number of times to run, 1 or more, or a `${name}` that holds one. |
 | `variable`, `values`, … | | Pairs of a variable name and its list of values. Add as many pairs as you need. |
 
 `values` can be:
@@ -90,10 +92,8 @@ Good to know:
 - With several lists, the loop runs as many times as the shortest list.
 - The variable keeps its last value after the loop ends.
 - A list stored in an elements file needs CSV quoting if it's JSON: `featured,"[""Trail Runner 2"",""Pace Knit""]"`. A pipe list needs none: `featured,Trail Runner 2|Pace Knit`.
+- The count can be a variable: `Run Loop,Add Trail Runner,${n}`. Optics reads the value of `n` when the step runs.
 - An odd number of parameters after the target, other than a single count, fails with error E0403.
-
-**Common mistake:**
-A count from a variable, such as `Run Loop,Add Trail Runner,${n}`, fails with error E0403 "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number.
 
 ## Branch
 
@@ -128,7 +128,7 @@ Good to know:
 - A module condition really runs its steps. Use one that only checks, such as a module with a single Assert Presence.
 - If no condition is true and there's no else target, the step passes and nothing runs.
 - If the target module fails, the step fails.
-- In YAML, write the expression without spaces: `${payment}=='card'`. A quoted expression that contains `=` keeps its quotes and fails.
+- In YAML, quote an expression that contains spaces: `"${payment} == 'card'"`.
 
 ### Compare numbers
 
@@ -187,7 +187,7 @@ Good to know:
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
 - **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
-- In YAML, write filters without spaces.
+- In YAML, quote a filter that contains spaces: `"role == 'admin';select=email"`.
 
 ### Evaluate
 
@@ -253,7 +253,7 @@ Good to know:
 - Only days work. `+1 week` fails with error E0403. Put a space between the number and `days`.
 - `today` and `now` don't read the clock. They keep the start date as it is, which is useful to reformat a date.
 - An ambiguous date such as `03/04/2026` is read as March 4.
-- Use a variable name that has no value yet, and don't add it to your elements file. If the name already has a value, Date Evaluate adds the new date after it, and `${name}` keeps giving the old value. For the same reason, don't reuse the name inside a loop.
+- The new date replaces the earlier value of the variable, so you can use the same name in a loop.
 - Common format codes are `%d` day, `%m` month number, `%B` month name, `%b` short month name and `%Y` year.
 
 ### Invoke API
@@ -322,7 +322,8 @@ Good to know:
 - The body is sent as JSON. Every request has a 30-second timeout.
 - `extract` maps a variable name to a JSONPath. `$.a.b`, `a.b` and `[0]` indexing all work.
 - Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step.
-- `expected_status`, `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
+- With `expected_result.expected_status` set, the step fails when the response has another HTTP status, such as `API 'Ping' returned status 200, expected 201.` The check runs before Optics extracts a value or runs an assertion. The failure has no error code.
+- `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
 - With `expected_result`, a response that isn't JSON fails the step with error E0403.
 - Each call is logged to `api_details.log` and `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 - The top-level key must be `api:`. A file that starts with `apis:` is ignored.

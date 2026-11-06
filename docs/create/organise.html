@@ -103,8 +103,8 @@ Close Birch,Close And Terminate App">Copy</button><pre><code><span class="c-dim"
 <span class="c-mod">Launch Birch</span><span class="c-dim">,</span><b>Launch App</b>
 <span class="c-mod">Close Birch</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
 <p>Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so <code class="ic">Birch Suite Setup</code> works too. Setup and teardown always run, even when you <a href="#run-only-some-test-cases">select which tests run</a>.</p>
-<aside class="callout callout-warning"><p class="callout-title">Per-test Setup and Teardown</p><p>Test cases named just <strong>Setup</strong> or <strong>Teardown</strong> are meant to run around every test case. They wrap only the first test case, so do not rely on them yet. Put shared steps in a module and list it at the start of each test case instead, as <code class="ic">Sign In</code> is above.</p>
-<p>Avoid "setup" and "teardown" in ordinary test names for the same reason: a test called <em>Setup wizard works</em> is treated as the per-test setup.</p></aside>
+<p>A test case named just <strong>Setup</strong> runs before each test case, and <strong>Teardown</strong> runs after each one. Use them to give every test a fresh start.</p>
+<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>Do not use "setup" or "teardown" in other test names. A test called <em>Setup wizard works</em> becomes the per-test setup.</p></aside>
 <h2 id="reuse-modules">Reuse modules<a class="anchor" href="#reuse-modules" aria-label="Link to this section">#</a></h2>
 <p>A module can appear in as many test cases as you like. Keep each module small and focused on one screen or one task, such as <em>Sign In</em>, <em>Search For Shoes</em> or <em>Open Cart</em>. When that screen changes, you fix one module and every test that uses it follows.</p>
 <p>To call one module from inside another, use <code class="ic">Execute Module</code>:</p>
@@ -227,6 +227,6 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=32d6e71075" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
 </body>
 </html>

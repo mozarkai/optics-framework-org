@@ -29,14 +29,13 @@ Search,Enter Text,${search_bar},${search_term}
 | You write | Optics uses |
 |---|---|
 | `${search_term}` as the whole cell | Each value in turn, the same as [element fallbacks](https://optics-framework.org/docs/elements/define) |
-| `Hi ${first}!` inside other text | The first value. An unknown name fails the step. |
+| `Hi ${first}!` or `${first} ${last}` | The first value of each name. An unknown name fails the step. |
 | `$${first}` | The text `${first}`, not the value |
 | `@:${password}` | The value, typed without `@:` and hidden in logs |
 
 `Evaluate`, `Condition`, the query of `Read Data` and the URL, headers and body of `Invoke API` put in the first value themselves. [Values are text](#values-are-text) shows how they quote it.
 
-**Two variables fill a whole cell:**
-A cell that starts with `${` and ends with `}`, such as `${first} ${last}`, fails with "Element not found: first} ${last". The dry run does not find this. Until the fix ships, put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first.
+`optics live` follows the same rules, so a name inside a longer value works in a recorded step too.
 
 ## Keep a value for later
 
@@ -87,8 +86,7 @@ Check Total,Evaluate,${expected_total},${price} * 2
 Check Total,Assert Presence,${expected_total}
 ```
 
-**Loop count from a variable:**
-`Run Loop,Add One Item,${n}` fails with "Expected an integer for loop count, got '${n}'." Until the fix ships, write the count as a number: `Run Loop,Add One Item,3`.
+`Run Loop` takes its count from a variable too: `Run Loop,Add One Item,${n}`.
 
 ## How long a value lasts
 
@@ -108,9 +106,6 @@ Element_Name,Element_ID
 access_token,placeholder
 ```
 
-**Placeholder for Date Evaluate:**
-Do not add a placeholder row for a `Date Evaluate` name. Date Evaluate adds its result after the old value, so `${delivery_date}` gives `placeholder`. The dry run defines the name without a row.
-
 ## Values are text
 
 Every value is text, even when it looks like a number. That matters in expressions:
@@ -123,13 +118,19 @@ Evaluate allows arithmetic (`+ - * / % **`), comparisons, `and`, `or`, `not` and
 
 ## Hide sensitive values
 
-Optics shows `****` in place of a secret value in logs, in the run tree and in `failed_steps_elements.json`. A value is secret when all of these are true:
+Optics writes `****` in place of a secret in the console, the log files, `logs.json`, `junit_output.xml`, `failed_steps_elements.json`, the run tree and error output. Optics masks these items:
 
-- `store_as` or `Read Data` set the value.
-- The name contains a secret word: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key` or `apikey`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
-- The value has 4 or more characters.
+- A value that `store_as` or `Read Data` sets under a secret name.
+- A value in the elements file or a step that starts with `@:`.
+- A text value in `config.yaml` under a secret name, such as `api_key`. This includes a value that the config reads from an environment variable with a secret name.
+- A password in a URL: `https://user:****@host`.
+- A query parameter with a secret name: `?token=****`.
 
-Values from the elements file, `Evaluate`, `Run Loop` and an `Invoke API` `extract` are not hidden. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
+A name is secret when it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
+
+A stored value or a config value must have 4 or more characters to be masked.
+
+Optics does not hide a value from the elements file, `Evaluate`, `Run Loop` or an `Invoke API` `extract` by its name. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
 
 For real secrets, do not commit them. Read them from the environment at run time:
 

@@ -44,29 +44,29 @@ The install scripts include it. With pip, install it yourself: `pip install "opt
 
 ## Setting up a project
 
-### "No driver enabled in …/config.yaml"
+### "Cannot start: E0104": No driver enabled in …/config.yaml
 
-No entry under `driver_sources` has `enabled: true`. Optics also prints this when it couldn't read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults.
+No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow) needs no driver.
 
 - Run `optics doctor <project>`. Its `config: file` row shows whether the file parses.
 - Set `enabled: true` on one driver, or run `optics configure <project>` to write a working config.
 - Check indentation: each engine is a list item, as in `- appium:` followed by its settings indented below.
 
-### "Missing required files in …: test_cases, modules"
+### "Cannot start: E0501": Missing required files in …: test_cases, modules
 
 Optics finds files by their header row, not their names, and found no test cases file or no modules file.
 
 Check the first line of each file: `test_case,test_step` for test cases and `module_name,module_step,param_1,…` for modules. Case does not matter. A spreadsheet app can add an invisible character to the first cell when it saves as "CSV UTF-8", so save as plain CSV. See [How Optics finds your files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files).
 
-### "Cannot start" panel: "No Appium server reachable at …"
+### "Cannot start: E0102": No Appium server reachable at …
 
-Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there.
+Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
 Start the server in another terminal with `appium`, then run again. If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
 
-### "Cannot start" panel for Selenium
+### "Cannot start: E0102": No Selenium/WebDriver server reachable at …
 
-No Selenium server answers at the `url` in `config.yaml`.
+No Selenium server answers at the `url` in `config.yaml`. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
 Start one, for example with Docker: `docker run -d -p 4444:4444 selenium/standalone-chrome`. Check that `url` in `config.yaml` points to it, usually `http://localhost:4444/wd/hub`.
 
@@ -84,7 +84,7 @@ Fill in the capabilities for your platform. Run `optics configure <project>` to 
 
 ### YAML test cases load nothing
 
-A YAML file with `test_cases:` at the top is recognized as a test cases file but loads no tests. The run then stops with "No test cases to run". Section names in YAML suites are exact.
+A YAML file with `test_cases:` at the top is recognized as a test cases file but loads no tests. The run then stops with "Cannot start: E0702" and the text "No test cases to run". Section names in YAML suites are exact.
 
 Use `Test Cases:`, `Modules:` and `Elements:`, with that capitalization and spacing. See [Section names are exact](https://optics-framework.org/docs/create/yaml#section-names-are-exact).
 
@@ -177,6 +177,24 @@ A module step that names another module is read as a keyword name.
 
 Call the other module with `Execute Module`: `Checkout,Execute Module,Sign In`. See [Execute Module](https://optics-framework.org/docs/reference/keywords/flow#execute-module).
 
+### "Cannot start: E0702": include matches no test case
+
+A name in `--include`, `--exclude` or the `include` and `exclude` lists of `config.yaml` matches no test case. Optics also stops when no test case is left to run. The exit code is `3`, and Optics writes no report.
+
+Read the suggestion and the list of available test cases in the panel. Matching ignores case and uses `*` and `?` as wildcards. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
+
+### The run stopped, and the report shows ERROR and NOT_RUN
+
+Someone pressed Ctrl+C (exit code `130`), or the CI system sent SIGTERM (exit code `143`). Optics stops at once and still writes `junit_output.xml`. The test case in progress is `ERROR`. The test cases that did not start, and Suite Teardown, are `NOT_RUN`.
+
+Run the suite again. A CI job that you cancel on purpose gives the same result. See [What each outcome writes](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
+
+### Test cases end as ERROR with `E0106`
+
+The driver session ended during the run. The Appium or Selenium server stopped, or it dropped the session. The test case in progress and each later test case is `ERROR` in the report. Optics does not reconnect.
+
+Find out why the server stopped, start it again, and run the suite. See [`E0106`](https://optics-framework.org/docs/reference/errors#e01-driver-and-session).
+
 ### Enter Text or Press Element acts before the page loads
 
 Action keywords act on the screen as it is at that moment. They don't wait for a page or screen to finish loading, so they fail or act on the wrong screen.
@@ -189,29 +207,17 @@ Condition compares values as text, so `${count} > 5` can't be evaluated.
 
 Compare with quoted values: `${count} == '7'` or `${status} == 'ready'`. For greater-than or less-than, compute the result with Evaluate first, then test it: see [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
 
-### "Element not found: first} ${last}"
-
-A cell that starts with `${` and ends with `}` holds more than one variable, such as `${first} ${last}`. Optics reads the whole cell as one name. The dry run does not find this.
-
-Put text before the first variable or after the last one, such as `Name: ${first} ${last}`. You can also join the values with `Evaluate` first. See [Variables](https://optics-framework.org/docs/advanced/variables#where-name-works).
-
-### "Expected an integer for loop count, got '${n}'"
-
-`Run Loop` does not read its count from a variable.
-
-Write the count as a number: `Run Loop,Add One Item,3`.
-
 ### `ValueError: invalid literal for int()`
 
 A parameter that must be a whole number got something else. Two causes are common: a timeout or count with a decimal point, such as `2.5`, and an empty cell. Empty cells are dropped, so the values after them shift left into the wrong parameter.
 
 Use whole numbers. To skip a parameter, name the next one instead of leaving a gap: `Press Element,${sign_in},index=1`.
 
-### Per-test Setup runs only around the first test case
+### A test runs as setup or teardown
 
-A test case named `Setup` or `Teardown` (without "suite") runs only before or after the first regular test case, not around each one.
+A test case with "setup" or "teardown" in its name, such as *Setup wizard works*, runs before or after every other test case.
 
-Use `Suite Setup` and `Suite Teardown`, which run once and work as expected. If each test needs a fresh start, open and close the app inside that test's own modules. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
+Remove those words from the name. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 
 ### Every step takes about 10 seconds on Appium
 
@@ -235,11 +241,11 @@ A test case step that names a keyword instead of a module passes without doing a
 
 List modules in `test_cases.csv`, and put keywords inside modules in `modules.csv`.
 
-### Assert Equality never fails
+### Validate Screen never fails
 
-Assert Equality and Validate Screen return false on a mismatch but never fail a step.
+Validate Screen returns false when it finds nothing, but it does not fail the step.
 
-To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
+To fail on a missing element, use Assert Presence. To fail on wrong text, use `Assert Text,<element>,<expected text>`. See [Keywords that never fail a step](https://optics-framework.org/docs/reference/keywords/#keywords-that-never-fail-a-step).
 
 ### Screenshots are missing from a custom output folder
 
@@ -357,9 +363,9 @@ Run `optics setup --install playwright` again. It downloads the Chromium build P
 
 ## CI
 
-### The run passes, but CI shows a failed test
+### Every step passes, but the run fails with `on-screen-error-detection`
 
-When your project has an [error definitions file](https://optics-framework.org/docs/run/error-detection), Optics checks the last screen for known error messages at the end of `optics execute`. A match adds a failing test case named `on-screen-error-detection` to `junit_output.xml`, but doesn't change the exit code or the summary in the terminal.
+When your project has an [error definitions file](https://optics-framework.org/docs/run/error-detection), Optics checks the final screen for known error messages in `optics execute`. A match adds a failing test case named `on-screen-error-detection` to `junit_output.xml` and to the summary in the terminal. The exit code is `1`.
 
 Open `execution_output/detected_errors_<session>.json` to see which message matched. Fix the app, or the definition if it matched by mistake.
 
@@ -373,7 +379,7 @@ Always pass the project: `optics doctor ./my-project --check`.
 
 Your CI starts the Appium or Selenium server in a way the preflight check can't reach, or starts it after Optics.
 
-Wait for the server before running Optics. If you're sure it's reachable, set `OPTICS_SKIP_PREFLIGHT=1` to skip the check.
+Wait for the server before running Optics. If you know that it is reachable, set `OPTICS_SKIP_PREFLIGHT=1` to skip the check. When the check fails, the report shows each test case as `ERROR` with code `E0102`.
 
 ### `junit_output.xml` is cut short
 
