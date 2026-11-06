@@ -101,6 +101,7 @@ Optics treats some test case names specially. Matching ignores case and looks fo
 - A failing setup doesn't stop the test cases after it.
 - The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
 - Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
+- Each run of a per-test setup or teardown has its own result in the report, named `Setup (<test case>)` or `Teardown (<test case>)`.
 
 ## Modules
 
@@ -212,7 +213,7 @@ Text like `(optional)` or `Size [US]` is read as XPath or CSS. Add `text=` in fr
 
 ## Error definitions
 
-A CSV file of messages that mean your app is in a bad state. At the end of `optics execute`, Optics checks the text on the final screen against each `match_string`.
+A CSV file of messages that mean your app is in a bad state. In `optics execute`, Optics checks the text on the final screen against each `match_string`. It reads the screen before Suite Teardown when the suite has one.
 
 ```csv title="test_data/error_definitions.csv"
 error_code,match_string,description,severity
@@ -228,7 +229,7 @@ BIRCH_003,Out of stock,Product page shows out of stock,medium
 | `description` | No | Free text, shown in the results. |
 | `severity` | No | Free text, for example `critical`, `high` or `medium`. |
 
-There's no YAML form. A match adds a failing test case to `junit_output.xml` but doesn't change the exit code. See [Detect on-screen errors](/docs/run/error-detection).
+There is no YAML form. A match adds a failing test case to `junit_output.xml` and gives exit code `1`. See [Catch error screens](/docs/run/error-detection).
 
 ## API definitions
 
@@ -273,7 +274,7 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 **Backslash sequences.** In any cell, `\n` becomes a new line, `\t` a tab, `\r` a carriage return, and `\\` a single backslash.
 
-**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files and the result tree. Every driver removes the prefix before typing. Optics also masks values saved under secret names. See [Logging](/docs/reference/config#logging).
+**Secrets.** Start a value with `@:`, as in `@:s3cret`, to mask it as `****` in the console, the log files, `logs.json`, `junit_output.xml`, the result tree and error output. Every driver removes the prefix before typing. Optics also masks these items: values saved under secret names, passwords in URLs, and secret values from config.yaml. See [Hide sensitive values](/docs/advanced/variables#hide-sensitive-values).
 
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
@@ -291,6 +292,8 @@ birch-tests/execution_output/
 ├── execution_logs.log                             # file_log: true
 ├── 2026-10-09T15-04-05-123456-pre_press_element.jpg
 ├── ...-press_element_element_detection_result.jpg
+├── ...-failure_<test case>.jpg                    # when a test case fails
+├── ...-failure_<test case>.xml                    # when a test case fails
 ├── ...-end_of_run.jpg
 ├── page_sources_log.xml
 ├── failed_steps_elements.json                     # when a step fails
@@ -299,7 +302,7 @@ birch-tests/execution_output/
 
 | File | When it's written | What it holds |
 |---|---|---|
-| `junit_output.xml` | Every run, including dry runs | One test case per test, with each module and keyword, their status, timings and log lines. Error detection adds a failing `on-screen-error-detection` test case. If another session is already writing the file, Optics names it `junit_output_<session_id>.xml`. |
+| `junit_output.xml` | Every run that starts, including dry runs. It is also written when you stop the run with [[Ctrl]]+[[C]] or SIGTERM. | One test case per test, with each module and keyword, their status (`PASS`, `FAIL`, `ERROR` or `NOT_RUN`), start and end times, and log lines. The suite and every `classname` are named after the project folder. Error detection adds a failing `on-screen-error-detection` test case. If another session in the same process is already writing the file, Optics names it `junit_output_<session_id>.xml`. See [Read the results](/docs/run/results#read-the-junit-report). |
 | `logs.json` | `json_log: true` | A JSON list of every test case, module and keyword event with status and timings. |
 | `internal_logs.log`, `execution_logs.log` | `file_log: true` | Text logs. Each rotates at 10 MB. |
 | `<time>-pre_<keyword>.jpg` | Every keyword that finds an element, with `save_captures: true` | The screen before Optics looked for the element. |
@@ -308,7 +311,8 @@ birch-tests/execution_output/
 | `<time>-<keyword>_with_aoi.jpg` | The step used an area of interest, with `save_captures: true` | The screen with the area drawn in blue. |
 | `<time>-<keyword>.jpg` | Gestures and coordinate keywords, such as `Swipe`, `Scroll`, `Press By Percentage`, `Press Keycode` | The screen when the step ran. |
 | `<time>-capture_screenshot.jpg` | `Capture Screenshot`, `Get Screen Elements` | Only when `save_captures` is `true`. |
-| `<time>-end_of_run.jpg` | End of `optics execute`, if the app is still open | The final screen. |
+| `<time>-failure_<test case>.jpg` and `.xml` | A test case failed, with `save_captures: true`. Web pages write `.html`. | The screen and the UI tree where the test case ended. |
+| `<time>-end_of_run.jpg` | End of `optics execute`, before Suite Teardown, if the app is still open | The final screen. |
 | `page_sources_log.xml` | Appium page source reads and the end of the run | Each UI tree, with a timestamp. |
 | `page_sources_log.html` | Web page source reads and the end of the run | Each page's HTML, with a timestamp. |
 | `failed_steps_elements.json` | A step failed, with `save_captures: true` | For each failed step: the test case, the step and the elements on the screen, with secrets masked. Use it to fix the locator. |

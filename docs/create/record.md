@@ -53,6 +53,7 @@ Type a keyword and its values, separated by spaces, and press [[Enter]]:
 - Write keyword names in `snake_case` or in words: `press_element`, `Press Element` and `press element` all work.
 - Put quotes around a value that contains spaces.
 - Type `${` to pick from the elements already defined in your project.
+- Put a name inside a longer value, such as `enter_text ${email_field} "ava+${tag}@birch.shop"`. Live uses the first value of `tag`. A name that is not defined fails the step.
 - Type `name=value` to give a parameter by name. For example, `press_element "Add to cart" index=1` presses the second match. On Appium, `index=` also picks among native elements with the same text.
 - Type `go_back` to go back one screen. Type `assert_text ${greeting} "Hi, Ava"` to fail the step when the element shows other text.
 - Press [[Tab]] to complete a keyword name. The rest of its parameters appear in grey as a hint.
