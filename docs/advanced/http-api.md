@@ -110,7 +110,7 @@ The server has **no authentication**, and it accepts requests from any web page 
 - Keep the default `--host 127.0.0.1`, so only your machine can reach it.
 - If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.
 - Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.
-- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, and `Read Data` with `ENV:`.
+- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, `user_data_dir`, a browser `profile`, and `Read Data` with `ENV:`.
 
 ## See also
 
