@@ -27,7 +27,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | Key | Default | What it does |
 |---|---|---|
 | `driver_sources` | All disabled | The driver that controls the device or browser. See [driver_sources](#driver-sources). |
-| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias. |
+| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias in each command, `optics doctor` included. If the file has both keys, Optics uses `elements_sources`. |
 | `text_detection` | All disabled | OCR engines for finding elements by on-screen text. |
 | `image_detection` | All disabled | Engines for finding elements by image templates. |
 | `llm_models` | All disabled | The LLM for AI self-heal and the plain-English mode of `optics live`. |
@@ -154,7 +154,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`, or after the screenshot source of a driver for screens that the driver cannot capture. |
 
 `optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
 
@@ -164,7 +164,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 |---|---|---|
 | `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | `capabilities.credentials_path`: a service account key file. Without it, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -176,7 +176,9 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 ### llm_models
 
-Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. Use environment variables for keys, not `config.yaml`. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+
+Each engine reads its API key from `capabilities.api_key` first, then from an environment variable. To keep the key out of the file, write a reference such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file. If the variable is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config) before it starts. Logs and reports show `****` in place of the key.
 
 Each engine also takes `timeout_s` under `capabilities`: the seconds that one request can take, default `60`. A value that is not a positive number fails with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines).
 
@@ -189,6 +191,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
 | `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
+| `api_key` | None | The Gemini API key, or a reference such as `${GEMINI_API_KEY}`. `gemini_api_key` also works. |
 
 ```yaml
 llm_models:
@@ -198,7 +201,7 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
+Without `api_key`, Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. The key does not select the backend. If `GOOGLE_GENAI_USE_VERTEXAI` selects Vertex AI and you want the Gemini API, also set `use_vertexai: false`.
 
 To use a service account key file, set `credentials_path` and leave out the API key:
 
@@ -220,6 +223,7 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Setting | Default | What it does |
 |---|---|---|
 | `model` | None (required) | The model name as the server spells it, for example `gpt-5-mini`, or `anthropic/claude-sonnet-5-5` on OpenRouter. |
+| `api_key` | None | The key, or a reference such as `${OPENROUTER_API_KEY}`. Optics uses it before `api_key_env`. |
 | `api_key_env` | `OPENAI_API_KEY` | The environment variable that holds the key. |
 | `response_format` | `json_schema` | Set `json_object` if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead. |
 | `max_tokens` | The server's limit | The longest reply the model may write. |
@@ -228,8 +232,8 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Server | `url` | Key |
 |---|---|---|
 | OpenAI | Leave it out | `OPENAI_API_KEY` |
-| OpenRouter | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY`, with `api_key_env: OPENROUTER_API_KEY` |
-| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable named by `api_key_env` |
+| OpenRouter | `https://openrouter.ai/api/v1` | `api_key: ${OPENROUTER_API_KEY}` |
+| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in `api_key` |
 | Ollama | `http://localhost:11434/v1` | None |
 | vLLM, LM Studio | The server's `/v1` URL | None |
 
@@ -240,8 +244,10 @@ llm_models:
       url: https://openrouter.ai/api/v1
       capabilities:
         model: anthropic/claude-sonnet-5-5
-        api_key_env: OPENROUTER_API_KEY
+        api_key: ${OPENROUTER_API_KEY}
 ```
+
+With no key and no `url`, the engine stops with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines): "found no API key: set capabilities.api_key or OPENAI_API_KEY". A server at a `url` can work without a key.
 
 #### anthropic
 
@@ -253,13 +259,14 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
 | `region` | From the environment | The Bedrock or Vertex AI region. |
 | `project` | From the environment | The Vertex AI project. |
+| `api_key` | None | The Claude API key, or a reference such as `${ANTHROPIC_API_KEY}`. Only for `platform: anthropic`. Optics uses it before `api_key_env`. |
 | `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. |
 | `max_tokens` | `4096` | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
 | Platform | Credentials |
 |---|---|
-| `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
+| `anthropic` | `api_key`, else `ANTHROPIC_API_KEY` or the variable `api_key_env` names |
 | `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
 | `vertex` | Google Cloud application default credentials |
 
@@ -541,6 +548,9 @@ image_detection:
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
 | `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
+| `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts the frame to the screen and makes it straight. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
+| `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after `deskew_corners`. |
 
 With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
 
@@ -549,10 +559,14 @@ If you set neither `url` nor `camera_index`, Optics reads these environment vari
 | Variable | Used for |
 |---|---|
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
-| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token for `WEBCAM_SCREENSHOT_URL`. Optics sends it to no other URL. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
 
-Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
+For a `url` in config.yaml, set `token` too. Keep the token out of the file: `token: ${WEBCAM_SCREENSHOT_TOKEN}`. A `url` with no `token` sends no token, and Optics logs a warning.
+
+Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, or another `rotation` value stop the run.
+
+A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](https://optics-framework.org/docs/reference/errors#e03-screenshots).
 
 The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](https://optics-framework.org/docs/platforms/production).
 
@@ -587,8 +601,8 @@ With `file_log: true` and no `execution_output_path`, Optics also writes a copy 
 
 Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
 
-- Values you write with the `@:` prefix, such as `@:s3cret`.
-- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Values you write with the `@:` prefix, such as `@:s3cret`. After the step runs, Optics also masks the value without the prefix.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters, also values with `@:`.
 - Text values in config.yaml under a secret name, such as `appium:keystorePassword`. Also the values of environment variables with a secret name, such as `HUB_TOKEN`. A key that ends in `_env`, such as `api_key_env`, holds the name of a variable and is not a secret.
 - Passwords in URLs (`https://user:****@host`) and query parameters with a secret name (`?token=****`).
 
@@ -610,6 +624,7 @@ llm_models:
 - It needs an enabled `llm_models` entry, that engine's extra and key, and a screenshot element source such as `appium_screenshot`. Without them it does nothing, and the run isn't affected.
 - It applies to keywords that find and act on an element: `Press Element`, `Enter Text`, `Enter Number`, `Clear Element Text`, `Get Text`, `Swipe From Element`, `Scroll From Element`, `Detect And Press` and `Select Dropdown Option`. It doesn't apply to assertions.
 - A healed step passes. Check the logs for `AI self-heal:` lines so a real regression doesn't go unnoticed.
+- When the step uses `${name}`, Optics sends the element name to the model with the screen. Any engine works, also your own model server with an OpenAI-compatible API. See [Choose a model](https://optics-framework.org/docs/elements/self-heal#choose-a-model).
 
 `optics serve` and `optics mcp` ignore this key. They use per-session fields and the `OPTICS_AI_SELF_HEAL` variable instead. See [Self-heal](https://optics-framework.org/docs/elements/self-heal).
 

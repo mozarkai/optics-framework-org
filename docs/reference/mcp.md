@@ -14,6 +14,8 @@ The server needs the `mcp` extra. The [install scripts](https://optics-framework
 $ pip install "optics-framework[mcp]"
 ```
 
+The extra installs fastmcp 3.4.4 or newer.
+
 You also need the extras for your driver, for example `appium` or `playwright`. See [Engines and extras](https://optics-framework.org/docs/reference/engines).
 
 ## Start the server
@@ -30,6 +32,10 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|
 | `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 10 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
 
 We recommend `stdio` for an agent on your own machine. Use `http` when the server runs in a container or on another machine.
+
+Over `http`, each session belongs to the client connection that started it. Another client cannot see the session or use its id. The server has no authentication, so keep it on `127.0.0.1` or behind a gateway that adds authentication. On another address, it logs a warning when it starts. Set `OPTICS_ALLOWED_HOSTS` to the host names that clients use, such as `localhost` in a container. A request with another `Host` is refused.
+
+An `http` server also refuses what makes it read its own files: `project_path`, `credentials_path`, `file:` URLs and `Read Data` from a file.
 
 ## Connect your agent
 
@@ -119,7 +125,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app` and 
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. Passing `[]` makes the session fail to start. |
 | `text_detection` | `[]` | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | `[]` | Image engines, for example `["templatematch"]`. |
-| `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. |
+| `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). |
 | `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM engine for self-heal: `gemini`, `openai` or `anthropic`. |
 | `llm_model` | `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini | The model for self-heal. `openai` and `anthropic` need one. |
@@ -291,12 +297,13 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | `OPTICS_MCP_TOOLSET` | `core` | `core` or `full`. The `--toolset` flag wins. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `900` | Ends a session after this many seconds without a call. `0` turns it off. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `100` | The longest time one call can take. After it, the call returns a `timeout` error, and the session stays `busy` until the driver call ends. |
+| `OPTICS_ALLOWED_HOSTS` | | `http` only. Host names that the server answers in addition to loopback names, separated by commas. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | off | `1`, `true`, `yes` or `on` allows the coordinate keywords. See [Coordinate taps](#coordinate-taps). |
 | `OPTICS_AI_SELF_HEAL` | off | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
 | `OPTICS_LLM_PROVIDER` | `gemini` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | | The default model. `openai` and `anthropic` need one. |
-| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see [llm_models](https://optics-framework.org/docs/reference/config#llm-models). |
-| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY` or `api_key_env`. |
+| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. A session cannot set `api_key_env`, so each engine reads its default variables. For Gemini on Vertex AI, see [llm_models](https://optics-framework.org/docs/reference/config#llm-models). Claude runs only on the Claude API here, not on Bedrock or Vertex AI. |
+| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY`. |
 
 ## Typical agent loop
 
@@ -320,7 +327,7 @@ Call `terminate_session`.
 - **No flow control.** `Run Loop`, `Condition`, `Evaluate`, `Read Data`, `Invoke API` and the other flow-control keywords are not tools. Your agent can still write them into CSV modules for `optics execute`.
 - **No save tool.** There are no tools to record, save, replay, find devices or run doctor. The agent writes project files from the steps resource.
 - **Sessions are not shared.** Sessions live in the server's memory. `optics serve` and `optics live` cannot see them. A session ends after the idle lease. All sessions end when the server stops.
-- **Images come from a project.** There's no upload tool. Pass `project_path` to use template images.
+- **Images come from a project.** There is no upload tool. On `stdio`, pass `project_path` to use template images. An `http` server has no template images.
 - **Selenium has no rows.** The tools run keywords on Selenium, but `verified` stays `unknown` and `observe` fails. Read `/source` instead.
 
 ## Errors

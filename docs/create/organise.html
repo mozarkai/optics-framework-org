@@ -102,9 +102,10 @@ Launch Birch,Launch App
 Close Birch,Close And Terminate App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
 <span class="c-mod">Launch Birch</span><span class="c-dim">,</span><b>Launch App</b>
 <span class="c-mod">Close Birch</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
-<p>Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so <code class="ic">Birch Suite Setup</code> works too. Setup and teardown always run, even when you <a href="#run-only-some-test-cases">select which tests run</a>.</p>
-<p>A test case named just <strong>Setup</strong> runs before each test case, and <strong>Teardown</strong> runs after each one. Use them to give every test a fresh start.</p>
-<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>Do not use "setup" or "teardown" in other test names. A test called <em>Setup wizard works</em> becomes the per-test setup.</p></aside>
+<p>A name that ends with "Suite Setup" also works, such as <code class="ic">Birch Suite Setup</code>. Matching ignores case. Setup and teardown run even when you <a href="#run-only-some-test-cases">select which tests run</a>.</p>
+<p>A test case whose name ends with <strong>Setup</strong> runs before each test case, and <strong>Teardown</strong> runs after each one. Use them to give each test a fresh start.</p>
+<p>If Suite Setup fails, the test cases do not run, and the report shows them as skipped. Suite Teardown still runs. If the per-test setup fails, only its test case is skipped.</p>
+<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>Give each role to one test case only. Two test cases whose names end with "Setup" stop the run before it starts. A name such as <em>Setup wizard works</em> is an ordinary test case, because it does not end with "Setup".</p></aside>
 <h2 id="reuse-modules">Reuse modules<a class="anchor" href="#reuse-modules" aria-label="Link to this section">#</a></h2>
 <p>A module can appear in as many test cases as you like. Keep each module small and focused on one screen or one task, such as <em>Sign In</em>, <em>Search For Shoes</em> or <em>Open Cart</em>. When that screen changes, you fix one module and every test that uses it follows.</p>
 <p>To call one module from inside another, use <code class="ic">Execute Module</code>:</p>
@@ -227,6 +228,6 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

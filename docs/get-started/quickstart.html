@@ -89,7 +89,7 @@
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button><button class="os-tab" role="tab" id="tabs-os-t2" aria-controls="tabs-os-p2" aria-selected="false" tabindex="-1" data-tab="pip">pip</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>irm</b> https://optics-framework.org/install.ps1 | iex</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p2" aria-labelledby="tabs-os-t2" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install optics-framework">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install optics-framework</code></pre></figure></div></div>
 <p>Open a new terminal window, then check that the <code class="ic">optics</code> command works:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics --version">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> <span class="c-info">--version</span>
-Optics Framework 1.11.2</code></pre></figure>
+Optics Framework 1.11.3</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="create-a-project">Create a project<a class="anchor" href="#create-a-project" aria-label="Link to this section">#</a></h2></div><div class="step-body">
 <p>Run the guided setup:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics quickstart">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> quickstart</code></pre></figure>
@@ -127,7 +127,7 @@ Description,text=Welcome to Example">Copy</button><pre><code><span class="c-dim"
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
 │ Keyword 'Validate Element' failed after fallback attempts; last error:       │
-│ Code.E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR   │
+│ E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR        │
 │ was not tried: no text_detection engine is configured.                       │
 ╰──────────────────────────────────────────────────────────────────────────────╯</code></pre></figure>
 <p>The tree shows where the run stopped: the test case <code class="ic">TC1 Verify Landing</code>, its module <code class="ic">Verify Example Page</code>, and the step <code class="ic">Validate Element</code>. <strong>Failure details</strong> gives the step, the value it looked for and the last error. Optics waited for the text, and the page did not show it. The OCR note tells you that Optics did not also read the screenshot, because no <a href="../../docs/elements/text-and-images#turn-on-ocr">OCR engine</a> is configured.</p>
@@ -217,6 +217,6 @@ Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-di
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

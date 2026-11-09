@@ -2,7 +2,7 @@
 
 > Look up every command, setting, file format and keyword.
 
-These pages describe Optics 1.11.2 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
+These pages describe Optics 1.11.3 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
 
 If you're new to Optics, start with the [quickstart](https://optics-framework.org/docs/get-started/quickstart) and come back here when you need a detail.
 

@@ -99,9 +99,9 @@ pip install optics-framework">Copy</button><pre><code><span class="prompt">$</sp
 <span class="prompt">$</span> <b>pip</b> install optics-framework</code></pre></figure></div></div>
 <p>Open a new terminal so it picks up the updated PATH, then check the install:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics --version">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> <span class="c-info">--version</span>
-Optics Framework 1.11.2</code></pre></figure>
+Optics Framework 1.11.3</code></pre></figure>
 <details class="doc-details"><summary>Installer options</summary><div class="details-body"><p>Pass options after <code class="ic">sh -s --</code>. On Windows, set the matching environment variable before running the installer.</p>
-<div class="table-wrap"><table><thead><tr><th>Option</th><th>Windows variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version 1.11.2</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Install a specific release.</td></tr><tr><td><code class="ic">--extra appium,easyocr</code></td><td><code class="ic">OPTICS_EXTRA</code></td><td>Install engines at the same time.</td></tr><tr><td><code class="ic">--dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Install somewhere other than <code class="ic">~/.optics</code>.</td></tr><tr><td><code class="ic">--no-modify-path</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Don't edit your shell profile.</td></tr><tr><td><code class="ic">--dry-run</code></td><td></td><td>Print what would happen and change nothing.</td></tr><tr><td><code class="ic">--uninstall</code></td><td></td><td>Remove Optics and the PATH entry it added.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Windows variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version 1.11.3</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Install a specific release.</td></tr><tr><td><code class="ic">--extra appium,easyocr</code></td><td><code class="ic">OPTICS_EXTRA</code></td><td>Install engines at the same time.</td></tr><tr><td><code class="ic">--dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Install somewhere other than <code class="ic">~/.optics</code>.</td></tr><tr><td><code class="ic">--no-modify-path</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Don't edit your shell profile.</td></tr><tr><td><code class="ic">--dry-run</code></td><td></td><td>Print what would happen and change nothing.</td></tr><tr><td><code class="ic">--uninstall</code></td><td></td><td>Remove Optics and the PATH entry it added.</td></tr></tbody></table></div>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,easyocr">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh <span class="c-info">-s</span> <span class="c-info">--</span> <span class="c-info">--extra</span> playwright,easyocr</code></pre></figure></div></details>
 <h2 id="add-engines-for-your-platform">Add engines for your platform<a class="anchor" href="#add-engines-for-your-platform" aria-label="Link to this section">#</a></h2>
 <p>The core install ships without drivers, so it stays small. Add the ones for what you test. <code class="ic">optics setup</code> installs engines that match your Optics version:</p>
@@ -121,7 +121,7 @@ Optics Framework 1.11.2</code></pre></figure>
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.2
+  ✅ optics-framework                  installed, version 1.11.3
 
 Engines
   ⚠️ Appium                            appium-python-client not installed
@@ -200,6 +200,6 @@ Web
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

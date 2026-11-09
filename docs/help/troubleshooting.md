@@ -333,13 +333,13 @@ Install it by that name, for example `optics setup --install openai`.
 
 ### `E0601`: the LLM engine needs a model or a key
 
-The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
+The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `capabilities.api_key`, `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
 
 ### `E0801` or authentication errors from the model
 
 The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.
 
-Set your engine's key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`) in the terminal you run Optics from, and check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
+Set your engine's key in `capabilities.api_key`, or in the terminal you run Optics from (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`). Then check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
 
 ### AI self-heal does nothing
 

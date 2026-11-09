@@ -21,15 +21,26 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 The server prints its own log lines and Optics' debug logs to the terminal. Interactive docs are at `http://127.0.0.1:8000/docs` while it runs.
 
 **Warning:**
-The API has no authentication, and it accepts requests from any web origin (CORS is open). Anyone who can reach the port can control your devices. Keep the default `127.0.0.1`, and bind to another address only on a network you trust.
+The API has no authentication. Anyone who can reach the port can control your devices. Keep the default `127.0.0.1`, or put the server behind a gateway that adds authentication. On another address, the server logs a warning when it starts.
 
-The server doesn't read config.yaml or your project's test files. Each session gets its engines from the request. Sessions also don't write screenshots or page sources to disk, and they log at `DEBUG`.
+Two more checks keep web pages away from the server:
+
+- **CORS is off.** A web page cannot call the server, unless you list its origin in `OPTICS_CORS_ORIGINS`, such as `https://dash.example.com`. Separate origins with commas. The value `*` stops the server with E0501.
+- **The Host header must be a loopback name.** On `127.0.0.1`, a request with another `Host`, such as a domain that points to `127.0.0.1`, gets `421 Misdirected Request`. To allow more names, or to apply the check on any address, list the names in `OPTICS_ALLOWED_HOSTS`. Separate names with commas. Loopback names stay allowed.
+
+In a container, publish the port on the host loopback and set `OPTICS_ALLOWED_HOSTS=localhost`:
+
+```shell
+$ docker run -p 127.0.0.1:8000:8000 -e OPTICS_ALLOWED_HOSTS=localhost <image>
+```
+
+The server does not read config.yaml or the test files of your project. Each session gets its engines from the request. Sessions do not save screenshots or page sources, and they log at `DEBUG`. Each session writes its other output, such as `junit_output.xml`, to its own temporary folder. The server deletes the folder when the session stops.
 
 ## Endpoints
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.2"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.3"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -78,7 +89,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `elements_sources` | list | Element sources by name, for example `["appium_find_element", "appium_page_source", "appium_screenshot"]`. There's no default here, so always list them. |
 | `text_detection` | list | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | list | Image engines, for example `["templatematch"]`. |
-| `project_path` | string | A project folder on the server. Optics loads its image templates. It doesn't load elements or test cases. |
+| `project_path` | string | Refused with `400` and E0501. Upload templates with `POST /v1/sessions/{id}/templates`. |
 | `api_data` | object | API definitions for `Invoke API`, inline. File paths aren't supported. |
 | `ai_self_heal` | boolean | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). Defaults to `OPTICS_AI_SELF_HEAL`, else off. |
 | `llm_provider` | string | The self-heal engine: `gemini`, `openai` or `anthropic`. Defaults to `OPTICS_LLM_PROVIDER`, else `gemini`. |
@@ -86,7 +97,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `strict_element_match` | boolean | Accepts only exact text matches. |
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
-Engine names are the same as in [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
+Engine names are the same as in [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). A session cannot set `api_key_env` or the `anthropic` `platform`, so each engine reads its default variables, such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, and Claude runs on the Claude API. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
 
 The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
 
@@ -94,9 +105,12 @@ The server does not read its own environment or files for a caller. It refuses t
 - A file path in `capabilities.storage_state`. Send the state as a JSON object.
 - `capabilities.user_data_dir`. Set it in a project's config.yaml instead.
 - `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
+- `project_path`, and `credentials_path` in any capabilities.
+- A `file:` URL, or another URL that opens a local resource of the browser, such as `chrome:`, `view-source:` or `about:` other than `about:blank`. This applies to `Launch App` and to each capability value, including a browser argument such as `--app=<url>`.
+- `Read Data` from a file or from `ENV:`. Send the rows in the step instead.
 
 ```terminal
-{"detail":{"type":"optics:config","code":"Code.E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
+{"detail":{"type":"optics:config","code":"E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
 ```
 
 The session log shows only the scheme and host of a URL. It masks header values, `storage_state` and every value with a secret name, such as `token` or `password`.
@@ -147,13 +161,13 @@ Unlike `optics execute`, the HTTP API returns keyword results, so `Get Text`, `A
 A keyword that does not find its element returns `404`:
 
 ```json
-{"detail": {"type": "optics:element", "code": "Code.E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "Code.E0201: Element 'css=#nope' not found."}}
+{"detail": {"type": "optics:element", "code": "E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "E0201: Element 'css=#nope' not found."}}
 ```
 
 - `cause` is the error that caused this one, or `null`.
-- When you send several values for one parameter and each one fails, the message is `All fallback values failed for keyword '<keyword>':` and lists each try. The code and status are those of the last try.
-- `Read Data` with an `ENV:` file path returns `400` with `E0501`: `Read Data ENV: is only available to project runs, not API callers`.
-- The `code` field can carry a `Code.` prefix, as in `Code.E0402`. It's the same code. See [Error codes](https://optics-framework.org/docs/reference/errors).
+- When you send several values for one parameter, Optics tries the next value only when the element is not found. It tries a maximum of 20 combinations. When each try fails, the message is `All <n> fallback combinations failed for keyword '<keyword>':` and lists the last five tries. The code and status are those of the last try.
+- `Read Data` with a file or an `ENV:` path returns `400` with `E0501`.
+- The `code` field holds the code alone, such as `E0402`. See [Error codes](https://optics-framework.org/docs/reference/errors).
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
 
@@ -252,7 +266,7 @@ $ curl -s -X DELETE http://127.0.0.1:8000/v1/sessions/$SID/stop
 {"status":"terminated"}
 ```
 
-Optics writes `junit_output.xml` for the session to `execution_output/` in the project path, or in the folder where the server runs.
+Optics writes `junit_output.xml` for the session to the temporary folder of the session. The server deletes the folder when the session stops.
 
 ## Limits
 

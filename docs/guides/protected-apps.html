@@ -90,6 +90,7 @@
 <p>Use the Bluetooth and camera setup when:</p>
 <ul><li><strong>The app blocks screenshots.</strong> The camera sees the screen anyway.</li><li><strong>USB debugging or developer mode isn't allowed</strong> on the device.</li><li><strong>You monitor the live app.</strong> The same journey runs on a real, unmodified device and app, the way a customer uses it.</li></ul>
 <p>If Appium or a browser driver can reach the device, use them instead. They're faster, read the UI tree directly, and support every keyword. See <a href="../../docs/platforms/">Supported platforms</a>.</p>
+<p>If Appium works and the app blocks screenshots only on some screens, keep Appium and add a camera for those screens. See <a href="../../docs/platforms/production#add-a-camera-to-an-appium-run">Add a camera to an Appium run</a>.</p>
 <h2 id="get-the-hardware">Get the hardware<a class="anchor" href="#get-the-hardware" aria-label="Link to this section">#</a></h2>
 <ul><li><strong>A USB serial BLE HID dongle</strong>, which plugs into your machine as a serial port.</li><li><strong>A camera or capture card</strong> that your machine sees as a webcam, or a TCP frame server that sends a picture on request.</li><li><strong>A stand</strong> that holds the camera square over the screen, so the picture doesn't shift between runs.</li></ul>
 <p>You also need an OCR engine, such as EasyOCR, to read text in the camera picture.</p>
@@ -189,6 +190,6 @@ Sign in,Assert Presence,Trail Runner 2,20">Copy</button><pre><code><span class="
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

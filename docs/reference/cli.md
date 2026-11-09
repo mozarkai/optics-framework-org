@@ -2,7 +2,7 @@
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.2.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -14,7 +14,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -246,7 +246,7 @@ $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can c
 - Each flag takes one or more names. You can also give a flag more than once.
 - Matching ignores case and extra spaces, and must match the full name. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first, then removes the `--exclude` matches.
-- Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
+- Suite Setup, Suite Teardown and the per-test setup and teardown always stay in the run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
 
 Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 3. This also applies to `include` and `exclude` in config.yaml:
@@ -273,7 +273,7 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 1. Optics walks the whole folder and finds your files by their content (see [Project files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
 2. It loads the config and checks the test case selection. Then it stops if no driver is enabled and the selected test cases use a keyword that needs one. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`, runs with no driver.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
-4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
+4. It runs Suite Setup, then each test case, then Suite Teardown. A test case that fails does not stop the others. A failed setup skips the test cases that it prepares. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
 The printer shows a live tree, then a summary:
@@ -289,6 +289,8 @@ Test Suite
 Total Test Cases: 1 | Passed: 1 | Failed: 0
 ```
 
+When a failed setup skips test cases, the summary also shows `| Skipped: <count>`.
+
 When a step fails, a "Failure details" box names the test, the step and the reason:
 
 ```terminal
@@ -298,7 +300,7 @@ Shopper can add a backpack → step 'Press Elemnt (//input[@id='login-button'])'
 The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If every fallback value failed, it is `Keyword '<keyword>' failed after fallback attempts; last error: <error>`. If the error has a deeper cause, `(cause: …)` comes at the end:
 
 ```terminal
-Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
+Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
 ```
 
 Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs) and [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
@@ -312,7 +314,7 @@ Results go to `execution_output/` in the project: `junit_output.xml`, screenshot
 | 130 | You pressed Ctrl+C. |
 | 143 | Optics received SIGTERM. |
 
-Optics also writes `junit_output.xml` when you stop the run with Ctrl+C or SIGTERM. The test case in progress ends as `ERROR`. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
+Optics also writes `junit_output.xml` when you stop the run with Ctrl+C or SIGTERM. The test case in progress ends as `ERROR`, with the code E0706. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
 
 On-screen errors found by error detection appear in `junit_output.xml` as a failing test case. They count as a failed test case, so the exit code is 1.
 
@@ -377,7 +379,9 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 | `--workers` | `1` | Server processes. Keep it at 1: sessions live in memory and aren't shared between processes. |
 
 **Warning:**
-The API has no authentication and accepts requests from any web origin. Keep the default `127.0.0.1` unless you're on a trusted network.
+The API has no authentication. Keep the default `127.0.0.1`, unless you are on a trusted network. On another address, the server logs a warning when it starts.
+
+Web pages cannot call the server unless you list their origins in `OPTICS_CORS_ORIGINS`. A request whose `Host` is not a loopback name gets `421`. Add other names in `OPTICS_ALLOWED_HOSTS`.
 
 The server doesn't read config.yaml. Each session gets its settings from the request. Interactive API docs are at `http://127.0.0.1:8000/docs`. See [HTTP API](https://optics-framework.org/docs/reference/http-api).
 
@@ -504,16 +508,18 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_MCP_TOOLSET` | `mcp` | The default for `--toolset`: `core` or `full`. Any other value stops the server. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `mcp` | Seconds before an unused session ends. Default `900`. `0` keeps sessions open. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `mcp` | Seconds that one tool call can take. Default `100`. |
+| `OPTICS_CORS_ORIGINS` | `serve` | Web origins that can call the server, separated by commas. Empty by default, so no web page can call it. `*` stops the server with E0501. |
+| `OPTICS_ALLOWED_HOSTS` | `serve`, `mcp` over HTTP | Host names that the server answers in addition to loopback names, separated by commas. When set, the check applies on any address. Other hosts get `421`. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
-| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. |
+| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. `capabilities.api_key` in config.yaml wins over it. |
 | `GOOGLE_GENAI_USE_VERTEXAI`, `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_APPLICATION_CREDENTIALS` | Gemini, Google Vision | Use Vertex AI and Google Cloud credentials instead of an API key. |
-| `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. Set `api_key_env` in config.yaml to read another variable. |
+| `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. `capabilities.api_key` in config.yaml wins over it. Set `api_key_env` to read another variable. |
 | `OPENAI_BASE_URL` | `openai` engine | The server to call when the entry has no `url`, such as OpenRouter or a local Ollama. |
-| `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. |
+| `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. `capabilities.api_key` in config.yaml wins over it. Set `api_key_env` to read another variable. |
 | Any name in `${NAME}` | Playwright | A `${NAME}` in the Playwright `url` or in a `headers` value is read from the environment. If it is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). |
 
-`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
+`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. `optics serve` and `optics mcp` over HTTP also refuse a `Read Data` file. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
 
 ## Install scripts
 

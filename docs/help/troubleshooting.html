@@ -245,10 +245,10 @@
 <p>An engine is enabled under <code class="ic">llm_models</code>, but its extra isn't installed. The message names the engine.</p>
 <p>Install it by that name, for example <code class="ic">optics setup --install openai</code>.</p>
 <h3 id="llm-not-configured"><code class="ic">E0601</code>: the LLM engine needs a model or a key<a class="anchor" href="#llm-not-configured" aria-label="Link to this section">#</a></h3>
-<p>The <code class="ic">openai</code> and <code class="ic">anthropic</code> engines have no default model, so set <code class="ic">capabilities.model</code>. The <code class="ic">openai</code> engine also stops when it finds no key and no <code class="ic">url</code>: set <code class="ic">OPENAI_API_KEY</code>, or the variable you named in <code class="ic">api_key_env</code>. See <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
+<p>The <code class="ic">openai</code> and <code class="ic">anthropic</code> engines have no default model, so set <code class="ic">capabilities.model</code>. The <code class="ic">openai</code> engine also stops when it finds no key and no <code class="ic">url</code>: set <code class="ic">capabilities.api_key</code>, <code class="ic">OPENAI_API_KEY</code>, or the variable you named in <code class="ic">api_key_env</code>. See <a href="../../docs/reference/config#llm-models">llm_models</a>.</p>
 <h3 id="llm-auth"><code class="ic">E0801</code> or authentication errors from the model<a class="anchor" href="#llm-auth" aria-label="Link to this section">#</a></h3>
 <p>The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.</p>
-<p>Set your engine's key (<code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable in <code class="ic">api_key_env</code>) in the terminal you run Optics from, and check your quota with the provider. See <a href="../../docs/reference/cli#environment-variables">Environment variables</a>.</p>
+<p>Set your engine's key in <code class="ic">capabilities.api_key</code>, or in the terminal you run Optics from (<code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code>, <code class="ic">ANTHROPIC_API_KEY</code>, or the variable in <code class="ic">api_key_env</code>). Then check your quota with the provider. See <a href="../../docs/reference/cli#environment-variables">Environment variables</a>.</p>
 <h3 id="self-heal-inactive">AI self-heal does nothing<a class="anchor" href="#self-heal-inactive" aria-label="Link to this section">#</a></h3>
 <p>Self-heal needs <code class="ic">ai_self_heal: true</code>, an enabled <code class="ic">llm_models</code> entry, the AI engine, a key, and a screenshot source. If any is missing, Optics logs "AI self-heal enabled but no usable LLM" or skips self-heal without a message.</p>
 <p>Check each item in <a href="../../docs/elements/self-heal#turn-it-on">Turn it on</a>. Self-heal only helps steps that find and act on an element; Assert Presence and other checks never self-heal.</p>
@@ -342,6 +342,6 @@
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

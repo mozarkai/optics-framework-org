@@ -43,7 +43,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.2
+Optics Framework 1.11.3
 ```
 
 **Installer options**
@@ -51,7 +51,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.2` | `OPTICS_VERSION` | Install a specific release. |
+| `--version 1.11.3` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
@@ -114,7 +114,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.2
+  ✅ optics-framework                  installed, version 1.11.3
 
 Engines
   ⚠️ Appium                            appium-python-client not installed

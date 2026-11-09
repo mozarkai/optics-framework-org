@@ -87,7 +87,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.2"
+      - run: pip install "optics-framework[playwright]==1.11.3"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()
@@ -308,7 +308,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.2
+Optics Framework 1.11.3
 ```
 
 ### Create a project
@@ -380,7 +380,7 @@ Run the test again. This time it fails:
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
 │ Keyword 'Validate Element' failed after fallback attempts; last error:       │
-│ Code.E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR   │
+│ E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR        │
 │ was not tried: no text_detection engine is configured.                       │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
@@ -475,7 +475,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.2
+Optics Framework 1.11.3
 ```
 
 **Installer options**
@@ -483,7 +483,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.2` | `OPTICS_VERSION` | Install a specific release. |
+| `--version 1.11.3` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
@@ -546,7 +546,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.2
+  ✅ optics-framework                  installed, version 1.11.3
 
 Engines
   ⚠️ Appium                            appium-python-client not installed
@@ -744,7 +744,7 @@ A test is only useful if it fails when the app is broken. Pretend the store rena
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ Shopper can add a backpack → step 'Assert Presence (Removed)' — Keyword      │
-│ 'Assert Presence' failed after fallback attempts; last error: Code.E0201:    │
+│ 'Assert Presence' failed after fallback attempts; last error: E0201:         │
 │ ['Removed'] not found based on rule 'any'. OCR was not tried: no             │
 │ text_detection engine is configured.                                         │
 ╰──────────────────────────────────────────────────────────────────────────────╯
@@ -1356,8 +1356,10 @@ PS> $env:GEMINI_API_KEY = "your-key"
 
 Use `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable you named in `api_key_env`. A local server needs no key.
 
-**Warning:**
-Don't put API keys in `config.yaml`. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.
+You can also give the key in `config.yaml`, under `capabilities.api_key`. Optics uses it before the environment variable.
+
+**Tip:**
+Write the key as a reference, such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file, so you can commit `config.yaml` with your tests and keep the key private.
 
 ## Describe a flow
 
@@ -1828,12 +1830,14 @@ Launch Birch,Launch App
 Close Birch,Close And Terminate App
 ```
 
-Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so `Birch Suite Setup` works too. Setup and teardown always run, even when you [select which tests run](#run-only-some-test-cases).
+A name that ends with "Suite Setup" also works, such as `Birch Suite Setup`. Matching ignores case. Setup and teardown run even when you [select which tests run](#run-only-some-test-cases).
 
-A test case named just **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give every test a fresh start.
+A test case whose name ends with **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give each test a fresh start.
+
+If Suite Setup fails, the test cases do not run, and the report shows them as skipped. Suite Teardown still runs. If the per-test setup fails, only its test case is skipped.
 
 **Tip:**
-Do not use "setup" or "teardown" in other test names. A test called *Setup wizard works* becomes the per-test setup.
+Give each role to one test case only. Two test cases whose names end with "Setup" stop the run before it starts. A name such as *Setup wizard works* is an ordinary test case, because it does not end with "Setup".
 
 ## Reuse modules
 
@@ -2293,7 +2297,7 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 |---|---|---|---|
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
 | Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
-| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
+| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
 List more than one engine and Optics tries them in order.
@@ -2436,19 +2440,19 @@ Source: https://optics-framework.org/docs/elements/self-heal
 
 > Let an AI model look at the screen and finish a step when every way of finding its element has failed.
 
-AI self-heal is a last line of defence. When a step can't find its element by any value or any method, Optics sends a screenshot to an AI model and asks it to complete the step. If the button now says *Log in* instead of *Sign in*, the model can spot that and press it, and the test carries on. It's off by default.
+AI self-heal is the last line of defence. When a step cannot find its element with any value or any method, Optics sends a screenshot to an AI model. The model then tries to complete the step. If the button now says *Log in* instead of *Sign in*, the model can find it and press it, and the test continues. Self-heal is off by default.
 
 ## When to use it
 
-Self-heal keeps long runs going through small, expected UI changes, such as monitoring a production app on a schedule, or a nightly regression where you'd rather get a full report than stop at the first renamed button.
+Self-heal keeps long runs alive through small, expected changes to the UI. Examples are a scheduled check of a production app, or a nightly regression. There, a full report is better than a stop at the first renamed button.
 
-It isn't a substitute for good elements. A healed step **passes**, so a real change in the app can go unnoticed unless you read the logs. Fix the element afterwards, as described in [Find out what healed](#find-out-what-healed).
+Self-heal does not replace good elements. A healed step **passes**, so you must read the logs to see a real change in the app. Fix the element after the run, as [Find out what healed](#find-out-what-healed) shows.
 
 ## Turn it on
 
 ### Install the AI engine and set your key
 
-Self-heal uses the same AI engine and key as [plain-English mode](https://optics-framework.org/docs/create/describe#before-you-begin). Install it and set its key, for example:
+Self-heal uses the same AI engine and key as [plain-English mode](https://optics-framework.org/docs/create/describe#before-you-begin). Install the engine and set its key, for example:
 
 ```shell
 $ optics setup --install gemini
@@ -2467,25 +2471,110 @@ llm_models:
       enabled: true
 ```
 
-For OpenAI, Claude or a local model, use that engine's entry instead. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
+For OpenAI, Claude or your own model server, use the entry of that engine. See [Choose a model](#choose-a-model).
 
 ### Enable a screenshot source
 
-The model works from a screenshot, so `elements_sources` must include one, such as `appium_screenshot` or `playwright_screenshot`. Without it, self-heal does nothing.
+The model works from a screenshot, so `elements_sources` must include a screenshot source, such as `appium_screenshot` or `playwright_screenshot`. Without one, self-heal does nothing.
 
-If the AI engine isn't installed or the key is missing, Optics logs a warning and runs without self-heal. It never fails a run because self-heal is unavailable.
+If the AI engine is not installed or the key is missing, Optics logs a warning and runs without self-heal. A run never fails because self-heal is not available.
+
+## Choose a model
+
+Self-heal works with each engine under [llm_models](https://optics-framework.org/docs/reference/config#llm-models). Use a model that accepts images.
+
+| Model | Engine | Key |
+|---|---|---|
+| Gemini | `gemini` | `GEMINI_API_KEY` |
+| OpenAI, or a hosted service such as OpenRouter | `openai` | `OPENAI_API_KEY`, or `api_key` |
+| Claude | `anthropic` | `ANTHROPIC_API_KEY` |
+| Your own server with an OpenAI-compatible API, such as vLLM, Ollama or LM Studio | `openai`, with the server in `url` | Only if the server asks for one |
+
+### Use your own model server
+
+The `openai` engine can call any server with an OpenAI-compatible Chat Completions API. For example, a vLLM server can serve a small vision model on a machine in your network:
+
+```shell
+$ vllm serve Qwen/Qwen2.5-VL-3B-Instruct --port 8000
+```
+
+Set the server address in `url` and the model name in `model`:
+
+`config.yaml`:
+
+```yaml
+ai_self_heal: true
+
+llm_models:
+  - openai:
+      enabled: true
+      url: http://gpu-box:8000/v1
+      capabilities:
+        model: Qwen/Qwen2.5-VL-3B-Instruct
+```
+
+If you start the server with an API key, give the key to Optics as `api_key: ${VLLM_API_KEY}` under `capabilities`. If the server rejects JSON-schema output, set `response_format: json_object`.
+
+For a 2B model trained for self-heal, with measured results, read [Self-heal broken locators with a 2B model on your own GPU](https://optics-framework.org/blog/small-model-self-heal).
+
+### Give the API key in config.yaml
+
+Each engine reads its API key from `capabilities.api_key` first, then from its environment variable. Write the key as a reference, so that the file stays safe to commit:
+
+`config.yaml`:
+
+```yaml
+llm_models:
+  - openai:
+      enabled: true
+      url: https://openrouter.ai/api/v1
+      capabilities:
+        model: google/gemini-2.5-flash
+        api_key: ${OPENROUTER_API_KEY}
+```
+
+Optics reads the variable when it loads the file. If the variable is not set, the run stops before it starts. Logs and reports show `****` in place of the key. The `openai` and `anthropic` engines also take `api_key_env`, the name of the variable to read.
 
 ## What it does
 
 When a step that finds an element fails, Optics gives the model:
 
-- the step that failed and the element it was looking for,
-- a screenshot and a list of the elements on screen, each with a reference such as `e7` that the model can name. The UI tree is sent only when that list is empty or leaves elements out,
-- the steps that ran just before.
+- The step that failed and the locator of its element.
+- The name of the element in your suite, when the step uses `${name}`. For `Press Element,${stopwatch_tab}`, the model gets `stopwatch_tab`.
+- A screenshot and a list of the elements on the screen, each with a reference such as `e7` that the model can name. Optics sends the UI tree only when that list is empty or does not show all the elements.
+- Up to three rows of that list that are the closest match to the target, best first. See [How Optics points the model to the target](#how-optics-points-the-model-to-the-target).
+- The steps that ran before the failure.
 
-The model can take up to five actions to finish the step, using only six keywords: Press Element, Enter Text, Scroll, Swipe By Percentage, Press Keycode and Press By Percentage. Each action goes through Optics' normal ways of finding elements. If the step is done within five actions, it passes. If not, it fails with the original error.
+Optics tells the model to choose the row whose text or id matches the target. It also tells the model not to choose a row only because it is the main button on the screen.
 
-Self-heal covers steps that find an element and act on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element, Scroll From Element, and the keywords built on them (Detect And Press, Select Dropdown Option). Checks such as Assert Presence don't self-heal, so a missing element still fails a check.
+The model can do up to five actions to complete the step. It can use only six keywords: Press Element, Enter Text, Scroll, Swipe By Percentage, Press Keycode and Press By Percentage. Optics finds the element of each action with its usual methods. If the step is complete within five actions, the step passes. If not, the step fails with the original error.
+
+Self-heal covers the steps that find an element and do an action on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element, Scroll From Element, and the keywords that use them (Detect And Press, Select Dropdown Option). Checks such as Assert Presence do not self-heal, so a missing element still fails a check.
+
+### How Optics points the model to the target
+
+Optics compares the target with each row on the screen and lists the closest rows in the prompt. It takes the words from the part of the locator that names the target:
+
+- The resource id, if the locator has one. `//*[@resource-id='com.app:id/search_button']` gives `search` and `button`.
+- Else the quoted values. Optics ignores XPath syntax such as `android.widget`.
+- Else the full text of the locator.
+
+Optics then makes more words from them:
+
+- It divides words at each change of case and at each change between letters and digits. `loginButton` gives `login` and `button`. `timerPreset1` gives `timer`, `preset` and `1`.
+- It joins each pair of adjacent words. "Stop watch" also gives `stopwatch`, so it matches a row that says "Stopwatch".
+- It adds the words of the element name from your suite.
+
+A row with the exact resource id comes first. The other rows are in order of the number of shared words. If two rows share the same number, a row that takes an action, such as a tap, comes before read-only text. Then the row with fewer other words comes first.
+
+**Tip:**
+Give your elements clear names in the elements file, such as `stopwatch_tab` or `timer_preset_1`. Optics sends the name to the model and uses its words to find the closest rows. A clear name helps a small model to find the correct row.
+
+### When a heal ends
+
+A heal of Press Element ends when the model presses the row that the locator names. The step passes, also when the model plans more actions. Optics compares the label and the id of the row with the value in the locator. It ignores case, separators, the words `tab`, `button`, `btn` and `icon`, and a plural "s". Thus `timerPreset1` matches `timer_preset_1`, and `tab_alarm` matches "Alarms".
+
+A press on a different row can lead to the target, such as a press on a menu or a tab. Then the model tells Optics if the step is complete. The same applies to a locator with more than one quoted value, such as an XPath with two conditions.
 
 ## Find out what healed
 
@@ -2505,15 +2594,16 @@ AI self-heal step 1/5 for 'press_element': action=keyword keyword=press_element 
 AI self-heal: recovered 'press_element' via keyword 'press_element'
 ```
 
-Update the element with what the model used, here by adding `sign_in,Log in` to `elements.csv`.
+Update the element with the value that the model used. In this example, add `sign_in,Log in` to `elements.csv`.
 
-Over the [HTTP API](https://optics-framework.org/docs/advanced/http-api) and [MCP](https://optics-framework.org/docs/create/agent), a healed step's result says so directly, with `"healed": true` and the steps that worked.
+Over the [HTTP API](https://optics-framework.org/docs/advanced/http-api) and [MCP](https://optics-framework.org/docs/create/agent), the result of a healed step shows `"healed": true` and the steps that worked.
 
 ## Costs and limits
 
-- Each healed step makes up to six calls to the model, and each call takes a few seconds and costs API usage.
-- Screenshots go to your model provider while self-heal runs, unless you run the model locally. Don't use a hosted model on screens with data you can't share with a third party.
-- The model's instructions are tuned for phones. It works in browsers, but key presses use Android key codes.
+- Each healed step makes up to six calls to the model. Each call takes some seconds and uses your API quota.
+- Self-heal sends screenshots to your model provider, unless the model runs on your own server. Use your own server for screens with data that you cannot share with a third party.
+- The model never sees the text of a failed Enter Text step. It sees `<value>` and selects the field, and then Optics types the real text.
+- The instructions to the model are for phones. Self-heal works in browsers too, but key presses use Android key codes.
 
 ## See also
 
@@ -2600,7 +2690,7 @@ $ optics execute birch-tests --include "shopper can*" --exclude "Shopper can che
 
 - Matching ignores case. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first.
-- Suite Setup and Suite Teardown always run.
+- Suite Setup and Suite Teardown always stay in the run.
 - A name that matches no test case stops the run before it starts, with exit code `3`. The message suggests the correct name.
 
 `optics dry_run` takes the same flags. To keep a selection for every run, put `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude). The flags replace them for one run.
@@ -2699,19 +2789,21 @@ log_level: DEBUG    # more detail in the terminal and log files
 
 ## Read the JUnit report
 
-`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `kind`, `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+
+`kind` tells you the role of the test case: `suite_setup`, `setup`, `test`, `teardown` or `suite_teardown`. Use it to filter setup and teardown out of your test counts. A `<failure>` or `<error>` has a `code` attribute with the error code, such as `E0201`, when the failure has a code.
 
 Inside each test case, every module and keyword is a `<kw>` with `status`, `starttime`, `endtime` and `elapsed`. CI tools that show nested steps display the same tree you saw in the terminal.
 
 ```xml
-<testcase name="Shopper can find a missing link" classname="birch-tests" time="3.79" ... status="FAIL">
-  <kw name="Verify Missing Link" type="setup" status="FAIL" ...>
-    <kw name="Assert Presence" status="FAIL" ... elapsed="3.01">
+<testcase name="Shopper can find a missing link" classname="birch-tests" kind="test" time="3.79" ... status="FAIL">
+  <kw name="Verify Missing Link" type="setup" status="FAIL" ... code="E0201">
+    <kw name="Assert Presence" status="FAIL" ... code="E0201" elapsed="3.01">
     ...
     </kw>
     <kw name="Validate Element" status="NOT_RUN"/>
   </kw>
-  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure">...</failure>
+  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure" code="E0201">...</failure>
 </testcase>
 ```
 
@@ -2724,7 +2816,7 @@ A status is one of these:
 | `ERROR` | The run could not do its work, for example because the driver session was lost or the run stopped. |
 | `NOT_RUN` | A failure or a stop kept it from running. |
 
-After a failure, the steps that did not run are `NOT_RUN`. A test case that never started is `NOT_RUN` with a `<skipped>` element. A per-test setup or teardown has its own result, named `Setup (<test case>)` or `Teardown (<test case>)`. If a per-test setup fails, the test case still runs.
+After a failure, the steps that did not run are `NOT_RUN`. A test case that never started is `NOT_RUN` with a `<skipped>` element. A per-test setup or teardown has its own result, named `Setup (<test case>)` or `Teardown (<test case>)`. If a per-test setup fails, its test case does not run. The test case is `NOT_RUN`, and the `message` of its `<skipped>` starts with `Setup failed:`.
 
 If error screens were detected, the report has an extra failing test case called `on-screen-error-detection`. See [Catch error screens](https://optics-framework.org/docs/run/error-detection).
 
@@ -2737,11 +2829,13 @@ Each outcome has an exit code and a result in `junit_output.xml`. A run that can
 | Every test case passed | `0` | Every test case is `PASS`. |
 | A test case failed | `1` | That test case is `FAIL` with a `<failure>`. The steps after the failed step are `NOT_RUN`. |
 | An error screen matched | `1` | An extra `on-screen-error-detection` test case has one `<failure>` for each match. |
+| Suite Setup failed | `1` | Suite Setup is `FAIL`. Each other test case, except Suite Teardown, is `NOT_RUN` with a `<skipped>` whose `message` starts with `Suite setup failed:`. Suite Teardown runs. |
+| A per-test setup failed | `1` | `Setup (<test case>)` is `FAIL`. Its test case is `NOT_RUN` with a `<skipped>` whose `message` starts with `Setup failed:`. Its teardown runs. |
 | Config error, missing files or no driver enabled | `1` | Not written. |
 | Test selection not valid | `3` | Not written. |
-| The Appium or Selenium server cannot be reached, or no Android device is attached | `1` | Each test case is `ERROR` with an `<error>` that names the problem. Their steps are `NOT_RUN`. |
+| The Appium or Selenium server cannot be reached, or no Android device is attached | `1` | Each test case is `ERROR` with an `<error>` that names the problem and has its code, such as `E0102`. Their steps are `NOT_RUN`. |
 | The driver session is lost during the run | `1` | The test case in progress and each later one is `ERROR` with an `<error>` that has `E0106`. |
-| You press Ctrl+C | `130` | Finished test cases keep their results. The one in progress is `ERROR`. Later ones and Suite Teardown are `NOT_RUN` with `<skipped>`. |
+| You press Ctrl+C | `130` | Finished test cases keep their results. The one in progress is `ERROR` with `code="E0706"`. Later ones and Suite Teardown are `NOT_RUN` with `<skipped>`. |
 | Optics receives SIGTERM | `143` | The same as Ctrl+C. |
 
 A session is lost when the Appium server or the Selenium server stops, or drops the session, during a run. The terminal summary shows the affected test cases as failed.
@@ -2885,7 +2979,7 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.11.2"
+          pip install "optics-framework[playwright]==1.11.3"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
@@ -2912,7 +3006,7 @@ jobs:
 optics-web:
   image: python:3.12-bookworm
   script:
-    - pip install "optics-framework[playwright]==1.11.2"
+    - pip install "optics-framework[playwright]==1.11.3"
     - python -m playwright install --with-deps chromium
     - optics execute birch-tests --no-use-printer
   artifacts:
@@ -2976,7 +3070,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.11.2"
+          pip install "optics-framework[appium]==1.11.3"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -3018,7 +3112,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.11.2`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Pin the Optics version** (`optics-framework==1.11.3`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
@@ -3052,9 +3146,9 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 
 ## The configuration
 
-- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.2`). Upgrade on purpose, in its own change.
+- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.3`). Upgrade on purpose, in its own change.
 - [ ] **Only the engines you use are enabled.** Every enabled OCR or image engine loads at the start of each run, even when no step needs it.
-- [ ] **No secrets are in `config.yaml` or the suite files.** Keep API keys in environment variables, and passwords in CI secrets.
+- [ ] **No secrets are in `config.yaml` or the suite files.** Keep API keys in environment variables, and refer to them as `api_key: ${GEMINI_API_KEY}`. Keep passwords in CI secrets.
 - [ ] **The project folder holds one config file** and no stray copies of old suites. Optics reads every CSV and YAML in the folder.
 
 ## The run
@@ -4473,6 +4567,8 @@ Instead of a path, you can give the dongle's USB product description, such as `M
 
 Mount the camera straight on, with the screen upright and filling the picture edge to edge. Optics turns positions in the camera picture straight into pointer moves, so anything around the screen throws the taps off.
 
+If the camera sees the screen at an angle, or sees more than the screen, set `deskew_corners`. Optics then cuts each frame to the screen and makes it straight. See [`camera_screenshot` source](#camera-screenshot-source).
+
 ### Write config.yaml
 
 `config.yaml`:
@@ -4532,6 +4628,9 @@ There's no preflight for this setup, so check the dongle and camera before you s
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | Frame server only. The length of the size header in bytes, `4` or `8`. |
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
+| `deskew_corners` | None | The four corners of the screen in the camera picture, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts each frame to the screen and makes it straight. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
+| `rotation` | None | `clockwise` or `counterclockwise`. Optics turns the frame a quarter turn after `deskew_corners`. |
 
 Set either `camera_index` or `url`. With neither, Optics reads the environment variables below. If these are not set, Optics stops with "No camera_index or valid URL provided".
 
@@ -4540,10 +4639,12 @@ For an HTTP URL, Optics sends a `GET` request and decodes the reply as an image.
 | Variable | Used for |
 |---|---|
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
-| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when `url` is set and `token` is not. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token for `WEBCAM_SCREENSHOT_URL`. Optics sends it to no other URL. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
 
-A value in config.yaml wins over a variable. Write `token: ${CAMERA_TOKEN}` to keep the token out of the file.
+A value in config.yaml wins over a variable. For a `url` in config.yaml, set `token` too. Write `token: ${WEBCAM_SCREENSHOT_TOKEN}` to keep the token out of the file.
+
+Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, stop the run. A `rotation` value other than `clockwise` or `counterclockwise` also stops the run.
 
 A frame server receives the line `screenshot`, then replies with the picture's size in a `header_size`-byte unsigned number, followed by the picture as JPEG or PNG.
 
@@ -4598,9 +4699,34 @@ Sign in,Assert Presence,Trail Runner 2,20
 
 The first step taps the Birch icon on the home screen, so the run starts from there.
 
+## Add a camera to an Appium run
+
+Some apps block screenshots only on some screens, such as a payment screen. If Appium can reach the device, keep Appium and add a camera for those screens. On a protected screen, the Appium screenshot is black, and Optics uses the camera frame.
+
+List `camera_screenshot` after `appium_screenshot`:
+
+`config.yaml`:
+
+```yaml
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_screenshot: {enabled: true}
+  - camera_screenshot:
+      enabled: true
+      capabilities:
+        url: http://127.0.0.1:8080/screenshot
+        deskew_corners: ["212,88", "868,95", "861,1262", "205,1255"]
+        out_width: 1080
+        out_height: 2400
+```
+
+Optics maps OCR and image matches on the camera frame into the Appium window, the same as for an Appium screenshot. Appium then taps the correct point on the device.
+
+**Tip:**
+Set `deskew_corners` so that the frame shows only the screen. Set `out_width` and `out_height` to the screenshot size of the device, so that the frame has the same shape as the screen. With other drivers, Optics uses the pixels of the frame as they are.
+
 ## Known gaps
 
-- **Camera correction isn't applied.** `deskew_corners`, `rotation`, `out_width` and `out_height` under `camera_screenshot` have no effect. Frame the camera straight on, with the screen upright, instead.
 - **The doctor reports a failure.** `optics doctor` expects an element source whose name starts with `ble_`, and none exists. It shows ❌ for `config: ble element source`. Ignore that row, and don't use `optics doctor --check` on this project in CI.
 
 ## If it isn't working
@@ -4764,23 +4890,23 @@ Every value is text, even when it looks like a number. That matters in expressio
 
 - **Evaluate** puts the value into the expression as you wrote it. `${price} + 5` with `price` set to `64` becomes `64 + 5`, which is `69`. To join text, quote it: `'${first_name}' + ' ' + '${last_name}'`.
 - **Read Data** puts quotes around a value in its query, unless the value is already between quotes. `name == ${user}` works.
-- **Condition** puts quotes around each value. `${count} == '3'` works. `${count} > 2` fails, because it compares text with a number. Compare against quoted text, or compute the comparison with Evaluate first. See [Conditions and loops](https://optics-framework.org/docs/advanced/conditions).
+- **Condition** puts each value in quotes as text. `${count} == '3'` works. `${count} > 2` fails, because it compares text with a number. Compare against quoted text, or compute the comparison with Evaluate first. See [Conditions and loops](https://optics-framework.org/docs/advanced/conditions).
 
-Evaluate allows arithmetic (`+ - * / % **`), comparisons, `and`, `or`, `not` and `x if condition else y`. It doesn't allow function calls such as `int()`.
+Evaluate allows arithmetic (`+ - * / % **`), comparisons, `in`, `and`, `or`, `not` and `x if condition else y`. It does not allow function calls such as `int()`. An expression with other parts, or one that is too large to compute, fails with E0406.
 
 ## Hide sensitive values
 
 Optics writes `****` in place of a secret in the console, the log files, `logs.json`, `junit_output.xml`, `failed_steps_elements.json`, the run tree and error output. Optics masks these items:
 
 - A value that `store_as` or `Read Data` sets under a secret name.
-- A value in the elements file or a step that starts with `@:`.
+- A value in the elements file or a step that starts with `@:`. When the step runs, Optics also masks the value without the prefix in all later output of the run.
 - A text value in `config.yaml` under a secret name, such as `api_key`. This includes a value that the config reads from an environment variable with a secret name.
 - A password in a URL: `https://user:****@host`.
 - A query parameter with a secret name: `?token=****`.
 
 A name is secret when it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
 
-A stored value or a config value must have 4 or more characters to be masked.
+A value must have 4 or more characters to be masked. This also applies to a value with `@:`.
 
 Optics does not hide a value from the elements file, `Evaluate`, `Run Loop` or an `Invoke API` `extract` by its name. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
 
@@ -5209,7 +5335,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.11.2"}
+{"status":"Optics Framework API is running","version":"1.11.3"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.
@@ -5290,12 +5416,15 @@ $ curl -N http://127.0.0.1:8000/v1/sessions/$SESSION/events
 
 ## Keep the server safe
 
-The server has **no authentication**, and it accepts requests from any web page your browser opens. Anyone who can reach it can control the connected device.
+The server has **no authentication**. Anyone who can reach it can control the connected device.
 
 - Keep the default `--host 127.0.0.1`, so only your machine can reach it.
 - If another machine must call it, put it behind a proxy that adds authentication, on a trusted network.
 - Run one worker (the default). Sessions live in the server's memory, so several workers would lose track of each other's sessions.
-- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, `user_data_dir`, a browser `profile`, and `Read Data` with `ENV:`.
+- Web pages cannot call the server. To let your own web app call it, list the origin of the app in `OPTICS_CORS_ORIGINS`.
+- The server answers only requests whose `Host` is a loopback name, such as `localhost`. Add other names to `OPTICS_ALLOWED_HOSTS`.
+- The server does not read its own environment or files for a caller. It refuses `${NAME}` in a driver URL or header, a `storage_state` file path, `user_data_dir` and a browser `profile`. It also refuses `project_path`, `credentials_path`, `file:` URLs, and `Read Data` from a file or `ENV:`. Upload template images with `POST /v1/sessions/{id}/templates`.
+- Each session writes its output to its own temporary folder, and the server deletes it when the session stops.
 
 ## See also
 
@@ -5523,6 +5652,8 @@ Use the Bluetooth and camera setup when:
 - **You monitor the live app.** The same journey runs on a real, unmodified device and app, the way a customer uses it.
 
 If Appium or a browser driver can reach the device, use them instead. They're faster, read the UI tree directly, and support every keyword. See [Supported platforms](https://optics-framework.org/docs/platforms/).
+
+If Appium works and the app blocks screenshots only on some screens, keep Appium and add a camera for those screens. See [Add a camera to an Appium run](https://optics-framework.org/docs/platforms/production#add-a-camera-to-an-appium-run).
 
 ## Get the hardware
 
@@ -5942,7 +6073,7 @@ Source: https://optics-framework.org/docs/reference/
 
 > Look up every command, setting, file format and keyword.
 
-These pages describe Optics 1.11.2 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
+These pages describe Optics 1.11.3 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
 
 If you're new to Optics, start with the [quickstart](https://optics-framework.org/docs/get-started/quickstart) and come back here when you need a detail.
 
@@ -7485,7 +7616,7 @@ The conditions are checked in order. The first true one runs its target, and the
 A condition is one of two kinds:
 
 - **A module name.** Optics runs that module. If every step passes, the condition is true. Start the name with `!` to flip it: `!Is Signed In` is true when the module fails.
-- **An expression.** Each `${name}` is replaced with its value in double quotes, so compare it with a quoted literal. You can use `==`, `!=`, `and`, `or` and `not`. Start the expression with `!` to negate it.
+- **An expression.** Each `${name}` is replaced with its value as quoted text, so compare it with a quoted literal. You can use `==`, `!=`, `in`, `not in`, `and`, `or` and `not`. Start the expression with `!` to negate it. An expression that Optics refuses fails with E0406, also with `!`.
 
 ```csv
 Start,Condition,Is Signed In,Go Home,Sign In
@@ -7531,6 +7662,8 @@ The query has parts separated by `;`:
 - A filter such as `tier == 'gold'` keeps the matching rows. Several filters must all match.
 - `${name}` inside the query is replaced with its value in single quotes, so write `email == ${email}`.
 
+A filter compares columns with values. You can use `== != < <= > >=`, `and`, `or`, `not`, and `column in ['a', 'b']` or `not in`. Put a column name that has spaces between backticks: `` `user tier` == 'gold' ``. Optics refuses arithmetic on columns, function calls, and the pandas operators `&`, `|` and `~`, with E0406. Write `and`, `or` and `not` instead.
+
 Given this data file:
 
 `test_data/users.csv`:
@@ -7557,7 +7690,8 @@ Good to know:
 
 - Every cell is read as text, so filters must compare text: `age == '30'`. `age > 26` fails with error E0403.
 - Narrow the result to one row and one column. One row with several columns is stored joined by commas, such as `ana@birch.example,gold`. Several rows are stored in a form you can't use in a step.
-- A query that matches nothing fails with "No data found". A missing column fails with error E0403. A missing file or environment variable fails with error E0501.
+- A query that matches nothing fails with "No data found". A missing column fails with error E0403: "Column '<name>' is not in the data." A filter that compares no column also fails with E0403. A missing file or environment variable fails with error E0501.
+- `optics serve` and `optics mcp` refuse a file and `ENV:` with E0501. Send the data in the request instead.
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
 - **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
@@ -7584,9 +7718,10 @@ Cart,Evaluate,${greeting},'Hello ' + '${first_name}'
 
 Good to know:
 
-- Each `${name}` is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: `'${first_name}'`.
-- You can use numbers, quoted text, lists, `+ - * / % **`, comparisons, `and`, `or`, `not` and `x if condition else y`.
-- Function calls such as `int(...)` or `len(...)` aren't allowed. They fail with "Unsafe expression".
+- Each `${name}` is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: `'${first_name}'`. An unknown name fails with E0403.
+- You can use numbers, quoted text, lists, `+ - * / % **`, comparisons, `in`, `and`, `or`, `not` and `x if condition else y`.
+- Optics computes the expression itself and runs no Python. Function calls such as `int(...)` or `len(...)` are not allowed. They fail with E0406: "Expression '<expression>' refused: only these calls are allowed: none."
+- Optics also refuses an expression that is too large, with E0406. The limits are 100,000 characters, 2,000 parts, numbers of 10,000 bits, and 1,000,000 items in one value.
 - The result is saved as text. A comparison saves `True` or `False`.
 - In CSV, wrap an expression that contains commas in double quotes.
 
@@ -7695,11 +7830,11 @@ Good to know:
 - `${name}` is replaced anywhere in the endpoint, headers and body. A missing variable fails the step.
 - The body is sent as JSON. Every request has a 30-second timeout.
 - `extract` maps a variable name to a JSONPath. `$.a.b`, `a.b` and `[0]` indexing all work.
-- Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step.
+- Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step. A condition can call only `len`, `str`, `int`, `float` and `bool`. Other calls fail with E0406.
 - With `expected_result.expected_status` set, the step fails when the response has another HTTP status, such as `API 'Ping' returned status 200, expected 201.` The check runs before Optics extracts a value or runs an assertion. The failure has no error code.
 - `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
 - With `expected_result`, a response that isn't JSON fails the step with error E0403.
-- Each call is logged to `api_details.log` and `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
+- Each call is logged to `api_details.log`, one JSON object for each line, and to `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 - The top-level key must be `api:`. A file that starts with `apis:` is ignored.
 
 See [Call APIs from a test](https://optics-framework.org/docs/advanced/api-calls) for a full walkthrough.
@@ -7775,7 +7910,7 @@ Source: https://optics-framework.org/docs/reference/cli
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.2.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -7787,7 +7922,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -8019,7 +8154,7 @@ $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can c
 - Each flag takes one or more names. You can also give a flag more than once.
 - Matching ignores case and extra spaces, and must match the full name. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first, then removes the `--exclude` matches.
-- Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
+- Suite Setup, Suite Teardown and the per-test setup and teardown always stay in the run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
 
 Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 3. This also applies to `include` and `exclude` in config.yaml:
@@ -8046,7 +8181,7 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 1. Optics walks the whole folder and finds your files by their content (see [Project files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
 2. It loads the config and checks the test case selection. Then it stops if no driver is enabled and the selected test cases use a keyword that needs one. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`, runs with no driver.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
-4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
+4. It runs Suite Setup, then each test case, then Suite Teardown. A test case that fails does not stop the others. A failed setup skips the test cases that it prepares. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
 The printer shows a live tree, then a summary:
@@ -8062,6 +8197,8 @@ Test Suite
 Total Test Cases: 1 | Passed: 1 | Failed: 0
 ```
 
+When a failed setup skips test cases, the summary also shows `| Skipped: <count>`.
+
 When a step fails, a "Failure details" box names the test, the step and the reason:
 
 ```terminal
@@ -8071,7 +8208,7 @@ Shopper can add a backpack → step 'Press Elemnt (//input[@id='login-button'])'
 The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If every fallback value failed, it is `Keyword '<keyword>' failed after fallback attempts; last error: <error>`. If the error has a deeper cause, `(cause: …)` comes at the end:
 
 ```terminal
-Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
+Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
 ```
 
 Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs) and [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
@@ -8085,7 +8222,7 @@ Results go to `execution_output/` in the project: `junit_output.xml`, screenshot
 | 130 | You pressed Ctrl+C. |
 | 143 | Optics received SIGTERM. |
 
-Optics also writes `junit_output.xml` when you stop the run with Ctrl+C or SIGTERM. The test case in progress ends as `ERROR`. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
+Optics also writes `junit_output.xml` when you stop the run with Ctrl+C or SIGTERM. The test case in progress ends as `ERROR`, with the code E0706. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
 
 On-screen errors found by error detection appear in `junit_output.xml` as a failing test case. They count as a failed test case, so the exit code is 1.
 
@@ -8150,7 +8287,9 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 | `--workers` | `1` | Server processes. Keep it at 1: sessions live in memory and aren't shared between processes. |
 
 **Warning:**
-The API has no authentication and accepts requests from any web origin. Keep the default `127.0.0.1` unless you're on a trusted network.
+The API has no authentication. Keep the default `127.0.0.1`, unless you are on a trusted network. On another address, the server logs a warning when it starts.
+
+Web pages cannot call the server unless you list their origins in `OPTICS_CORS_ORIGINS`. A request whose `Host` is not a loopback name gets `421`. Add other names in `OPTICS_ALLOWED_HOSTS`.
 
 The server doesn't read config.yaml. Each session gets its settings from the request. Interactive API docs are at `http://127.0.0.1:8000/docs`. See [HTTP API](https://optics-framework.org/docs/reference/http-api).
 
@@ -8277,16 +8416,18 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_MCP_TOOLSET` | `mcp` | The default for `--toolset`: `core` or `full`. Any other value stops the server. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `mcp` | Seconds before an unused session ends. Default `900`. `0` keeps sessions open. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `mcp` | Seconds that one tool call can take. Default `100`. |
+| `OPTICS_CORS_ORIGINS` | `serve` | Web origins that can call the server, separated by commas. Empty by default, so no web page can call it. `*` stops the server with E0501. |
+| `OPTICS_ALLOWED_HOSTS` | `serve`, `mcp` over HTTP | Host names that the server answers in addition to loopback names, separated by commas. When set, the check applies on any address. Other hosts get `421`. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
-| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. |
+| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. `capabilities.api_key` in config.yaml wins over it. |
 | `GOOGLE_GENAI_USE_VERTEXAI`, `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_APPLICATION_CREDENTIALS` | Gemini, Google Vision | Use Vertex AI and Google Cloud credentials instead of an API key. |
-| `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. Set `api_key_env` in config.yaml to read another variable. |
+| `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. `capabilities.api_key` in config.yaml wins over it. Set `api_key_env` to read another variable. |
 | `OPENAI_BASE_URL` | `openai` engine | The server to call when the entry has no `url`, such as OpenRouter or a local Ollama. |
-| `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. |
+| `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. `capabilities.api_key` in config.yaml wins over it. Set `api_key_env` to read another variable. |
 | Any name in `${NAME}` | Playwright | A `${NAME}` in the Playwright `url` or in a `headers` value is read from the environment. If it is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config). |
 
-`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
+`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. `optics serve` and `optics mcp` over HTTP also refuse a `Read Data` file. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow).
 
 ## Install scripts
 
@@ -8386,7 +8527,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | Key | Default | What it does |
 |---|---|---|
 | `driver_sources` | All disabled | The driver that controls the device or browser. See [driver_sources](#driver-sources). |
-| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias. |
+| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias in each command, `optics doctor` included. If the file has both keys, Optics uses `elements_sources`. |
 | `text_detection` | All disabled | OCR engines for finding elements by on-screen text. |
 | `image_detection` | All disabled | Engines for finding elements by image templates. |
 | `llm_models` | All disabled | The LLM for AI self-heal and the plain-English mode of `optics live`. |
@@ -8513,7 +8654,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`, or after the screenshot source of a driver for screens that the driver cannot capture. |
 
 `optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
 
@@ -8523,7 +8664,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 |---|---|---|
 | `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | `capabilities.credentials_path`: a service account key file. Without it, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -8535,7 +8676,9 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 ### llm_models
 
-Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. Use environment variables for keys, not `config.yaml`. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+
+Each engine reads its API key from `capabilities.api_key` first, then from an environment variable. To keep the key out of the file, write a reference such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file. If the variable is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config) before it starts. Logs and reports show `****` in place of the key.
 
 Each engine also takes `timeout_s` under `capabilities`: the seconds that one request can take, default `60`. A value that is not a positive number fails with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines).
 
@@ -8548,6 +8691,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
 | `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
+| `api_key` | None | The Gemini API key, or a reference such as `${GEMINI_API_KEY}`. `gemini_api_key` also works. |
 
 ```yaml
 llm_models:
@@ -8557,7 +8701,7 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
+Without `api_key`, Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. The key does not select the backend. If `GOOGLE_GENAI_USE_VERTEXAI` selects Vertex AI and you want the Gemini API, also set `use_vertexai: false`.
 
 To use a service account key file, set `credentials_path` and leave out the API key:
 
@@ -8579,6 +8723,7 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Setting | Default | What it does |
 |---|---|---|
 | `model` | None (required) | The model name as the server spells it, for example `gpt-5-mini`, or `anthropic/claude-sonnet-5-5` on OpenRouter. |
+| `api_key` | None | The key, or a reference such as `${OPENROUTER_API_KEY}`. Optics uses it before `api_key_env`. |
 | `api_key_env` | `OPENAI_API_KEY` | The environment variable that holds the key. |
 | `response_format` | `json_schema` | Set `json_object` if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead. |
 | `max_tokens` | The server's limit | The longest reply the model may write. |
@@ -8587,8 +8732,8 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Server | `url` | Key |
 |---|---|---|
 | OpenAI | Leave it out | `OPENAI_API_KEY` |
-| OpenRouter | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY`, with `api_key_env: OPENROUTER_API_KEY` |
-| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable named by `api_key_env` |
+| OpenRouter | `https://openrouter.ai/api/v1` | `api_key: ${OPENROUTER_API_KEY}` |
+| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in `api_key` |
 | Ollama | `http://localhost:11434/v1` | None |
 | vLLM, LM Studio | The server's `/v1` URL | None |
 
@@ -8599,8 +8744,10 @@ llm_models:
       url: https://openrouter.ai/api/v1
       capabilities:
         model: anthropic/claude-sonnet-5-5
-        api_key_env: OPENROUTER_API_KEY
+        api_key: ${OPENROUTER_API_KEY}
 ```
+
+With no key and no `url`, the engine stops with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines): "found no API key: set capabilities.api_key or OPENAI_API_KEY". A server at a `url` can work without a key.
 
 #### anthropic
 
@@ -8612,13 +8759,14 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
 | `region` | From the environment | The Bedrock or Vertex AI region. |
 | `project` | From the environment | The Vertex AI project. |
+| `api_key` | None | The Claude API key, or a reference such as `${ANTHROPIC_API_KEY}`. Only for `platform: anthropic`. Optics uses it before `api_key_env`. |
 | `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. |
 | `max_tokens` | `4096` | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
 | Platform | Credentials |
 |---|---|
-| `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
+| `anthropic` | `api_key`, else `ANTHROPIC_API_KEY` or the variable `api_key_env` names |
 | `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
 | `vertex` | Google Cloud application default credentials |
 
@@ -8900,6 +9048,9 @@ image_detection:
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
 | `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
+| `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts the frame to the screen and makes it straight. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
+| `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after `deskew_corners`. |
 
 With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
 
@@ -8908,10 +9059,14 @@ If you set neither `url` nor `camera_index`, Optics reads these environment vari
 | Variable | Used for |
 |---|---|
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
-| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token for `WEBCAM_SCREENSHOT_URL`. Optics sends it to no other URL. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
 
-Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
+For a `url` in config.yaml, set `token` too. Keep the token out of the file: `token: ${WEBCAM_SCREENSHOT_TOKEN}`. A `url` with no `token` sends no token, and Optics logs a warning.
+
+Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, or another `rotation` value stop the run.
+
+A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](https://optics-framework.org/docs/reference/errors#e03-screenshots).
 
 The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](https://optics-framework.org/docs/platforms/production).
 
@@ -8946,8 +9101,8 @@ With `file_log: true` and no `execution_output_path`, Optics also writes a copy 
 
 Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
 
-- Values you write with the `@:` prefix, such as `@:s3cret`.
-- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Values you write with the `@:` prefix, such as `@:s3cret`. After the step runs, Optics also masks the value without the prefix.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters, also values with `@:`.
 - Text values in config.yaml under a secret name, such as `appium:keystorePassword`. Also the values of environment variables with a secret name, such as `HUB_TOKEN`. A key that ends in `_env`, such as `api_key_env`, holds the name of a variable and is not a secret.
 - Passwords in URLs (`https://user:****@host`) and query parameters with a secret name (`?token=****`).
 
@@ -8969,6 +9124,7 @@ llm_models:
 - It needs an enabled `llm_models` entry, that engine's extra and key, and a screenshot element source such as `appium_screenshot`. Without them it does nothing, and the run isn't affected.
 - It applies to keywords that find and act on an element: `Press Element`, `Enter Text`, `Enter Number`, `Clear Element Text`, `Get Text`, `Swipe From Element`, `Scroll From Element`, `Detect And Press` and `Select Dropdown Option`. It doesn't apply to assertions.
 - A healed step passes. Check the logs for `AI self-heal:` lines so a real regression doesn't go unnoticed.
+- When the step uses `${name}`, Optics sends the element name to the model with the screen. Any engine works, also your own model server with an OpenAI-compatible API. See [Choose a model](https://optics-framework.org/docs/elements/self-heal#choose-a-model).
 
 `optics serve` and `optics mcp` ignore this key. They use per-session fields and the `OPTICS_AI_SELF_HEAL` variable instead. See [Self-heal](https://optics-framework.org/docs/elements/self-heal).
 
@@ -9093,19 +9249,23 @@ A `test_step` that names a keyword instead of a module passes both `dry_run` and
 
 ### Setup and teardown
 
-Optics treats some test case names specially. Matching ignores case and looks for the words anywhere in the name.
+Optics gives a special role to a test case whose name ends with one of these words. Matching ignores case.
 
-| Name contains | Role | When it runs |
+| Name ends with | Role | When it runs |
 |---|---|---|
-| `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
-| `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Before each test case. |
-| `teardown` without `suite` | Per-test teardown | After each test case. |
+| `Suite Setup` | Suite setup | Once, before all other test cases. |
+| `Suite Teardown` | Suite teardown | Once, after all other test cases. |
+| `Setup` | Per-test setup | Before each test case. |
+| `Teardown` | Per-test teardown | After each test case. |
 
-- A failing setup doesn't stop the test cases after it.
-- The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
-- Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
-- Each run of a per-test setup or teardown has its own result in the report, named `Setup (<test case>)` or `Teardown (<test case>)`.
+`Web Suite Setup` is the suite setup, and `Test Setup` is the per-test setup. A name such as `Setup wizard works` does not end with one of the words, so it is an ordinary test case.
+
+- A project has a maximum of one test case of each role. A second one stops the run before it starts, with E0503: "The test cases have more than one test setup". Rename the other test cases.
+- If the suite setup fails, no other test case runs, except the suite teardown. The report shows each one as `NOT_RUN` with a `<skipped>` message that starts with `Suite setup failed:`.
+- If a per-test setup fails, its test case does not run. The report shows the test case as `NOT_RUN` with a `<skipped>` message that starts with `Setup failed:`. The per-test teardown still runs.
+- The test cases in the table run even when `include` or `exclude` does not name them.
+- Each run of a per-test setup or teardown has its own result in the report. Its name is the name of the setup or teardown, followed by the test case, such as `Setup (Shopper can sign in)`.
+- `optics execute --runner pytest` obeys the same rules.
 
 ## Modules
 
@@ -9393,7 +9553,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `easyocr` to start with. It needs nothing else installed.
@@ -9417,7 +9577,7 @@ An LLM powers [AI self-heal](https://optics-framework.org/docs/elements/self-hea
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Each engine reads its credentials from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
+Each engine reads its API key from `capabilities.api_key` in config.yaml, else from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
 
 ## Other extras
 
@@ -9550,6 +9710,8 @@ The server needs the `mcp` extra. The [install scripts](https://optics-framework
 $ pip install "optics-framework[mcp]"
 ```
 
+The extra installs fastmcp 3.4.4 or newer.
+
 You also need the extras for your driver, for example `appium` or `playwright`. See [Engines and extras](https://optics-framework.org/docs/reference/engines).
 
 ## Start the server
@@ -9566,6 +9728,10 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|
 | `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 10 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
 
 We recommend `stdio` for an agent on your own machine. Use `http` when the server runs in a container or on another machine.
+
+Over `http`, each session belongs to the client connection that started it. Another client cannot see the session or use its id. The server has no authentication, so keep it on `127.0.0.1` or behind a gateway that adds authentication. On another address, it logs a warning when it starts. Set `OPTICS_ALLOWED_HOSTS` to the host names that clients use, such as `localhost` in a container. A request with another `Host` is refused.
+
+An `http` server also refuses what makes it read its own files: `project_path`, `credentials_path`, `file:` URLs and `Read Data` from a file.
 
 ## Connect your agent
 
@@ -9655,7 +9821,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app` and 
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. Passing `[]` makes the session fail to start. |
 | `text_detection` | `[]` | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | `[]` | Image engines, for example `["templatematch"]`. |
-| `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. |
+| `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). |
 | `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM engine for self-heal: `gemini`, `openai` or `anthropic`. |
 | `llm_model` | `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini | The model for self-heal. `openai` and `anthropic` need one. |
@@ -9827,12 +9993,13 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | `OPTICS_MCP_TOOLSET` | `core` | `core` or `full`. The `--toolset` flag wins. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `900` | Ends a session after this many seconds without a call. `0` turns it off. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `100` | The longest time one call can take. After it, the call returns a `timeout` error, and the session stays `busy` until the driver call ends. |
+| `OPTICS_ALLOWED_HOSTS` | | `http` only. Host names that the server answers in addition to loopback names, separated by commas. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | off | `1`, `true`, `yes` or `on` allows the coordinate keywords. See [Coordinate taps](#coordinate-taps). |
 | `OPTICS_AI_SELF_HEAL` | off | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
 | `OPTICS_LLM_PROVIDER` | `gemini` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | | The default model. `openai` and `anthropic` need one. |
-| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see [llm_models](https://optics-framework.org/docs/reference/config#llm-models). |
-| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY` or `api_key_env`. |
+| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. A session cannot set `api_key_env`, so each engine reads its default variables. For Gemini on Vertex AI, see [llm_models](https://optics-framework.org/docs/reference/config#llm-models). Claude runs only on the Claude API here, not on Bedrock or Vertex AI. |
+| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY`. |
 
 ## Typical agent loop
 
@@ -9856,7 +10023,7 @@ Call `terminate_session`.
 - **No flow control.** `Run Loop`, `Condition`, `Evaluate`, `Read Data`, `Invoke API` and the other flow-control keywords are not tools. Your agent can still write them into CSV modules for `optics execute`.
 - **No save tool.** There are no tools to record, save, replay, find devices or run doctor. The agent writes project files from the steps resource.
 - **Sessions are not shared.** Sessions live in the server's memory. `optics serve` and `optics live` cannot see them. A session ends after the idle lease. All sessions end when the server stops.
-- **Images come from a project.** There's no upload tool. Pass `project_path` to use template images.
+- **Images come from a project.** There is no upload tool. On `stdio`, pass `project_path` to use template images. An `http` server has no template images.
 - **Selenium has no rows.** The tools run keywords on Selenium, but `verified` stays `unknown` and `observe` fails. Read `/source` instead.
 
 ## Errors
@@ -9921,15 +10088,26 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 The server prints its own log lines and Optics' debug logs to the terminal. Interactive docs are at `http://127.0.0.1:8000/docs` while it runs.
 
 **Warning:**
-The API has no authentication, and it accepts requests from any web origin (CORS is open). Anyone who can reach the port can control your devices. Keep the default `127.0.0.1`, and bind to another address only on a network you trust.
+The API has no authentication. Anyone who can reach the port can control your devices. Keep the default `127.0.0.1`, or put the server behind a gateway that adds authentication. On another address, the server logs a warning when it starts.
 
-The server doesn't read config.yaml or your project's test files. Each session gets its engines from the request. Sessions also don't write screenshots or page sources to disk, and they log at `DEBUG`.
+Two more checks keep web pages away from the server:
+
+- **CORS is off.** A web page cannot call the server, unless you list its origin in `OPTICS_CORS_ORIGINS`, such as `https://dash.example.com`. Separate origins with commas. The value `*` stops the server with E0501.
+- **The Host header must be a loopback name.** On `127.0.0.1`, a request with another `Host`, such as a domain that points to `127.0.0.1`, gets `421 Misdirected Request`. To allow more names, or to apply the check on any address, list the names in `OPTICS_ALLOWED_HOSTS`. Separate names with commas. Loopback names stay allowed.
+
+In a container, publish the port on the host loopback and set `OPTICS_ALLOWED_HOSTS=localhost`:
+
+```shell
+$ docker run -p 127.0.0.1:8000:8000 -e OPTICS_ALLOWED_HOSTS=localhost <image>
+```
+
+The server does not read config.yaml or the test files of your project. Each session gets its engines from the request. Sessions do not save screenshots or page sources, and they log at `DEBUG`. Each session writes its other output, such as `junit_output.xml`, to its own temporary folder. The server deletes the folder when the session stops.
 
 ## Endpoints
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.2"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.3"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -9978,7 +10156,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `elements_sources` | list | Element sources by name, for example `["appium_find_element", "appium_page_source", "appium_screenshot"]`. There's no default here, so always list them. |
 | `text_detection` | list | OCR engines, for example `["easyocr"]`. |
 | `image_detection` | list | Image engines, for example `["templatematch"]`. |
-| `project_path` | string | A project folder on the server. Optics loads its image templates. It doesn't load elements or test cases. |
+| `project_path` | string | Refused with `400` and E0501. Upload templates with `POST /v1/sessions/{id}/templates`. |
 | `api_data` | object | API definitions for `Invoke API`, inline. File paths aren't supported. |
 | `ai_self_heal` | boolean | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). Defaults to `OPTICS_AI_SELF_HEAL`, else off. |
 | `llm_provider` | string | The self-heal engine: `gemini`, `openai` or `anthropic`. Defaults to `OPTICS_LLM_PROVIDER`, else `gemini`. |
@@ -9986,7 +10164,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `strict_element_match` | boolean | Accepts only exact text matches. |
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
-Engine names are the same as in [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
+Engine names are the same as in [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). A session cannot set `api_key_env` or the `anthropic` `platform`, so each engine reads its default variables, such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, and Claude runs on the Claude API. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
 
 The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
 
@@ -9994,9 +10172,12 @@ The server does not read its own environment or files for a caller. It refuses t
 - A file path in `capabilities.storage_state`. Send the state as a JSON object.
 - `capabilities.user_data_dir`. Set it in a project's config.yaml instead.
 - `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
+- `project_path`, and `credentials_path` in any capabilities.
+- A `file:` URL, or another URL that opens a local resource of the browser, such as `chrome:`, `view-source:` or `about:` other than `about:blank`. This applies to `Launch App` and to each capability value, including a browser argument such as `--app=<url>`.
+- `Read Data` from a file or from `ENV:`. Send the rows in the step instead.
 
 ```terminal
-{"detail":{"type":"optics:config","code":"Code.E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
+{"detail":{"type":"optics:config","code":"E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
 ```
 
 The session log shows only the scheme and host of a URL. It masks header values, `storage_state` and every value with a secret name, such as `token` or `password`.
@@ -10047,13 +10228,13 @@ Unlike `optics execute`, the HTTP API returns keyword results, so `Get Text`, `A
 A keyword that does not find its element returns `404`:
 
 ```json
-{"detail": {"type": "optics:element", "code": "Code.E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "Code.E0201: Element 'css=#nope' not found."}}
+{"detail": {"type": "optics:element", "code": "E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "E0201: Element 'css=#nope' not found."}}
 ```
 
 - `cause` is the error that caused this one, or `null`.
-- When you send several values for one parameter and each one fails, the message is `All fallback values failed for keyword '<keyword>':` and lists each try. The code and status are those of the last try.
-- `Read Data` with an `ENV:` file path returns `400` with `E0501`: `Read Data ENV: is only available to project runs, not API callers`.
-- The `code` field can carry a `Code.` prefix, as in `Code.E0402`. It's the same code. See [Error codes](https://optics-framework.org/docs/reference/errors).
+- When you send several values for one parameter, Optics tries the next value only when the element is not found. It tries a maximum of 20 combinations. When each try fails, the message is `All <n> fallback combinations failed for keyword '<keyword>':` and lists the last five tries. The code and status are those of the last try.
+- `Read Data` with a file or an `ENV:` path returns `400` with `E0501`.
+- The `code` field holds the code alone, such as `E0402`. See [Error codes](https://optics-framework.org/docs/reference/errors).
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
 
@@ -10152,7 +10333,7 @@ $ curl -s -X DELETE http://127.0.0.1:8000/v1/sessions/$SID/stop
 {"status":"terminated"}
 ```
 
-Optics writes `junit_output.xml` for the session to `execution_output/` in the project path, or in the folder where the server runs.
+Optics writes `junit_output.xml` for the session to the temporary folder of the session. The server deletes the folder when the session stops.
 
 ## Limits
 
@@ -10169,7 +10350,7 @@ Source: https://optics-framework.org/docs/reference/errors
 
 > Learn what each Optics error code means and how to fix it.
 
-When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.2 and what to do about each one.
+When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.3 and what to do about each one.
 
 ## How codes are built
 
@@ -10187,14 +10368,13 @@ Codes in the `E02` family and `X0201` mean "element not found". When a step uses
 
 | Where | What it looks like |
 |---|---|
-| `optics execute` "Failure details" box | `<test> → step '<step>' — Keyword '<keyword>' failed: Code.E0401: <message>`, with ` (cause: <cause>)` at the end when there is a deeper cause |
+| `optics execute` "Failure details" box | `<test> → step '<step>' — Keyword '<keyword>' failed: E0401: <message>`, with ` (cause: <cause>)` at the end when there is a deeper cause |
 | Log files (`file_log: true`) | The same reason as the Failure details box, as an error line in `execution_logs.log`. A deeper cause follows as ` caused by: <cause>`. |
 | Error panels | A red panel with the code as its title. A deeper cause shows on a `Caused by:` line. |
 | `optics live` history | `✗ press_element ${sign_in}` with `[E0201] ...` on the line below |
 | HTTP API (`optics serve`) | A `code` field in the error body, or the code inside a `detail` string. A `cause` field holds the deeper cause. See [HTTP API](https://optics-framework.org/docs/reference/http-api#errors). |
+| JUnit report (`junit_output.xml`) | A `code` attribute on each `<failure>`, `<error>` and failed `<kw>`. See [Read results](https://optics-framework.org/docs/run/results#read-the-junit-report). |
 | MCP server (`optics mcp`) | `[E0201] not found: ...` in the tool reply, with a `Next:` line and the current screen rows. See [MCP server](https://optics-framework.org/docs/reference/mcp#errors). |
-
-In some places the code has a `Code.` prefix, as in `Code.E0102`. It's the same code. Search for the five characters, for example `E0102`.
 
 The cause is the innermost error of the chain, on one line of at most 300 characters. Optics leaves it out when the message already contains it.
 
@@ -10206,7 +10386,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 |---|---|---|
 | `E0101` | **Driver not initialized.** A keyword ran before the driver session started. In `optics live` this happens when the automatic `launch_app` failed. | Start with `Launch App`. In `optics live`, run `launch_app` again and read its error first. |
 | `E0102` | **Failed to start session.** The driver couldn't create a session. The Appium server refused it, Playwright couldn't open or connect to the browser, or the request took too long. On Playwright, each call has a limit of `action_timeout_ms` (15 seconds). Launch App can take up to `connect_timeout_ms` + `navigation_timeout_ms` + `action_timeout_ms` (165 seconds). | Check that the server is running and the device is connected with `optics doctor <folder>`. Check the capabilities, especially `appPackage`, `appActivity` or `bundleId`. Read the Appium server's own log for the cause. For a remote browser, check the `url` and `headers`. Raise the [Playwright timeouts](https://optics-framework.org/docs/reference/config#playwright-capabilities) for slow pages. |
-| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. Also raised when `Press Keycode` gets a remote key name that a Samsung or LG TV does not know (`Unknown remote key '<name>' for <TV>. Known keys: ...`). The message lists the names that work. | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV` or `LGTV`. For a TV key, use a name from [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys). |
+| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. Also raised when `Press Keycode` gets a remote key name that a Samsung or LG TV does not know (`Unknown remote key '<name>' for <TV>. Known keys: ...`). The message lists the names that work. Also raised when `Get App Version` gets a name that is not an Android package name, such as `com.example.app`. | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV` or `LGTV`. For a TV key, use a name from [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys). |
 | `E0105` | **Keyword not supported on this device platform.** You used a keyword on a Samsung or LG TV that needs a touch screen: a coordinate tap, a swipe, a scroll, `Select Dropdown Option`, the `checked` state of `Is Element`, typing without an element, or `Go Back`. Also raised by `Enter Text` with a special key that an app keyboard does not have, such as `<tab>`. Also raised by `Go Back` on a driver without it (`'go_back' is not supported by the <Driver> driver.`) and by a special key that Playwright cannot map. | Move the focus with `Press Element`, or press a remote key with `Press Keycode`, such as `UP`, `DOWN`, `ENTER` or `BACK`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv#keywords-that-fail-on-tizen-and-webos). |
 | `E0106` | **Driver session is no longer active.** The Appium or Selenium server dropped the session, for example after a timeout, a device disconnect or a server restart. A refused connection to the server in the middle of a run also counts. Optics doesn't reconnect. Also raised when Appium cannot go back to the app after it read a web page. In `optics execute`, a keyword with this error ends as `ERROR`, not `FAIL`, and its test case does the same. | Run the tests again. Over HTTP or MCP, end the session and start a new one. If it keeps happening, raise `newCommandTimeout` in the capabilities. |
 
@@ -10214,7 +10394,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0201` | **Element not found.** No strategy found the element on the current screen. Also raised when a `${name}` variable isn't defined, when OCR is needed but no `text_detection` engine is enabled, or when `Scroll Until Element Appears` or `Swipe Until Element Appears` time out. On web pages it also means: `'<element>' is covered by another element on the page.`, `'<element>' is in the page but not displayed.`, `'<element>' matched N web element(s); index i is out of range.` or `Cannot read the web page shown by '<app>'`. | Check the locator against the screen with `optics live` or the page source. Put `Assert Presence` before the step if the element appears late. Playwright actions wait up to `element_timeout_ms` (10 seconds), but other drivers do not wait. Add fallback values in `Element_ID_*` columns. Enable `easyocr` if you locate by visible text. |
+| `E0201` | **Element not found.** No strategy found the element on the current screen. Also raised when a `${name}` variable isn't defined, when OCR is needed but no `text_detection` engine is enabled, or when `Scroll Until Element Appears` or `Swipe Until Element Appears` time out. On web pages it also means: `'<element>' is covered by another element on the page.`, `'<element>' is in the page but not displayed.`, `'<element>' matched N web element(s); index i is out of range.`, `Cannot read the web page shown by '<app>'` or `Cannot place the web element: its centre is outside the web view that shows the page.` | Check the locator against the screen with `optics live` or the page source. Put `Assert Presence` before the step if the element appears late. Playwright actions wait up to `element_timeout_ms` (10 seconds), but other drivers do not wait. Add fallback values in `Element_ID_*` columns. Enable `easyocr` if you locate by visible text. |
 | `X0201` | **Element not found after all fallbacks.** Optics found the element, or tried every fallback value, but the action failed each time. The element may be hidden, covered, disabled, or the wrong match. | Use `index` to pick the right match, an [area of interest](https://optics-framework.org/docs/elements/area-of-interest) to narrow the search, or a more specific locator. Turn on [AI self-heal](https://optics-framework.org/docs/elements/self-heal) for popups that get in the way. |
 | `E0202` | **Unsupported operation for element source.** The enabled element sources can't do what the keyword asked, usually listing interactive elements. | Enable `appium_page_source` or `playwright_page_source`. Selenium can't list interactive elements; use the page source instead. |
 | `E0205` | **Invalid element type.** An area of interest is out of range, or a `rule` isn't `any` or `all`. | Keep area values between 0 and 100, with `aoi_x + aoi_width` and `aoi_y + aoi_height` at most 100. Set `rule` to `any` or `all`. |
@@ -10224,22 +10404,25 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 | Code | What happened | What to do |
 |---|---|---|
 | `E0303` | **Screenshot empty or black.** Optics couldn't take a screenshot, got a black image, or has no screenshot source enabled. Also raised when `appium_screenshot` runs on a Samsung Tizen TV: `This TV cannot take a screenshot through Appium; use camera_screenshot`. | Enable the screenshot source for your driver, such as `appium_screenshot`. Check that the device screen is on and unlocked. Some apps block screenshots on secure screens. For a Tizen TV, use `camera_screenshot`. See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera). |
+| `E0304` | **Image too large to decode or not a valid image.** An image is not PNG, JPEG, GIF, BMP, WebP or TIFF, or it is larger than 64 MiB or 67,108,864 pixels. Examples are a template upload over HTTP and a camera frame. | Send a smaller image in one of these formats. For a camera, lower the resolution of the frame server. |
 
 ## E04: Keywords and parameters
 
 | Code | What happened | What to do |
 |---|---|---|
 | `E0401` | **Action failed.** The keyword ran but couldn't complete: an app didn't launch, an element wasn't visible or enabled for `Is Element`, typing failed, a script failed, an API request failed, or a module run by `Run Loop`, `Condition` or `Execute Module` failed. Also raised when `Assert Text` finds other text (`Element '<element>' shows '<text>' but expected '<expected>'.`), when `Assert Equality` finds two different values (`Expected '<expected>', got '<actual>'.`), when `Is Element` finds the wrong state or finds the element only by OCR or image, when iOS `Go Back` finds no back button, or when a deep link does not open. In `optics live`, also shown for errors a keyword logged without failing. | Read the message after the code; it names the cause. For nested modules, the inner error is included. |
+| `X0401` | **Action failed with exception.** A keyword failed with an error that has no Optics code. The JUnit report gives this code to the failed step. | Read the message of the `<failure>`. |
 | `E0402` | **Keyword not found.** No keyword has that name. | Check the spelling with `optics list`. Case and spaces don't matter. |
-| `E0403` | **Invalid keyword parameters.** A parameter has the wrong form: an expression that can't be evaluated, a numeric comparison on string values, a bad loop count, a query that matches no data, an `Invoke API` id without a dot, an `Invoke API` response that is not JSON, a key name that Playwright does not know. Also raised for an unknown `${name}` inside a longer value (`Variable '${name}' in '<value>' is not defined.`), for a `store_as` with no name or no value to store, or when the page source can't be read. | Read the message. In `Condition` and `Evaluate`, compare with quoted values: `${size} == '9'`, not `${size} > 5`. Use `collection.api` for `Invoke API`. Write `store_as=<name>` only on a keyword that returns a value. See [Keywords](https://optics-framework.org/docs/reference/keywords/). |
+| `E0403` | **Invalid keyword parameters.** A parameter has the wrong form: an expression that can't be evaluated, a numeric comparison on string values, a bad loop count, a query that matches no data, an `Invoke API` id without a dot, an `Invoke API` response that is not JSON, a key name that Playwright does not know. Also raised for an unknown `${name}` inside a longer value (`Variable '${name}' in '<value>' is not defined.`), for a `store_as` with no name or no value to store, or when the page source can't be read. Also raised for a number out of range: `'repeat' must be a number from 1 to 100, got '<value>'`. Pixel coordinates and lengths go from 0 to 16,384, and percentages from 0 to 100. Over HTTP and MCP, also raised for too many positional parameters. | Read the message. In `Condition` and `Evaluate`, compare with quoted values: `${size} == '9'`, not `${size} > 5`. Use `collection.api` for `Invoke API`. Write `store_as=<name>` only on a keyword that returns a value. See [Keywords](https://optics-framework.org/docs/reference/keywords/). |
 | `E0405` | **Action ran, but the screen does not show its result.** The action ran, but the check after it failed. On a Samsung or LG TV, `Enter Text` types on the on-screen keyboard and then reads the field. The error shows when the field does not show the text or typing stopped part way. It also shows when `Clear Element Text` leaves text in the field. No fallback value runs the action again, because the action already ran. In `optics mcp`, this error has the kind `silent_failure`. | Read the message. Check the field on the TV. Press the field with `Press Element` first when the screen has more than one field. Then run the step again. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv). |
+| `E0406` | **Expression or filter refused.** An `Evaluate`, `Condition` or `Read Data` expression uses something other than values, names, arithmetic, comparisons, `in`, `and`, `or` and `not`. Function calls and the pandas operators `&`, `\|` and `~` are refused. Also raised for an expression that is too large to compute, such as `2**10**10`. | Remove the function call, or compute the value in an earlier step. In a `Read Data` filter, write `and`, `or` and `not`. See [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow). |
 
 ## E05: Files and config
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0501` | **Missing required files.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set (`Environment variable NAME is not set`), and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty, and for a `./` path in config.yaml that does not exist. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
-| `E0503` | **Config parser error.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists) and [API definitions](https://optics-framework.org/docs/reference/files#api-definitions). |
+| `E0501` | **Missing required files.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set (`Environment variable NAME is not set`), and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty, and for a `./` path in config.yaml that does not exist. `optics serve` and `optics mcp` over HTTP also raise it for `project_path`, `credentials_path`, a `file:` URL and a `Read Data` file, and `optics serve` for `OPTICS_CORS_ORIGINS=*`. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
+| `E0503` | **Config parser error.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. Also raised when two test cases have the same setup or teardown role: `The test cases have more than one test setup: '<first>' and '<second>'`. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists) and [API definitions](https://optics-framework.org/docs/reference/files#api-definitions). For two setups, keep one name that ends with "Setup" and rename the other. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown). |
 
 ## E06: Modules and engines
 
@@ -10254,6 +10437,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 |---|---|---|
 | `E0701` | **Execution failed.** A run or a session action failed and Optics wrapped the cause. Also raised when the run order can't be built. | Read the wrapped message after `Execution failed:`. |
 | `E0702` | **Test case not found.** No test cases were loaded, an HTTP session no longer exists, or a variable used in `Evaluate`, `Condition` or a `Read Data` query isn't defined. Also raised when an `include` or `exclude` name matches no test case, matches only setup or teardown test cases, or leaves no test case to run. In `optics live`, also raised when the session can't start or switch devices. | Check that your test cases file is found (see [Project files](https://optics-framework.org/docs/reference/files#how-optics-finds-your-files)). Define the variable in elements.csv or create it in an earlier step. Fix the test case names that the message shows. |
+| `E0706` | **Run stopped before the test case finished.** You pressed Ctrl+C, or Optics received SIGTERM. The report gives this code to the test case and the keyword that were in progress. | Run the tests again. |
 
 ## E08: General
 
@@ -10269,7 +10453,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 ## Reserved codes
 
-These codes exist in Optics 1.11.2, but nothing raises them. If you see one, it came from a newer version or your own code.
+These codes exist in Optics 1.11.3, but nothing raises them. If you see one, it came from a newer version or your own code.
 
 | Code | Default message |
 |---|---|
@@ -10279,7 +10463,6 @@ These codes exist in Optics 1.11.2, but nothing raises them. If you see one, it 
 | `E0204` | Timeout locating element |
 | `E0301` | Screenshot disabled |
 | `W0302` | Fallback to next camera supported driver |
-| `X0401` | Action failed with exception |
 | `W0404` | Keyword deprecated |
 | `X0502` | File read exception |
 | `W0503` | Config parser warning (can be ignored) |
@@ -10696,13 +10879,13 @@ Install it by that name, for example `optics setup --install openai`.
 
 ### `E0601`: the LLM engine needs a model or a key
 
-The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
+The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `capabilities.api_key`, `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models).
 
 ### `E0801` or authentication errors from the model
 
 The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.
 
-Set your engine's key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`) in the terminal you run Optics from, and check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
+Set your engine's key in `capabilities.api_key`, or in the terminal you run Optics from (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`). Then check your quota with the provider. See [Environment variables](https://optics-framework.org/docs/reference/cli#environment-variables).
 
 ### AI self-heal does nothing
 
@@ -10770,7 +10953,7 @@ Source: https://optics-framework.org/docs/help/faq
 
 > Learn what Optics can and can't do, with short answers to the questions people ask most.
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.2.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.3.
 
 ## About Optics
 

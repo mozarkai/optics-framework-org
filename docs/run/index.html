@@ -114,7 +114,7 @@
 <h2 id="choose-which-test-cases-run">Choose which test cases run<a class="anchor" href="#choose-which-test-cases-run" aria-label="Link to this section">#</a></h2>
 <p>Name the test cases to run with <code class="ic">--include</code>, or the ones to skip with <code class="ic">--exclude</code>:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch-tests --include &quot;shopper can*&quot; --exclude &quot;Shopper can check out&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch-tests <span class="c-info">--include</span> "shopper can*" <span class="c-info">--exclude</span> "Shopper can check out"</code></pre></figure>
-<ul><li>Matching ignores case. <code class="ic">*</code> and <code class="ic">?</code> are wildcards.</li><li>You can use both flags. Optics applies <code class="ic">--include</code> first.</li><li>Suite Setup and Suite Teardown always run.</li><li>A name that matches no test case stops the run before it starts, with exit code <code class="ic">3</code>. The message suggests the correct name.</li></ul>
+<ul><li>Matching ignores case. <code class="ic">*</code> and <code class="ic">?</code> are wildcards.</li><li>You can use both flags. Optics applies <code class="ic">--include</code> first.</li><li>Suite Setup and Suite Teardown always stay in the run.</li><li>A name that matches no test case stops the run before it starts, with exit code <code class="ic">3</code>. The message suggests the correct name.</li></ul>
 <p><code class="ic">optics dry_run</code> takes the same flags. To keep a selection for every run, put <code class="ic">include</code> and <code class="ic">exclude</code> in <a href="../../docs/reference/config#include-and-exclude">config.yaml</a>. The flags replace them for one run.</p>
 <h2 id="options">Options<a class="anchor" href="#options" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Option</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--no-use-printer</code></td><td>Print plain log output instead of the live tree. Useful when a CI log viewer garbles the tree.</td></tr><tr><td><code class="ic">--include NAME ...</code></td><td>Run only these test cases.</td></tr><tr><td><code class="ic">--exclude NAME ...</code></td><td>Skip these test cases.</td></tr><tr><td><code class="ic">--runner pytest</code></td><td>Run the suite through pytest instead of Optics' own runner. Most projects don't need this.</td></tr></tbody></table></div>
@@ -189,6 +189,6 @@
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=4c44e9f886" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+  <script src="../../scene-defs.js?v=424129ec81" defer></script>
 </body>
 </html>

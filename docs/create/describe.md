@@ -60,8 +60,10 @@ PS> $env:GEMINI_API_KEY = "your-key"
 
 Use `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable you named in `api_key_env`. A local server needs no key.
 
-**Warning:**
-Don't put API keys in `config.yaml`. The file is meant to be committed with your tests, and a key in it would be shared with everyone who can read the repository.
+You can also give the key in `config.yaml`, under `capabilities.api_key`. Optics uses it before the environment variable.
+
+**Tip:**
+Write the key as a reference, such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file, so you can commit `config.yaml` with your tests and keep the key private.
 
 ## Describe a flow
 

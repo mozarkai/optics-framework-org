@@ -47,7 +47,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `easyocr` to start with. It needs nothing else installed.
@@ -71,7 +71,7 @@ An LLM powers [AI self-heal](https://optics-framework.org/docs/elements/self-hea
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Each engine reads its credentials from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
+Each engine reads its API key from `capabilities.api_key` in config.yaml, else from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
 
 ## Other extras
 

@@ -3,7 +3,7 @@
   "info": {
     "title": "Optics Framework API",
     "version": "1.0",
-    "description": "The HTTP API of `optics serve` from optics-framework 1.11.2. It is not hosted on optics-framework.org: install Optics (`pip install optics-framework`) and run `optics serve`, which listens on http://127.0.0.1:8000 by default (`--host` and `--port` change it). Start a session with POST /v1/sessions/start, run keywords with POST /v1/sessions/{session_id}/action, and list keywords with GET /v1/keywords. The server has no authentication, so keep it on a trusted network."
+    "description": "The HTTP API of `optics serve` from optics-framework 1.11.3. It is not hosted on optics-framework.org: install Optics (`pip install optics-framework`) and run `optics serve`, which listens on http://127.0.0.1:8000 by default (`--host` and `--port` change it). Start a session with POST /v1/sessions/start, run keywords with POST /v1/sessions/{session_id}/action, and list keywords with GET /v1/keywords. The server has no authentication, so keep it on a trusted network."
   },
   "paths": {
     "/health": {
