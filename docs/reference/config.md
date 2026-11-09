@@ -192,6 +192,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
 | `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
+| `api_key_env` | None | The environment variable that holds the Gemini API key. If the variable you name is not set, Optics skips the engine with [E0601](/docs/reference/errors#e06-modules-and-engines) and uses the next entry. Don't set it with `credentials_path`. |
 
 ```yaml
 llm_models:
@@ -201,7 +202,7 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it.
+Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`, or from the variable `api_key_env` names. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it. It wins over `api_key_env`.
 
 To use a service account key file, set `credentials_path` and leave out the API key:
 
@@ -256,7 +257,7 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
 | `region` | From the environment | The Bedrock or Vertex AI region. |
 | `project` | From the environment | The Vertex AI project. |
-| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. |
+| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. If the variable you name is not set, Optics skips the engine with [E0601](/docs/reference/errors#e06-modules-and-engines) and uses the next entry. |
 | `max_tokens` | `4096` | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
@@ -537,6 +538,8 @@ If you set neither `url` nor `camera_index`, Optics reads these environment vari
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
 | `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
+
+A session that `optics serve` or `optics mcp` starts with its own `url` sends only the `token` of that session. It never sends `WEBCAM_SCREENSHOT_TOKEN`.
 
 Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
 

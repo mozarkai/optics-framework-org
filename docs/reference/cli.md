@@ -511,7 +511,7 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `mcp` | Seconds that one tool call can take. Default `100`. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
-| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. |
+| `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. Set `api_key_env` in config.yaml to read another variable. |
 | `GOOGLE_GENAI_USE_VERTEXAI`, `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_APPLICATION_CREDENTIALS` | Gemini, Google Vision | Use Vertex AI and Google Cloud credentials instead of an API key. |
 | `OPENAI_API_KEY` | `openai` engine | API key for OpenAI. Set `api_key_env` in config.yaml to read another variable. |
 | `OPENAI_BASE_URL` | `openai` engine | The server to call when the entry has no `url`, such as OpenRouter or a local Ollama. |
