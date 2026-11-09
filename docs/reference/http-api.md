@@ -43,7 +43,7 @@ The server does not read config.yaml or the test files of your project. Each ses
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.2"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.3"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |

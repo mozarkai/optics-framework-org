@@ -4,7 +4,7 @@ nav: FAQ
 summary: Learn what Optics can and can't do, with short answers to the questions people ask most.
 ---
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.2.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.3.
 
 ## About Optics
 

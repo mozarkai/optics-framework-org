@@ -4,7 +4,7 @@ summary: Look up every `optics` command, its flags, what it writes and the exit 
 layout: wide
 ---
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.2.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -16,7 +16,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.2` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
