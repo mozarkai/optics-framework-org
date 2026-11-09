@@ -167,7 +167,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 |---|---|---|
 | `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | `capabilities.credentials_path`: a service account key file. Without it, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -179,7 +179,9 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 ### llm_models
 
-Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. Use environment variables for keys, not `config.yaml`. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+
+Each engine reads its API key from `capabilities.api_key` first, then from an environment variable. To keep the key out of the file, write a reference such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file. If the variable is not set, the run stops with [E0501](/docs/reference/errors#e05-files-and-config) before it starts. Logs and reports show `****` in place of the key.
 
 Each engine also takes `timeout_s` under `capabilities`: the seconds that one request can take, default `60`. A value that is not a positive number fails with [E0601](/docs/reference/errors#e06-modules-and-engines).
 
@@ -192,7 +194,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
 | `temperature` | The model's default | Sampling temperature. |
 | `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
-| `api_key_env` | None | The environment variable that holds the Gemini API key. If the variable you name is not set, Optics skips the engine with [E0601](/docs/reference/errors#e06-modules-and-engines) and uses the next entry. Don't set it with `credentials_path`. |
+| `api_key` | None | The Gemini API key, or a reference such as `${GEMINI_API_KEY}`. `gemini_api_key` also works. |
 
 ```yaml
 llm_models:
@@ -202,7 +204,7 @@ llm_models:
         model: gemini-2.5-flash
 ```
 
-Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`, or from the variable `api_key_env` names. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. Optics accepts `api_key` or `gemini_api_key` in `capabilities` too, but warns when you use it. It wins over `api_key_env`.
+Without `api_key`, Gemini reads its key from `GEMINI_API_KEY` or `GOOGLE_API_KEY`. For Vertex AI, set `GOOGLE_GENAI_USE_VERTEXAI=true` with `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` and `GOOGLE_APPLICATION_CREDENTIALS`. The key does not select the backend. If `GOOGLE_GENAI_USE_VERTEXAI` selects Vertex AI and you want the Gemini API, also set `use_vertexai: false`.
 
 To use a service account key file, set `credentials_path` and leave out the API key:
 
@@ -224,6 +226,7 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Setting | Default | What it does |
 |---|---|---|
 | `model` | None (required) | The model name as the server spells it, for example `gpt-5-mini`, or `anthropic/claude-sonnet-5-5` on OpenRouter. |
+| `api_key` | None | The key, or a reference such as `${OPENROUTER_API_KEY}`. Optics uses it before `api_key_env`. |
 | `api_key_env` | `OPENAI_API_KEY` | The environment variable that holds the key. |
 | `response_format` | `json_schema` | Set `json_object` if the server rejects JSON-schema output. Optics then puts the schema in the prompt instead. |
 | `max_tokens` | The server's limit | The longest reply the model may write. |
@@ -232,8 +235,8 @@ Works with OpenAI and any server that offers an OpenAI-compatible Chat Completio
 | Server | `url` | Key |
 |---|---|---|
 | OpenAI | Leave it out | `OPENAI_API_KEY` |
-| OpenRouter | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY`, with `api_key_env: OPENROUTER_API_KEY` |
-| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in the variable named by `api_key_env` |
+| OpenRouter | `https://openrouter.ai/api/v1` | `api_key: ${OPENROUTER_API_KEY}` |
+| Azure OpenAI | `https://<resource>.openai.azure.com/openai/v1/` | Your Azure key, in `api_key` |
 | Ollama | `http://localhost:11434/v1` | None |
 | vLLM, LM Studio | The server's `/v1` URL | None |
 
@@ -244,8 +247,10 @@ llm_models:
       url: https://openrouter.ai/api/v1
       capabilities:
         model: anthropic/claude-sonnet-5-5
-        api_key_env: OPENROUTER_API_KEY
+        api_key: ${OPENROUTER_API_KEY}
 ```
+
+With no key and no `url`, the engine stops with [E0601](/docs/reference/errors#e06-modules-and-engines): "found no API key: set capabilities.api_key or OPENAI_API_KEY". A server at a `url` can work without a key.
 
 #### anthropic
 
@@ -257,13 +262,14 @@ Use Claude through the Claude API, Amazon Bedrock or Google Vertex AI. For Bedro
 | `platform` | `anthropic` | `anthropic` (the Claude API), `bedrock` or `vertex`. |
 | `region` | From the environment | The Bedrock or Vertex AI region. |
 | `project` | From the environment | The Vertex AI project. |
-| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. If the variable you name is not set, Optics skips the engine with [E0601](/docs/reference/errors#e06-modules-and-engines) and uses the next entry. |
+| `api_key` | None | The Claude API key, or a reference such as `${ANTHROPIC_API_KEY}`. Only for `platform: anthropic`. Optics uses it before `api_key_env`. |
+| `api_key_env` | `ANTHROPIC_API_KEY` | The environment variable that holds the Claude API key. Only for `platform: anthropic`. |
 | `max_tokens` | `4096` | The longest reply the model may write. |
 | `temperature` | The model's default | Sampling temperature. |
 
 | Platform | Credentials |
 |---|---|
-| `anthropic` | `ANTHROPIC_API_KEY`, or the variable `api_key_env` names |
+| `anthropic` | `api_key`, else `ANTHROPIC_API_KEY` or the variable `api_key_env` names |
 | `bedrock` | Your usual AWS credentials, such as `AWS_PROFILE` and `AWS_REGION` |
 | `vertex` | Google Cloud application default credentials |
 
