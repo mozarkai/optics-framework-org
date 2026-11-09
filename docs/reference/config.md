@@ -157,7 +157,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`, or after the screenshot source of a driver for screens that the driver cannot capture. |
 
 `optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
 
@@ -534,6 +534,9 @@ image_detection:
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
 | `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
+| `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts the frame to the screen and makes it straight. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
+| `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after `deskew_corners`. |
 
 With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
 
@@ -542,12 +545,14 @@ If you set neither `url` nor `camera_index`, Optics reads these environment vari
 | Variable | Used for |
 |---|---|
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
-| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when you set `url` and no `token`. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token for `WEBCAM_SCREENSHOT_URL`. Optics sends it to no other URL. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
 
-A session that `optics serve` or `optics mcp` starts with its own `url` sends only the `token` of that session. It never sends `WEBCAM_SCREENSHOT_TOKEN`.
+For a `url` in config.yaml, set `token` too. Keep the token out of the file: `token: ${WEBCAM_SCREENSHOT_TOKEN}`. A `url` with no `token` sends no token, and Optics logs a warning.
 
-Keep the token out of the file: `token: ${CAMERA_TOKEN}`.
+Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, or another `rotation` value stop the run.
+
+A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](/docs/reference/errors#e03-screenshots).
 
 The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](/docs/platforms/production).
 

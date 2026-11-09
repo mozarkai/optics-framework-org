@@ -23,6 +23,8 @@ Use the Bluetooth and camera setup when:
 
 If Appium or a browser driver can reach the device, use them instead. They're faster, read the UI tree directly, and support every keyword. See [Supported platforms](/docs/platforms/).
 
+If Appium works and the app blocks screenshots only on some screens, keep Appium and add a camera for those screens. See [Add a camera to an Appium run](/docs/platforms/production#add-a-camera-to-an-appium-run).
+
 ## Get the hardware
 
 - **A USB serial BLE HID dongle**, which plugs into your machine as a serial port.

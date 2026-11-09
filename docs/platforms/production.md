@@ -57,6 +57,8 @@ Instead of a path, you can give the dongle's USB product description, such as `M
 
 Mount the camera straight on, with the screen upright and filling the picture edge to edge. Optics turns positions in the camera picture straight into pointer moves, so anything around the screen throws the taps off.
 
+If the camera sees the screen at an angle, or sees more than the screen, set `deskew_corners`. Optics then cuts each frame to the screen and makes it straight. See [`camera_screenshot` source](#camera-screenshot-source).
+
 ### Write config.yaml
 
 ```yaml title="config.yaml"
@@ -115,6 +117,9 @@ There's no preflight for this setup, so check the dongle and camera before you s
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | Frame server only. The length of the size header in bytes, `4` or `8`. |
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
+| `deskew_corners` | None | The four corners of the screen in the camera picture, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts each frame to the screen and makes it straight. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
+| `rotation` | None | `clockwise` or `counterclockwise`. Optics turns the frame a quarter turn after `deskew_corners`. |
 
 Set either `camera_index` or `url`. With neither, Optics reads the environment variables below. If these are not set, Optics stops with "No camera_index or valid URL provided".
 
@@ -123,10 +128,12 @@ For an HTTP URL, Optics sends a `GET` request and decodes the reply as an image.
 | Variable | Used for |
 |---|---|
 | `WEBCAM_SCREENSHOT_URL` | The screenshot URL. |
-| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token. Optics also uses it when `url` is set and `token` is not. |
+| `WEBCAM_SCREENSHOT_TOKEN` | The bearer token for `WEBCAM_SCREENSHOT_URL`. Optics sends it to no other URL. |
 | `WEBCAM_SCREENSHOT_TCP_PORT` | A TCP frame server at `127.0.0.1` on this port. Optics uses it when `WEBCAM_SCREENSHOT_URL` is not set. |
 
-A value in config.yaml wins over a variable. Write `token: ${CAMERA_TOKEN}` to keep the token out of the file.
+A value in config.yaml wins over a variable. For a `url` in config.yaml, set `token` too. Write `token: ${WEBCAM_SCREENSHOT_TOKEN}` to keep the token out of the file.
+
+Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, stop the run. A `rotation` value other than `clockwise` or `counterclockwise` also stops the run.
 
 A frame server receives the line `screenshot`, then replies with the picture's size in a `header_size`-byte unsigned number, followed by the picture as JPEG or PNG.
 
@@ -179,9 +186,33 @@ Sign in,Assert Presence,Trail Runner 2,20
 
 The first step taps the Birch icon on the home screen, so the run starts from there.
 
+## Add a camera to an Appium run
+
+Some apps block screenshots only on some screens, such as a payment screen. If Appium can reach the device, keep Appium and add a camera for those screens. On a protected screen, the Appium screenshot is black, and Optics uses the camera frame.
+
+List `camera_screenshot` after `appium_screenshot`:
+
+```yaml title="config.yaml"
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_screenshot: {enabled: true}
+  - camera_screenshot:
+      enabled: true
+      capabilities:
+        url: http://127.0.0.1:8080/screenshot
+        deskew_corners: ["212,88", "868,95", "861,1262", "205,1255"]
+        out_width: 1080
+        out_height: 2400
+```
+
+Optics maps OCR and image matches on the camera frame into the Appium window, the same as for an Appium screenshot. Appium then taps the correct point on the device.
+
+:::tip
+Set `deskew_corners` so that the frame shows only the screen. Set `out_width` and `out_height` to the screenshot size of the device, so that the frame has the same shape as the screen. With other drivers, Optics uses the pixels of the frame as they are.
+:::
+
 ## Known gaps
 
-- **Camera correction isn't applied.** `deskew_corners`, `rotation`, `out_width` and `out_height` under `camera_screenshot` have no effect. Frame the camera straight on, with the screen upright, instead.
 - **The doctor reports a failure.** `optics doctor` expects an element source whose name starts with `ble_`, and none exists. It shows ❌ for `config: ble element source`. Ignore that row, and don't use `optics doctor --check` on this project in CI.
 
 ## If it isn't working
