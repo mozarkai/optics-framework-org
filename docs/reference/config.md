@@ -605,6 +605,7 @@ llm_models:
 - It needs an enabled `llm_models` entry, that engine's extra and key, and a screenshot element source such as `appium_screenshot`. Without them it does nothing, and the run isn't affected.
 - It applies to keywords that find and act on an element: `Press Element`, `Enter Text`, `Enter Number`, `Clear Element Text`, `Get Text`, `Swipe From Element`, `Scroll From Element`, `Detect And Press` and `Select Dropdown Option`. It doesn't apply to assertions.
 - A healed step passes. Check the logs for `AI self-heal:` lines so a real regression doesn't go unnoticed.
+- When the step uses `${name}`, Optics sends the element name to the model with the screen. Any engine works, also your own model server with an OpenAI-compatible API. See [Choose a model](/docs/elements/self-heal#choose-a-model).
 
 `optics serve` and `optics mcp` ignore this key. They use per-session fields and the `OPTICS_AI_SELF_HEAL` variable instead. See [Self-heal](/docs/elements/self-heal).
 
