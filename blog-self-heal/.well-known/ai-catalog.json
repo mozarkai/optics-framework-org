@@ -1,0 +1,41 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Optics",
+    "identifier": "https://optics-framework.org/"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:optics-framework.org:mcp:optics",
+      "displayName": "Optics MCP server",
+      "type": "application/mcp-server-card+json",
+      "url": "https://optics-framework.org/.well-known/mcp/server-card.json",
+      "representativeQueries": [
+        "tap a button in my Android app from an AI agent",
+        "let Claude drive a browser and write the test",
+        "automate a smart TV app over MCP"
+      ]
+    },
+    {
+      "identifier": "urn:air:optics-framework.org:skill:optics-framework",
+      "displayName": "Optics agent skill",
+      "type": "text/markdown",
+      "url": "https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md",
+      "representativeQueries": [
+        "write an Optics test suite in CSV",
+        "which Optics keyword presses an element",
+        "run optics execute and read the JUnit results"
+      ]
+    },
+    {
+      "identifier": "urn:air:optics-framework.org:api:optics-serve",
+      "displayName": "optics serve HTTP API",
+      "type": "application/vnd.oai.openapi+json",
+      "url": "https://optics-framework.org/openapi.json",
+      "representativeQueries": [
+        "run Optics keywords over HTTP",
+        "start an Optics session from another service"
+      ]
+    }
+  ]
+}

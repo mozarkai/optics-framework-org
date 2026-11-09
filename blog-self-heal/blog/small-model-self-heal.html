@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Self-heal broken locators with a 2B model on your own GPU · Optics blog</title>
+  <meta name="description" content="I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.">
+  <meta name="ai-summary" content="I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.">
+  <link rel="canonical" href="https://optics-framework.org/blog/small-model-self-heal">
+  <link rel="stylesheet" href="../docs.css?v=f46a574929">
+  <link rel="alternate" type="text/markdown" href="small-model-self-heal.md" title="Self-heal broken locators with a 2B model on your own GPU, as Markdown">
+  <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Self-heal broken locators with a 2B model on your own GPU",
+  "description": "I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.",
+  "url": "https://optics-framework.org/blog/small-model-self-heal",
+  "mainEntityOfPage": "https://optics-framework.org/blog/small-model-self-heal",
+  "datePublished": "2026-11-09",
+  "dateModified": "2026-11-09",
+  "image": "https://optics-framework.org/media/blog/small-model-self-heal.webp",
+  "author": {
+    "@type": "Person",
+    "name": "Chinmay Jha"
+  },
+  "about": {
+    "@id": "https://optics-framework.org/#optics"
+  },
+  "isPartOf": {
+    "@type": "Blog",
+    "name": "Optics blog",
+    "url": "https://optics-framework.org/blog"
+  }
+}
+  </script>
+  <meta property="og:title" content="Self-heal broken locators with a 2B model on your own GPU · Optics blog">
+  <meta property="og:description" content="I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="../#create">Create</a>
+        <a href="../#run">Run</a>
+        <a href="../#ladder">Locators</a>
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="../#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<article class="post">
+        <p class="post-crumbs"><a href="../blog">Blog</a></p>
+        <h1 class="h2">Self-heal broken locators with a 2B model on your own GPU</h1>
+        <p class="lede">I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.</p>
+        <p class="post-meta"><span><time datetime="2026-11-09">9 Nov 2026</time></span><span>Chinmay Jha</span><span>6 min read</span></p>
+        <img class="post-hero" src="../media/blog/small-model-self-heal.webp?v=5335232999" alt="The headline Self-heal on your own GPU beside a self-heal request for id/primary_action and the reply press_element e4, with the next assert passed" decoding="async">
+        <div class="prose">
+<p>When a step cannot find its element, Optics Framework can ask an AI model to find it. This is AI self-heal. Optics Framework sends the failed locator, the rows of the screen and a screenshot to the model. The model selects the correct row. The model can run on any OpenAI-compatible server. You can use a small open model on your own GPU.</p>
+<p>I used Qwen3.5-2B, a model with 2 billion parameters. I tried two ways to teach it this job. The first way was a direct edit of the weights, with no gradients. The second way was a small LoRA. Then I connected the LoRA model to Optics Framework 1.11.3 and ran a suite on a Pixel 4a.</p>
+<h2 id="the-job-of-the-model">The job of the model<a class="anchor" href="#the-job-of-the-model" aria-label="Link to this section">#</a></h2>
+<p>This is part of a self-heal request from the phone run. I broke the locator of the Start button in the Google Clock app:</p>
+<figure class="code doc-code no-copy" data-lang="text"><pre><code>TARGET ELEMENT (not found by normal locators): //*[@resource-id="com.google.android.deskclock:id/primary_action"]
+TARGET ELEMENT NAME (from the test suite): start_button
+CURRENT SCREEN:
+e3 android.widget.TextView "00:00.00" #com.google.android.deskclock:id/stopwatch_time_text
+e4 android.widget.Button "Start" [tap] #com.google.android.deskclock:id/start_stop_button
+e5 android.widget.FrameLayout "Alarms" [tap] #com.google.android.deskclock:id/tab_menu_alarm</code></pre></figure>
+<p>The model replied:</p>
+<figure class="code doc-code no-copy" data-lang="json"><pre><code>{<span class="c-mod">"reason"</span>: <span class="c-lit">"The target is the 'Start' button. Row e4 matches the target name 'Start' and has the #id 'start_stop_button'."</span>,
+ <span class="c-mod">"action"</span>: <span class="c-lit">"keyword"</span>, <span class="c-mod">"keyword"</span>: <span class="c-lit">"press_element"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"e4"</span>, <span class="c-mod">"params"</span>: [], <span class="c-mod">"completed"</span>: <span class="c-info">true</span>}</code></pre></figure>
+<p>The locator <code class="ic">primary_action</code> has no word in common with "Start". The element name from the suite, <code class="ic">start_button</code>, gives the model the link. Optics Framework sends this name with each self-heal request. Optics Framework also adds 3 hint rows. These are the rows that have the most words in common with the locator.</p>
+<p>I measured two types of broken locators. A text locator repeats the text of the button, for example <code class="ic">id/see_1_tab</code> for "See 1 tab". A purpose locator gives only the purpose of the button, for example <code class="ic">id/skip_notification_button</code> for "Not now". The locator <code class="ic">primary_action</code> above is a purpose locator. The model makes more errors on purpose locators.</p>
+<h2 id="two-ways-to-teach-the-skill">Two ways to teach the skill<a class="anchor" href="#two-ways-to-teach-the-skill" aria-label="Link to this section">#</a></h2>
+<p>My first method came from <a href="https://x.com/TensorSlay/status/2119416808273019037" rel="noopener">weight-space programming</a> (WSP). With WSP, an agent wrote facts into Qwen 0.8B in closed form. It changed 5 of 488 tensors and used no gradients. A fact is one link, for example "the capital of Japan" to "Tokyo". I wanted to know if the same method can add a skill.</p>
+<p>My best edit used the difference between two runs of the model, with a hint and without the hint. The hint tells the model to select the row whose text matches the target name. I added this difference as a rank-1 update to the attention output projection in 5 of 24 layers. Each matrix changed by 0.6% to 1.7%.</p>
+<p>The second method was a LoRA. The LoRA adds 0.7% more weights to the model. I trained it for 1 epoch on 2,628 examples.</p>
+<p><img src="../media/blog/small-model-self-heal-results.webp?v=5c4866cae2" alt="Bar chart: the weight edit adds 1.6 points. The LoRA adds 3.1 points on text locators and 7.0 points on purpose locators" loading="lazy"></p>
+<p><em>Each score comes from recorded screens of 96 Android and iOS apps, with 4-fold cross-validation by app. In each fold, the model did not train on the apps that I scored.</em></p>
+<div class="table-wrap"><table><thead><tr><th>Setup</th><th>Text locators</th><th>Purpose locators</th></tr></thead><tbody><tr><td>Qwen3.5-2B with the Optics Framework self-heal prompt</td><td>95.5%</td><td>77.9%</td></tr><tr><td>The same, with the LoRA</td><td><strong>98.6%</strong></td><td><strong>84.9%</strong></td></tr></tbody></table></div>
+<p>The weight edit added 1.6 points on text locators, from 86.3% to 87.9%. This prompt had no hint rows. On a separate set of 377 steps, the edit got 58% of the gain of the hint. A stronger edit broke correct answers at the same rate as it repaired incorrect answers.</p>
+<p>The LoRA added 3.1 points on text locators and 7.0 points on purpose locators. It got these scores on apps that it did not see when I trained it. I used only one model and one task.</p>
+<h2 id="on-a-phone">On a phone<a class="anchor" href="#on-a-phone" aria-label="Link to this section">#</a></h2>
+<p>I served the LoRA model with vLLM and connected Optics Framework 1.11.3 to it. The suite operates Google Clock on a Pixel 4a. It has 2 test cases, with an assert after each press. I broke the locators in 7 ways and ran each break set 2 times. With <code class="ic">strict_element_match: true</code>, Optics Framework does not use its fuzzy match. Each broken locator goes to the model.</p>
+<p><img src="../media/blog/small-model-self-heal-pilot.webp?v=a9c20abca4" alt="Three screenshots: the stopwatch screen when the locator fails, the press on the Start button, and the stopwatch in operation at the next assert" loading="lazy"></p>
+<p>*A heal from the purpose set. The broken locator is <code class="ic">id/primary_action</code>. The model selected Start, and the next assert passed.*</p>
+<div class="table-wrap"><table><thead><tr><th>Break sets</th><th>Correct heals</th><th>Test cases passed</th></tr></thead><tbody><tr><td>Wrong ID (4 sets: old ID, camelCase, package, class)</td><td>64 of 64</td><td>16 of 16</td></tr><tr><td>Wrong words (3 sets: new label, purpose, purpose with correct tabs)</td><td>49 of 50</td><td>11 of 12</td></tr></tbody></table></div>
+<p>The model healed 109 of the 114 locators in 1 step and 5 in 2 steps. 1 of the 2-step heals was incorrect. The log of the purpose set shows each heal and the reason of the model:</p>
+<figure class="code doc-code no-copy" data-lang="text"><pre><code>AI self-heal: attempting recovery for 'press_element' on '//*[@content-desc="Chronometer"]'
+AI self-heal step 1/5 for 'press_element': ... reason=The target is 'stopwatch_tab'. Row e13 "Stopwatch" matches the target name exactly.
+AI self-heal: attempting recovery for 'press_element' on '//*[@resource-id="com.google.android.deskclock:id/halt"]'
+AI self-heal step 1/5 for 'press_element': ... reason=The target is 'stop_button'. Row e10 "Stop" matches the target name exactly.</code></pre></figure>
+<h2 id="use-the-model-with-optics-framework">Use the model with Optics Framework<a class="anchor" href="#use-the-model-with-optics-framework" aria-label="Link to this section">#</a></h2>
+<p>The adapter (60 MB) and the scripts are in the <a href="https://github.com/chinmayajha/qwen-self-heal" rel="noopener">qwen-self-heal repository</a>. You need a GPU with 16 GB of memory or more for the server.</p>
+<ol><li>Download <code class="ic">Qwen/Qwen3.5-2B</code> from Hugging Face.</li><li>Download the adapter from the release of the repository.</li><li>Merge the adapter into the base model with <code class="ic">scripts/merge_adapter.py</code>.</li><li>Start the server with <code class="ic">vllm serve</code>. Use the flags in the repository README.</li><li>Add the server to <code class="ic">config.yaml</code>:</li></ol>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="ai_self_heal: true
+llm_models:
+  - openai:
+      enabled: true
+      url: http://&lt;gpu-host&gt;:8000/v1
+      capabilities:
+        model: qwen-heal
+        response_format: json_object
+        temperature: 0.0
+        max_tokens: 400">Copy</button><pre><code><span class="c-mod">ai_self_heal</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">llm_models</span><span class="c-dim">:</span>
+  - <span class="c-mod">openai</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> http://&lt;gpu-host&gt;:8000/v1
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">model</span><span class="c-dim">:</span> qwen-heal
+        <span class="c-mod">response_format</span><span class="c-dim">:</span> json_object
+        <span class="c-mod">temperature</span><span class="c-dim">:</span> <span class="c-info">0.0</span>
+        <span class="c-mod">max_tokens</span><span class="c-dim">:</span> <span class="c-info">400</span></code></pre></figure>
+<ol start="6"><li>Run your suite with <code class="ic">optics execute</code>.</li></ol>
+<p>The value of <code class="ic">model</code> must be the same as <code class="ic">--served-model-name</code> in the server command. vLLM asks for a key only when you start it with <code class="ic">--api-key</code>. For a server with a key, add <code class="ic">api_key: ${QWEN_API_KEY}</code> under <code class="ic">capabilities</code>. Optics Framework reads the variable when it loads the file. The logs show <code class="ic">****</code> in place of the key.</p>
+<h2 id="tips">Tips<a class="anchor" href="#tips" aria-label="Link to this section">#</a></h2>
+<ul><li>Use the settings from the measurements: a screenshot of 1 megapixel maximum, <code class="ic">enable_thinking: false</code>, temperature 0 and <code class="ic">json_object</code>. The vLLM flags in the README set the first two.</li><li>Give your elements descriptive names in the suite. The model uses the name when the locator has no word in common with the screen.</li><li>Keep an assert after each press. The assert confirms each heal on the next screen.</li><li>After a run, read the self-heal lines in the log.</li><li>Update the locators that healed.</li></ul>
+<p>The full results, the edit methods that did not work and the phone report are on the <a href="https://chinmayajha.github.io/qwen-self-heal/" rel="noopener">results page</a>. For the self-heal settings, read <a href="../docs/elements/self-heal">Recover failing steps with AI self-heal</a>.</p>
+<ul><li>Source: <a href="https://github.com/mozarkai/optics-framework" rel="noopener">github.com/mozarkai/optics-framework</a></li><li>Model and scripts: <a href="https://github.com/chinmayajha/qwen-self-heal" rel="noopener">github.com/chinmayajha/qwen-self-heal</a></li></ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../about">About</a>
+        <a href="../contact">Contact</a>
+        <a href="../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../app.js?v=5160aed22e" defer></script>
+  <script src="../track.js?v=069e168b13" defer></script>
+</body>
+</html>

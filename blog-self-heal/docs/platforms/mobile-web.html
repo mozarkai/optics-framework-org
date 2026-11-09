@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test mobile websites and WebViews · Optics Framework docs</title>
+  <meta name="description" content="Automate mobile web testing in Chrome on Android, Safari on iOS and in-app WebViews with Optics, an open-source framework that finds CSS and DOM XPath locators through Appium without context switching.">
+  <meta name="ai-summary" content="Automate mobile web testing in Chrome on Android, Safari on iOS and in-app WebViews with Optics, an open-source framework that finds CSS and DOM XPath locators through Appium without context switching.">
+  <link rel="canonical" href="https://optics-framework.org/docs/platforms/mobile-web">
+  <link rel="alternate" type="text/markdown" href="mobile-web.md" title="This page as Markdown">
+  <meta property="og:title" content="Test mobile websites and WebViews · Optics Framework docs">
+  <meta property="og:description" content="Automate mobile web testing in Chrome on Android, Safari on iOS and in-app WebViews with Optics, an open-source framework that finds CSS and DOM XPath locators through Appium without context switching.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../../docs.css?v=f46a574929">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab on" href="../../docs/platforms/" aria-current="true">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section open" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web" aria-current="page">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/platforms/">Platforms</a><span class="sep" aria-hidden="true">/</span><span>Targets</span></nav>
+        <header class="doc-head">
+          <h1>Test mobile websites and WebViews</h1>
+          <p class="doc-summary">Test web pages in Chrome, Safari and in-app WebViews on a real phone, in the same session as the native app.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 15 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="mobile-web.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="mobile-web.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics tests web pages on Android and iOS phones through the same Appium session that tests native apps. One test can open an app, follow a link into Chrome or Safari, fill a web form, and go back to the app. Your steps never switch contexts.</p>
+<p>To test a website in a desktop browser, or in a browser that only emulates a phone, use <a href="../../docs/platforms/web#emulate-a-phone">Playwright</a> instead. This page is for real mobile browsers and WebViews.</p>
+<h2 id="how-it-works">How it works<a class="anchor" href="#how-it-works" aria-label="Link to this section">#</a></h2>
+<p>The session stays in the native context. Visible text, resource ids, native XPath and OCR work on web pages too. Chrome and Safari put the text, links and fields of the page into the native UI tree.</p>
+<p>Web locators, <code class="ic">css=…</code> and DOM XPath such as <code class="ic">//button[@type='submit']</code>, go to the <code class="ic">appium_web</code> element source. It finds the element in the page in front, scrolls it into view, and gives its position on the screen. The tap or text entry that follows is a native action at that position.</p>
+<h2 id="before-you-begin">Before you begin<a class="anchor" href="#before-you-begin" aria-label="Link to this section">#</a></h2>
+<ul><li>An <a href="../../docs/platforms/android">Android</a> or <a href="../../docs/platforms/ios">iOS</a> setup that works: Appium, its driver, and a device or emulator.</li><li>On Android, Chrome on the device.</li></ul>
+<h2 id="set-up">Set up<a class="anchor" href="#set-up" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="start-appium-so-that-it-can-get-chromedriver">Start Appium so that it can get chromedriver<a class="anchor" href="#start-appium-so-that-it-can-get-chromedriver" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Android web lookups need the chromedriver that matches the device's Chrome. Let Appium download it:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="appium server --allow-insecure uiautomator2:chromedriver_autodownload">Copy</button><pre><code><span class="prompt">$</span> <b>appium</b> server <span class="c-info">--allow-insecure</span> uiautomator2:chromedriver_autodownload</code></pre></figure>
+<p>Or set <code class="ic">appium:chromedriverExecutableDir</code> to a folder of chromedriver binaries. iOS needs no extra driver.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="write-configyaml">Write config.yaml<a class="anchor" href="#write-configyaml" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Enable <code class="ic">appium_web</code> next to the other Appium sources. <code class="ic">optics quickstart</code> and <code class="ic">optics configure</code> do this for Android and iOS projects.</p>
+<div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: Android
+        automationName: UiAutomator2
+        deviceName: emulator-5554
+        browserName: Chrome        # start in Chrome; remove it to start in your app
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_web:          {enabled: true}
+  - appium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Android
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> UiAutomator2
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> emulator-5554
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> Chrome       <span class="c-dim"> # start in Chrome; remove it to start in your app</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_web</span><span class="c-dim">:</span>          {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
+<p>With <code class="ic">browserName: Chrome</code>, the session starts in Chrome and web addresses open in Chrome, whatever the default browser is. To test an app that opens web pages, set <code class="ic">appPackage</code> and <code class="ic">appActivity</code> instead.</p></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: iOS
+        automationName: XCUITest
+        deviceName: &quot;iPhone 17&quot;
+        bundleId: com.apple.mobilesafari   # or your app's bundle id
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_web:          {enabled: true}
+  - appium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> iOS
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> XCUITest
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> <span class="c-lit">"iPhone 17"</span>
+        <span class="c-mod">bundleId</span><span class="c-dim">:</span> com.apple.mobilesafari  <span class="c-dim"> # or your app's bundle id</span>
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_web</span><span class="c-dim">:</span>          {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
+<p>Do not set <code class="ic">browserName: Safari</code>. It turns off the web lookups that <code class="ic">appium_web</code> uses.</p></div></div>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="let-optics-read-the-page">Let Optics read the page<a class="anchor" href="#let-optics-read-the-page" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-2-t0" aria-controls="tabs-os-2-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-os-2-t1" aria-controls="tabs-os-2-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-2-p0" aria-labelledby="tabs-os-2-t0"><p>Chrome needs no setup. An app's WebView is readable only when the app calls <code class="ic">WebView.setWebContentsDebuggingEnabled(true)</code>. Debug builds usually do.</p></div><div class="tab-pane" role="tabpanel" id="tabs-os-2-p1" aria-labelledby="tabs-os-2-t1" hidden><p>Simulators need no setup. On a real device, turn on <strong>Web Inspector</strong> and <strong>Remote Automation</strong> in <strong>Settings &gt; Apps &gt; Safari &gt; Advanced</strong>.</p>
+<p>Safari and in-app Safari sheets are always readable. An app's <code class="ic">WKWebView</code> is readable when the app sets <code class="ic">isInspectable = true</code>.</p></div></div>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="run-the-sample">Run the sample<a class="anchor" href="#run-the-sample" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>The <code class="ic">mobile_web</code> sample searches Wikipedia in Chrome on Android:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics init --name wiki --template mobile_web
+optics execute wiki">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> init <span class="c-info">--name</span> wiki <span class="c-info">--template</span> mobile_web
+<span class="prompt">$</span> <b>optics</b> execute wiki</code></pre></figure></div></li></ol>
+<h2 id="open-web-pages">Open web pages<a class="anchor" href="#open-web-pages" aria-label="Link to this section">#</a></h2>
+<p>Launch App and Launch Other App open a URL in the app that handles it. For a web address, that is a browser.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Open shop,Launch App,https://shop.example.com/
+Back to the app,Launch App,com.example.shop">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Open shop</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>https://shop.example.com/
+<span class="c-mod">Back to the app</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>com.example.shop</code></pre></figure>
+<p>On iOS, Launch App opens the URL in Safari. To go back to your app, use Launch App with its bundle id.</p>
+<h2 id="locators-for-web-pages">Locators for web pages<a class="anchor" href="#locators-for-web-pages" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Locator</th><th>Example</th><th>Found by</th></tr></thead><tbody><tr><td>Visible text</td><td><code class="ic">Sign in</code></td><td>The native UI tree, then OCR</td></tr><tr><td>HTML id</td><td><code class="ic">searchInput</code></td><td>The native UI tree. Chrome gives HTML ids as resource ids.</td></tr><tr><td>CSS</td><td><code class="ic">css=input[name='q']</code>, <code class="ic">#searchInput</code></td><td><code class="ic">appium_web</code></td></tr><tr><td>DOM XPath</td><td><code class="ic">//button[@type='submit']</code></td><td>The native sources first, then <code class="ic">appium_web</code></td></tr></tbody></table></div>
+<p>An XPath that names a native class or attribute, such as <code class="ic">android.widget.Button</code> or <code class="ic">@resource-id</code>, goes only to the native sources. Web locators search the top page, not the inside of an <code class="ic">iframe</code>.</p>
+<p>Assert Presence with a web locator checks the page, so an element that is off screen passes. Assert Visibility passes only when the element is in the visible part of the page.</p>
+<p>Assert Text reads the text of a web element. Is Element checks the <code class="ic">enabled</code>, <code class="ic">disabled</code>, <code class="ic">checked</code> and <code class="ic">unchecked</code> states of a web control, and <code class="ic">aria-disabled</code> and <code class="ic">aria-checked</code> count too.</p>
+<h2 id="move-between-apps-and-the-browser">Move between apps and the browser<a class="anchor" href="#move-between-apps-and-the-browser" aria-label="Link to this section">#</a></h2>
+<p>Every lookup reads the screen as it is now, so a test follows the user from one app to the next:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Read the policy,Press Element,Refund policy
+Read the policy,Assert Presence,css=h1,30
+Read the policy,Get Text,css=h1,store_as=policy_title
+Read the policy,Go Back
+Read the policy,Assert Presence,Refund policy,20">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Read the policy</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Refund policy
+<span class="c-mod">Read the policy</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>css=h1<span class="c-dim">,</span>30
+<span class="c-mod">Read the policy</span><span class="c-dim">,</span><b>Get Text</b><span class="c-dim">,</span>css=h1<span class="c-dim">,</span>store_as=policy_title
+<span class="c-mod">Read the policy</span><span class="c-dim">,</span><b>Go Back</b>
+<span class="c-mod">Read the policy</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Refund policy<span class="c-dim">,</span>20</code></pre></figure>
+<ul><li><strong>App to browser.</strong> A link in an app opens Chrome or a Chrome Custom Tab. Web locators then find elements in that page. Go Back closes the tab.</li><li><strong>Browser to app.</strong> A link that an app handles, such as a Play Store link, opens that app. Its native elements are available immediately.</li><li><strong>Two apps can open the link.</strong> Android asks which app to use. Answer with Detect And Press on the app's name, then on <code class="ic">Just once</code>.</li></ul>
+<h2 id="covered-elements">Covered elements<a class="anchor" href="#covered-elements" aria-label="Link to this section">#</a></h2>
+<p>When a banner, a dialog or a panel covers the element, Optics does not tap it, because the tap will hit the cover. The step fails with "is covered by another element on the page". Close the cover first. Get Text still reads a covered element.</p>
+<h2 id="chromes-first-run-pop-ups">Chrome's first-run pop-ups<a class="anchor" href="#chromes-first-run-pop-ups" aria-label="Link to this section">#</a></h2>
+<p>A new Chrome shows pop-ups over the page, such as a notification prompt or a sign-in offer. You cannot tap the page while one is open. Give Chrome the notification permission before you open a page:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Prepare Chrome,Launch App
+Prepare Chrome,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile: changePermissions&quot;&quot;, &quot;&quot;args&quot;&quot;: {&quot;&quot;permissions&quot;&quot;: &quot;&quot;android.permission.POST_NOTIFICATIONS&quot;&quot;, &quot;&quot;appPackage&quot;&quot;: &quot;&quot;com.android.chrome&quot;&quot;, &quot;&quot;action&quot;&quot;: &quot;&quot;grant&quot;&quot;}}&quot;
+Prepare Chrome,Launch App,https://www.wikipedia.org/
+Prepare Chrome,Detect And Press,negative_button,5">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Prepare Chrome</span><span class="c-dim">,</span><b>Launch App</b>
+<span class="c-mod">Prepare Chrome</span><span class="c-dim">,</span><b>Execute Script</b><span class="c-dim">,</span>"{""script"": ""mobile: changePermissions"", ""args"": {""permissions"": ""android.permission.POST_NOTIFICATIONS"", ""appPackage"": ""com.android.chrome"", ""action"": ""grant""}}"
+<span class="c-mod">Prepare Chrome</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>https://www.wikipedia.org/
+<span class="c-mod">Prepare Chrome</span><span class="c-dim">,</span><b>Detect And Press</b><span class="c-dim">,</span>negative_button<span class="c-dim">,</span>5</code></pre></figure>
+<p>Detect And Press closes a pop-up only if it shows, and does not fail if it does not. Other buttons to close: <code class="ic">No thanks</code>, <code class="ic">Stay signed out</code> or <code class="ic">signin_fre_dismiss_button</code>.</p>
+<h2 id="screen-elements">Screen elements<a class="anchor" href="#screen-elements" aria-label="Link to this section">#</a></h2>
+<p>With <code class="ic">appium_web</code> on, Get Interactive Elements, the MCP <code class="ic">elements</code> resource and <code class="ic">optics live</code> list the web page next to the native elements. Each web control has a <code class="ic">loc</code>: a <code class="ic">css=</code> or <code class="ic">xpath=</code> locator that matches only that element and stays the same between runs. Copy it into your elements file.</p>
+<h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+<ul><li>A web lookup takes one to two seconds on a remote device. Use native locators where they work.</li><li>iOS sign-in sheets (<code class="ic">ASWebAuthenticationSession</code>) cannot be read. Use text locators or OCR.</li><li>Optics adds capabilities that keep web lookups fast. Values in your <code class="ic">capabilities</code> replace them. The <a href="../../docs/reference/config#appium-capabilities">config.yaml reference</a> lists them.</li></ul>
+<h2 id="if-it-isnt-working">If it isn't working<a class="anchor" href="#if-it-isnt-working" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>"No web content found in the foreground app".</strong> The app's WebView is not debuggable. Turn on WebView debugging, or use text locators and OCR.</li><li><strong>"Cannot read the web page shown by …".</strong> The link opened in a browser that Optics cannot read, such as Samsung Internet. Make Chrome the default browser.</li><li><strong>"Cannot tell which browser tab is on screen".</strong> Several Chrome tabs show the same address. Close the extra tabs.</li><li><strong>"is in the page but not displayed".</strong> The locator matches a hidden element. Use a locator for the visible one.</li><li><strong>A Custom Tab ignores the first tap.</strong> Chrome ignores the first tap on a Custom Tab that opens immediately after another one closes. Press the field once before you type.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/platforms/android">Test Android apps</a></li><li><a href="../../docs/platforms/ios">Test iOS apps</a></li><li><a href="../../docs/platforms/web">Test websites</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20mobile%20websites%20and%20WebViews&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fmobile-web%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20mobile%20websites%20and%20WebViews&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fmobile-web%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/platforms/web"><span>Previous</span>Web</a><a class="pager-next" href="../../docs/platforms/tv"><span>Next</span>TV</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/platforms/mobile-web.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#how-it-works">How it works</a></li><li class="toc-l2"><a href="#before-you-begin">Before you begin</a></li><li class="toc-l2"><a href="#set-up">Set up</a></li><li class="toc-l3"><a href="#start-appium-so-that-it-can-get-chromedriver">Start Appium so that it can get chromedriver</a></li><li class="toc-l3"><a href="#write-configyaml">Write config.yaml</a></li><li class="toc-l3"><a href="#let-optics-read-the-page">Let Optics read the page</a></li><li class="toc-l3"><a href="#run-the-sample">Run the sample</a></li><li class="toc-l2"><a href="#open-web-pages">Open web pages</a></li><li class="toc-l2"><a href="#locators-for-web-pages">Locators for web pages</a></li><li class="toc-l2"><a href="#move-between-apps-and-the-browser">Move between apps and the browser</a></li><li class="toc-l2"><a href="#covered-elements">Covered elements</a></li><li class="toc-l2"><a href="#chromes-first-run-pop-ups">Chrome's first-run pop-ups</a></li><li class="toc-l2"><a href="#screen-elements">Screen elements</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#if-it-isnt-working">If it isn't working</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=5160aed22e" defer></script>
+  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../docs.js?v=4c44e9f886" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=5da036df6a" defer></script>
+</body>
+</html>
