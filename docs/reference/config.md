@@ -587,8 +587,8 @@ With `file_log: true` and no `execution_output_path`, Optics also writes a copy 
 
 Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
 
-- Values you write with the `@:` prefix, such as `@:s3cret`.
-- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters.
+- Values you write with the `@:` prefix, such as `@:s3cret`. After the step runs, Optics also masks the value without the prefix.
+- Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters, also values with `@:`.
 - Text values in config.yaml under a secret name, such as `appium:keystorePassword`. Also the values of environment variables with a secret name, such as `HUB_TOKEN`. A key that ends in `_env`, such as `api_key_env`, holds the name of a variable and is not a secret.
 - Passwords in URLs (`https://user:****@host`) and query parameters with a secret name (`?token=****`).
 

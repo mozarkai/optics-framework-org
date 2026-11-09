@@ -383,8 +383,10 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 | `--workers` | `1` | Server processes. Keep it at 1: sessions live in memory and aren't shared between processes. |
 
 :::warning
-The API has no authentication and accepts requests from any web origin. Keep the default `127.0.0.1` unless you're on a trusted network.
+The API has no authentication. Keep the default `127.0.0.1`, unless you are on a trusted network. On another address, the server logs a warning when it starts.
 :::
+
+Web pages cannot call the server unless you list their origins in `OPTICS_CORS_ORIGINS`. A request whose `Host` is not a loopback name gets `421`. Add other names in `OPTICS_ALLOWED_HOSTS`.
 
 The server doesn't read config.yaml. Each session gets its settings from the request. Interactive API docs are at `http://127.0.0.1:8000/docs`. See [HTTP API](/docs/reference/http-api).
 
@@ -511,6 +513,8 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `OPTICS_MCP_TOOLSET` | `mcp` | The default for `--toolset`: `core` or `full`. Any other value stops the server. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `mcp` | Seconds before an unused session ends. Default `900`. `0` keeps sessions open. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `mcp` | Seconds that one tool call can take. Default `100`. |
+| `OPTICS_CORS_ORIGINS` | `serve` | Web origins that can call the server, separated by commas. Empty by default, so no web page can call it. `*` stops the server with E0501. |
+| `OPTICS_ALLOWED_HOSTS` | `serve`, `mcp` over HTTP | Host names that the server answers in addition to loopback names, separated by commas. When set, the check applies on any address. Other hosts get `421`. |
 | `OPTICS_EVENT_DRAIN_TIMEOUT_S` | `execute`, `serve` | Seconds to wait for events to flush at the end of a run. Default `2.0`. Raise it if `junit_output.xml` is cut short on long runs. |
 | `PLAYWRIGHT_BROWSERS_PATH` | `doctor`, Playwright | Where Playwright browsers are installed. |
 | `GEMINI_API_KEY` or `GOOGLE_API_KEY` | Gemini | API key for the Gemini Developer API. `capabilities.api_key` in config.yaml wins over it. |
@@ -520,7 +524,7 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | `ANTHROPIC_API_KEY` | `anthropic` engine | API key for the Claude API. `capabilities.api_key` in config.yaml wins over it. Set `api_key_env` to read another variable. |
 | Any name in `${NAME}` | Playwright | A `${NAME}` in the Playwright `url` or in a `headers` value is read from the environment. If it is not set, the run stops with [E0501](/docs/reference/errors#e05-files-and-config). |
 
-`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. See [Flow control keywords](/docs/reference/keywords/flow).
+`Read Data` can also read any variable with `ENV:<NAME>` in a project run. `optics serve` and `optics mcp` refuse `ENV:`. `optics serve` and `optics mcp` over HTTP also refuse a `Read Data` file. See [Flow control keywords](/docs/reference/keywords/flow).
 
 ## Install scripts
 
