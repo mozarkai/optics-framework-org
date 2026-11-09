@@ -102,7 +102,7 @@ Run the test again. This time it fails:
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
 │ Keyword 'Validate Element' failed after fallback attempts; last error:       │
-│ Code.E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR   │
+│ E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR        │
 │ was not tried: no text_detection engine is configured.                       │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```

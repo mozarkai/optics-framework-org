@@ -99,7 +99,7 @@ The server does not read its own environment or files for a caller. It refuses t
 - `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
 
 ```terminal
-{"detail":{"type":"optics:config","code":"Code.E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
+{"detail":{"type":"optics:config","code":"E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
 ```
 
 The session log shows only the scheme and host of a URL. It masks header values, `storage_state` and every value with a secret name, such as `token` or `password`.
@@ -150,13 +150,13 @@ Unlike `optics execute`, the HTTP API returns keyword results, so `Get Text`, `A
 A keyword that does not find its element returns `404`:
 
 ```json
-{"detail": {"type": "optics:element", "code": "Code.E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "Code.E0201: Element 'css=#nope' not found."}}
+{"detail": {"type": "optics:element", "code": "E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "E0201: Element 'css=#nope' not found."}}
 ```
 
 - `cause` is the error that caused this one, or `null`.
 - When you send several values for one parameter and each one fails, the message is `All fallback values failed for keyword '<keyword>':` and lists each try. The code and status are those of the last try.
 - `Read Data` with an `ENV:` file path returns `400` with `E0501`: `Read Data ENV: is only available to project runs, not API callers`.
-- The `code` field can carry a `Code.` prefix, as in `Code.E0402`. It's the same code. See [Error codes](/docs/reference/errors).
+- The `code` field holds the code alone, such as `E0402`. See [Error codes](/docs/reference/errors).
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
 

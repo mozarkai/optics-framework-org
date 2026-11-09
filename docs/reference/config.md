@@ -30,7 +30,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | Key | Default | What it does |
 |---|---|---|
 | `driver_sources` | All disabled | The driver that controls the device or browser. See [driver_sources](#driver-sources). |
-| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias. |
+| `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias in each command, `optics doctor` included. If the file has both keys, Optics uses `elements_sources`. |
 | `text_detection` | All disabled | OCR engines for finding elements by on-screen text. |
 | `image_detection` | All disabled | Engines for finding elements by image templates. |
 | `llm_models` | All disabled | The LLM for AI self-heal and the plain-English mode of `optics live`. |

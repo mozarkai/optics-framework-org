@@ -250,7 +250,7 @@ $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can c
 - Each flag takes one or more names. You can also give a flag more than once.
 - Matching ignores case and extra spaces, and must match the full name. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first, then removes the `--exclude` matches.
-- Suite Setup, Suite Teardown and the per-test setup and teardown always run. You cannot include or exclude them.
+- Suite Setup, Suite Teardown and the per-test setup and teardown always stay in the run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](/docs/reference/config#include-and-exclude) for that run.
 
 Each name must match a test case. If a name matches nothing, Optics stops before it starts a session and exits with code 3. This also applies to `include` and `exclude` in config.yaml:
@@ -277,7 +277,7 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 1. Optics walks the whole folder and finds your files by their content (see [Project files](/docs/reference/files#how-optics-finds-your-files)). It stops if there's no test cases file or no modules file.
 2. It loads the config and checks the test case selection. Then it stops if no driver is enabled and the selected test cases use a keyword that needs one. A suite that uses only [flow control keywords](/docs/reference/keywords/flow), such as `Evaluate`, `Condition` and `Run Loop`, runs with no driver.
 3. **Preflight.** It checks that the first enabled driver can be reached. For Appium it connects to the server URL. If the server is on this computer and the platform is Android, it also checks that `adb` finds a device. For Selenium it connects to the server URL. Playwright is skipped. If the check fails, Optics shows a "Cannot start" panel with the command that fixes it. Set `OPTICS_SKIP_PREFLIGHT=1` to skip this check.
-4. It runs Suite Setup, then each test case, then Suite Teardown. A failing test case doesn't stop the others.
+4. It runs Suite Setup, then each test case, then Suite Teardown. A test case that fails does not stop the others. A failed setup skips the test cases that it prepares. See [Setup and teardown](/docs/reference/files#setup-and-teardown).
 5. It saves a final screenshot and page source, and runs [error detection](/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
 The printer shows a live tree, then a summary:
@@ -293,6 +293,8 @@ Test Suite
 Total Test Cases: 1 | Passed: 1 | Failed: 0
 ```
 
+When a failed setup skips test cases, the summary also shows `| Skipped: <count>`.
+
 When a step fails, a "Failure details" box names the test, the step and the reason:
 
 ```terminal
@@ -302,7 +304,7 @@ Shopper can add a backpack → step 'Press Elemnt (//input[@id='login-button'])'
 The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If every fallback value failed, it is `Keyword '<keyword>' failed after fallback attempts; last error: <error>`. If the error has a deeper cause, `(cause: …)` comes at the end:
 
 ```terminal
-Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: Code.E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: Code.E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
+Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
 ```
 
 Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](/docs/reference/files#outputs) and [Read the results](/docs/run/results#what-each-outcome-writes).
@@ -316,7 +318,7 @@ Results go to `execution_output/` in the project: `junit_output.xml`, screenshot
 | 130 | You pressed [[Ctrl]]+[[C]]. |
 | 143 | Optics received SIGTERM. |
 
-Optics also writes `junit_output.xml` when you stop the run with [[Ctrl]]+[[C]] or SIGTERM. The test case in progress ends as `ERROR`. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
+Optics also writes `junit_output.xml` when you stop the run with [[Ctrl]]+[[C]] or SIGTERM. The test case in progress ends as `ERROR`, with the code E0706. The test cases that did not start are `NOT_RUN`. Suite Teardown does not run.
 
 On-screen errors found by error detection appear in `junit_output.xml` as a failing test case. They count as a failed test case, so the exit code is 1.
 

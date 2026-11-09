@@ -22,14 +22,13 @@ Codes in the `E02` family and `X0201` mean "element not found". When a step uses
 
 | Where | What it looks like |
 |---|---|
-| `optics execute` "Failure details" box | `<test> → step '<step>' — Keyword '<keyword>' failed: Code.E0401: <message>`, with ` (cause: <cause>)` at the end when there is a deeper cause |
+| `optics execute` "Failure details" box | `<test> → step '<step>' — Keyword '<keyword>' failed: E0401: <message>`, with ` (cause: <cause>)` at the end when there is a deeper cause |
 | Log files (`file_log: true`) | The same reason as the Failure details box, as an error line in `execution_logs.log`. A deeper cause follows as ` caused by: <cause>`. |
 | Error panels | A red panel with the code as its title. A deeper cause shows on a `Caused by:` line. |
 | `optics live` history | `✗ press_element ${sign_in}` with `[E0201] ...` on the line below |
 | HTTP API (`optics serve`) | A `code` field in the error body, or the code inside a `detail` string. A `cause` field holds the deeper cause. See [HTTP API](/docs/reference/http-api#errors). |
+| JUnit report (`junit_output.xml`) | A `code` attribute on each `<failure>`, `<error>` and failed `<kw>`. See [Read results](/docs/run/results#read-the-junit-report). |
 | MCP server (`optics mcp`) | `[E0201] not found: ...` in the tool reply, with a `Next:` line and the current screen rows. See [MCP server](/docs/reference/mcp#errors). |
-
-In some places the code has a `Code.` prefix, as in `Code.E0102`. It's the same code. Search for the five characters, for example `E0102`.
 
 The cause is the innermost error of the chain, on one line of at most 300 characters. Optics leaves it out when the message already contains it.
 
@@ -65,6 +64,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 | Code | What happened | What to do |
 |---|---|---|
 | `E0401` | **Action failed.** The keyword ran but couldn't complete: an app didn't launch, an element wasn't visible or enabled for `Is Element`, typing failed, a script failed, an API request failed, or a module run by `Run Loop`, `Condition` or `Execute Module` failed. Also raised when `Assert Text` finds other text (`Element '<element>' shows '<text>' but expected '<expected>'.`), when `Assert Equality` finds two different values (`Expected '<expected>', got '<actual>'.`), when `Is Element` finds the wrong state or finds the element only by OCR or image, when iOS `Go Back` finds no back button, or when a deep link does not open. In `optics live`, also shown for errors a keyword logged without failing. | Read the message after the code; it names the cause. For nested modules, the inner error is included. |
+| `X0401` | **Action failed with exception.** A keyword failed with an error that has no Optics code. The JUnit report gives this code to the failed step. | Read the message of the `<failure>`. |
 | `E0402` | **Keyword not found.** No keyword has that name. | Check the spelling with `optics list`. Case and spaces don't matter. |
 | `E0403` | **Invalid keyword parameters.** A parameter has the wrong form: an expression that can't be evaluated, a numeric comparison on string values, a bad loop count, a query that matches no data, an `Invoke API` id without a dot, an `Invoke API` response that is not JSON, a key name that Playwright does not know. Also raised for an unknown `${name}` inside a longer value (`Variable '${name}' in '<value>' is not defined.`), for a `store_as` with no name or no value to store, or when the page source can't be read. | Read the message. In `Condition` and `Evaluate`, compare with quoted values: `${size} == '9'`, not `${size} > 5`. Use `collection.api` for `Invoke API`. Write `store_as=<name>` only on a keyword that returns a value. See [Keywords](/docs/reference/keywords/). |
 | `E0405` | **Action ran, but the screen does not show its result.** The action ran, but the check after it failed. On a Samsung or LG TV, `Enter Text` types on the on-screen keyboard and then reads the field. The error shows when the field does not show the text or typing stopped part way. It also shows when `Clear Element Text` leaves text in the field. No fallback value runs the action again, because the action already ran. In `optics mcp`, this error has the kind `silent_failure`. | Read the message. Check the field on the TV. Press the field with `Press Element` first when the screen has more than one field. Then run the step again. See [Type on a TV](/docs/platforms/tv#type-on-a-tv). |
@@ -74,7 +74,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 | Code | What happened | What to do |
 |---|---|---|
 | `E0501` | **Missing required files.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set (`Environment variable NAME is not set`), and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty, and for a `./` path in config.yaml that does not exist. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
-| `E0503` | **Config parser error.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](/docs/reference/config#engine-lists) and [API definitions](/docs/reference/files#api-definitions). |
+| `E0503` | **Config parser error.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. Also raised when two test cases have the same setup or teardown role: `The test cases have more than one test setup: '<first>' and '<second>'`. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](/docs/reference/config#engine-lists) and [API definitions](/docs/reference/files#api-definitions). For two setups, keep one name that ends with "Setup" and rename the other. See [Setup and teardown](/docs/reference/files#setup-and-teardown). |
 
 ## E06: Modules and engines
 
@@ -89,6 +89,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 |---|---|---|
 | `E0701` | **Execution failed.** A run or a session action failed and Optics wrapped the cause. Also raised when the run order can't be built. | Read the wrapped message after `Execution failed:`. |
 | `E0702` | **Test case not found.** No test cases were loaded, an HTTP session no longer exists, or a variable used in `Evaluate`, `Condition` or a `Read Data` query isn't defined. Also raised when an `include` or `exclude` name matches no test case, matches only setup or teardown test cases, or leaves no test case to run. In `optics live`, also raised when the session can't start or switch devices. | Check that your test cases file is found (see [Project files](/docs/reference/files#how-optics-finds-your-files)). Define the variable in elements.csv or create it in an earlier step. Fix the test case names that the message shows. |
+| `E0706` | **Run stopped before the test case finished.** You pressed [[Ctrl]]+[[C]], or Optics received SIGTERM. The report gives this code to the test case and the keyword that were in progress. | Run the tests again. |
 
 ## E08: General
 
@@ -114,7 +115,6 @@ These codes exist in Optics 1.11.2, but nothing raises them. If you see one, it 
 | `E0204` | Timeout locating element |
 | `E0301` | Screenshot disabled |
 | `W0302` | Fallback to next camera supported driver |
-| `X0401` | Action failed with exception |
 | `W0404` | Keyword deprecated |
 | `X0502` | File read exception |
 | `W0503` | Config parser warning (can be ignored) |

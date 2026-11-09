@@ -63,19 +63,21 @@ log_level: DEBUG    # more detail in the terminal and log files
 
 ## Read the JUnit report
 
-`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `kind`, `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+
+`kind` tells you the role of the test case: `suite_setup`, `setup`, `test`, `teardown` or `suite_teardown`. Use it to filter setup and teardown out of your test counts. A `<failure>` or `<error>` has a `code` attribute with the error code, such as `E0201`, when the failure has a code.
 
 Inside each test case, every module and keyword is a `<kw>` with `status`, `starttime`, `endtime` and `elapsed`. CI tools that show nested steps display the same tree you saw in the terminal.
 
 ```xml
-<testcase name="Shopper can find a missing link" classname="birch-tests" time="3.79" ... status="FAIL">
-  <kw name="Verify Missing Link" type="setup" status="FAIL" ...>
-    <kw name="Assert Presence" status="FAIL" ... elapsed="3.01">
+<testcase name="Shopper can find a missing link" classname="birch-tests" kind="test" time="3.79" ... status="FAIL">
+  <kw name="Verify Missing Link" type="setup" status="FAIL" ... code="E0201">
+    <kw name="Assert Presence" status="FAIL" ... code="E0201" elapsed="3.01">
     ...
     </kw>
     <kw name="Validate Element" status="NOT_RUN"/>
   </kw>
-  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure">...</failure>
+  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure" code="E0201">...</failure>
 </testcase>
 ```
 
@@ -88,7 +90,7 @@ A status is one of these:
 | `ERROR` | The run could not do its work, for example because the driver session was lost or the run stopped. |
 | `NOT_RUN` | A failure or a stop kept it from running. |
 
-After a failure, the steps that did not run are `NOT_RUN`. A test case that never started is `NOT_RUN` with a `<skipped>` element. A per-test setup or teardown has its own result, named `Setup (<test case>)` or `Teardown (<test case>)`. If a per-test setup fails, the test case still runs.
+After a failure, the steps that did not run are `NOT_RUN`. A test case that never started is `NOT_RUN` with a `<skipped>` element. A per-test setup or teardown has its own result, named `Setup (<test case>)` or `Teardown (<test case>)`. If a per-test setup fails, its test case does not run. The test case is `NOT_RUN`, and the `message` of its `<skipped>` starts with `Setup failed:`.
 
 If error screens were detected, the report has an extra failing test case called `on-screen-error-detection`. See [Catch error screens](/docs/run/error-detection).
 
@@ -101,11 +103,13 @@ Each outcome has an exit code and a result in `junit_output.xml`. A run that can
 | Every test case passed | `0` | Every test case is `PASS`. |
 | A test case failed | `1` | That test case is `FAIL` with a `<failure>`. The steps after the failed step are `NOT_RUN`. |
 | An error screen matched | `1` | An extra `on-screen-error-detection` test case has one `<failure>` for each match. |
+| Suite Setup failed | `1` | Suite Setup is `FAIL`. Each other test case, except Suite Teardown, is `NOT_RUN` with a `<skipped>` whose `message` starts with `Suite setup failed:`. Suite Teardown runs. |
+| A per-test setup failed | `1` | `Setup (<test case>)` is `FAIL`. Its test case is `NOT_RUN` with a `<skipped>` whose `message` starts with `Setup failed:`. Its teardown runs. |
 | Config error, missing files or no driver enabled | `1` | Not written. |
 | Test selection not valid | `3` | Not written. |
-| The Appium or Selenium server cannot be reached, or no Android device is attached | `1` | Each test case is `ERROR` with an `<error>` that names the problem. Their steps are `NOT_RUN`. |
+| The Appium or Selenium server cannot be reached, or no Android device is attached | `1` | Each test case is `ERROR` with an `<error>` that names the problem and has its code, such as `E0102`. Their steps are `NOT_RUN`. |
 | The driver session is lost during the run | `1` | The test case in progress and each later one is `ERROR` with an `<error>` that has `E0106`. |
-| You press [[Ctrl]]+[[C]] | `130` | Finished test cases keep their results. The one in progress is `ERROR`. Later ones and Suite Teardown are `NOT_RUN` with `<skipped>`. |
+| You press [[Ctrl]]+[[C]] | `130` | Finished test cases keep their results. The one in progress is `ERROR` with `code="E0706"`. Later ones and Suite Teardown are `NOT_RUN` with `<skipped>`. |
 | Optics receives SIGTERM | `143` | The same as [[Ctrl]]+[[C]]. |
 
 A session is lost when the Appium server or the Selenium server stops, or drops the session, during a run. The terminal summary shows the affected test cases as failed.

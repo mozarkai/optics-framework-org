@@ -26,12 +26,14 @@ Launch Birch,Launch App
 Close Birch,Close And Terminate App
 ```
 
-Optics matches these names loosely: any test case name containing both "suite" and "setup" counts, so `Birch Suite Setup` works too. Setup and teardown always run, even when you [select which tests run](#run-only-some-test-cases).
+A name that ends with "Suite Setup" also works, such as `Birch Suite Setup`. Matching ignores case. Setup and teardown run even when you [select which tests run](#run-only-some-test-cases).
 
-A test case named just **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give every test a fresh start.
+A test case whose name ends with **Setup** runs before each test case, and **Teardown** runs after each one. Use them to give each test a fresh start.
+
+If Suite Setup fails, the test cases do not run, and the report shows them as skipped. Suite Teardown still runs. If the per-test setup fails, only its test case is skipped.
 
 :::tip
-Do not use "setup" or "teardown" in other test names. A test called *Setup wizard works* becomes the per-test setup.
+Give each role to one test case only. Two test cases whose names end with "Setup" stop the run before it starts. A name such as *Setup wizard works* is an ordinary test case, because it does not end with "Setup".
 :::
 
 ## Reuse modules

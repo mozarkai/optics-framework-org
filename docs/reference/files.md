@@ -89,19 +89,23 @@ A `test_step` that names a keyword instead of a module passes both `dry_run` and
 
 ### Setup and teardown
 
-Optics treats some test case names specially. Matching ignores case and looks for the words anywhere in the name.
+Optics gives a special role to a test case whose name ends with one of these words. Matching ignores case.
 
-| Name contains | Role | When it runs |
+| Name ends with | Role | When it runs |
 |---|---|---|
-| `suite` and `setup` | Suite setup | Once, before every other test case. If several match, the last one is used. |
-| `suite` and `teardown` | Suite teardown | Once, after every other test case. |
-| `setup` without `suite` | Per-test setup | Before each test case. |
-| `teardown` without `suite` | Per-test teardown | After each test case. |
+| `Suite Setup` | Suite setup | Once, before all other test cases. |
+| `Suite Teardown` | Suite teardown | Once, after all other test cases. |
+| `Setup` | Per-test setup | Before each test case. |
+| `Teardown` | Per-test teardown | After each test case. |
 
-- A failing setup doesn't stop the test cases after it.
-- The four test cases in the table always run, even when `include` or `exclude` would skip them. Other names with "setup" or "teardown", such as a second per-test setup, are ordinary test cases.
-- Don't use "setup" or "teardown" in an ordinary test name. "Setup wizard works" is treated as the per-test setup.
-- Each run of a per-test setup or teardown has its own result in the report, named `Setup (<test case>)` or `Teardown (<test case>)`.
+`Web Suite Setup` is the suite setup, and `Test Setup` is the per-test setup. A name such as `Setup wizard works` does not end with one of the words, so it is an ordinary test case.
+
+- A project has a maximum of one test case of each role. A second one stops the run before it starts, with E0503: "The test cases have more than one test setup". Rename the other test cases.
+- If the suite setup fails, no other test case runs, except the suite teardown. The report shows each one as `NOT_RUN` with a `<skipped>` message that starts with `Suite setup failed:`.
+- If a per-test setup fails, its test case does not run. The report shows the test case as `NOT_RUN` with a `<skipped>` message that starts with `Setup failed:`. The per-test teardown still runs.
+- The test cases in the table run even when `include` or `exclude` does not name them.
+- Each run of a per-test setup or teardown has its own result in the report. Its name is the name of the setup or teardown, followed by the test case, such as `Setup (Shopper can sign in)`.
+- `optics execute --runner pytest` obeys the same rules.
 
 ## Modules
 
