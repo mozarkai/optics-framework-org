@@ -89,7 +89,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `strict_element_match` | boolean | Accepts only exact text matches. |
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
-Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). See [Environment variables](/docs/reference/cli#environment-variables).
+Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). A session cannot set `api_key_env` or the `anthropic` `platform`, so each engine reads its default variables, such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, and Claude runs on the Claude API. See [Environment variables](/docs/reference/cli#environment-variables).
 
 The server does not read its own environment or files for a caller. It refuses these values with `400` and `E0501`:
 

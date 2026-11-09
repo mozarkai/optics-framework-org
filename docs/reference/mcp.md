@@ -289,8 +289,8 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | `OPTICS_AI_SELF_HEAL` | off | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
 | `OPTICS_LLM_PROVIDER` | `gemini` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | | The default model. `openai` and `anthropic` need one. |
-| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. For Vertex AI and Bedrock, see [llm_models](/docs/reference/config#llm-models). |
-| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY` or `api_key_env`. |
+| `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | | The engine's key. Keys never travel in a tool call. A session cannot set `api_key_env`, so each engine reads its default variables. For Gemini on Vertex AI, see [llm_models](/docs/reference/config#llm-models). Claude runs only on the Claude API here, not on Bedrock or Vertex AI. |
+| `OPENAI_BASE_URL` | | The server the `openai` engine calls, such as OpenRouter or a local Ollama. Only the operator sets it; a session cannot. The key comes from `OPENAI_API_KEY`. |
 
 ## Typical agent loop
 
