@@ -81,7 +81,7 @@ llm_models:
 
 If you start the server with an API key, give the key to Optics as `api_key: ${VLLM_API_KEY}` under `capabilities`. If the server rejects JSON-schema output, set `response_format: json_object`.
 
-For a 2B model trained for self-heal, with measured results, read [Self-heal broken locators with a 2B model on your own GPU](/blog/small-model-self-heal).
+For a 2B model trained for self-heal, with measured results, read [Self-heal broken locators with a 2B model on your own GPU](https://optics-framework.org/blog/small-model-self-heal).
 
 ### Give the API key in config.yaml
 
