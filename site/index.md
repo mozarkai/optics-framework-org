@@ -79,7 +79,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.3"
+      - run: pip install "optics-framework[playwright]==1.11.4"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()
