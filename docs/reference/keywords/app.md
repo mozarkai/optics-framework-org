@@ -43,6 +43,7 @@ Good to know:
 - With no parameters, Launch App uses the app, URL and browser from your [config](/docs/reference/config). On Playwright, it opens the browser and no page.
 - On Selenium, `app_identifier` and `app_activity` apply only when Launch App starts the session. Later calls reopen the configured URL.
 - On Playwright, a second Launch App opens the URL in the same browser. The `browser`, `headless`, `viewport` and `device` capabilities set the browser. See [Web](/docs/platforms/web#emulate-a-phone).
+- On a desktop, Launch App starts `app` from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: a bundle id or `.app` path on macOS, an executable on Linux and Windows. See [Desktop](/docs/platforms/desktop#work-with-more-than-one-app).
 - The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.
 
 ### Start Appium Session
@@ -79,6 +80,7 @@ Open Help,Launch Other App,https://birch.example/help
 Good to know:
 
 - On Appium, a value containing `://` opens as a deep link or URL. Anything else is started or brought to the front as an app.
+- On a desktop, it starts the app, or brings it to the front if it runs, and later steps act on it. Launch App with no value goes back to the app from the config.
 - On Playwright, the URL opens in a new tab.
 - On Selenium, the current tab navigates to the URL.
 - In Python the parameter is called `bundleid`.
@@ -101,6 +103,7 @@ Close Birch,Close And Terminate App
 
 Good to know:
 
+- On a desktop, it stops only the apps that the session started. An app that you attached to with `appName` stays open.
 - After this keyword, later steps have no session. Put it in your last module or a teardown test case. See [Organise tests](/docs/create/organise).
 
 ### Force Terminate App
@@ -123,6 +126,7 @@ Reset Birch,Force Terminate App,com.birch.shop
 Good to know:
 
 - On Appium, errors are logged and the step passes, even if the app wasn't killed. With no session it does nothing.
+- On a desktop, give the same app id as for Launch Other App, for example `gnome-calculator`.
 - On Selenium, it closes the current browser window and ignores `app_name`.
 - Playwright doesn't support it. The step fails.
 
@@ -144,6 +148,7 @@ Good to know:
 
 - On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.
 - To keep the version in a variable, add [`store_as=name`](/docs/reference/keywords/#store-as).
+- On a desktop, the step fails with error E0105.
 - Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing `app_package` fails the step.
 
 ### Get Driver Session Id

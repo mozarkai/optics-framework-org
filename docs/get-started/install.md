@@ -86,6 +86,11 @@ You also need the Appium server, the Android SDK (for `adb`) and a device or emu
 $ optics setup --install appium
 ```
 You also need the Appium server with the XCUITest driver, Xcode, and a simulator or device. See [iOS](/docs/platforms/ios).
+::tab[Desktop]
+```shell
+$ optics setup --install appium
+```
+You also need Appium and appium-xa11y-driver on the computer that shows the app. One setup script installs both. See [Set up the Host](/docs/platforms/desktop#set-up-the-host).
 :::
 
 Run `optics setup` with no options to pick engines from a list instead, or `optics setup --list` to see every name.

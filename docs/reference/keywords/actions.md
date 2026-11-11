@@ -194,7 +194,7 @@ Good to know:
 - When the element is a caption or label, such as `Email`, Optics types into the field that it names.
 - `event_name` comes before `index` here, unlike Press Element. Set `index` by name: `index=1`.
 - When the field was found by OCR or image, Optics taps it, then types.
-- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. An unknown name is typed literally.
+- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. On a desktop, the keys are the Playwright keys plus the number pad keys, and phone keys such as `<back>` fail with error E0105. An unknown name is typed literally.
 - Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. `@:${password}` also works.
 - In YAML, quote text that contains spaces.
 - On Samsung Tizen and LG webOS TVs, Optics types into a real `<input>` directly. For a field that the app draws, it presses the keys of the on-screen keyboard one by one. If the field does not show the text afterward, the step fails with error E0405 and no fallback value types the text again. `<space>`, `<backspace>` and `<enter>` press that key of the on-screen keyboard. `<escape>` and the arrow keys press remote keys. Other special keys fail with error E0105. See [Type on a TV](/docs/platforms/tv#type-on-a-tv).
@@ -242,6 +242,7 @@ Good to know:
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
 - On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
 - On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
+- On a desktop, the keys go to the app in front. If a different app is in front, the step fails and types nothing.
 
 ### Enter Text Using Keyboard
 
@@ -290,6 +291,7 @@ Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
 - When the element is a caption or label, Optics clears the field that it names.
+- On a desktop, Optics selects all the text with Cmd+A on macOS or Ctrl+A on Linux and Windows, then deletes it.
 - On Samsung Tizen and LG webOS TVs, Optics presses the backspace key of the on-screen keyboard until the field stops changing. If text stays in the field, the step fails with error E0405.
 
 ## Swipe and scroll
@@ -501,7 +503,7 @@ Good to know:
 - On Playwright and Selenium, Go Back goes back one page in the browser history. Playwright waits for the page to load, up to `navigation_timeout_ms`. See [Timeouts](/docs/platforms/web#timeouts).
 - On Android, it presses the system Back button.
 - On iOS, it taps the back button in the navigation bar. If the screen has no such button, the step fails with error E0401.
-- Samsung Tizen and LG webOS TVs and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV.
+- Samsung Tizen and LG webOS TVs, desktop apps and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV, or with the app's key combination on a desktop.
 
 ### Press Keycode
 
@@ -517,6 +519,7 @@ Sends a hardware, system or remote-control key.
 | Android | An Android keycode number | `4` Back, `3` Home, `66` Enter |
 | Samsung Tizen and LG webOS TV | A remote key name | `UP`, `DOWN`, `LEFT`, `RIGHT`, `ENTER`, `BACK`, `HOME`, `PLAY`, `PAUSE` |
 | Playwright | A key name | `Enter`, `Tab`, `Escape`, `ArrowUp` |
+| Desktop (macOS, Linux, Windows) | A key or a key combination, joined with `+` | `primary+s`, `cmd+shift+z`, `ctrl+t`, `Escape`, `f5` |
 
 ```csv
 Product,Press Keycode,4
@@ -534,6 +537,7 @@ Good to know:
 - On Playwright, case and a `KEYCODE_` prefix do not matter: `esc`, `ARROWDOWN` and `KEYCODE_ENTER` work. An unknown name fails with error E0403 and lists the names that Optics knows.
 - On Tizen and webOS, an unknown remote key name fails with error E0104. The message lists the names that Optics knows. See [TV](/docs/platforms/tv#move-around-with-remote-keys) for the names.
 - On TVs, this is how you press one remote key. To move the focus to an element, use Press Element.
+- On a desktop, `primary` is Cmd on macOS and Ctrl on Linux and Windows. An unknown key name fails with `Unknown key`. [Press keys and key combinations](/docs/platforms/desktop#press-keys-and-key-combinations) lists the names.
 
 ### Execute Script
 
@@ -560,6 +564,7 @@ Good to know:
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
 - To keep the result, add [`store_as=name`](/docs/reference/keywords/#store-as).
 - On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
+- On a desktop, only the `xa11y:` methods of the driver work, such as `{"script": "xa11y: listWindows"}`. Other scripts fail with `unknown method`. See [Call the driver directly](/docs/platforms/desktop#call-the-driver-directly).
 - The BLE driver doesn't support it.
 
 ## Read and wait

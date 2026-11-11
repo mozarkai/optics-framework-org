@@ -53,6 +53,16 @@ Keep the `session_id`. Starting a session also opens the app, as `Launch App` wo
 }
 ```
 
+For a desktop app, give the OS and the app. See [Test desktop apps](/docs/platforms/desktop):
+
+```json
+{
+  "driver_sources": [{"appium": {"enabled": true, "url": "http://127.0.0.1:4723", "capabilities": {
+    "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
+  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
+}
+```
+
 ### Run keywords
 
 Send one keyword per request, with its values in order:

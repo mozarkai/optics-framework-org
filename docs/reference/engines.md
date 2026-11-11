@@ -14,12 +14,12 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
+| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV, macOS, Linux and Windows desktop apps |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
 | `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
-The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android) and [Test iOS apps](/docs/platforms/ios).
+The Appium server itself, and its UiAutomator2, XCUITest or Xa11y driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android), [Test iOS apps](/docs/platforms/ios) and [Test desktop apps](/docs/platforms/desktop#set-up-the-host).
 
 ## Element sources
 
@@ -27,9 +27,9 @@ An element source is how Optics looks at the screen for a driver. They need no e
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV |
-| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV |
-| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV |
+| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV, desktop |
+| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV, desktop |
+| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV, desktop |
 | `appium_web` | `appium` | Finds `css=` and DOM XPath locators in web pages in the phone's browser and in WebViews. Lists interactive elements. | Android, iOS |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
