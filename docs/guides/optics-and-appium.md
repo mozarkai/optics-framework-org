@@ -5,14 +5,14 @@ summary: Optics runs on top of Appium. Keep your Appium server and devices, and 
 description: Optics is an open-source framework that runs on top of Appium. Keep your Appium server, drivers and capabilities, and add CSV suites, fallback locators, OCR and image matching, a live recorder and an MCP server for AI agents.
 ---
 
-Optics doesn't replace Appium. For Android, iOS and TV apps, Optics drives the device **through** an Appium server. Appium still talks to the device. Optics decides what to press, finds it on screen several ways, and turns the steps into a suite anyone on the team can read.
+Optics doesn't replace Appium. For Android, iOS, TV and desktop apps, Optics drives the device **through** an Appium server. Appium still talks to the device. Optics decides what to press, finds it on screen several ways, and turns the steps into a suite anyone on the team can read.
 
 If you already run Appium, you keep your server, drivers, devices and capabilities. Optics adds a layer on top.
 
 ## What stays the same
 
 - **The Appium server.** You run it as before, locally or remotely. Set its address as `url` in `config.yaml`. A device farm works too, as long as you can reach its Appium server.
-- **The drivers.** UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs.
+- **The drivers.** UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs, and appium-xa11y-driver for macOS, Linux and Windows desktop apps.
 - **Your capabilities.** Optics passes your capabilities to Appium. It adds a few defaults, such as a 1-second idle wait, and your own values replace them. See [Appium capabilities](/docs/reference/config#appium-capabilities).
 - **Your inspector.** [Appium Inspector](https://github.com/appium/appium-inspector) still shows each element's id, text and XPath.
 - **Driver commands.** The Execute Script keyword runs Appium `mobile:` commands. See [Execute Script](/docs/reference/keywords/actions#execute-script).
@@ -90,6 +90,7 @@ Optics has no importer for Appium scripts. Rebuild each flow by [recording](/doc
 :::cards{cols="2"}
 - [Test Android apps](/docs/platforms/android): Set up Appium and adb, then run on a phone or emulator.
 - [Test iOS apps](/docs/platforms/ios): Run on a simulator or a signed device with XCUITest.
+- [Test desktop apps](/docs/platforms/desktop): Run native apps on macOS, Linux and Windows.
 - [Test TV apps](/docs/platforms/tv): Drive Android TV, Samsung Tizen and LG webOS.
 - [Optics vs Maestro](/docs/guides/optics-vs-maestro): Compare Optics with a framework that doesn't use Appium.
 :::

@@ -176,3 +176,4 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 - [Readiness checklist](/docs/run/checklist)
 - [Read the results](/docs/run/results)
 - [Android](/docs/platforms/android) and [Web](/docs/platforms/web) setup
+- [Run desktop tests in CI](/docs/platforms/desktop#run-in-ci) on Linux and Windows runners

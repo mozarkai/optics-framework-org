@@ -63,7 +63,7 @@ Check the first line of each file: `test_case,test_step` for test cases and `mod
 
 Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
-Start the server in another terminal with `appium`, then run again. If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
+Start the server in another terminal with `appium`, then run again. For a desktop app, check that the Appium service of the Host runs: see [Check that Appium runs](/docs/platforms/desktop#check-that-appium-runs). If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
 
 ### "Cannot start: E0102": No Selenium/WebDriver server reachable at … {#selenium-not-reachable}
 
@@ -79,7 +79,7 @@ Add `browserName: chrome` or `browserName: firefox` under `capabilities`. Those 
 
 ### `E0104` Appium capabilities not found or unsupported platform {#appium-capabilities}
 
-The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV` or `LGTV`.
+The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV`, `LGTV`, `Mac`, `Linux` or `Windows`. A desktop session also needs `app` or `appName`. See [Write config.yaml](/docs/platforms/desktop#write-config-yaml).
 
 Fill in the capabilities for your platform. Run `optics configure <project>` to answer a few questions instead of writing them by hand. See [Error codes](/docs/reference/errors#e01-driver-and-session).
 
@@ -349,6 +349,24 @@ Check each item in [Turn it on](/docs/elements/self-heal#turn-it-on). Self-heal 
 Each instruction stops after 15 steps, after 3 failed steps in a row, or after 3 taps, swipes or scrolls in a row that are not checked ("Repeated gesture/coordinate actions did not reach the goal"). It also stops when 4 actions in a row do not change the screen ("No progress: the screen did not change after repeated actions.").
 
 Break the goal into smaller instructions, and use the words shown on screen. See [Write goals the model can finish](/docs/create/describe#write-goals-the-model-can-finish).
+
+## Desktop apps
+
+### A desktop session fails with E0104: "needs its app when it starts" {#desktop-no-app}
+
+The capabilities name no app. Without one, the driver would attach to the app in front, which can be your terminal. Set `app` to start the app, or `appName` to attach to an app that runs. See [Write config.yaml](/docs/platforms/desktop#write-config-yaml).
+
+### Keys or clicks fail with "is not the frontmost app" {#desktop-not-frontmost}
+
+A different app is in front, for example a system dialog. The driver sends no keys or clicks, because they would go to that app. Close the other app's window, or add a Launch App step to bring your app to the front.
+
+### Nothing works on macOS after the setup script {#desktop-mac-permissions}
+
+Appium needs the Accessibility and Screen & System Audio Recording permissions. Give them to the Node.js path that the setup script printed, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. See [Give the permissions](/docs/platforms/desktop#give-the-permissions-macos-only).
+
+### Go Back fails with E0105 on a desktop {#desktop-go-back}
+
+Go Back and Get App Version work only on phones. On a desktop, press the app's key combination with Press Keycode, for example `Press Keycode,cmd+[`. See [Keywords that differ on a desktop](/docs/platforms/desktop#keywords-that-differ-on-a-desktop).
 
 ## Web and Playwright
 
