@@ -1,6 +1,6 @@
 ---
 name: optics-framework
-description: Drive Android, iOS, smart TV and browser sessions with the Optics (optics-framework) MCP server, and write or fix Optics CSV/YAML test suites (test_cases, modules, elements, error_definitions). Use when automating or testing a real app UI with Optics, or when an Optics keyword name, parameter or default is uncertain.
+description: Drive Android, iOS, smart TV, desktop app and browser sessions with the Optics (optics-framework) MCP server, and write or fix Optics CSV/YAML test suites (test_cases, modules, elements, error_definitions). Use when automating or testing a real app UI with Optics, or when an Optics keyword name, parameter or default is uncertain.
 license: Apache-2.0
 ---
 
@@ -30,6 +30,10 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      Phone emulation: `capabilities: {"device": "Pixel 7"}`.
    - Mobile and TV: an Appium server must already be running (default
      `http://127.0.0.1:4723`); the device goes in the capabilities (`udid`, `deviceName`, ...).
+   - Desktop (macOS, Linux, Windows): Appium with appium-xa11y-driver must run on the computer
+     that shows the app. `capabilities: {"platformName": "Mac", "automationName": "Xa11y"}`
+     (or `Linux`, `Windows`) and `app`: a bundle id on macOS, an executable elsewhere.
+     `press_key` takes a key combination such as `primary+s`; `"back"` fails on a desktop.
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
    Every action returns what changed on screen; call `observe` only to search the rows
