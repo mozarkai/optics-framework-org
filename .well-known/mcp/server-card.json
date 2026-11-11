@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
   "name": "org.optics-framework/optics",
   "title": "Optics",
-  "version": "1.11.3",
-  "description": "Drive Android, iOS, TV and web apps from an AI agent. Runs locally: `optics mcp`.",
+  "version": "1.11.4",
+  "description": "Drive Android, iOS, TV, desktop and web apps from an AI agent. Runs locally: `optics mcp`.",
   "websiteUrl": "https://optics-framework.org/docs/reference/mcp",
   "repository": {
     "url": "https://github.com/mozarkai/optics-framework",
@@ -44,7 +44,7 @@
   },
   "serverInfo": {
     "name": "optics-framework",
-    "version": "1.11.3"
+    "version": "1.11.4"
   },
   "transport": {
     "type": "streamable-http",

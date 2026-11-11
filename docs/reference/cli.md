@@ -2,7 +2,7 @@
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.4.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -14,7 +14,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.4` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -37,11 +37,11 @@ optics quickstart
 
 There are no flags. The command asks these questions in order:
 
-1. **What do you want to automate?** `mobile` or `web`.
-2. **Install the engine now?** Appium for mobile; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
-3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web. Decline to pick an empty project or another sample.
+1. **What do you want to automate?** `mobile`, `web` or `desktop`.
+2. **Install the engine now?** Appium for mobile and desktop; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
+3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web, the `desktop_editor` sample for desktop. Decline to pick an empty project or another sample.
 4. **Project name** (default `my-optics-project`) and **where it should live** (default: the current folder). If the folder exists, it asks for another name.
-5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and no for web.
+5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and desktop, and no for web. For desktop, it asks which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (default `com.apple.TextEdit`, `gedit` or `notepad.exe`) and the Appium server URL.
 6. It runs `optics doctor` on the new project and shows the report.
 7. If the report shows no blocking problems, it offers to run your first test with `optics execute`.
 
@@ -62,12 +62,12 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
 
-In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web, Playwright Web and Mobile Web. Press Enter on a blank answer to cancel.
+In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web, Playwright Web, Mobile Web and Desktop Editor. Press Enter on a blank answer to cancel.
 
 A blank project contains:
 
@@ -88,6 +88,7 @@ birch-tests/
 | `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. |
 | `playwright` | `https://example.com` | Playwright. Needs no device or server. |
 | `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
+| `desktop_editor` | TextEdit on macOS: types a note, checks it, clears it and closes the editor | Appium with appium-xa11y-driver. Change `platformName` and `app` for Linux or Windows. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop). |
 
 Example:
 
@@ -110,16 +111,17 @@ optics configure [folder] [--edit]
 | `folder` | Current folder | The project folder. It's created if it doesn't exist. |
 | `--edit` | Off | Opens a full-screen editor over every config.yaml setting instead of the questions. |
 
-**Guided mode** asks what you're automating (`android`, `ios`, `web-playwright` or `web-selenium`), then the details for that platform:
+**Guided mode** asks what you're automating (`android`, `ios`, `desktop`, `web-playwright` or `web-selenium`), then the details for that platform:
 
 | Platform | Questions (defaults) |
 |---|---|
 | `android` | Device name (`emulator-5554`), platform name (`Android`), app package (`com.example.app`), main activity (`com.example.app.MainActivity`), Appium server URL (`http://127.0.0.1:4723`) |
 | `ios` | Device or simulator name (`iPhone 15`), platform name (`iOS`), bundle identifier (`com.example.app`), Appium server URL |
+| `desktop` | Which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (`com.apple.TextEdit`, `gedit` or `notepad.exe`), Appium server URL |
 | `web-selenium` | Selenium server URL (`http://127.0.0.1:4444/wd/hub`) |
 | `web-playwright` | Browser (`chromium`), headless (no) |
 
-For `android` and `ios`, Optics also enables the `appium_web` element source. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
+For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element source. It has no effect on a desktop app. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
 
 **Warning:**
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform).
@@ -149,9 +151,9 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 |---|---|
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
-| Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
+| Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
-| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
+| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, `bundleId` on iOS, and `app` or `appName` on a desktop). |
 
 Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without `--check`, doctor always exits with 0.
 

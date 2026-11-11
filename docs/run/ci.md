@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.11.3"
+          pip install "optics-framework[playwright]==1.11.4"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
@@ -60,7 +60,7 @@ jobs:
 optics-web:
   image: python:3.12-bookworm
   script:
-    - pip install "optics-framework[playwright]==1.11.3"
+    - pip install "optics-framework[playwright]==1.11.4"
     - python -m playwright install --with-deps chromium
     - optics execute birch-tests --no-use-printer
   artifacts:
@@ -124,7 +124,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.11.3"
+          pip install "optics-framework[appium]==1.11.4"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -166,7 +166,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.11.3`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Pin the Optics version** (`optics-framework==1.11.4`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
@@ -179,3 +179,4 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 - [Readiness checklist](https://optics-framework.org/docs/run/checklist)
 - [Read the results](https://optics-framework.org/docs/run/results)
 - [Android](https://optics-framework.org/docs/platforms/android) and [Web](https://optics-framework.org/docs/platforms/web) setup
+- [Run desktop tests in CI](https://optics-framework.org/docs/platforms/desktop#run-in-ci) on Linux and Windows runners

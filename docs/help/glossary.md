@@ -6,13 +6,21 @@ Terms are listed alphabetically. Each entry links to the page that explains it i
 
 ## A
 
+### Accessibility tree
+
+The accessibility tree is the list of buttons, fields and texts that an operating system gives to screen readers. On a desktop, Optics reads it as the [UI tree](#ui-tree) of the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop#find-elements).
+
 ### AOI (area of interest)
 
 An AOI, or area of interest, is a rectangle that limits where Optics looks for an element, given as percentages of the screen from 0 to 100. Use it when the same text or icon appears in several places. See [Search part of the screen](https://optics-framework.org/docs/elements/area-of-interest).
 
 ### Appium
 
-Appium is the open-source automation server Optics uses to drive Android, iOS and TV apps. You run the Appium server yourself, and Optics connects to it at the `url` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+Appium is the open-source automation server Optics uses to drive Android, iOS, TV and desktop apps. You run the Appium server yourself, and Optics connects to it at the `url` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+
+### appium-xa11y-driver
+
+appium-xa11y-driver is the Appium driver that Optics uses for desktop apps on macOS, Linux and Windows. It runs on the [Host](#host) with Appium. Set `automationName: Xa11y` to use it. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop).
 
 ## B
 
@@ -30,6 +38,10 @@ A browser profile is the set of sign-ins, cookies and settings that Chrome or Ed
 
 Capabilities are the settings Optics passes to a driver when it starts a session, such as the device name, the app to open or the browser to use. They go under `capabilities` for each driver in `config.yaml`. See [driver_sources](https://optics-framework.org/docs/reference/config#driver-sources).
 
+### Chord
+
+A chord is a key combination, such as `cmd+s` or `ctrl+shift+t`. On a desktop, Press Keycode takes a chord. `primary` is Cmd on macOS and Ctrl on Linux and Windows. See [Press keys and key combinations](https://optics-framework.org/docs/platforms/desktop#press-keys-and-key-combinations).
+
 ### config.yaml
 
 `config.yaml` is the settings file in each project. It says which driver to use, how to look at the screen, and how to log and report. See [config.yaml](https://optics-framework.org/docs/reference/config).
@@ -42,7 +54,7 @@ CSV (comma-separated values) is the plain-text table format most Optics suites u
 
 ### Driver
 
-A driver is the engine that controls the target: Appium for phones and TVs, Playwright or Selenium for browsers, or the BLE driver for locked-down devices. You enable one under `driver_sources` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+A driver is the engine that controls the target: Appium for phones, TVs and desktop apps, Playwright or Selenium for browsers, or the BLE driver for locked-down devices. You enable one under `driver_sources` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
 
 ### Dry run
 
@@ -83,6 +95,12 @@ An extra is the pip name for an optional engine, such as `appium`, `easyocr` or 
 ### Fallback
 
 A fallback is a second (or third) value for an element that Optics tries when the first one isn't found. For example, an element can have an XPath, then its text, then an image. See [How Optics finds elements](https://optics-framework.org/docs/elements/).
+
+## H
+
+### Host
+
+The Host is the computer that shows the desktop app under test. Appium and appium-xa11y-driver run on it. Optics runs on the Host or connects to it from another computer. See [Set up the Host](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 ## I
 

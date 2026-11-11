@@ -75,6 +75,32 @@ with Optics(config) as optics:
 
 Settings such as `ai_self_heal`, `llm_models` and `log_level` aren't read by the SDK.
 
+### Test a desktop app
+
+A desktop app uses the Appium driver with the OS and the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) for the setup:
+
+`test_notes.py`:
+
+```python
+from optics_framework import Optics
+
+optics = Optics()
+optics.setup(config={
+    "driver_sources": [{"appium": {"enabled": True, "url": "http://127.0.0.1:4723", "capabilities": {
+        "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
+    "elements_sources": [{"appium_find_element": {"enabled": True}},
+                         {"appium_page_source": {"enabled": True}},
+                         {"appium_screenshot": {"enabled": True}}],
+})
+optics.launch_app()
+optics.enter_text("//text_area", "Hello from Optics")
+optics.assert_text("//text_area", "Hello from Optics")
+optics.press_keycode("primary+a")
+optics.enter_text_using_keyboard("<backspace>")
+optics.close_and_terminate_app()
+optics.quit()
+```
+
 ## How calls differ from suite files
 
 - **Method names are snake_case.** `Press Element` is `press_element`. Your editor's autocomplete lists them all.

@@ -7,6 +7,7 @@ These pages start from a job, such as testing a TV app or letting an AI agent us
 ## Task guides
 
 - [Test Android TV, Samsung Tizen and LG webOS apps with one framework](https://optics-framework.org/docs/guides/smart-tv-apps): Test Android TV, Samsung Tizen and LG webOS apps with remote-control keys.
+- [Test macOS, Linux and Windows desktop apps with one framework](https://optics-framework.org/docs/guides/desktop-apps): Test native desktop apps with the same CSV tests as phones and browsers. (New)
 - [Test apps that block screenshots](https://optics-framework.org/docs/guides/protected-apps): Drive a locked phone through a Bluetooth dongle and read the screen with a camera. (Advanced)
 - [Let your AI agent drive a phone](https://optics-framework.org/docs/guides/ai-agent-phone): Give Claude Code, Cursor or Codex a real device over MCP.
 

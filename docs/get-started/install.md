@@ -43,7 +43,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.3
+Optics Framework 1.11.4
 ```
 
 **Installer options**
@@ -51,7 +51,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.3` | `OPTICS_VERSION` | Install a specific release. |
+| `--version 1.11.4` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
@@ -84,6 +84,12 @@ You also need the Appium server, the Android SDK (for `adb`) and a device or emu
 $ optics setup --install appium
 ```
 You also need the Appium server with the XCUITest driver, Xcode, and a simulator or device. See [iOS](https://optics-framework.org/docs/platforms/ios).
+**Desktop**
+
+```shell
+$ optics setup --install appium
+```
+You also need Appium and appium-xa11y-driver on the computer that shows the app. One setup script installs both. See [Set up the Host](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 Run `optics setup` with no options to pick engines from a list instead, or `optics setup --list` to see every name.
 
@@ -114,7 +120,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.3
+  ✅ optics-framework                  installed, version 1.11.4
 
 Engines
   ⚠️ Appium                            appium-python-client not installed

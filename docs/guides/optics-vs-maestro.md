@@ -15,6 +15,7 @@ This page sets out the facts so you can pick the one that fits your apps. Maestr
 | iOS | Simulators and signed real devices, through Appium | Simulators. Its README says physical iOS devices aren't supported yet. |
 | Web | Playwright (Chromium, Firefox, WebKit, local or remote, with phone emulation) or Selenium (Chrome or Firefox). Real Chrome and Safari on phones through Appium. | Beta, Chromium only |
 | TV | Android TV, Samsung Tizen and LG webOS | Android TV remote keys in `pressKey`. Tizen and webOS aren't listed as supported platforms. |
+| Desktop apps | Native apps on macOS and Linux, and Windows (experimental), through Appium and appium-xa11y-driver | Its [supported platforms](https://docs.maestro.dev/get-started/supported-platform) page lists Android, iOS and web only |
 | Locked devices | Bluetooth mouse and keyboard plus a camera, no software on the device | Not covered in its docs |
 | How it drives the app | Through a driver you run: Appium, Playwright, Selenium or a BLE dongle | A single binary that drives the app through the accessibility layer, with no separate drivers. The CLI needs Java 17 or newer. |
 | Test format | CSV or YAML rows of keywords, split into test cases, modules and elements. Also Python and Robot Framework. | YAML flows, with JavaScript for logic |
@@ -87,7 +88,7 @@ The Maestro CLI runs flows locally or in CI. It writes JUnit or HTML reports, an
 
 Choose **Optics** when you need:
 
-- Smart TVs on Tizen or webOS, physical iPhones, or locked devices.
+- Smart TVs on Tizen or webOS, native desktop apps, physical iPhones, or locked devices.
 - Elements that the UI tree can't see, found with OCR or image matching.
 - Suites that non-developers read and edit in a spreadsheet.
 - Python or Robot Framework from the same keywords.

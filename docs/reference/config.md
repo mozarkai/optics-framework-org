@@ -133,7 +133,7 @@ Enable one driver. `optics live` refuses more than one, and `optics doctor` warn
 
 | Name | Extra | What it drives |
 |---|---|---|
-| `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps through an Appium server. |
+| `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps, and macOS, Linux and Windows desktop apps, through an Appium server. |
 | `selenium` | `selenium` | Chrome or Firefox through a Selenium server or Grid. |
 | `playwright` | `playwright` | Chromium, Firefox or WebKit, on this computer or a remote browser. See [Playwright capabilities](#playwright-capabilities). |
 | `ble` | `ble` | Any device paired with a Bluetooth mouse-and-keyboard dongle. For devices with no automation access. |
@@ -413,6 +413,7 @@ Optics reads `platformName`, the app id and `browserName`. It passes every other
 | `iOS` | `bundleId` | The same defaults without `ignoreHiddenApiPolicyError`, with `ensureWebviewsHavePages: true` and `settings: {waitForIdleTimeout: 1}` |
 | `TizenTV` | `appPackage` | `newCommandTimeout: 3600`, `rcMode: remote`, `noReset: true` |
 | `LGTV` | `appId` | `newCommandTimeout: 600`, `rcMode: rc`, `useSecureWebsocket: true`, `autoExtendDevMode: false`, `noReset: true` |
+| `Mac`, `Linux`, `Windows` | `app`, or `appName` to attach to a running app | `automationName: Xa11y`, `newCommandTimeout: 3600` |
 
 Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Optics waits up to 300 seconds for Appium to create a session. To attach to an Appium session that is already running, add `appium:existingSessionId`. Optics starts a new session if it cannot attach.
 
@@ -502,6 +503,30 @@ elements_sources:
 ```
 
 On Tizen and webOS, `appium_find_element` finds `text=` and `css=` locators in the app's DOM, and the element keywords press remote keys to move the focus. Touch keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). A Tizen TV needs `camera_screenshot` in place of `appium_screenshot`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
+
+## Desktop
+
+macOS, Linux and Windows apps use the `appium` driver with appium-xa11y-driver on the computer that shows the app:
+
+`config.yaml (macOS)`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://127.0.0.1:4723"
+      capabilities:
+        platformName: Mac              # or Linux, Windows
+        automationName: Xa11y
+        app: com.apple.TextEdit        # a bundle id or .app path on macOS, an executable elsewhere
+        appArguments: ["-ApplePersistenceIgnoreState", "YES"]
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source: {enabled: true}
+  - appium_screenshot: {enabled: true}
+```
+
+A desktop session needs `app` or `appName` when it starts. Without them, it fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). The driver also reads `launchTimeout`, `terminateOnDelete` and `failureArtifacts`. See [Write config.yaml](https://optics-framework.org/docs/platforms/desktop#write-config-yaml) for each capability and the app id on each OS.
 
 ## BLE and camera
 

@@ -16,7 +16,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.11.3"}
+{"status":"Optics Framework API is running","version":"1.11.4"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.
@@ -42,6 +42,16 @@ Keep the `session_id`. Starting a session also opens the app, as `Launch App` wo
   "driver_sources": [{"appium": {"url": "http://127.0.0.1:4723", "capabilities": {
     "platformName": "Android", "automationName": "UiAutomator2",
     "deviceName": "emulator-5554", "appPackage": "com.birch.shop", "appActivity": ".MainActivity"}}}],
+  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
+}
+```
+
+For a desktop app, give the OS and the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop):
+
+```json
+{
+  "driver_sources": [{"appium": {"enabled": true, "url": "http://127.0.0.1:4723", "capabilities": {
+    "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
   "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
 }
 ```

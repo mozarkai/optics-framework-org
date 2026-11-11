@@ -112,6 +112,76 @@
     mark();
   }
 
+  // ---- long tables -------------------------------------------------------------
+  // Every row stays in the page, so search engines, agents and the Markdown twin keep the whole table.
+  var LONG = 12, SHOWN = 8, FILTERED = 15;
+  var longTables = [];
+  document.querySelectorAll(".prose .table-wrap").forEach(function (wrap, n) {
+    var rows = Array.prototype.slice.call(wrap.querySelectorAll("tbody > tr"));
+    if (rows.length <= LONG) return;
+    var box = document.createElement("div");
+    box.className = "long-table clipped";
+    wrap.parentNode.insertBefore(box, wrap);
+    box.appendChild(wrap);
+    wrap.id = wrap.id || "long-table-" + n;
+    rows.forEach(function (r, i) { if (i >= SHOWN) r.classList.add("more"); });
+    var bar = document.createElement("button");
+    bar.type = "button";
+    bar.className = "table-more";
+    bar.setAttribute("aria-controls", wrap.id);
+    box.appendChild(bar);
+    var filter = null, live = null;
+    function setOpen(open) {
+      box.classList.toggle("clipped", !open);
+      bar.setAttribute("aria-expanded", open ? "true" : "false");
+      bar.textContent = open ? "Show fewer rows" : "Show all " + rows.length + " rows";
+    }
+    bar.addEventListener("click", function () {
+      var open = box.classList.contains("clipped");
+      setOpen(open);
+      if (!open) box.scrollIntoView({ block: "nearest" });
+    });
+    if (rows.length > FILTERED) {
+      filter = document.createElement("input");
+      filter.type = "search";
+      filter.className = "table-filter";
+      filter.placeholder = "Filter " + rows.length + " rows";
+      filter.setAttribute("aria-label", "Filter the rows of this table");
+      filter.setAttribute("aria-controls", wrap.id);
+      live = document.createElement("p");
+      live.className = "sr-only";
+      live.setAttribute("aria-live", "polite");
+      box.insertBefore(filter, wrap);
+      box.appendChild(live);
+      filter.addEventListener("input", function () {
+        var q = filter.value.trim().toLowerCase();
+        var hits = 0;
+        rows.forEach(function (r) {
+          var on = !q || r.textContent.toLowerCase().indexOf(q) > -1;
+          r.hidden = !on;
+          if (on) hits++;
+        });
+        box.classList.toggle("filtering", !!q);
+        live.textContent = q ? hits + " of " + rows.length + " rows match" : "";
+      });
+    }
+    setOpen(false);
+    longTables.push({ box: box, open: function () { setOpen(true); } });
+  });
+  function openAllTables() { longTables.forEach(function (t) { t.open(); }); }
+  function openTableAt(hash) {
+    var target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
+    var box = target && target.closest && target.closest(".long-table");
+    if (box) longTables.forEach(function (t) { if (t.box === box) t.open(); });
+  }
+  if (longTables.length) {
+    // The browser's own find cannot see rows that are not shown, so Cmd/Ctrl+F shows them first.
+    document.addEventListener("keydown", function (e) { if (e.key.toLowerCase() === "f" && (e.metaKey || e.ctrlKey)) openAllTables(); });
+    window.addEventListener("beforeprint", openAllTables);
+    window.addEventListener("hashchange", function () { openTableAt(location.hash); });
+    openTableAt(location.hash);
+  }
+
   // ---- was this helpful --------------------------------------------------------
   var helpful = document.querySelector(".helpful");
   if (helpful) helpful.querySelectorAll("[data-vote]").forEach(function (b) {

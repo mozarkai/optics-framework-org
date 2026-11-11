@@ -1,8 +1,8 @@
 # Optics
 
-> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS and web, plus locked-down devices driven over Bluetooth (BLE) as a mouse and keyboard. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
+> Optics (the `optics-framework` Python package, Apache 2.0) is open-source test automation for Android, iOS, Android TV, Samsung Tizen, LG webOS, web and native macOS, Linux and Windows desktop apps, plus locked-down devices driven over Bluetooth (BLE) as a mouse and keyboard. A test suite is plain CSV or YAML (test cases, modules, elements); the same keywords are a Python library, a Robot Framework library, an HTTP API (`optics serve`) and an MCP server (`optics mcp`). Elements fall back from XPath to visible text to OCR to image matching, so suites survive redesigns.
 
-Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
+Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Appium with appium-xa11y-driver on the computer that shows a desktop app, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
 
 How an agent should call Optics:
 
@@ -15,10 +15,11 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 
 ## When to use
 
-- [Delegate it: drive a device from your agent over MCP](https://optics-framework.org/docs/create/agent.md): use when you, an AI agent, need eyes and hands on a phone, TV or browser, to reproduce a bug, explore an app, or author a test suite yourself.
+- [Delegate it: drive a device from your agent over MCP](https://optics-framework.org/docs/create/agent.md): use when you, an AI agent, need eyes and hands on a phone, TV, desktop app or browser, to reproduce a bug, explore an app, or author a test suite yourself.
 - [Write it: CSV and YAML suites](https://optics-framework.org/docs/create/write.md): use when a team wants end-to-end UI tests that non-developers can read and review in pull requests.
 - [Record it or describe it: `optics live`](https://optics-framework.org/docs/create/record.md): use when a person wants to build a suite interactively, one keyword at a time or by describing the flow in plain English.
 - [Mobile web: Chrome, Safari and WebViews](https://optics-framework.org/docs/platforms/mobile-web.md): use when a test must follow a user from a native app into a mobile browser or WebView on a real phone, with `css=` and DOM XPath locators and no context switches.
+- [Desktop apps: macOS, Linux and Windows](https://optics-framework.org/docs/platforms/desktop.md): use when a test must drive a native desktop app through the accessibility tree of the OS, with Appium and appium-xa11y-driver on the computer that shows the app (the Host). Covers the Host setup, `config.yaml`, locators per OS and key combinations such as `primary+s`.
 - [Run it in CI](https://optics-framework.org/docs/run/ci.md): use when the same suite must run on every build and report JUnit XML, including on-screen error detection for crash dialogs.
 - [Python and Robot Framework libraries](https://optics-framework.org/docs/create/python.md): use when tests should live in pytest or Robot Framework code instead of CSV.
 - [HTTP API: `optics serve`](https://optics-framework.org/docs/advanced/http-api.md): use when another service needs to run keywords over HTTP. The server runs on your machine (default http://127.0.0.1:8000); its OpenAPI document is https://optics-framework.org/openapi.json.

@@ -8,7 +8,7 @@ Source: https://optics-framework.org/
 
 # Optics: create it your way, run it forever
 
-Optics is open-source test automation for Android, iOS, web and TV. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
+Optics is open-source test automation for Android, iOS, web, TV and desktop. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
 
 - Install (macOS and Linux): `curl -fsSL https://optics-framework.org/install | sh`
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
@@ -69,7 +69,7 @@ Every element can have several identities, tried cheapest first:
 
 - **On every build:** in CI. `optics execute` exits with 1 when a test fails, and the JUnit report becomes a check on the pull request. On-screen error detection runs too. GitLab and Android versions: https://optics-framework.org/docs/run/ci
 - **Before every release:** on your own emulator or device, with annotated screenshots.
-- **On every device:** Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium; web through Selenium or Playwright.
+- **On every device:** Android, iOS, Android TV, Samsung Tizen, LG webOS and macOS, Linux and Windows desktop apps through Appium; web through Selenium or Playwright.
 - **In production:** on a schedule against your live app, including a Bluetooth driver for locked-down devices.
 
 ```yaml
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.3"
+      - run: pip install "optics-framework[playwright]==1.11.4"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()
@@ -222,7 +222,7 @@ Total Test Cases: 3 | Passed: <span class="c-pass">3</span> | Failed: 0</code></
 <div class="dh-col"><h3>Create tests</h3><ul><li><a href="https://optics-framework.org/docs/create/write">Write a test suite</a></li><li><a href="https://optics-framework.org/docs/create/record">Record a test</a></li><li><a href="https://optics-framework.org/docs/create/python">Use Optics from Python</a></li><li><a href="https://optics-framework.org/docs/create/organise">Organise a suite</a></li></ul></div>
 <div class="dh-col"><h3>Find elements</h3><ul><li><a href="https://optics-framework.org/docs/elements/">How Optics finds elements</a></li><li><a href="https://optics-framework.org/docs/elements/define">Define elements</a></li><li><a href="https://optics-framework.org/docs/elements/text-and-images">Find by text and image</a></li><li><a href="https://optics-framework.org/docs/elements/self-heal">AI self-heal</a></li></ul></div>
 <div class="dh-col"><h3>Run and report</h3><ul><li><a href="https://optics-framework.org/docs/run/">Run a suite</a></li><li><a href="https://optics-framework.org/docs/run/results">Read the results</a></li><li><a href="https://optics-framework.org/docs/run/error-detection">Catch error screens</a></li><li><a href="https://optics-framework.org/docs/run/ci">Run tests in CI</a></li></ul></div>
-<div class="dh-col"><h3>Platforms</h3><ul><li><a href="https://optics-framework.org/docs/platforms/android">Android</a></li><li><a href="https://optics-framework.org/docs/platforms/ios">iOS</a></li><li><a href="https://optics-framework.org/docs/platforms/web">Web</a></li><li><a href="https://optics-framework.org/docs/platforms/tv">TV</a></li></ul></div>
+<div class="dh-col"><h3>Platforms</h3><ul><li><a href="https://optics-framework.org/docs/platforms/android">Android</a></li><li><a href="https://optics-framework.org/docs/platforms/ios">iOS</a></li><li><a href="https://optics-framework.org/docs/platforms/web">Web</a></li><li><a href="https://optics-framework.org/docs/platforms/tv">TV</a></li><li><a href="https://optics-framework.org/docs/platforms/desktop">Desktop</a></li></ul></div>
 <div class="dh-col"><h3>Advanced</h3><ul><li><a href="https://optics-framework.org/docs/advanced/variables">Variables</a></li><li><a href="https://optics-framework.org/docs/advanced/conditions">Conditions and loops</a></li><li><a href="https://optics-framework.org/docs/advanced/api-calls">Call APIs in a test</a></li><li><a href="https://optics-framework.org/docs/advanced/generate">Generate pytest or Robot code</a></li></ul></div>
 <div class="dh-col"><h3>Reference</h3><ul><li><a href="https://optics-framework.org/docs/reference/keywords/">Keywords</a></li><li><a href="https://optics-framework.org/docs/reference/cli">CLI</a></li><li><a href="https://optics-framework.org/docs/reference/config">config.yaml</a></li><li><a href="https://optics-framework.org/docs/reference/errors">Error codes</a></li></ul></div>
 <div class="dh-col"><h3>Help</h3><ul><li><a href="https://optics-framework.org/docs/help/troubleshooting">Troubleshooting</a></li><li><a href="https://optics-framework.org/docs/help/faq">FAQ</a></li><li><a href="https://optics-framework.org/docs/help/glossary">Glossary</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Ask on GitHub</a></li></ul></div>
@@ -242,7 +242,7 @@ Source: https://optics-framework.org/docs/get-started/
 
 > Learn what Optics does, what it tests, and the fastest way to see it run.
 
-Optics is open-source test automation for apps on Android, iOS, the web and TV. You describe what a person does in your app, such as signing in or adding a product to the cart. Optics repeats it on a real device, an emulator or a browser, and tells you when the app stops behaving.
+Optics is open-source test automation for apps on Android, iOS, the web, TV and the desktop. You describe what a person does in your app, such as signing in or adding a product to the cart. Optics repeats it on a real device, an emulator or a browser, and tells you when the app stops behaving.
 
 ## How a test works
 
@@ -259,6 +259,7 @@ When a run finishes, you get a pass or fail for every step, screenshots of what 
 | Android and iOS apps | Through [Appium](https://optics-framework.org/docs/platforms/android), on emulators, simulators and real phones |
 | Websites | Through [Playwright or Selenium](https://optics-framework.org/docs/platforms/web), no device needed |
 | Android TV, Samsung Tizen, LG webOS | Through Appium, with the remote's arrow keys. See [TV](https://optics-framework.org/docs/platforms/tv) |
+| macOS, Linux and Windows desktop apps | Through Appium and the accessibility tree of the OS. See [Desktop](https://optics-framework.org/docs/platforms/desktop) |
 | Locked-down production devices | As a Bluetooth mouse and keyboard, with a camera watching the screen. See [Production devices](https://optics-framework.org/docs/platforms/production) |
 
 Optics runs on macOS, Linux and Windows with Python 3.12 or newer. There is no account, cloud service or API key. Everything runs on your machine or in your CI.
@@ -308,7 +309,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.3
+Optics Framework 1.11.4
 ```
 
 ### Create a project
@@ -419,6 +420,10 @@ Close Browser,Close And Terminate App
 
 Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from a sample for the Android Contacts app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](https://optics-framework.org/docs/platforms/android) walks through both.
 
+## Testing a desktop app instead
+
+Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `desktop_editor` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) walks through it.
+
 ## Next steps
 
 - [Write your first test](https://optics-framework.org/docs/get-started/first-test): Build a sign-in and add-to-cart test against a real online store. (Next)
@@ -475,7 +480,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.3
+Optics Framework 1.11.4
 ```
 
 **Installer options**
@@ -483,7 +488,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.3` | `OPTICS_VERSION` | Install a specific release. |
+| `--version 1.11.4` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
@@ -516,6 +521,12 @@ You also need the Appium server, the Android SDK (for `adb`) and a device or emu
 $ optics setup --install appium
 ```
 You also need the Appium server with the XCUITest driver, Xcode, and a simulator or device. See [iOS](https://optics-framework.org/docs/platforms/ios).
+**Desktop**
+
+```shell
+$ optics setup --install appium
+```
+You also need Appium and appium-xa11y-driver on the computer that shows the app. One setup script installs both. See [Set up the Host](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 Run `optics setup` with no options to pick engines from a list instead, or `optics setup --list` to see every name.
 
@@ -546,7 +557,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.3
+  ✅ optics-framework                  installed, version 1.11.4
 
 Engines
   ⚠️ Appium                            appium-python-client not installed
@@ -1683,6 +1694,32 @@ with Optics(config) as optics:
 
 Settings such as `ai_self_heal`, `llm_models` and `log_level` aren't read by the SDK.
 
+### Test a desktop app
+
+A desktop app uses the Appium driver with the OS and the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) for the setup:
+
+`test_notes.py`:
+
+```python
+from optics_framework import Optics
+
+optics = Optics()
+optics.setup(config={
+    "driver_sources": [{"appium": {"enabled": True, "url": "http://127.0.0.1:4723", "capabilities": {
+        "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
+    "elements_sources": [{"appium_find_element": {"enabled": True}},
+                         {"appium_page_source": {"enabled": True}},
+                         {"appium_screenshot": {"enabled": True}}],
+})
+optics.launch_app()
+optics.enter_text("//text_area", "Hello from Optics")
+optics.assert_text("//text_area", "Hello from Optics")
+optics.press_keycode("primary+a")
+optics.enter_text_using_keyboard("<backspace>")
+optics.close_and_terminate_app()
+optics.quit()
+```
+
 ## How calls differ from suite files
 
 - **Method names are snake_case.** `Press Element` is `press_element`. Your editor's autocomplete lists them all.
@@ -1768,6 +1805,8 @@ Shopper Can Sign In
     Press Element    ${sign_in}
     Assert Presence    Picked for you|Search Birch    timeout=20    rule=any
 ```
+
+The suite reads `config.yaml`, so the same suite style works for a desktop app with a [desktop config](https://optics-framework.org/docs/platforms/desktop#write-config-yaml). On a desktop, `Press Keycode` takes a key combination such as `primary+a`.
 
 Run it like any Robot suite:
 
@@ -2979,7 +3018,7 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.11.3"
+          pip install "optics-framework[playwright]==1.11.4"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
@@ -3006,7 +3045,7 @@ jobs:
 optics-web:
   image: python:3.12-bookworm
   script:
-    - pip install "optics-framework[playwright]==1.11.3"
+    - pip install "optics-framework[playwright]==1.11.4"
     - python -m playwright install --with-deps chromium
     - optics execute birch-tests --no-use-printer
   artifacts:
@@ -3070,7 +3109,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.11.3"
+          pip install "optics-framework[appium]==1.11.4"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -3112,7 +3151,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.11.3`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Pin the Optics version** (`optics-framework==1.11.4`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
@@ -3125,6 +3164,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 - [Readiness checklist](https://optics-framework.org/docs/run/checklist)
 - [Read the results](https://optics-framework.org/docs/run/results)
 - [Android](https://optics-framework.org/docs/platforms/android) and [Web](https://optics-framework.org/docs/platforms/web) setup
+- [Run desktop tests in CI](https://optics-framework.org/docs/platforms/desktop#run-in-ci) on Linux and Windows runners
 
 ---
 
@@ -3146,7 +3186,7 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 
 ## The configuration
 
-- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.3`). Upgrade on purpose, in its own change.
+- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.4`). Upgrade on purpose, in its own change.
 - [ ] **Only the engines you use are enabled.** Every enabled OCR or image engine loads at the start of each run, even when no step needs it.
 - [ ] **No secrets are in `config.yaml` or the suite files.** Keep API keys in environment variables, and refer to them as `api_key: ${GEMINI_API_KEY}`. Keep passwords in CI secrets.
 - [ ] **The project folder holds one config file** and no stray copies of old suites. Optics reads every CSV and YAML in the folder.
@@ -3172,7 +3212,7 @@ Source: https://optics-framework.org/docs/platforms/
 
 > Learn which platforms Optics drives, what each one needs, and which keywords behave differently.
 
-Optics runs the same tests on phones, TVs, browsers and locked production devices. A **driver** controls the device, and **element sources** are the ways Optics looks at the screen. You pick both in `config.yaml`.
+Optics runs the same tests on phones, TVs, browsers, desktop apps and locked production devices. A **driver** controls the device, and **element sources** are the ways Optics looks at the screen. You pick both in `config.yaml`.
 
 ## Support matrix
 
@@ -3186,6 +3226,7 @@ Optics runs the same tests on phones, TVs, browsers and locked production device
 | LG webOS | `appium` (`platformName: LGTV`) | `appium_find_element`, plus OCR | Element keywords move the remote focus. Touch keywords fail with E0105. |
 | Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone. |
 | Web (Selenium) | `selenium` | `selenium_find_element`, `selenium_page_source`, `selenium_screenshot` | Needs a WebDriver server or Grid. Chrome or Firefox. |
+| Desktop (macOS, Linux, Windows) | `appium` (`automationName: Xa11y`) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Needs Appium and appium-xa11y-driver on the computer that shows the app. Windows is experimental. |
 | Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera. |
 
 Enable one driver and the element sources whose names start with that driver's name. The [config.yaml reference](https://optics-framework.org/docs/reference/config) lists every key, and the [engines reference](https://optics-framework.org/docs/reference/engines) lists what each engine installs.
@@ -3198,7 +3239,7 @@ Use **Selenium** when you already run a Selenium Grid, or need Firefox or a real
 
 ## What changes between platforms
 
-Between phones and browsers, only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
+Between phones, browsers and desktop apps, only `config.yaml` changes. Your test cases, modules and keywords stay the same. To run a suite on another platform, copy the project and swap the driver and element sources.
 
 TVs on Samsung Tizen and LG webOS are the exception. They have no touch screen, so the element keywords press remote keys to move the focus. Touch keywords such as Swipe and Scroll fail with E0105 there. Use Press Keycode for single remote keys. [Test TV apps](https://optics-framework.org/docs/platforms/tv) shows the locators and key names.
 
@@ -3222,10 +3263,10 @@ Most keywords work on every platform. These are the exceptions:
 | Keyword | Where it differs |
 |---|---|
 | Swipe, Scroll and other touch keywords | Fail with E0105 on Samsung Tizen and LG webOS. Press Element and Enter Text move the remote focus instead. |
-| Press Keycode | Takes Android key numbers on Android and Android TV, remote key names on Tizen and webOS, and key names such as `Enter` on Playwright. Not supported on Selenium or iOS. |
+| Press Keycode | Takes Android key numbers on Android and Android TV, remote key names on Tizen and webOS, key names such as `Enter` on Playwright, and key combinations such as `primary+s` on a desktop. Not supported on Selenium or iOS. |
 | Swipe | Not supported on Selenium. On Playwright it scrolls the page up or down. |
-| Launch App | Opens a package, a bundle id or a URL on Appium, and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |
-| Go Back | Goes back one page in a browser, and presses Back on Android. On iOS it taps the navigation bar's back button. Fails with E0105 on TVs and production devices. |
+| Launch App | Opens a package, a bundle id or a URL on Appium, an app on a desktop, and a URL on Playwright. On Selenium it opens `browserURL`. Not supported on production devices. |
+| Go Back | Goes back one page in a browser, and presses Back on Android. On iOS it taps the navigation bar's back button. Fails with E0105 on TVs, desktops and production devices. |
 | XPath and UI-tree text | Not available on production devices, which only have camera pictures. Use OCR and images. |
 | [Error detection](https://optics-framework.org/docs/run/error-detection) | Needs the page source, so it doesn't run on production devices. |
 
@@ -3238,6 +3279,7 @@ The [keyword reference](https://optics-framework.org/docs/reference/keywords/) l
 - [Web](https://optics-framework.org/docs/platforms/web): Test websites with Playwright or Selenium. (Recommended)
 - [Mobile web](https://optics-framework.org/docs/platforms/mobile-web): Test Chrome, Safari and WebViews on a real phone.
 - [TV](https://optics-framework.org/docs/platforms/tv): Drive Android TV, Samsung Tizen and LG webOS with remote keys.
+- [Desktop](https://optics-framework.org/docs/platforms/desktop): Test native apps on macOS, Linux and Windows. (New)
 - [Production devices](https://optics-framework.org/docs/platforms/production): Test locked devices through Bluetooth and a camera. (Advanced)
 
 ---
@@ -4513,6 +4555,567 @@ A few habits make TV tests reliable:
 
 ---
 
+Source: https://optics-framework.org/docs/platforms/desktop
+
+# Test desktop apps on macOS, Linux and Windows
+
+> Test native desktop apps on macOS, Linux and Windows. Optics reads the accessibility tree of the OS through Appium.
+
+Optics tests native desktop apps on macOS, Linux and Windows. It uses the same CSV files, keywords and reports as for phones and browsers. A test can open an editor, type a note, press a key combination, open a calculator and check a result.
+
+**Note:**
+Windows support is experimental. It is tested on Windows Server 2022 with Notepad and the classic Calculator. [Limits](#limits) has the details for each OS.
+
+## How it works
+
+Optics talks to an **Appium** server. Appium uses **appium-xa11y-driver**, which reads the accessibility tree of the OS: the same data that a screen reader uses. Each button, field and menu item in the tree is an element that Optics can find, press and read.
+
+Appium and the driver run on the **Host**: the computer that shows the app. Optics can run on the Host too, or on a different computer that connects to the Host.
+
+```text
+Optics  ──WebDriver──>  Appium + appium-xa11y-driver  ──accessibility API──>  your app
+                        └───────────── on the Host ─────────────┘
+```
+
+| OS | Accessibility API | Display |
+|---|---|---|
+| macOS | AXUIElement | The desktop of the user that is logged in |
+| Linux | AT-SPI2 | An X11 display. The setup script starts one if there is none. |
+| Windows | UI Automation | The desktop of the user that is logged in |
+
+## Before you begin
+
+- [Optics installed](https://optics-framework.org/docs/get-started/install) with the Appium engine: `optics setup --install appium`.
+- A Host that runs macOS, Linux with X11 (Debian 13 is tested), or Windows (Windows Server 2022 is tested).
+- On macOS, access to System Settings to give two permissions one time.
+- On Windows, an administrator one time, if the Visual C++ runtime is not installed.
+
+The setup script installs its own Node.js, Appium 3 and the driver. You do not need Node.js before you start.
+
+## Set up
+
+### Set up the Host
+
+Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. It is safe to run the script again: it changes only what is missing.
+
+**macOS**
+
+```shell
+$ curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/mac/setup.sh
+$ bash setup.sh
+```
+
+The service is the LaunchAgent `appium-xa11y`. Its log is `~/Library/Logs/appium-xa11y.log`.
+
+**Linux**
+
+```shell
+$ curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/linux/setup.sh
+$ bash setup.sh
+```
+
+The script installs Xvfb, Openbox, D-Bus and AT-SPI with `apt`. That step needs root: run the script as root, or with `sudo` access. If the script cannot get root, it prints the command to run yourself.
+
+The service is the systemd user unit `appium-xa11y`. It uses the X11 display that is there. If there is no display, it starts Xvfb on `:99`. To see the log, run `journalctl --user -u appium-xa11y`.
+
+**Windows**
+
+In PowerShell:
+
+```powershell
+PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/windows/setup.ps1 -OutFile setup.ps1
+PS> powershell -ExecutionPolicy Bypass -File setup.ps1
+```
+
+The service is the logon task `appium-xa11y` of the user that runs the script. That user must stay logged on to the desktop. The log is `%LOCALAPPDATA%\appium-xa11y\appium.log`.
+
+### Give the permissions (macOS only)
+
+macOS lets an app read other apps only when you give it **Accessibility**. Screenshots also need **Screen & System Audio Recording**. At the end, the setup script prints the path of the Node.js that runs Appium.
+
+1. Open **System Settings > Privacy & Security > Accessibility**.
+2. Click **+**, press **Cmd+Shift+G**, paste the path, and add it. Make sure that its switch is on.
+3. Do the same steps in **Privacy & Security > Screen & System Audio Recording**.
+4. Restart Appium:
+
+```shell
+$ launchctl kickstart -k gui/$(id -u)/appium-xa11y
+```
+
+**Common mistake:**
+Do not give the permissions to your terminal app. The service does not run in your terminal. Give them to the Node.js path that the script prints. Give them to the terminal app only when you start Appium yourself with `host.sh run`.
+
+### Check that Appium runs
+
+```shell
+$ curl -s http://127.0.0.1:4723/status
+{"value":{"ready":true,"message":"The server is ready to accept new connections", ...}}
+```
+
+If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
+
+### Make a project
+
+`optics quickstart` asks what you want to automate. Choose `desktop`, then the OS and the app. It writes `config.yaml` for you and can make the sample project.
+
+Or make the sample project yourself:
+
+```shell
+$ optics init notes --template desktop_editor
+```
+
+The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. On Linux or Windows, change `platformName` and `app` in `notes/config.yaml` first. [Write config.yaml](#write-config-yaml) shows the values.
+
+### Check and run
+
+```shell
+$ optics doctor notes
+$ optics execute notes
+```
+
+`optics doctor` can warn that `adb` is missing. A desktop project does not need adb, so you can ignore it. Then `optics execute` runs the sample:
+
+```terminal
+│ Total Test Cases: 3 | Passed: 3 | Failed: 0 │
+```
+
+## Write config.yaml
+
+A desktop project uses the `appium` driver with three settings: the OS, `automationName: Xa11y` and the app. To write them with questions in place of YAML, run `optics configure notes` and choose `desktop`.
+
+**macOS**
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://127.0.0.1:4723"
+      capabilities:
+        platformName: Mac
+        automationName: Xa11y
+        app: com.apple.TextEdit
+        appArguments: ["-ApplePersistenceIgnoreState", "YES"]
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}
+```
+
+`appArguments` makes the app start with no windows from the last time. Without it, TextEdit and other document apps open the documents of the last session.
+
+**Linux**
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://127.0.0.1:4723"
+      capabilities:
+        platformName: Linux
+        automationName: Xa11y
+        app: mousepad
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}
+```
+
+`optics quickstart` suggests `gedit`. Many systems do not have it. Use an editor that is installed, such as `mousepad`.
+
+**Windows**
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://127.0.0.1:4723"
+      capabilities:
+        platformName: Windows
+        automationName: Xa11y
+        app: notepad.exe
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}
+```
+
+`optics quickstart` also turns on `appium_web`. It has no effect on a desktop app, so you can keep it or remove it.
+
+### Capabilities
+
+| Capability | Value | Default |
+|---|---|---|
+| `platformName` | `Mac`, `Linux` or `Windows` | Required |
+| `automationName` | `Xa11y` | Optics sets `Xa11y` when you leave it out |
+| `app` | The app to start. See [Find the app id](#find-the-app-id). | Set `app` or `appName` |
+| `appArguments` | A list of arguments for `app` | None |
+| `appName` | The name of an app that runs now. The session attaches to it and does not start it. | None |
+| `launchTimeout` | Milliseconds to wait for the app's first window | `20000` |
+| `terminateOnDelete` | Stop the apps that the session started when the session ends. Apps that ran before stay open. | `true` |
+| `failureArtifacts` | A folder on the Host. When a command fails, the driver saves the page source and a screenshot there. | None |
+
+You can also put the driver's capabilities in `appium:options`, as in other Appium projects. Optics reads both forms.
+
+**Warning:**
+Set `app` or `appName`. If you set neither, the session fails with E0104. Without an app, the driver attaches to the app in front, which can be your terminal or your AI agent.
+
+### Find the app id
+
+| OS | `app` | Example | How to find it |
+|---|---|---|---|
+| macOS | A bundle id or an `.app` path | `com.apple.TextEdit`, `/Applications/Calculator.app` | `osascript -e 'id of app "TextEdit"'` |
+| Linux | An executable on the `PATH`, or a full path | `mousepad`, `/usr/bin/gnome-calculator` | `which mousepad` |
+| Windows | An executable on the `PATH`, or a full path | `notepad.exe`, `C:\Program Files\App\app.exe` | `where notepad` |
+
+On Windows, some executables are launchers that start a different process and exit, for example `calc.exe`. The session attaches to the app that the launcher starts.
+
+### Attach to an app that runs
+
+Use `appName` in place of `app` to test an app that is already open. The session does not start it and does not stop it at the end.
+
+`config.yaml`:
+
+```yaml
+      capabilities:
+        platformName: Mac
+        automationName: Xa11y
+        appName: TextEdit
+```
+
+`appName` is the name that the OS shows for the app, for example `TextEdit` on macOS or `mousepad` on Linux.
+
+## Use a Host on a different computer
+
+Appium has no authentication. Keep it on `127.0.0.1`, and connect to it through a tunnel:
+
+```shell
+$ ssh -N -L 4723:127.0.0.1:4723 user@host
+```
+
+Then keep `url: "http://127.0.0.1:4723"` in `config.yaml`. Each step is one round trip through the tunnel, so a suite is slower over a network. To write and try a suite, run Optics on your computer. For CI and long suites, run Optics on the Host.
+
+### Run a Linux Host in Docker
+
+The driver has a Dockerfile for a Linux Host with Xvfb and the sample apps:
+
+```shell
+$ git clone --branch v0.1.2 https://github.com/chinmayajha/appium-xa11y-driver
+$ docker build -f appium-xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux appium-xa11y-driver
+$ docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
+```
+
+The container has `mousepad` and `gnome-calculator`. To test your own app, install it in an image that starts from this one.
+
+## Find elements
+
+Each element in the tree is one XML tag. The tag is the role, such as `button`, `text_field`, `text_area`, `menu_item`, `static_text` or `window`. Each element has these attributes:
+
+| Attribute | Meaning |
+|---|---|
+| `name` | The accessible name, usually the visible label |
+| `value` | The text or value, for example the text in a field |
+| `label` | The accessible description |
+| `id` | The id that the app sets: AXIdentifier on macOS, AutomationId on Windows. It is always empty on Linux. |
+| `type` | The role of the OS, for example `AXButton`, `push button` or `Button` |
+| `enabled`, `visible`, `focused`, `selected`, `checked` | The state |
+| `clickable`, `checkable`, `editable`, `scrollable` | What you can do with the element |
+| `x`, `y`, `width`, `height` | The position on the screen |
+
+Write locators in `test_data/elements.csv`:
+
+| Locator | Example | Use it when |
+|---|---|---|
+| XPath with the id | `//button[@id="AllClear"]` | The app sets ids. This is the most stable locator on macOS and Windows. |
+| XPath with the name | `//button[@name="Save"]` | The element has a label. On Linux, use this, because there are no ids. |
+| XPath with the role | `//text_area` | There is only one element of that role, such as the editor. |
+| Visible text | `Save` | You want a locator that works on all OSs. |
+
+### Give one element a value for each OS
+
+The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The `desktop_editor` sample uses this for the editor:
+
+`test_data/elements.csv`:
+
+```csv
+Element_Name,Element_ID_text_area,Element_ID_web_area
+Editor,//text_area,//web_area
+```
+
+The editor is a `text_area` in TextEdit and mousepad, and a `web_area` in Notepad. A calculator shows the differences well:
+
+| Key | macOS Calculator | Linux gnome-calculator | Windows classic Calculator |
+|---|---|---|---|
+| 7 | `//button[@id="Seven"]` | `//button[@name="7"]` | `//button[@id="137"]` |
+| + | `//button[@id="Add"]` | `//button[@name="+"]` | `//button[@id="93"]` |
+| = | `//button[@id="Equals"]` | `//button[@name="="]` | `//button[@id="121"]` |
+| Clear | `//button[@id="AllClear"]` | `//button[@name="C"]` | `//button[@id="81"]` |
+
+### See the tree
+
+To see the tree of your app, add a `Capture Pagesource` step. Optics writes the tree to `execution_output/page_sources_log.xml`.
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step
+Look at the app,Launch App
+Look at the app,Capture Pagesource
+```
+
+`Get Interactive Elements` lists only the elements that you can press or type into. [`optics live`](https://optics-framework.org/docs/create/record) shows the elements on the screen while you try steps one at a time.
+
+The macOS menu bar is not in the tree. To use a menu command, press its key combination with Press Keycode.
+
+## Press keys and key combinations
+
+On a desktop, Press Keycode takes a key combination, or **chord**. Join the keys with `+`:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1
+Select all,Press Keycode,primary+a
+Save,Press Keycode,cmd+s
+New tab,Press Keycode,ctrl+t
+Close a dialog,Press Keycode,Escape
+```
+
+`primary` is Cmd on macOS and Ctrl on Linux and Windows. Use `primary` when one test must run on all three OSs.
+
+| Key | Names you can use |
+|---|---|
+| Cmd, Windows key | `cmd`, `command`, `meta`, `super`, `win`, `windows` |
+| Ctrl | `ctrl`, `control` |
+| Alt, Option | `alt`, `option`, `opt` |
+| Shift | `shift` |
+| Cmd on macOS, Ctrl elsewhere | `primary` |
+| Enter | `enter`, `return` |
+| Escape | `esc`, `escape` |
+| Arrows | `up`, `down`, `left`, `right`, `arrowup`, `arrowdown`, `arrowleft`, `arrowright` |
+| Delete | `backspace`, `delete`, `del` |
+| Other keys | `tab`, `space`, `insert`, `home`, `end`, `pageup`, `pagedown`, `plus` |
+| Function keys | `f1` to `f24` |
+| Letters, digits, symbols | The character itself: `a`, `7`, `/` |
+
+Key names are not case sensitive. An unknown name fails with `Unknown key '<name>'`. To press `+`, use `plus`.
+
+## Type text
+
+Enter Text types into an element. Enter Text Using Keyboard types into the element that has the focus.
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2
+Write,Enter Text,${Editor},hello world
+Write,Assert Text,${Editor},hello world
+Fix the typo,Enter Text Using Keyboard,<backspace>
+Clear,Clear Element Text,${Editor}
+```
+
+A value that is one special key in angle brackets presses that key: `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<left>`, `<right>`, `<up>`, `<down>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>`, `<f1>` to `<f12>`. Phone keys such as `<back>` or `<volume_up>` fail with E0105.
+
+Clear Element Text selects all the text with Cmd+A or Ctrl+A, then deletes it.
+
+**Tip:**
+On a macOS test Host, turn off inline predictive text: **System Settings > Keyboard > Text Input > Edit > Show inline predictive text**. A prediction adds words to a field, and Optics cannot set the text while it shows.
+
+## Scroll and swipe
+
+Scroll and Swipe By Percentage work in the window of the app:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2,param_3,param_4
+Move down,Scroll,down
+Drag up,Swipe By Percentage,50,70,up,30
+```
+
+Scroll turns the mouse wheel. Swipe drags with the mouse. Percentages are of the app's window, not of the screen.
+
+## Work with more than one app
+
+Launch Other App starts or brings a second app to the front, and the session follows it. Launch App with no value goes back to the app in `config.yaml`. Force Terminate App stops an app.
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2
+Add numbers,Launch Other App,gnome-calculator
+Add numbers,Press Element,${Seven}
+Add numbers,Press Element,${Plus}
+Add numbers,Press Element,5
+Add numbers,Press Element,${Equals}
+Add numbers,Assert Presence,12
+Add numbers,Force Terminate App,gnome-calculator
+Back to the editor,Launch App
+```
+
+Keys, typing and mouse actions go to the app in front. If a different app is in front, for example a system dialog, the step fails and sends nothing. Use Launch App to bring the app back to the front.
+
+## Keywords that differ on a desktop
+
+| Keyword | On a desktop |
+|---|---|
+| Press Keycode | Takes a chord, such as `primary+s`. Not an Android key number. |
+| Launch App | Starts `app`, or brings it to the front if it runs. |
+| Close And Terminate App | Closes the app that the session started. |
+| Go Back | Fails with E0105. Press the app's key combination for back instead. |
+| Get App Version | Fails with E0105. |
+| Enter Text with phone keys | `<back>`, `<menu>` and the volume keys fail with E0105. |
+
+All other keywords work as on a phone: Press Element, Assert Presence, Get Text, Scroll, Detect And Press and the others.
+
+## Call the driver directly
+
+Execute Script calls an `xa11y:` method of the driver. Use it for what no keyword does:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1
+Front window,Execute Script,"{""script"": ""xa11y: focusWindow""}"
+Type,Execute Script,"{""script"": ""xa11y: typeText"", ""args"": {""text"": ""via script""}}"
+```
+
+| Method | Arguments | What it does |
+|---|---|---|
+| `xa11y: chord` | `keys` | Presses a chord, as Press Keycode does |
+| `xa11y: typeText` | `text` | Types into the app in front |
+| `xa11y: focusWindow` | `name` (optional) | Brings a window to the front |
+| `xa11y: closeWindow` | `name` (optional) | Closes a window |
+| `xa11y: launch` | `app`, `arguments` (optional) | Starts an app, and the session follows it |
+| `xa11y: switchApp` | `name` or `pid` | Follows a different app, but does not bring it to the front |
+| `xa11y: listApps`, `xa11y: listWindows`, `xa11y: activeAppInfo` | None | Lists the apps or windows, or gives the app in front |
+
+To keep the result, for example the list of windows, add `store_as=name`. Other scripts fail with `unknown method`. The driver cannot run JavaScript.
+
+## Use other parts of Optics
+
+- **[Error detection](https://optics-framework.org/docs/run/error-detection) and [self-heal](https://optics-framework.org/docs/elements/self-heal)** read the page source, so they work on a desktop.
+- **[OCR and images](https://optics-framework.org/docs/elements/text-and-images)** work with `appium_screenshot`. On macOS, screenshots need the Screen & System Audio Recording permission.
+- **[The MCP server](https://optics-framework.org/docs/reference/mcp)** starts a desktop session with `driver: appium`, the `app`, and the capabilities above. An AI agent can then drive the app.
+- **[Python](https://optics-framework.org/docs/create/python), [Robot Framework](https://optics-framework.org/docs/create/robot) and [the HTTP API](https://optics-framework.org/docs/advanced/http-api)** take the same config.
+
+## Run in CI
+
+Run Optics on the Host, next to Appium. These GitHub Actions steps start a Host on a hosted runner, then run your suite:
+
+**Linux**
+
+`.github/workflows/desktop.yml`:
+
+```yaml
+jobs:
+  desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: chinmayajha/appium-xa11y-driver
+          ref: v0.1.2
+          path: xa11y-driver
+      - name: Start the Linux Host
+        run: |
+          docker build -q -f xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux xa11y-driver
+          docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status > /dev/null && break; sleep 2; done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "optics-framework[appium]"
+      - run: optics execute tests/desktop
+```
+
+The app runs in the container, so it must be installed in the image.
+
+**Windows**
+
+`.github/workflows/desktop.yml`:
+
+```yaml
+jobs:
+  desktop:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: chinmayajha/appium-xa11y-driver
+          ref: v0.1.2
+          path: xa11y-driver
+      - name: Prepare the Windows Host
+        shell: powershell
+        run: xa11y-driver/hosts/windows/setup.ps1 -NoService
+      - name: Start Appium
+        shell: bash
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File "$LOCALAPPDATA/appium-xa11y/host.ps1" > appium.log 2>&1 &
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status > /dev/null && break; sleep 2; done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "optics-framework[appium]"
+      - run: optics execute tests/desktop
+```
+
+Hosted macOS runners do not give the Accessibility permission. For macOS, use a self-hosted runner on a Mac where you gave the permissions one time. [Run in CI](https://optics-framework.org/docs/run/ci) covers reports and artifacts.
+
+## Limits
+
+**macOS**
+
+- The menu bar is not in the tree. Use key combinations for menu commands.
+- A screenshot fails while a different process records the screen. Stop that process. If screenshots still fail, restart Appium.
+- On a Mac with more than one display, screenshots show only the main display.
+- Inline predictive text blocks typing. Turn it off on the Host.
+
+**Linux**
+
+- Only X11. On Wayland, GTK 4 elements have no position.
+- Elements have no `id`. Use `@name`, the role or visible text.
+- GTK 4 apps work on GTK 4.18 (Debian 13). On GTK 4.14 (Ubuntu 24.04), they have no window and no positions. GTK 3 apps work on both.
+- Some menu items have spaces at the end of their names. Use `contains(@name, "Save")` or visible text for them.
+
+**Windows**
+
+- Tested only on Windows Server 2022, with Notepad and the classic Calculator. On Windows 10 and 11, `calc.exe` starts a different Calculator app.
+- Typing goes to the caret, so the driver clicks the field first. This brings its window to the front.
+- The driver needs the Microsoft Visual C++ 2015–2022 runtime. The setup script installs it.
+
+## If it isn't working
+
+- **No answer from `http://127.0.0.1:4723/status`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
+- **A message about the Accessibility or Screen Recording permission.** On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.
+- **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
+- **"'<app>' showed no window, and started no app of its own, within 20000 ms".** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
+- **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.
+- **"<app> is not the frontmost app (<other> is)".** A different app is in front, so keys and clicks would go to it. Close the dialog that is in front, or use Launch App to bring your app to the front.
+- **"Unknown key '<name>'".** Press Keycode got a key name that the driver does not know. Use a name from [Press keys and key combinations](#press-keys-and-key-combinations).
+- **E0105: "'go_back' is not supported on Mac".** The keyword works only on phones. See [Keywords that differ on a desktop](#keywords-that-differ-on-a-desktop).
+- **"DISPLAY ':1' is not a local X11 display".** On Linux, the driver needs a local X11 display. Remove the `--display` option and run the setup script again, so that it starts Xvfb.
+- **An old document opens on macOS.** The app restored its last session. Add `appArguments: ["-ApplePersistenceIgnoreState", "YES"]`.
+- **The element is not found on Linux, but the locator has `@id`.** Linux has no ids. Use `@name` or visible text.
+- **`optics doctor` warns about adb.** A desktop project does not need adb. The warning does not stop the run.
+
+## See also
+
+- [Test desktop apps with one framework](https://optics-framework.org/docs/guides/desktop-apps)
+- [Define elements](https://optics-framework.org/docs/elements/define)
+- [Keyword reference](https://optics-framework.org/docs/reference/keywords/)
+- [config.yaml reference](https://optics-framework.org/docs/reference/config)
+- [appium-xa11y-driver on GitHub](https://github.com/chinmayajha/appium-xa11y-driver)
+
+---
+
 Source: https://optics-framework.org/docs/platforms/production
 
 # Test production devices
@@ -5335,7 +5938,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.11.3"}
+{"status":"Optics Framework API is running","version":"1.11.4"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.
@@ -5361,6 +5964,16 @@ Keep the `session_id`. Starting a session also opens the app, as `Launch App` wo
   "driver_sources": [{"appium": {"url": "http://127.0.0.1:4723", "capabilities": {
     "platformName": "Android", "automationName": "UiAutomator2",
     "deviceName": "emulator-5554", "appPackage": "com.birch.shop", "appActivity": ".MainActivity"}}}],
+  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
+}
+```
+
+For a desktop app, give the OS and the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop):
+
+```json
+{
+  "driver_sources": [{"appium": {"enabled": true, "url": "http://127.0.0.1:4723", "capabilities": {
+    "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
   "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
 }
 ```
@@ -5524,6 +6137,7 @@ These pages start from a job, such as testing a TV app or letting an AI agent us
 ## Task guides
 
 - [Test Android TV, Samsung Tizen and LG webOS apps with one framework](https://optics-framework.org/docs/guides/smart-tv-apps): Test Android TV, Samsung Tizen and LG webOS apps with remote-control keys.
+- [Test macOS, Linux and Windows desktop apps with one framework](https://optics-framework.org/docs/guides/desktop-apps): Test native desktop apps with the same CSV tests as phones and browsers. (New)
 - [Test apps that block screenshots](https://optics-framework.org/docs/guides/protected-apps): Drive a locked phone through a Bluetooth dongle and read the screen with a camera. (Advanced)
 - [Let your AI agent drive a phone](https://optics-framework.org/docs/guides/ai-agent-phone): Give Claude Code, Cursor or Codex a real device over MCP.
 
@@ -5628,6 +6242,92 @@ Run the suite with `optics execute`, as you would a phone suite. Before each run
 - [Supported platforms](https://optics-framework.org/docs/platforms/)
 - [Press Keycode](https://optics-framework.org/docs/reference/keywords/actions#press-keycode)
 - [Find elements by text and image](https://optics-framework.org/docs/elements/text-and-images)
+
+---
+
+Source: https://optics-framework.org/docs/guides/desktop-apps
+
+# Test macOS, Linux and Windows desktop apps with one framework
+
+> Test native desktop apps on macOS, Linux and Windows with the same CSV tests that you use for phones and browsers.
+
+You can test a desktop app the way a user uses it: open the app, click buttons, type text, press key combinations and check what the window shows. Optics drives native apps on macOS, Linux and Windows through **Appium** and **appium-xa11y-driver**. Your tests are rows in CSV files, so one suite style covers your desktop, phone and web apps.
+
+This page walks you through the job and links to the pages that hold the details. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) is the full reference.
+
+## Check what each OS supports
+
+The driver reads the accessibility tree of the OS. You pick the OS with `platformName` in `config.yaml`.
+
+| OS | `platformName` | `app` | Status |
+|---|---|---|---|
+| macOS | `Mac` | A bundle id, such as `com.apple.TextEdit` | Supported |
+| Linux (X11) | `Linux` | An executable, such as `mousepad` | Supported |
+| Windows | `Windows` | An executable, such as `notepad.exe` | Experimental |
+
+The same keywords work on all three OSs. Press Keycode takes key combinations such as `primary+s`, where `primary` is Cmd on macOS and Ctrl elsewhere. Go Back and Get App Version are phone keywords, and they fail with **E0105** on a desktop.
+
+## Set up
+
+### Install Optics with the Appium engine
+
+[Install Optics](https://optics-framework.org/docs/get-started/install), then add the Appium engine:
+
+```shell
+$ optics setup --install appium
+```
+
+### Prepare the Host
+
+The Host is the computer that shows the app. Run the setup script of the driver there. It installs Node.js, Appium and the driver, and runs Appium as a service. [Set up the Host](https://optics-framework.org/docs/platforms/desktop#set-up-the-host) has the command for each OS.
+
+On macOS, give the Accessibility and Screen & System Audio Recording permissions to the Node.js path that the script prints. Then restart Appium.
+
+### Make a project and run it
+
+```shell
+$ optics init notes --template desktop_editor
+$ optics doctor notes
+$ optics execute notes
+```
+
+Or run `optics quickstart` and choose `desktop`. It asks for the OS, the app and the Appium URL, and writes `config.yaml` for you.
+
+## Write the test
+
+A desktop test is a list of steps on the app's elements. This module types a note, selects it all and deletes it:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2
+Open Editor,Launch App
+Type A Note,Enter Text,${Editor},Hello from Optics
+Type A Note,Assert Text,${Editor},Hello from Optics
+Clear The Note,Press Keycode,primary+a
+Clear The Note,Enter Text Using Keyboard,<backspace>
+Close Editor,Close And Terminate App
+```
+
+Elements are XPath over the accessibility tree, such as `//button[@name="Save"]` or `//text_area`, or visible text. The tree differs between OSs, so give an element one column for each OS. [Find elements](https://optics-framework.org/docs/platforms/desktop#find-elements) shows the tree and the locators.
+
+## Keep desktop tests reliable
+
+- **Start each app clean.** On macOS, add `appArguments: ["-ApplePersistenceIgnoreState", "YES"]`, so the app does not open old documents.
+- **Keep your app in front.** Keys and clicks go to the app in front. A dialog of a different app makes the step fail. Use Launch App to bring the app back.
+- **Use ids on macOS and Windows.** An `@id` stays the same when the label text changes. Linux has no ids, so use `@name` there.
+- **Run Optics on the Host in CI.** Each step is one round trip, so a tunnel makes a suite slower.
+
+## Run it on every build
+
+Run the suite with `optics execute`, as you would a phone suite. The driver gives a Linux Host in Docker and a setup script for Windows runners. [Run in CI](https://optics-framework.org/docs/platforms/desktop#run-in-ci) has GitHub Actions jobs for both.
+
+## See also
+
+- [Test desktop apps](https://optics-framework.org/docs/platforms/desktop), the full desktop reference
+- [Supported platforms](https://optics-framework.org/docs/platforms/)
+- [Press Keycode](https://optics-framework.org/docs/reference/keywords/actions#press-keycode)
+- [Define elements](https://optics-framework.org/docs/elements/define)
 
 ---
 
@@ -5876,6 +6576,7 @@ This page sets out the facts so you can pick the one that fits your apps. Maestr
 | iOS | Simulators and signed real devices, through Appium | Simulators. Its README says physical iOS devices aren't supported yet. |
 | Web | Playwright (Chromium, Firefox, WebKit, local or remote, with phone emulation) or Selenium (Chrome or Firefox). Real Chrome and Safari on phones through Appium. | Beta, Chromium only |
 | TV | Android TV, Samsung Tizen and LG webOS | Android TV remote keys in `pressKey`. Tizen and webOS aren't listed as supported platforms. |
+| Desktop apps | Native apps on macOS and Linux, and Windows (experimental), through Appium and appium-xa11y-driver | Its [supported platforms](https://docs.maestro.dev/get-started/supported-platform) page lists Android, iOS and web only |
 | Locked devices | Bluetooth mouse and keyboard plus a camera, no software on the device | Not covered in its docs |
 | How it drives the app | Through a driver you run: Appium, Playwright, Selenium or a BLE dongle | A single binary that drives the app through the accessibility layer, with no separate drivers. The CLI needs Java 17 or newer. |
 | Test format | CSV or YAML rows of keywords, split into test cases, modules and elements. Also Python and Robot Framework. | YAML flows, with JavaScript for logic |
@@ -5948,7 +6649,7 @@ The Maestro CLI runs flows locally or in CI. It writes JUnit or HTML reports, an
 
 Choose **Optics** when you need:
 
-- Smart TVs on Tizen or webOS, physical iPhones, or locked devices.
+- Smart TVs on Tizen or webOS, native desktop apps, physical iPhones, or locked devices.
 - Elements that the UI tree can't see, found with OCR or image matching.
 - Suites that non-developers read and edit in a spreadsheet.
 - Python or Robot Framework from the same keywords.
@@ -5974,14 +6675,14 @@ Source: https://optics-framework.org/docs/guides/optics-and-appium
 
 > Optics runs on top of Appium. Keep your Appium server and devices, and add readable suites, fallback locators, OCR and AI agents.
 
-Optics doesn't replace Appium. For Android, iOS and TV apps, Optics drives the device **through** an Appium server. Appium still talks to the device. Optics decides what to press, finds it on screen several ways, and turns the steps into a suite anyone on the team can read.
+Optics doesn't replace Appium. For Android, iOS, TV and desktop apps, Optics drives the device **through** an Appium server. Appium still talks to the device. Optics decides what to press, finds it on screen several ways, and turns the steps into a suite anyone on the team can read.
 
 If you already run Appium, you keep your server, drivers, devices and capabilities. Optics adds a layer on top.
 
 ## What stays the same
 
 - **The Appium server.** You run it as before, locally or remotely. Set its address as `url` in `config.yaml`. A device farm works too, as long as you can reach its Appium server.
-- **The drivers.** UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs.
+- **The drivers.** UiAutomator2 for Android and Android TV, XCUITest for iOS, and the Tizen and webOS drivers for TVs, and appium-xa11y-driver for macOS, Linux and Windows desktop apps.
 - **Your capabilities.** Optics passes your capabilities to Appium. It adds a few defaults, such as a 1-second idle wait, and your own values replace them. See [Appium capabilities](https://optics-framework.org/docs/reference/config#appium-capabilities).
 - **Your inspector.** [Appium Inspector](https://github.com/appium/appium-inspector) still shows each element's id, text and XPath.
 - **Driver commands.** The Execute Script keyword runs Appium `mobile:` commands. See [Execute Script](https://optics-framework.org/docs/reference/keywords/actions#execute-script).
@@ -6062,6 +6763,7 @@ Optics has no importer for Appium scripts. Rebuild each flow by [recording](http
 
 - [Test Android apps](https://optics-framework.org/docs/platforms/android): Set up Appium and adb, then run on a phone or emulator.
 - [Test iOS apps](https://optics-framework.org/docs/platforms/ios): Run on a simulator or a signed device with XCUITest.
+- [Test desktop apps](https://optics-framework.org/docs/platforms/desktop): Run native apps on macOS, Linux and Windows.
 - [Test TV apps](https://optics-framework.org/docs/platforms/tv): Drive Android TV, Samsung Tizen and LG webOS.
 - [Optics vs Maestro](https://optics-framework.org/docs/guides/optics-vs-maestro): Compare Optics with a framework that doesn't use Appium.
 
@@ -6073,7 +6775,7 @@ Source: https://optics-framework.org/docs/reference/
 
 > Look up every command, setting, file format and keyword.
 
-These pages describe Optics 1.11.3 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
+These pages describe Optics 1.11.4 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
 
 If you're new to Optics, start with the [quickstart](https://optics-framework.org/docs/get-started/quickstart) and come back here when you need a detail.
 
@@ -6408,6 +7110,7 @@ Good to know:
 - With no parameters, Launch App uses the app, URL and browser from your [config](https://optics-framework.org/docs/reference/config). On Playwright, it opens the browser and no page.
 - On Selenium, `app_identifier` and `app_activity` apply only when Launch App starts the session. Later calls reopen the configured URL.
 - On Playwright, a second Launch App opens the URL in the same browser. The `browser`, `headless`, `viewport` and `device` capabilities set the browser. See [Web](https://optics-framework.org/docs/platforms/web#emulate-a-phone).
+- On a desktop, Launch App starts `app` from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: a bundle id or `.app` path on macOS, an executable on Linux and Windows. See [Desktop](https://optics-framework.org/docs/platforms/desktop#work-with-more-than-one-app).
 - The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.
 
 ### Start Appium Session
@@ -6444,6 +7147,7 @@ Open Help,Launch Other App,https://birch.example/help
 Good to know:
 
 - On Appium, a value containing `://` opens as a deep link or URL. Anything else is started or brought to the front as an app.
+- On a desktop, it starts the app, or brings it to the front if it runs, and later steps act on it. Launch App with no value goes back to the app from the config.
 - On Playwright, the URL opens in a new tab.
 - On Selenium, the current tab navigates to the URL.
 - In Python the parameter is called `bundleid`.
@@ -6466,6 +7170,7 @@ Close Birch,Close And Terminate App
 
 Good to know:
 
+- On a desktop, it stops only the apps that the session started. An app that you attached to with `appName` stays open.
 - After this keyword, later steps have no session. Put it in your last module or a teardown test case. See [Organise tests](https://optics-framework.org/docs/create/organise).
 
 ### Force Terminate App
@@ -6488,6 +7193,7 @@ Reset Birch,Force Terminate App,com.birch.shop
 Good to know:
 
 - On Appium, errors are logged and the step passes, even if the app wasn't killed. With no session it does nothing.
+- On a desktop, give the same app id as for Launch Other App, for example `gnome-calculator`.
 - On Selenium, it closes the current browser window and ignores `app_name`.
 - Playwright doesn't support it. The step fails.
 
@@ -6509,6 +7215,7 @@ Good to know:
 
 - On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.
 - To keep the version in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
+- On a desktop, the step fails with error E0105.
 - Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing `app_package` fails the step.
 
 ### Get Driver Session Id
@@ -6734,7 +7441,7 @@ Good to know:
 - When the element is a caption or label, such as `Email`, Optics types into the field that it names.
 - `event_name` comes before `index` here, unlike Press Element. Set `index` by name: `index=1`.
 - When the field was found by OCR or image, Optics taps it, then types.
-- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. An unknown name is typed literally.
+- A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. On a desktop, the keys are the Playwright keys plus the number pad keys, and phone keys such as `<back>` fail with error E0105. An unknown name is typed literally.
 - Start a value with `@:` to mark it as sensitive. Optics masks it as `****` in log files and removes the `@:` before typing. `@:${password}` also works.
 - In YAML, quote text that contains spaces.
 - On Samsung Tizen and LG webOS TVs, Optics types into a real `<input>` directly. For a field that the app draws, it presses the keys of the on-screen keyboard one by one. If the field does not show the text afterward, the step fails with error E0405 and no fallback value types the text again. `<space>`, `<backspace>` and `<enter>` press that key of the on-screen keyboard. `<escape>` and the arrow keys press remote keys. Other special keys fail with error E0105. See [Type on a TV](https://optics-framework.org/docs/platforms/tv#type-on-a-tv).
@@ -6782,6 +7489,7 @@ Good to know:
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
 - On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
 - On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
+- On a desktop, the keys go to the app in front. If a different app is in front, the step fails and types nothing.
 
 ### Enter Text Using Keyboard
 
@@ -6830,6 +7538,7 @@ Good to know:
 
 - When the field was found by OCR or image, Optics taps it and clears it. On Playwright it selects all and deletes.
 - When the element is a caption or label, Optics clears the field that it names.
+- On a desktop, Optics selects all the text with Cmd+A on macOS or Ctrl+A on Linux and Windows, then deletes it.
 - On Samsung Tizen and LG webOS TVs, Optics presses the backspace key of the on-screen keyboard until the field stops changing. If text stays in the field, the step fails with error E0405.
 
 ## Swipe and scroll
@@ -7041,7 +7750,7 @@ Good to know:
 - On Playwright and Selenium, Go Back goes back one page in the browser history. Playwright waits for the page to load, up to `navigation_timeout_ms`. See [Timeouts](https://optics-framework.org/docs/platforms/web#timeouts).
 - On Android, it presses the system Back button.
 - On iOS, it taps the back button in the navigation bar. If the screen has no such button, the step fails with error E0401.
-- Samsung Tizen and LG webOS TVs and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV.
+- Samsung Tizen and LG webOS TVs, desktop apps and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV, or with the app's key combination on a desktop.
 
 ### Press Keycode
 
@@ -7057,6 +7766,7 @@ Sends a hardware, system or remote-control key.
 | Android | An Android keycode number | `4` Back, `3` Home, `66` Enter |
 | Samsung Tizen and LG webOS TV | A remote key name | `UP`, `DOWN`, `LEFT`, `RIGHT`, `ENTER`, `BACK`, `HOME`, `PLAY`, `PAUSE` |
 | Playwright | A key name | `Enter`, `Tab`, `Escape`, `ArrowUp` |
+| Desktop (macOS, Linux, Windows) | A key or a key combination, joined with `+` | `primary+s`, `cmd+shift+z`, `ctrl+t`, `Escape`, `f5` |
 
 ```csv
 Product,Press Keycode,4
@@ -7074,6 +7784,7 @@ Good to know:
 - On Playwright, case and a `KEYCODE_` prefix do not matter: `esc`, `ARROWDOWN` and `KEYCODE_ENTER` work. An unknown name fails with error E0403 and lists the names that Optics knows.
 - On Tizen and webOS, an unknown remote key name fails with error E0104. The message lists the names that Optics knows. See [TV](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys) for the names.
 - On TVs, this is how you press one remote key. To move the focus to an element, use Press Element.
+- On a desktop, `primary` is Cmd on macOS and Ctrl on Linux and Windows. An unknown key name fails with `Unknown key`. [Press keys and key combinations](https://optics-framework.org/docs/platforms/desktop#press-keys-and-key-combinations) lists the names.
 
 ### Execute Script
 
@@ -7100,6 +7811,7 @@ Good to know:
 - When the value is JSON with a `script` key, `args` is passed this way: an object becomes one argument, and a list becomes one argument per item.
 - To keep the result, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
 - On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
+- On a desktop, only the `xa11y:` methods of the driver work, such as `{"script": "xa11y: listWindows"}`. Other scripts fail with `unknown method`. See [Call the driver directly](https://optics-framework.org/docs/platforms/desktop#call-the-driver-directly).
 - The BLE driver doesn't support it.
 
 ## Read and wait
@@ -7910,7 +8622,7 @@ Source: https://optics-framework.org/docs/reference/cli
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.4.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -7922,7 +8634,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.4` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -7945,11 +8657,11 @@ optics quickstart
 
 There are no flags. The command asks these questions in order:
 
-1. **What do you want to automate?** `mobile` or `web`.
-2. **Install the engine now?** Appium for mobile; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
-3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web. Decline to pick an empty project or another sample.
+1. **What do you want to automate?** `mobile`, `web` or `desktop`.
+2. **Install the engine now?** Appium for mobile and desktop; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
+3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web, the `desktop_editor` sample for desktop. Decline to pick an empty project or another sample.
 4. **Project name** (default `my-optics-project`) and **where it should live** (default: the current folder). If the folder exists, it asks for another name.
-5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and no for web.
+5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and desktop, and no for web. For desktop, it asks which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (default `com.apple.TextEdit`, `gedit` or `notepad.exe`) and the Appium server URL.
 6. It runs `optics doctor` on the new project and shows the report.
 7. If the report shows no blocking problems, it offers to run your first test with `optics execute`.
 
@@ -7970,12 +8682,12 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
 
-In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web, Playwright Web and Mobile Web. Press Enter on a blank answer to cancel.
+In a terminal without `--template`, Optics shows a numbered list: `(Blank project)`, Contacts, Clock, Calendar, YouTube, Gmail Web, Playwright Web, Mobile Web and Desktop Editor. Press Enter on a blank answer to cancel.
 
 A blank project contains:
 
@@ -7996,6 +8708,7 @@ birch-tests/
 | `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. |
 | `playwright` | `https://example.com` | Playwright. Needs no device or server. |
 | `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
+| `desktop_editor` | TextEdit on macOS: types a note, checks it, clears it and closes the editor | Appium with appium-xa11y-driver. Change `platformName` and `app` for Linux or Windows. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop). |
 
 Example:
 
@@ -8018,16 +8731,17 @@ optics configure [folder] [--edit]
 | `folder` | Current folder | The project folder. It's created if it doesn't exist. |
 | `--edit` | Off | Opens a full-screen editor over every config.yaml setting instead of the questions. |
 
-**Guided mode** asks what you're automating (`android`, `ios`, `web-playwright` or `web-selenium`), then the details for that platform:
+**Guided mode** asks what you're automating (`android`, `ios`, `desktop`, `web-playwright` or `web-selenium`), then the details for that platform:
 
 | Platform | Questions (defaults) |
 |---|---|
 | `android` | Device name (`emulator-5554`), platform name (`Android`), app package (`com.example.app`), main activity (`com.example.app.MainActivity`), Appium server URL (`http://127.0.0.1:4723`) |
 | `ios` | Device or simulator name (`iPhone 15`), platform name (`iOS`), bundle identifier (`com.example.app`), Appium server URL |
+| `desktop` | Which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (`com.apple.TextEdit`, `gedit` or `notepad.exe`), Appium server URL |
 | `web-selenium` | Selenium server URL (`http://127.0.0.1:4444/wd/hub`) |
 | `web-playwright` | Browser (`chromium`), headless (no) |
 
-For `android` and `ios`, Optics also enables the `appium_web` element source. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
+For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element source. It has no effect on a desktop app. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
 
 **Warning:**
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform).
@@ -8057,9 +8771,9 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 |---|---|
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
-| Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). |
+| Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
-| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, and `bundleId` on iOS). |
+| Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, `bundleId` on iOS, and `app` or `appName` on a desktop). |
 
 Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without `--check`, doctor always exits with 0.
 
@@ -8633,7 +9347,7 @@ Enable one driver. `optics live` refuses more than one, and `optics doctor` warn
 
 | Name | Extra | What it drives |
 |---|---|---|
-| `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps through an Appium server. |
+| `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps, and macOS, Linux and Windows desktop apps, through an Appium server. |
 | `selenium` | `selenium` | Chrome or Firefox through a Selenium server or Grid. |
 | `playwright` | `playwright` | Chromium, Firefox or WebKit, on this computer or a remote browser. See [Playwright capabilities](#playwright-capabilities). |
 | `ble` | `ble` | Any device paired with a Bluetooth mouse-and-keyboard dongle. For devices with no automation access. |
@@ -8913,6 +9627,7 @@ Optics reads `platformName`, the app id and `browserName`. It passes every other
 | `iOS` | `bundleId` | The same defaults without `ignoreHiddenApiPolicyError`, with `ensureWebviewsHavePages: true` and `settings: {waitForIdleTimeout: 1}` |
 | `TizenTV` | `appPackage` | `newCommandTimeout: 3600`, `rcMode: remote`, `noReset: true` |
 | `LGTV` | `appId` | `newCommandTimeout: 600`, `rcMode: rc`, `useSecureWebsocket: true`, `autoExtendDevMode: false`, `noReset: true` |
+| `Mac`, `Linux`, `Windows` | `app`, or `appName` to attach to a running app | `automationName: Xa11y`, `newCommandTimeout: 3600` |
 
 Any other `platformName` fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). Optics waits up to 300 seconds for Appium to create a session. To attach to an Appium session that is already running, add `appium:existingSessionId`. Optics starts a new session if it cannot attach.
 
@@ -9002,6 +9717,30 @@ elements_sources:
 ```
 
 On Tizen and webOS, `appium_find_element` finds `text=` and `css=` locators in the app's DOM, and the element keywords press remote keys to move the focus. Touch keywords fail with [E0105](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). A Tizen TV needs `camera_screenshot` in place of `appium_screenshot`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv).
+
+## Desktop
+
+macOS, Linux and Windows apps use the `appium` driver with appium-xa11y-driver on the computer that shows the app:
+
+`config.yaml (macOS)`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://127.0.0.1:4723"
+      capabilities:
+        platformName: Mac              # or Linux, Windows
+        automationName: Xa11y
+        app: com.apple.TextEdit        # a bundle id or .app path on macOS, an executable elsewhere
+        appArguments: ["-ApplePersistenceIgnoreState", "YES"]
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source: {enabled: true}
+  - appium_screenshot: {enabled: true}
+```
+
+A desktop session needs `app` or `appName` when it starts. Without them, it fails with [E0104](https://optics-framework.org/docs/reference/errors#e01-driver-and-session). The driver also reads `launchTimeout`, `terminateOnDelete` and `failureArtifacts`. See [Write config.yaml](https://optics-framework.org/docs/platforms/desktop#write-config-yaml) for each capability and the app id on each OS.
 
 ## BLE and camera
 
@@ -9518,12 +10257,12 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
+| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV, macOS, Linux and Windows desktop apps |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
 | `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
-The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](https://optics-framework.org/docs/platforms/android) and [Test iOS apps](https://optics-framework.org/docs/platforms/ios).
+The Appium server itself, and its UiAutomator2, XCUITest or Xa11y driver, aren't Python packages. Install and start them separately. See [Test Android apps](https://optics-framework.org/docs/platforms/android), [Test iOS apps](https://optics-framework.org/docs/platforms/ios) and [Test desktop apps](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 ## Element sources
 
@@ -9531,9 +10270,9 @@ An element source is how Optics looks at the screen for a driver. They need no e
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV |
-| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV |
-| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV |
+| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV, desktop |
+| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV, desktop |
+| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV, desktop |
 | `appium_web` | `appium` | Finds `css=` and DOM XPath locators in web pages in the phone's browser and in WebViews. Lists interactive elements. | Android, iOS |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
@@ -9844,6 +10583,19 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
+For a desktop app, give the app and the OS. The session starts the app:
+
+```json
+{
+  "driver": "appium",
+  "url": "http://127.0.0.1:4723",
+  "app": "com.apple.TextEdit",
+  "capabilities": {"platformName": "Mac", "automationName": "Xa11y"}
+}
+```
+
+`app` is a bundle id or `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, and `launch_app` opens another app in the same session. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop).
+
 ### Sign in with a browser profile
 
 A web flow that needs a sign-in can start with the sign-ins of a local Chrome or Edge profile. The agent reads the `optics://browser-profiles` resource and shows the list to you. Each entry has a `channel`, a `directory`, a `name` and the `email` of the account:
@@ -10107,7 +10859,7 @@ The server does not read config.yaml or the test files of your project. Each ses
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.3"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.4"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -10350,7 +11102,7 @@ Source: https://optics-framework.org/docs/reference/errors
 
 > Learn what each Optics error code means and how to fix it.
 
-When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.3 and what to do about each one.
+When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.4 and what to do about each one.
 
 ## How codes are built
 
@@ -10386,8 +11138,8 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 |---|---|---|
 | `E0101` | **Driver not initialized.** A keyword ran before the driver session started. In `optics live` this happens when the automatic `launch_app` failed. | Start with `Launch App`. In `optics live`, run `launch_app` again and read its error first. |
 | `E0102` | **Failed to start session.** The driver couldn't create a session. The Appium server refused it, Playwright couldn't open or connect to the browser, or the request took too long. On Playwright, each call has a limit of `action_timeout_ms` (15 seconds). Launch App can take up to `connect_timeout_ms` + `navigation_timeout_ms` + `action_timeout_ms` (165 seconds). | Check that the server is running and the device is connected with `optics doctor <folder>`. Check the capabilities, especially `appPackage`, `appActivity` or `bundleId`. Read the Appium server's own log for the cause. For a remote browser, check the `url` and `headers`. Raise the [Playwright timeouts](https://optics-framework.org/docs/reference/config#playwright-capabilities) for slow pages. |
-| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. Also raised when `Press Keycode` gets a remote key name that a Samsung or LG TV does not know (`Unknown remote key '<name>' for <TV>. Known keys: ...`). The message lists the names that work. Also raised when `Get App Version` gets a name that is not an Android package name, such as `com.example.app`. | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV` or `LGTV`. For a TV key, use a name from [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys). |
-| `E0105` | **Keyword not supported on this device platform.** You used a keyword on a Samsung or LG TV that needs a touch screen: a coordinate tap, a swipe, a scroll, `Select Dropdown Option`, the `checked` state of `Is Element`, typing without an element, or `Go Back`. Also raised by `Enter Text` with a special key that an app keyboard does not have, such as `<tab>`. Also raised by `Go Back` on a driver without it (`'go_back' is not supported by the <Driver> driver.`) and by a special key that Playwright cannot map. | Move the focus with `Press Element`, or press a remote key with `Press Keycode`, such as `UP`, `DOWN`, `ENTER` or `BACK`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv#keywords-that-fail-on-tizen-and-webos). |
+| `E0104` | **Driver config incomplete.** A required driver setting is missing or wrong: empty Appium `capabilities`, no `platformName`, an unsupported `platformName`, or no server `url`. Also raised when `Press Keycode` gets a remote key name that a Samsung or LG TV does not know (`Unknown remote key '<name>' for <TV>. Known keys: ...`). The message lists the names that work. Also raised when `Get App Version` gets a name that is not an Android package name, such as `com.example.app`. Also raised when a desktop session has neither `app` nor `appName` (`A Mac session needs its app when it starts`). | Fill in the driver settings in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). `platformName` must be `Android`, `iOS`, `TizenTV`, `LGTV`, `Mac`, `Linux` or `Windows`. On a desktop, set `app` or `appName`: see [Desktop](https://optics-framework.org/docs/platforms/desktop#write-config-yaml). For a TV key, use a name from [Move around with remote keys](https://optics-framework.org/docs/platforms/tv#move-around-with-remote-keys). |
+| `E0105` | **Keyword not supported on this device platform.** You used a keyword on a Samsung or LG TV that needs a touch screen: a coordinate tap, a swipe, a scroll, `Select Dropdown Option`, the `checked` state of `Is Element`, typing without an element, or `Go Back`. Also raised by `Enter Text` with a special key that an app keyboard does not have, such as `<tab>`. Also raised by `Go Back` on a driver without it (`'go_back' is not supported by the <Driver> driver.`) and by a special key that Playwright cannot map. On a desktop, raised by `Go Back`, `Get App Version` and phone keys such as `<back>` (`'go_back' is not supported on Mac. Supported here: android, ios.`). | On a desktop, press the app's key combination with `Press Keycode`: see [Keywords that differ on a desktop](https://optics-framework.org/docs/platforms/desktop#keywords-that-differ-on-a-desktop). On a TV, move the focus with `Press Element`, or press a remote key with `Press Keycode`, such as `UP`, `DOWN`, `ENTER` or `BACK`. See [Test TV apps](https://optics-framework.org/docs/platforms/tv#keywords-that-fail-on-tizen-and-webos). |
 | `E0106` | **Driver session is no longer active.** The Appium or Selenium server dropped the session, for example after a timeout, a device disconnect or a server restart. A refused connection to the server in the middle of a run also counts. Optics doesn't reconnect. Also raised when Appium cannot go back to the app after it read a web page. In `optics execute`, a keyword with this error ends as `ERROR`, not `FAIL`, and its test case does the same. | Run the tests again. Over HTTP or MCP, end the session and start a new one. If it keeps happening, raise `newCommandTimeout` in the capabilities. |
 
 ## E02: Elements
@@ -10453,7 +11205,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 ## Reserved codes
 
-These codes exist in Optics 1.11.3, but nothing raises them. If you see one, it came from a newer version or your own code.
+These codes exist in Optics 1.11.4, but nothing raises them. If you see one, it came from a newer version or your own code.
 
 | Code | Default message |
 |---|---|
@@ -10608,7 +11360,7 @@ Check the first line of each file: `test_case,test_step` for test cases and `mod
 
 Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
-Start the server in another terminal with `appium`, then run again. If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
+Start the server in another terminal with `appium`, then run again. For a desktop app, check that the Appium service of the Host runs: see [Check that Appium runs](https://optics-framework.org/docs/platforms/desktop#check-that-appium-runs). If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
 
 ### "Cannot start: E0102": No Selenium/WebDriver server reachable at …
 
@@ -10624,7 +11376,7 @@ Add `browserName: chrome` or `browserName: firefox` under `capabilities`. Those 
 
 ### `E0104` Appium capabilities not found or unsupported platform
 
-The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV` or `LGTV`.
+The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV`, `LGTV`, `Mac`, `Linux` or `Windows`. A desktop session also needs `app` or `appName`. See [Write config.yaml](https://optics-framework.org/docs/platforms/desktop#write-config-yaml).
 
 Fill in the capabilities for your platform. Run `optics configure <project>` to answer a few questions instead of writing them by hand. See [Error codes](https://optics-framework.org/docs/reference/errors#e01-driver-and-session).
 
@@ -10899,6 +11651,24 @@ Each instruction stops after 15 steps, after 3 failed steps in a row, or after 3
 
 Break the goal into smaller instructions, and use the words shown on screen. See [Write goals the model can finish](https://optics-framework.org/docs/create/describe#write-goals-the-model-can-finish).
 
+## Desktop apps
+
+### A desktop session fails with E0104: "needs its app when it starts"
+
+The capabilities name no app. Without one, the driver would attach to the app in front, which can be your terminal. Set `app` to start the app, or `appName` to attach to an app that runs. See [Write config.yaml](https://optics-framework.org/docs/platforms/desktop#write-config-yaml).
+
+### Keys or clicks fail with "is not the frontmost app"
+
+A different app is in front, for example a system dialog. The driver sends no keys or clicks, because they would go to that app. Close the other app's window, or add a Launch App step to bring your app to the front.
+
+### Nothing works on macOS after the setup script
+
+Appium needs the Accessibility and Screen & System Audio Recording permissions. Give them to the Node.js path that the setup script printed, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. See [Give the permissions](https://optics-framework.org/docs/platforms/desktop#give-the-permissions-macos-only).
+
+### Go Back fails with E0105 on a desktop
+
+Go Back and Get App Version work only on phones. On a desktop, press the app's key combination with Press Keycode, for example `Press Keycode,cmd+[`. See [Keywords that differ on a desktop](https://optics-framework.org/docs/platforms/desktop#keywords-that-differ-on-a-desktop).
+
 ## Web and Playwright
 
 ### The Playwright browser isn't installed
@@ -10953,7 +11723,7 @@ Source: https://optics-framework.org/docs/help/faq
 
 > Learn what Optics can and can't do, with short answers to the questions people ask most.
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.3.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.4.
 
 ## About Optics
 
@@ -10976,9 +11746,13 @@ With the [MCP server](https://optics-framework.org/docs/create/agent), Optics it
 
 ### What can I test, and where does it run?
 
-Optics tests Android and iOS apps through Appium, websites through Playwright or Selenium, and Android TV, Samsung Tizen and LG webOS apps through Appium. It can also drive locked-down [production devices](https://optics-framework.org/docs/platforms/production) as a Bluetooth mouse and keyboard, with a camera watching the screen.
+Optics tests Android and iOS apps through Appium, websites through Playwright or Selenium, Android TV, Samsung Tizen and LG webOS apps through Appium, and native desktop apps on macOS, Linux and Windows through Appium and appium-xa11y-driver. It can also drive locked-down [production devices](https://optics-framework.org/docs/platforms/production) as a Bluetooth mouse and keyboard, with a camera watching the screen.
 
 Optics itself runs on macOS, Linux and Windows with Python 3.12 or newer. Testing iOS apps needs a Mac with Xcode. See [Platforms](https://optics-framework.org/docs/platforms/).
+
+### Can Optics test desktop apps?
+
+Yes. Optics tests native apps on macOS, Linux and Windows through Appium and appium-xa11y-driver, which read the accessibility tree of the OS. You use the same CSV tests and keywords as for phones. Windows support is experimental. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop).
 
 ### Do I need to know how to code?
 
@@ -11108,13 +11882,21 @@ Terms are listed alphabetically. Each entry links to the page that explains it i
 
 ## A
 
+### Accessibility tree
+
+The accessibility tree is the list of buttons, fields and texts that an operating system gives to screen readers. On a desktop, Optics reads it as the [UI tree](#ui-tree) of the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop#find-elements).
+
 ### AOI (area of interest)
 
 An AOI, or area of interest, is a rectangle that limits where Optics looks for an element, given as percentages of the screen from 0 to 100. Use it when the same text or icon appears in several places. See [Search part of the screen](https://optics-framework.org/docs/elements/area-of-interest).
 
 ### Appium
 
-Appium is the open-source automation server Optics uses to drive Android, iOS and TV apps. You run the Appium server yourself, and Optics connects to it at the `url` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+Appium is the open-source automation server Optics uses to drive Android, iOS, TV and desktop apps. You run the Appium server yourself, and Optics connects to it at the `url` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+
+### appium-xa11y-driver
+
+appium-xa11y-driver is the Appium driver that Optics uses for desktop apps on macOS, Linux and Windows. It runs on the [Host](#host) with Appium. Set `automationName: Xa11y` to use it. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop).
 
 ## B
 
@@ -11132,6 +11914,10 @@ A browser profile is the set of sign-ins, cookies and settings that Chrome or Ed
 
 Capabilities are the settings Optics passes to a driver when it starts a session, such as the device name, the app to open or the browser to use. They go under `capabilities` for each driver in `config.yaml`. See [driver_sources](https://optics-framework.org/docs/reference/config#driver-sources).
 
+### Chord
+
+A chord is a key combination, such as `cmd+s` or `ctrl+shift+t`. On a desktop, Press Keycode takes a chord. `primary` is Cmd on macOS and Ctrl on Linux and Windows. See [Press keys and key combinations](https://optics-framework.org/docs/platforms/desktop#press-keys-and-key-combinations).
+
 ### config.yaml
 
 `config.yaml` is the settings file in each project. It says which driver to use, how to look at the screen, and how to log and report. See [config.yaml](https://optics-framework.org/docs/reference/config).
@@ -11144,7 +11930,7 @@ CSV (comma-separated values) is the plain-text table format most Optics suites u
 
 ### Driver
 
-A driver is the engine that controls the target: Appium for phones and TVs, Playwright or Selenium for browsers, or the BLE driver for locked-down devices. You enable one under `driver_sources` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
+A driver is the engine that controls the target: Appium for phones, TVs and desktop apps, Playwright or Selenium for browsers, or the BLE driver for locked-down devices. You enable one under `driver_sources` in `config.yaml`. See [Drivers](https://optics-framework.org/docs/reference/engines#drivers).
 
 ### Dry run
 
@@ -11185,6 +11971,12 @@ An extra is the pip name for an optional engine, such as `appium`, `easyocr` or 
 ### Fallback
 
 A fallback is a second (or third) value for an element that Optics tries when the first one isn't found. For example, an element can have an XPath, then its text, then an image. See [How Optics finds elements](https://optics-framework.org/docs/elements/).
+
+## H
+
+### Host
+
+The Host is the computer that shows the desktop app under test. Appium and appium-xa11y-driver run on it. Optics runs on the Host or connects to it from another computer. See [Set up the Host](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 ## I
 

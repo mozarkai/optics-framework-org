@@ -3,7 +3,7 @@
   "info": {
     "title": "Optics Framework API",
     "version": "1.0",
-    "description": "The HTTP API of `optics serve` from optics-framework 1.11.3. It is not hosted on optics-framework.org: install Optics (`pip install optics-framework`) and run `optics serve`, which listens on http://127.0.0.1:8000 by default (`--host` and `--port` change it). Start a session with POST /v1/sessions/start, run keywords with POST /v1/sessions/{session_id}/action, and list keywords with GET /v1/keywords. The server has no authentication, so keep it on a trusted network."
+    "description": "The HTTP API of `optics serve` from optics-framework 1.11.4. It is not hosted on optics-framework.org: install Optics (`pip install optics-framework`) and run `optics serve`, which listens on http://127.0.0.1:8000 by default (`--host` and `--port` change it). Start a session with POST /v1/sessions/start, run keywords with POST /v1/sessions/{session_id}/action, and list keywords with GET /v1/keywords. The server has no authentication, so keep it on a trusted network."
   },
   "paths": {
     "/health": {
@@ -371,7 +371,7 @@
     "/v1/sessions/{session_id}/elements": {
       "get": {
         "summary": "Get Elements",
-        "description": "Get interactive elements from the current session screen.\n\nArgs:\n    session_id: The session ID\n    filter_config: Optional list of filter types. Valid values:\n        - \"all\": Show all elements (default when None or empty)\n        - \"interactive\": Only interactive elements\n        - \"buttons\": Only button elements\n        - \"inputs\": Only input/text field elements\n        - \"images\": Only image elements\n        - \"text\": Only text elements\n        Can be combined: ?filter_config=buttons&filter_config=inputs\n    compact: When true, ignore filter_config and return the compact list\n        ({i, label, cls, bounds, act, rid?, loc?, offscreen?}) instead of the full element dump.\n\nReturns:\n    The elements result.",
+        "description": "Get interactive elements from the current session screen.\n\nArgs:\n    session_id: The session ID\n    filter_config: Optional list of filter types. Valid values:\n        - \"all\": Show all elements (default when None or empty)\n        - \"interactive\": Only interactive elements\n        - \"buttons\": Only button elements\n        - \"inputs\": Only input/text field elements\n        - \"images\": Only image elements\n        - \"text\": Only text elements\n        Can be combined: ?filter_config=buttons&filter_config=inputs\n    compact: When true, ignore filter_config and return the compact list\n        ({i, label, cls, bounds, act, rid?, rid_attr?, loc?, offscreen?}) instead of the full element dump.\n\nReturns:\n    The elements result.",
         "operationId": "get_elements_v1_sessions__session_id__elements_get",
         "parameters": [
           {

@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test desktop apps on macOS, Linux and Windows · Optics Framework docs</title>
+  <meta name="description" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that reads the OS accessibility tree through Appium and appium-xa11y-driver. Set up the Host, write config.yaml and run CSV tests.">
+  <meta name="ai-summary" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that reads the OS accessibility tree through Appium and appium-xa11y-driver. Set up the Host, write config.yaml and run CSV tests.">
+  <link rel="canonical" href="https://optics-framework.org/docs/platforms/desktop">
+  <link rel="alternate" type="text/markdown" href="desktop.md" title="This page as Markdown">
+  <meta property="og:title" content="Test desktop apps on macOS, Linux and Windows · Optics Framework docs">
+  <meta property="og:description" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that reads the OS accessibility tree through Appium and appium-xa11y-driver. Set up the Host, write config.yaml and run CSV tests.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab on" href="../../docs/platforms/" aria-current="true">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section open" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop" aria-current="page">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/platforms/">Platforms</a><span class="sep" aria-hidden="true">/</span><span>Targets</span></nav>
+        <header class="doc-head">
+          <h1>Test desktop apps on macOS, Linux and Windows</h1>
+          <p class="doc-summary">Test native desktop apps on macOS, Linux and Windows. Optics reads the accessibility tree of the OS through Appium.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 20 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="desktop.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="desktop.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics tests native desktop apps on macOS, Linux and Windows. It uses the same CSV files, keywords and reports as for phones and browsers. A test can open an editor, type a note, press a key combination, open a calculator and check a result.</p>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>Windows support is experimental. It is tested on Windows Server 2022 with Notepad and the classic Calculator. <a href="#limits">Limits</a> has the details for each OS.</p></aside>
+<h2 id="how-it-works">How it works<a class="anchor" href="#how-it-works" aria-label="Link to this section">#</a></h2>
+<p>Optics talks to an <strong>Appium</strong> server. Appium uses <strong>appium-xa11y-driver</strong>, which reads the accessibility tree of the OS: the same data that a screen reader uses. Each button, field and menu item in the tree is an element that Optics can find, press and read.</p>
+<p>Appium and the driver run on the <strong>Host</strong>: the computer that shows the app. Optics can run on the Host too, or on a different computer that connects to the Host.</p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Optics  ──WebDriver──&gt;  Appium + appium-xa11y-driver  ──accessibility API──&gt;  your app
+                        └───────────── on the Host ─────────────┘">Copy</button><pre><code>Optics  ──WebDriver──&gt;  Appium + appium-xa11y-driver  ──accessibility API──&gt;  your app
+                        └───────────── on the Host ─────────────┘</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>OS</th><th>Accessibility API</th><th>Display</th></tr></thead><tbody><tr><td>macOS</td><td>AXUIElement</td><td>The desktop of the user that is logged in</td></tr><tr><td>Linux</td><td>AT-SPI2</td><td>An X11 display. The setup script starts one if there is none.</td></tr><tr><td>Windows</td><td>UI Automation</td><td>The desktop of the user that is logged in</td></tr></tbody></table></div>
+<h2 id="before-you-begin">Before you begin<a class="anchor" href="#before-you-begin" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/get-started/install">Optics installed</a> with the Appium engine: <code class="ic">optics setup --install appium</code>.</li><li>A Host that runs macOS, Linux with X11 (Debian 13 is tested), or Windows (Windows Server 2022 is tested).</li><li>On macOS, access to System Settings to give two permissions one time.</li><li>On Windows, an administrator one time, if the Visual C++ runtime is not installed.</li></ul>
+<p>The setup script installs its own Node.js, Appium 3 and the driver. You do not need Node.js before you start.</p>
+<h2 id="set-up">Set up<a class="anchor" href="#set-up" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="set-up-the-host">Set up the Host<a class="anchor" href="#set-up-the-host" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on <code class="ic">127.0.0.1:4723</code>. It is safe to run the script again: it changes only what is missing.</p>
+<div class="doc-tabs" data-group="desktop"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-desktop-t0" aria-controls="tabs-desktop-p0" aria-selected="true"  data-tab="macOS">macOS</button><button class="os-tab" role="tab" id="tabs-desktop-t1" aria-controls="tabs-desktop-p1" aria-selected="false" tabindex="-1" data-tab="Linux">Linux</button><button class="os-tab" role="tab" id="tabs-desktop-t2" aria-controls="tabs-desktop-p2" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-p0" aria-labelledby="tabs-desktop-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/mac/setup.sh
+bash setup.sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSLO</span> https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/mac/setup.sh
+<span class="prompt">$</span> <b>bash</b> setup.sh</code></pre></figure>
+<p>The service is the LaunchAgent <code class="ic">appium-xa11y</code>. Its log is <code class="ic">~/Library/Logs/appium-xa11y.log</code>.</p></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-p1" aria-labelledby="tabs-desktop-t1" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/linux/setup.sh
+bash setup.sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSLO</span> https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/linux/setup.sh
+<span class="prompt">$</span> <b>bash</b> setup.sh</code></pre></figure>
+<p>The script installs Xvfb, Openbox, D-Bus and AT-SPI with <code class="ic">apt</code>. That step needs root: run the script as root, or with <code class="ic">sudo</code> access. If the script cannot get root, it prints the command to run yourself.</p>
+<p>The service is the systemd user unit <code class="ic">appium-xa11y</code>. It uses the X11 display that is there. If there is no display, it starts Xvfb on <code class="ic">:99</code>. To see the log, run <code class="ic">journalctl --user -u appium-xa11y</code>.</p></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-p2" aria-labelledby="tabs-desktop-t2" hidden><p>In PowerShell:</p>
+<figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/windows/setup.ps1 -OutFile setup.ps1
+powershell -ExecutionPolicy Bypass -File setup.ps1">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>iwr</b> https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/windows/setup.ps1 <span class="c-info">-OutFile</span> setup.ps1
+<span class="prompt">PS&gt;</span> <b>powershell</b> <span class="c-info">-ExecutionPolicy</span> Bypass <span class="c-info">-File</span> setup.ps1</code></pre></figure>
+<p>The service is the logon task <code class="ic">appium-xa11y</code> of the user that runs the script. That user must stay logged on to the desktop. The log is <code class="ic">%LOCALAPPDATA%\appium-xa11y\appium.log</code>.</p></div></div>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="give-the-permissions-macos-only">Give the permissions (macOS only)<a class="anchor" href="#give-the-permissions-macos-only" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>macOS lets an app read other apps only when you give it <strong>Accessibility</strong>. Screenshots also need <strong>Screen &amp; System Audio Recording</strong>. At the end, the setup script prints the path of the Node.js that runs Appium.</p>
+<ol><li>Open <strong>System Settings &gt; Privacy &amp; Security &gt; Accessibility</strong>.</li><li>Click <strong>+</strong>, press <strong>Cmd+Shift+G</strong>, paste the path, and add it. Make sure that its switch is on.</li><li>Do the same steps in <strong>Privacy &amp; Security &gt; Screen &amp; System Audio Recording</strong>.</li><li>Restart Appium:</li></ol>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="launchctl kickstart -k gui/$(id -u)/appium-xa11y">Copy</button><pre><code><span class="prompt">$</span> <b>launchctl</b> kickstart <span class="c-info">-k</span> gui/$(id <span class="c-info">-u</span>)/appium-xa11y</code></pre></figure>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p>Do not give the permissions to your terminal app. The service does not run in your terminal. Give them to the Node.js path that the script prints. Give them to the terminal app only when you start Appium yourself with <code class="ic">host.sh run</code>.</p></aside>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="check-that-appium-runs">Check that Appium runs<a class="anchor" href="#check-that-appium-runs" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -s http://127.0.0.1:4723/status">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-s</span> http://127.0.0.1:4723/status
+{"value":{"ready":true,"message":"The server is ready to accept new connections", ...}}</code></pre></figure>
+<p>If you get no answer, read the log of the service. <a href="#if-it-isnt-working">If it isn't working</a> lists the usual causes.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="make-a-project">Make a project<a class="anchor" href="#make-a-project" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p><code class="ic">optics quickstart</code> asks what you want to automate. Choose <code class="ic">desktop</code>, then the OS and the app. It writes <code class="ic">config.yaml</code> for you and can make the sample project.</p>
+<p>Or make the sample project yourself:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics init notes --template desktop_editor">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> init notes <span class="c-info">--template</span> desktop_editor</code></pre></figure>
+<p>The <code class="ic">desktop_editor</code> sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. On Linux or Windows, change <code class="ic">platformName</code> and <code class="ic">app</code> in <code class="ic">notes/config.yaml</code> first. <a href="#write-config-yaml">Write config.yaml</a> shows the values.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h3 id="check-and-run">Check and run<a class="anchor" href="#check-and-run" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor notes
+optics execute notes">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> doctor notes
+<span class="prompt">$</span> <b>optics</b> execute notes</code></pre></figure>
+<p><code class="ic">optics doctor</code> can warn that <code class="ic">adb</code> is missing. A desktop project does not need adb, so you can ignore it. Then <code class="ic">optics execute</code> runs the sample:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>│ Total Test Cases: 3 | <span class="c-pass">Passed</span>: 3 | Failed: 0 │</code></pre></figure></div></li></ol>
+<h2 id="write-config-yaml">Write config.yaml<a class="anchor" href="#write-config-yaml" aria-label="Link to this section">#</a></h2>
+<p>A desktop project uses the <code class="ic">appium</code> driver with three settings: the OS, <code class="ic">automationName: Xa11y</code> and the app. To write them with questions in place of YAML, run <code class="ic">optics configure notes</code> and choose <code class="ic">desktop</code>.</p>
+<div class="doc-tabs" data-group="desktop"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-desktop-2-t0" aria-controls="tabs-desktop-2-p0" aria-selected="true"  data-tab="macOS">macOS</button><button class="os-tab" role="tab" id="tabs-desktop-2-t1" aria-controls="tabs-desktop-2-p1" aria-selected="false" tabindex="-1" data-tab="Linux">Linux</button><button class="os-tab" role="tab" id="tabs-desktop-2-t2" aria-controls="tabs-desktop-2-p2" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-2-p0" aria-labelledby="tabs-desktop-2-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;
+      capabilities:
+        platformName: Mac
+        automationName: Xa11y
+        app: com.apple.TextEdit
+        appArguments: [&quot;-ApplePersistenceIgnoreState&quot;, &quot;YES&quot;]
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Mac
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> Xa11y
+        <span class="c-mod">app</span><span class="c-dim">:</span> com.apple.TextEdit
+        <span class="c-mod">appArguments</span><span class="c-dim">:</span> [<span class="c-lit">"-ApplePersistenceIgnoreState"</span>, <span class="c-lit">"YES"</span>]
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
+<p><code class="ic">appArguments</code> makes the app start with no windows from the last time. Without it, TextEdit and other document apps open the documents of the last session.</p></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-2-p1" aria-labelledby="tabs-desktop-2-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;
+      capabilities:
+        platformName: Linux
+        automationName: Xa11y
+        app: mousepad
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Linux
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> Xa11y
+        <span class="c-mod">app</span><span class="c-dim">:</span> mousepad
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
+<p><code class="ic">optics quickstart</code> suggests <code class="ic">gedit</code>. Many systems do not have it. Use an editor that is installed, such as <code class="ic">mousepad</code>.</p></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-2-p2" aria-labelledby="tabs-desktop-2-t2" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://127.0.0.1:4723&quot;
+      capabilities:
+        platformName: Windows
+        automationName: Xa11y
+        app: notepad.exe
+elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_page_source:  {enabled: true}
+  - appium_screenshot:   {enabled: true}">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://127.0.0.1:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Windows
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> Xa11y
+        <span class="c-mod">app</span><span class="c-dim">:</span> notepad.exe
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span> {enabled: true}
+  - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
+  - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure></div></div>
+<p><code class="ic">optics quickstart</code> also turns on <code class="ic">appium_web</code>. It has no effect on a desktop app, so you can keep it or remove it.</p>
+<h3 id="capabilities">Capabilities<a class="anchor" href="#capabilities" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Capability</th><th>Value</th><th>Default</th></tr></thead><tbody><tr><td><code class="ic">platformName</code></td><td><code class="ic">Mac</code>, <code class="ic">Linux</code> or <code class="ic">Windows</code></td><td>Required</td></tr><tr><td><code class="ic">automationName</code></td><td><code class="ic">Xa11y</code></td><td>Optics sets <code class="ic">Xa11y</code> when you leave it out</td></tr><tr><td><code class="ic">app</code></td><td>The app to start. See <a href="#find-the-app-id">Find the app id</a>.</td><td>Set <code class="ic">app</code> or <code class="ic">appName</code></td></tr><tr><td><code class="ic">appArguments</code></td><td>A list of arguments for <code class="ic">app</code></td><td>None</td></tr><tr><td><code class="ic">appName</code></td><td>The name of an app that runs now. The session attaches to it and does not start it.</td><td>None</td></tr><tr><td><code class="ic">launchTimeout</code></td><td>Milliseconds to wait for the app's first window</td><td><code class="ic">20000</code></td></tr><tr><td><code class="ic">terminateOnDelete</code></td><td>Stop the apps that the session started when the session ends. Apps that ran before stay open.</td><td><code class="ic">true</code></td></tr><tr><td><code class="ic">failureArtifacts</code></td><td>A folder on the Host. When a command fails, the driver saves the page source and a screenshot there.</td><td>None</td></tr></tbody></table></div>
+<p>You can also put the driver's capabilities in <code class="ic">appium:options</code>, as in other Appium projects. Optics reads both forms.</p>
+<aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Set <code class="ic">app</code> or <code class="ic">appName</code>. If you set neither, the session fails with E0104. Without an app, the driver attaches to the app in front, which can be your terminal or your AI agent.</p></aside>
+<h3 id="find-the-app-id">Find the app id<a class="anchor" href="#find-the-app-id" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>OS</th><th><code class="ic">app</code></th><th>Example</th><th>How to find it</th></tr></thead><tbody><tr><td>macOS</td><td>A bundle id or an <code class="ic">.app</code> path</td><td><code class="ic">com.apple.TextEdit</code>, <code class="ic">/Applications/Calculator.app</code></td><td><code class="ic">osascript -e 'id of app "TextEdit"'</code></td></tr><tr><td>Linux</td><td>An executable on the <code class="ic">PATH</code>, or a full path</td><td><code class="ic">mousepad</code>, <code class="ic">/usr/bin/gnome-calculator</code></td><td><code class="ic">which mousepad</code></td></tr><tr><td>Windows</td><td>An executable on the <code class="ic">PATH</code>, or a full path</td><td><code class="ic">notepad.exe</code>, <code class="ic">C:\Program Files\App\app.exe</code></td><td><code class="ic">where notepad</code></td></tr></tbody></table></div>
+<p>On Windows, some executables are launchers that start a different process and exit, for example <code class="ic">calc.exe</code>. The session attaches to the app that the launcher starts.</p>
+<h3 id="attach-to-an-app-that-runs">Attach to an app that runs<a class="anchor" href="#attach-to-an-app-that-runs" aria-label="Link to this section">#</a></h3>
+<p>Use <code class="ic">appName</code> in place of <code class="ic">app</code> to test an app that is already open. The session does not start it and does not stop it at the end.</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="      capabilities:
+        platformName: Mac
+        automationName: Xa11y
+        appName: TextEdit">Copy</button><pre><code>      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> Mac
+        <span class="c-mod">automationName</span><span class="c-dim">:</span> Xa11y
+        <span class="c-mod">appName</span><span class="c-dim">:</span> TextEdit</code></pre></figure>
+<p><code class="ic">appName</code> is the name that the OS shows for the app, for example <code class="ic">TextEdit</code> on macOS or <code class="ic">mousepad</code> on Linux.</p>
+<h2 id="use-a-host-on-a-different-computer">Use a Host on a different computer<a class="anchor" href="#use-a-host-on-a-different-computer" aria-label="Link to this section">#</a></h2>
+<p>Appium has no authentication. Keep it on <code class="ic">127.0.0.1</code>, and connect to it through a tunnel:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="ssh -N -L 4723:127.0.0.1:4723 user@host">Copy</button><pre><code><span class="prompt">$</span> <b>ssh</b> <span class="c-info">-N</span> <span class="c-info">-L</span> 4723:127.0.0.1:4723 user@host</code></pre></figure>
+<p>Then keep <code class="ic">url: "http://127.0.0.1:4723"</code> in <code class="ic">config.yaml</code>. Each step is one round trip through the tunnel, so a suite is slower over a network. To write and try a suite, run Optics on your computer. For CI and long suites, run Optics on the Host.</p>
+<h3 id="run-a-linux-host-in-docker">Run a Linux Host in Docker<a class="anchor" href="#run-a-linux-host-in-docker" aria-label="Link to this section">#</a></h3>
+<p>The driver has a Dockerfile for a Linux Host with Xvfb and the sample apps:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="git clone --branch v0.1.2 https://github.com/chinmayajha/appium-xa11y-driver
+docker build -f appium-xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux appium-xa11y-driver
+docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux">Copy</button><pre><code><span class="prompt">$</span> <b>git</b> clone <span class="c-info">--branch</span> v0.1.2 https://github.com/chinmayajha/appium-xa11y-driver
+<span class="prompt">$</span> <b>docker</b> build <span class="c-info">-f</span> appium-xa11y-driver/docker/linux/Dockerfile <span class="c-info">-t</span> appium-xa11y-linux appium-xa11y-driver
+<span class="prompt">$</span> <b>docker</b> run <span class="c-info">-d</span> <span class="c-info">--name</span> appium <span class="c-info">-p</span> 127.0.0.1:4723:4723 appium-xa11y-linux</code></pre></figure>
+<p>The container has <code class="ic">mousepad</code> and <code class="ic">gnome-calculator</code>. To test your own app, install it in an image that starts from this one.</p>
+<h2 id="find-elements">Find elements<a class="anchor" href="#find-elements" aria-label="Link to this section">#</a></h2>
+<p>Each element in the tree is one XML tag. The tag is the role, such as <code class="ic">button</code>, <code class="ic">text_field</code>, <code class="ic">text_area</code>, <code class="ic">menu_item</code>, <code class="ic">static_text</code> or <code class="ic">window</code>. Each element has these attributes:</p>
+<div class="table-wrap"><table><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr><td><code class="ic">name</code></td><td>The accessible name, usually the visible label</td></tr><tr><td><code class="ic">value</code></td><td>The text or value, for example the text in a field</td></tr><tr><td><code class="ic">label</code></td><td>The accessible description</td></tr><tr><td><code class="ic">id</code></td><td>The id that the app sets: AXIdentifier on macOS, AutomationId on Windows. It is always empty on Linux.</td></tr><tr><td><code class="ic">type</code></td><td>The role of the OS, for example <code class="ic">AXButton</code>, <code class="ic">push button</code> or <code class="ic">Button</code></td></tr><tr><td><code class="ic">enabled</code>, <code class="ic">visible</code>, <code class="ic">focused</code>, <code class="ic">selected</code>, <code class="ic">checked</code></td><td>The state</td></tr><tr><td><code class="ic">clickable</code>, <code class="ic">checkable</code>, <code class="ic">editable</code>, <code class="ic">scrollable</code></td><td>What you can do with the element</td></tr><tr><td><code class="ic">x</code>, <code class="ic">y</code>, <code class="ic">width</code>, <code class="ic">height</code></td><td>The position on the screen</td></tr></tbody></table></div>
+<p>Write locators in <code class="ic">test_data/elements.csv</code>:</p>
+<div class="table-wrap"><table><thead><tr><th>Locator</th><th>Example</th><th>Use it when</th></tr></thead><tbody><tr><td>XPath with the id</td><td><code class="ic">//button[@id="AllClear"]</code></td><td>The app sets ids. This is the most stable locator on macOS and Windows.</td></tr><tr><td>XPath with the name</td><td><code class="ic">//button[@name="Save"]</code></td><td>The element has a label. On Linux, use this, because there are no ids.</td></tr><tr><td>XPath with the role</td><td><code class="ic">//text_area</code></td><td>There is only one element of that role, such as the editor.</td></tr><tr><td>Visible text</td><td><code class="ic">Save</code></td><td>You want a locator that works on all OSs.</td></tr></tbody></table></div>
+<h3 id="give-one-element-a-value-for-each-os">Give one element a value for each OS<a class="anchor" href="#give-one-element-a-value-for-each-os" aria-label="Link to this section">#</a></h3>
+<p>The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The <code class="ic">desktop_editor</code> sample uses this for the editor:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>test_data/elements.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="Element_Name,Element_ID_text_area,Element_ID_web_area
+Editor,//text_area,//web_area">Copy</button><pre><code><span class="c-dim">Element_Name,Element_ID_text_area,Element_ID_web_area</span>
+<span class="c-mod">Editor</span><span class="c-dim">,</span><b>//text_area</b><span class="c-dim">,</span>//web_area</code></pre></figure>
+<p>The editor is a <code class="ic">text_area</code> in TextEdit and mousepad, and a <code class="ic">web_area</code> in Notepad. A calculator shows the differences well:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>macOS Calculator</th><th>Linux gnome-calculator</th><th>Windows classic Calculator</th></tr></thead><tbody><tr><td>7</td><td><code class="ic">//button[@id="Seven"]</code></td><td><code class="ic">//button[@name="7"]</code></td><td><code class="ic">//button[@id="137"]</code></td></tr><tr><td>+</td><td><code class="ic">//button[@id="Add"]</code></td><td><code class="ic">//button[@name="+"]</code></td><td><code class="ic">//button[@id="93"]</code></td></tr><tr><td>=</td><td><code class="ic">//button[@id="Equals"]</code></td><td><code class="ic">//button[@name="="]</code></td><td><code class="ic">//button[@id="121"]</code></td></tr><tr><td>Clear</td><td><code class="ic">//button[@id="AllClear"]</code></td><td><code class="ic">//button[@name="C"]</code></td><td><code class="ic">//button[@id="81"]</code></td></tr></tbody></table></div>
+<h3 id="see-the-tree">See the tree<a class="anchor" href="#see-the-tree" aria-label="Link to this section">#</a></h3>
+<p>To see the tree of your app, add a <code class="ic">Capture Pagesource</code> step. Optics writes the tree to <code class="ic">execution_output/page_sources_log.xml</code>.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step
+Look at the app,Launch App
+Look at the app,Capture Pagesource">Copy</button><pre><code><span class="c-dim">module_name,module_step</span>
+<span class="c-mod">Look at the app</span><span class="c-dim">,</span><b>Launch App</b>
+<span class="c-mod">Look at the app</span><span class="c-dim">,</span><b>Capture Pagesource</b></code></pre></figure>
+<p><code class="ic">Get Interactive Elements</code> lists only the elements that you can press or type into. <a href="../../docs/create/record"><code class="ic">optics live</code></a> shows the elements on the screen while you try steps one at a time.</p>
+<p>The macOS menu bar is not in the tree. To use a menu command, press its key combination with Press Keycode.</p>
+<h2 id="press-keys-and-key-combinations">Press keys and key combinations<a class="anchor" href="#press-keys-and-key-combinations" aria-label="Link to this section">#</a></h2>
+<p>On a desktop, Press Keycode takes a key combination, or <strong>chord</strong>. Join the keys with <code class="ic">+</code>:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Select all,Press Keycode,primary+a
+Save,Press Keycode,cmd+s
+New tab,Press Keycode,ctrl+t
+Close a dialog,Press Keycode,Escape">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Select all</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>primary+a
+<span class="c-mod">Save</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>cmd+s
+<span class="c-mod">New tab</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>ctrl+t
+<span class="c-mod">Close a dialog</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>Escape</code></pre></figure>
+<p><code class="ic">primary</code> is Cmd on macOS and Ctrl on Linux and Windows. Use <code class="ic">primary</code> when one test must run on all three OSs.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Names you can use</th></tr></thead><tbody><tr><td>Cmd, Windows key</td><td><code class="ic">cmd</code>, <code class="ic">command</code>, <code class="ic">meta</code>, <code class="ic">super</code>, <code class="ic">win</code>, <code class="ic">windows</code></td></tr><tr><td>Ctrl</td><td><code class="ic">ctrl</code>, <code class="ic">control</code></td></tr><tr><td>Alt, Option</td><td><code class="ic">alt</code>, <code class="ic">option</code>, <code class="ic">opt</code></td></tr><tr><td>Shift</td><td><code class="ic">shift</code></td></tr><tr><td>Cmd on macOS, Ctrl elsewhere</td><td><code class="ic">primary</code></td></tr><tr><td>Enter</td><td><code class="ic">enter</code>, <code class="ic">return</code></td></tr><tr><td>Escape</td><td><code class="ic">esc</code>, <code class="ic">escape</code></td></tr><tr><td>Arrows</td><td><code class="ic">up</code>, <code class="ic">down</code>, <code class="ic">left</code>, <code class="ic">right</code>, <code class="ic">arrowup</code>, <code class="ic">arrowdown</code>, <code class="ic">arrowleft</code>, <code class="ic">arrowright</code></td></tr><tr><td>Delete</td><td><code class="ic">backspace</code>, <code class="ic">delete</code>, <code class="ic">del</code></td></tr><tr><td>Other keys</td><td><code class="ic">tab</code>, <code class="ic">space</code>, <code class="ic">insert</code>, <code class="ic">home</code>, <code class="ic">end</code>, <code class="ic">pageup</code>, <code class="ic">pagedown</code>, <code class="ic">plus</code></td></tr><tr><td>Function keys</td><td><code class="ic">f1</code> to <code class="ic">f24</code></td></tr><tr><td>Letters, digits, symbols</td><td>The character itself: <code class="ic">a</code>, <code class="ic">7</code>, <code class="ic">/</code></td></tr></tbody></table></div>
+<p>Key names are not case sensitive. An unknown name fails with <code class="ic">Unknown key '&lt;name&gt;'</code>. To press <code class="ic">+</code>, use <code class="ic">plus</code>.</p>
+<h2 id="type-text">Type text<a class="anchor" href="#type-text" aria-label="Link to this section">#</a></h2>
+<p>Enter Text types into an element. Enter Text Using Keyboard types into the element that has the focus.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Write,Enter Text,${Editor},hello world
+Write,Assert Text,${Editor},hello world
+Fix the typo,Enter Text Using Keyboard,&lt;backspace&gt;
+Clear,Clear Element Text,${Editor}">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Write</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${Editor}</span><span class="c-dim">,</span>hello world
+<span class="c-mod">Write</span><span class="c-dim">,</span><b>Assert Text</b><span class="c-dim">,</span><span class="c-var">${Editor}</span><span class="c-dim">,</span>hello world
+<span class="c-mod">Fix the typo</span><span class="c-dim">,</span><b>Enter Text Using Keyboard</b><span class="c-dim">,</span>&lt;backspace&gt;
+<span class="c-mod">Clear</span><span class="c-dim">,</span><b>Clear Element Text</b><span class="c-dim">,</span><span class="c-var">${Editor}</span></code></pre></figure>
+<p>A value that is one special key in angle brackets presses that key: <code class="ic">&lt;enter&gt;</code>, <code class="ic">&lt;tab&gt;</code>, <code class="ic">&lt;backspace&gt;</code>, <code class="ic">&lt;space&gt;</code>, <code class="ic">&lt;escape&gt;</code>, <code class="ic">&lt;left&gt;</code>, <code class="ic">&lt;right&gt;</code>, <code class="ic">&lt;up&gt;</code>, <code class="ic">&lt;down&gt;</code>, <code class="ic">&lt;insert&gt;</code>, <code class="ic">&lt;delete&gt;</code>, <code class="ic">&lt;home&gt;</code>, <code class="ic">&lt;end&gt;</code>, <code class="ic">&lt;pageup&gt;</code>, <code class="ic">&lt;pagedown&gt;</code>, <code class="ic">&lt;f1&gt;</code> to <code class="ic">&lt;f12&gt;</code>. Phone keys such as <code class="ic">&lt;back&gt;</code> or <code class="ic">&lt;volume_up&gt;</code> fail with E0105.</p>
+<p>Clear Element Text selects all the text with Cmd+A or Ctrl+A, then deletes it.</p>
+<aside class="callout callout-tip"><p class="callout-title">Tip</p><p>On a macOS test Host, turn off inline predictive text: <strong>System Settings &gt; Keyboard &gt; Text Input &gt; Edit &gt; Show inline predictive text</strong>. A prediction adds words to a field, and Optics cannot set the text while it shows.</p></aside>
+<h2 id="scroll-and-swipe">Scroll and swipe<a class="anchor" href="#scroll-and-swipe" aria-label="Link to this section">#</a></h2>
+<p>Scroll and Swipe By Percentage work in the window of the app:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2,param_3,param_4
+Move down,Scroll,down
+Drag up,Swipe By Percentage,50,70,up,30">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2,param_3,param_4</span>
+<span class="c-mod">Move down</span><span class="c-dim">,</span><b>Scroll</b><span class="c-dim">,</span>down
+<span class="c-mod">Drag up</span><span class="c-dim">,</span><b>Swipe By Percentage</b><span class="c-dim">,</span>50<span class="c-dim">,</span>70<span class="c-dim">,</span>up<span class="c-dim">,</span>30</code></pre></figure>
+<p>Scroll turns the mouse wheel. Swipe drags with the mouse. Percentages are of the app's window, not of the screen.</p>
+<h2 id="work-with-more-than-one-app">Work with more than one app<a class="anchor" href="#work-with-more-than-one-app" aria-label="Link to this section">#</a></h2>
+<p>Launch Other App starts or brings a second app to the front, and the session follows it. Launch App with no value goes back to the app in <code class="ic">config.yaml</code>. Force Terminate App stops an app.</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Add numbers,Launch Other App,gnome-calculator
+Add numbers,Press Element,${Seven}
+Add numbers,Press Element,${Plus}
+Add numbers,Press Element,5
+Add numbers,Press Element,${Equals}
+Add numbers,Assert Presence,12
+Add numbers,Force Terminate App,gnome-calculator
+Back to the editor,Launch App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Launch Other App</b><span class="c-dim">,</span>gnome-calculator
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${Seven}</span>
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${Plus}</span>
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>5
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${Equals}</span>
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>12
+<span class="c-mod">Add numbers</span><span class="c-dim">,</span><b>Force Terminate App</b><span class="c-dim">,</span>gnome-calculator
+<span class="c-mod">Back to the editor</span><span class="c-dim">,</span><b>Launch App</b></code></pre></figure>
+<p>Keys, typing and mouse actions go to the app in front. If a different app is in front, for example a system dialog, the step fails and sends nothing. Use Launch App to bring the app back to the front.</p>
+<h2 id="keywords-that-differ-on-a-desktop">Keywords that differ on a desktop<a class="anchor" href="#keywords-that-differ-on-a-desktop" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Keyword</th><th>On a desktop</th></tr></thead><tbody><tr><td>Press Keycode</td><td>Takes a chord, such as <code class="ic">primary+s</code>. Not an Android key number.</td></tr><tr><td>Launch App</td><td>Starts <code class="ic">app</code>, or brings it to the front if it runs.</td></tr><tr><td>Close And Terminate App</td><td>Closes the app that the session started.</td></tr><tr><td>Go Back</td><td>Fails with E0105. Press the app's key combination for back instead.</td></tr><tr><td>Get App Version</td><td>Fails with E0105.</td></tr><tr><td>Enter Text with phone keys</td><td><code class="ic">&lt;back&gt;</code>, <code class="ic">&lt;menu&gt;</code> and the volume keys fail with E0105.</td></tr></tbody></table></div>
+<p>All other keywords work as on a phone: Press Element, Assert Presence, Get Text, Scroll, Detect And Press and the others.</p>
+<h2 id="call-the-driver-directly">Call the driver directly<a class="anchor" href="#call-the-driver-directly" aria-label="Link to this section">#</a></h2>
+<p>Execute Script calls an <code class="ic">xa11y:</code> method of the driver. Use it for what no keyword does:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Front window,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;xa11y: focusWindow&quot;&quot;}&quot;
+Type,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;xa11y: typeText&quot;&quot;, &quot;&quot;args&quot;&quot;: {&quot;&quot;text&quot;&quot;: &quot;&quot;via script&quot;&quot;}}&quot;">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Front window</span><span class="c-dim">,</span><b>Execute Script</b><span class="c-dim">,</span>"{""script"": ""xa11y: focusWindow""}"
+<span class="c-mod">Type</span><span class="c-dim">,</span><b>Execute Script</b><span class="c-dim">,</span>"{""script"": ""xa11y: typeText"", ""args"": {""text"": ""via script""}}"</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>Arguments</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">xa11y: chord</code></td><td><code class="ic">keys</code></td><td>Presses a chord, as Press Keycode does</td></tr><tr><td><code class="ic">xa11y: typeText</code></td><td><code class="ic">text</code></td><td>Types into the app in front</td></tr><tr><td><code class="ic">xa11y: focusWindow</code></td><td><code class="ic">name</code> (optional)</td><td>Brings a window to the front</td></tr><tr><td><code class="ic">xa11y: closeWindow</code></td><td><code class="ic">name</code> (optional)</td><td>Closes a window</td></tr><tr><td><code class="ic">xa11y: launch</code></td><td><code class="ic">app</code>, <code class="ic">arguments</code> (optional)</td><td>Starts an app, and the session follows it</td></tr><tr><td><code class="ic">xa11y: switchApp</code></td><td><code class="ic">name</code> or <code class="ic">pid</code></td><td>Follows a different app, but does not bring it to the front</td></tr><tr><td><code class="ic">xa11y: listApps</code>, <code class="ic">xa11y: listWindows</code>, <code class="ic">xa11y: activeAppInfo</code></td><td>None</td><td>Lists the apps or windows, or gives the app in front</td></tr></tbody></table></div>
+<p>To keep the result, for example the list of windows, add <code class="ic">store_as=name</code>. Other scripts fail with <code class="ic">unknown method</code>. The driver cannot run JavaScript.</p>
+<h2 id="use-other-parts-of-optics">Use other parts of Optics<a class="anchor" href="#use-other-parts-of-optics" aria-label="Link to this section">#</a></h2>
+<ul><li>**<a href="../../docs/run/error-detection">Error detection</a> and <a href="../../docs/elements/self-heal">self-heal</a>** read the page source, so they work on a desktop.</li><li>**<a href="../../docs/elements/text-and-images">OCR and images</a>** work with <code class="ic">appium_screenshot</code>. On macOS, screenshots need the Screen &amp; System Audio Recording permission.</li><li>**<a href="../../docs/reference/mcp">The MCP server</a>** starts a desktop session with <code class="ic">driver: appium</code>, the <code class="ic">app</code>, and the capabilities above. An AI agent can then drive the app.</li><li>**<a href="../../docs/create/python">Python</a>, <a href="../../docs/create/robot">Robot Framework</a> and <a href="../../docs/advanced/http-api">the HTTP API</a>** take the same config.</li></ul>
+<h2 id="run-in-ci">Run in CI<a class="anchor" href="#run-in-ci" aria-label="Link to this section">#</a></h2>
+<p>Run Optics on the Host, next to Appium. These GitHub Actions steps start a Host on a hosted runner, then run your suite:</p>
+<div class="doc-tabs" data-group="desktop"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-desktop-3-t0" aria-controls="tabs-desktop-3-p0" aria-selected="true"  data-tab="Linux">Linux</button><button class="os-tab" role="tab" id="tabs-desktop-3-t1" aria-controls="tabs-desktop-3-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-3-p0" aria-labelledby="tabs-desktop-3-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.github/workflows/desktop.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="jobs:
+  desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: chinmayajha/appium-xa11y-driver
+          ref: v0.1.2
+          path: xa11y-driver
+      - name: Start the Linux Host
+        run: |
+          docker build -q -f xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux xa11y-driver
+          docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status &gt; /dev/null &amp;&amp; break; sleep 2; done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &quot;3.12&quot;
+      - run: pip install &quot;optics-framework[appium]&quot;
+      - run: optics execute tests/desktop">Copy</button><pre><code><span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">desktop</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> ubuntu-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">repository</span><span class="c-dim">:</span> chinmayajha/appium-xa11y-driver
+          <span class="c-mod">ref</span><span class="c-dim">:</span> v0.1.2
+          <span class="c-mod">path</span><span class="c-dim">:</span> xa11y-driver
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Start the Linux Host
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
+          docker build -q -f xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux xa11y-driver
+          docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status &gt; /dev/null &amp;&amp; break; sleep 2; done
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-mod">run</span><span class="c-dim">:</span> pip install <span class="c-lit">"optics-framework[appium]"</span>
+      - <span class="c-mod">run</span><span class="c-dim">:</span> optics execute tests/desktop</code></pre></figure>
+<p>The app runs in the container, so it must be installed in the image.</p></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-3-p1" aria-labelledby="tabs-desktop-3-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>.github/workflows/desktop.yml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="jobs:
+  desktop:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: chinmayajha/appium-xa11y-driver
+          ref: v0.1.2
+          path: xa11y-driver
+      - name: Prepare the Windows Host
+        shell: powershell
+        run: xa11y-driver/hosts/windows/setup.ps1 -NoService
+      - name: Start Appium
+        shell: bash
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$LOCALAPPDATA/appium-xa11y/host.ps1&quot; &gt; appium.log 2&gt;&amp;1 &amp;
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status &gt; /dev/null &amp;&amp; break; sleep 2; done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &quot;3.12&quot;
+      - run: pip install &quot;optics-framework[appium]&quot;
+      - run: optics execute tests/desktop">Copy</button><pre><code><span class="c-mod">jobs</span><span class="c-dim">:</span>
+  <span class="c-mod">desktop</span><span class="c-dim">:</span>
+    <span class="c-mod">runs-on</span><span class="c-dim">:</span> windows-latest
+    <span class="c-mod">steps</span><span class="c-dim">:</span>
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/checkout@v4
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">repository</span><span class="c-dim">:</span> chinmayajha/appium-xa11y-driver
+          <span class="c-mod">ref</span><span class="c-dim">:</span> v0.1.2
+          <span class="c-mod">path</span><span class="c-dim">:</span> xa11y-driver
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Prepare the Windows Host
+        <span class="c-mod">shell</span><span class="c-dim">:</span> powershell
+        <span class="c-mod">run</span><span class="c-dim">:</span> xa11y-driver/hosts/windows/setup.ps1 -NoService
+      - <span class="c-mod">name</span><span class="c-dim">:</span> Start Appium
+        <span class="c-mod">shell</span><span class="c-dim">:</span> bash
+        <span class="c-mod">run</span><span class="c-dim">:</span> |
+          powershell -NoProfile -ExecutionPolicy Bypass -File <span class="c-lit">"$LOCALAPPDATA/appium-xa11y/host.ps1"</span> &gt; appium.log 2&gt;&amp;1 &amp;
+          for _ in $(seq 90); do curl -sf http://127.0.0.1:4723/status &gt; /dev/null &amp;&amp; break; sleep 2; done
+      - <span class="c-mod">uses</span><span class="c-dim">:</span> actions/setup-python@v5
+        <span class="c-mod">with</span><span class="c-dim">:</span>
+          <span class="c-mod">python-version</span><span class="c-dim">:</span> <span class="c-lit">"3.12"</span>
+      - <span class="c-mod">run</span><span class="c-dim">:</span> pip install <span class="c-lit">"optics-framework[appium]"</span>
+      - <span class="c-mod">run</span><span class="c-dim">:</span> optics execute tests/desktop</code></pre></figure></div></div>
+<p>Hosted macOS runners do not give the Accessibility permission. For macOS, use a self-hosted runner on a Mac where you gave the permissions one time. <a href="../../docs/run/ci">Run in CI</a> covers reports and artifacts.</p>
+<h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+<div class="doc-tabs" data-group="desktop"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-desktop-4-t0" aria-controls="tabs-desktop-4-p0" aria-selected="true"  data-tab="macOS">macOS</button><button class="os-tab" role="tab" id="tabs-desktop-4-t1" aria-controls="tabs-desktop-4-p1" aria-selected="false" tabindex="-1" data-tab="Linux">Linux</button><button class="os-tab" role="tab" id="tabs-desktop-4-t2" aria-controls="tabs-desktop-4-p2" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-4-p0" aria-labelledby="tabs-desktop-4-t0"><ul><li>The menu bar is not in the tree. Use key combinations for menu commands.</li><li>A screenshot fails while a different process records the screen. Stop that process. If screenshots still fail, restart Appium.</li><li>On a Mac with more than one display, screenshots show only the main display.</li><li>Inline predictive text blocks typing. Turn it off on the Host.</li></ul></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-4-p1" aria-labelledby="tabs-desktop-4-t1" hidden><ul><li>Only X11. On Wayland, GTK 4 elements have no position.</li><li>Elements have no <code class="ic">id</code>. Use <code class="ic">@name</code>, the role or visible text.</li><li>GTK 4 apps work on GTK 4.18 (Debian 13). On GTK 4.14 (Ubuntu 24.04), they have no window and no positions. GTK 3 apps work on both.</li><li>Some menu items have spaces at the end of their names. Use <code class="ic">contains(@name, "Save")</code> or visible text for them.</li></ul></div><div class="tab-pane" role="tabpanel" id="tabs-desktop-4-p2" aria-labelledby="tabs-desktop-4-t2" hidden><ul><li>Tested only on Windows Server 2022, with Notepad and the classic Calculator. On Windows 10 and 11, <code class="ic">calc.exe</code> starts a different Calculator app.</li><li>Typing goes to the caret, so the driver clicks the field first. This brings its window to the front.</li><li>The driver needs the Microsoft Visual C++ 2015–2022 runtime. The setup script installs it.</li></ul></div></div>
+<h2 id="if-it-isnt-working">If it isn't working<a class="anchor" href="#if-it-isnt-working" aria-label="Link to this section">#</a></h2>
+<ul><li>**No answer from <code class="ic">http://127.0.0.1:4723/status</code>.** Appium does not run. Read the log of the service, then restart it: <code class="ic">launchctl kickstart -k gui/$(id -u)/appium-xa11y</code> on macOS, <code class="ic">systemctl --user restart appium-xa11y</code> on Linux, or <code class="ic">Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y</code> on Windows.</li><li><strong>A message about the Accessibility or Screen Recording permission.</strong> On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.</li><li><strong>E0104: "A Mac session needs its app when it starts".</strong> Set <code class="ic">app</code> or <code class="ic">appName</code> in the capabilities.</li><li><strong>"'&lt;app&gt;' showed no window, and started no app of its own, within 20000 ms".</strong> The app id is wrong, or the app starts slowly. Check the id with <a href="#find-the-app-id">Find the app id</a>, or set <code class="ic">launchTimeout</code> to a larger value.</li><li><strong>"&lt;app&gt; has no window to activate".</strong> The app runs, but it has no open window. Open a window first, for example with Press Keycode <code class="ic">primary+n</code>.</li><li><strong>"&lt;app&gt; is not the frontmost app (&lt;other&gt; is)".</strong> A different app is in front, so keys and clicks would go to it. Close the dialog that is in front, or use Launch App to bring your app to the front.</li><li><strong>"Unknown key '&lt;name&gt;'".</strong> Press Keycode got a key name that the driver does not know. Use a name from <a href="#press-keys-and-key-combinations">Press keys and key combinations</a>.</li><li><strong>E0105: "'go_back' is not supported on Mac".</strong> The keyword works only on phones. See <a href="#keywords-that-differ-on-a-desktop">Keywords that differ on a desktop</a>.</li><li><strong>"DISPLAY ':1' is not a local X11 display".</strong> On Linux, the driver needs a local X11 display. Remove the <code class="ic">--display</code> option and run the setup script again, so that it starts Xvfb.</li><li><strong>An old document opens on macOS.</strong> The app restored its last session. Add <code class="ic">appArguments: ["-ApplePersistenceIgnoreState", "YES"]</code>.</li><li>**The element is not found on Linux, but the locator has <code class="ic">@id</code>.** Linux has no ids. Use <code class="ic">@name</code> or visible text.</li><li>**<code class="ic">optics doctor</code> warns about adb.** A desktop project does not need adb. The warning does not stop the run.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/guides/desktop-apps">Test desktop apps with one framework</a></li><li><a href="../../docs/elements/define">Define elements</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li><li><a href="../../docs/reference/config">config.yaml reference</a></li><li><a href="https://github.com/chinmayajha/appium-xa11y-driver" rel="noopener">appium-xa11y-driver on GitHub</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20desktop%20apps%20on%20macOS%2C%20Linux%20and%20Windows&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fdesktop%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20desktop%20apps%20on%20macOS%2C%20Linux%20and%20Windows&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fplatforms%2Fdesktop%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/platforms/tv"><span>Previous</span>TV</a><a class="pager-next" href="../../docs/platforms/production"><span>Next</span>Production devices</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/platforms/desktop.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#how-it-works">How it works</a></li><li class="toc-l2"><a href="#before-you-begin">Before you begin</a></li><li class="toc-l2"><a href="#set-up">Set up</a></li><li class="toc-l3"><a href="#set-up-the-host">Set up the Host</a></li><li class="toc-l3"><a href="#give-the-permissions-macos-only">Give the permissions (macOS only)</a></li><li class="toc-l3"><a href="#check-that-appium-runs">Check that Appium runs</a></li><li class="toc-l3"><a href="#make-a-project">Make a project</a></li><li class="toc-l3"><a href="#check-and-run">Check and run</a></li><li class="toc-l2"><a href="#write-config-yaml">Write config.yaml</a></li><li class="toc-l3"><a href="#capabilities">Capabilities</a></li><li class="toc-l3"><a href="#find-the-app-id">Find the app id</a></li><li class="toc-l3"><a href="#attach-to-an-app-that-runs">Attach to an app that runs</a></li><li class="toc-l2"><a href="#use-a-host-on-a-different-computer">Use a Host on a different computer</a></li><li class="toc-l3"><a href="#run-a-linux-host-in-docker">Run a Linux Host in Docker</a></li><li class="toc-l2"><a href="#find-elements">Find elements</a></li><li class="toc-l3"><a href="#give-one-element-a-value-for-each-os">Give one element a value for each OS</a></li><li class="toc-l3"><a href="#see-the-tree">See the tree</a></li><li class="toc-l2"><a href="#press-keys-and-key-combinations">Press keys and key combinations</a></li><li class="toc-l2"><a href="#type-text">Type text</a></li><li class="toc-l2"><a href="#scroll-and-swipe">Scroll and swipe</a></li><li class="toc-l2"><a href="#work-with-more-than-one-app">Work with more than one app</a></li><li class="toc-l2"><a href="#keywords-that-differ-on-a-desktop">Keywords that differ on a desktop</a></li><li class="toc-l2"><a href="#call-the-driver-directly">Call the driver directly</a></li><li class="toc-l2"><a href="#use-other-parts-of-optics">Use other parts of Optics</a></li><li class="toc-l2"><a href="#run-in-ci">Run in CI</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#if-it-isnt-working">If it isn't working</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=5160aed22e" defer></script>
+  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../docs.js?v=771c6a77b1" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+</body>
+</html>

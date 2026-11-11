@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test macOS, Linux and Windows desktop apps with one framework · Optics Framework docs</title>
+  <meta name="description" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that drives apps through Appium and the OS accessibility tree. One CSV test format for desktop, mobile and web.">
+  <meta name="ai-summary" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that drives apps through Appium and the OS accessibility tree. One CSV test format for desktop, mobile and web.">
+  <link rel="canonical" href="https://optics-framework.org/docs/guides/desktop-apps">
+  <link rel="alternate" type="text/markdown" href="desktop-apps.md" title="This page as Markdown">
+  <meta property="og:title" content="Test macOS, Linux and Windows desktop apps with one framework · Optics Framework docs">
+  <meta property="og:description" content="Automate native desktop app testing on macOS, Linux and Windows with Optics, an open-source framework that drives apps through Appium and the OS accessibility tree. One CSV test format for desktop, mobile and web.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
+  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab on" href="../../docs/guides/" aria-current="true">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section open" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps" aria-current="page">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/guides/">Guides</a><span class="sep" aria-hidden="true">/</span><span>Task guides</span></nav>
+        <header class="doc-head">
+          <h1>Test macOS, Linux and Windows desktop apps with one framework</h1>
+          <p class="doc-summary">Test native desktop apps on macOS, Linux and Windows with the same CSV tests that you use for phones and browsers.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 10 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="desktop-apps.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="desktop-apps.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>You can test a desktop app the way a user uses it: open the app, click buttons, type text, press key combinations and check what the window shows. Optics drives native apps on macOS, Linux and Windows through <strong>Appium</strong> and <strong>appium-xa11y-driver</strong>. Your tests are rows in CSV files, so one suite style covers your desktop, phone and web apps.</p>
+<p>This page walks you through the job and links to the pages that hold the details. <a href="../../docs/platforms/desktop">Test desktop apps</a> is the full reference.</p>
+<h2 id="check-what-each-os-supports">Check what each OS supports<a class="anchor" href="#check-what-each-os-supports" aria-label="Link to this section">#</a></h2>
+<p>The driver reads the accessibility tree of the OS. You pick the OS with <code class="ic">platformName</code> in <code class="ic">config.yaml</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>OS</th><th><code class="ic">platformName</code></th><th><code class="ic">app</code></th><th>Status</th></tr></thead><tbody><tr><td>macOS</td><td><code class="ic">Mac</code></td><td>A bundle id, such as <code class="ic">com.apple.TextEdit</code></td><td>Supported</td></tr><tr><td>Linux (X11)</td><td><code class="ic">Linux</code></td><td>An executable, such as <code class="ic">mousepad</code></td><td>Supported</td></tr><tr><td>Windows</td><td><code class="ic">Windows</code></td><td>An executable, such as <code class="ic">notepad.exe</code></td><td>Experimental</td></tr></tbody></table></div>
+<p>The same keywords work on all three OSs. Press Keycode takes key combinations such as <code class="ic">primary+s</code>, where <code class="ic">primary</code> is Cmd on macOS and Ctrl elsewhere. Go Back and Get App Version are phone keywords, and they fail with <strong>E0105</strong> on a desktop.</p>
+<h2 id="set-up">Set up<a class="anchor" href="#set-up" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-optics-with-the-appium-engine">Install Optics with the Appium engine<a class="anchor" href="#install-optics-with-the-appium-engine" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p><a href="../../docs/get-started/install">Install Optics</a>, then add the Appium engine:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium</code></pre></figure>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="prepare-the-host">Prepare the Host<a class="anchor" href="#prepare-the-host" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>The Host is the computer that shows the app. Run the setup script of the driver there. It installs Node.js, Appium and the driver, and runs Appium as a service. <a href="../../docs/platforms/desktop#set-up-the-host">Set up the Host</a> has the command for each OS.</p>
+<p>On macOS, give the Accessibility and Screen &amp; System Audio Recording permissions to the Node.js path that the script prints. Then restart Appium.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="make-a-project-and-run-it">Make a project and run it<a class="anchor" href="#make-a-project-and-run-it" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics init notes --template desktop_editor
+optics doctor notes
+optics execute notes">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> init notes <span class="c-info">--template</span> desktop_editor
+<span class="prompt">$</span> <b>optics</b> doctor notes
+<span class="prompt">$</span> <b>optics</b> execute notes</code></pre></figure>
+<p>Or run <code class="ic">optics quickstart</code> and choose <code class="ic">desktop</code>. It asks for the OS, the app and the Appium URL, and writes <code class="ic">config.yaml</code> for you.</p></div></li></ol>
+<h2 id="write-the-test">Write the test<a class="anchor" href="#write-the-test" aria-label="Link to this section">#</a></h2>
+<p>A desktop test is a list of steps on the app's elements. This module types a note, selects it all and deletes it:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
+Open Editor,Launch App
+Type A Note,Enter Text,${Editor},Hello from Optics
+Type A Note,Assert Text,${Editor},Hello from Optics
+Clear The Note,Press Keycode,primary+a
+Clear The Note,Enter Text Using Keyboard,&lt;backspace&gt;
+Close Editor,Close And Terminate App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
+<span class="c-mod">Open Editor</span><span class="c-dim">,</span><b>Launch App</b>
+<span class="c-mod">Type A Note</span><span class="c-dim">,</span><b>Enter Text</b><span class="c-dim">,</span><span class="c-var">${Editor}</span><span class="c-dim">,</span>Hello from Optics
+<span class="c-mod">Type A Note</span><span class="c-dim">,</span><b>Assert Text</b><span class="c-dim">,</span><span class="c-var">${Editor}</span><span class="c-dim">,</span>Hello from Optics
+<span class="c-mod">Clear The Note</span><span class="c-dim">,</span><b>Press Keycode</b><span class="c-dim">,</span>primary+a
+<span class="c-mod">Clear The Note</span><span class="c-dim">,</span><b>Enter Text Using Keyboard</b><span class="c-dim">,</span>&lt;backspace&gt;
+<span class="c-mod">Close Editor</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
+<p>Elements are XPath over the accessibility tree, such as <code class="ic">//button[@name="Save"]</code> or <code class="ic">//text_area</code>, or visible text. The tree differs between OSs, so give an element one column for each OS. <a href="../../docs/platforms/desktop#find-elements">Find elements</a> shows the tree and the locators.</p>
+<h2 id="keep-desktop-tests-reliable">Keep desktop tests reliable<a class="anchor" href="#keep-desktop-tests-reliable" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Start each app clean.</strong> On macOS, add <code class="ic">appArguments: ["-ApplePersistenceIgnoreState", "YES"]</code>, so the app does not open old documents.</li><li><strong>Keep your app in front.</strong> Keys and clicks go to the app in front. A dialog of a different app makes the step fail. Use Launch App to bring the app back.</li><li><strong>Use ids on macOS and Windows.</strong> An <code class="ic">@id</code> stays the same when the label text changes. Linux has no ids, so use <code class="ic">@name</code> there.</li><li><strong>Run Optics on the Host in CI.</strong> Each step is one round trip, so a tunnel makes a suite slower.</li></ul>
+<h2 id="run-it-on-every-build">Run it on every build<a class="anchor" href="#run-it-on-every-build" aria-label="Link to this section">#</a></h2>
+<p>Run the suite with <code class="ic">optics execute</code>, as you would a phone suite. The driver gives a Linux Host in Docker and a setup script for Windows runners. <a href="../../docs/platforms/desktop#run-in-ci">Run in CI</a> has GitHub Actions jobs for both.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/platforms/desktop">Test desktop apps</a>, the full desktop reference</li><li><a href="../../docs/platforms/">Supported platforms</a></li><li><a href="../../docs/reference/keywords/actions#press-keycode">Press Keycode</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20macOS%2C%20Linux%20and%20Windows%20desktop%20apps%20with%20one%20framework&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fguides%2Fdesktop-apps%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Test%20macOS%2C%20Linux%20and%20Windows%20desktop%20apps%20with%20one%20framework&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fguides%2Fdesktop-apps%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/guides/smart-tv-apps"><span>Previous</span>Smart TV apps</a><a class="pager-next" href="../../docs/guides/protected-apps"><span>Next</span>Apps that block screenshots</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/guides/desktop-apps.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#check-what-each-os-supports">Check what each OS supports</a></li><li class="toc-l2"><a href="#set-up">Set up</a></li><li class="toc-l3"><a href="#install-optics-with-the-appium-engine">Install Optics with the Appium engine</a></li><li class="toc-l3"><a href="#prepare-the-host">Prepare the Host</a></li><li class="toc-l3"><a href="#make-a-project-and-run-it">Make a project and run it</a></li><li class="toc-l2"><a href="#write-the-test">Write the test</a></li><li class="toc-l2"><a href="#keep-desktop-tests-reliable">Keep desktop tests reliable</a></li><li class="toc-l2"><a href="#run-it-on-every-build">Run it on every build</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=5160aed22e" defer></script>
+  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../docs.js?v=771c6a77b1" defer></script>
+  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
+  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+</body>
+</html>

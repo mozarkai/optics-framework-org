@@ -148,6 +148,19 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
+For a desktop app, give the app and the OS. The session starts the app:
+
+```json
+{
+  "driver": "appium",
+  "url": "http://127.0.0.1:4723",
+  "app": "com.apple.TextEdit",
+  "capabilities": {"platformName": "Mac", "automationName": "Xa11y"}
+}
+```
+
+`app` is a bundle id or `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, and `launch_app` opens another app in the same session. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop).
+
 ### Sign in with a browser profile
 
 A web flow that needs a sign-in can start with the sign-ins of a local Chrome or Edge profile. The agent reads the `optics://browser-profiles` resource and shows the list to you. Each entry has a `channel`, a `directory`, a `name` and the `email` of the account:

@@ -145,7 +145,7 @@
   };
 
   // ------------------------------------------------------------------ record (optics live)
-  // Matches optics live 1.11.3: launch_app runs and is recorded at startup, each result
+  // Matches optics live 1.11.4: launch_app runs and is recorded at startup, each result
   // line is followed by its time and the way the element was found, and /save writes
   // every recorded step (launch_app included) to modules.csv.
   var LIVE_BAR = '<b>appium:emulator-5554</b>  ·  <span class="m sc-rec">rec ●</span>  ·  /help · /quit · Tab complete · Ctrl-K keywords · Ctrl-N AI mode';
@@ -760,12 +760,12 @@
     ['  <span class="t-ok">✓</span> Python 3.12.7 at /usr/local/bin/python3.12', 300],
     ["  " + D("→") + " Creating a virtual environment at /Users/you/.optics/venv", 500],
     ["  " + D("→") + " Installing optics-framework", 1100],
-    ['  <span class="t-ok">✓</span> Optics Framework 1.11.3', 300],
+    ['  <span class="t-ok">✓</span> Optics Framework 1.11.4', 300],
     ['  <span class="t-ok">✓</span> Added /Users/you/.optics/bin to your PATH in /Users/you/.zshrc', 400],
     [B("Next:") + " optics quickstart", 100],
     [D("      Builds a project, checks your setup, and runs your first test."), 800],
     ["$", "optics quickstart"],
-    [panel("Optics drives real phones and browsers with plain-English test steps — no code required.", { title: "Optics Framework", sub: "v1.11.3", tone: "info" }), 700],
+    [panel("Optics drives real phones and browsers with plain-English test steps — no code required.", { title: "Optics Framework", sub: "v1.11.4", tone: "info" }), 700],
     [ask("What do you want to automate?", "[mobile/web] (mobile):", "web"), 700],
     [ask("Install Playwright, Selenium now?", "[y/n] (y):", "y"), 500],
     [D("# pip installs both, then Playwright downloads Chromium"), 900],
@@ -796,7 +796,7 @@
   ].concat(box('Total Test Cases: 3 | Passed: <span class="t-ok">3</span> | Failed: 0')), { h: 480, bottom: true });
 
   // optics dry_run checks every keyword and ${name} without touching a device. The tree,
-  // the failure box and the suggestion are what 1.11.3 prints for a mistyped keyword.
+  // the failure box and the suggestion are what 1.11.4 prints for a mistyped keyword.
   function tr(prefix, name, time, status) { return function (d) { return treeRow(prefix, name, time, status, d.narrow ? 30 : 52); }; }
   function box(text, title) { return [[panel(text, title ? { title: title, tone: "bad" } : null), 300]]; }
   var LOGIN = "//*[@resource-id='com.birch.shop:id/login']";
@@ -829,7 +829,7 @@
 
   // ------------------------------------------------------------------ http (optics serve)
   // optics serve keeps running in its own terminal; a second terminal sends requests.
-  // Responses are the real 1.11.3 shapes, with the ids shortened.
+  // Responses are the real 1.11.4 shapes, with the ids shortened.
   S.http = {
     w: 880, h: 500,
     narrow: { w: 440, h: 640 },
