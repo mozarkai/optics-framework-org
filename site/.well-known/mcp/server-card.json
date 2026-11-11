@@ -3,7 +3,7 @@
   "name": "org.optics-framework/optics",
   "title": "Optics",
   "version": "1.11.3",
-  "description": "Drive Android, iOS, TV and web apps from an AI agent. Runs locally: `optics mcp`.",
+  "description": "Drive Android, iOS, TV, desktop and web apps from an AI agent. Runs locally: `optics mcp`.",
   "websiteUrl": "https://optics-framework.org/docs/reference/mcp",
   "repository": {
     "url": "https://github.com/mozarkai/optics-framework",
