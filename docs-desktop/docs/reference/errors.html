@@ -83,7 +83,7 @@
           </div>
         </header>
         <div class="prose">
-<p>When a step or command fails, Optics usually attaches a code such as <code class="ic">E0201</code>. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.3 and what to do about each one.</p>
+<p>When a step or command fails, Optics usually attaches a code such as <code class="ic">E0201</code>. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.4 and what to do about each one.</p>
 <h2 id="how-codes-are-built">How codes are built<a class="anchor" href="#how-codes-are-built" aria-label="Link to this section">#</a></h2>
 <p>A code is a letter followed by four digits.</p>
 <div class="table-wrap"><table><thead><tr><th>Part</th><th>Meaning</th></tr></thead><tbody><tr><td>First letter</td><td><code class="ic">E</code> is an error. <code class="ic">X</code> is an error after Optics tried every fallback or caught an exception. <code class="ic">W</code> is a warning.</td></tr><tr><td>First two digits</td><td>The family: <code class="ic">01</code> driver, <code class="ic">02</code> elements, <code class="ic">03</code> screenshots, <code class="ic">04</code> keywords, <code class="ic">05</code> files and config, <code class="ic">06</code> engines and modules, <code class="ic">07</code> test cases and variables, <code class="ic">08</code> general, <code class="ic">09</code> <code class="ic">optics live</code>.</td></tr><tr><td>Last two digits</td><td>The specific problem in that family.</td></tr></tbody></table></div>
@@ -111,7 +111,7 @@
 <h2 id="e09-optics-live">E09: optics live<a class="anchor" href="#e09-optics-live" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Code</th><th>What happened</th><th>What to do</th></tr></thead><tbody><tr><td><code class="ic">E0901</code></td><td><strong>Named element not defined in this project.</strong> You typed <code class="ic">${name}</code> in <code class="ic">optics live</code>, and no elements file defines it.</td><td>Add the name to elements.csv, or type the locator directly. Use <code class="ic">/elements</code> to see the names Optics found.</td></tr></tbody></table></div>
 <h2 id="reserved-codes">Reserved codes<a class="anchor" href="#reserved-codes" aria-label="Link to this section">#</a></h2>
-<p>These codes exist in Optics 1.11.3, but nothing raises them. If you see one, it came from a newer version or your own code.</p>
+<p>These codes exist in Optics 1.11.4, but nothing raises them. If you see one, it came from a newer version or your own code.</p>
 <div class="table-wrap"><table><thead><tr><th>Code</th><th>Default message</th></tr></thead><tbody><tr><td><code class="ic">E0103</code></td><td>Failed to end session</td></tr><tr><td><code class="ic">W0104</code></td><td>Driver config incomplete (warning)</td></tr><tr><td><code class="ic">W0203</code></td><td>Element format mismatch</td></tr><tr><td><code class="ic">E0204</code></td><td>Timeout locating element</td></tr><tr><td><code class="ic">E0301</code></td><td>Screenshot disabled</td></tr><tr><td><code class="ic">W0302</code></td><td>Fallback to next camera supported driver</td></tr><tr><td><code class="ic">W0404</code></td><td>Keyword deprecated</td></tr><tr><td><code class="ic">X0502</code></td><td>File read exception</td></tr><tr><td><code class="ic">W0503</code></td><td>Config parser warning (can be ignored)</td></tr><tr><td><code class="ic">W0602</code></td><td>No valid instances, ignoring it</td></tr><tr><td><code class="ic">X0604</code></td><td>Import related problem</td></tr><tr><td><code class="ic">E0703</code></td><td>Parameter resolution failed</td></tr><tr><td><code class="ic">E0704</code></td><td>Test case timeout</td></tr><tr><td><code class="ic">W0705</code></td><td>Test case skipped</td></tr><tr><td><code class="ic">E0802</code></td><td>Unhandled exception</td></tr></tbody></table></div>
 <h2 id="messages-without-a-code">Messages without a code<a class="anchor" href="#messages-without-a-code" aria-label="Link to this section">#</a></h2>
 <p>These common <code class="ic">optics execute</code> and <code class="ic">optics dry_run</code> failures have no code.</p>
@@ -181,6 +181,6 @@
   <script src="../../track.js?v=069e168b13" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
   <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=424129ec81" defer></script>
+  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
 </body>
 </html>

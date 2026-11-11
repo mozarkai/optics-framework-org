@@ -16,7 +16,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.11.3"}
+{"status":"Optics Framework API is running","version":"1.11.4"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.

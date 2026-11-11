@@ -87,7 +87,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.3"
+      - run: pip install "optics-framework[playwright]==1.11.4"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()
@@ -309,7 +309,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.3
+Optics Framework 1.11.4
 ```
 
 ### Create a project
@@ -480,7 +480,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.3
+Optics Framework 1.11.4
 ```
 
 **Installer options**
@@ -488,7 +488,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.3` | `OPTICS_VERSION` | Install a specific release. |
+| `--version 1.11.4` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
@@ -557,7 +557,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
-  ✅ optics-framework                  installed, version 1.11.3
+  ✅ optics-framework                  installed, version 1.11.4
 
 Engines
   ⚠️ Appium                            appium-python-client not installed
@@ -3018,7 +3018,7 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.11.3"
+          pip install "optics-framework[playwright]==1.11.4"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
@@ -3045,7 +3045,7 @@ jobs:
 optics-web:
   image: python:3.12-bookworm
   script:
-    - pip install "optics-framework[playwright]==1.11.3"
+    - pip install "optics-framework[playwright]==1.11.4"
     - python -m playwright install --with-deps chromium
     - optics execute birch-tests --no-use-printer
   artifacts:
@@ -3109,7 +3109,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.11.3"
+          pip install "optics-framework[appium]==1.11.4"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -3151,7 +3151,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.11.3`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Pin the Optics version** (`optics-framework==1.11.4`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.
@@ -3186,7 +3186,7 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 
 ## The configuration
 
-- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.3`). Upgrade on purpose, in its own change.
+- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.4`). Upgrade on purpose, in its own change.
 - [ ] **Only the engines you use are enabled.** Every enabled OCR or image engine loads at the start of each run, even when no step needs it.
 - [ ] **No secrets are in `config.yaml` or the suite files.** Keep API keys in environment variables, and refer to them as `api_key: ${GEMINI_API_KEY}`. Keep passwords in CI secrets.
 - [ ] **The project folder holds one config file** and no stray copies of old suites. Optics reads every CSV and YAML in the folder.
@@ -5938,7 +5938,7 @@ It listens on `http://127.0.0.1:8000`. Check it's up:
 
 ```shell
 $ curl http://127.0.0.1:8000/health
-{"status":"Optics Framework API is running","version":"1.11.3"}
+{"status":"Optics Framework API is running","version":"1.11.4"}
 ```
 
 Use `--port` to change the port. Interactive API docs are at `http://127.0.0.1:8000/docs` while the server runs.
@@ -6775,7 +6775,7 @@ Source: https://optics-framework.org/docs/reference/
 
 > Look up every command, setting, file format and keyword.
 
-These pages describe Optics 1.11.3 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
+These pages describe Optics 1.11.4 exactly as it behaves. Use them when you know what you want to do and need the precise name, flag, column or code.
 
 If you're new to Optics, start with the [quickstart](https://optics-framework.org/docs/get-started/quickstart) and come back here when you need a detail.
 
@@ -8622,7 +8622,7 @@ Source: https://optics-framework.org/docs/reference/cli
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.3.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.4.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -8634,7 +8634,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.3` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.4` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -10859,7 +10859,7 @@ The server does not read config.yaml or the test files of your project. Each ses
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.3"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.4"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -11102,7 +11102,7 @@ Source: https://optics-framework.org/docs/reference/errors
 
 > Learn what each Optics error code means and how to fix it.
 
-When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.3 and what to do about each one.
+When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.4 and what to do about each one.
 
 ## How codes are built
 
@@ -11205,7 +11205,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 ## Reserved codes
 
-These codes exist in Optics 1.11.3, but nothing raises them. If you see one, it came from a newer version or your own code.
+These codes exist in Optics 1.11.4, but nothing raises them. If you see one, it came from a newer version or your own code.
 
 | Code | Default message |
 |---|---|
@@ -11723,7 +11723,7 @@ Source: https://optics-framework.org/docs/help/faq
 
 > Learn what Optics can and can't do, with short answers to the questions people ask most.
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.3.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.4.
 
 ## About Optics
 

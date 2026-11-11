@@ -2,7 +2,7 @@
 
 > Learn what each Optics error code means and how to fix it.
 
-When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.3 and what to do about each one.
+When a step or command fails, Optics usually attaches a code such as `E0201`. The code tells you which part of Optics failed, and the message after it says why. This page lists every code in Optics 1.11.4 and what to do about each one.
 
 ## How codes are built
 
@@ -105,7 +105,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 ## Reserved codes
 
-These codes exist in Optics 1.11.3, but nothing raises them. If you see one, it came from a newer version or your own code.
+These codes exist in Optics 1.11.4, but nothing raises them. If you see one, it came from a newer version or your own code.
 
 | Code | Default message |
 |---|---|
