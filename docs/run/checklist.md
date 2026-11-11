@@ -17,7 +17,7 @@ A suite that passes on your laptop can still be flaky, slow or hard to debug in 
 
 ## The configuration
 
-- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.3`). Upgrade on purpose, in its own change.
+- [ ] **The Optics version is pinned** in CI (`optics-framework==1.11.4`). Upgrade on purpose, in its own change.
 - [ ] **Only the engines you use are enabled.** Every enabled OCR or image engine loads at the start of each run, even when no step needs it.
 - [ ] **No secrets are in `config.yaml` or the suite files.** Keep API keys in environment variables, and refer to them as `api_key: ${GEMINI_API_KEY}`. Keep passwords in CI secrets.
 - [ ] **The project folder holds one config file** and no stray copies of old suites. Optics reads every CSV and YAML in the folder.
