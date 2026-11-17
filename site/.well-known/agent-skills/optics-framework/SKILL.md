@@ -40,6 +40,7 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      or other UI automation on it. If the optics tools are missing, start a new agent session.
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
+   Use `batch` for several `tap`, `type_text` or `press_key` steps on one screen, such as a form.
    Every action returns what changed on screen; call `observe` only to search the rows
    (`query`), get a screenshot, or list every row.
 3. `check` waits for text to be present or absent. `run_keyword` runs any other keyword, such as
