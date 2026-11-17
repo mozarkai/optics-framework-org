@@ -21,7 +21,7 @@ Optics is open-source test automation for Android, iOS, web, TV and desktop. Wri
 1. **Write it.** Elements, modules and test cases are plain CSV or YAML. The same keywords are also a Python library and a Robot Framework library.
 2. **Record it.** Run keywords one at a time in `optics live` next to your device. Every step that works is recorded, and `/save` writes the recording into your suite as a reusable module.
 3. **Describe it.** Press Ctrl+N in `optics live` and describe the flow. An AI model (Gemini, Claude, OpenAI or a local one) drives the device a step at a time, then keeps only the steps that mattered.
-4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through ten tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
+4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through eleven tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
 
 ## Every way ends in plain text
 
