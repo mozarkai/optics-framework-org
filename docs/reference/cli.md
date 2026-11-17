@@ -156,6 +156,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
+| Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS a reminder of the Accessibility and Screen Recording permissions. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](/docs/platforms/desktop#check-and-run). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
 | Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, `bundleId` on iOS, and `app` or `appName` on a desktop). |
 
