@@ -244,13 +244,21 @@ Use `appName` in place of `app` to test an app that is already open. The session
 
 ## Use a Host on a different computer
 
-Appium has no authentication. Keep it on `127.0.0.1`, and connect to it through a tunnel:
+Appium has no authentication. Keep it on `127.0.0.1`, and connect to it through a tunnel. Use a local port other than 4723, for example 4733:
 
 ```shell
-$ ssh -N -L 4723:127.0.0.1:4723 user@host
+$ ssh -N -o ExitOnForwardFailure=yes -L 4733:127.0.0.1:4723 user@host
 ```
 
-Then keep `url: "http://127.0.0.1:4723"` in `config.yaml`. Each step is one round trip through the tunnel, so a suite is slower over a network. To write and try a suite, run Optics on your computer. For CI and long suites, run Optics on the Host.
+A local Appium often uses port 4723. Then the tunnel cannot use `127.0.0.1:4723`, and Optics connects to the local Appium, not to the Host. With `ExitOnForwardFailure=yes`, `ssh` stops when it cannot open the local port.
+
+Set `url: "http://127.0.0.1:4733"` in `config.yaml`, and check that the Host answers:
+
+```shell
+$ curl -s http://127.0.0.1:4733/status
+```
+
+Each step is one round trip through the tunnel, so a suite is slower over a network. To write and try a suite, run Optics on your computer. For CI and long suites, run Optics on the Host.
 
 ### Run a Linux Host in Docker
 
