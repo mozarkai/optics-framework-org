@@ -146,7 +146,7 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
-For a desktop app, give the app and the OS. The session starts the app:
+For a desktop app, give the app and the OS. The session starts the app. On macOS, it attaches to the app if the app runs:
 
 ```json
 {
@@ -157,7 +157,7 @@ For a desktop app, give the app and the OS. The session starts the app:
 }
 ```
 
-`app` is a bundle id or `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, and `launch_app` opens another app in the same session. See [Test desktop apps](/docs/platforms/desktop).
+`app` is an app name, a bundle id or an `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, and `launch_app` opens another app in the same session. See [Test desktop apps](/docs/platforms/desktop).
 
 ### Sign in with a browser profile
 

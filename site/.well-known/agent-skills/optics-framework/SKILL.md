@@ -32,7 +32,8 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      `http://127.0.0.1:4723`); the device goes in the capabilities (`udid`, `deviceName`, ...).
    - Desktop (macOS, Linux, Windows): Appium with appium-xa11y-driver must run on the computer
      that shows the app. `capabilities: {"platformName": "Mac", "automationName": "Xa11y"}`
-     (or `Linux`, `Windows`) and `app`: a bundle id on macOS, an executable elsewhere.
+     (or `Linux`, `Windows`) and `app`: an app name such as `TextEdit` or a bundle id on macOS,
+     an executable elsewhere. On macOS, a session attaches to an app that runs already.
      `press_key` takes a key combination such as `primary+s`; `"back"` fails on a desktop.
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.

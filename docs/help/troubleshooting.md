@@ -356,9 +356,9 @@ Break the goal into smaller instructions, and use the words shown on screen. See
 
 The capabilities name no app. Without one, the driver would attach to the app in front, which can be your terminal. Set `app` to start the app, or `appName` to attach to an app that runs. See [Write config.yaml](/docs/platforms/desktop#write-config-yaml).
 
-### Keys or clicks fail with "is not the frontmost app" {#desktop-not-frontmost}
+### Keys or clicks fail with "did not come to the front" {#desktop-not-frontmost}
 
-A different app is in front, for example a system dialog. The driver sends no keys or clicks, because they would go to that app. Close the other app's window, or add a Launch App step to bring your app to the front.
+The driver tried to bring your app to the front, but a different window stays in front, for example a system alert. The driver sends no keys or clicks, because they can go to that window. Close that window, then run the step again.
 
 ### Nothing works on macOS after the setup script {#desktop-mac-permissions}
 

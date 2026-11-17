@@ -46,19 +46,23 @@ The setup script installs its own Node.js, Appium 3 and the driver. You do not n
 
 Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. It is safe to run the script again: it changes only what is missing.
 
+Download the script to a temporary folder, not to your project. Do not send it to `bash` through a pipe: the script copies its own file to make the service script `host.sh`.
+
 :::tabs{group="desktop"}
 ::tab[macOS]
 ```shell
-$ curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/mac/setup.sh
-$ bash setup.sh
+$ setup="$(mktemp -d)/setup.sh"
+$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/mac/setup.sh
+$ bash "$setup"
 ```
 
 The service is the LaunchAgent `appium-xa11y`. Its log is `~/Library/Logs/appium-xa11y.log`.
 
 ::tab[Linux]
 ```shell
-$ curl -fsSLO https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/linux/setup.sh
-$ bash setup.sh
+$ setup="$(mktemp -d)/setup.sh"
+$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/linux/setup.sh
+$ bash "$setup"
 ```
 
 The script installs Xvfb, Openbox, D-Bus and AT-SPI with `apt`. That step needs root: run the script as root, or with `sudo` access. If the script cannot get root, it prints the command to run yourself.
@@ -69,8 +73,9 @@ The service is the systemd user unit `appium-xa11y`. It uses the X11 display tha
 In PowerShell:
 
 ```powershell
-PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.2/hosts/windows/setup.ps1 -OutFile setup.ps1
-PS> powershell -ExecutionPolicy Bypass -File setup.ps1
+PS> $setup = Join-Path $env:TEMP 'setup.ps1'
+PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/windows/setup.ps1 -OutFile $setup
+PS> powershell -ExecutionPolicy Bypass -File $setup
 ```
 
 The service is the logon task `appium-xa11y` of the user that runs the script. That user must stay logged on to the desktop. The log is `%LOCALAPPDATA%\appium-xa11y\appium.log`.
@@ -212,11 +217,17 @@ Set `app` or `appName`. If you set neither, the session fails with E0104. Withou
 
 | OS | `app` | Example | How to find it |
 |---|---|---|---|
-| macOS | A bundle id or an `.app` path | `com.apple.TextEdit`, `/Applications/Calculator.app` | `osascript -e 'id of app "TextEdit"'` |
+| macOS | The name of an installed app, a bundle id or an `.app` path | `TextEdit`, `com.apple.TextEdit`, `/Applications/Calculator.app` | `mdls -name kMDItemCFBundleIdentifier -r /System/Applications/TextEdit.app` |
 | Linux | An executable on the `PATH`, or a full path | `mousepad`, `/usr/bin/gnome-calculator` | `which mousepad` |
 | Windows | An executable on the `PATH`, or a full path | `notepad.exe`, `C:\Program Files\App\app.exe` | `where notepad` |
 
+On macOS, the driver finds an app name such as `TextEdit` as `TextEdit.app` in the app folders. Upper and lower case are the same. If the app runs when the session starts, the session attaches to it and brings it to the front. The session does not stop that app when it ends.
+
 On Windows, some executables are launchers that start a different process and exit, for example `calc.exe`. The session attaches to the app that the launcher starts.
+
+:::warning
+On macOS, the driver starts a Chromium app, such as an Electron app or Spotify, with `--force-renderer-accessibility`. This flag puts the web content of the app in the tree. If the app runs without the flag and refuses to give its web tree, the driver quits the app and starts it again. Save your work in that app before the session starts.
+:::
 
 ### Attach to an app that runs
 
@@ -246,7 +257,7 @@ Then keep `url: "http://127.0.0.1:4723"` in `config.yaml`. Each step is one roun
 The driver has a Dockerfile for a Linux Host with Xvfb and the sample apps:
 
 ```shell
-$ git clone --branch v0.1.2 https://github.com/chinmayajha/appium-xa11y-driver
+$ git clone --branch v0.1.3 https://github.com/chinmayajha/appium-xa11y-driver
 $ docker build -f appium-xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux appium-xa11y-driver
 $ docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
 ```
@@ -388,7 +399,7 @@ Add numbers,Force Terminate App,gnome-calculator
 Back to the editor,Launch App
 ```
 
-Keys, typing and mouse actions go to the app in front. If a different app is in front, for example a system dialog, the step fails and sends nothing. Use Launch App to bring the app back to the front.
+Keys, typing and mouse actions go only to the app of the session. Before each of these steps, the driver brings that app to the front. If a different window stays in front, for example a system alert, the step fails and sends nothing.
 
 ## Keywords that differ on a desktop
 
@@ -447,7 +458,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: chinmayajha/appium-xa11y-driver
-          ref: v0.1.2
+          ref: v0.1.3
           path: xa11y-driver
       - name: Start the Linux Host
         run: |
@@ -473,7 +484,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: chinmayajha/appium-xa11y-driver
-          ref: v0.1.2
+          ref: v0.1.3
           path: xa11y-driver
       - name: Prepare the Windows Host
         shell: powershell
@@ -519,9 +530,9 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **No answer from `http://127.0.0.1:4723/status`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
-- **"'<app>' showed no window, and started no app of its own, within 20000 ms".** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
+- **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
 - **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.
-- **"<app> is not the frontmost app (<other> is)".** A different app is in front, so keys and clicks would go to it. Close the dialog that is in front, or use Launch App to bring your app to the front.
+- **"<app> did not come to the front (<other> stays frontmost, ...)".** A different window stays in front, for example a system alert, and keys and clicks can go to it. Close that window, then run the step again.
 - **"Unknown key '<name>'".** Press Keycode got a key name that the driver does not know. Use a name from [Press keys and key combinations](#press-keys-and-key-combinations).
 - **E0105: "'go_back' is not supported on Mac".** The keyword works only on phones. See [Keywords that differ on a desktop](#keywords-that-differ-on-a-desktop).
 - **"DISPLAY ':1' is not a local X11 display".** On Linux, the driver needs a local X11 display. Remove the `--display` option and run the setup script again, so that it starts Xvfb.
