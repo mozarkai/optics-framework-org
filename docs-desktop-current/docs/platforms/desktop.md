@@ -465,7 +465,7 @@ Type,Execute Script,"{""script"": ""xa11y: typeText"", ""args"": {""text"": ""vi
 | Method | Arguments | What it does |
 |---|---|---|
 | `xa11y: chord` | `keys` | Presses a chord, as Press Keycode does |
-| `xa11y: typeText` | `text` | Types into the app in front |
+| `xa11y: typeText` | `text` | Types into the app of the session |
 | `xa11y: focusWindow` | `name` (optional) | Brings a window to the front |
 | `xa11y: closeWindow` | `name` (optional) | Closes a window |
 | `xa11y: launch` | `app`, `arguments` (optional) | Starts an app, and the session follows it |
@@ -597,7 +597,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
 - **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.
-- **"<app> did not come to the front (<other> stays frontmost, ...)".** A different window stays in front, for example a system alert, so keys and clicks would go to it. Close that window, then run the step again.
+- **"<app> did not come to the front (<other> stays frontmost, ...)".** A different window stays in front, for example a system alert, and keys and clicks can go to it. Close that window, then run the step again.
 - **"Unknown key '<name>'".** Press Keycode got a key name that the driver does not know. Use a name from [Press keys and key combinations](#press-keys-and-key-combinations).
 - **E0105: "'go_back' is not supported on Mac".** The keyword works only on phones. See [Keywords that differ on a desktop](#keywords-that-differ-on-a-desktop).
 - **"DISPLAY ':1' is not a local X11 display".** On Linux, the driver needs a local X11 display. Remove the `--display` option and run the setup script again, so that it starts Xvfb.

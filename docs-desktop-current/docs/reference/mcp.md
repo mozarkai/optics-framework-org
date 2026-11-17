@@ -47,7 +47,7 @@ $ claude mcp add -s user optics -- ~/.optics/bin/optics mcp
 
 Without `-s user`, the server works only in the current folder. The installer adds `~/.optics/bin` to `PATH` only in new terminals, so give the full path.
 
-Most other agents read a JSON file that lists MCP servers. For Claude Desktop it's `claude_desktop_config.json`. Claude Code also reads `.mcp.json` in your project. Other agents use the same shape.
+Most other agents read a JSON file that lists MCP servers. For Claude Desktop, the file is `claude_desktop_config.json`. Claude Code also reads `.mcp.json` in your project. Other agents use the same shape.
 
 `.mcp.json`:
 
@@ -62,7 +62,7 @@ Most other agents read a JSON file that lists MCP servers. For Claude Desktop it
 }
 ```
 
-If your agent can't find `optics`, use the full path to it, for example `/Users/ana/.optics/bin/optics`. Agents do not expand `~` in a JSON file.
+If your agent cannot find `optics`, use the full path to it, for example `/Users/ana/.optics/bin/optics`. Agents do not expand `~` in a JSON file.
 
 An agent reads its MCP servers when a session starts. After you add the server, start a new session, then make sure that the optics tools, such as `start_session`, are in its tool list.
 

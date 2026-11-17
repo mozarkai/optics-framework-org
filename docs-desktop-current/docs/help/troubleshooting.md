@@ -361,7 +361,7 @@ The capabilities name no app. Without one, the driver would attach to the app in
 
 ### Keys or clicks fail with "did not come to the front"
 
-The driver tried to bring your app to the front, but a different window stays in front, for example a system alert. The driver sends no keys or clicks, because they would go to that window. Close that window, then run the step again.
+The driver tried to bring your app to the front, but a different window stays in front, for example a system alert. The driver sends no keys or clicks, because they can go to that window. Close that window, then run the step again.
 
 ### Nothing works on macOS after the setup script
 
