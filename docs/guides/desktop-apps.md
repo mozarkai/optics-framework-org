@@ -81,6 +81,7 @@ Run the suite with `optics execute`, as you would a phone suite. The driver give
 ## See also
 
 - [Test desktop apps](/docs/platforms/desktop), the full desktop reference
+- [Drive a desktop app from an AI agent](/docs/platforms/desktop#drive-a-desktop-app-from-an-ai-agent)
 - [Supported platforms](/docs/platforms/)
 - [Press Keycode](/docs/reference/keywords/actions#press-keycode)
 - [Define elements](/docs/elements/define)
