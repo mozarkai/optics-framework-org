@@ -126,7 +126,24 @@ $ optics doctor notes
 $ optics execute notes
 ```
 
-`optics doctor` can warn that `adb` is missing. A desktop project does not need adb, so you can ignore it. Then `optics execute` runs the sample:
+The Desktop section of `optics doctor` checks that Appium answers and that appium-xa11y-driver is installed. On macOS, it also shows the two permissions, but it cannot read them. Doctor looks for the driver in `APPIUM_HOME`, or in `~/.appium` when `APPIUM_HOME` is not set. The setup script installs the driver in a different folder, so give that folder to doctor:
+
+:::tabs{group="desktop"}
+::tab[macOS]
+```shell
+$ APPIUM_HOME="$HOME/Library/Application Support/appium-xa11y/appium-home" optics doctor notes
+```
+::tab[Linux]
+```shell
+$ APPIUM_HOME="$HOME/.local/share/appium-xa11y/appium-home" optics doctor notes
+```
+::tab[Windows]
+```powershell
+PS> $env:APPIUM_HOME = "$env:LOCALAPPDATA\appium-xa11y\appium-home"; optics doctor notes
+```
+:::
+
+`optics doctor` can also warn that `adb` is missing. A desktop project does not need adb, so you can ignore it. Then `optics execute` runs the sample:
 
 ```terminal
 │ Total Test Cases: 3 | Passed: 3 | Failed: 0 │
