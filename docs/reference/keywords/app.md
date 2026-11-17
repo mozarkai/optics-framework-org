@@ -43,7 +43,7 @@ Good to know:
 - With no parameters, Launch App uses the app, URL and browser from your [config](https://optics-framework.org/docs/reference/config). On Playwright, it opens the browser and no page.
 - On Selenium, `app_identifier` and `app_activity` apply only when Launch App starts the session. Later calls reopen the configured URL.
 - On Playwright, a second Launch App opens the URL in the same browser. The `browser`, `headless`, `viewport` and `device` capabilities set the browser. See [Web](https://optics-framework.org/docs/platforms/web#emulate-a-phone).
-- On a desktop, Launch App starts `app` from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: a bundle id or `.app` path on macOS, an executable on Linux and Windows. See [Desktop](https://optics-framework.org/docs/platforms/desktop#work-with-more-than-one-app).
+- On a desktop, Launch App starts `app` from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: an app name, a bundle id or an `.app` path on macOS, an executable on Linux and Windows. See [Desktop](https://optics-framework.org/docs/platforms/desktop#work-with-more-than-one-app).
 - The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.
 
 ### Start Appium Session

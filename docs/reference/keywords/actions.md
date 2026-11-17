@@ -240,7 +240,7 @@ Good to know:
 - Special keys such as `<enter>` aren't recognized here. They're typed as text. Use Enter Text Using Keyboard for keys.
 - On iOS, the step fails with error E0401 when no field has keyboard focus. Tap the field first.
 - On Samsung Tizen and LG webOS TVs, the step fails with error E0105. Use Enter Text with an element.
-- On a desktop, the keys go to the app in front. If a different app is in front, the step fails and types nothing.
+- On a desktop, the driver first brings the app of the session to the front. If a different window stays in front, the step fails and types nothing.
 
 ### Enter Text Using Keyboard
 

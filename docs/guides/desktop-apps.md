@@ -12,7 +12,7 @@ The driver reads the accessibility tree of the OS. You pick the OS with `platfor
 
 | OS | `platformName` | `app` | Status |
 |---|---|---|---|
-| macOS | `Mac` | A bundle id, such as `com.apple.TextEdit` | Supported |
+| macOS | `Mac` | An app name or a bundle id, such as `TextEdit` or `com.apple.TextEdit` | Supported |
 | Linux (X11) | `Linux` | An executable, such as `mousepad` | Supported |
 | Windows | `Windows` | An executable, such as `notepad.exe` | Experimental |
 
@@ -65,7 +65,7 @@ Elements are XPath over the accessibility tree, such as `//button[@name="Save"]`
 ## Keep desktop tests reliable
 
 - **Start each app clean.** On macOS, add `appArguments: ["-ApplePersistenceIgnoreState", "YES"]`, so the app does not open old documents.
-- **Keep your app in front.** Keys and clicks go to the app in front. A dialog of a different app makes the step fail. Use Launch App to bring the app back.
+- **Close system alerts.** Before keys and clicks, the driver brings your app to the front. A system alert that stays in front makes the step fail.
 - **Use ids on macOS and Windows.** An `@id` stays the same when the label text changes. Linux has no ids, so use `@name` there.
 - **Run Optics on the Host in CI.** Each step is one round trip, so a tunnel makes a suite slower.
 
@@ -76,6 +76,7 @@ Run the suite with `optics execute`, as you would a phone suite. The driver give
 ## See also
 
 - [Test desktop apps](https://optics-framework.org/docs/platforms/desktop), the full desktop reference
+- [Drive a desktop app from an AI agent](https://optics-framework.org/docs/platforms/desktop#drive-a-desktop-app-from-an-ai-agent)
 - [Supported platforms](https://optics-framework.org/docs/platforms/)
 - [Press Keycode](https://optics-framework.org/docs/reference/keywords/actions#press-keycode)
 - [Define elements](https://optics-framework.org/docs/elements/define)

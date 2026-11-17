@@ -20,6 +20,7 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
 - CLI: https://optics-framework.org/docs/reference/cli.md
 - Error codes: https://optics-framework.org/docs/reference/errors.md
 - Mobile web (Chrome, Safari, WebViews): https://optics-framework.org/docs/platforms/mobile-web.md
+- Desktop apps (macOS, Linux, Windows): https://optics-framework.org/docs/platforms/desktop.md
 
 ## Drive a device or browser over MCP
 
@@ -32,10 +33,14 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      `http://127.0.0.1:4723`); the device goes in the capabilities (`udid`, `deviceName`, ...).
    - Desktop (macOS, Linux, Windows): Appium with appium-xa11y-driver must run on the computer
      that shows the app. `capabilities: {"platformName": "Mac", "automationName": "Xa11y"}`
-     (or `Linux`, `Windows`) and `app`: a bundle id on macOS, an executable elsewhere.
+     (or `Linux`, `Windows`) and `app`: an app name such as `TextEdit` or a bundle id on macOS,
+     an executable elsewhere. On macOS, a session attaches to an app that runs already.
      `press_key` takes a key combination such as `primary+s`; `"back"` fails on a desktop.
+     Do every step on the app with these tools. Do not use AppleScript, `osascript`, `xdotool`
+     or other UI automation on it. If the optics tools are missing, start a new agent session.
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
+   Use `batch` for several `tap`, `type_text` or `press_key` steps on one screen, such as a form.
    Every action returns what changed on screen; call `observe` only to search the rows
    (`query`), get a screenshot, or list every row.
 3. `check` waits for text to be present or absent. `run_keyword` runs any other keyword, such as
