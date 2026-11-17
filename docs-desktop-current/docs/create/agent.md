@@ -100,7 +100,7 @@ $ optics execute checkout
 The server gives the agent:
 
 - **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
-- **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app` and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
+- **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` (several steps on one screen, such as a form) and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
 - **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
 
 The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict. Optics waits up to 5 seconds for that text, so a page that loads late can still pass.

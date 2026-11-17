@@ -97,6 +97,7 @@ source .venv/bin/activate
 pip install optics-framework">Copy</button><pre><code><span class="prompt">$</span> <b>python3</b> <span class="c-info">-m</span> venv .venv
 <span class="prompt">$</span> <b>source</b> .venv/bin/activate
 <span class="prompt">$</span> <b>pip</b> install optics-framework</code></pre></figure></div></div>
+<p>The installer also prints the command that adds Optics to Claude Code, with the full path of <code class="ic">optics</code>. See <a href="../../docs/create/agent">Let your AI agent build tests</a>.</p>
 <p>Open a new terminal so it picks up the updated PATH, then check the install:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics --version">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> <span class="c-info">--version</span>
 Optics Framework 1.11.4</code></pre></figure>
@@ -122,6 +123,7 @@ Optics Framework 1.11.4</code></pre></figure>
 
 Core
   ✅ python                            3.12.13
+      → informational — optics needs Python 3.12+
   ✅ optics-framework                  installed, version 1.11.4
 
 Engines

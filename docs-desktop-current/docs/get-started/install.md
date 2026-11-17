@@ -39,6 +39,8 @@ $ source .venv/bin/activate
 $ pip install optics-framework
 ```
 
+The installer also prints the command that adds Optics to Claude Code, with the full path of `optics`. See [Let your AI agent build tests](https://optics-framework.org/docs/create/agent).
+
 Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
@@ -120,6 +122,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
+      → informational — optics needs Python 3.12+
   ✅ optics-framework                  installed, version 1.11.4
 
 Engines

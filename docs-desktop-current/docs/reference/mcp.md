@@ -29,7 +29,7 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|
 | `--transport` | `stdio` | `stdio`: your agent starts the server and talks to it directly. `http`: the server listens at `http://<host>:<port>/mcp`. |
 | `--host` | `127.0.0.1` | The address to listen on. `http` only. |
 | `--port` | `8090` | The port to listen on. `http` only. |
-| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 10 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
+| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 11 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
 
 We recommend `stdio` for an agent on your own machine. Use `http` when the server runs in a container or on another machine.
 
@@ -101,7 +101,7 @@ A tap on a ref uses a locator that matches only that element. The agent can also
 
 ## Core tools
 
-The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
+The default toolset has 11 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -113,6 +113,7 @@ The default toolset has 10 tools. Every tool except `start_session` takes `sessi
 | `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
 | `press_key` | `key` | `back` runs `go_back` on any driver. Another value runs `press_keycode`: a key name such as `Enter`, `Escape`, `esc` or `ArrowDown`, or an Android KeyEvent number such as `66`. On the web, case and a `KEYCODE_` prefix do not matter. A ref is refused with a hint to use `tap`. |
 | `launch_app` | `app` ("") | Opens an app id or a URL. Empty opens the configured app. |
+| `batch` | `steps` (1–12 items: `tool` is `tap`, `type_text` or `press_key`, `target`, and `text` for `type_text`) | Runs the steps in order on one screen, such as a form, and stops at the first that fails. `expect_present` and `expect_absent` check the screen after the last step. |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–30) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
 
@@ -253,7 +254,7 @@ Start the server with `--toolset full`, or set `OPTICS_MCP_TOOLSET=full`, to add
 
 The full toolset also has:
 
-- The 10 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
+- The 11 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
 - `screenshot`, which returns the screen as a PNG image.
 - Deprecated keywords, `swipe`, `get_interactive_elements`, `initialise_setup`, `start_appium_session` and `get_driver_session_id`.
 

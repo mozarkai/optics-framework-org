@@ -29,7 +29,7 @@ Optics is open-source test automation for Android, iOS, web, TV and desktop. Wri
 1. **Write it.** Elements, modules and test cases are plain CSV or YAML. The same keywords are also a Python library and a Robot Framework library.
 2. **Record it.** Run keywords one at a time in `optics live` next to your device. Every step that works is recorded, and `/save` writes the recording into your suite as a reusable module.
 3. **Describe it.** Press Ctrl+N in `optics live` and describe the flow. An AI model (Gemini, Claude, OpenAI or a local one) drives the device a step at a time, then keeps only the steps that mattered.
-4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through ten tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
+4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through eleven tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
 
 ## Every way ends in plain text
 
@@ -476,6 +476,8 @@ $ source .venv/bin/activate
 $ pip install optics-framework
 ```
 
+The installer also prints the command that adds Optics to Claude Code, with the full path of `optics`. See [Let your AI agent build tests](https://optics-framework.org/docs/create/agent).
+
 Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
@@ -557,6 +559,7 @@ $ optics doctor
 
 Core
   ✅ python                            3.12.13
+      → informational — optics needs Python 3.12+
   ✅ optics-framework                  installed, version 1.11.4
 
 Engines
@@ -1570,7 +1573,7 @@ $ optics execute checkout
 The server gives the agent:
 
 - **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
-- **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app` and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
+- **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` (several steps on one screen, such as a form) and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
 - **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
 
 The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict. Optics waits up to 5 seconds for that text, so a page that loads late can still pass.
@@ -6706,7 +6709,7 @@ Optics has four ways to create a test, and each writes the same files:
 - [Describe it](https://optics-framework.org/docs/create/describe) in plain English, and an AI model drives the app.
 - [Delegate it](https://optics-framework.org/docs/create/agent) to your AI agent through `optics mcp`.
 
-The `optics mcp` server gives the agent ten tools to look, tap, type, scroll and check, plus `run_keyword` for every other keyword. Each action returns what changed on screen. After the run, the agent reads the recorded steps as a ready suite for `optics execute`. See the [MCP server reference](https://optics-framework.org/docs/reference/mcp).
+The `optics mcp` server gives the agent eleven tools to look, tap, type, scroll and check. One of them, `run_keyword`, runs every other keyword. Each action returns what changed on screen. After the run, the agent reads the recorded steps as a ready suite for `optics execute`. See the [MCP server reference](https://optics-framework.org/docs/reference/mcp).
 
 Maestro has [Maestro Studio](https://docs.maestro.dev/maestro-studio), a desktop app for building and debugging flows visually. Its [MCP server](https://docs.maestro.dev/get-started/maestro-mcp) ships inside the CLI. It lets the agent inspect the screen, take screenshots, run inline YAML and submit runs to Maestro Cloud, and it includes Maestro Viewer, a web view of the device.
 
@@ -10536,7 +10539,7 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|
 | `--transport` | `stdio` | `stdio`: your agent starts the server and talks to it directly. `http`: the server listens at `http://<host>:<port>/mcp`. |
 | `--host` | `127.0.0.1` | The address to listen on. `http` only. |
 | `--port` | `8090` | The port to listen on. `http` only. |
-| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 10 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
+| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 11 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
 
 We recommend `stdio` for an agent on your own machine. Use `http` when the server runs in a container or on another machine.
 
@@ -10608,7 +10611,7 @@ A tap on a ref uses a locator that matches only that element. The agent can also
 
 ## Core tools
 
-The default toolset has 10 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
+The default toolset has 11 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -10620,6 +10623,7 @@ The default toolset has 10 tools. Every tool except `start_session` takes `sessi
 | `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
 | `press_key` | `key` | `back` runs `go_back` on any driver. Another value runs `press_keycode`: a key name such as `Enter`, `Escape`, `esc` or `ArrowDown`, or an Android KeyEvent number such as `66`. On the web, case and a `KEYCODE_` prefix do not matter. A ref is refused with a hint to use `tap`. |
 | `launch_app` | `app` ("") | Opens an app id or a URL. Empty opens the configured app. |
+| `batch` | `steps` (1–12 items: `tool` is `tap`, `type_text` or `press_key`, `target`, and `text` for `type_text`) | Runs the steps in order on one screen, such as a form, and stops at the first that fails. `expect_present` and `expect_absent` check the screen after the last step. |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–30) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
 
@@ -10760,7 +10764,7 @@ Start the server with `--toolset full`, or set `OPTICS_MCP_TOOLSET=full`, to add
 
 The full toolset also has:
 
-- The 10 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
+- The 11 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
 - `screenshot`, which returns the screen as a PNG image.
 - Deprecated keywords, `swipe`, `get_interactive_elements`, `initialise_setup`, `start_appium_session` and `get_driver_session_id`.
 
