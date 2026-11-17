@@ -504,7 +504,7 @@ driver_sources:
       capabilities:
         platformName: Mac              # or Linux, Windows
         automationName: Xa11y
-        app: com.apple.TextEdit        # a bundle id or .app path on macOS, an executable elsewhere
+        app: com.apple.TextEdit        # an app name, bundle id or .app path on macOS, an executable elsewhere
         appArguments: ["-ApplePersistenceIgnoreState", "YES"]
 elements_sources:
   - appium_find_element: {enabled: true}

@@ -435,7 +435,7 @@ Type,Execute Script,"{""script"": ""xa11y: typeText"", ""args"": {""text"": ""vi
 | Method | Arguments | What it does |
 |---|---|---|
 | `xa11y: chord` | `keys` | Presses a chord, as Press Keycode does |
-| `xa11y: typeText` | `text` | Types into the app in front |
+| `xa11y: typeText` | `text` | Types into the app of the session |
 | `xa11y: focusWindow` | `name` (optional) | Brings a window to the front |
 | `xa11y: closeWindow` | `name` (optional) | Closes a window |
 | `xa11y: launch` | `app`, `arguments` (optional) | Starts an app, and the session follows it |
