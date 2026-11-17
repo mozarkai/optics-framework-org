@@ -277,9 +277,12 @@ if ($onPath) {
 }
 
 Write-Host ''
-Write-Host 'Next: optics quickstart'
-Write-Host '      Builds a project, checks your setup, and runs your first test.' -ForegroundColor DarkGray
-Write-Host 'Docs: https://optics-framework.org/docs/get-started/first-test?ref=installer'
+Write-Host 'Next:    optics quickstart'
+Write-Host '         Builds a project, checks your setup, and runs your first test.' -ForegroundColor DarkGray
+Write-Host "Agent:   claude mcp add -s user optics -- `"$Shim`" mcp"
+Write-Host '         Lets your AI agent drive apps. Start a new agent session to see the tools.' -ForegroundColor DarkGray
+Write-Host 'Desktop: https://optics-framework.org/docs/platforms/desktop?ref=installer'
+Write-Host 'Docs:    https://optics-framework.org/docs/get-started/first-test?ref=installer'
 Write-Host ''
 } } catch [System.OperationCanceledException] {
     # The reason is already printed. A downloaded script reports failure to its
