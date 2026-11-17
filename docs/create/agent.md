@@ -31,8 +31,10 @@ $ pip install "optics-framework[mcp]"
 :::tabs{group="client"}
 ::tab[Claude Code]
 ```shell
-$ claude mcp add optics -- optics mcp
+$ claude mcp add -s user optics -- ~/.optics/bin/optics mcp
 ```
+
+`-s user` adds the server for all your folders, not only the current folder. Give the full path of `optics`, because the installer adds `~/.optics/bin` to `PATH` only in new terminals. If you installed with pip, use the path that `command -v optics` shows.
 ::tab[Claude Desktop]
 Add this to `claude_desktop_config.json` (**Settings → Developer → Edit config**), then restart Claude Desktop:
 
@@ -65,7 +67,11 @@ Add this to `.vscode/mcp.json`:
 ```
 :::
 
-If your client can't find `optics`, use its full path, for example `~/.optics/bin/optics`.
+If your client cannot find `optics`, use its full path, for example `/Users/ana/.optics/bin/optics`. Clients do not expand `~` in a JSON file. To see the path, run `command -v optics` in a new terminal.
+
+### Check that the tools are there
+
+Your client reads its MCP servers when a session starts. A session that was open when you added the server does not show the optics tools. Start a new session, or restart the client. Then make sure that the tool list has the optics tools, such as `start_session`. In Claude Code, run `/mcp`, or run `claude mcp list` in a terminal.
 
 ### Ask for a test
 
