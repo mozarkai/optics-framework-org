@@ -444,11 +444,36 @@ Type,Execute Script,"{""script"": ""xa11y: typeText"", ""args"": {""text"": ""vi
 
 To keep the result, for example the list of windows, add `store_as=name`. Other scripts fail with `unknown method`. The driver cannot run JavaScript.
 
+## Drive a desktop app from an AI agent
+
+An AI agent can drive a desktop app through the [optics MCP server](/docs/create/agent). The agent reads the tree of the app as rows, acts on one row, and sees what changed. Optics keeps each step, so the agent can write a suite that `optics execute` runs again.
+
+:::steps
+### Add the server to your agent
+
+[Add Optics to your client](/docs/create/agent#add-optics-to-your-client), then start a new agent session. A session that was open before does not show the optics tools.
+
+### Ask for the flow
+
+Give the Appium URL, the OS and the app:
+
+```text
+Use the optics tools to start an appium session at http://127.0.0.1:4723
+with platformName Mac, automationName Xa11y and app TextEdit.
+Type a note, check it, then write the steps as an Optics suite in ./notes.
+```
+
+For a Host on a different computer, give the local port of the tunnel, for example `http://127.0.0.1:4733`.
+:::
+
+:::important
+Tell the agent to use only the optics tools on the app. Do not let it click, type or read the app with AppleScript, `osascript`, `xdotool` or PowerShell. These tools do not wait for the app, do not show what changed, and do not keep steps for a suite.
+:::
+
 ## Use other parts of Optics
 
 - **[Error detection](/docs/run/error-detection) and [self-heal](/docs/elements/self-heal)** read the page source, so they work on a desktop.
 - **[OCR and images](/docs/elements/text-and-images)** work with `appium_screenshot`. On macOS, screenshots need the Screen & System Audio Recording permission.
-- **[The MCP server](/docs/reference/mcp)** starts a desktop session with `driver: appium`, the `app`, and the capabilities above. An AI agent can then drive the app.
 - **[Python](/docs/create/python), [Robot Framework](/docs/create/robot) and [the HTTP API](/docs/advanced/http-api)** take the same config.
 
 ## Run in CI
