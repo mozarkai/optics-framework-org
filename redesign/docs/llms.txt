@@ -49,6 +49,7 @@
 - [Test websites](https://optics-framework.org/docs/platforms/web.md): Set up Playwright or Selenium, then run your tests in a browser.
 - [Test mobile websites and WebViews](https://optics-framework.org/docs/platforms/mobile-web.md): Test web pages in Chrome, Safari and in-app WebViews on a real phone, in the same session as the native app.
 - [Test TV apps](https://optics-framework.org/docs/platforms/tv.md): Drive Android TV, Samsung Tizen and LG webOS apps with remote-control keys and focus.
+- [Test desktop apps on macOS, Linux and Windows](https://optics-framework.org/docs/platforms/desktop.md): Test native desktop apps on macOS, Linux and Windows. Optics reads the accessibility tree of the OS through Appium.
 - [Test production devices](https://optics-framework.org/docs/platforms/production.md): Test locked devices and live apps through a Bluetooth mouse and keyboard and a camera.
 
 ## Advanced
@@ -65,6 +66,7 @@
 
 - [Guides and comparisons](https://optics-framework.org/docs/guides/index.md): Find the page for a job you have in mind, or see how Optics compares with tools you already know.
 - [Test Android TV, Samsung Tizen and LG webOS apps with one framework](https://optics-framework.org/docs/guides/smart-tv-apps.md): Test Android TV, Samsung Tizen and LG webOS apps with one tool and remote-control keys.
+- [Test macOS, Linux and Windows desktop apps with one framework](https://optics-framework.org/docs/guides/desktop-apps.md): Test native desktop apps on macOS, Linux and Windows with the same CSV tests that you use for phones and browsers.
 - [Test apps that block screenshots or USB debugging](https://optics-framework.org/docs/guides/protected-apps.md): Automate a banking or streaming app on a locked phone, with a Bluetooth dongle for input and a camera for eyes.
 - [Let your AI agent drive a real phone over MCP](https://optics-framework.org/docs/guides/ai-agent-phone.md): Give Claude Code, Cursor or Codex eyes and hands on a real Android phone or iPhone over MCP.
 - [Optics vs Maestro](https://optics-framework.org/docs/guides/optics-vs-maestro.md): Compare two open-source UI test frameworks on platforms, test format, finding elements, TVs, AI agents and where tests run.

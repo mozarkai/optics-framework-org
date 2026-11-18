@@ -10,13 +10,18 @@ Both are slower than the UI tree, so Optics only uses them after the faster ways
 
 ### Install an OCR engine
 
-We recommend EasyOCR. It runs on your machine and needs no account.
+We recommend Apple Vision on a Mac and RapidOCR everywhere else. Both run on your machine, need no account and work offline.
+
+**macOS**
 
 ```shell
-$ optics setup --install easyocr
+$ optics setup --install apple-vision
 ```
+**Linux and Windows**
 
-The first run downloads EasyOCR's models, which takes a minute.
+```shell
+$ optics setup --install rapidocr
+```
 
 ### Enable it, and a screenshot source
 
@@ -34,7 +39,7 @@ elements_sources:
       enabled: true
 
 text_detection:
-  - easyocr:
+  - rapidocr:             # apple_vision on a Mac
       enabled: true
 ```
 
@@ -44,13 +49,33 @@ Nothing changes in your tests. Any text value, such as `Press Element,Trail Runn
 
 Without an OCR engine, a text miss ends with "OCR was not tried: no text_detection engine is configured."
 
+### How OCR matches text
+
+OCR looks for your text as words in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
+
+By default, your text can also be a part of a word. Set `strict_element_match: true` in `config.yaml` to find complete words only.
+
+| Text value | On the screen | Found | Found when strict |
+|---|---|---|---|
+| `Sign in` | "Sign in to your account" | Yes | Yes |
+| `sign IN` | "Sign in" | Yes | Yes |
+| `World clock` | "World" at the end of one line, "clock" at the start of the next | Yes, and the tap goes to "World" | Yes |
+| `Pay` | "Payment" | Yes | No |
+| `Sign in.` | "Sign in" | No | No |
+
+In Chinese, Japanese, Thai and other scripts with no spaces between words, each character counts as a word, so `设置` finds "打开设置页面". Arabic and Hebrew are read from right to left.
+
+When the text shows more than once, `index` picks one: `0` is the first. Complete words come first, then parts of words. Each group is counted from the top and then from left to right.
+
 ### OCR engines
 
 | Engine | Name in config | Install | Good to know |
 |---|---|---|---|
-| EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
+| Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.2 s for a phone screenshot, and good on camera pictures. |
+| RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 1 s for a phone screenshot, and good on camera pictures. |
+| EasyOCR | `easyocr` | `optics setup --install easyocr` | Local. Needs a GPU to be quick: 15 s or more for a phone screenshot on a CPU. Reads English. |
 | Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
-| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
+| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
 List more than one engine and Optics tries them in order.

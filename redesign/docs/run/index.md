@@ -73,7 +73,7 @@ $ optics execute birch-tests --include "shopper can*" --exclude "Shopper can che
 
 - Matching ignores case. `*` and `?` are wildcards.
 - You can use both flags. Optics applies `--include` first.
-- Suite Setup and Suite Teardown always run.
+- Suite Setup and Suite Teardown always stay in the run.
 - A name that matches no test case stops the run before it starts, with exit code `3`. The message suggests the correct name.
 
 `optics dry_run` takes the same flags. To keep a selection for every run, put `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude). The flags replace them for one run.

@@ -7,6 +7,14 @@
     <description>Articles, videos and posts about Optics, the open-source test automation framework.</description>
     <language>en</language>
     <item>
+      <title>Self-heal broken locators with a 2B model on your own GPU</title>
+      <link>https://optics-framework.org/blog/small-model-self-heal</link>
+      <guid isPermaLink="true">https://optics-framework.org/blog/small-model-self-heal</guid>
+      <pubDate>Mon, 09 Nov 2026 00:00:00 GMT</pubDate>
+      <category>Article</category>
+      <description>I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.</description>
+    </item>
+    <item>
       <title>Your AI agent writes the test once. Optics runs it with no model.</title>
       <link>https://optics-framework.org/blog/ai-agent-writes-the-test-once</link>
       <guid isPermaLink="true">https://optics-framework.org/blog/ai-agent-writes-the-test-once</guid>

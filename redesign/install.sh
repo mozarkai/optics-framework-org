@@ -296,7 +296,10 @@ else
 fi
 
 say ""
-say "${B}Next:${R} optics quickstart"
-say "      ${DIM}Builds a project, checks your setup, and runs your first test.${R}"
-say "${B}Docs:${R} https://optics-framework.org/docs/get-started/first-test?ref=installer"
+say "${B}Next:${R}    optics quickstart"
+say "         ${DIM}Builds a project, checks your setup, and runs your first test.${R}"
+say "${B}Agent:${R}   claude mcp add -s user optics -- \"$BIN/optics\" mcp"
+say "         ${DIM}Lets your AI agent drive apps. Start a new agent session to see the tools.${R}"
+say "${B}Desktop:${R} https://optics-framework.org/docs/platforms/desktop?ref=installer"
+say "${B}Docs:${R}    https://optics-framework.org/docs/get-started/first-test?ref=installer"
 say ""

@@ -1,10 +1,10 @@
 # Optics: create it your way, run it forever
 
-Optics is open-source test automation for Android, iOS, web and TV. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
+Optics is open-source test automation for Android, iOS, web, TV and desktop. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
 
 - Install (macOS and Linux): `curl -fsSL https://optics-framework.org/install | sh`
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
-- Install (pip): `pip install optics-framework`
+- Install (pip): `pip install "optics-framework[mcp]"`
 - Licence: Apache 2.0. Needs Python 3.12 or newer.
 - Docs: https://optics-framework.org/docs/ (every page is also Markdown; index for agents: https://optics-framework.org/docs/llms.txt)
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
@@ -68,7 +68,7 @@ Every element can have several identities, tried cheapest first:
 
 1. **XPath:** a native query through the accessibility tree.
 2. **Text:** the visible text, CSS or class in the page source.
-3. **OCR:** reads the screenshot with EasyOCR, Tesseract or Google Vision.
+3. **OCR:** reads the screenshot with Apple Vision, RapidOCR, EasyOCR, Tesseract or Google Vision.
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
 
@@ -100,7 +100,7 @@ A locked phone through Bluetooth and a camera. A TV through its remote. A game t
 
 - **On every build:** in CI. `optics execute` exits with 1 when a test fails, and the JUnit report becomes a check on the pull request. On-screen error detection runs too. GitLab and Android versions: https://optics-framework.org/docs/run/ci
 - **Before every release:** on your own emulator or device, with annotated screenshots.
-- **On every device:** Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium; web through Selenium or Playwright.
+- **On every device:** Android, iOS, Android TV, Samsung Tizen, LG webOS and macOS, Linux and Windows desktop apps through Appium; web through Selenium or Playwright.
 - **In production:** on a schedule against your live app, including a Bluetooth driver for locked-down devices.
 
 ```yaml
@@ -118,7 +118,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.2"
+      - run: pip install "optics-framework[playwright]==1.11.4"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()
@@ -172,6 +172,7 @@ Paste one line into Claude Code, Codex, Cursor or any agent that runs commands. 
 
 ## From the blog
 
+- [Self-heal broken locators with a 2B model on your own GPU](https://optics-framework.org/blog/small-model-self-heal.md): article, 9 Nov 2026, by Chinmay Jha. I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.
 - [Your AI agent writes the test once. Optics runs it with no model.](https://optics-framework.org/blog/ai-agent-writes-the-test-once.md): article, 20 Oct 2026, by Chinmay Jha. An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.
 - [Your tests passed. Your app didn't.](https://optics-framework.org/blog/your-tests-passed-your-app-didnt.md): article, 16 Oct 2026, by Chinmay Jha. Error definitions catch crash dialogs, "Session expired" and other error screens that no step checked for. List the messages in one CSV file, and Optics looks for them on the last screen of every run.
 - [Introducing Optics Framework: create a test your way, run it forever](https://optics-framework.org/blog/introducing-optics-framework.md): article, 11 Oct 2026, by Chinmay Jha. Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.

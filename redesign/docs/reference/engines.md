@@ -12,12 +12,12 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
+| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV, macOS, Linux and Windows desktop apps |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
 | `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
-The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](https://optics-framework.org/docs/platforms/android) and [Test iOS apps](https://optics-framework.org/docs/platforms/ios).
+The Appium server itself, and its UiAutomator2, XCUITest or Xa11y driver, aren't Python packages. Install and start them separately. See [Test Android apps](https://optics-framework.org/docs/platforms/android), [Test iOS apps](https://optics-framework.org/docs/platforms/ios) and [Test desktop apps](https://optics-framework.org/docs/platforms/desktop#set-up-the-host).
 
 ## Element sources
 
@@ -25,9 +25,9 @@ An element source is how Optics looks at the screen for a driver. They need no e
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV |
-| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV |
-| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV |
+| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV, desktop |
+| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV, desktop |
+| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV, desktop |
 | `appium_web` | `appium` | Finds `css=` and DOM XPath locators in web pages in the phone's browser and in WebViews. Lists interactive elements. | Android, iOS |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
@@ -41,16 +41,18 @@ Only `appium_page_source`, `appium_web` and `playwright_page_source` can list in
 
 ## Text recognition (OCR)
 
-OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Enable engines under `text_detection`.
+OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Every engine matches text the same way: [complete words, in order](https://optics-framework.org/docs/elements/text-and-images#how-ocr-matches-text). Enable engines under `text_detection`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
+| `apple_vision` | `apple-vision` | Local OCR with the macOS Vision framework. The fastest and most accurate engine: about 0.2 s for a phone screenshot, and it reads blurred camera pictures well. `recognition_level` is `accurate` (default) or `fast`; `languages` defaults to `["en-US"]`. | macOS |
+| `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 1 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
+| `easyocr` | `easyocr` | Local OCR. Slow on CPU (15 s or more for a phone screenshot). Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
-We recommend `easyocr` to start with. It needs nothing else installed.
+We recommend `apple_vision` on a Mac and `rapidocr` everywhere else. Neither needs anything else installed.
 
 ## Image matching
 
@@ -71,7 +73,7 @@ An LLM powers [AI self-heal](https://optics-framework.org/docs/elements/self-hea
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Each engine reads its credentials from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
+Each engine reads its API key from `capabilities.api_key` in config.yaml, else from the environment. See [llm_models](https://optics-framework.org/docs/reference/config#llm-models) for its settings and credentials.
 
 ## Other extras
 
@@ -87,9 +89,9 @@ A bundle installs several extras at once.
 |---|---|
 | `mobile` | `appium` |
 | `web` | `selenium`, `playwright` |
-| `vision` | `easyocr`, `pytesseract`, `google-vision` |
+| `vision` | `apple-vision` (macOS only), `rapidocr`, `easyocr`, `pytesseract`, `google-vision` |
 | `llm` | `gemini`, `openai`, `anthropic` |
-| `all` | `appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`. Not `mcp`. |
+| `all` | `appium`, `ble`, `selenium`, `playwright`, `apple-vision` (macOS only), `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`. Not `mcp`. |
 
 ## Install with optics setup
 
@@ -102,7 +104,7 @@ optics setup [--install NAME [NAME ...]] [--list]
 Without flags, it opens a picker with a checkbox for each engine. In scripts and CI, name the engines:
 
 ```shell
-$ optics setup --install appium easyocr
+$ optics setup --install appium rapidocr
 $ optics setup --install web gemini
 $ optics setup --install appium==6.1.2
 ```
@@ -119,14 +121,16 @@ Available engines (install with `optics setup --install <name>`):
 
 Action Drivers:
   appium          (appium-python-client)
-  ble             (pyserial)
+  ble             (airhand)
   selenium        (selenium)
   playwright      (playwright)
 
 OCR Engines:
+  apple-vision    (pyobjc-framework-vision)
+  rapidocr        (rapidocr, onnxruntime)
   easyocr         (easyocr)
   pytesseract     (pytesseract, pillow)
-  google-vision   (google-cloud-vision)
+  google-vision   (google-cloud-vision, google-auth)
 
 LLM Engines:
   gemini          (google-genai)
@@ -136,9 +140,9 @@ LLM Engines:
 Bundles (install several at once):
   mobile          (appium)
   web             (selenium, playwright)
-  vision          (easyocr, pytesseract, google-vision)
+  vision          (apple-vision, rapidocr, easyocr, pytesseract, google-vision)
   llm             (gemini, openai, anthropic)
-  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
+  all             (appium, ble, selenium, playwright, apple-vision, rapidocr, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
 ```
 
 On success, Optics reminds you that services such as the Appium server still need to be started separately. Run `optics doctor` to confirm each engine shows ✅.
@@ -148,12 +152,12 @@ On success, Optics reminds you that services such as the Appium server still nee
 Name the extras in brackets:
 
 ```shell
-$ pip install "optics-framework[appium,easyocr]"
+$ pip install "optics-framework[appium,rapidocr]"
 $ pip install "optics-framework[playwright]" && playwright install chromium
 $ pip install "optics-framework[mcp]"
 ```
 
-If you installed Optics with the [install script](https://optics-framework.org/docs/reference/cli#install-scripts), pass extras with `--extra appium,easyocr` (or `OPTICS_EXTRA` on Windows).
+If you installed Optics with the [install script](https://optics-framework.org/docs/reference/cli#install-scripts), pass extras with `--extra appium,rapidocr` (or `OPTICS_EXTRA` on Windows).
 
 ## Where installs are refused
 
@@ -162,8 +166,8 @@ If you installed Optics with the [install script](https://optics-framework.org/d
 | Environment | What to do instead |
 |---|---|
 | Conda | Use a virtual environment. EasyOCR and Optics need conflicting versions of NumPy under Conda. |
-| `pipx` | Reinstall with the extras: `pipx install --force "optics-framework[appium,easyocr]"`, or add packages with `pipx inject optics-framework <package>`. |
-| `uv tool` or `uvx` | Reinstall with the extras: `uv tool install "optics-framework[appium,easyocr]"`. |
+| `pipx` | Reinstall with the extras: `pipx install --force "optics-framework[appium,rapidocr]"`, or add packages with `pipx inject optics-framework <package>`. |
+| `uv tool` or `uvx` | Reinstall with the extras: `uv tool install "optics-framework[appium,rapidocr]"`. |
 | A project managed by uv, Poetry, PDM or Pipenv | Add the extra with your tool, for example `uv add "optics-framework[appium]"` or `poetry add "optics-framework[appium]"`. |
 | System Python marked as externally managed | Use a virtual environment. |
 | Read-only site-packages | Use a virtual environment you can write to. |

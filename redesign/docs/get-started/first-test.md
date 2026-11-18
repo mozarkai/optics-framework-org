@@ -166,7 +166,7 @@ A test is only useful if it fails when the app is broken. Pretend the store rena
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ Shopper can add a backpack → step 'Assert Presence (Removed)' — Keyword      │
-│ 'Assert Presence' failed after fallback attempts; last error: Code.E0201:    │
+│ 'Assert Presence' failed after fallback attempts; last error: E0201:         │
 │ ['Removed'] not found based on rule 'any'. OCR was not tried: no             │
 │ text_detection engine is configured.                                         │
 ╰──────────────────────────────────────────────────────────────────────────────╯

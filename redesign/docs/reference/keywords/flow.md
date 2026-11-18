@@ -111,7 +111,7 @@ The conditions are checked in order. The first true one runs its target, and the
 A condition is one of two kinds:
 
 - **A module name.** Optics runs that module. If every step passes, the condition is true. Start the name with `!` to flip it: `!Is Signed In` is true when the module fails.
-- **An expression.** Each `${name}` is replaced with its value in double quotes, so compare it with a quoted literal. You can use `==`, `!=`, `and`, `or` and `not`. Start the expression with `!` to negate it.
+- **An expression.** Each `${name}` is replaced with its value as quoted text, so compare it with a quoted literal. You can use `==`, `!=`, `in`, `not in`, `and`, `or` and `not`. Start the expression with `!` to negate it. An expression that Optics refuses fails with E0406, also with `!`.
 
 ```csv
 Start,Condition,Is Signed In,Go Home,Sign In
@@ -157,6 +157,8 @@ The query has parts separated by `;`:
 - A filter such as `tier == 'gold'` keeps the matching rows. Several filters must all match.
 - `${name}` inside the query is replaced with its value in single quotes, so write `email == ${email}`.
 
+A filter compares columns with values. You can use `== != < <= > >=`, `and`, `or`, `not`, and `column in ['a', 'b']` or `not in`. Put a column name that has spaces between backticks: `` `user tier` == 'gold' ``. Optics refuses arithmetic on columns, function calls, and the pandas operators `&`, `|` and `~`, with E0406. Write `and`, `or` and `not` instead.
+
 Given this data file:
 
 `test_data/users.csv`:
@@ -183,7 +185,8 @@ Good to know:
 
 - Every cell is read as text, so filters must compare text: `age == '30'`. `age > 26` fails with error E0403.
 - Narrow the result to one row and one column. One row with several columns is stored joined by commas, such as `ana@birch.example,gold`. Several rows are stored in a form you can't use in a step.
-- A query that matches nothing fails with "No data found". A missing column fails with error E0403. A missing file or environment variable fails with error E0501.
+- A query that matches nothing fails with "No data found". A missing column fails with error E0403: "Column '<name>' is not in the data." A filter that compares no column also fails with E0403. A missing file or environment variable fails with error E0501.
+- `optics serve` and `optics mcp` refuse a file and `ENV:` with E0501. Send the data in the request instead.
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
 - **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
@@ -210,9 +213,10 @@ Cart,Evaluate,${greeting},'Hello ' + '${first_name}'
 
 Good to know:
 
-- Each `${name}` is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: `'${first_name}'`.
-- You can use numbers, quoted text, lists, `+ - * / % **`, comparisons, `and`, `or`, `not` and `x if condition else y`.
-- Function calls such as `int(...)` or `len(...)` aren't allowed. They fail with "Unsafe expression".
+- Each `${name}` is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: `'${first_name}'`. An unknown name fails with E0403.
+- You can use numbers, quoted text, lists, `+ - * / % **`, comparisons, `in`, `and`, `or`, `not` and `x if condition else y`.
+- Optics computes the expression itself and runs no Python. Function calls such as `int(...)` or `len(...)` are not allowed. They fail with E0406: "Expression '<expression>' refused: only these calls are allowed: none."
+- Optics also refuses an expression that is too large, with E0406. The limits are 100,000 characters, 2,000 parts, numbers of 10,000 bits, and 1,000,000 items in one value.
 - The result is saved as text. A comparison saves `True` or `False`.
 - In CSV, wrap an expression that contains commas in double quotes.
 
@@ -321,11 +325,11 @@ Good to know:
 - `${name}` is replaced anywhere in the endpoint, headers and body. A missing variable fails the step.
 - The body is sent as JSON. Every request has a 30-second timeout.
 - `extract` maps a variable name to a JSONPath. `$.a.b`, `a.b` and `[0]` indexing all work.
-- Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step.
+- Each `jsonpath_assertions` entry checks the value at `path`. In `condition`, `$` stands for that value, as in `len($) > 0` or `$ == 'ok'`. A false condition fails the step. A condition can call only `len`, `str`, `int`, `float` and `bool`. Other calls fail with E0406.
 - With `expected_result.expected_status` set, the step fails when the response has another HTTP status, such as `API 'Ping' returned status 200, expected 201.` The check runs before Optics extracts a value or runs an assertion. The failure has no error code.
 - `json_schema` and `request.timeout` are accepted but not checked yet. Use a `jsonpath_assertions` entry to check the response instead.
 - With `expected_result`, a response that isn't JSON fails the step with error E0403.
-- Each call is logged to `api_details.log` and `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
+- Each call is logged to `api_details.log`, one JSON object for each line, and to `api_details.har` in the run's output folder. See [Results](https://optics-framework.org/docs/run/results).
 - The top-level key must be `api:`. A file that starts with `apis:` is ignored.
 
 See [Call APIs from a test](https://optics-framework.org/docs/advanced/api-calls) for a full walkthrough.
