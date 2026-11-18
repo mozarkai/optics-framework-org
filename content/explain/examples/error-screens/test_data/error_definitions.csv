@@ -1,0 +1,5 @@
+error_code,match_string,description,severity
+ERR_CRASH,has stopped,The app crashed with a system dialog,critical
+ERR_NOT_RESPONDING,isn't responding,Android shows an ANR dialog,critical
+ERR_SESSION,Session expired,The user was signed out,high
+ERR_NETWORK,No internet connection,The app lost its connection,medium

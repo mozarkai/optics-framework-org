@@ -49,6 +49,8 @@ Add To Cart,Enter Text,${search_bar},trail runner
 Add To Cart,Press Element,Add to cart
 ```
 
+[Explain a suite](https://optics-framework.org/explain) reads one row by row and shows what `optics dry_run` would report.
+
 ## Run a suite
 
 `optics execute <folder>` replays the suite step by step. `optics dry_run <folder>` validates every keyword, element and module reference without a device. Each run writes:

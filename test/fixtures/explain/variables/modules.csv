@@ -1,0 +1,20 @@
+module_name,module_step,param_1,param_2,param_3,param_4
+Uses Later Value,Assert Equality,${total},3
+Prepare,Get Text,${label},store_as=prepared
+Keep Total,Get Text,${label},store_as=total
+Use Total,Assert Equality,${total},${prepared}
+Load,Read Data,${user_email},test_data/users.csv,tier == 'gold';select=email
+Load,Enter Text,${label},${user_email}
+Compute,Evaluate,${sum},${total} + 1
+Compute,Date Evaluate,${when},2026-10-10,+5 days
+Compute,Assert Equality,${sum},${when}
+Looping,Run Loop,Each,${size},US 9|US 10
+Looping,Press Element,${size}
+Call,Invoke API,birch.login
+Call,Enter Text,${label},${auth_token}
+Branch,Condition,${nobody} == 'x',Each
+Branch Whole,Condition,${flag},Each
+Store Named,Get Text,${label},store_as=${named}
+Store Named,Assert Equality,${named},Hi ${named} and $${raw}
+Finish,Press Element,${prepared}
+Each,Press Element,${size}

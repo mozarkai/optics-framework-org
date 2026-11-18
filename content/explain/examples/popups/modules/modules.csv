@@ -1,0 +1,14 @@
+module_name,module_step,param_1,param_2,param_3,param_4,param_5
+Launch Birch,Launch App,com.birch.shop
+Launch Birch,Detect And Press,Allow notifications,5
+Launch Birch,Detect And Press,${not_now},5
+Is Signed In,Assert Presence,Picked for you,5
+Start Shopping,Condition,Is Signed In,Go To Search,Sign In
+Start Shopping,Condition,!Is Signed In,Sign In
+Go To Search,Press Element,${search_bar}
+Sign In,Enter Text,${email_field},ava@birch.shop
+Sign In,Press Element,${sign_in}
+Choose Payment,Condition,${payment} == 'card',Pay By Card,${payment} == 'wallet',Pay By Wallet,Pay On Delivery
+Pay By Card,Press Element,Card
+Pay By Wallet,Press Element,Birch Wallet
+Pay On Delivery,Press Element,Cash on delivery

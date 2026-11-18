@@ -1,0 +1,37 @@
+api:
+  collections:
+    birch:
+      name: "Birch API"
+      base_url: "https://api.birch.example"
+      global_headers:
+        content-type: "application/json"
+      apis:
+        login:
+          name: "Sign in"
+          endpoint: "/v1/token"
+          request:
+            method: POST
+            body:
+              email: "${api_email}"
+              password: "${api_password}"
+          expected_result:
+            expected_status: 200
+            jsonpath_assertions:
+              - path: $.token
+                condition: "len($) > 0"
+            extract:
+              auth_token: $.token
+        create_order:
+          name: "Place an order"
+          endpoint: "/v1/orders"
+          request:
+            method: POST
+            headers:
+              Authorization: "Bearer ${auth_token}"
+            body:
+              sku: "TR2-US9"
+              quantity: 1
+          expected_result:
+            expected_status: 201
+            extract:
+              order_number: $.order.number

@@ -1,0 +1,4 @@
+test_case,test_step
+Suite Setup,Open Birch
+Browse after a long break,Browse The Shop
+Suite Teardown,Close Birch

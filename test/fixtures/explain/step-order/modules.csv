@@ -1,0 +1,11 @@
+module_name,module_step,param_1,param_2
+A,Pres Element,${missing}
+B,Pres Element,${missing},Hi ${nobody}
+C,Pres Element,${here}
+D,Asert Presense,${here}
+E,Tap,${here}
+F,  PRESS   element ,${here}
+G,press_element,${here},store_as=
+H,Launch App,com.birch.shop
+,Press Element,${here}
+H,,${here}

@@ -1,0 +1,1126 @@
+{
+ "version": "1.11.4",
+ "keywords": [
+  {
+   "slug": "close_and_terminate_app",
+   "group": "AppManagement",
+   "params": []
+  },
+  {
+   "slug": "force_terminate_app",
+   "group": "AppManagement",
+   "params": [
+    {
+     "name": "app_name",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "get_app_version",
+   "group": "AppManagement",
+   "params": [
+    {
+     "name": "app_package",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "get_driver_session_id",
+   "group": "AppManagement",
+   "params": []
+  },
+  {
+   "slug": "initialise_setup",
+   "group": "AppManagement",
+   "params": []
+  },
+  {
+   "slug": "launch_app",
+   "group": "AppManagement",
+   "params": [
+    {
+     "name": "app_identifier",
+     "default": null
+    },
+    {
+     "name": "app_activity",
+     "default": null
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "launch_other_app",
+   "group": "AppManagement",
+   "params": [
+    {
+     "name": "app_name",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "start_appium_session",
+   "group": "AppManagement",
+   "params": [
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "clear_element_text",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "detect_and_press",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "default": "30"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "enter_number",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "number",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "enter_text",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "text",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "enter_text_direct",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "text",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "enter_text_using_keyboard",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "text_input",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "execute_script",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "script_or_json",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "get_text",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "index",
+     "default": "0"
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    }
+   ]
+  },
+  {
+   "slug": "go_back",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "press_by_coordinates",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "coor_x",
+     "required": true
+    },
+    {
+     "name": "coor_y",
+     "required": true
+    },
+    {
+     "name": "repeat",
+     "default": "1"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "press_by_percentage",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "percent_x",
+     "required": true
+    },
+    {
+     "name": "percent_y",
+     "required": true
+    },
+    {
+     "name": "repeat",
+     "default": "1"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "press_checkbox",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "press_element",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "repeat",
+     "default": "1"
+    },
+    {
+     "name": "offset_x",
+     "default": "0"
+    },
+    {
+     "name": "offset_y",
+     "default": "0"
+    },
+    {
+     "name": "index",
+     "default": "0"
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "press_keycode",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "keycode",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "press_radio_button",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "scroll",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "direction",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "scroll_from_element",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "required": true
+    },
+    {
+     "name": "scroll_length",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "scroll_until_element_appears",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "select_dropdown_option",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "option",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "default": "30"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "sleep",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "duration",
+     "required": true
+    }
+   ]
+  },
+  {
+   "slug": "swipe",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "coor_x",
+     "required": true
+    },
+    {
+     "name": "coor_y",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "default": "right"
+    },
+    {
+     "name": "swipe_length",
+     "default": "50"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "swipe_by_percentage",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "percent_x",
+     "required": true
+    },
+    {
+     "name": "percent_y",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "default": "right"
+    },
+    {
+     "name": "swipe_length",
+     "default": "50"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "swipe_from_element",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "required": true
+    },
+    {
+     "name": "swipe_length",
+     "required": true
+    },
+    {
+     "name": "aoi_x",
+     "default": "0"
+    },
+    {
+     "name": "aoi_y",
+     "default": "0"
+    },
+    {
+     "name": "aoi_width",
+     "default": "100"
+    },
+    {
+     "name": "aoi_height",
+     "default": "100"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "index",
+     "default": "0"
+    }
+   ]
+  },
+  {
+   "slug": "swipe_seekbar_to_right_android",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "swipe_until_element_appears",
+   "group": "ActionKeyword",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "direction",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "assert_equality",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "output",
+     "required": true
+    },
+    {
+     "name": "expression",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "assert_presence",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "elements",
+     "required": true
+    },
+    {
+     "name": "timeout_str",
+     "default": "30"
+    },
+    {
+     "name": "rule",
+     "default": "any"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "fail",
+     "default": "True"
+    }
+   ]
+  },
+  {
+   "slug": "assert_text",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "expected",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "default": "10"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "assert_visibility",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "elements",
+     "required": true
+    },
+    {
+     "name": "timeout_str",
+     "default": "30"
+    },
+    {
+     "name": "rule",
+     "default": "any"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    },
+    {
+     "name": "fail",
+     "default": "True"
+    }
+   ]
+  },
+  {
+   "slug": "capture_pagesource",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "capture_screenshot",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "get_interactive_elements",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "filter_config",
+     "default": null
+    },
+    {
+     "name": "compact",
+     "default": "False"
+    }
+   ]
+  },
+  {
+   "slug": "get_screen_elements",
+   "group": "Verifier",
+   "params": []
+  },
+  {
+   "slug": "is_element",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "element_state",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "required": true
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "validate_element",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "element",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "default": "10"
+    },
+    {
+     "name": "rule",
+     "default": "all"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "validate_screen",
+   "group": "Verifier",
+   "params": [
+    {
+     "name": "elements",
+     "required": true
+    },
+    {
+     "name": "timeout",
+     "default": "30"
+    },
+    {
+     "name": "rule",
+     "default": "any"
+    },
+    {
+     "name": "event_name",
+     "default": null
+    }
+   ]
+  },
+  {
+   "slug": "condition",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "args",
+     "variadic": true
+    }
+   ],
+   "substitutesOwnVars": true
+  },
+  {
+   "slug": "date_evaluate",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "param1",
+     "required": true
+    },
+    {
+     "name": "param2",
+     "required": true
+    },
+    {
+     "name": "param3",
+     "required": true
+    },
+    {
+     "name": "param4",
+     "default": "%d %B"
+    }
+   ],
+   "raw": [
+    0
+   ],
+   "definesVariable": true
+  },
+  {
+   "slug": "evaluate",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "param1",
+     "required": true
+    },
+    {
+     "name": "param2",
+     "required": true
+    }
+   ],
+   "raw": [
+    0
+   ],
+   "substitutesOwnVars": true,
+   "definesVariable": true
+  },
+  {
+   "slug": "execute_module",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "module_name",
+     "required": true
+    }
+   ]
+  },
+  {
+   "slug": "invoke_api",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "api_identifier",
+     "required": true
+    }
+   ]
+  },
+  {
+   "slug": "read_data",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "input_element",
+     "required": true
+    },
+    {
+     "name": "file_path",
+     "required": true
+    },
+    {
+     "name": "query",
+     "default": ""
+    }
+   ],
+   "raw": [
+    0
+   ],
+   "substitutesOwnVars": true,
+   "definesVariable": true
+  },
+  {
+   "slug": "run_loop",
+   "group": "FlowControl",
+   "params": [
+    {
+     "name": "target",
+     "required": true
+    },
+    {
+     "name": "args",
+     "variadic": true
+    }
+   ],
+   "raw": [
+    1,
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15
+   ]
+  }
+ ],
+ "yamlArity": {
+  "clear_element_text": 7,
+  "detect_and_press": 3,
+  "enter_number": 8,
+  "enter_text": 8,
+  "enter_text_direct": 2,
+  "enter_text_using_keyboard": 2,
+  "execute_script": 2,
+  "get_text": 6,
+  "go_back": 1,
+  "press_by_coordinates": 4,
+  "press_by_percentage": 4,
+  "press_checkbox": 7,
+  "press_element": 10,
+  "press_keycode": 2,
+  "press_radio_button": 7,
+  "scroll": 2,
+  "scroll_from_element": 9,
+  "scroll_until_element_appears": 4,
+  "select_dropdown_option": 4,
+  "sleep": 1,
+  "swipe": 5,
+  "swipe_by_percentage": 5,
+  "swipe_from_element": 9,
+  "swipe_seekbar_to_right_android": 2,
+  "swipe_until_element_appears": 4,
+  "close_and_terminate_app": 0,
+  "force_terminate_app": 2,
+  "get_app_version": 1,
+  "get_driver_session_id": 0,
+  "initialise_setup": 0,
+  "launch_app": 3,
+  "launch_other_app": 2,
+  "start_appium_session": 1,
+  "condition": null,
+  "date_evaluate": 4,
+  "evaluate": 2,
+  "execute_module": 1,
+  "invoke_api": 1,
+  "read_data": 3,
+  "run_loop": null,
+  "assert_equality": 3,
+  "assert_presence": 5,
+  "assert_text": 4,
+  "assert_visibility": 5,
+  "capture_pagesource": 1,
+  "capture_screenshot": 1,
+  "get_interactive_elements": 2,
+  "get_screen_elements": 0,
+  "is_element": 4,
+  "validate_element": 4,
+  "validate_screen": 4,
+  "press_element_with_index": 3,
+  "quit": 0
+ },
+ "codes": {
+  "E0101": "Driver not initialized",
+  "E0102": "Failed to start session",
+  "E0103": "Failed to end session",
+  "E0104": "Driver config incomplete",
+  "E0105": "Keyword not supported on this device platform",
+  "E0106": "Driver session is no longer active",
+  "W0104": "Driver config incomplete (warning)",
+  "E0201": "Element not found",
+  "X0201": "Element not found after all fallbacks",
+  "E0202": "Unsupported operation for element source",
+  "W0203": "Element format mismatch",
+  "E0204": "Timeout locating element",
+  "E0205": "Invalid element type",
+  "E0301": "Screenshot disabled",
+  "W0302": "Fallback to next camera supported driver",
+  "E0303": "Screenshot empty/black",
+  "E0304": "Image too large to decode or not a valid image",
+  "E0401": "Action failed",
+  "X0401": "Action failed with exception",
+  "E0402": "Keyword not found",
+  "E0403": "Invalid keyword parameters",
+  "W0404": "Keyword deprecated",
+  "E0405": "Action ran, but the screen does not show its result",
+  "E0406": "Expression or filter refused: unsafe or too costly",
+  "E0501": "Missing required files",
+  "X0502": "File read exception",
+  "E0503": "Config parser error (important param)",
+  "W0503": "Config parser warning (can be ignored)",
+  "E0601": "Module not found",
+  "W0602": "No valid instances, ignoring it",
+  "E0603": "Factory init failed",
+  "X0604": "Import related problem",
+  "E0701": "Execution failed",
+  "E0702": "Test case not found",
+  "E0703": "Parameter resolution failed",
+  "E0704": "Test case timeout",
+  "W0705": "Test case skipped",
+  "E0706": "Run stopped before the test case finished",
+  "E0801": "Unexpected error",
+  "E0802": "Unhandled exception",
+  "E0901": "Named element not defined in this project"
+ }
+}

@@ -1,0 +1,21 @@
+Test Cases:
+  - Suite Setup:
+      - Open Birch
+  - Fill the cart:
+      - Search Shoes
+      - Fill Cart
+Modules:
+  - Open Birch:
+      - Launch App com.birch.shop
+      - Detect And Press "Not now" 5
+  - Search Shoes:
+      - Enter Text ${search_bar} "trail runner"
+      - Sleep 2
+      - Press Element "Trail Runner 2" index=1
+  - Fill Cart:
+      - Run Loop "Add Product" ${size} "US 9|US 10"
+  - Add Product:
+      - Press Element ${size}
+      - Press Element "Add to cart"
+Elements:
+  search_bar: ["//*[@resource-id='com.birch.shop:id/search']", Search Birch]

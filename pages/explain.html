@@ -1,0 +1,34 @@
+      <div class="xp">
+        <div class="xp-intro">
+          <h1>Explain a suite</h1>
+          <p class="lede body-text">Edit a suite and move through its rows. Each row is explained as you go, and the dry run updates as you type.</p>
+        </div>
+        <div class="xp-bar">
+          <div class="xp-examples" role="group" aria-label="Examples"></div>
+          <button class="xp-copy btn btn-ghost btn-sm" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg><span>Copy link</span></button>
+        </div>
+        <div class="xp-bench">
+          <section class="xp-editor" aria-label="Suite files">
+            <div class="xp-tabs" role="tablist" aria-label="Files"></div>
+            <div class="xp-code">
+              <div class="xp-gutter" aria-hidden="true"></div>
+              <div class="xp-view">
+                <div class="xp-band" aria-hidden="true"></div>
+                <pre class="xp-hl" aria-hidden="true"></pre>
+                <textarea class="xp-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off" aria-label="File contents"></textarea>
+              </div>
+            </div>
+            <p class="xp-status"><span class="xp-where"></span><span>Rules of optics {{version}}. Assumes a driver is on in config.yaml.</span></p>
+          </section>
+          <section class="xp-explain" aria-label="The row under the cursor"></section>
+          <section class="xp-run" aria-label="Predicted optics dry_run">
+            <p class="xp-run-h"><span>$ optics dry_run</span><span>Predicted</span></p>
+            <div class="xp-run-out"></div>
+            <div class="xp-notes" hidden><p class="xp-run-h"><span>When it runs</span><span>Not checked by dry_run</span></p><ul></ul></div>
+          </section>
+        </div>
+        <script type="application/json" id="xp-data">{{data}}</script>
+      </div>
+      <script src="suite.js" defer></script>
+      <script src="suite-explain.js" defer></script>
+      <script src="explain.js" defer></script>

@@ -1,0 +1,5 @@
+test_case,test_step
+Suite Setup,Open Birch
+Sign in with email,Sign In
+Sign in with email,Check Greeting
+Suite Teardown,Close Birch

@@ -1,0 +1,10 @@
+[
+  { "slug": "sign-in", "title": "Sign in", "focus": "modules/modules.csv:5" },
+  { "slug": "data-driven", "title": "Data-driven", "focus": "modules/modules.csv:3" },
+  { "slug": "popups", "title": "Optional pop-ups", "focus": "modules/modules.csv:6" },
+  { "slug": "api", "title": "API mid-test", "focus": "modules/modules.csv:4" },
+  { "slug": "area-of-interest", "title": "Area of interest", "focus": "modules/modules.csv:5" },
+  { "slug": "error-screens", "title": "Error screens", "focus": "test_data/error_definitions.csv:2" },
+  { "slug": "yaml", "title": "YAML", "focus": "birch.yaml:12" },
+  { "slug": "broken", "title": "Find the bugs", "focus": "modules/modules.csv:3" }
+]
