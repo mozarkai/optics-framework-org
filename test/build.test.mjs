@@ -143,7 +143,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`, ...articles];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`, ...articles, `${ORIGIN}/explain`];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {

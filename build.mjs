@@ -7,6 +7,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
+import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -95,6 +96,18 @@ writeFileSync("out/blog.html", render(BLOG_PAGE, { root: "", home: "./", canonic
 writeFileSync("out/blog.md", blogMarkdown(blog, ORIGIN));
 writeFileSync("out/feed.xml", blogFeed(blog, ORIGIN));
 
+// /explain: a suite editor that explains each row and predicts optics dry_run in the browser.
+const catalogue = loadCatalogue();
+const explainExamples = loadExamples();
+const EXPLAIN_PAGE = {
+  title: "Explain an Optics suite, row by row",
+  description: "Edit an Optics test suite in CSV or YAML and see what each row does, how each element is found and what optics dry_run reports, live in your browser.",
+  body: explainBody(catalogue, explainExamples),
+  head: `<link rel="stylesheet" href="explain.css">\n  <link rel="alternate" type="text/markdown" href="explain.md" title="Explain a suite, as Markdown">`,
+};
+writeFileSync("out/explain.html", render(EXPLAIN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/explain` }));
+writeFileSync("out/explain.md", explainMarkdown(catalogue, explainExamples, ORIGIN));
+
 // Articles hosted here: blog/<slug>.html and its Markdown twin, canonical to this site.
 const articles = blog.items.filter((item) => item.slug);
 const articleSrc = (item) => `content/blog/${item.slug}.md`;
@@ -167,6 +180,7 @@ writeFileSync(
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
+    { loc: `${ORIGIN}/explain`, lastmod: lastModified("pages/explain.html") },
     ...docs.entries,
   ]),
 );
@@ -181,7 +195,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|suite\.js|suite-explain\.js|explain\.js|explain\.css|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);
