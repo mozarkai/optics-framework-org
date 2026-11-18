@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { itemUrl, loadBlog } from "../lib/blog.mjs";
+import { loadRun } from "../lib/run.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 const TRUST_PAGES = ["about", "contact", "privacy"];
@@ -143,7 +144,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`, ...articles];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
@@ -438,7 +439,7 @@ test("every hosted article is a full page with its own canonical URL, schema and
 // The privacy page promises the site loads nothing from third-party servers. Links may
 // point anywhere; images, scripts, styles and media must come from this site.
 test("no page loads an asset from another server", () => {
-  const pages = ["index.html", "blog.html", ...hosted().map((i) => `blog/${i.slug}.html`), ...TRUST_PAGES.map((p) => `${p}.html`), ...docsPages().map((p) => p.file)];
+  const pages = ["index.html", "blog.html", "run.html", "birch/index.html", ...hosted().map((i) => `blog/${i.slug}.html`), ...TRUST_PAGES.map((p) => `${p}.html`), ...docsPages().map((p) => p.file)];
   for (const page of pages) {
     const html = read(page);
     for (const [tag] of html.matchAll(/<(?:img|script|source|video|iframe|link)\b[^>]*>/g)) {
@@ -460,4 +461,16 @@ test("every HTML page has a Markdown twin for agents", () => {
     assert.match(html, /<meta name="ai-summary" content="[^"]{20,}">/, `${page} has no ai-summary`);
   }
   assert.match(read("about.md"), /^# About Optics\n/);
+});
+
+// The replay shows only what a run wrote, so everything it points at must be published.
+test("the real run points only at files that are published", () => {
+  const run = loadRun("out/runs/birch-run.js");
+  const path = (url) => `out/${url.split("?")[0]}`;
+  for (const r of run.runs) {
+    for (const s of r.steps) for (const shot of [s.pre, s.found].filter(Boolean)) assert.ok(existsSync(path(shot)), shot);
+    assert.ok(existsSync(path(r.end)), r.end);
+    for (const f of [...r.files, "junit_output.xml", "logs.json"]) assert.ok(existsSync(`out/runs/birch-${r.release}/${f}`), f);
+  }
+  for (const name of Object.keys(run.suite)) assert.equal(read(`birch-tests/${name}`), run.suite[name], `${name} changed since the run`);
 });

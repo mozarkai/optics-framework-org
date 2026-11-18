@@ -1,0 +1,61 @@
+name: Rerun the Birch suite
+
+# Runs the Birch suite with a released Optics against the real Birch app, then opens a pull
+# request with the new run for /run and the homepage. Start it after each optics-framework release.
+on:
+  workflow_dispatch:
+    inputs:
+      optics:
+        description: optics-framework version on PyPI, such as 1.11.4
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      OPTICS_VERSION: ${{ inputs.optics }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Optics with Playwright and EasyOCR
+        run: |
+          python -m venv .optics
+          .optics/bin/pip install --extra-index-url https://download.pytorch.org/whl/cpu "optics-framework[playwright,easyocr]==$OPTICS_VERSION"
+          .optics/bin/python -m playwright install --with-deps chromium
+
+      - name: Run the Birch suite against releases 2.1 and 2.2
+        run: .optics/bin/python scripts/birch-run.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Test the site with the new run
+        run: |
+          npm ci
+          npm test
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- site/runs)" ]; then exit 0; fi
+          branch="birch-run/$OPTICS_VERSION-$GITHUB_RUN_ID"
+          git switch -c "$branch"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/runs
+          git commit -m "chore(run): rerun the Birch suite with Optics $OPTICS_VERSION"
+          git push origin "$branch"
+          gh pr create --base "$GITHUB_REF_NAME" --head "$branch" \
+            --title "Rerun the Birch suite with Optics $OPTICS_VERSION" \
+            --body "The run on /run and the homepage, from \`scripts/birch-run.py\` with optics-framework $OPTICS_VERSION from PyPI, on ubuntu-latest."

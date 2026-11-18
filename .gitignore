@@ -4,3 +4,4 @@ out/
 *.log
 .wrangler/
 stats/
+!site/runs/**/*.log
