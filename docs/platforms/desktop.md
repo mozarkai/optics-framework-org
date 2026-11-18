@@ -227,7 +227,7 @@ elements_sources:
 
 | Capability | Value | Default |
 |---|---|---|
-| `platformName` | `Mac`, `Linux` or `Windows` | Required |
+| `platformName` | The OS of the Host: `Mac`, `Linux` or `Windows`. A different value fails the session. | Required |
 | `automationName` | `Xa11y` | Optics sets `Xa11y` when you leave it out |
 | `app` | The app to start. See [Find the app id](#find-the-app-id). | Set `app` or `appName` |
 | `appArguments` | A list of arguments for `app` | None |
@@ -281,10 +281,10 @@ $ ssh -N -o ExitOnForwardFailure=yes -L 4733:127.0.0.1:4723 user@host
 
 A local Appium often uses port 4723. Then the tunnel cannot use `127.0.0.1:4723`, and Optics connects to the local Appium, not to the Host. With `ExitOnForwardFailure=yes`, `ssh` stops when it cannot open the local port.
 
-Set `url: "http://127.0.0.1:4733"` in `config.yaml`, and check that the Host answers:
+Set `url: "http://127.0.0.1:4733"` in `config.yaml`. Then check that the Host answers and gives the `platformName` of your config:
 
 ```shell
-$ curl -s http://127.0.0.1:4733/status
+$ curl -s http://127.0.0.1:4733/xa11y/status
 ```
 
 Each step is one round trip through the tunnel, so a suite is slower over a network. To write and try a suite, run Optics on your computer. For CI and long suites, run Optics on the Host.
@@ -594,6 +594,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **No answer from `http://127.0.0.1:4723/status`, or from the port that you set with `--port` or `-Port`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
 - **"port <port> is in use by <process>" from the setup script, `host.sh run` or `host.ps1`.** A different process holds the Appium port, for example an Appium that you started yourself. Stop that process, or run the setup script again with `--port` or `-Port`. Then use that port in `url`.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, the message names the app or Node.js that gets the permissions. It also gives the restart command. Give both permissions to it, then restart Appium. `/xa11y/status` shows the missing permissions.
+- **E0102 with "This Appium runs on a Mac Host, so it cannot start a session with platformName Linux".** `platformName` is not the OS of the Host, or `url` goes to a different Appium. Set `platformName` to the OS of the Host, or set `url` to the correct Host.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
 - **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.

@@ -374,6 +374,10 @@ Appium needs the Accessibility and Screen & System Audio Recording permissions. 
 
 A different process holds the Appium port, for example an Appium that you started yourself. The setup script, `host.sh run` and `host.ps1` stop before they start Appium, and the message names that process. Stop that process, or run the setup script again with `--port <port>`, or `-Port <port>` on Windows. Then use that port in `url` in `config.yaml`.
 
+### A desktop session fails with "cannot start a session with platformName" {#desktop-wrong-host}
+
+The `platformName` in `config.yaml` is not the OS of the Host. A Host starts sessions only for its own OS, and Optics shows `E0102` with the OS of the Host in the message. Set `platformName` to that OS. If you use a tunnel, make sure that `url` goes to the Host, not to a local Appium. `curl -s <url>/xa11y/status` gives the `platformName` of the Host. See [Use a Host on a different computer](/docs/platforms/desktop#use-a-host-on-a-different-computer).
+
 ### Go Back fails with E0105 on a desktop {#desktop-go-back}
 
 Go Back and Get App Version work only on phones. On a desktop, press the app's key combination with Press Keycode, for example `Press Keycode,cmd+[`. See [Keywords that differ on a desktop](/docs/platforms/desktop#keywords-that-differ-on-a-desktop).
