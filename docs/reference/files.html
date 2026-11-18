@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="files.md" title="This page as Markdown">
   <meta property="og:title" content="Project files · Optics Framework docs">
   <meta property="og:description" content="The file formats Optics reads: test cases, modules, elements, error definitions and API definitions.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -223,7 +223,7 @@ add_to_cart,text=Add to cart,,add_to_cart.png">Copy</button><pre><code><span cla
   <span class="c-mod">search_bar</span><span class="c-dim">:</span> <span class="c-lit">"//*[@resource-id='com.birch.shop:id/search']"</span>
   <span class="c-mod">add_to_cart</span><span class="c-dim">:</span> [<span class="c-lit">"text=Add to cart"</span>, <span class="c-lit">"add_to_cart.png"</span>]</code></pre></figure></div></div>
 <div class="table-wrap"><table><thead><tr><th>Column</th><th>What it holds</th></tr></thead><tbody><tr><td><code class="ic">Element_Name</code></td><td>The name.</td></tr><tr><td><code class="ic">Element_ID</code></td><td>The first locator or value. Required.</td></tr><tr><td><code class="ic">Element_ID_*</code></td><td>Fallbacks. Any column whose header starts with <code class="ic">Element_ID</code>, such as <code class="ic">Element_ID_text</code>, <code class="ic">Element_ID_image</code> or <code class="ic">Element_ID_2</code>, adds another value. They're tried in column order.</td></tr></tbody></table></div>
-<ul><li>Empty cells are ignored. Columns that don't start with <code class="ic">Element_ID</code>, such as <code class="ic">Element_Text</code>, are ignored.</li><li>A second row with the same name adds more fallback values.</li><li>When a step uses <code class="ic">${name}</code>, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside <code class="ic">Run Loop</code>, <code class="ic">Condition</code> and <code class="ic">Execute Module</code> use only the first value.</li><li>Variables that a step creates while running, such as the target of <code class="ic">Evaluate</code>, <code class="ic">Read Data</code> or <code class="ic">store_as</code>, need no row. Do not add a placeholder row for them.</li></ul>
+<ul><li>Empty cells are ignored. Columns that don't start with <code class="ic">Element_ID</code>, such as <code class="ic">Element_Text</code>, are ignored.</li><li>A file with <code class="ic">Element_Name</code> and another <code class="ic">Element_</code> column, but no <code class="ic">Element_ID</code>, stops the run before a session starts. An example is <code class="ic">Element_Name,Element_Locator</code>. The <code class="ic">Cannot start: E0503</code> panel names the file. A <a href="../../docs/reference/keywords/flow#read-data">Read Data</a> file with an <code class="ic">element_name</code> column and no other <code class="ic">element_</code> column is not an elements file, so it still loads.</li><li>A second row with the same name adds more fallback values.</li><li>When a step uses <code class="ic">${name}</code>, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside <code class="ic">Run Loop</code>, <code class="ic">Condition</code> and <code class="ic">Execute Module</code> use only the first value.</li><li>Variables that a step creates while running, such as the target of <code class="ic">Evaluate</code>, <code class="ic">Read Data</code> or <code class="ic">store_as</code>, need no row. Do not add a placeholder row for them.</li></ul>
 <p>Optics decides what kind of locator a value is from its form:</p>
 <div class="table-wrap"><table><thead><tr><th>Value</th><th>Treated as</th></tr></thead><tbody><tr><td>Starts with <code class="ic">text=</code> or <code class="ic">text_only:</code></td><td>Text. <code class="ic">text_only:</code> uses OCR only.</td></tr><tr><td>Ends with <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code></td><td>An image template, found by file name anywhere in the project.</td></tr><tr><td>Starts with <code class="ic">css=</code></td><td>CSS selector.</td></tr><tr><td>Starts with <code class="ic">xpath=</code>, <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code></td><td>XPath.</td></tr><tr><td>Starts with <code class="ic">android.</code> or <code class="ic">xcui</code></td><td>A UI class name.</td></tr><tr><td>Starts with <code class="ic">.</code> or <code class="ic">#</code>, or contains <code class="ic">[</code> and <code class="ic">]</code></td><td>CSS selector.</td></tr><tr><td>Anything else</td><td>Text.</td></tr></tbody></table></div>
 <p>Text like <code class="ic">(optional)</code> or <code class="ic">Size [US]</code> is read as XPath or CSS. Add <code class="ic">text=</code> in front to force text: <code class="ic">text=Size [US]</code>. See <a href="../../docs/elements/define">Define elements</a>.</p>
@@ -331,7 +331,7 @@ Go Home,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -373,10 +373,10 @@ Go Home,Execute Script,&quot;{&quot;&quot;script&quot;&quot;: &quot;&quot;mobile
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

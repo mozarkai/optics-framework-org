@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="define.md" title="This page as Markdown">
   <meta property="og:title" content="Define elements · Optics Framework docs">
   <meta property="og:description" content="Name the things your tests touch, choose good values for them, and add fallbacks that survive redesigns.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -104,7 +104,7 @@ sign_in,//*[@resource-id='com.birch.shop:id/login'],Sign in,sign_in.png">Copy</b
 <p>Both layouts mean the same thing. Use whichever is easier to read for your team. Empty cells are ignored.</p>
 <h2 id="choose-the-kind-of-value">Choose the kind of value<a class="anchor" href="#choose-the-kind-of-value" aria-label="Link to this section">#</a></h2>
 <p>Optics decides what a value is from how it looks:</p>
-<div class="table-wrap"><table><thead><tr><th>Write</th><th>Optics treats it as</th><th>Example</th></tr></thead><tbody><tr><td>Starts with <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code></td><td>XPath, looked up in the UI tree</td><td><code class="ic">//*[@resource-id='login']</code></td></tr><tr><td>Plain words</td><td>Text: UI tree first, then OCR on a screenshot</td><td><code class="ic">Sign in</code></td></tr><tr><td><code class="ic">text_only:</code> then words</td><td>Text, OCR only</td><td><code class="ic">text_only:Sign in</code></td></tr><tr><td>Ends in <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code></td><td>An image to match on a screenshot</td><td><code class="ic">cart_icon.png</code></td></tr><tr><td><code class="ic">css=</code>, <code class="ic">#id</code>, <code class="ic">.class</code> or <code class="ic">tag[attr]</code></td><td>A CSS selector. Playwright and web pages on Appium only</td><td><code class="ic">#login-button</code></td></tr><tr><td>Starts with <code class="ic">android.</code> or <code class="ic">XCUI</code></td><td>A class name</td><td><code class="ic">android.widget.Switch</code></td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Write</th><th>Optics treats it as</th><th>Example</th></tr></thead><tbody><tr><td>Starts with <code class="ic">/</code>, <code class="ic">//</code> or <code class="ic">(</code></td><td>XPath, looked up in the UI tree</td><td><code class="ic">//*[@resource-id='login']</code></td></tr><tr><td>Plain words</td><td>Text: UI tree first, then OCR on a screenshot</td><td><code class="ic">Sign in</code></td></tr><tr><td><code class="ic">text_only:</code> then words</td><td>Text, OCR only</td><td><code class="ic">text_only:Sign in</code></td></tr><tr><td>Ends in <code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code> or <code class="ic">.bmp</code></td><td>An image to match on a screenshot</td><td><code class="ic">cart_icon.png</code></td></tr><tr><td><code class="ic">css=</code>, <code class="ic">#id</code>, <code class="ic">.class</code> or <code class="ic">tag[attr]</code></td><td>A CSS selector. Playwright, Selenium and web pages on Appium only</td><td><code class="ic">#login-button</code></td></tr><tr><td>Starts with <code class="ic">android.</code> or <code class="ic">XCUI</code></td><td>A class name</td><td><code class="ic">android.widget.Switch</code></td></tr></tbody></table></div>
 <p>On Playwright, you can also write these prefixes. A prefix can be in any case:</p>
 <div class="table-wrap"><table><thead><tr><th>Write</th><th>Finds</th></tr></thead><tbody><tr><td><code class="ic">id=login</code>, <code class="ic">data-testid=save</code>, <code class="ic">data-test=save</code>, <code class="ic">data-test-id=save</code></td><td>An element by its id or test attribute</td></tr><tr><td><code class="ic">testid=save</code></td><td>The same as <code class="ic">data-testid=save</code></td></tr><tr><td><code class="ic">label=Email</code>, <code class="ic">placeholder=Search Birch</code></td><td>A field by its label or placeholder</td></tr><tr><td><code class="ic">alt=Birch logo</code>, <code class="ic">title=Open the cart</code></td><td>An element by its alt text or title</td></tr><tr><td><code class="ic">role=button[name="Save"]</code></td><td>An element by its role and name</td></tr><tr><td><code class="ic">text="Save"</code></td><td>An element with exactly this text. <code class="ic">text=Save</code> also matches <code class="ic">Save changes</code>.</td></tr><tr><td><code class="ic">loc=css:button.save</code>, <code class="ic">loc=role:button[name="Save"]</code>, <code class="ic">loc=href:/next</code></td><td>The same as <code class="ic">css=</code>, <code class="ic">role=</code> and a link with this <code class="ic">href</code>. Agent browsers write locators in this form.</td></tr></tbody></table></div>
 <p>See <a href="../../docs/platforms/web#locators-for-web-pages">Locators for web pages</a>.</p>
@@ -155,7 +155,7 @@ Add Second Product,Press Element,Add to cart,index=1">Copy</button><pre><code><s
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -197,10 +197,10 @@ Add Second Product,Press Element,Add to cart,index=1">Copy</button><pre><code><s
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

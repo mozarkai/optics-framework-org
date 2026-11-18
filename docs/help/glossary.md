@@ -26,7 +26,7 @@ appium-xa11y-driver is the Appium driver that Optics uses for desktop apps on ma
 
 ### BLE driver
 
-The BLE driver makes Optics act as a Bluetooth mouse and keyboard, for devices that allow no automation software. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](https://optics-framework.org/docs/platforms/production).
+The BLE driver drives a phone or computer through an airhand USB dongle that the device sees as a Bluetooth keyboard and pointer, or a touch screen on Android. It needs no app on the device, so it works where automation software is not allowed. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](https://optics-framework.org/docs/platforms/production).
 
 ### Browser profile
 
@@ -58,7 +58,7 @@ A driver is the engine that controls the target: Appium for phones, TVs and desk
 
 ### Dry run
 
-A dry run, started with `optics dry_run`, checks a project for unknown keywords, missing modules and undefined variables without tapping or typing anything. Run one before every commit. See [`optics dry_run`](https://optics-framework.org/docs/reference/cli#optics-dry-run).
+A dry run, started with `optics dry_run`, checks a project for unknown keywords, missing modules, wrong keyword parameters and undefined variables without tapping or typing anything. It does not check locators, the app or the device. Run one before every commit. See [`optics dry_run`](https://optics-framework.org/docs/reference/cli#optics-dry-run).
 
 ## E
 
@@ -88,7 +88,7 @@ The execution output is the `execution_output/` folder in a project, where each 
 
 ### Extra
 
-An extra is the pip name for an optional engine, such as `appium`, `easyocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web`, `llm` and `all` install several at once. See [Engines and extras](https://optics-framework.org/docs/reference/engines).
+An extra is the pip name for an optional engine, such as `appium`, `rapidocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web`, `llm` and `all` install several at once. See [Engines and extras](https://optics-framework.org/docs/reference/engines).
 
 ## F
 
@@ -228,7 +228,7 @@ A test case is a flow you want to check, made of modules run in order, such as *
 
 ### Text detection
 
-Text detection finds an element by reading the text on a screenshot with an OCR engine, such as EasyOCR or Tesseract. Turn it on under `text_detection` in `config.yaml`. See [Turn on OCR](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr).
+Text detection finds an element by reading the text on a screenshot with an OCR engine, such as Apple Vision or RapidOCR. Turn it on under `text_detection` in `config.yaml`. See [Turn on OCR](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr).
 
 ## U
 

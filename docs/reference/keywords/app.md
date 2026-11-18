@@ -44,7 +44,7 @@ Good to know:
 - On Selenium, `app_identifier` and `app_activity` apply only when Launch App starts the session. Later calls reopen the configured URL.
 - On Playwright, a second Launch App opens the URL in the same browser. The `browser`, `headless`, `viewport` and `device` capabilities set the browser. See [Web](https://optics-framework.org/docs/platforms/web#emulate-a-phone).
 - On a desktop, Launch App starts `app` from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: an app name, a bundle id or an `.app` path on macOS, an executable on Linux and Windows. See [Desktop](https://optics-framework.org/docs/platforms/desktop#work-with-more-than-one-app).
-- The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.
+- On the BLE driver, give the name of the app as the device shows it, for example `Settings`. Optics opens it with the launch methods in config.yaml, such as Spotlight on iOS or the app drawer search on Android. When no method opens the app, the step fails with E0405. With no value, Launch App does nothing. See [Open apps](https://optics-framework.org/docs/platforms/production#open-apps).
 
 ### Start Appium Session
 
@@ -81,6 +81,7 @@ Good to know:
 
 - On Appium, a value containing `://` opens as a deep link or URL. Anything else is started or brought to the front as an app.
 - On a desktop, it starts the app, or brings it to the front if it runs, and later steps act on it. Launch App with no value goes back to the app from the config.
+- On the BLE driver, it opens the app by its name on the device, the same as Launch App. See [Open apps](https://optics-framework.org/docs/platforms/production#open-apps).
 - On Playwright, the URL opens in a new tab.
 - On Selenium, the current tab navigates to the URL.
 - In Python the parameter is called `bundleid`.
@@ -129,6 +130,7 @@ Good to know:
 - On a desktop, give the same app id as for Launch Other App, for example `gnome-calculator`.
 - On Selenium, it closes the current browser window and ignores `app_name`.
 - Playwright doesn't support it. The step fails.
+- On the BLE driver, it works on iOS and Android. It opens the app by its name, then closes it from the App Switcher. See [What works and what does not](https://optics-framework.org/docs/platforms/production#what-works-and-what-does-not).
 
 ## Inspect
 
@@ -148,7 +150,7 @@ Good to know:
 
 - On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.
 - To keep the version in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
-- On a desktop, the step fails with error E0105.
+- On a desktop and on the BLE driver, the step fails with error E0105.
 - Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing `app_package` fails the step.
 
 ### Get Driver Session Id
@@ -164,7 +166,7 @@ App Info,Get Driver Session Id
 Good to know:
 
 - To keep the id in a variable, add [`store_as=name`](https://optics-framework.org/docs/reference/keywords/#store-as).
-- On Playwright, it returns nothing, so `store_as` fails. Selenium and the BLE driver do not support it, and the step fails.
+- On Playwright, it returns nothing, so `store_as` fails. Selenium does not support it, and the step fails. The BLE driver returns the identity of the dongle.
 
 ### Initialise Setup
 

@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="install.md" title="This page as Markdown">
   <meta property="og:title" content="Install Optics · Optics Framework docs">
   <meta property="og:description" content="Install the optics command, then add only the drivers and engines your platform needs.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -101,10 +101,10 @@ pip install &quot;optics-framework[mcp]&quot;">Copy</button><pre><code><span cla
 <p>The installer also prints the command that adds Optics to Claude Code, with the full path of <code class="ic">optics</code>. See <a href="../../docs/create/agent">Let your AI agent build tests</a>.</p>
 <p>Open a new terminal so it picks up the updated PATH, then check the install:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics --version">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> <span class="c-info">--version</span>
-Optics Framework 1.11.4</code></pre></figure>
+Optics Framework 1.11.5</code></pre></figure>
 <details class="doc-details"><summary>Installer options</summary><div class="details-body"><p>Pass options after <code class="ic">sh -s --</code>. On Windows, set the matching environment variable before running the installer.</p>
-<div class="table-wrap"><table><thead><tr><th>Option</th><th>Windows variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version 1.11.4</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Install a specific release.</td></tr><tr><td><code class="ic">--extra appium,easyocr</code></td><td><code class="ic">OPTICS_EXTRA</code></td><td>Install engines at the same time.</td></tr><tr><td><code class="ic">--dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Install somewhere other than <code class="ic">~/.optics</code>.</td></tr><tr><td><code class="ic">--no-modify-path</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Don't edit your shell profile.</td></tr><tr><td><code class="ic">--dry-run</code></td><td></td><td>Print what would happen and change nothing.</td></tr><tr><td><code class="ic">--uninstall</code></td><td></td><td>Remove Optics and the PATH entry it added.</td></tr></tbody></table></div>
-<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,easyocr">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh <span class="c-info">-s</span> <span class="c-info">--</span> <span class="c-info">--extra</span> playwright,easyocr</code></pre></figure></div></details>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Windows variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version 1.11.5</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Install a specific release.</td></tr><tr><td><code class="ic">--extra appium,rapidocr</code></td><td><code class="ic">OPTICS_EXTRA</code></td><td>Install engines at the same time.</td></tr><tr><td><code class="ic">--dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Install somewhere other than <code class="ic">~/.optics</code>.</td></tr><tr><td><code class="ic">--no-modify-path</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Don't edit your shell profile.</td></tr><tr><td><code class="ic">--dry-run</code></td><td></td><td>Print what would happen and change nothing.</td></tr><tr><td><code class="ic">--uninstall</code></td><td></td><td>Remove Optics and the PATH entry it added.</td></tr></tbody></table></div>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,rapidocr">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh <span class="c-info">-s</span> <span class="c-info">--</span> <span class="c-info">--extra</span> playwright,rapidocr</code></pre></figure></div></details>
 <h2 id="add-engines-for-your-platform">Add engines for your platform<a class="anchor" href="#add-engines-for-your-platform" aria-label="Link to this section">#</a></h2>
 <p>The core install ships without drivers, so it stays small. Add the ones for what you test. <code class="ic">optics setup</code> installs engines that match your Optics version:</p>
 <div class="doc-tabs" data-group="platform"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-platform-t0" aria-controls="tabs-platform-p0" aria-selected="true"  data-tab="Web">Web</button><button class="os-tab" role="tab" id="tabs-platform-t1" aria-controls="tabs-platform-p1" aria-selected="false" tabindex="-1" data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-platform-t2" aria-controls="tabs-platform-p2" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button><button class="os-tab" role="tab" id="tabs-platform-t3" aria-controls="tabs-platform-p3" aria-selected="false" tabindex="-1" data-tab="Desktop">Desktop</button></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p0" aria-labelledby="tabs-platform-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install playwright">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> playwright</code></pre></figure>
@@ -115,7 +115,7 @@ Optics Framework 1.11.4</code></pre></figure>
 <p>Run <code class="ic">optics setup</code> with no options to pick engines from a list instead, or <code class="ic">optics setup --list</code> to see every name.</p>
 <h3 id="optional-engines">Optional engines<a class="anchor" href="#optional-engines" aria-label="Link to this section">#</a></h3>
 <p>Add these when a page tells you to. You don't need them for your first test.</p>
-<div class="table-wrap"><table><thead><tr><th>Engine</th><th>Install name</th><th>Adds</th></tr></thead><tbody><tr><td>EasyOCR</td><td><code class="ic">easyocr</code></td><td>Finds elements by reading text on a screenshot. Runs locally.</td></tr><tr><td>Tesseract</td><td><code class="ic">pytesseract</code></td><td>A lighter OCR engine. Needs the Tesseract program installed too.</td></tr><tr><td>Google Vision</td><td><code class="ic">google-vision</code></td><td>Cloud OCR. Needs Google Cloud credentials.</td></tr><tr><td>AI model</td><td><code class="ic">gemini</code>, <code class="ic">openai</code> or <code class="ic">anthropic</code></td><td>Plain-English test creation and AI self-heal. Pick the one for your account; see <a href="../../docs/create/describe#before-you-begin">Describe it</a>.</td></tr><tr><td>MCP server</td><td><code class="ic">mcp</code></td><td>Lets AI agents drive Optics. The installer always includes it; with pip: <code class="ic">pip install "optics-framework[mcp]"</code>.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Engine</th><th>Install name</th><th>Adds</th></tr></thead><tbody><tr><td>Apple Vision</td><td><code class="ic">apple-vision</code></td><td>Finds elements by reading text on a screenshot. The fastest OCR engine. macOS only.</td></tr><tr><td>RapidOCR</td><td><code class="ic">rapidocr</code></td><td>Finds elements by reading text on a screenshot. Runs on any OS, on the CPU.</td></tr><tr><td>EasyOCR</td><td><code class="ic">easyocr</code></td><td>An OCR engine that is quick with a GPU.</td></tr><tr><td>Tesseract</td><td><code class="ic">pytesseract</code></td><td>A lighter OCR engine. Needs the Tesseract program installed too.</td></tr><tr><td>Google Vision</td><td><code class="ic">google-vision</code></td><td>Cloud OCR. Needs Google Cloud credentials.</td></tr><tr><td>AI model</td><td><code class="ic">gemini</code>, <code class="ic">openai</code> or <code class="ic">anthropic</code></td><td>Plain-English test creation and AI self-heal. Pick the one for your account; see <a href="../../docs/create/describe#before-you-begin">Describe it</a>.</td></tr><tr><td>MCP server</td><td><code class="ic">mcp</code></td><td>Lets AI agents drive Optics. The installer always includes it.</td></tr></tbody></table></div>
 <p>Bundles install several at once: <code class="ic">mobile</code> (Appium), <code class="ic">web</code> (Playwright and Selenium), <code class="ic">vision</code> (all OCR engines), <code class="ic">llm</code> (all three AI engines) and <code class="ic">all</code> (everything except the MCP server). The <a href="../../docs/reference/engines">engines reference</a> lists every engine.</p>
 <h2 id="check-your-setup">Check your setup<a class="anchor" href="#check-your-setup" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics doctor</code> checks Python, each engine, and the tools around them:</p>
@@ -125,7 +125,7 @@ Optics Framework 1.11.4</code></pre></figure>
 Core
   ✅ python                            3.12.13
       → informational — optics needs Python 3.12+
-  ✅ optics-framework                  installed, version 1.11.4
+  ✅ optics-framework                  installed, version 1.11.5
 
 Engines
   ⚠️ Appium                            appium-python-client not installed
@@ -158,7 +158,7 @@ Web
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -200,10 +200,10 @@ Web
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

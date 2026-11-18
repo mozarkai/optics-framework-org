@@ -14,9 +14,10 @@ A dry run reads every file and checks that:
 
 - every test step names a module or keyword that exists,
 - every keyword in every module exists, with a suggestion when you mistype one,
+- every step gives its keyword the parameters that it takes: none missing, none too many and none given twice. A wrong step fails with E0403 and names the `optics list <keyword>` command that shows the parameters,
 - every `${name}` is defined in an elements file or by an earlier step, such as `Evaluate`, `Read Data` or `store_as`. This includes a `${name}` inside a longer value.
 
-It does not tap, type or open anything, so it is quick and safe to run before every commit. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled. `optics dry-run` is the same command.
+It does not tap, type or open anything, so it is quick and safe to run before every commit. It does not check that a locator finds its element, or the app and the device. The last line of its output says so. It still starts the engines in your `config.yaml`, so they must be installed and a driver must be enabled. `optics dry-run` is the same command.
 
 A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow), such as `Evaluate` and `Condition`, needs no driver. `optics execute` follows the same rule.
 

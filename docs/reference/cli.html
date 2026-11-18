@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="cli.md" title="This page as Markdown">
   <meta property="og:title" content="CLI · Optics Framework docs">
   <meta property="og:description" content="Look up every `optics` command, its flags, what it writes and the exit codes it returns.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -83,11 +83,11 @@
           </div>
         </header>
         <div class="prose">
-<p>The <code class="ic">optics</code> command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.4.</p>
+<p>The <code class="ic">optics</code> command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.5.</p>
 <p>Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run <code class="ic">optics &lt;command&gt; --help</code> to see the same flags in your terminal.</p>
 <h2 id="global-behavior">Global behavior<a class="anchor" href="#global-behavior" aria-label="Link to this section">#</a></h2>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics [--version] [--help] &lt;command&gt; [options]">Copy</button><pre><code>optics [--version] [--help] &lt;command&gt; [options]</code></pre></figure>
-<div class="table-wrap"><table><thead><tr><th>Flag</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version</code></td><td>Prints <code class="ic">Optics Framework 1.11.4</code> and exits with code 0.</td></tr><tr><td><code class="ic">--help</code>, <code class="ic">-h</code></td><td>Lists the commands: <code class="ic">list</code>, <code class="ic">configure</code>, <code class="ic">config</code>, <code class="ic">doctor</code>, <code class="ic">quickstart</code>, <code class="ic">dry_run</code>, <code class="ic">dry-run</code>, <code class="ic">init</code>, <code class="ic">execute</code>, <code class="ic">live</code>, <code class="ic">generate</code>, <code class="ic">setup</code>, <code class="ic">serve</code>, <code class="ic">mcp</code>, <code class="ic">completion</code>.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Flag</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version</code></td><td>Prints <code class="ic">Optics Framework 1.11.5</code> and exits with code 0.</td></tr><tr><td><code class="ic">--help</code>, <code class="ic">-h</code></td><td>Lists the commands: <code class="ic">list</code>, <code class="ic">configure</code>, <code class="ic">config</code>, <code class="ic">doctor</code>, <code class="ic">quickstart</code>, <code class="ic">dry_run</code>, <code class="ic">dry-run</code>, <code class="ic">init</code>, <code class="ic">execute</code>, <code class="ic">live</code>, <code class="ic">generate</code>, <code class="ic">setup</code>, <code class="ic">serve</code>, <code class="ic">mcp</code>, <code class="ic">completion</code>.</td></tr></tbody></table></div>
 <p>There's no <code class="ic">optics version</code> command. Use <code class="ic">optics --version</code>.</p>
 <p>When you run <code class="ic">optics</code> with no command for the first time, it prints a welcome panel that points to <code class="ic">optics quickstart</code>, <code class="ic">optics doctor</code> and <code class="ic">optics --help</code>. After that, it prints a one-line reminder. Optics remembers the first run in a small marker file under <code class="ic">~/.optics</code> (or <code class="ic">$OPTICS_HOME</code>).</p>
 <p>If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example <code class="ic">pipx reinstall optics-framework</code> or <code class="ic">pip install --force-reinstall optics-framework</code>.</p>
@@ -111,6 +111,16 @@
 <span class="c-dim">├── </span>modules/modules.csv<span class="c-dim">         # module_name,module_step,param_1,param_2,param_3</span>
 <span class="c-dim">├── </span>test_cases/test_cases.csv<span class="c-dim">   # test_case,test_step</span>
 <span class="c-dim">└── </span>test_data/elements.csv<span class="c-dim">      # Element_Name,Element_ID</span></code></pre></figure>
+<p><code class="ic">optics init</code> writes <code class="ic">name: &lt;name&gt;</code> in config.yaml, for a blank project and for a sample. The name labels the <a href="../../docs/run/results#read-the-junit-report">JUnit report</a>, and <code class="ic">optics configure</code> keeps it. The Appium entry of the starter config has commented lines for a desktop app (<code class="ic">platformName: Mac</code>, <code class="ic">automationName: Xa11y</code>, <code class="ic">app: com.apple.TextEdit</code>). After a blank project, Optics prints the command that replaces it with a sample:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Or replace it with a sample: optics init birch-tests --force --template &lt;sample&gt;
+  contact          Contacts
+  clock            Clock
+  calendar         Calendar
+  youtube          YouTube
+  gmail_web        Gmail Web
+  playwright       Playwright Web
+  mobile_web       Mobile Web
+  desktop_editor   Desktop Editor</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Sample</th><th>Target</th><th>Engines it uses</th></tr></thead><tbody><tr><td><code class="ic">contact</code></td><td>Google Contacts on an Android emulator</td><td>Appium, EasyOCR. Includes an error definitions file.</td></tr><tr><td><code class="ic">clock</code></td><td>Android Clock app</td><td>Appium, Pytesseract, image templates. Shows <code class="ic">Run Loop</code>.</td></tr><tr><td><code class="ic">calendar</code></td><td>Android Calendar app</td><td>Appium, EasyOCR. Shows <code class="ic">Invoke API</code> and <code class="ic">Date Evaluate</code>.</td></tr><tr><td><code class="ic">youtube</code></td><td>YouTube on Android</td><td>Appium, EasyOCR, image templates. Shows <code class="ic">Condition</code>.</td></tr><tr><td><code class="ic">gmail_web</code></td><td>Gmail in Chrome</td><td>Selenium, EasyOCR.</td></tr><tr><td><code class="ic">playwright</code></td><td><code class="ic">https://example.com</code></td><td>Playwright. Needs no device or server.</td></tr><tr><td><code class="ic">mobile_web</code></td><td>Wikipedia search in Chrome on Android</td><td>Appium with <code class="ic">browserName: Chrome</code>, and the <code class="ic">appium_web</code> element source. See <a href="../../docs/platforms/mobile-web">Test mobile websites</a>.</td></tr><tr><td><code class="ic">desktop_editor</code></td><td>TextEdit on macOS: types a note, checks it, clears it and closes the editor</td><td>Appium with appium-xa11y-driver. Change <code class="ic">platformName</code> and <code class="ic">app</code> for Linux or Windows. See <a href="../../docs/platforms/desktop">Test desktop apps</a>.</td></tr></tbody></table></div>
 <p>Example:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics init birch-tests --template playwright --path ~/work --git-init">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> init birch-tests <span class="c-info">--template</span> playwright <span class="c-info">--path</span> ~/work <span class="c-info">--git-init</span></code></pre></figure>
@@ -129,21 +139,29 @@
 <p>Checks your Python, installed engines, device tools and project config, and tells you what to fix.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor [folder] [--check]">Copy</button><pre><code>optics doctor [folder] [--check]</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">folder</code></td><td>None</td><td>The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. With a folder that has no config.yaml, it shows a ❌ row.</td></tr><tr><td><code class="ic">--check</code></td><td>Off</td><td>Exits with code 1 if any row is ❌. Use it in CI.</td></tr></tbody></table></div>
-<p>Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a <code class="ic">→</code> hint with the fix. If the terminal cannot show emoji, doctor writes <code class="ic">OK</code>, <code class="ic">WARN</code>, <code class="ic">FAIL</code> and <code class="ic">-&gt;</code> instead.</p>
-<div class="table-wrap"><table><thead><tr><th>Section</th><th>What it checks</th></tr></thead><tbody><tr><td>Core</td><td>Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs.</td></tr><tr><td>Engines</td><td>Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic.</td></tr><tr><td>Mobile</td><td><code class="ic">adb</code> on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or <code class="ic">127.0.0.1:4723</code>). A project that does not drive Android gets a warning, not a failure, for <code class="ic">adb</code>.</td></tr><tr><td>Desktop</td><td>Whether the Appium server answers, appium-xa11y-driver in <code class="ic">APPIUM_HOME</code> (default <code class="ic">~/.appium</code>), and on macOS a reminder of the Accessibility and Screen Recording permissions. For a project with <code class="ic">platformName</code> <code class="ic">Mac</code>, <code class="ic">Linux</code> or <code class="ic">Windows</code>, a missing driver is a blocking problem. See <a href="../../docs/platforms/desktop#check-and-run">Check and run</a>.</td></tr><tr><td>Web</td><td>The Playwright Chromium browser, and <code class="ic">chromedriver</code> or <code class="ic">geckodriver</code> on your PATH. If the project's Playwright entry has a <code class="ic">url</code>, the row shows ✅ "remote browser configured; no local download needed".</td></tr><tr><td>Project</td><td>With a folder: config.yaml parses and every <code class="ic">${NAME}</code> environment variable it uses is set. A ❌ <code class="ic">config: references</code> row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example <code class="ic">url</code>, <code class="ic">platformName</code>, <code class="ic">bundleId</code> on iOS, and <code class="ic">app</code> or <code class="ic">appName</code> on a desktop).</td></tr></tbody></table></div>
+<p>Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed), ❌ failure or ℹ️ information. Each problem row has a <code class="ic">→</code> hint with the fix. An ℹ️ row is a hint that doctor does not check, and the counts at the end do not include it. If the terminal cannot show emoji, doctor writes <code class="ic">OK</code>, <code class="ic">WARN</code>, <code class="ic">FAIL</code>, <code class="ic">INFO</code> and <code class="ic">-&gt;</code> instead.</p>
+<div class="table-wrap"><table><thead><tr><th>Section</th><th>What it checks</th></tr></thead><tbody><tr><td>Core</td><td>Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs.</td></tr><tr><td>Engines</td><td>Whether each engine package is installed: Appium, BLE, Selenium, Playwright, Apple Vision, RapidOCR, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic and the MCP server.</td></tr><tr><td>Mobile</td><td><code class="ic">adb</code> on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or <code class="ic">127.0.0.1:4723</code>). A project that does not drive Android gets a warning, not a failure, for <code class="ic">adb</code>.</td></tr><tr><td>Desktop</td><td>Whether the Appium server answers, appium-xa11y-driver in <code class="ic">APPIUM_HOME</code> (default <code class="ic">~/.appium</code>), and on macOS an ℹ️ row for the Accessibility and Screen Recording permissions. For a project with <code class="ic">platformName</code> <code class="ic">Mac</code>, <code class="ic">Linux</code> or <code class="ic">Windows</code>, a missing driver is a blocking problem. See <a href="../../docs/platforms/desktop#check-and-run">Check and run</a>.</td></tr><tr><td>Web</td><td>The Playwright Chromium browser, and <code class="ic">chromedriver</code> or <code class="ic">geckodriver</code> on your PATH. If the project's Playwright entry has a <code class="ic">url</code>, the row shows ✅ "remote browser configured; no local download needed".</td></tr><tr><td>Project</td><td>With a folder: config.yaml parses and every <code class="ic">${NAME}</code> environment variable it uses is set. A ❌ <code class="ic">config: references</code> row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example <code class="ic">url</code>, <code class="ic">platformName</code>, <code class="ic">bundleId</code> on iOS, and <code class="ic">app</code> or <code class="ic">appName</code> on a desktop).</td></tr></tbody></table></div>
 <p>Only project rows can be ❌. Environment rows are ✅ or ⚠️. Without <code class="ic">--check</code>, doctor always exits with 0.</p>
 <p>Doctor doesn't check Selenium <code class="ic">capabilities</code>, and it doesn't create any output folders.</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor ./birch-tests --check">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> doctor ./birch-tests <span class="c-info">--check</span></code></pre></figure>
+<p>This is the Desktop section on a Mac with Appium and the driver installed:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>Desktop
+  ✅ appium server       reachable at 127.0.0.1:4723
+  ✅ xa11y driver        appium-xa11y-driver 0.1.3 in ~/.appium
+  <span class="c-info">ℹ</span>️ macOS permissions   not checked by doctor
+      → System Settings &gt; Privacy &amp; Security: give Accessibility, and Screen Recording for screenshots, to the Node.js that runs Appium (setup.sh shows its path), or to your terminal if you start Appium in it. Then restart Appium: launchctl kickstart -k gui/$(id -u)/appium-xa11y</code></pre></figure>
 <h2 id="optics-setup"><code class="ic">optics setup</code><a class="anchor" href="#optics-setup" aria-label="Link to this section">#</a></h2>
 <p>Installs the optional engines Optics needs for your platform: drivers, OCR and LLM.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup [--install NAME [NAME ...]] [--list]">Copy</button><pre><code>optics setup [--install NAME [NAME ...]] [--list]</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Argument</th><th>What it does</th></tr></thead><tbody><tr><td>(none)</td><td>Opens a full-screen picker with checkboxes for each engine.</td></tr><tr><td><code class="ic">--list</code></td><td>Prints every engine and bundle you can install. Wins if you also pass <code class="ic">--install</code>.</td></tr><tr><td><code class="ic">--install</code></td><td>Installs the named engines or bundles.</td></tr></tbody></table></div>
-<p>Names are case-insensitive. You can use an engine name (<code class="ic">appium</code>, <code class="ic">ble</code>, <code class="ic">selenium</code>, <code class="ic">playwright</code>, <code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code>, <code class="ic">gemini</code>, <code class="ic">openai</code>, <code class="ic">anthropic</code>), a display name (<code class="ic">Gemini</code>, <code class="ic">Google Vision</code>) or a bundle (<code class="ic">mobile</code>, <code class="ic">web</code>, <code class="ic">vision</code>, <code class="ic">llm</code>, <code class="ic">all</code>). Pin the engine's main package with a standard specifier such as <code class="ic">appium==6.1.2</code> or <code class="ic">"easyocr&gt;=1.7,&lt;2.0"</code>. The version must be in the range that your Optics release supports.</p>
+<p>Names are case-insensitive. You can use an engine name (<code class="ic">appium</code>, <code class="ic">ble</code>, <code class="ic">selenium</code>, <code class="ic">playwright</code>, <code class="ic">apple-vision</code>, <code class="ic">rapidocr</code>, <code class="ic">easyocr</code>, <code class="ic">pytesseract</code>, <code class="ic">google-vision</code>, <code class="ic">gemini</code>, <code class="ic">openai</code>, <code class="ic">anthropic</code>, <code class="ic">mcp</code>), a display name (<code class="ic">Gemini</code>, <code class="ic">Google Vision</code>) or a bundle (<code class="ic">mobile</code>, <code class="ic">web</code>, <code class="ic">vision</code>, <code class="ic">llm</code>, <code class="ic">all</code>). The <code class="ic">all</code> bundle does not include <code class="ic">mcp</code>. Pin the engine's main package with a standard specifier such as <code class="ic">appium==6.1.2</code> or <code class="ic">"easyocr&gt;=1.7,&lt;2.0"</code>. The version must be in the range that your Optics release supports.</p>
 <p><code class="ic">optics setup</code> installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See <a href="../../docs/reference/engines#where-installs-are-refused">Engines and extras</a>.</p>
-<p>The MCP server isn't an engine here. The install scripts include it; with pip, install it with <code class="ic">pip install "optics-framework[mcp]"</code>.</p>
-<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium easyocr
-optics setup --install web gemini">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium easyocr
-<span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> web gemini</code></pre></figure>
+<p><code class="ic">optics setup --list</code> shows the MCP server under <code class="ic">Servers</code>. The install scripts include it.</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium rapidocr
+optics setup --install web gemini
+optics setup --install mcp">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium rapidocr
+<span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> web gemini
+<span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> mcp</code></pre></figure>
 <p>Exit code 1 if a name is unknown, a version specifier is malformed (<code class="ic">appium=6.1.2</code>), or the install fails.</p>
 <h2 id="optics-dry-run"><code class="ic">optics dry_run</code><a class="anchor" href="#optics-dry-run" aria-label="Link to this section">#</a></h2>
 <p>Checks a project for mistakes without running any step on a device.</p>
@@ -153,7 +171,25 @@ optics setup --install web gemini">Copy</button><pre><code><span class="prompt">
 <p><code class="ic">optics dry-run</code> is the same command.</p>
 <div class="table-wrap"><table><thead><tr><th>Argument</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">folder</code></td><td>Required</td><td>The project folder. It must exist.</td></tr><tr><td><code class="ic">--runner</code></td><td><code class="ic">test_runner</code></td><td>The runner. Leave the default.</td></tr><tr><td><code class="ic">--use-printer</code> / <code class="ic">--no-use-printer</code></td><td>Printer on</td><td>Shows or hides the live result tree.</td></tr><tr><td><code class="ic">--include</code>, <code class="ic">--exclude</code></td><td>All test cases</td><td>Checks only some test cases. See <a href="#pick-test-cases">Pick test cases</a>.</td></tr></tbody></table></div>
 <p>A dry run checks that:</p>
-<ul><li>Each test step names a module (or a keyword).</li><li>Each module step names a real keyword. A typo gets a suggestion: <code class="ic">Did you mean 'Press Element'?</code></li><li>Each <code class="ic">${name}</code> is defined, as a whole cell or inside a longer value. An unknown name fails with <code class="ic">Variable '${name}' in '&lt;value&gt;' is not defined.</code></li></ul>
+<ul><li>Each test step names a module (or a keyword).</li><li>Each module step names a real keyword. A typo gets a suggestion: <code class="ic">Did you mean 'Press Element'?</code></li><li>Each step gives its keyword the parameters that it takes. A step with a missing parameter, too many values, or the same parameter twice fails with E0403.</li><li>Each <code class="ic">${name}</code> is defined, as a whole cell or inside a longer value. An unknown name fails with <code class="ic">Variable '${name}' in '&lt;value&gt;' is not defined.</code></li></ul>
+<p>For example, this is the <code class="ic">playwright</code> sample with no element for <code class="ic">Press Element</code>:</p>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Open Example Page,Launch App,https://example.com
+Verify Example Page,Press Element
+Close Browser,Close And Terminate App">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Open Example Page</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>https://example.com
+<span class="c-mod">Verify Example Page</span><span class="c-dim">,</span><b>Press Element</b>
+<span class="c-mod">Close Browser</span><span class="c-dim">,</span><b>Close And Terminate App</b></code></pre></figure>
+<p>The dry run fails the step, names the command that shows the parameters, and exits with code 1:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="prompt">$</span> <b>optics dry_run pw</b>
+…
+╭──────────────────────────────── Failure details ─────────────────────────────────╮
+│ TC1 Verify Landing → step 'Press Element' — Code.E0403: 'Press Element' cannot   │
+│ take these params: missing a required argument: 'element'. See its params with:  │
+│ optics list Press Element                                                        │
+╰──────────────────────────────────────────────────────────────────────────────────╯
+dry_run checks the keywords, their params and the names they use. It does not check locators, the app or the device: optics execute does.</code></pre></figure>
+<p>Too many values give <code class="ic">too many positional arguments</code>. A value in a column and the same parameter as <code class="ic">name=value</code> give <code class="ic">multiple values for argument '&lt;name&gt;'</code>. The dry run does not check the steps of a module that <code class="ic">Execute Module</code>, <code class="ic">Run Loop</code> or <code class="ic">Condition</code> runs.</p>
 <p>A dry run counts a variable as defined when an earlier step creates it: the first parameter of <code class="ic">Read Data</code>, <code class="ic">Evaluate</code> and <code class="ic">Date Evaluate</code>, and each <code class="ic">store_as=</code> name. Do not add placeholder rows for them.</p>
 <p>It does not run any keyword or touch the device. It does load the engines in config.yaml, so the engine extras must be installed, a driver must be enabled, and its settings must be valid (for example non-empty Appium <code class="ic">capabilities</code>). A suite that uses only <a href="../../docs/reference/keywords/flow">flow control keywords</a> needs no driver.</p>
 <p>The output and exit codes are the same as <a href="#optics-execute"><code class="ic">optics execute</code></a>. In the report, each keyword that passes the check ends as <code class="ic">PASS</code>. Dry runs write <code class="ic">junit_output.xml</code> to <code class="ic">execution_output/</code> but no screenshots.</p>
@@ -224,7 +260,13 @@ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --no-use-printer">Copy</but
 <p>Starts the MCP server, which lets an AI agent such as Claude or Cursor drive a device with Optics keywords.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|full]">Copy</button><pre><code>optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|full]</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Flag</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--transport</code></td><td><code class="ic">stdio</code></td><td><code class="ic">stdio</code> for agents that start the server themselves; <code class="ic">http</code> to serve at <code class="ic">http://&lt;host&gt;:&lt;port&gt;/mcp</code>.</td></tr><tr><td><code class="ic">--host</code></td><td><code class="ic">127.0.0.1</code></td><td>The address to listen on. <code class="ic">http</code> only.</td></tr><tr><td><code class="ic">--port</code></td><td><code class="ic">8090</code></td><td>The port to listen on. <code class="ic">http</code> only.</td></tr><tr><td><code class="ic">--toolset</code></td><td><code class="ic">core</code>, or <code class="ic">OPTICS_MCP_TOOLSET</code></td><td><code class="ic">core</code> gives the agent a small set of tools. <code class="ic">full</code> also adds one tool for each keyword.</td></tr></tbody></table></div>
-<p>It needs the <code class="ic">mcp</code> extra, which the install scripts include. With pip: <code class="ic">pip install "optics-framework[mcp]"</code>. The <code class="ic">all</code> bundle doesn't include it. Without the extra, the command exits with code 1 and prints the install command. See <a href="../../docs/reference/mcp">MCP server</a>.</p>
+<p>It needs the <code class="ic">mcp</code> extra, which the install scripts include. The <code class="ic">all</code> bundle doesn't include it. Without the extra, the command exits with code 1:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>╭──────────────────────── Cannot start ────────────────────────╮
+│ The Optics MCP server needs the mcp extra. Install it with:  │
+│                                                              │
+│   optics setup --install mcp                                 │
+╰──────────────────────────────────────────────────────────────╯</code></pre></figure>
+<p>See <a href="../../docs/reference/mcp">MCP server</a>.</p>
 <h2 id="optics-generate"><code class="ic">optics generate</code><a class="anchor" href="#optics-generate" aria-label="Link to this section">#</a></h2>
 <p>Turns a CSV or YAML project into pytest or Robot Framework code.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics generate &lt;folder&gt; [--framework pytest|robot] [--output FILE]">Copy</button><pre><code>optics generate &lt;folder&gt; [--framework pytest|robot] [--output FILE]</code></pre></figure>
@@ -236,17 +278,30 @@ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --no-use-printer">Copy</but
 <p>Exit code 3 if a required file is missing or two files define the same name. See <a href="../../docs/advanced/generate">Generate code</a>.</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics generate ./birch-tests --framework robot --output smoke.robot">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> generate ./birch-tests <span class="c-info">--framework</span> robot <span class="c-info">--output</span> smoke.robot</code></pre></figure>
 <h2 id="optics-list"><code class="ic">optics list</code><a class="anchor" href="#optics-list" aria-label="Link to this section">#</a></h2>
-<p>Prints every keyword you can use, grouped by category.</p>
-<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics list">Copy</button><pre><code>optics list</code></pre></figure>
-<p>Names are printed in snake_case. In a module, write them in Title Case with spaces: <code class="ic">press_element</code> becomes <code class="ic">Press Element</code>. Matching ignores case and spaces, so both forms work.</p>
-<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>ActionKeyword:
-  - clear_element_text
-  - detect_and_press
-  ...
-AppManagement:
-  - launch_app
-  ...</code></pre></figure>
-<p>For parameters and examples, see <a href="../../docs/reference/keywords/">Keywords</a>.</p>
+<p>Prints every keyword, or the parameters of one keyword.</p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics list [keyword]">Copy</button><pre><code>optics list [keyword]</code></pre></figure>
+<p>Without a keyword, it prints each keyword on one line, as you write it in a module:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="prompt">$</span> <b>optics list</b>
+Assert Equality
+Assert Presence
+Assert Text
+…</code></pre></figure>
+<p>With a keyword, it prints the parameters in CSV column order, with their defaults, then the keyword's description. <code class="ic">param_1</code> is the first column after <code class="ic">module_step</code>:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="prompt">$</span> <b>optics list Assert Presence</b>
+Assert Presence
+  param_1  elements
+  param_2  timeout_str = 30
+  param_3  rule = any
+  param_4  event_name = None
+  param_5  fail = True
+
+Asserts the presence of elements -- anywhere in the page/DOM, visible or not.
+…</code></pre></figure>
+<p>A parameter without <code class="ic">=</code> is required. Case, spaces and underscores do not matter, so <code class="ic">Assert Presence</code>, <code class="ic">"assert presence"</code> and <code class="ic">assert_presence</code> give the same result. A keyword that takes any number of values, such as <code class="ic">Run Loop</code>, shows them as <code class="ic">param_2...  args...</code>.</p>
+<p>An unknown name prints a suggestion and exits with code 1:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="prompt">$</span> <b>optics list Asert Presense</b>
+Keyword not found: Asert Presense. Did you mean 'Assert Presence'? (run `optics list` to see all keywords)</code></pre></figure>
+<p>When <code class="ic">optics dry_run</code> finds a step with the wrong parameters, its message ends with the <code class="ic">optics list &lt;keyword&gt;</code> command to run. For examples, see <a href="../../docs/reference/keywords/">Keywords</a>.</p>
 <h2 id="optics-completion"><code class="ic">optics completion</code><a class="anchor" href="#optics-completion" aria-label="Link to this section">#</a></h2>
 <p>Turns on tab completion for <code class="ic">optics</code> in bash or zsh.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="optics completion">Copy</button><pre><code>optics completion</code></pre></figure>
@@ -265,18 +320,18 @@ AppManagement:
 <p>The install scripts put Optics in its own virtual environment under <code class="ic">~/.optics</code> and add the <code class="ic">optics</code> command to your PATH. They don't change your system Python. Python 3.12 or later is the one prerequisite.</p>
 <div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS and Linux">macOS and Linux</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Windows">Windows</button><button class="os-tab" role="tab" id="tabs-os-t2" aria-controls="tabs-os-p2" aria-selected="false" tabindex="-1" data-tab="pip">pip</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh</code></pre></figure>
 <p>Pass options after <code class="ic">sh -s --</code>:</p>
-<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,easyocr">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh <span class="c-info">-s</span> <span class="c-info">--</span> <span class="c-info">--extra</span> appium,easyocr</code></pre></figure>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,rapidocr">Copy</button><pre><code><span class="prompt">$</span> <b>curl</b> <span class="c-info">-fsSL</span> https://optics-framework.org/install | sh <span class="c-info">-s</span> <span class="c-info">--</span> <span class="c-info">--extra</span> appium,rapidocr</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Option</th><th>Environment variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">--version X.Y.Z</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Installs a specific release.</td></tr><tr><td><code class="ic">--extra a,b</code></td><td></td><td>Also installs engine extras, for example <code class="ic">appium,llm</code>. The <code class="ic">mcp</code> extra is always installed.</td></tr><tr><td><code class="ic">--dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Installs somewhere other than <code class="ic">~/.optics</code>.</td></tr><tr><td><code class="ic">--no-modify-path</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Leaves your shell profile alone.</td></tr><tr><td><code class="ic">--dry-run</code></td><td></td><td>Prints what would happen and changes nothing.</td></tr><tr><td><code class="ic">--uninstall</code></td><td></td><td>Removes Optics and the PATH line it added to your shell profile. Other files in the folder are kept.</td></tr><tr><td><code class="ic">--help</code></td><td></td><td>Shows the options.</td></tr></tbody></table></div>
 <p>On Windows under Git Bash, MSYS2 or Cygwin, the script stops and points you to the PowerShell installer. Inside WSL, use this script.</p></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>irm</b> https://optics-framework.org/install.ps1 | iex</code></pre></figure>
 <p>Piping into <code class="ic">iex</code> can't pass parameters, so set environment variables first:</p>
-<figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="$env:OPTICS_EXTRA = &quot;appium,easyocr&quot;
-irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>$env:OPTICS_EXTRA</b> = "appium,easyocr"
+<figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="$env:OPTICS_EXTRA = &quot;appium,rapidocr&quot;
+irm https://optics-framework.org/install.ps1 | iex">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>$env:OPTICS_EXTRA</b> = "appium,rapidocr"
 <span class="prompt">PS&gt;</span> <b>irm</b> https://optics-framework.org/install.ps1 | iex</code></pre></figure>
 <div class="table-wrap"><table><thead><tr><th>Parameter (downloaded script)</th><th>Environment variable</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">-Version X.Y.Z</code></td><td><code class="ic">OPTICS_VERSION</code></td><td>Installs a specific release.</td></tr><tr><td><code class="ic">-Extra a,b</code></td><td><code class="ic">OPTICS_EXTRA</code></td><td>Also installs engine extras. The <code class="ic">mcp</code> extra is always installed.</td></tr><tr><td><code class="ic">-Dir PATH</code></td><td><code class="ic">OPTICS_INSTALL_DIR</code></td><td>Installs somewhere other than <code class="ic">~\.optics</code>.</td></tr><tr><td><code class="ic">-NoModifyPath</code></td><td><code class="ic">OPTICS_NO_MODIFY_PATH</code></td><td>Leaves your PATH alone.</td></tr><tr><td><code class="ic">-DryRun</code></td><td></td><td>Prints what would happen and changes nothing.</td></tr><tr><td><code class="ic">-Uninstall</code></td><td></td><td>Removes Optics and its entry in your user PATH. Other files in the folder are kept.</td></tr></tbody></table></div>
 <p>To pass parameters without downloading the script, run it as a script block:</p>
 <figure class="code doc-code" data-lang="powershell"><button class="copy" type="button" aria-label="Copy code" data-copy="&amp; ([scriptblock]::Create((irm https://optics-framework.org/install.ps1))) -Uninstall">Copy</button><pre><code><span class="prompt">PS&gt;</span> <b>&amp;</b> ([scriptblock]::Create((irm https://optics-framework.org/install.ps1))) <span class="c-info">-Uninstall</span></code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p2" aria-labelledby="tabs-os-t2" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="python3 -m venv .venv &amp;&amp; . .venv/bin/activate
-pip install &quot;optics-framework[appium,easyocr]&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>python3</b> <span class="c-info">-m</span> venv .venv &amp;&amp; . .venv/bin/activate
-<span class="prompt">$</span> <b>pip</b> install "optics-framework[appium,easyocr]"</code></pre></figure>
+pip install &quot;optics-framework[appium,rapidocr]&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>python3</b> <span class="c-info">-m</span> venv .venv &amp;&amp; . .venv/bin/activate
+<span class="prompt">$</span> <b>pip</b> install "optics-framework[appium,rapidocr]"</code></pre></figure>
 <p>Install into a virtual environment you control. Add <a href="../../docs/reference/engines">extras</a> in the brackets.</p></div></div>
 <p>See <a href="../../docs/get-started/install">Install Optics</a> for a step-by-step guide.</p>
         </div>
@@ -297,7 +352,7 @@ pip install &quot;optics-framework[appium,easyocr]&quot;">Copy</button><pre><cod
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -339,10 +394,10 @@ pip install &quot;optics-framework[appium,easyocr]&quot;">Copy</button><pre><cod
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

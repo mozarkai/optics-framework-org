@@ -36,11 +36,15 @@ EasyOCR and Optics need different major versions of NumPy under Conda, so they c
 
 Use the installer or a standard `venv` instead of Conda.
 
-### The MCP server isn't installed by `optics setup`
+### "The Optics MCP server needs the mcp extra"
 
-`optics setup --install mcp` reports `Invalid engine(s): mcp`, and the `all` bundle leaves the MCP server out.
+`optics mcp` stops with this panel when the `mcp` extra is not installed. The `all` bundle leaves the MCP server out.
 
-The install scripts include it. With pip, install it yourself: `pip install "optics-framework[mcp]"`. See [MCP server](https://optics-framework.org/docs/reference/mcp#install).
+```shell
+$ optics setup --install mcp
+```
+
+The install scripts include it. See [MCP server](https://optics-framework.org/docs/reference/mcp#install).
 
 ### "Operation not permitted" for a project or venv in Documents on macOS
 
@@ -258,6 +262,26 @@ To fail on a missing element, use Assert Presence. To fail on wrong text, use `A
 When you set `execution_output_path` yourself, Optics doesn't create the folder. Results and logs create it, but screenshots fail to save without a warning.
 
 Create the folder before the run. See [config.yaml](https://optics-framework.org/docs/reference/config#top-level-keys).
+
+### "cannot take these params"
+
+A step does not give its keyword the parameters that it takes. `optics dry_run` fails the step with E0403:
+
+```terminal
+Code.E0403: 'Press Element' cannot take these params: missing a required argument: 'element'. See its params with: optics list Press Element
+```
+
+`optics execute` fails the same step with X0401 and the Python message: `ActionKeyword.press_element() missing 1 required positional argument: 'element'`. Run `optics dry_run` to get the message above.
+
+Run the command at the end of the message. It prints the parameters in column order: `param_1` is the first column after `module_step`. Then fix the row:
+
+- `missing a required argument`: add the value in its column.
+- `too many positional arguments`: remove the extra cells.
+- `multiple values for argument`: a value in a column and the same parameter as `name=value` collide. Keep one of them.
+
+### "The elements file has Element_Name but no Element_ID column"
+
+The header of an elements file must be `Element_Name,Element_ID`. A header such as `Element_Name,Element_Locator` stops the run before a session starts, with a `Cannot start: E0503` panel that names the file. Rename the column to `Element_ID`. More values go in `Element_ID_2`, `Element_ID_3` and so on. See [Elements](https://optics-framework.org/docs/reference/files#elements).
 
 ### `optics dry_run` fails without a device
 

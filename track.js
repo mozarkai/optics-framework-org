@@ -161,6 +161,8 @@
     else track("copy", "text", sel ? sel.toString().length : null);
   });
 
+  on(document, "optics:play", function (e) { track("scene", "playground:" + e.detail); });
+
   on(document, "change", function (e) {
     if (e.target.matches(".task input[type=checkbox]")) {
       var item = e.target.closest("li") || e.target.parentElement;

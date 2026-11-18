@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="index.md" title="This page as Markdown">
   <meta property="og:title" content="Supported platforms · Optics Framework docs">
   <meta property="og:description" content="Optics tests Android, iOS, mobile web, websites, Android TV, Samsung Tizen, LG webOS, macOS, Linux and Windows desktop apps, and locked production devices. See the driver, element sources and limits for each platform.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -86,7 +86,7 @@
 <figure class="scene-fig"><div class="scene" data-scene="platforms" role="img" aria-label="One test on a phone, a TV and a browser. Phones and browsers press the element itself. Tizen and webOS TVs have no touch, so their steps move the focus with remote keys."></div><figcaption>One test on a phone, a TV and a browser. Phones and browsers press the element itself. Tizen and webOS TVs have no touch, so their steps move the focus with remote keys.</figcaption></figure>
 <p>Optics runs the same tests on phones, TVs, browsers, desktop apps and locked production devices. A <strong>driver</strong> controls the device, and <strong>element sources</strong> are the ways Optics looks at the screen. You pick both in <code class="ic">config.yaml</code>.</p>
 <h2 id="support-matrix">Support matrix<a class="anchor" href="#support-matrix" aria-label="Link to this section">#</a></h2>
-<div class="table-wrap"><table><thead><tr><th>Platform</th><th>Driver</th><th>Element sources</th><th>Notes</th></tr></thead><tbody><tr><td>Android</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_web</code>, <code class="ic">appium_screenshot</code></td><td>Needs the Appium server, adb, and a phone or emulator.</td></tr><tr><td>iOS</td><td><code class="ic">appium</code> (XCUITest)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_web</code>, <code class="ic">appium_screenshot</code></td><td>Needs a Mac with Xcode, and a simulator or a signed real device.</td></tr><tr><td>Mobile web (Chrome, Safari, WebViews)</td><td><code class="ic">appium</code></td><td><code class="ic">appium_web</code> with the Android or iOS sources</td><td>Same setup as Android or iOS. Finds <code class="ic">css=</code> and DOM XPath locators in the page.</td></tr><tr><td>Android TV</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Same setup as Android. Move around with D-pad key numbers.</td></tr><tr><td>Samsung Tizen</td><td><code class="ic">appium</code> (<code class="ic">platformName: TizenTV</code>)</td><td><code class="ic">appium_find_element</code>, <code class="ic">camera_screenshot</code></td><td>Element keywords move the remote focus. Touch keywords fail with E0105.</td></tr><tr><td>LG webOS</td><td><code class="ic">appium</code> (<code class="ic">platformName: LGTV</code>)</td><td><code class="ic">appium_find_element</code>, plus OCR</td><td>Element keywords move the remote focus. Touch keywords fail with E0105.</td></tr><tr><td>Web (Playwright)</td><td><code class="ic">playwright</code></td><td><code class="ic">playwright_find_element</code>, <code class="ic">playwright_page_source</code>, <code class="ic">playwright_screenshot</code></td><td>No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone.</td></tr><tr><td>Web (Selenium)</td><td><code class="ic">selenium</code></td><td><code class="ic">selenium_find_element</code>, <code class="ic">selenium_page_source</code>, <code class="ic">selenium_screenshot</code></td><td>Needs a WebDriver server or Grid. Chrome or Firefox.</td></tr><tr><td>Desktop (macOS, Linux, Windows)</td><td><code class="ic">appium</code> (<code class="ic">automationName: Xa11y</code>)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Needs Appium and appium-xa11y-driver on the computer that shows the app. Windows is experimental.</td></tr><tr><td>Production devices (BLE + camera)</td><td><code class="ic">ble</code></td><td><code class="ic">camera_screenshot</code>, plus OCR or image matching</td><td>Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Platform</th><th>Driver</th><th>Element sources</th><th>Notes</th></tr></thead><tbody><tr><td>Android</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_web</code>, <code class="ic">appium_screenshot</code></td><td>Needs the Appium server, adb, and a phone or emulator.</td></tr><tr><td>iOS</td><td><code class="ic">appium</code> (XCUITest)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_web</code>, <code class="ic">appium_screenshot</code></td><td>Needs a Mac with Xcode, and a simulator or a signed real device.</td></tr><tr><td>Mobile web (Chrome, Safari, WebViews)</td><td><code class="ic">appium</code></td><td><code class="ic">appium_web</code> with the Android or iOS sources</td><td>Same setup as Android or iOS. Finds <code class="ic">css=</code> and DOM XPath locators in the page.</td></tr><tr><td>Android TV</td><td><code class="ic">appium</code> (UiAutomator2)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Same setup as Android. Move around with D-pad key numbers.</td></tr><tr><td>Samsung Tizen</td><td><code class="ic">appium</code> (<code class="ic">platformName: TizenTV</code>)</td><td><code class="ic">appium_find_element</code>, <code class="ic">camera_screenshot</code></td><td>Element keywords move the remote focus. Touch keywords fail with E0105.</td></tr><tr><td>LG webOS</td><td><code class="ic">appium</code> (<code class="ic">platformName: LGTV</code>)</td><td><code class="ic">appium_find_element</code>, plus OCR</td><td>Element keywords move the remote focus. Touch keywords fail with E0105.</td></tr><tr><td>Web (Playwright)</td><td><code class="ic">playwright</code></td><td><code class="ic">playwright_find_element</code>, <code class="ic">playwright_page_source</code>, <code class="ic">playwright_screenshot</code></td><td>No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone.</td></tr><tr><td>Web (Selenium)</td><td><code class="ic">selenium</code></td><td><code class="ic">selenium_find_element</code>, <code class="ic">selenium_page_source</code>, <code class="ic">selenium_screenshot</code></td><td>Needs a WebDriver server or Grid. Chrome or Firefox.</td></tr><tr><td>Desktop (macOS, Linux, Windows)</td><td><code class="ic">appium</code> (<code class="ic">automationName: Xa11y</code>)</td><td><code class="ic">appium_find_element</code>, <code class="ic">appium_page_source</code>, <code class="ic">appium_screenshot</code></td><td>Needs Appium and appium-xa11y-driver on the computer that shows the app. Windows is experimental.</td></tr><tr><td>Production devices (BLE + camera)</td><td><code class="ic">ble</code></td><td><code class="ic">camera_screenshot</code>, plus OCR or image matching</td><td>Taps, types and opens apps through an airhand dongle that the device sees as a Bluetooth keyboard and pointer, and sees the screen through a camera. iOS, Android, macOS, Windows and Linux. Without a camera, position and key keywords still work.</td></tr></tbody></table></div>
 <p>Enable one driver and the element sources whose names start with that driver's name. The <a href="../../docs/reference/config">config.yaml reference</a> lists every key, and the <a href="../../docs/reference/engines">engines reference</a> lists what each engine installs.</p>
 <h2 id="choose-a-driver-for-web">Choose a driver for web<a class="anchor" href="#choose-a-driver-for-web" aria-label="Link to this section">#</a></h2>
 <p>We recommend <strong>Playwright</strong> for most people. It needs no server, <code class="ic">optics setup</code> installs its browser for you, and it runs on your own machine.</p>
@@ -127,7 +127,7 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -169,10 +169,10 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

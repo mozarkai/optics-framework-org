@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="index.md" title="This page as Markdown">
   <meta property="og:title" content="How Optics finds elements · Optics Framework docs">
   <meta property="og:description" content="Learn how Optics tries several ways to find each element, so one changed locator doesn't fail a test.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -98,7 +98,7 @@ sign_in,sign_in.png">Copy</button><pre><code><span class="c-dim">Element_Name,El
 <span class="c-mod">sign_in</span><span class="c-dim">,</span><b>sign_in.png</b></code></pre></figure>
 <h3 id="2-each-way-to-find-that-kind-of-value">2. Each way to find that kind of value<a class="anchor" href="#2-each-way-to-find-that-kind-of-value" aria-label="Link to this section">#</a></h3>
 <p>Optics looks at a value and decides what kind it is, then tries the ways that fit, cheapest first:</p>
-<div class="table-wrap"><table><thead><tr><th>Value looks like</th><th>Optics tries</th><th>Needs</th></tr></thead><tbody><tr><td>An XPath, such as <code class="ic">//*[@resource-id='login']</code></td><td>The UI tree</td><td>A driver that exposes a UI tree</td></tr><tr><td>Text, such as <code class="ic">Sign in</code></td><td>1. The UI tree<br>2. OCR on a screenshot</td><td>OCR needs a <a href="../../docs/elements/text-and-images">text detection engine</a></td></tr><tr><td>An image file, such as <code class="ic">sign_in.png</code></td><td>Image matching on a screenshot</td><td>An <a href="../../docs/elements/text-and-images">image detection engine</a></td></tr><tr><td>CSS, such as <code class="ic">css=#login</code></td><td>The web page</td><td>Playwright, or a web page on Appium. See <a href="../../docs/platforms/mobile-web">Mobile web</a>.</td></tr><tr><td><code class="ic">text_only:Sign in</code></td><td>OCR only, skipping the UI tree</td><td>A text detection engine</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Value looks like</th><th>Optics tries</th><th>Needs</th></tr></thead><tbody><tr><td>An XPath, such as <code class="ic">//*[@resource-id='login']</code></td><td>The UI tree</td><td>A driver that exposes a UI tree</td></tr><tr><td>Text, such as <code class="ic">Sign in</code></td><td>1. The UI tree<br>2. OCR on a screenshot</td><td>OCR needs a <a href="../../docs/elements/text-and-images">text detection engine</a></td></tr><tr><td>An image file, such as <code class="ic">sign_in.png</code></td><td>Image matching on a screenshot</td><td>An <a href="../../docs/elements/text-and-images">image detection engine</a></td></tr><tr><td>CSS, such as <code class="ic">css=#login</code></td><td>The web page</td><td>Playwright, Selenium, or a web page on Appium. See <a href="../../docs/platforms/mobile-web">Mobile web</a>.</td></tr><tr><td><code class="ic">text_only:Sign in</code></td><td>OCR only, skipping the UI tree</td><td>A text detection engine</td></tr></tbody></table></div>
 <p>Looking something up in the UI tree takes milliseconds. OCR and image matching read a screenshot, which takes longer, so Optics only uses them when the tree can't help. <a href="../../docs/elements/define">Define elements</a> shows every kind of value.</p>
 <h3 id="3-each-element-source-in-config-order">3. Each element source, in config order<a class="anchor" href="#3-each-element-source-in-config-order" aria-label="Link to this section">#</a></h3>
 <p><code class="ic">config.yaml</code> lists <strong>element sources</strong>: the ways Optics may look at the screen, such as asking the app directly, reading its UI tree, or taking a screenshot. For an action, Optics tries them in the order of the list, with each way that fits in each source. Assertions always try the UI tree sources before OCR and image matching. If you enable more than one driver, each is tried in turn as well.</p>
@@ -130,7 +130,7 @@ sign_in,sign_in.png">Copy</button><pre><code><span class="c-dim">Element_Name,El
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -172,10 +172,10 @@ sign_in,sign_in.png">Copy</button><pre><code><span class="c-dim">Element_Name,El
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

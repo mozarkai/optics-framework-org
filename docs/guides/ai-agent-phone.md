@@ -39,10 +39,13 @@ $ pip install "optics-framework[mcp,appium]"
 **Claude Code**
 
 ```shell
-$ claude mcp add -s user optics -- ~/.optics/bin/optics mcp
+$ ~/.optics/bin/optics mcp install
+Registered optics for all folders: /Users/ana/.optics/venv/bin/optics mcp
+A client loads its MCP servers only when a session starts: start a new session, then check that the optics tools are listed.
+In Claude Code, `claude --continue` keeps the conversation, and /mcp shows optics as connected.
 ```
 
-`-s user` adds the server for all your folders, not only the current folder. Give the full path of `optics`, because the installer adds `~/.optics/bin` to `PATH` only in new terminals. If you installed with pip, use the path that `command -v optics` shows.
+The command registers the server for all your folders, with the absolute path of this install. Give the full path of `optics` the first time, because the installer adds `~/.optics/bin` to `PATH` only in new terminals. If you installed with pip, run `optics mcp install` in that environment.
 **Cursor**
 
 Add this to `.cursor/mcp.json` in your project, or `~/.cursor/mcp.json` for every project:
@@ -99,7 +102,7 @@ A typical session goes like this:
 1. **Start a session.** `start_session` connects to Appium with your capabilities, opens the app and returns the first screen as rows, such as `e7 button "Sign in" [tap] #sign_in`.
 2. **Act.** The agent calls `tap`, `type_text` and `scroll` on a ref such as `e7`. Optics uses a locator that matches only that element. Each reply shows what changed on the screen. For a system key, the agent calls `press_key` with `back` or an Android key number such as `66`. `press_key` refuses a ref.
 3. **Check.** It calls `check` with the text that proves the step worked, such as `present: ["1 item"]`. An action that has `expect_present` or `expect_absent` waits up to 5 seconds for the text.
-4. **End the session.** `terminate_session` closes the app.
+4. **End the session.** `terminate_session` closes the app, and the reply gives the address of the steps.
 
 The agent taps by reference, not by position. The server hides coordinate taps by default, because tests that guess positions break on any other screen size. See [Coordinate taps](https://optics-framework.org/docs/reference/mcp#coordinate-taps).
 
@@ -113,7 +116,7 @@ the steps you ran as an Optics suite in ./checkout, with a config.yaml
 for this phone. Run optics dry_run on it and fix any errors.
 ```
 
-The steps resource gives the module and element rows of each step that passed. A typed password shows as `<redacted>`. Put the real value in the elements file, or read it from an environment variable. The agent writes the same CSV files a person would: test cases, modules and elements. Review them like a colleague's pull request, then run them:
+The steps resource gives the module and element rows of each step that passed. It stays readable after the session ends, also after the server restarts. A typed password shows as `<redacted>`. Put the real value in the elements file, or read it from an environment variable. The agent writes the same CSV files a person would: test cases, modules and elements. Review them like a colleague's pull request, then run them:
 
 ```shell
 $ optics execute checkout
@@ -125,7 +128,7 @@ The run writes a JUnit report and screenshots to `execution_output/`. See [Read 
 
 - **No loops or conditions as tools.** `Run Loop`, `Condition` and the other flow-control keywords only work inside suite files. The agent can still write them there.
 - **No save tool.** The agent writes the suite files from the steps resource and `optics://project-format`.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call. With two phones open, the agent must pass `session_id` on each call.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see an MCP session. It ends when the agent calls `terminate_session` or the server stops. Its steps stay readable after that. With two phones open, the agent must pass `session_id` on each call.
 - **Apps that block screenshots.** The agent sees what the driver sees. For an app that blocks screenshots, see [Test apps that block screenshots](https://optics-framework.org/docs/guides/protected-apps).
 
 ## See also

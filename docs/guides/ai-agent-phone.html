@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="ai-agent-phone.md" title="This page as Markdown">
   <meta property="og:title" content="Let your AI agent drive a real phone over MCP · Optics Framework docs">
   <meta property="og:description" content="Let an AI coding agent such as Claude Code, Cursor or Codex tap, type and read the screen on a real Android phone or iPhone over MCP and Appium with the open-source optics mcp server, then save the run as a reusable test suite.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -97,8 +97,11 @@
 <p>With pip, install both extras in the same environment as Optics:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pip install &quot;optics-framework[mcp,appium]&quot;">Copy</button><pre><code><span class="prompt">$</span> <b>pip</b> install "optics-framework[mcp,appium]"</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="add-optics-to-your-agent">Add Optics to your agent<a class="anchor" href="#add-optics-to-your-agent" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<div class="doc-tabs" data-group="client"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-client-t0" aria-controls="tabs-client-p0" aria-selected="true"  data-tab="Claude Code">Claude Code</button><button class="os-tab" role="tab" id="tabs-client-t1" aria-controls="tabs-client-p1" aria-selected="false" tabindex="-1" data-tab="Cursor">Cursor</button><button class="os-tab" role="tab" id="tabs-client-t2" aria-controls="tabs-client-p2" aria-selected="false" tabindex="-1" data-tab="Codex">Codex</button><button class="os-tab" role="tab" id="tabs-client-t3" aria-controls="tabs-client-p3" aria-selected="false" tabindex="-1" data-tab="Other clients">Other clients</button></div><div class="tab-pane" role="tabpanel" id="tabs-client-p0" aria-labelledby="tabs-client-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="claude mcp add -s user optics -- ~/.optics/bin/optics mcp">Copy</button><pre><code><span class="prompt">$</span> <b>claude</b> mcp add <span class="c-info">-s</span> user optics <span class="c-info">--</span> ~/.optics/bin/optics mcp</code></pre></figure>
-<p><code class="ic">-s user</code> adds the server for all your folders, not only the current folder. Give the full path of <code class="ic">optics</code>, because the installer adds <code class="ic">~/.optics/bin</code> to <code class="ic">PATH</code> only in new terminals. If you installed with pip, use the path that <code class="ic">command -v optics</code> shows.</p></div><div class="tab-pane" role="tabpanel" id="tabs-client-p1" aria-labelledby="tabs-client-t1" hidden><p>Add this to <code class="ic">.cursor/mcp.json</code> in your project, or <code class="ic">~/.cursor/mcp.json</code> for every project:</p>
+<div class="doc-tabs" data-group="client"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-client-t0" aria-controls="tabs-client-p0" aria-selected="true"  data-tab="Claude Code">Claude Code</button><button class="os-tab" role="tab" id="tabs-client-t1" aria-controls="tabs-client-p1" aria-selected="false" tabindex="-1" data-tab="Cursor">Cursor</button><button class="os-tab" role="tab" id="tabs-client-t2" aria-controls="tabs-client-p2" aria-selected="false" tabindex="-1" data-tab="Codex">Codex</button><button class="os-tab" role="tab" id="tabs-client-t3" aria-controls="tabs-client-p3" aria-selected="false" tabindex="-1" data-tab="Other clients">Other clients</button></div><div class="tab-pane" role="tabpanel" id="tabs-client-p0" aria-labelledby="tabs-client-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="~/.optics/bin/optics mcp install">Copy</button><pre><code><span class="prompt">$</span> <b>~/.optics/bin/optics</b> mcp install
+Registered optics for all folders: /Users/ana/.optics/venv/bin/optics mcp
+A client loads its MCP servers only when a session starts: start a new session, then check that the optics tools are listed.
+In Claude Code, `claude --continue` keeps the conversation, and /mcp shows optics as connected.</code></pre></figure>
+<p>The command registers the server for all your folders, with the absolute path of this install. Give the full path of <code class="ic">optics</code> the first time, because the installer adds <code class="ic">~/.optics/bin</code> to <code class="ic">PATH</code> only in new terminals. If you installed with pip, run <code class="ic">optics mcp install</code> in that environment.</p></div><div class="tab-pane" role="tabpanel" id="tabs-client-p1" aria-labelledby="tabs-client-t1" hidden><p>Add this to <code class="ic">.cursor/mcp.json</code> in your project, or <code class="ic">~/.cursor/mcp.json</code> for every project:</p>
 <figure class="code doc-code has-title" data-lang="json"><figcaption><span>.cursor/mcp.json</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="{
   &quot;mcpServers&quot;: {
     &quot;optics&quot;: { &quot;command&quot;: &quot;optics&quot;, &quot;args&quot;: [&quot;mcp&quot;] }
@@ -132,7 +135,7 @@ that the cart shows 1 item. Tell me each step you took.</code></pre></figure>
 <p>For an iPhone, use <code class="ic">platformName iOS</code>, the phone's <code class="ic">udid</code> and the app's <code class="ic">bundleId</code>.</p></div></li></ol>
 <h2 id="what-the-agent-does">What the agent does<a class="anchor" href="#what-the-agent-does" aria-label="Link to this section">#</a></h2>
 <p>A typical session goes like this:</p>
-<ol><li><strong>Start a session.</strong> <code class="ic">start_session</code> connects to Appium with your capabilities, opens the app and returns the first screen as rows, such as <code class="ic">e7 button "Sign in" [tap] #sign_in</code>.</li><li><strong>Act.</strong> The agent calls <code class="ic">tap</code>, <code class="ic">type_text</code> and <code class="ic">scroll</code> on a ref such as <code class="ic">e7</code>. Optics uses a locator that matches only that element. Each reply shows what changed on the screen. For a system key, the agent calls <code class="ic">press_key</code> with <code class="ic">back</code> or an Android key number such as <code class="ic">66</code>. <code class="ic">press_key</code> refuses a ref.</li><li><strong>Check.</strong> It calls <code class="ic">check</code> with the text that proves the step worked, such as <code class="ic">present: ["1 item"]</code>. An action that has <code class="ic">expect_present</code> or <code class="ic">expect_absent</code> waits up to 5 seconds for the text.</li><li><strong>End the session.</strong> <code class="ic">terminate_session</code> closes the app.</li></ol>
+<ol><li><strong>Start a session.</strong> <code class="ic">start_session</code> connects to Appium with your capabilities, opens the app and returns the first screen as rows, such as <code class="ic">e7 button "Sign in" [tap] #sign_in</code>.</li><li><strong>Act.</strong> The agent calls <code class="ic">tap</code>, <code class="ic">type_text</code> and <code class="ic">scroll</code> on a ref such as <code class="ic">e7</code>. Optics uses a locator that matches only that element. Each reply shows what changed on the screen. For a system key, the agent calls <code class="ic">press_key</code> with <code class="ic">back</code> or an Android key number such as <code class="ic">66</code>. <code class="ic">press_key</code> refuses a ref.</li><li><strong>Check.</strong> It calls <code class="ic">check</code> with the text that proves the step worked, such as <code class="ic">present: ["1 item"]</code>. An action that has <code class="ic">expect_present</code> or <code class="ic">expect_absent</code> waits up to 5 seconds for the text.</li><li><strong>End the session.</strong> <code class="ic">terminate_session</code> closes the app, and the reply gives the address of the steps.</li></ol>
 <p>The agent taps by reference, not by position. The server hides coordinate taps by default, because tests that guess positions break on any other screen size. See <a href="../../docs/reference/mcp#coordinate-taps">Coordinate taps</a>.</p>
 <h2 id="keep-the-run-as-a-test">Keep the run as a test<a class="anchor" href="#keep-the-run-as-a-test" aria-label="Link to this section">#</a></h2>
 <p>What the agent did on the phone can become a suite you run without it. Ask it to save the flow:</p>
@@ -141,11 +144,11 @@ the steps you ran as an Optics suite in ./checkout, with a config.yaml
 for this phone. Run optics dry_run on it and fix any errors.">Copy</button><pre><code>Read optics://session/{id}/steps and optics://project-format, and write
 the steps you ran as an Optics suite in ./checkout, with a config.yaml
 for this phone. Run optics dry_run on it and fix any errors.</code></pre></figure>
-<p>The steps resource gives the module and element rows of each step that passed. A typed password shows as <code class="ic">&lt;redacted&gt;</code>. Put the real value in the elements file, or read it from an environment variable. The agent writes the same CSV files a person would: test cases, modules and elements. Review them like a colleague's pull request, then run them:</p>
+<p>The steps resource gives the module and element rows of each step that passed. It stays readable after the session ends, also after the server restarts. A typed password shows as <code class="ic">&lt;redacted&gt;</code>. Put the real value in the elements file, or read it from an environment variable. The agent writes the same CSV files a person would: test cases, modules and elements. Review them like a colleague's pull request, then run them:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute checkout">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute checkout</code></pre></figure>
 <p>The run writes a JUnit report and screenshots to <code class="ic">execution_output/</code>. See <a href="../../docs/run/results">Read the results</a>.</p>
 <h2 id="know-the-limits">Know the limits<a class="anchor" href="#know-the-limits" aria-label="Link to this section">#</a></h2>
-<ul><li><strong>No loops or conditions as tools.</strong> <code class="ic">Run Loop</code>, <code class="ic">Condition</code> and the other flow-control keywords only work inside suite files. The agent can still write them there.</li><li><strong>No save tool.</strong> The agent writes the suite files from the steps resource and <code class="ic">optics://project-format</code>.</li><li><strong>Sessions are private to the server.</strong> <code class="ic">optics serve</code> and <code class="ic">optics live</code> cannot see an MCP session. It ends when the server stops, or after 15 minutes without a call. With two phones open, the agent must pass <code class="ic">session_id</code> on each call.</li><li><strong>Apps that block screenshots.</strong> The agent sees what the driver sees. For an app that blocks screenshots, see <a href="../../docs/guides/protected-apps">Test apps that block screenshots</a>.</li></ul>
+<ul><li><strong>No loops or conditions as tools.</strong> <code class="ic">Run Loop</code>, <code class="ic">Condition</code> and the other flow-control keywords only work inside suite files. The agent can still write them there.</li><li><strong>No save tool.</strong> The agent writes the suite files from the steps resource and <code class="ic">optics://project-format</code>.</li><li><strong>Sessions are private to the server.</strong> <code class="ic">optics serve</code> and <code class="ic">optics live</code> cannot see an MCP session. It ends when the agent calls <code class="ic">terminate_session</code> or the server stops. Its steps stay readable after that. With two phones open, the agent must pass <code class="ic">session_id</code> on each call.</li><li><strong>Apps that block screenshots.</strong> The agent sees what the driver sees. For an app that blocks screenshots, see <a href="../../docs/guides/protected-apps">Test apps that block screenshots</a>.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/create/agent">Let your AI agent build tests</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/platforms/android">Test Android apps</a></li><li><a href="../../docs/platforms/ios">Test iOS apps</a></li></ul>
         </div>
@@ -166,7 +169,7 @@ for this phone. Run optics dry_run on it and fix any errors.</code></pre></figur
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -208,10 +211,10 @@ for this phone. Run optics dry_run on it and fix any errors.</code></pre></figur
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=5160aed22e" defer></script>
-  <script src="../../track.js?v=069e168b13" defer></script>
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

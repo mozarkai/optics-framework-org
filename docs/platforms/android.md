@@ -104,7 +104,7 @@ elements_sources:
   - appium_web:          {enabled: true}     # finds css= and DOM XPath in web pages
   - appium_screenshot:   {enabled: true}     # screenshots for OCR and image matching
 text_detection:
-  - easyocr: {enabled: true}                 # needs: optics setup --install easyocr
+  - rapidocr: {enabled: true}                # needs: optics setup --install rapidocr
 image_detection:
   - templatematch: {enabled: true}           # finds .png templates anywhere in the project
 log_level: INFO

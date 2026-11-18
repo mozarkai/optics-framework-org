@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="app.md" title="This page as Markdown">
   <meta property="og:title" content="App management keywords · Optics Framework docs">
   <meta property="og:description" content="Learn how to start, switch, close and inspect the app or browser under test.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -101,7 +101,7 @@ Open Birch Web,Launch App,https://birch.example">Copy</button><pre><code><span c
 <span class="c-mod">Open Birch Web</span><span class="c-dim">,</span><b>Launch App</b><span class="c-dim">,</span>https://birch.example</code></pre></figure>
 <figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Launch App com.birch.shop">Copy</button><pre><code>- Launch App com.birch.shop</code></pre></figure>
 <p>Good to know:</p>
-<ul><li>On Appium, Launch App starts a session if none is running. If a session is already running and you give an identifier, it brings that app to the front.</li><li>On Appium, a value that contains <code class="ic">://</code> opens as a URL or deep link. A web address opens in the device browser. See <a href="../../../docs/platforms/mobile-web">Mobile web</a>.</li><li>With no parameters, Launch App uses the app, URL and browser from your <a href="../../../docs/reference/config">config</a>. On Playwright, it opens the browser and no page.</li><li>On Selenium, <code class="ic">app_identifier</code> and <code class="ic">app_activity</code> apply only when Launch App starts the session. Later calls reopen the configured URL.</li><li>On Playwright, a second Launch App opens the URL in the same browser. The <code class="ic">browser</code>, <code class="ic">headless</code>, <code class="ic">viewport</code> and <code class="ic">device</code> capabilities set the browser. See <a href="../../../docs/platforms/web#emulate-a-phone">Web</a>.</li><li>On a desktop, Launch App starts <code class="ic">app</code> from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: an app name, a bundle id or an <code class="ic">.app</code> path on macOS, an executable on Linux and Windows. See <a href="../../../docs/platforms/desktop#work-with-more-than-one-app">Desktop</a>.</li><li>The BLE driver (a Bluetooth keyboard and mouse) can't launch apps. Open the app by tapping its icon instead.</li></ul>
+<ul><li>On Appium, Launch App starts a session if none is running. If a session is already running and you give an identifier, it brings that app to the front.</li><li>On Appium, a value that contains <code class="ic">://</code> opens as a URL or deep link. A web address opens in the device browser. See <a href="../../../docs/platforms/mobile-web">Mobile web</a>.</li><li>With no parameters, Launch App uses the app, URL and browser from your <a href="../../../docs/reference/config">config</a>. On Playwright, it opens the browser and no page.</li><li>On Selenium, <code class="ic">app_identifier</code> and <code class="ic">app_activity</code> apply only when Launch App starts the session. Later calls reopen the configured URL.</li><li>On Playwright, a second Launch App opens the URL in the same browser. The <code class="ic">browser</code>, <code class="ic">headless</code>, <code class="ic">viewport</code> and <code class="ic">device</code> capabilities set the browser. See <a href="../../../docs/platforms/web#emulate-a-phone">Web</a>.</li><li>On a desktop, Launch App starts <code class="ic">app</code> from the config, or brings it to the front if it runs. A value starts that app, or brings it to the front: an app name, a bundle id or an <code class="ic">.app</code> path on macOS, an executable on Linux and Windows. See <a href="../../../docs/platforms/desktop#work-with-more-than-one-app">Desktop</a>.</li><li>On the BLE driver, give the name of the app as the device shows it, for example <code class="ic">Settings</code>. Optics opens it with the launch methods in config.yaml, such as Spotlight on iOS or the app drawer search on Android. When no method opens the app, the step fails with E0405. With no value, Launch App does nothing. See <a href="../../../docs/platforms/production#open-apps">Open apps</a>.</li></ul>
 <h3 id="start-appium-session">Start Appium Session<a class="anchor" href="#start-appium-session" aria-label="Link to this section">#</a></h3>
 <p>Starts a driver session without naming an app. It's the same as Launch App with no parameters, and it works with every driver despite its name.</p>
 <div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">event_name</code></td><td>Empty</td><td>Label for a timed event.</td></tr></tbody></table></div>
@@ -116,7 +116,7 @@ Open Help,Launch Other App,https://birch.example/help">Copy</button><pre><code><
 <span class="c-mod">Open Help</span><span class="c-dim">,</span><b>Launch Other App</b><span class="c-dim">,</span>https://birch.example/help</code></pre></figure>
 <figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Launch Other App com.android.settings">Copy</button><pre><code>- Launch Other App com.android.settings</code></pre></figure>
 <p>Good to know:</p>
-<ul><li>On Appium, a value containing <code class="ic">://</code> opens as a deep link or URL. Anything else is started or brought to the front as an app.</li><li>On a desktop, it starts the app, or brings it to the front if it runs, and later steps act on it. Launch App with no value goes back to the app from the config.</li><li>On Playwright, the URL opens in a new tab.</li><li>On Selenium, the current tab navigates to the URL.</li><li>In Python the parameter is called <code class="ic">bundleid</code>.</li></ul>
+<ul><li>On Appium, a value containing <code class="ic">://</code> opens as a deep link or URL. Anything else is started or brought to the front as an app.</li><li>On a desktop, it starts the app, or brings it to the front if it runs, and later steps act on it. Launch App with no value goes back to the app from the config.</li><li>On the BLE driver, it opens the app by its name on the device, the same as Launch App. See <a href="../../../docs/platforms/production#open-apps">Open apps</a>.</li><li>On Playwright, the URL opens in a new tab.</li><li>On Selenium, the current tab navigates to the URL.</li><li>In Python the parameter is called <code class="ic">bundleid</code>.</li></ul>
 <h2 id="close">Close<a class="anchor" href="#close" aria-label="Link to this section">#</a></h2>
 <h3 id="close-and-terminate-app">Close And Terminate App<a class="anchor" href="#close-and-terminate-app" aria-label="Link to this section">#</a></h3>
 <p>Ends the driver session, which closes the app or browser, and sends any recorded events.</p>
@@ -131,20 +131,20 @@ Open Help,Launch Other App,https://birch.example/help">Copy</button><pre><code><
 <figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Reset Birch,Force Terminate App,com.birch.shop">Copy</button><pre><code><span class="c-mod">Reset Birch</span><span class="c-dim">,</span><b>Force Terminate App</b><span class="c-dim">,</span>com.birch.shop</code></pre></figure>
 <figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="- Force Terminate App com.birch.shop">Copy</button><pre><code>- Force Terminate App com.birch.shop</code></pre></figure>
 <p>Good to know:</p>
-<ul><li>On Appium, errors are logged and the step passes, even if the app wasn't killed. With no session it does nothing.</li><li>On a desktop, give the same app id as for Launch Other App, for example <code class="ic">gnome-calculator</code>.</li><li>On Selenium, it closes the current browser window and ignores <code class="ic">app_name</code>.</li><li>Playwright doesn't support it. The step fails.</li></ul>
+<ul><li>On Appium, errors are logged and the step passes, even if the app wasn't killed. With no session it does nothing.</li><li>On a desktop, give the same app id as for Launch Other App, for example <code class="ic">gnome-calculator</code>.</li><li>On Selenium, it closes the current browser window and ignores <code class="ic">app_name</code>.</li><li>Playwright doesn't support it. The step fails.</li><li>On the BLE driver, it works on iOS and Android. It opens the app by its name, then closes it from the App Switcher. See <a href="../../../docs/platforms/production#what-works-and-what-does-not">What works and what does not</a>.</li></ul>
 <h2 id="inspect">Inspect<a class="anchor" href="#inspect" aria-label="Link to this section">#</a></h2>
 <h3 id="get-app-version">Get App Version<a class="anchor" href="#get-app-version" aria-label="Link to this section">#</a></h3>
 <p>Reads the installed app's version.</p>
 <div class="table-wrap"><table><thead><tr><th>Parameter</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">app_package</code></td><td>Empty</td><td>The Android package or iOS bundle id. Empty uses the app from your config.</td></tr></tbody></table></div>
 <figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="App Info,Get App Version,com.birch.shop">Copy</button><pre><code><span class="c-mod">App Info</span><span class="c-dim">,</span><b>Get App Version</b><span class="c-dim">,</span>com.birch.shop</code></pre></figure>
 <p>Good to know:</p>
-<ul><li>On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.</li><li>To keep the version in a variable, add <a href="../../../docs/reference/keywords/#store-as"><code class="ic">store_as=name</code></a>.</li><li>On a desktop, the step fails with error E0105.</li><li>Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing <code class="ic">app_package</code> fails the step.</li></ul>
+<ul><li>On Android, Optics reads the version through adb. On iOS, it uses ideviceinstaller, which must be installed.</li><li>To keep the version in a variable, add <a href="../../../docs/reference/keywords/#store-as"><code class="ic">store_as=name</code></a>.</li><li>On a desktop and on the BLE driver, the step fails with error E0105.</li><li>Selenium doesn't support it, so the step fails. On Playwright it returns a "not supported" message, and passing <code class="ic">app_package</code> fails the step.</li></ul>
 <h3 id="get-driver-session-id">Get Driver Session Id<a class="anchor" href="#get-driver-session-id" aria-label="Link to this section">#</a></h3>
 <p>Returns the id of the current driver session.</p>
 <p>This keyword takes no parameters.</p>
 <figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="App Info,Get Driver Session Id">Copy</button><pre><code><span class="c-dim">App Info,Get Driver Session Id</span></code></pre></figure>
 <p>Good to know:</p>
-<ul><li>To keep the id in a variable, add <a href="../../../docs/reference/keywords/#store-as"><code class="ic">store_as=name</code></a>.</li><li>On Playwright, it returns nothing, so <code class="ic">store_as</code> fails. Selenium and the BLE driver do not support it, and the step fails.</li></ul>
+<ul><li>To keep the id in a variable, add <a href="../../../docs/reference/keywords/#store-as"><code class="ic">store_as=name</code></a>.</li><li>On Playwright, it returns nothing, so <code class="ic">store_as</code> fails. Selenium does not support it, and the step fails. The BLE driver returns the identity of the dongle.</li></ul>
 <h3 id="initialise-setup">Initialise Setup<a class="anchor" href="#initialise-setup" aria-label="Link to this section">#</a></h3>
 <p>Does nothing. It exists for compatibility and writes a debug log line only.</p>
 <p>This keyword takes no parameters.</p>
@@ -167,7 +167,7 @@ Open Help,Launch Other App,https://birch.example/help">Copy</button><pre><code><
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -209,10 +209,10 @@ Open Help,Launch Other App,https://birch.example/help">Copy</button><pre><code><
     </symbol>
   </svg>
 
-  <script src="../../../app.js?v=5160aed22e" defer></script>
-  <script src="../../../track.js?v=069e168b13" defer></script>
+  <script src="../../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../../track.js?v=a7621959d3" defer></script>
   <script src="../../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

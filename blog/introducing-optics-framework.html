@@ -7,7 +7,7 @@
   <meta name="description" content="Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.">
   <meta name="ai-summary" content="Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.">
   <link rel="canonical" href="https://optics-framework.org/blog/introducing-optics-framework">
-  <link rel="stylesheet" href="../docs.css?v=0ac11ae948">
+  <link rel="stylesheet" href="../docs.css?v=63d357ad4b">
   <link rel="alternate" type="text/markdown" href="introducing-optics-framework.md" title="Introducing Optics Framework: create a test your way, run it forever, as Markdown">
   <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
   <script type="application/ld+json">
@@ -37,10 +37,10 @@
   </script>
   <meta property="og:title" content="Introducing Optics Framework: create a test your way, run it forever · Optics blog">
   <meta property="og:description" content="Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="website">
   <link rel="icon" href="../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -50,7 +50,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../styles.css?v=2c04e05495">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -86,12 +86,12 @@
         <h1 class="h2">Introducing Optics Framework: create a test your way, run it forever</h1>
         <p class="lede">Optics is an open-source test automation framework for Android, iOS, web and TV apps. Tests are CSV or YAML files, and each element on screen can have several locators.</p>
         <p class="post-meta"><span><time datetime="2026-10-11">11 Oct 2026</time></span><span>Chinmay Jha</span><span>5 min read</span></p>
-        <img class="post-hero" src="../media/blog/introducing-optics.webp?v=3a05b8460c" alt="The headline Create it your way. Run it forever. beside a modules.csv test file and a passing optics execute run" decoding="async">
+        <img class="post-hero" src="../media/blog/introducing-optics.webp?v=8530319a12" alt="The headline Create it your way. Run it forever. beside a modules.csv test file and a passing optics execute run" decoding="async">
         <div class="prose">
 <p>A designer changes “Sign in” to “Log in”, or a developer renames the button’s id in a refactor, and the nightly run fails even though the app works. Someone then spends the next morning updating locators.</p>
 <p>At Atlassian, flaky tests caused <a href="https://www.atlassian.com/blog/atlassian-engineering/taming-test-flakiness-how-we-built-a-scalable-tool-to-detect-and-manage-flaky-tests" rel="noopener">up to 21% of master build failures</a> in the Jira frontend repo. Mobile teams often write the same flow separately for Android, iOS and the web. Many newer AI testing tools put a model in charge of every step of every run, so each run costs money and can take a different path through the app.</p>
 <p>Optics Framework, licensed under Apache 2.0, runs on your laptop or CI runner. It has no paid edition or account, and it sends no telemetry.</p>
-<p><img src="../media/blog/four-ways.webp?v=26d80113d5" alt="Animation: four ways to create an Optics test (write, record, describe, delegate), each producing the same CSV test suite" loading="lazy"></p>
+<p><img src="../media/blog/four-ways.webp?v=fc4871b95f" alt="Animation: four ways to create an Optics test (write, record, describe, delegate), each producing the same CSV test suite" loading="lazy"></p>
 <p><em>Four ways to create a test. Each one writes the same plain-text suite.</em></p>
 <h2 id="the-test-format">The test format<a class="anchor" href="#the-test-format" aria-label="Link to this section">#</a></h2>
 <p>A test row describes one action a person takes in the app, and Optics works out how to perform it on the current screen.</p>
@@ -108,7 +108,7 @@ Add To Cart,Press Element,Add to cart">Copy</button><pre><code><span class="c-di
 <h2 id="four-ways-to-create-a-test">Four ways to create a test<a class="anchor" href="#four-ways-to-create-a-test" aria-label="Link to this section">#</a></h2>
 <p>All four write the same files, and one project can mix them:</p>
 <ul><li>Write it in a text editor or a spreadsheet.</li><li>Record it in <code class="ic">optics live</code>, an interactive session next to your device. Each step runs on the device as you type it, and <code class="ic">/save</code> stores the steps that worked as a module.</li><li>Describe it in plain English. Press Ctrl+N in <code class="ic">optics live</code>, type <em>add trail runners to the cart</em>, and an AI model drives the app one keyword at a time.</li><li>Delegate it to your AI agent. Add <code class="ic">optics mcp</code> to Claude Code, Cursor or another MCP client, and every keyword becomes a tool the agent can call while it explores the app and writes the suite files.</li></ul>
-<p><img src="../media/blog/optics-live.webp?v=d12cf847fe" alt="Animation: an optics live terminal session running test steps on a phone app, then saving them to modules.csv" loading="lazy"></p>
+<p><img src="../media/blog/optics-live.webp?v=01960d56ee" alt="Animation: an optics live terminal session running test steps on a phone app, then saving them to modules.csv" loading="lazy"></p>
 <p><em>optics live runs each step on the device as you type it, and /save writes the steps into the suite.</em></p>
 <p>Teams that prefer code can use the same keywords from <a href="../docs/create/python">Python or Robot Framework</a>.</p>
 <h2 id="how-optics-finds-an-element">How Optics finds an element<a class="anchor" href="#how-optics-finds-an-element" aria-label="Link to this section">#</a></h2>
@@ -120,18 +120,18 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
 <span class="c-mod">sign_in</span><span class="c-dim">,</span><b>//*[@resource-id='login']</b>
 <span class="c-mod">sign_in</span><span class="c-dim">,</span><b>Sign in</b></code></pre></figure>
 <p>With these two rows, a refactor that renames the button’s id breaks the XPath, and Optics falls back to the button’s text. Text painted into a banner image never reaches the UI tree, so OCR is the only way to read it. The report for each step names the method that found the element, which tells you when a locator has gone stale.</p>
-<p><img src="../media/blog/locator-fallback.webp?v=56555344e2" alt="Animation: Optics locator fallback, where an XPath misses, the visible text matches, and OCR reads text inside a banner image" loading="lazy"></p>
+<p><img src="../media/blog/locator-fallback.webp?v=9995dd0f0b" alt="Animation: Optics locator fallback, where an XPath misses, the visible text matches, and OCR reads text inside a banner image" loading="lazy"></p>
 <p><em>After a redesign the XPath misses and Optics finds the button by its text. OCR reads a product name from a banner image.</em></p>
 <h2 id="ai-in-optics">AI in Optics<a class="anchor" href="#ai-in-optics" aria-label="Link to this section">#</a></h2>
 <p>Optics uses AI to write tests. A model or an agent explores the app and leaves behind keyword rows for you to review, and <code class="ic">optics execute</code> replays those rows without calling a model. The browser-use team made a similar choice when they built a deterministic follow-up to their AI browser agent, because <a href="https://news.ycombinator.com/item?id=44007065" rel="noopener">in their words</a> "pure LLM agents were slow, expensive, and unpredictable."</p>
 <p>AI self-heal is the one exception. You can switch it on as a last step for when every locator fails, and the log records each action the model takes.</p>
-<p><img src="../media/blog/ai-once.webp?v=0b8bc17608" alt="Diagram comparing an AI model deciding every test run with Optics, where a model helps author the test once and later runs replay keywords" loading="lazy"></p>
+<p><img src="../media/blog/ai-once.webp?v=b43b965b31" alt="Diagram comparing an AI model deciding every test run with Optics, where a model helps author the test once and later runs replay keywords" loading="lazy"></p>
 <p><em>Optics calls a model only while you write a test.</em></p>
 <h2 id="supported-platforms">Supported platforms<a class="anchor" href="#supported-platforms" aria-label="Link to this section">#</a></h2>
 <p>A project’s <code class="ic">config.yaml</code> names the target, and the same test files run on:</p>
 <ul><li>Android and iOS, through Appium, on emulators, simulators and real phones.</li><li>Websites, through Playwright or Selenium.</li><li>Android TV, Samsung Tizen and LG webOS, through Appium, using remote-control keys.</li><li>Locked production phones, through a Bluetooth mouse and keyboard and a camera pointed at the screen. Nothing gets installed on the phone, so a journey tested in CI can also monitor the live app.</li></ul>
 <p>Teams that already run Appium, Playwright or Selenium keep their drivers and devices, since Optics drives them directly.</p>
-<p><img src="../media/blog/platforms.webp?v=51cb888d3c" alt="Animation: the same Optics test running on a phone, a TV with remote keys, and a web browser" loading="lazy"></p>
+<p><img src="../media/blog/platforms.webp?v=f0deeae9a6" alt="Animation: the same Optics test running on a phone, a TV with remote keys, and a web browser" loading="lazy"></p>
 <p><em>The same test on a phone, a TV and a browser.</em></p>
 <h2 id="running-a-suite">Running a suite<a class="anchor" href="#running-a-suite" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics execute</code> prints a live tree of every test case, module and step. This is a real run on an Android emulator:</p>
@@ -154,7 +154,7 @@ optics execute my-optics-project</code></pre></figure>
     </div>
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -186,7 +186,7 @@ optics execute my-optics-project</code></pre></figure>
     </symbol>
   </svg>
 
-  <script src="../app.js?v=5160aed22e" defer></script>
-  <script src="../track.js?v=069e168b13" defer></script>
+  <script src="../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../track.js?v=a7621959d3" defer></script>
 </body>
 </html>

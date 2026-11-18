@@ -10,10 +10,10 @@
   <link rel="alternate" type="text/markdown" href="index.md" title="This page as Markdown">
   <meta property="og:title" content="Keywords · Optics Framework docs">
   <meta property="og:description" content="Every keyword you can use in a step, grouped by what it does.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="article">
   <link rel="icon" href="../../../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../../../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -23,9 +23,9 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../../styles.css?v=fc2d95b0c2">
-  <link rel="stylesheet" href="../../../docs.css?v=0ac11ae948">
-  <link rel="stylesheet" href="../../../scenes.css?v=ad01343c44">
+  <link rel="stylesheet" href="../../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../../docs.css?v=63d357ad4b">
+  <link rel="stylesheet" href="../../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../../docs/">
   <a class="skip" href="#main">Skip to content</a>
@@ -93,9 +93,19 @@ Sign In,Assert Presence,Welcome,20">Copy</button><pre><code><span class="c-dim">
 <span class="c-mod">Sign In</span><span class="c-dim">,</span><b>Assert Presence</b><span class="c-dim">,</span>Welcome<span class="c-dim">,</span>20</code></pre></figure>
 <h2 id="keyword-names">Keyword names<a class="anchor" href="#keyword-names" aria-label="Link to this section">#</a></h2>
 <p>Write keyword names in Title Case in CSV and YAML files: <code class="ic">Press Element</code>, <code class="ic">Assert Presence</code>. In <code class="ic">optics live</code>, the MCP server and Python, the same keyword is written in snake_case: <code class="ic">press_element</code>, <code class="ic">assert_presence</code>.</p>
-<p>The runner ignores capitalization and collapses spaces, so <code class="ic">Press Element</code>, <code class="ic">press element</code> and <code class="ic">press_element</code> all reach the same keyword. If you misspell a name, the error suggests the closest match. Run <code class="ic">optics list</code> to print every keyword name in snake_case.</p>
+<p>The runner ignores capitalization and collapses spaces, so <code class="ic">Press Element</code>, <code class="ic">press element</code> and <code class="ic">press_element</code> all reach the same keyword. If you misspell a name, the error suggests the closest match. Run <code class="ic">optics list</code> to print every keyword name as you write it in a module.</p>
 <h2 id="parameters">Parameters<a class="anchor" href="#parameters" aria-label="Link to this section">#</a></h2>
-<p>Parameters are positional. They fill the keyword's parameters in the order shown in each parameter table on these pages.</p>
+<p>Parameters are positional. They fill the keyword's parameters in the order shown in each parameter table on these pages. <code class="ic">optics list &lt;keyword&gt;</code> prints the same order in your terminal, with the CSV column of each parameter:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code><span class="prompt">$</span> <b>optics list Press Element</b>
+Press Element
+  param_1  element
+  param_2  repeat = 1
+  param_3  offset_x = 0
+  param_4  offset_y = 0
+  param_5  index = 0
+  param_6  aoi_x = 0
+  …</code></pre></figure>
+<p><code class="ic">optics dry_run</code> fails a step with E0403 when its values do not fit the keyword: a required value is missing, there are too many values, or a value in a column and a <code class="ic">name=value</code> set the same parameter.</p>
 <p>To set a parameter by name, write <code class="ic">name=value</code>. This works only when <code class="ic">name</code> is a real parameter of that keyword. Use it to skip parameters you want to leave at their defaults:</p>
 <figure class="code doc-code" data-lang="csv"><button class="copy" type="button" aria-label="Copy code" data-copy="Browse,Press Element,Trail Runner 2,index=1">Copy</button><pre><code><span class="c-mod">Browse</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span>Trail Runner 2<span class="c-dim">,</span>index=1</code></pre></figure>
 <p>Here <code class="ic">index=1</code> sets the fifth parameter of Press Element and leaves <code class="ic">repeat</code>, <code class="ic">offset_x</code> and <code class="ic">offset_y</code> at their defaults.</p>
@@ -163,7 +173,7 @@ Cart,Assert Text,${cart_total},${price}">Copy</button><pre><code><span class="c-
 <h2 id="deprecated-keywords">Deprecated keywords<a class="anchor" href="#deprecated-keywords" aria-label="Link to this section">#</a></h2>
 <p>Press Checkbox and Press Radio Button still work but log a warning. Use <a href="../../../docs/reference/keywords/actions#press-element">Press Element</a> instead. Swipe Seekbar To Right Android fails on Appium. Use <a href="../../../docs/reference/keywords/actions#swipe-from-element">Swipe From Element</a> instead.</p>
 <h2 id="where-each-keyword-works">Where each keyword works<a class="anchor" href="#where-each-keyword-works" aria-label="Link to this section">#</a></h2>
-<ul><li>**CSV and YAML suites, <code class="ic">optics live</code> and <code class="ic">optics serve</code>** have every keyword on this page.</li><li><strong>The MCP server</strong> gives 10 core tools by default. Its <code class="ic">run_keyword</code> tool runs most other keywords, but not the flow control keywords. See <a href="../../../docs/reference/mcp">MCP server</a>.</li><li><strong>Python and Robot Framework</strong> have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See <a href="../../../docs/create/python">Write tests in Python</a>.</li><li>**<code class="ic">optics generate</code>** skips flow-control keywords and a few others when it converts a suite to code.</li></ul>
+<ul><li>**CSV and YAML suites, <code class="ic">optics live</code> and <code class="ic">optics serve</code>** have every keyword on this page.</li><li><strong>The MCP server</strong> gives a small set of core tools by default. Its <code class="ic">run_keyword</code> tool runs most other keywords, but not the flow control keywords. See <a href="../../../docs/reference/mcp">MCP server</a>.</li><li><strong>Python and Robot Framework</strong> have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See <a href="../../../docs/create/python">Write tests in Python</a>.</li><li>**<code class="ic">optics generate</code>** skips flow-control keywords and a few others when it converts a suite to code.</li></ul>
 <h2 id="python-and-robot-framework-only">Python and Robot Framework only<a class="anchor" href="#python-and-robot-framework-only" aria-label="Link to this section">#</a></h2>
 <p>These keywords exist only in the <a href="../../../docs/create/python">Python library</a> and the <a href="../../../docs/create/robot">Robot Framework library</a>. The CSV and YAML runner reports them as unknown keywords.</p>
 <div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th></tr></thead><tbody><tr><td>Setup</td><td>Create a session from a config dictionary or YAML text</td></tr><tr><td>Setup From File</td><td>Create a session from a config file</td></tr><tr><td>Quit</td><td>End the session</td></tr><tr><td>Add Element</td><td>Add a value to a variable, after any values it already has</td></tr><tr><td>Get Element Value</td><td>Return the list of values for a variable</td></tr><tr><td>Add API</td><td>Load API definitions for Invoke API</td></tr><tr><td>Add Module</td><td>Define a module for Run Loop and Condition</td></tr><tr><td>Add Testcase</td><td>Set the session's test cases</td></tr><tr><td>Add Error Definitions</td><td>Add on-screen error definitions</td></tr><tr><td>Capture And Detect Errors</td><td>Check the current screen for defined errors and return any matches</td></tr><tr><td>Press Element With Index</td><td>Press Element with an index</td></tr></tbody></table></div>
@@ -185,7 +195,7 @@ Cart,Assert Text,${cart_total},${price}">Copy</button><pre><code><span class="c-
     </main>
   </div>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../../../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -227,10 +237,10 @@ Cart,Assert Text,${cart_total},${price}">Copy</button><pre><code><span class="c-
     </symbol>
   </svg>
 
-  <script src="../../../app.js?v=5160aed22e" defer></script>
-  <script src="../../../track.js?v=069e168b13" defer></script>
+  <script src="../../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../../track.js?v=a7621959d3" defer></script>
   <script src="../../../docs.js?v=771c6a77b1" defer></script>
-  <script src="../../../scenes.js?v=ac7a5affa2" defer></script>
-  <script src="../../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

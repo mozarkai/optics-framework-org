@@ -7,7 +7,7 @@
   <meta name="description" content="An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.">
   <meta name="ai-summary" content="An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.">
   <link rel="canonical" href="https://optics-framework.org/blog/ai-agent-writes-the-test-once">
-  <link rel="stylesheet" href="../docs.css?v=0ac11ae948">
+  <link rel="stylesheet" href="../docs.css?v=63d357ad4b">
   <link rel="alternate" type="text/markdown" href="ai-agent-writes-the-test-once.md" title="Your AI agent writes the test once. Optics runs it with no model., as Markdown">
   <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
   <script type="application/ld+json">
@@ -37,10 +37,10 @@
   </script>
   <meta property="og:title" content="Your AI agent writes the test once. Optics runs it with no model. · Optics blog">
   <meta property="og:description" content="An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="website">
   <link rel="icon" href="../logo.svg" type="image/svg+xml">
-  <link rel="preload" href="../fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -50,7 +50,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=fc2d95b0c2">
+  <link rel="stylesheet" href="../styles.css?v=2c04e05495">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -86,12 +86,12 @@
         <h1 class="h2">Your AI agent writes the test once. Optics runs it with no model.</h1>
         <p class="lede">An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.</p>
         <p class="post-meta"><span><time datetime="2026-10-20">20 Oct 2026</time></span><span>Chinmay Jha</span><span>6 min read</span></p>
-        <img class="post-hero" src="../media/blog/agent-writes-once.webp?v=e9a690dc76" alt="The headline Your agent writes it once. Optics runs it forever. beside an agent tool-call log and a terminal where optics execute passes with 0 model calls" decoding="async">
+        <img class="post-hero" src="../media/blog/agent-writes-once.webp?v=9af7c1d1c2" alt="The headline Your agent writes it once. Optics runs it forever. beside an agent tool-call log and a terminal where optics execute passes with 0 model calls" decoding="async">
         <div class="prose">
 <p>Many AI tools for UI tests put a model in control of each test run. Thus, each run has a model cost. Also, the model can go through the app in a different sequence each time.</p>
 <p>Optics Framework uses the model at a different point. Your AI agent goes through the app one time through the Optics MCP server. Then it writes a CSV test suite. After that, each run replays the suite and uses no model.</p>
 <p>I did this procedure on saucedemo.com, a sample web site for tests. The agent was Claude Code with claude-opus-5-5, and the server was Optics Framework 1.11.0. This post shows the recorded session, the files that the agent wrote and the data from 10 replays.</p>
-<video src="../media/blog/agent-session.mp4?v=a39307f53b" poster="../media/blog/agent-session-poster.webp?v=8b5cd2f532" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: Claude Code calls Optics MCP tools in a terminal panel while a Chromium window signs in to saucedemo.com, adds a backpack to the cart and completes the checkout. The agent then writes four suite files and the dry run passes."></video>
+<video src="../media/blog/agent-session.mp4?v=05e1953ff8" poster="../media/blog/agent-session-poster.webp?v=979279fd49" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: Claude Code calls Optics MCP tools in a terminal panel while a Chromium window signs in to saucedemo.com, adds a backpack to the cart and completes the checkout. The agent then writes four suite files and the dry run passes."></video>
 <p><em>The recorded agent session at 1.5× speed. The left panel shows each Optics tool call, and the right panel shows the browser that the agent controls.</em></p>
 <h2 id="the-prompt">The prompt<a class="anchor" href="#the-prompt" aria-label="Link to this section">#</a></h2>
 <p>I gave Claude Code one prompt and one MCP server. Skills and user settings were off. Thus, the agent had only the information from Optics.</p>
@@ -162,11 +162,11 @@ order_complete_header,text=Thank you for your order!,&quot;[data-test=&quot;&quo
 <p>These 4 files are the full result of the session. You can read them, review them in a pull request and keep them in Git with the code of your app.</p>
 <h2 id="the-replay">The replay<a class="anchor" href="#the-replay" aria-label="Link to this section">#</a></h2>
 <p>Then I ran the suite 10 times with <code class="ic">optics execute</code>. The environment had no API keys. All 10 runs passed. The shortest run was 2.8 seconds, the longest run was 4.2 seconds, and the median was 3.3 seconds. Each time includes the start of Python and the start of the browser.</p>
-<video src="../media/blog/replay-runs.mp4?v=3736f8f8b7" poster="../media/blog/replay-runs-poster.webp?v=83b3afcae3" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: three runs of optics execute checkout. Each run prints a tree of passed steps while Chromium completes the saucedemo.com checkout in about three seconds, with no model calls."></video>
+<video src="../media/blog/replay-runs.mp4?v=e5815b7071" poster="../media/blog/replay-runs-poster.webp?v=f3aa1b90fd" autoplay loop muted playsinline controls preload="metadata" aria-label="Screen recording: three runs of optics execute checkout. Each run prints a tree of passed steps while Chromium completes the saucedemo.com checkout in about three seconds, with no model calls."></video>
 <p><em>3 recorded replays of the suite at 1× speed, with the terminal output of each run.</em></p>
 <p>To count the model calls, I recorded each DNS lookup and each network connection from the Optics Python process. In all 10 runs, the record was empty. Only the browser connected to the network, to load saucedemo.com. To make sure that the record works, I sent one request to example.com from the same process. The record showed that request.</p>
 <p>The source code agrees with this result. Optics makes an LLM client only when you set <code class="ic">ai_self_heal</code> to <code class="ic">true</code>. The value is <code class="ic">false</code> if you do not set it.</p>
-<p><img src="../media/blog/agent-replay-figure.webp?v=9e7775e8ba" alt="Diagram: the agent session uses the model for 32 turns and 21 Optics tool calls, and writes 4 files in 71 seconds for $0.44. Each replay runs 13 steps in 3.3 seconds with 0 model calls and costs $0." loading="lazy"></p>
+<p><img src="../media/blog/agent-replay-figure.webp?v=1f5f014103" alt="Diagram: the agent session uses the model for 32 turns and 21 Optics tool calls, and writes 4 files in 71 seconds for $0.44. Each replay runs 13 steps in 3.3 seconds with 0 model calls and costs $0." loading="lazy"></p>
 <p><em>Data from the agent session and from the 10 replays.</em></p>
 <div class="table-wrap"><table><thead><tr><th></th><th>Agent session</th><th>Each replay</th></tr></thead><tbody><tr><td>Time</td><td>71 s</td><td>3.3 s (median of 10)</td></tr><tr><td>Model turns</td><td>32</td><td>0</td></tr><tr><td>Model cost</td><td>$0.44</td><td>$0</td></tr><tr><td>Result</td><td>4 suite files</td><td>10 of 10 runs passed</td></tr></tbody></table></div>
 <h2 id="when-the-page-changes">When the page changes<a class="anchor" href="#when-the-page-changes" aria-label="Link to this section">#</a></h2>
@@ -189,7 +189,7 @@ Pressing element 'Login'</code></pre></figure>
     </div>
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
     <div class="wrap foot-row">
       <a class="brand" href="../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -221,7 +221,7 @@ Pressing element 'Login'</code></pre></figure>
     </symbol>
   </svg>
 
-  <script src="../app.js?v=5160aed22e" defer></script>
-  <script src="../track.js?v=069e168b13" defer></script>
+  <script src="../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../track.js?v=a7621959d3" defer></script>
 </body>
 </html>

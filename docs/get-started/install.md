@@ -47,7 +47,7 @@ Open a new terminal so it picks up the updated PATH, then check the install:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.4
+Optics Framework 1.11.5
 ```
 
 **Installer options**
@@ -55,15 +55,15 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.4` | `OPTICS_VERSION` | Install a specific release. |
-| `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
+| `--version 1.11.5` | `OPTICS_VERSION` | Install a specific release. |
+| `--extra appium,rapidocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
 | `--dry-run` | | Print what would happen and change nothing. |
 | `--uninstall` | | Remove Optics and the PATH entry it added. |
 
 ```shell
-$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,easyocr
+$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,rapidocr
 ```
 
 ## Add engines for your platform
@@ -103,11 +103,13 @@ Add these when a page tells you to. You don't need them for your first test.
 
 | Engine | Install name | Adds |
 |---|---|---|
-| EasyOCR | `easyocr` | Finds elements by reading text on a screenshot. Runs locally. |
+| Apple Vision | `apple-vision` | Finds elements by reading text on a screenshot. The fastest OCR engine. macOS only. |
+| RapidOCR | `rapidocr` | Finds elements by reading text on a screenshot. Runs on any OS, on the CPU. |
+| EasyOCR | `easyocr` | An OCR engine that is quick with a GPU. |
 | Tesseract | `pytesseract` | A lighter OCR engine. Needs the Tesseract program installed too. |
 | Google Vision | `google-vision` | Cloud OCR. Needs Google Cloud credentials. |
 | AI model | `gemini`, `openai` or `anthropic` | Plain-English test creation and AI self-heal. Pick the one for your account; see [Describe it](https://optics-framework.org/docs/create/describe#before-you-begin). |
-| MCP server | `mcp` | Lets AI agents drive Optics. The installer always includes it; with pip: `pip install "optics-framework[mcp]"`. |
+| MCP server | `mcp` | Lets AI agents drive Optics. The installer always includes it. |
 
 Bundles install several at once: `mobile` (Appium), `web` (Playwright and Selenium), `vision` (all OCR engines), `llm` (all three AI engines) and `all` (everything except the MCP server). The [engines reference](https://optics-framework.org/docs/reference/engines) lists every engine.
 
@@ -125,7 +127,7 @@ $ optics doctor
 Core
   ✅ python                            3.12.13
       → informational — optics needs Python 3.12+
-  ✅ optics-framework                  installed, version 1.11.4
+  ✅ optics-framework                  installed, version 1.11.5
 
 Engines
   ⚠️ Appium                            appium-python-client not installed

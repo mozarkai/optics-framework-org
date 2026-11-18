@@ -26,6 +26,7 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 
 | Key | Default | What it does |
 |---|---|---|
+| `name` | The project folder's name | Names the JUnit test suite and each test case's class. `optics init` writes it. |
 | `driver_sources` | All disabled | The driver that controls the device or browser. See [driver_sources](#driver-sources). |
 | `elements_sources` | All disabled | Where Optics looks for elements: the driver's UI tree, its locators, or its screenshots. `element_sources` is accepted as an alias in each command, `optics doctor` included. If the file has both keys, Optics uses `elements_sources`. |
 | `text_detection` | All disabled | OCR engines for finding elements by on-screen text. |
@@ -136,7 +137,7 @@ Enable one driver. `optics live` refuses more than one, and `optics doctor` warn
 | `appium` | `appium` | Android, iOS, Android TV, Samsung Tizen TV and LG webOS TV apps, and macOS, Linux and Windows desktop apps, through an Appium server. |
 | `selenium` | `selenium` | Chrome or Firefox through a Selenium server or Grid. |
 | `playwright` | `playwright` | Chromium, Firefox or WebKit, on this computer or a remote browser. See [Playwright capabilities](#playwright-capabilities). |
-| `ble` | `ble` | Any device paired with a Bluetooth mouse-and-keyboard dongle. For devices with no automation access. |
+| `ble` | `ble` | An iOS, Android, macOS, Windows or Linux device, through an airhand dongle that it sees as a Bluetooth keyboard and mouse. For devices with no automation access. See [BLE and camera](#ble-and-camera). |
 
 ### elements_sources
 
@@ -154,15 +155,17 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `placeholder=`, `role=`, `id=`, `data-testid=`, `data-test=` and `data-test-id=` locators. A value with no prefix is tried as text, label, placeholder, button name and link name. |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. |
-| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`, or after the screenshot source of a driver for screens that the driver cannot capture. |
+| `camera_screenshot` | Any | Frames from a webcam, an HTTP(S) screenshot URL or a TCP frame server. Used with `ble`, or after the screenshot source of a driver for screens that the driver cannot capture. See [BLE and camera](#ble-and-camera). |
 
-`optics doctor` fails a project when no enabled element source starts with the enabled driver's name.
+`optics doctor` fails a project when no enabled element source starts with the name of the enabled driver, and `camera_screenshot` is not enabled. For `ble`, it only shows a warning: a `ble` project with no element source uses positions and keys only.
 
 ### text_detection
 
 | Name | Extra | Settings |
 |---|---|---|
-| `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
+| `apple_vision` | `apple-vision` | macOS only. `capabilities.recognition_level`: `accurate` (default) or `fast`. `capabilities.languages`: the languages to read, default `["en-US"]`. |
+| `rapidocr` | `rapidocr` | None. Runs on the CPU with the models that come with the package. |
+| `easyocr` | `easyocr` | None. Slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
 | `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
@@ -171,7 +174,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 | Name | Extra | Settings |
 |---|---|---|
-| `templatematch` | None | `capabilities.sift_nfeatures` (2000). Finds template images, including scaled or rotated ones. Images are found by file name anywhere in the project. |
+| `templatematch` | None | `capabilities.scale_range` (`[0.8, 1.25]`): the sizes to try when a template does not match at its own size. `capabilities.sift_nfeatures` (2000): the features of the last pass, which also finds rotated templates. Optics finds images by file name anywhere in the project. |
 | `remote_oir` | None | `url` (required): your image service. `capabilities`: `timeout` (30), `method` (`template_matching`). Optics posts to `<url>/detect-image`. |
 
 ### llm_models
@@ -312,7 +315,7 @@ elements_sources:
   - appium_page_source:  {enabled: true}   # UI tree search (uses strict_element_match)
   - appium_screenshot:   {enabled: true}   # screenshots for OCR, images, self-heal
 text_detection:
-  - easyocr: {enabled: true}               # extra: easyocr
+  - rapidocr: {enabled: true}              # extra: rapidocr
 image_detection:
   - templatematch: {enabled: true}
 log_level: INFO
@@ -530,7 +533,7 @@ A desktop session needs `app` or `appName` when it starts. Without them, it fail
 
 ## BLE and camera
 
-The `ble` driver taps and types through a Bluetooth mouse-and-keyboard dongle. A camera or frame server provides the screen, and Optics finds elements with OCR or image templates.
+The `ble` driver taps and types through an [airhand](https://github.com/chinmayajha/airhand/tree/v0.1.2#quick-start) dongle. The device sees a Bluetooth keyboard, mouse and media remote. A camera, a screenshot URL or a frame server gives the screen, and Optics finds elements with OCR or image templates. [Test production devices](https://optics-framework.org/docs/platforms/production) gives the full procedure.
 
 `config.yaml`:
 
@@ -539,45 +542,47 @@ driver_sources:
   - ble:
       enabled: true
       capabilities:
-        device_id: "Birch test phone"     # required
-        port: "/dev/ttyACM0"              # required: device path, COM port or USB product name
-        pixel_width: 1080                 # the device screen in pixels
-        pixel_height: 2336
-        mickeys_width: 1080               # the device screen in mouse units
-        mickeys_height: 2336
-        x_invert: 1                       # 1 or -1
-        y_invert: 1
+        platform: ios                     # ios, android, macos, windows or linux
+        frame: {width: 1170, height: 2532}
 elements_sources:
   - camera_screenshot:
       enabled: true
       capabilities:
         camera_index: 0                   # a webcam, or url: for a screenshot URL or a TCP frame server
+        find_screen: brightness
+        out_width: 1170
+        out_height: 2532
 text_detection:
-  - easyocr: {enabled: true}
+  - apple_vision: {enabled: true}         # rapidocr on Linux and Windows
 image_detection:
   - templatematch: {enabled: true}
 ```
 
 | `ble` capability | Default | What it does |
 |---|---|---|
-| `device_id` | Required | A name for the device. |
-| `port` | Required | The dongle's serial port (`/dev/ttyACM0`, `COM3`) or its USB product description. |
-| `pixel_width`, `pixel_height` | `0` | The device screen size in pixels. Set them: taps can't be placed without them. |
-| `mickeys_width`, `mickeys_height` | `0` | The device screen size in mouse movement units. Set them too. |
-| `x_invert`, `y_invert` | `1` | `-1` reverses the direction of mouse movement on that axis. |
+| `platform` | Required | `ios`, `android`, `macos`, `windows` or `linux`. It selects the keys for Back, Home, search and select all. |
+| `frame` | Required | `{width, height}`: the size in pixels of the positions that keywords use. Use the camera frame size. Without a camera, use the screen size of the device. |
+| `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. |
+| `port` | None | A fixed serial port (`/dev/cu.usbmodem1101`, `COM5`) in place of `serial`. Set one of the two, not both. `optics serve` and `optics mcp` refuse it. |
+| `launch` | The default of the platform | The methods that `Launch App` tries, in sequence: `launcher_key`, `drawer_search`, `drawer_tap`, `search_key`, `home_icon`. See [Open apps](https://optics-framework.org/docs/platforms/production#open-apps). |
+| `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. |
+
+The driver refuses the settings of the driver before 1.11.5: `device_id`, `pixel_width`, `pixel_height`, `mickeys_width`, `mickeys_height`, `x_invert` and `y_invert`. See [Migrate from the v1 driver](https://optics-framework.org/docs/platforms/production#migrate-from-the-v1-driver).
 
 | `camera_screenshot` capability | Default | What it does |
 |---|---|---|
 | `camera_index` | None | The webcam number. Use this or `url`. |
+| `camera_width`, `camera_height` | The largest size of the camera | The size that the webcam captures at. Set both or neither. |
 | `url` | None | An `http://` or `https://` URL that Optics fetches with `GET`, or a TCP frame server as `ip:port`. |
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
-| `header_size` | `8` | TCP only. Bytes in the frame server's length header: `4` or `8`. |
-| `byte_order` | `little` | TCP only. The length header's byte order: `little` or `big`. |
-| `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Optics cuts the frame to the screen and makes it straight. |
-| `out_width`, `out_height` | `1080`, `1920` | The size of the frame after `deskew_corners`. Set the screenshot size of the device. |
-| `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after `deskew_corners`. |
+| `header_size` | `8` | TCP only. Bytes in the length header of the frame server: `4` or `8`. |
+| `byte_order` | `little` | TCP only. The byte order of the length header: `little` or `big`. |
+| `find_screen` | None | `brightness` or `frame`: Optics finds the corners of the screen in the camera frame. See [Find the screen](https://optics-framework.org/docs/platforms/production#find-the-screen). |
+| `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Set this or `find_screen`, not both. |
+| `out_width`, `out_height` | `1080`, `1920` | The size of the frame, at most `8192` on each side. Set the screen size of the device. If you set them without `find_screen` or `deskew_corners`, Optics scales each frame to this size. |
+| `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after Optics cuts out the screen. |
 
-With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the server's JSON reply. Optics does not follow redirects, because a redirect will send the token again.
+With an HTTP URL, Optics decodes the body as an image. Any status other than 200 fails with the status and the `code` and `message` of the JSON reply of the server. Optics does not follow redirects, so the token goes to no other server.
 
 If you set neither `url` nor `camera_index`, Optics reads these environment variables. A value in config.yaml wins over a variable.
 
@@ -589,11 +594,11 @@ If you set neither `url` nor `camera_index`, Optics reads these environment vari
 
 For a `url` in config.yaml, set `token` too. Keep the token out of the file: `token: ${WEBCAM_SCREENSHOT_TOKEN}`. A `url` with no `token` sends no token, and Optics logs a warning.
 
-Optics checks `deskew_corners` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, or another `rotation` value stop the run.
+Optics checks `deskew_corners`, `find_screen` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, stop the run. A `rotation` value other than `clockwise` or `counterclockwise` also stops the run.
 
-A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](https://optics-framework.org/docs/reference/errors#e03-screenshots).
+A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](https://optics-framework.org/docs/reference/errors#e03-screenshots). When the camera does not see the screen, because the screen is off or the device moved, the run stops with `E0305`.
 
-The BLE driver can't launch apps, so `Launch App` fails. Open the app by hand or with keys before the run. XPath and text locators don't work without a UI tree; use text that OCR can read, or image templates. See [Test production devices](https://optics-framework.org/docs/platforms/production).
+There is no UI tree over Bluetooth, so XPath and UI-tree text do not work. Use text that OCR can read, or image templates. A project with `elements_sources: []` uses positions and keys only.
 
 ## include and exclude
 
