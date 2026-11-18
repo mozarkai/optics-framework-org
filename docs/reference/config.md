@@ -643,7 +643,7 @@ llm_models:
 strict_element_match: true
 ```
 
-By default the page-source element sources (`appium_page_source`, `selenium_page_source`, `playwright_page_source`) accept close or partial text matches, so `Sign in` can match `Sign in with email`. Set `strict_element_match: true` to accept only exact matches. Turn it on when similar labels make tests press the wrong element.
+By default the page-source element sources (`appium_page_source`, `selenium_page_source`, `playwright_page_source`) accept close or partial text matches, so `Sign in` can match `Sign in with email`. OCR also finds text inside a longer word, so `Pay` can match `Payment`. Set `strict_element_match: true` to accept only exact matches, and complete words for OCR. See [How OCR matches text](/docs/elements/text-and-images#how-ocr-matches-text). Turn it on when similar labels make tests press the wrong element.
 
 ## save_captures
 
