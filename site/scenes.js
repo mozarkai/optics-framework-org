@@ -4,7 +4,6 @@
 // without motion when the visitor prefers reduced motion.
 (function () {
   var stages = document.querySelectorAll(".scene[data-scene]");
-  if (!stages.length) return;
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ---------------------------------------------------------------- timeline
@@ -267,7 +266,7 @@
   }
 
   // ---------------------------------------------------------------- scenes
-  var KIT = { h: h, abs: abs, esc: esc, term: term, file: file, wire: wire, phone: phone, BOX: BOX, card: card, PRODUCTS: PRODUCTS, logo: logo, shoe: shoe, cursorSvg: cursorSvg };
+  var KIT = { Timeline: Timeline, h: h, abs: abs, esc: esc, term: term, file: file, wire: wire, phone: phone, BOX: BOX, card: card, PRODUCTS: PRODUCTS, logo: logo, shoe: shoe, cursorSvg: cursorSvg };
   var SCENES = (window.OPTICS_SCENES = window.OPTICS_SCENES || {});
   window.OPTICS_KIT = KIT;
 

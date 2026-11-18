@@ -11,6 +11,14 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 - Source: https://github.com/mozarkai/optics-framework
 - For AI agents: https://optics-framework.org/llms.txt
 
+## Playground
+
+The homepage runs a sample suite on a demo shop app. Change the app and see what Optics reports:
+
+- **The sign-in button gets a new id.** XPath finds no match, so Optics finds the button by its text. The suite passes with exit code 0.
+- **The text fallback for `sign_in` is also deleted.** No locator matches. The step fails, the steps after it are NOT_RUN, and the run ends with exit code 1.
+- **The app ends on "Session expired".** Error-screen detection matches the screen and adds a failed test case. The run ends with exit code 1.
+
 ## Every test has two lives
 
 - **The day you create it.** Someone turns a user flow into steps a machine can repeat. Optics lets that person work in a spreadsheet, on the device, in a sentence, or through an AI agent.

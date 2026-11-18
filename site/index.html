@@ -8,7 +8,7 @@
   <meta name="ai-summary" content="The homepage of Optics, open-source test automation for Android, iOS, web, TV and Bluetooth (BLE) devices. It covers the four ways to create a test, how a suite runs, how Optics finds elements on screen and how to install it.">
   <meta property="og:title" content="Optics: create it your way, run it forever">
   <meta property="og:description" content="Open-source test automation for Android, iOS, web and TV. Four ways to create a test, one command to run it.">
-  <meta property="og:image" content="https://optics-framework.org/media/optics-film-poster.jpg">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://optics-framework.org/">
@@ -25,7 +25,7 @@
     "description": "Open-source test automation for Android, iOS, web and TV, plus a Bluetooth (BLE) driver for locked-down devices. Write tests as CSV or YAML, record them live, describe them in plain English or let an AI agent build them over MCP, then run the same suite on every build and device.",
     "keywords": "test automation, mobile automation, Android, iOS, web automation, smart TV, Android TV, Samsung Tizen, LG webOS, Bluetooth, BLE, Appium, Selenium, Playwright, Robot Framework, MCP server, self-healing tests",
     "url": "https://optics-framework.org/",
-    "image": "https://optics-framework.org/media/optics-film-poster.jpg",
+    "image": "https://optics-framework.org/media/optics-og.jpg",
     "applicationCategory": "DeveloperApplication",
     "applicationSubCategory": "Test automation",
     "operatingSystem": "macOS, Linux, Windows",
@@ -83,7 +83,7 @@
   }
   </script>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -125,7 +125,7 @@
 
   <main id="main">
     <!-- Hero: the tagline across the page, then the pitch beside install, then a suite running on a phone. -->
-    <section class="hero" id="top">
+    <section class="hero" id="top" data-hour="1">
       <div class="wrap">
         <h1 class="hero-title"><span>Create it your way.</span> <span>Run it forever.</span></h1>
         <div class="two hero-grid">
@@ -143,19 +143,38 @@
           </div>
         </div>
 
-        <figure class="hero-proof">
-          <div class="scene" data-scene="hero" role="img" aria-label="A test running on a shop app. Each row of modules.csv lights up while Optics does that step on the phone: it types an email and password, finds the Sign in button by its text when its id no longer matches, signs in, searches for trail runners, opens Trail Runner 2, adds it to the cart and checks that Added to cart appears. Every row is ticked off with its time, and the run passes."></div>
-          <figcaption class="hero-cap">
-            <p>Each row of <code>modules.csv</code> is one step Optics does on the device. When an element&#8217;s id stops matching, Optics finds it by its text.</p>
-            <button class="btn btn-ghost film-open" type="button" aria-haspopup="dialog">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
-            </button>
-          </figcaption>
-        </figure>
       </div>
     </section>
 
-    <section class="band lives" aria-labelledby="lives-h">
+    <!-- Playground: the hero suite on the Birch phone. Each switch is a change to the app or the suite, and the run shows what Optics does about it. -->
+    <section class="play" id="playground" data-hour="1" aria-label="Playground">
+      <div class="wrap">
+        <div class="play-frame">
+          <p class="play-tag label" aria-hidden="true"><span>Not a recording.</span> <em>Flip a switch.</em></p>
+          <div class="scene play-stage" role="img" aria-label="The Birch shop suite running on a phone. Each row of modules.csv lights up while Optics does that step, and the terminal prints the result of the run."></div>
+          <div class="play-bar">
+            <fieldset class="play-switches">
+              <legend>Change the app or the suite</legend>
+              <label class="play-switch"><input type="checkbox" name="newId" checked>The sign-in button has a new id</label>
+              <label class="play-switch"><input type="checkbox" name="noText">The text fallback for sign_in is deleted</label>
+              <label class="play-switch"><input type="checkbox" name="errorScreen">The app ends on &#8220;Session expired&#8221;</label>
+            </fieldset>
+            <div class="play-go">
+              <button class="btn btn-sun play-run" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Run the suite</button>
+              <output class="play-result" aria-live="polite" hidden></output>
+            </div>
+          </div>
+        </div>
+        <div class="play-cap">
+          <p>Each row of <code>modules.csv</code> is one step Optics does on the device. When an element&#8217;s id stops matching, Optics finds it by its text.</p>
+          <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section data-hour="2" class="band lives" aria-labelledby="lives-h">
       <div class="wrap">
         <h2 class="h2 statement" id="lives-h">Every test has two lives.</h2>
         <div class="two">
@@ -172,7 +191,7 @@
     </section>
 
     <!-- Create: the logo is the selector. Each bracket is one way to make a test. -->
-    <section class="band create" id="create" aria-labelledby="create-h">
+    <section data-hour="2" class="band create" id="create" aria-labelledby="create-h">
       <div class="wrap">
         <div class="head-row">
           <h2 class="h2" id="create-h">Four ways to create a test</h2>
@@ -270,7 +289,7 @@
       </div>
     </section>
 
-    <section class="band suite" aria-labelledby="suite-h">
+    <section data-hour="3" class="band suite" aria-labelledby="suite-h">
       <div class="wrap">
         <h2 class="h2" id="suite-h">Every way ends in plain text</h2>
         <div class="two align-center">
@@ -351,7 +370,7 @@ Element_Name,Element_ID
       </div>
     </section>
 
-    <section class="band run" id="run" aria-labelledby="run-h">
+    <section data-hour="4" class="band run" id="run" aria-labelledby="run-h">
       <div class="wrap">
         <h2 class="h2" id="run-h">Run a suite</h2>
         <div class="two">
@@ -387,7 +406,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     </section>
 
     <!-- The locator ladder, drawn as a ladder: the rungs are an ordered fallback. -->
-    <section class="band ladder" id="ladder" aria-labelledby="ladder-h">
+    <section data-hour="5" class="band ladder" id="ladder" aria-labelledby="ladder-h">
       <div class="wrap">
         <h2 class="h2" id="ladder-h">How Optics finds an element</h2>
         <div class="two">
@@ -406,7 +425,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       </div>
     </section>
 
-    <section class="band where" aria-labelledby="where-h">
+    <section data-hour="6" class="band where" aria-labelledby="where-h">
       <div class="wrap">
         <h2 class="h2" id="where-h">Where suites run</h2>
         <div class="two ci-row">
@@ -457,7 +476,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       </div>
     </section>
 
-    <section class="band start" id="install" aria-labelledby="start-h">
+    <section data-hour="7" class="band start" id="install" aria-labelledby="start-h">
       <div class="wrap">
         <h2 class="h2" id="start-h">Install</h2>
         <ol class="steps">
@@ -514,7 +533,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       </div>
     </section>
     <!-- Docs: where to go after installing. -->
-    <section class="band learn" id="docs" aria-labelledby="docs-h">
+    <section data-hour="8" class="band learn" id="docs" aria-labelledby="docs-h">
       <div class="wrap">
         <div class="head-row">
           <h2 class="h2" id="docs-h">Learn Optics</h2>
@@ -557,7 +576,10 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
   </dialog>
 
-  <footer class="foot">
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-night">
+      <p class="foot-line" aria-hidden="true">Run it <span>forever.</span></p>
+    </div>
     <div class="wrap foot-row">
       <a class="brand" href="#top" aria-label="Back to top">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
@@ -594,5 +616,6 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
   <script src="track.js" defer></script>
   <script src="scenes.js" defer></script>
   <script src="scene-defs.js" defer></script>
+  <script src="playground.js" defer></script>
 </body>
 </html>
