@@ -103,6 +103,8 @@ This check uses a browser on this machine. It needs no device.
 3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must say `passed`.
 4. Call `terminate_session`.
 
+The server can write an `execution_output` folder in the folder where your client started it. Do not commit that folder.
+
 If a call fails, read the error code and the `Next:` hint in the reply. The codes are in the [error reference](https://optics-framework.org/docs/reference/errors.md). Do not repeat a call that failed with the same arguments.
 
 ## 6. Do the task
