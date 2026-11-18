@@ -45,9 +45,9 @@ The install scripts include it. With pip, install it yourself: `pip install "opt
 
 ### "Operation not permitted" for a project or venv in Documents on macOS {#macos-operation-not-permitted}
 
-macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the terminal does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
+macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the app that runs your shell does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
 
-Give the terminal access in **System Settings > Privacy & Security > Files & Folders**, then open a new terminal. Or keep the virtual environment and the project in a different folder, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders.
+Keep the virtual environment and the project outside these folders, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders. Or give the app that runs your shell access in **System Settings > Privacy & Security > Files & Folders**, then open a new shell.
 
 ## Setting up a project
 
