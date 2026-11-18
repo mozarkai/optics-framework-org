@@ -19,7 +19,7 @@ test("the playground ships every engine file it loads, from this site", () => {
   assert.doesNotMatch(manifest.core, /^(?:https?:)?\/\//);
 });
 
-test("the shipped engine runs a real dry run of a suite", { timeout: 120000 }, async () => {
+test("the shipped engine runs a real dry run of a suite, and a run stops when the visitor asks", { timeout: 120000 }, async () => {
   const base = resolve(`out/${manifest.core}`) + "/";
   const { loadPyodide } = await import(`${base}pyodide.mjs`);
   const py = await loadPyodide({ indexURL: base, stdout: () => {}, stderr: () => {} });
@@ -42,4 +42,7 @@ test("the shipped engine runs a real dry run of a suite", { timeout: 120000 }, a
   assert.deepEqual(passed.results.map((r) => r.status), ["PASS"]);
   await dryRun("Pres Element");
   assert.ok(events.some((e) => e.code === "E0402" && /Press Element/.test(e.message)), JSON.stringify(events));
+  globalThis.opticsPage.stopped = true;
+  const stopped = JSON.parse(await page.run("execute", JSON.stringify({ "config.yaml": CONFIG, "checkout.yaml": suite("Press Element") })));
+  assert.deepEqual(stopped, { stopped: true });
 });

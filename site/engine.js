@@ -48,6 +48,7 @@
 
   // ---------------------------------------------------------------- the editor
   var edit = $(".eng-edit"), paintEl = $(".eng-paint");
+  paintEl.tabIndex = -1;
   function paintLine(line) {
     var s = esc(line);
     if (/^\s*#/.test(line)) return '<span class="k-dim">' + s + "</span>";
@@ -307,11 +308,20 @@
     event: function (json) { onEvent(JSON.parse(json)); },
   };
 
+  var stopBtn = $(".eng-stop"), starter = null;
+  stopBtn.addEventListener("click", function () { window.opticsPage.stopped = true; stopBtn.disabled = true; });
   function busy(on) {
     running = on;
     lab.dataset.state = on ? "running" : "ready";
+    var focused = lab.contains(document.activeElement) && document.activeElement;
     runBtns.forEach(function (b) { b.disabled = on; });
+    $$(".eng-try button").forEach(function (b) { b.disabled = on; });
     edit.readOnly = on;
+    stopBtn.hidden = !on;
+    stopBtn.disabled = false;
+    window.opticsPage.stopped = false;
+    if (on) { starter = focused; if (focused && focused.disabled) stopBtn.focus(); }
+    else if (starter && (document.activeElement === document.body || document.activeElement === stopBtn)) starter.focus();
   }
 
   function run(mode) {
@@ -321,9 +331,11 @@
     gen = clock.begin();
     steps = {}; rows = {}; cases = [];
     log.innerHTML = '<div class="e-cmd"><span class="k-dim">~/birch-shop $</span> optics ' + mode + " .</div>";
+    xmlPanes[1].textContent = "";
     var files = JSON.stringify({ "config.yaml": CONFIG, "checkout.yaml": edit.value });
     Promise.resolve(page.run(mode, files)).then(function (raw) {
       var out = JSON.parse(raw);
+      if (out.stopped) el(log, "div", "e-sum bad", "Stopped");
       if (out.error) el(log, "pre", "e-panic", esc(out.error));
       if (out.junit) xmlPanes[1].textContent = out.junit;
       if (lastSource) xmlPanes[0].textContent = lastSource;
