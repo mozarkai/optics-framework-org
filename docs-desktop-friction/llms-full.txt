@@ -12,7 +12,7 @@ Optics is open-source test automation for Android, iOS, web, TV and desktop. Wri
 
 - Install (macOS and Linux): `curl -fsSL https://optics-framework.org/install | sh`
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
-- Install (pip): `pip install optics-framework`
+- Install (pip): `pip install "optics-framework[mcp]"`
 - Licence: Apache 2.0. Needs Python 3.12 or newer.
 - Docs: https://optics-framework.org/docs/ (every page is also Markdown; index for agents: https://optics-framework.org/docs/llms.txt)
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
@@ -302,7 +302,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 **pip**
 
 ```shell
-$ pip install optics-framework
+$ pip install "optics-framework[mcp]"
 ```
 
 Open a new terminal window, then check that the `optics` command works:
@@ -11434,9 +11434,9 @@ The install scripts include it. With pip, install it yourself: `pip install "opt
 
 ### "Operation not permitted" for a project or venv in Documents on macOS
 
-macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the terminal does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
+macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the app that runs your shell does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
 
-Give the terminal access in **System Settings > Privacy & Security > Files & Folders**, then open a new terminal. Or keep the virtual environment and the project in a different folder, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders.
+Keep the virtual environment and the project outside these folders, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders. Or give the app that runs your shell access in **System Settings > Privacy & Security > Files & Folders**, then open a new shell.
 
 ## Setting up a project
 
