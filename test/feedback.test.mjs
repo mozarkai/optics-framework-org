@@ -6,8 +6,23 @@ import { DIGEST_CRON, scheduled, serve } from "../edge/worker.js";
 const SITE = "https://optics-framework.org";
 const COLUMNS = ["ts", "day", "kind", "impact", "task", "description", "tool", "error", "suggestion", "version", "client", "transport", "platform", "country"];
 
+const IMPACT_ORDER = ["blocked", "worked_around", "friction", "none"];
+
+function group(rows, keys) {
+  const groups = new Map();
+  for (const row of rows) {
+    const key = keys.map((k) => row[k]).join("|");
+    groups.set(key, { ...Object.fromEntries(keys.map((k) => [k, row[k]])), n: (groups.get(key)?.n ?? 0) + 1 });
+  }
+  return [...groups.values()];
+}
+
+// Answers the handful of statements feedback.js sends, the way D1 would.
 function fakeDb(feedback = []) {
   const hits = [];
+  const places = {};
+  for (const row of feedback) places[row.day] = (places[row.day] ?? 0) + 1;
+  const ofDay = (day) => feedback.filter((row) => row.day === day);
   const prepare = (sql) => ({
     bind: (...args) => ({
       run: async () => {
@@ -15,8 +30,19 @@ function fakeDb(feedback = []) {
         feedback.push(Object.fromEntries(COLUMNS.map((c, i) => [c, args[i]])));
         return { meta: { last_row_id: feedback.length } };
       },
-      first: async () => ({ n: feedback.filter((r) => r.day === args[0]).length }),
-      all: async () => ({ results: feedback.filter((r) => r.day === args[0]) }),
+      first: async () => {
+        const [day, cap] = args;
+        if ((places[day] ?? 0) >= cap) return null;
+        places[day] = (places[day] ?? 0) + 1;
+        return { n: places[day] };
+      },
+      all: async () => {
+        const rows = ofDay(args[0]);
+        if (sql.includes("GROUP BY kind")) return { results: group(rows, ["kind", "impact"]) };
+        if (sql.includes("GROUP BY tool")) return { results: group(rows.filter((r) => r.tool), ["tool"]).sort((a, b) => b.n - a.n) };
+        const rank = (row) => IMPACT_ORDER.indexOf(row.impact);
+        return { results: [...rows].sort((a, b) => rank(a) - rank(b) || a.ts - b.ts).slice(0, args[1]) };
+      },
     }),
   });
   return { feedback, hits, prepare };
@@ -105,6 +131,7 @@ test("the digest files yesterday's reports, and only those, as one issue in the 
   assert.equal(issue.title, "Optics feedback 2026-11-19: 2 reports");
   assert.deepEqual(issue.labels, ["broken", "worked"]);
   assert.match(issue.body, /Kinds: broken 1, worked 1/);
+  assert.match(issue.body, /tap 2/);
   assert.match(issue.body, /### 1\. broken · worked_around/);
   assert.match(issue.body, /Suggestion: say when a tap changes nothing/);
   assert.doesNotMatch(issue.body, /today's report/);
@@ -121,6 +148,21 @@ test("a report cannot mention people or break out of its block in the issue", as
   const block = body.slice(body.indexOf(`${fence}text`), body.lastIndexOf(fence));
   assert.match(block, /@octocat/);
   assert.equal(body.split("@octocat").length, 2);
+});
+
+test("on a busy day the issue leads with the blocked reports and points to D1 for the rest", async () => {
+  const now = Date.parse("2026-11-20T04:47:00Z");
+  const rows = Array.from({ length: 1200 }, (_, i) => ({
+    ...report, day: "2026-11-19", ts: now - 80_000_000 + i, kind: "worked", impact: "none", description: `run ${i} went fine`, error: null, suggestion: null,
+  }));
+  rows.push({ ...report, day: "2026-11-19", ts: now - 1000, impact: "blocked", task: "launch the desktop app", error: null, suggestion: null });
+  const { filed, post } = github();
+  await sendDigest({ ...ENV, DB: fakeDb(rows) }, now, post);
+  const { title, body } = filed[0].issue;
+  assert.equal(title, "Optics feedback 2026-11-19: 1201 reports");
+  assert.match(body, /### 1\. broken · blocked/);
+  assert.match(body, /Not shown: \d+ reports/);
+  assert.ok(body.length <= 61000);
 });
 
 test("no issue is filed on a day without reports, or before the token is set", async () => {
