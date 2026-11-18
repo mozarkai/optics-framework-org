@@ -120,6 +120,9 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .table-more:hover { color: var(--ink); }
 .table-filter { display: block; width: min(100%, 320px); height: 36px; margin-bottom: 10px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--bg); color: var(--ink); font: 500 .9375rem/1 var(--sans); }
 .table-filter:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.table-none:not(.shown) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.table-none.shown { margin: 12px 0 0; color: var(--ink-3); font-size: .9375rem; }
+.task-body { cursor: pointer; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media print { .long-table tbody > tr.more { display: table-row !important; } .table-more, .table-filter { display: none; } }
 
@@ -300,11 +303,11 @@ a.card:hover .card-title, a.card:focus-visible .card-title { text-decoration-col
   .menu-toggle { display: grid; }
   .dtabs { display: none; }
   .docs { --head-h: var(--bar-h); }
-  .sidebar { position: fixed; z-index: 60; top: 0; left: 0; bottom: 0; height: auto; width: min(320px, 86vw); background: var(--bg); border-right: 1px solid var(--line); transform: translateX(-102%); transition: transform .3s var(--ease); }
+  .sidebar { position: fixed; z-index: 60; top: var(--head-h); left: 0; bottom: 0; height: auto; width: min(320px, 86vw); background: var(--bg); border-right: 1px solid var(--line); transform: translateX(-102%); transition: transform .3s var(--ease); }
   .doc-home .sidebar { display: block; }
   .sidebar.open { transform: none; box-shadow: 0 0 80px rgba(6, 8, 28, .4); }
   .side-section { display: block; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
-  .scrim { position: fixed; inset: 0; z-index: 55; background: rgba(6, 8, 28, .4); }
+  .scrim { position: fixed; inset: var(--head-h) 0 0; z-index: 55; background: rgba(6, 8, 28, .4); }
   .search-open { width: auto; margin-left: auto; }
   .search-ph, .search-kbd { display: none; }
   .nav-text { display: none; }

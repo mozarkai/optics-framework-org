@@ -46,7 +46,7 @@ Or set `appium:chromedriverExecutableDir` to a folder of chromedriver binaries. 
 
 Enable `appium_web` next to the other Appium sources. `optics quickstart` and `optics configure` do this for Android and iOS projects.
 
-:::tabs{group="os"}
+:::tabs{group="platform"}
 ::tab[Android]
 ```yaml title="config.yaml"
 driver_sources:
@@ -90,7 +90,7 @@ Do not set `browserName: Safari`. It turns off the web lookups that `appium_web`
 
 ### Let Optics read the page
 
-:::tabs{group="os"}
+:::tabs{group="platform"}
 ::tab[Android]
 Chrome needs no setup. An app's WebView is readable only when the app calls `WebView.setWebContentsDebuggingEnabled(true)`. Debug builds usually do.
 

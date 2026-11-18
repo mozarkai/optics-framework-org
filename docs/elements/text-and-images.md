@@ -17,7 +17,7 @@ Both are slower than the UI tree, so Optics only uses them after the faster ways
 
 We recommend Apple Vision on a Mac and RapidOCR everywhere else. Both run on your machine, need no account and work offline.
 
-:::tabs{group="os"}
+:::tabs{group="ocr-os"}
 ::tab[macOS]
 ```shell
 $ optics setup --install apple-vision
