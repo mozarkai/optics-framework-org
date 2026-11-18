@@ -426,7 +426,7 @@ Good to know:
 - On Appium, one scroll drags from 80 % to 20 % of the screen height, or of the width for `left` and `right`.
 - On Selenium, one scroll moves one window's height or width.
 - On Playwright, one scroll moves about 2000 pixels.
-- The BLE driver ignores `left` and `right`.
+- On the BLE driver, iOS turns the mouse wheel for `up` and `down` and drags for `left` and `right`. Android drags slowly for 4 seconds. A computer turns the wheel. See [Production devices](/docs/platforms/production#what-works-and-what-does-not).
 - In Python, `direction` defaults to `down`.
 
 ### Scroll From Element
@@ -503,7 +503,8 @@ Good to know:
 - On Playwright and Selenium, Go Back goes back one page in the browser history. Playwright waits for the page to load, up to `navigation_timeout_ms`. See [Timeouts](/docs/platforms/web#timeouts).
 - On Android, it presses the system Back button.
 - On iOS, it taps the back button in the navigation bar. If the screen has no such button, the step fails with error E0401.
-- Samsung Tizen and LG webOS TVs, desktop apps and the BLE driver do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV, or with the app's key combination on a desktop.
+- On the BLE driver, it presses the Back key on Android, Cmd+[ on macOS and Alt+Left on Windows and Linux. iOS has no Back, so the step fails with error E0105. Tap the back button of the app instead.
+- Samsung Tizen and LG webOS TVs and desktop apps do not support it. The step fails with error E0105. Use [Press Keycode](#press-keycode) with `BACK` on a TV, or with the app's key combination on a desktop.
 
 ### Press Keycode
 
@@ -565,7 +566,7 @@ Good to know:
 - To keep the result, add [`store_as=name`](/docs/reference/keywords/#store-as).
 - On Playwright, give an expression such as `document.title`, or a script with `return` and `arguments[0]`, as on Selenium and Appium.
 - On a desktop, only the `xa11y:` methods of the driver work, such as `{"script": "xa11y: listWindows"}`. Other scripts fail with `unknown method`. See [Call the driver directly](/docs/platforms/desktop#call-the-driver-directly).
-- The BLE driver doesn't support it.
+- The BLE driver doesn't support it. The step fails with error E0105.
 
 ## Read and wait
 

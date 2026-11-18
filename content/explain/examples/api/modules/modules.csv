@@ -1,0 +1,8 @@
+module_name,module_step,param_1,param_2
+Open Birch,Launch App,com.birch.shop
+Place Order Over The API,Invoke API,birch.login
+Place Order Over The API,Invoke API,birch.create_order
+Find The Order,Press Element,Orders
+Find The Order,Assert Presence,${order_number},15
+Find The Order,Press Element,${order_number}
+Find The Order,Assert Presence,Trail Runner 2,10

@@ -1,0 +1,10 @@
+module_name,module_step,param_1,param_2
+Open Birch,Launch App,com.birch.shop
+Sign In,Assert Presence,${email_field},15
+Sign In,Enter Text,${email_field},${email}
+Sign In,Enter Text,${password_field},${password}
+Sign In,Press Element,${sign_in}
+Check Greeting,Assert Presence,Welcome back,20
+Check Greeting,Get Text,${greeting},store_as=greeting_text
+Check Greeting,Assert Equality,${greeting_text},Welcome back
+Close Birch,Close And Terminate App

@@ -1,0 +1,29 @@
+Test Cases:
+  - Sleep takes a plain value:
+      - Waits
+  - A misspelt longer keyword:
+      - Swipes
+  - A module named as a step:
+      - Calls Module
+  - Quoted values keep their spaces:
+      - Quoted
+  - Too many words for a keyword:
+      - Scrolls
+Modules:
+  - Waits:
+      - Sleep 5
+  - Swipes:
+      - Swipe By Percent ${x} ${y}
+  - Calls Module:
+      - Sleep Well
+  - Sleep Well:
+      - Sleep 1
+  - Quoted:
+      - Enter Text ${field} "Trail Runner 2" event_name="type it"
+      - Press Element 'Add ${missing}'
+  - Scrolls:
+      - Scroll To Element foo
+Elements:
+  x: "10"
+  y: ["20", "30"]
+  field: "//*[@id='field']"

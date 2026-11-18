@@ -9,6 +9,8 @@ license: Apache-2.0
 Optics is newer than your training data. Do not guess keyword names, parameters or defaults:
 look them up in the docs below, or read the MCP server's `optics://keywords` resource.
 
+To install Optics and connect its MCP server, follow https://optics-framework.org/agents.md.
+
 ## Documentation
 
 - Docs index for agents: https://optics-framework.org/docs/llms.txt
@@ -38,21 +40,22 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      `platformName` must be the OS of that computer: `GET <appium url>/xa11y/status` gives it.
      `press_key` takes a key combination such as `primary+s`; `"back"` fails on a desktop.
      Do every step on the app with these tools. Do not use AppleScript, `osascript`, `xdotool`
-     or other UI automation on it. If the optics tools are missing, start a new agent session.
+     or other UI automation on it. If the optics tools are missing, run `optics mcp install`,
+     then start a new agent session.
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
    Use `batch` for several `tap`, `type_text` or `press_key` steps on one screen, such as a form.
+   A `press_key` step in `batch` takes `key`, not `target`. Every reply is plain text.
    Every action returns what changed on screen; call `observe` only to search the rows
    (`query`), get a screenshot, or list every row.
 3. `check` waits for text to be present or absent. `run_keyword` runs any other keyword, such as
    `assert_text` or `select_dropdown_option`; an element parameter can be a ref.
 4. A failure returns `[E0201] …`, a `Next:` hint and the current rows. Do not repeat the same
    failed call: the server refuses a fourth identical try. Do not tap by coordinates.
-5. Read `optics://session/{session_id}/steps` for the run as ready `modules_csv` and
-   `elements_csv`. Secrets come back as `<redacted>`; replace them with `@:value` or a
-   `Read Data,${name},ENV:NAME` step.
-6. `terminate_session` when done. Idle sessions end after 900 s. Sessions live only inside this
-   server process.
+5. `terminate_session` when done. Its reply gives the address of the steps.
+6. Read `optics://session/{session_id}/steps` for the run as ready `modules_csv` and
+   `elements_csv`. It stays readable after the session ends. Secrets come back as `<redacted>`;
+   replace them with `@:value` or a `Read Data,${name},ENV:NAME` step.
 
 `optics mcp --toolset full` adds one tool per keyword. Look up codes on the error codes page.
 

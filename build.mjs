@@ -6,7 +6,11 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
+import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
+import { loadRun, runBody, runMarkdown } from "./lib/run.mjs";
+import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
+import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 
@@ -80,6 +84,38 @@ for (const page of PAGES) {
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
 
+// A real run of the Birch suite against the real Birch app, replayed from the files Optics wrote.
+const run = loadRun();
+const RUN_PAGE = {
+  path: "run",
+  title: "A real Optics run against Birch",
+  description: "Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.",
+  body: runBody(readFileSync("pages/run.html", "utf8"), run, ORIGIN),
+  head: `<link rel="alternate" type="text/markdown" href="run.md" title="A real Optics run, as Markdown">\n  <link rel="stylesheet" href="replay.css">`,
+};
+writeFileSync("out/run.html", render(RUN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/run` }));
+writeFileSync("out/run.md", runMarkdown(run, ORIGIN));
+// The playground runs the real engine in the page, loaded from out/engine/ when asked.
+const PLAYGROUND = {
+  src: "pages/playground.html",
+  path: "playground",
+  title: "Optics playground: run the real engine in your browser",
+  description: "Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.",
+};
+const engine = await buildEngine();
+writeFileSync(
+  "out/playground.html",
+  render(
+    {
+      ...PLAYGROUND,
+      body: readFileSync(PLAYGROUND.src, "utf8").replace("{{engine}}", () => JSON.stringify(engine)),
+      head: `<link rel="alternate" type="text/markdown" href="playground.md" title="${PLAYGROUND.title}, as Markdown">\n  <link rel="stylesheet" href="playground.css">\n  <link rel="stylesheet" href="engine.css">`,
+    },
+    { root: "", home: "./", canonical: `${ORIGIN}/playground` },
+  ),
+);
+cpSync("pages/playground.md", "out/playground.md");
+
 // The blog lists articles, videos and posts, hosted here or elsewhere, from any author:
 // /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
 // (both the HTML and the Markdown twin).
@@ -94,6 +130,18 @@ const BLOG_PAGE = {
 writeFileSync("out/blog.html", render(BLOG_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/blog` }));
 writeFileSync("out/blog.md", blogMarkdown(blog, ORIGIN));
 writeFileSync("out/feed.xml", blogFeed(blog, ORIGIN));
+
+// /explain: a suite editor that explains each row and predicts optics dry_run in the browser.
+const catalogue = loadCatalogue();
+const explainExamples = loadExamples();
+const EXPLAIN_PAGE = {
+  title: "Explain an Optics suite, row by row",
+  description: "Edit an Optics test suite in CSV or YAML and see what each row does, how each element is found and what optics dry_run reports, live in your browser.",
+  body: explainBody(catalogue, explainExamples),
+  head: `<link rel="stylesheet" href="explain.css">\n  <link rel="alternate" type="text/markdown" href="explain.md" title="Explain a suite, as Markdown">`,
+};
+writeFileSync("out/explain.html", render(EXPLAIN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/explain` }));
+writeFileSync("out/explain.md", explainMarkdown(catalogue, explainExamples, ORIGIN));
 
 // Articles hosted here: blog/<slug>.html and its Markdown twin, canonical to this site.
 const articles = blog.items.filter((item) => item.slug);
@@ -118,6 +166,20 @@ const fill = (file, marker, text) => {
 };
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
+const proof = loadProof();
+fill("out/index.html", "<!-- proof -->", proofBand(proof));
+const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
+  .split(/\n\n+/)
+  .map((cue) => cue.match(/(\d+):(\d+):([\d.]+) --> [^\n]+\n(.+)/))
+  .filter(Boolean)
+  .map(([, h, m, s, title]) => {
+    const t = +h * 3600 + +m * 60 + +s;
+    const stamp = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+    return `<li><button type="button" data-t="${t}"><span>${stamp}</span>${title.trim()}</button></li>`;
+  });
+fill("out/index.html", "<!-- film:chapters -->", `<ol aria-label="Chapters">${filmChapters.join("")}</ol>`);
+
+fill("out/index.md", "<!-- proof -->", proofMarkdown(proof));
 fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
 fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
 
@@ -164,9 +226,11 @@ writeFileSync(
   "out/sitemap.xml",
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
-    ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    ...[...PAGES, PLAYGROUND].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
+    { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
+    { loc: `${ORIGIN}/explain`, lastmod: lastModified("pages/explain.html") },
     ...docs.entries,
   ]),
 );
@@ -181,7 +245,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?((?:runs\/)?[\w-]+\.(?:css|js)|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);

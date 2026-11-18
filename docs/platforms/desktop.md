@@ -140,7 +140,17 @@ $ optics doctor notes
 $ optics execute notes
 ```
 
-The Desktop section of `optics doctor` checks that Appium answers and that appium-xa11y-driver is installed. On macOS, it also shows the two permissions, but it cannot read them. Doctor looks for the driver in `APPIUM_HOME`, or in `~/.appium` when `APPIUM_HOME` is not set. The setup script installs the driver in a different folder, so give that folder to doctor:
+The Desktop section of `optics doctor` checks that Appium answers and that appium-xa11y-driver is installed. On macOS, it also shows an ℹ️ row for the two permissions, but it cannot read them:
+
+```terminal
+Desktop
+  ✅ appium server       reachable at 127.0.0.1:4723
+  ✅ xa11y driver        appium-xa11y-driver <version> in <APPIUM_HOME>
+  ℹ️ macOS permissions   not checked by doctor
+      → System Settings > Privacy & Security: give Accessibility, and Screen Recording for screenshots, to the Node.js that runs Appium (setup.sh shows its path), or to your terminal if you start Appium in it. Then restart Appium: launchctl kickstart -k gui/$(id -u)/appium-xa11y
+```
+
+Doctor looks for the driver in `APPIUM_HOME`, or in `~/.appium` when `APPIUM_HOME` is not set. The setup script installs the driver in a different folder, so give that folder to doctor:
 
 :::tabs{group="desktop"}
 ::tab[macOS]
@@ -157,7 +167,7 @@ PS> $env:APPIUM_HOME = "$env:LOCALAPPDATA\appium-xa11y\appium-home"; optics doct
 ```
 :::
 
-`optics doctor` can also warn that `adb` is missing. A desktop project does not need adb, so you can ignore it. Then `optics execute` runs the sample:
+When the driver is not in that folder, the row is a warning, and for a desktop project it is a blocking problem: `not found in <folder>; the running server may use another APPIUM_HOME`. `optics doctor` can also warn that `adb` is missing. A desktop project does not need adb, so you can ignore it. Then `optics execute` runs the sample:
 
 ```terminal
 │ Total Test Cases: 3 | Passed: 3 | Failed: 0 │
@@ -597,6 +607,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **"port <port> is in use by <process>" from the setup script, `host.sh run` or `host.ps1`.** A different process holds the Appium port, for example an Appium that you started yourself. Stop that process, or run the setup script again with `--port` or `-Port`. Then use that port in `url`.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, the message names the app or Node.js that gets the permissions. It also gives the restart command. Give both permissions to it, then restart Appium. `/xa11y/status` shows the missing permissions.
 - **E0102 with "This Appium runs on a Mac Host, so it cannot start a session with platformName Linux".** `platformName` is not the OS of the Host, or `url` goes to a different Appium. Set `platformName` to the OS of the Host, or set `url` to the correct Host.
+- **E0102 with "The Appium server at <url> has no driver for automationName 'Xa11y'".** The Appium server that `url` reaches does not have appium-xa11y-driver. Install the driver for that server, or run the setup script again. If the driver is installed, the server uses a different `APPIUM_HOME`, or a different Appium server uses the port. `optics doctor` shows the `APPIUM_HOME` that it read.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
 - **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.

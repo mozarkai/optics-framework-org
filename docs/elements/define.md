@@ -39,7 +39,7 @@ Optics decides what a value is from how it looks:
 | Plain words | Text: UI tree first, then OCR on a screenshot | `Sign in` |
 | `text_only:` then words | Text, OCR only | `text_only:Sign in` |
 | Ends in `.png`, `.jpg`, `.jpeg` or `.bmp` | An image to match on a screenshot | `cart_icon.png` |
-| `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Playwright and web pages on Appium only | `#login-button` |
+| `css=`, `#id`, `.class` or `tag[attr]` | A CSS selector. Playwright, Selenium and web pages on Appium only | `#login-button` |
 | Starts with `android.` or `XCUI` | A class name | `android.widget.Switch` |
 
 On Playwright, you can also write these prefixes. A prefix can be in any case:

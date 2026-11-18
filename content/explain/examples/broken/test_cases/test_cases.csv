@@ -1,0 +1,6 @@
+test_case,test_step
+Suite Setup,Open Birch
+Sign up,Create Account
+Say hello,Greet Shopper
+Tap the banner,Open Promo
+Check out,Pay For Cart

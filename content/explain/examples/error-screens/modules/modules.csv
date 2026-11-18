@@ -1,0 +1,6 @@
+module_name,module_step,param_1,param_2
+Open Birch,Launch App,com.birch.shop
+Browse The Shop,Press Element,${search_bar}
+Browse The Shop,Enter Text Direct,ridge
+Browse The Shop,Assert Presence,Ridge GTX,10
+Close Birch,Close And Terminate App

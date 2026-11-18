@@ -1,0 +1,8 @@
+module_name,module_step,param_1,param_2,param_3,param_4
+Open Birch,Launch App,com.birch.shop
+Create Account,Pres Element,${sign_up}
+Create Account,Enter Text,${email_field},ava@birch.shop
+Greet Shopper,Enter Text,${note_field},Hi ${first_name}!
+Open Promo,Press By Percentage,50,90,,tap_banner
+Open Promo,Press Element,Add to cart,aoi_y=80,aoi_height=30
+Open Promo,Assert Presence,(optional),5

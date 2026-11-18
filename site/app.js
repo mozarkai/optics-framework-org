@@ -177,6 +177,7 @@
 
   tabs(document.querySelector(".os:not(.fmt)"));
   tabs(document.querySelector(".fmt"));
+  tabs(document.querySelector(".ho-tasks"));
 
   // ---- full demo dialog ------------------------------------------------------
   var dialog = document.querySelector(".film-dialog");
@@ -188,4 +189,17 @@
   // Click on the backdrop closes it.
   dialog.addEventListener("click", function (e) { if (e.target === dialog) dialog.close(); });
   dialog.addEventListener("close", function () { film.pause(); });
+  var chapters = Array.prototype.slice.call(dialog.querySelectorAll(".film-chapters button"));
+  chapters.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var seek = function () { film.currentTime = +b.dataset.t; };
+      if (film.readyState) seek(); else film.addEventListener("loadedmetadata", seek, { once: true });
+      var p = film.play(); if (p && p.catch) p.catch(function () {});
+    });
+  });
+  film.addEventListener("timeupdate", function () {
+    var now = null;
+    chapters.forEach(function (b) { if (+b.dataset.t <= film.currentTime + .05) now = b; });
+    chapters.forEach(function (b) { b.toggleAttribute("aria-current", b === now); });
+  });
 })();

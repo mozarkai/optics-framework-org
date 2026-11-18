@@ -1,0 +1,7 @@
+module_name,module_step,param_1,param_2,param_3
+Extra,Press Element,${a},1,0,${not_defined_but_dropped}
+Quoted,Read Data,${row},test_data/users.csv,"tier == 'gold';select=email,password"
+Quoted,Enter Text,${a},"Hi, ${row}"
+Empty Element,Press Element,${blank}
+Second File,Press Element,${from_yaml}
+Second File,Press Element,${a}

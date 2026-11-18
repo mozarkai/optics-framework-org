@@ -1,0 +1,13 @@
+test_case,test_step
+Suite Setup,Uses Later Value
+Setup,Prepare
+Store a value,Keep Total
+Reuse it,Use Total
+Read data defines,Load
+Evaluate defines,Compute
+Loop variable stays undefined,Looping
+API extract stays undefined,Call
+Condition leaves its own variables,Branch
+Condition resolves a whole variable,Branch Whole
+Store with a variable name,Store Named
+Teardown,Finish

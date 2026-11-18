@@ -1,0 +1,4 @@
+Element_Name,Element_ID
+search_bar,//*[@resource-id='com.birch.shop:id/search']
+cart_total,//*[@resource-id='com.birch.shop:id/total']
+cart_total,text_only:Total

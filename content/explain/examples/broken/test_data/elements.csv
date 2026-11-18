@@ -1,0 +1,3 @@
+Element_Name,Element_ID
+email_field,//*[@resource-id='com.birch.shop:id/email']
+note_field,//*[@resource-id='com.birch.shop:id/note']

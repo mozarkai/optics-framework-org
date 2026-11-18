@@ -43,7 +43,7 @@ The server does not read config.yaml or the test files of your project. Each ses
 
 | Method | Path | What it does |
 |---|---|---|
-| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.4"}`. |
+| `GET` | `/` or `/health` | Checks the server is up. Returns `{"status": "Optics Framework API is running", "version": "1.11.5"}`. |
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
@@ -77,10 +77,10 @@ With `compact=true`, each element is one row:
 Each item of `/v1/keywords` has the keyword's name, slug, description and parameters:
 
 ```json
-{"keyword": "Get Text", "keyword_slug": "get_text", "description": "Get the text from a specified element. ...", "parameters": [{"name": "element", "type": "<class 'str'>", "default": null}, {"name": "index", "type": "<class 'str'>", "default": "0"}, ...], "returns": true, "deprecated": false}
+{"keyword": "Get Text", "keyword_slug": "get_text", "description": "Get the text from a specified element. …", "parameters": [{"name": "element", "type": "<class 'str'>", "default": null, "required": true, "variadic": false}, {"name": "index", "type": "<class 'str'>", "default": "0", "required": false, "variadic": false}, …], "returns": true, "deprecated": false}
 ```
 
-`returns` is true when the keyword gives back a value. `deprecated` is true for a keyword you must not use in new tests, such as `Press Checkbox`.
+`required` is true for a parameter that has no default. `variadic` is true for a parameter that takes any number of values, such as `args` of `Run Loop`. `returns` is true when the keyword gives back a value. `deprecated` is true for a keyword you must not use in new tests, such as `Press Checkbox`.
 
 ## SessionConfig
 
@@ -90,7 +90,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 |---|---|---|
 | `driver_sources` | list | The driver. Each item is a name (`"playwright"`) or `{"appium": {"url": ..., "capabilities": {...}}}`. A listed item is enabled unless it says `"enabled": false`. |
 | `elements_sources` | list | Element sources by name, for example `["appium_find_element", "appium_page_source", "appium_screenshot"]`. There's no default here, so always list them. |
-| `text_detection` | list | OCR engines, for example `["easyocr"]`. |
+| `text_detection` | list | OCR engines, for example `["rapidocr"]`. |
 | `image_detection` | list | Image engines, for example `["templatematch"]`. |
 | `project_path` | string | Refused with `400` and E0501. Upload templates with `POST /v1/sessions/{id}/templates`. |
 | `api_data` | object | API definitions for `Invoke API`, inline. File paths aren't supported. |
@@ -278,4 +278,6 @@ Optics writes `junit_output.xml` for the session to the temporary folder of the 
 - Sessions live in memory. `optics live` and `optics mcp` cannot see them. When the server stops, it ends every session and closes its drivers.
 - There's no record or save endpoint. Write the steps you ran into [project files](/docs/reference/files) to replay them with `optics execute`.
 - Error detection doesn't run over HTTP.
-- With the `ble` driver, the automatic `launch_app` at session start fails, because BLE can't launch apps.
+- A `ble` session names the dongle by its `serial`, never by `port`. The `serial` must be a plugged-in airhand dongle, or the session fails with E0501: `ble: no plugged-in airhand dongle has the serial <serial>`.
+- A `camera_screenshot` source reads only the camera that the server sets in `WEBCAM_SCREENSHOT_URL`. A `url` or a `camera_index` in the request is refused with E0501. See [Test production devices](/docs/platforms/production).
+- With the `ble` driver, the automatic `launch_app` at session start has no app name, so it does nothing and the screen stays as it is. To open an app, send `Launch App` with the name the device shows, such as `Settings`. See [Open apps](/docs/platforms/production#open-apps).

@@ -1,0 +1,7 @@
+module_name,module_step,param_1,param_2,param_3,param_4
+Open Birch,Launch App,com.birch.shop
+Add Second Shoe,Enter Text,${search_bar},trail runner
+Add Second Shoe,Press Element,Trail Runner 2,index=1
+Add Second Shoe,Press Element,Add to cart,aoi_y=75,aoi_height=25
+Add Second Shoe,Press Element,cart_icon.png,aoi_x=67,aoi_width=33,aoi_height=15
+Add Second Shoe,Get Text,${cart_total},aoi_y=50,aoi_height=50,store_as=total
