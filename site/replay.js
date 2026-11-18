@@ -252,10 +252,10 @@
       ret.classList.remove("in", "lock");
       drawStep(st, n);
       view(st, false);
-      if (!st.found) return later(function () { go(S.i + 1); }, pace);
+      if (!st.found) return advance(pace);
       if (!S.playing || S.real || reduced) {
         view(st, true);
-        return later(function () { go(S.i + 1); }, pace);
+        return advance(pace);
       }
       if (rungOf(st) === "OCR") replay(scan, "go");
       if (st.box) {
@@ -263,12 +263,13 @@
         later(function () { aim(st.box); }, 160);
       }
       later(function () { view(st, true); }, 760);
-      later(function () { go(S.i + 1); }, pace);
+      advance(pace);
     }
 
     // Before: the screenshot Optics took as the step began. Found: the same screen with its box.
     function view(st, found) {
       imgFound.classList.toggle("in", found && !!st.found);
+      ret.classList.toggle("in", found && !!st.box);
       ret.classList.toggle("lock", found && !!st.box);
       if (found && st.box) aim(st.box);
       ret.querySelector("em").textContent = rungOf(st) + " · " + secs(st.elapsed);
@@ -288,6 +289,10 @@
       ret.classList.toggle("below", box[1] < 60);
       ret.classList.toggle("left", box[0] > SHOT.w * 0.55);
       ret.classList.add("in");
+    }
+
+    function advance(ms) {
+      if (S.playing) later(function () { go(S.i + 1); }, ms);
     }
 
     function later(fn, ms) { S.timers.push(setTimeout(fn, ms)); }

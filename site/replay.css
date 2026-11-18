@@ -96,9 +96,9 @@
 .rp-ln { display: inline-block; min-width: 100%; padding: 0 18px; transition: background-color .25s ease, color .25s ease; }
 .rp-ln.case { color: #fff; }
 .rp-ln.later { color: var(--code-dim); }
-.rp-ln.on { background: rgba(243, 190, 0, .16); box-shadow: inset 3px 0 0 var(--sun); color: #fff; }
+.rp-ln.on { background: rgba(243, 190, 0, .2); color: #fff; }
 .rp-ln.fail { color: #FF7096; }
-.rp-ln.fail.on { background: rgba(255, 112, 150, .16); box-shadow: inset 3px 0 0 #FF7096; }
+.rp-ln.fail.on { background: rgba(255, 112, 150, .2); }
 
 /* ---------- the track ---------- */
 .rp-time { position: relative; padding: 18px 20px 14px; border-top: var(--rp-line); }
@@ -179,7 +179,7 @@
   .rp-main { grid-template-columns: minmax(0, 1fr); }
   .rp-dev { border-right: 0; border-bottom: var(--rp-line); }
   .rp-phone { max-width: 220px; }
-  .rp-step { min-height: 380px; }
+  .rp-step { min-height: 320px; }
   .rp-time { padding-inline: 14px; }
   .rp-cases { display: none; }
   .rp-proof { padding-inline: 14px; }
