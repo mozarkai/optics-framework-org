@@ -82,7 +82,7 @@
     var line = "    " + span("k-kw", C.keywords[step.kw].robot) + kwArgs(step).map(function (a) {
       return "    " + span(/^\$\{/.test(a) ? "k-var" : "k-lit", a);
     }).join("");
-    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\nCheckout\n" + lists.join("") + line;
+    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\n" + step.tc + "\n" + lists.join("") + line;
     return { req: ["birch.robot", req], res: ["result", step.result ? verdict(step) : ""] };
   }
 
@@ -176,7 +176,7 @@
 
   // ------------------------------------------------------------------ the panel
   function ui(host) {
-    var B = G.BIRCH, steps = [], at = -1, follow = true, door = "http", refs = new WeakMap(), nextRef = 1;
+    var B = G.BIRCH, steps = [], cut = 0, at = -1, follow = true, door = "http", refs = new WeakMap(), nextRef = 1;
     var box = document.createElement("div");
     box.className = "doors";
     box.innerHTML =
@@ -259,7 +259,8 @@
 
     function take(d) {
       if (!d.result) {
-        var step = { n: steps.length + 1, cmd: d.cmd, kw: d.kw, args: d.args, named: d.named, secret: d.secret, module: d.module, line: d.line, before: { rows: read(d.app) } };
+        if (steps.length && !steps[0].line.isConnected) steps = [], cut = 0;
+        var step = { n: steps.length + 1, cmd: d.cmd, kw: d.kw, args: d.args, named: d.named, secret: d.secret, module: d.module, tc: "Checkout", line: d.line, before: { rows: read(d.app) } };
         d.door = step;
         if (d.line) d.line.dataset.step = steps.length;
         steps.push(step);
@@ -277,6 +278,11 @@
         lamp(s);
       });
     }
+    document.addEventListener("optics:save", function (e) {
+      steps.slice(cut).forEach(function (s) { s.module = e.detail.module; s.tc = e.detail.tc; });
+      cut = steps.length;
+      paint();
+    });
     box.querySelector(".doors-step").addEventListener("click", function (e) {
       var b = e.target.closest("[data-go]");
       if (b) show(at + +b.dataset.go, true);

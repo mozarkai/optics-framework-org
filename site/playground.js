@@ -312,6 +312,7 @@
           saved.push(mod);
           say("Saved " + rec.length + " step(s) → module '" + esc(mod.name) + "' in modules/modules.csv, test case '" + esc(mod.tc) + "' in test_cases/test_cases.csv");
           rec = [];
+          document.dispatchEvent(new CustomEvent("optics:save", { detail: { module: mod.name, tc: mod.tc } }));
           drawFiles();
           ping("modules");
           if (mod.steps.some(function (s) { return s.secret; })) ping("elements");

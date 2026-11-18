@@ -13,7 +13,7 @@ const spec = JSON.parse(readFileSync("site/openapi.json", "utf8"));
 const XPATH = "//*[@resource-id='com.birch.shop:id/login']";
 const rows = { rows: [{ ref: "e4", cls: "Button", label: "Sign in", act: ["tap"], state: "", rid: "login" }], digest: "abc123" };
 const step = (kw, args, ok = true, named = {}) => ({
-  n: 1, kw, args, named, secret: false, module: "Sign_In", cmd: kw,
+  n: 1, kw, args, named, secret: false, module: "Sign_In", tc: "Checkout", cmd: kw,
   before: rows, after: rows, result: ok ? { ok, tag: "Text", time: 0.4 } : { ok, err: "x" },
 });
 const STEPS = [
