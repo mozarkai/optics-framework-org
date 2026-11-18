@@ -95,7 +95,7 @@
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install appium">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> appium</code></pre></figure>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="prepare-the-host">Prepare the Host<a class="anchor" href="#prepare-the-host" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>The Host is the computer that shows the app. Run the setup script of the driver there. It installs Node.js, Appium and the driver, and runs Appium as a service. <a href="../../docs/platforms/desktop#set-up-the-host">Set up the Host</a> has the command for each OS.</p>
-<p>On macOS, give the Accessibility and Screen &amp; System Audio Recording permissions to the Node.js path that the script prints. Then restart Appium.</p>
+<p>On macOS, Appium needs the Accessibility and Screen &amp; System Audio Recording permissions. The script names the app or Node.js that gets them, and opens their panes in System Settings. Give the permissions, then restart Appium.</p>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="make-a-project-and-run-it">Make a project and run it<a class="anchor" href="#make-a-project-and-run-it" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics init notes --template desktop_editor
 optics doctor notes
