@@ -95,6 +95,7 @@
   </script>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="playground.css">
+  <link rel="stylesheet" href="replay.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -361,32 +362,19 @@ Element_Name,Element_ID
         <div class="two">
           <div class="run-copy">
             <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which validates every keyword, element and module reference.</p>
-            <dl class="outputs">
-              <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
-              <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
-              <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
-            </dl>
+            <p class="body-text">Birch is a real web app. <a href="birch/">Open it</a>, then watch Optics run the Birch suite against two releases of it. Each frame is a file that the run wrote.</p>
           </div>
-          <figure class="code">
-            <figcaption>~/birch</figcaption>
-<pre><code><span class="c-pass">~/birch</span> <span class="c-mod">❯</span> <b>optics execute checkout</b>
-Running tests <span class="bar"></span> 100% 0:00:04
-<b>Test Suite</b>
-<span class="c-dim">├── </span>Suite Setup                           <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">│   └── </span>Open Store                        <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">│       └── </span>Launch App                    <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">└── </span>Checkout                              <span class="c-dim">| 2.95s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    ├── </span>Sign In                           <span class="c-dim">| 0.83s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    │   ├── </span>Enter Text (//*[@resource-... <span class="c-dim">| 0.52s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    │   └── </span>Press Element (Sign in)       <span class="c-dim">| 0.31s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    └── </span>Add To Cart                       <span class="c-dim">| 2.12s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        ├── </span>Enter Text Direct (running... <span class="c-dim">| 0.61s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        ├── </span>Press Element (Trail Runne... <span class="c-dim">| 1.22s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        └── </span>Assert Presence (Added to ... <span class="c-dim">| 0.29s |</span>    <span class="c-pass">PASS</span>
-
-Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></pre>
-          </figure>
+          <dl class="outputs">
+            <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
+            <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
+            <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
+          </dl>
         </div>
+        <!-- A real run of birch-tests against the real Birch app, from site/runs/birch-run.js (scripts/birch-run.py writes it). -->
+        <div class="pg rp" data-replay>
+          <noscript><p class="rp-noscript body-text">The replay needs JavaScript. The files of the run are on <a href="run">the run page</a>.</p></noscript>
+        </div>
+        <p class="rp-more"><a class="btn btn-ghost btn-sm" href="run">Run it yourself</a></p>
       </div>
     </section>
 
@@ -613,5 +601,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
   <script src="track.js" defer></script>
   <script src="birch.js" defer></script>
   <script src="playground.js" defer></script>
+  <script src="runs/birch-run.js" defer></script>
+  <script src="replay.js" defer></script>
 </body>
 </html>

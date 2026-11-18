@@ -1,0 +1,31 @@
+2026-11-18 22:28:03,163 - INFO - Event attributes JSON file path is not set
+2026-11-18 22:28:07,366 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:07,381 - INFO - Trying XPathStrategy on '//input[@id='email']' ... SUCCESS
+2026-11-18 22:28:07,430 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:07,433 - INFO - Trying XPathStrategy on '//input[@id='password']' ... SUCCESS
+2026-11-18 22:28:07,480 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:07,484 - INFO - Trying TextElementStrategy on 'Sign in' ... SUCCESS
+2026-11-18 22:28:07,548 - INFO - Asserting (assert_elements) elements: ['Picked for you'] with rule: any and timeout: 30s
+2026-11-18 22:28:07,550 - INFO - Trying TextElementStrategy on '['Picked for you']' ... SUCCESS
+2026-11-18 22:28:07,569 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:07,575 - INFO - Asserting (assert_elements) elements: ['Free returns'] with rule: any and timeout: 30s
+2026-11-18 22:28:07,617 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,173 - INFO - Trying TextDetectionStrategy on '['Free returns']' ... SUCCESS
+2026-11-18 22:28:08,201 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,206 - INFO - Trying TextElementStrategy on 'css=#search' ... SUCCESS
+2026-11-18 22:28:08,233 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,237 - INFO - Trying TextElementStrategy on 'Trail Runner 2' ... SUCCESS
+2026-11-18 22:28:08,313 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,317 - INFO - Trying TextElementStrategy on '10' ... SUCCESS
+2026-11-18 22:28:08,381 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,384 - INFO - Trying TextElementStrategy on 'Add to cart' ... SUCCESS
+2026-11-18 22:28:08,441 - INFO - Asserting (assert_elements) elements: ['Added to cart'] with rule: any and timeout: 30s
+2026-11-18 22:28:08,443 - INFO - Trying TextElementStrategy on '['Added to cart']' ... SUCCESS
+2026-11-18 22:28:08,465 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,497 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,542 - INFO - Trying ImageDetectionStrategy on 'cart.png' ... SUCCESS
+2026-11-18 22:28:08,580 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:08,584 - INFO - Trying TextElementStrategy on 'Check out' ... SUCCESS
+2026-11-18 22:28:08,665 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:09,190 - WARNING - ON-SCREEN ERROR DETECTED — code: ERR_SESSION | matched_on: match_string | match_string: 'Session expired' | severity: high | The shopper was signed out
+2026-11-18 22:28:09,355 - INFO - No events to send.

@@ -6,6 +6,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
+import { loadRun, runBody, runMarkdown } from "./lib/run.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
@@ -79,6 +80,18 @@ for (const page of PAGES) {
   writeFileSync(`out/${page.path}.md`, pageMarkdown(readFileSync(page.src, "utf8")));
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
+
+// A real run of the Birch suite against the real Birch app, replayed from the files Optics wrote.
+const run = loadRun();
+const RUN_PAGE = {
+  path: "run",
+  title: "A real Optics run against Birch",
+  description: "Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.",
+  body: runBody(readFileSync("pages/run.html", "utf8"), run, ORIGIN),
+  head: `<link rel="alternate" type="text/markdown" href="run.md" title="A real Optics run, as Markdown">\n  <link rel="stylesheet" href="replay.css">`,
+};
+writeFileSync("out/run.html", render(RUN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/run` }));
+writeFileSync("out/run.md", runMarkdown(run, ORIGIN));
 
 // The blog lists articles, videos and posts, hosted here or elsewhere, from any author:
 // /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
@@ -167,6 +180,7 @@ writeFileSync(
     ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
+    { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
     ...docs.entries,
   ]),
 );
@@ -181,7 +195,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|birch-app\.css|birch-app\.js|replay\.css|replay\.js|runs\/birch-run\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);

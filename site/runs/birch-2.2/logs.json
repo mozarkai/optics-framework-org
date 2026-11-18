@@ -1,0 +1,951 @@
+[
+  {
+    "entity_type": "execution",
+    "entity_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+    "name": "Execution",
+    "status": "RUNNING",
+    "message": "Starting batch execution",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021086.8820229,
+    "args": null,
+    "start_time": null,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "c32aaeef-f57a-423f-94f0-a0b0f5813eba",
+    "name": "Suite Setup",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "suite_setup"
+    },
+    "timestamp": 1795021086.8825312,
+    "args": null,
+    "start_time": 1795021086.882414,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "name": "Open Birch",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "c32aaeef-f57a-423f-94f0-a0b0f5813eba",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021086.88286,
+    "args": null,
+    "start_time": 1795021086.8828511,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "0cc8e6ac-9ee6-4096-9dfd-92bae5537b5e",
+    "name": "Read Data",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021086.8832672,
+    "args": null,
+    "start_time": 1795021086.883254,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "0cc8e6ac-9ee6-4096-9dfd-92bae5537b5e",
+    "name": "Read Data",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021086.893424,
+    "args": null,
+    "start_time": 1795021086.883254,
+    "end_time": 1795021086.8934112,
+    "elapsed": 0.010157108306884766,
+    "logs": []
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "a48c50dd-d64e-4f04-ac76-1f035f40d7be",
+    "name": "Launch App",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021086.894022,
+    "args": null,
+    "start_time": 1795021086.894016,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "a48c50dd-d64e-4f04-ac76-1f035f40d7be",
+    "name": "Launch App",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.322572,
+    "args": null,
+    "start_time": 1795021086.894016,
+    "end_time": 1795021087.322541,
+    "elapsed": 0.4285249710083008,
+    "logs": []
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "3e4aae72-f2b1-4573-b76d-8575310f13e4",
+    "name": "Open Birch",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "c32aaeef-f57a-423f-94f0-a0b0f5813eba",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.3230321,
+    "args": null,
+    "start_time": 1795021086.8828511,
+    "end_time": 1795021087.323027,
+    "elapsed": 0.44017577171325684,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "c32aaeef-f57a-423f-94f0-a0b0f5813eba",
+    "name": "Suite Setup",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "suite_setup"
+    },
+    "timestamp": 1795021087.323377,
+    "args": null,
+    "start_time": 1795021086.882414,
+    "end_time": 1795021087.32336,
+    "elapsed": 0.4409458637237549,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "75af1035-ebd9-4774-a5d4-8ffef14dba57",
+    "name": "Shopper can sign in",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021087.3237739,
+    "args": null,
+    "start_time": 1795021087.3236952,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "name": "Sign In",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "75af1035-ebd9-4774-a5d4-8ffef14dba57",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.324085,
+    "args": null,
+    "start_time": 1795021087.3240802,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "53d44b1b-a812-4138-b64e-1485fce95154",
+    "name": "Enter Text",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.324397,
+    "args": null,
+    "start_time": 1795021087.3243918,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "53d44b1b-a812-4138-b64e-1485fce95154",
+    "name": "Enter Text",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.404592,
+    "args": null,
+    "start_time": 1795021087.3243918,
+    "end_time": 1795021087.404574,
+    "elapsed": 0.08018207550048828,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying XPathStrategy on '//input[@id='email']' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "cbc8204f-4534-4873-a11a-ea5c543730d6",
+    "name": "Enter Text",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.4051359,
+    "args": null,
+    "start_time": 1795021087.405115,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "cbc8204f-4534-4873-a11a-ea5c543730d6",
+    "name": "Enter Text",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.4650712,
+    "args": null,
+    "start_time": 1795021087.405115,
+    "end_time": 1795021087.465054,
+    "elapsed": 0.05993914604187012,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying XPathStrategy on '//input[@id='password']' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "24306485-1c00-40b5-b633-05417fb252b0",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.465465,
+    "args": null,
+    "start_time": 1795021087.46546,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "24306485-1c00-40b5-b633-05417fb252b0",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.547773,
+    "args": null,
+    "start_time": 1795021087.46546,
+    "end_time": 1795021087.547754,
+    "elapsed": 0.08229398727416992,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on 'Sign in' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "b0534527-92f8-4991-aa28-8a28975696c5",
+    "name": "Assert Presence",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.548167,
+    "args": null,
+    "start_time": 1795021087.548161,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "b0534527-92f8-4991-aa28-8a28975696c5",
+    "name": "Assert Presence",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.573916,
+    "args": null,
+    "start_time": 1795021087.548161,
+    "end_time": 1795021087.573898,
+    "elapsed": 0.025738000869750977,
+    "logs": [
+      "Asserting (assert_elements) elements: ['Picked for you'] with rule: any and timeout: 30s",
+      "Trying TextElementStrategy on '['Picked for you']' ... SUCCESS",
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "2210d87b-5b99-48e7-b07c-b5679d1b2f3f",
+    "name": "Sign In",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "75af1035-ebd9-4774-a5d4-8ffef14dba57",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.574284,
+    "args": null,
+    "start_time": 1795021087.3240802,
+    "end_time": 1795021087.57428,
+    "elapsed": 0.2501997947692871,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "75af1035-ebd9-4774-a5d4-8ffef14dba57",
+    "name": "Shopper can sign in",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021087.574548,
+    "args": null,
+    "start_time": 1795021087.3236952,
+    "end_time": 1795021087.574543,
+    "elapsed": 0.25084781646728516,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "ed624868-58de-4892-9cd7-7d7e7d2be8d0",
+    "name": "Shopper can find a shoe",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021087.5748322,
+    "args": null,
+    "start_time": 1795021087.5748029,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "name": "Find A Shoe",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "ed624868-58de-4892-9cd7-7d7e7d2be8d0",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.5750809,
+    "args": null,
+    "start_time": 1795021087.5750778,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "238dcb0f-2ce3-4191-aba3-96041c8f9efb",
+    "name": "Assert Presence",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021087.5753322,
+    "args": null,
+    "start_time": 1795021087.575329,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "238dcb0f-2ce3-4191-aba3-96041c8f9efb",
+    "name": "Assert Presence",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.175016,
+    "args": null,
+    "start_time": 1795021087.575329,
+    "end_time": 1795021088.175,
+    "elapsed": 0.5996708869934082,
+    "logs": [
+      "Asserting (assert_elements) elements: ['Free returns'] with rule: any and timeout: 30s",
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextDetectionStrategy on '['Free returns']' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "18c34af7-f5e6-4990-8e2a-b995beac2100",
+    "name": "Enter Text",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.175382,
+    "args": null,
+    "start_time": 1795021088.175377,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "18c34af7-f5e6-4990-8e2a-b995beac2100",
+    "name": "Enter Text",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.2144582,
+    "args": null,
+    "start_time": 1795021088.175377,
+    "end_time": 1795021088.214442,
+    "elapsed": 0.03906512260437012,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on 'css=#search' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "15467bb3-7d24-49d1-ae8a-f96a3cde5b3e",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.214847,
+    "args": null,
+    "start_time": 1795021088.214842,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "15467bb3-7d24-49d1-ae8a-f96a3cde5b3e",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.2913952,
+    "args": null,
+    "start_time": 1795021088.214842,
+    "end_time": 1795021088.29138,
+    "elapsed": 0.0765388011932373,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on 'Trail Runner 2' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "1dc9a114-17a8-46ff-994e-5176b3057069",
+    "name": "Find A Shoe",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "ed624868-58de-4892-9cd7-7d7e7d2be8d0",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.291737,
+    "args": null,
+    "start_time": 1795021087.5750778,
+    "end_time": 1795021088.291733,
+    "elapsed": 0.7166552543640137,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "ed624868-58de-4892-9cd7-7d7e7d2be8d0",
+    "name": "Shopper can find a shoe",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021088.292001,
+    "args": null,
+    "start_time": 1795021087.5748029,
+    "end_time": 1795021088.291996,
+    "elapsed": 0.7171931266784668,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "f1ca7677-44cf-46fa-9a1d-31401805d6da",
+    "name": "Shopper can add it to the cart",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021088.292282,
+    "args": null,
+    "start_time": 1795021088.2922492,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "name": "Add To Cart",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "f1ca7677-44cf-46fa-9a1d-31401805d6da",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.292526,
+    "args": null,
+    "start_time": 1795021088.292523,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "5d571ecc-71fa-411c-8733-e44b68280936",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.292775,
+    "args": null,
+    "start_time": 1795021088.292773,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "5d571ecc-71fa-411c-8733-e44b68280936",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.356506,
+    "args": null,
+    "start_time": 1795021088.292773,
+    "end_time": 1795021088.356491,
+    "elapsed": 0.06371808052062988,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on '10' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "72fd14b1-4364-4696-96d2-486cdfb3a595",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.356868,
+    "args": null,
+    "start_time": 1795021088.356863,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "72fd14b1-4364-4696-96d2-486cdfb3a595",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.441047,
+    "args": null,
+    "start_time": 1795021088.356863,
+    "end_time": 1795021088.441029,
+    "elapsed": 0.08416604995727539,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on 'Add to cart' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "d866ec45-224a-434e-a249-730a6f0f7bf8",
+    "name": "Assert Presence",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.4414499,
+    "args": null,
+    "start_time": 1795021088.4414442,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "d866ec45-224a-434e-a249-730a6f0f7bf8",
+    "name": "Assert Presence",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.469085,
+    "args": null,
+    "start_time": 1795021088.4414442,
+    "end_time": 1795021088.469068,
+    "elapsed": 0.027623891830444336,
+    "logs": [
+      "Asserting (assert_elements) elements: ['Added to cart'] with rule: any and timeout: 30s",
+      "Trying TextElementStrategy on '['Added to cart']' ... SUCCESS",
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "492f5214-ea25-4b20-9fa9-d0f6f99fc407",
+    "name": "Add To Cart",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "f1ca7677-44cf-46fa-9a1d-31401805d6da",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.469441,
+    "args": null,
+    "start_time": 1795021088.292523,
+    "end_time": 1795021088.469437,
+    "elapsed": 0.17691397666931152,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "f1ca7677-44cf-46fa-9a1d-31401805d6da",
+    "name": "Shopper can add it to the cart",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021088.469714,
+    "args": null,
+    "start_time": 1795021088.2922492,
+    "end_time": 1795021088.4697092,
+    "elapsed": 0.1774599552154541,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "05ed1fa3-66b4-4b6f-907d-b9cdb2199877",
+    "name": "Shopper can check out",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021088.47001,
+    "args": null,
+    "start_time": 1795021088.469971,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "name": "Check Out",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "05ed1fa3-66b4-4b6f-907d-b9cdb2199877",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.470253,
+    "args": null,
+    "start_time": 1795021088.47025,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "60ae8f13-68ef-4f27-9674-0cd656ceee1a",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.4705138,
+    "args": null,
+    "start_time": 1795021088.4705112,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "60ae8f13-68ef-4f27-9674-0cd656ceee1a",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.5582201,
+    "args": null,
+    "start_time": 1795021088.4705112,
+    "end_time": 1795021088.558201,
+    "elapsed": 0.08768987655639648,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying ImageDetectionStrategy on 'cart.png' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "36de32d7-ab40-4447-8e8d-305d12a6daa9",
+    "name": "Press Element",
+    "status": "RUNNING",
+    "message": "",
+    "code": null,
+    "parent_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.5587358,
+    "args": null,
+    "start_time": 1795021088.558729,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  },
+  {
+    "entity_type": "keyword",
+    "entity_id": "36de32d7-ab40-4447-8e8d-305d12a6daa9",
+    "name": "Press Element",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.641597,
+    "args": null,
+    "start_time": 1795021088.558729,
+    "end_time": 1795021088.641578,
+    "elapsed": 0.08284902572631836,
+    "logs": [
+      "Trying ScreenshotStrategy on 'screenshot' ... SUCCESS",
+      "Trying TextElementStrategy on 'Check out' ... SUCCESS"
+    ]
+  },
+  {
+    "entity_type": "module",
+    "entity_id": "12bb3a9f-1934-4b92-b7d8-7a71dbd8fb16",
+    "name": "Check Out",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": "05ed1fa3-66b4-4b6f-907d-b9cdb2199877",
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021088.6420732,
+    "args": null,
+    "start_time": 1795021088.47025,
+    "end_time": 1795021088.642067,
+    "elapsed": 0.17181706428527832,
+    "logs": null
+  },
+  {
+    "entity_type": "test_case",
+    "entity_id": "05ed1fa3-66b4-4b6f-907d-b9cdb2199877",
+    "name": "Shopper can check out",
+    "status": "PASS",
+    "message": "",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+      "kind": "test"
+    },
+    "timestamp": 1795021088.642362,
+    "args": null,
+    "start_time": 1795021088.469971,
+    "end_time": 1795021088.642356,
+    "elapsed": 0.17238497734069824,
+    "logs": null
+  },
+  {
+    "entity_type": "execution",
+    "entity_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836",
+    "name": "Execution",
+    "status": "FAIL",
+    "message": "Some test cases failed",
+    "code": null,
+    "parent_id": null,
+    "extra": {
+      "session_id": "2c5ee56d-5a51-40c6-adb3-dd035bc52836"
+    },
+    "timestamp": 1795021089.206542,
+    "args": null,
+    "start_time": null,
+    "end_time": null,
+    "elapsed": null,
+    "logs": null
+  }
+]

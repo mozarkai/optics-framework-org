@@ -1,0 +1,30 @@
+2026-11-18 22:27:54,863 - INFO - Event attributes JSON file path is not set
+2026-11-18 22:27:59,800 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:27:59,823 - INFO - Trying XPathStrategy on '//input[@id='email']' ... SUCCESS
+2026-11-18 22:27:59,879 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:27:59,882 - INFO - Trying XPathStrategy on '//input[@id='password']' ... SUCCESS
+2026-11-18 22:27:59,929 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:27:59,934 - INFO - Trying TextElementStrategy on 'Sign in' ... SUCCESS
+2026-11-18 22:28:00,006 - INFO - Asserting (assert_elements) elements: ['Picked for you'] with rule: any and timeout: 30s
+2026-11-18 22:28:00,009 - INFO - Trying TextElementStrategy on '['Picked for you']' ... SUCCESS
+2026-11-18 22:28:00,040 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:00,054 - INFO - Asserting (assert_elements) elements: ['Free returns'] with rule: any and timeout: 30s
+2026-11-18 22:28:00,103 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:00,812 - INFO - Trying TextDetectionStrategy on '['Free returns']' ... SUCCESS
+2026-11-18 22:28:00,850 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:00,854 - INFO - Trying TextElementStrategy on 'css=#search' ... SUCCESS
+2026-11-18 22:28:00,882 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:00,884 - INFO - Trying TextElementStrategy on 'Trail Runner 2' ... SUCCESS
+2026-11-18 22:28:00,964 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:00,967 - INFO - Trying TextElementStrategy on '10' ... SUCCESS
+2026-11-18 22:28:01,048 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:01,051 - INFO - Trying TextElementStrategy on 'Add to cart' ... SUCCESS
+2026-11-18 22:28:01,110 - INFO - Asserting (assert_elements) elements: ['Added to cart'] with rule: any and timeout: 30s
+2026-11-18 22:28:01,112 - INFO - Trying TextElementStrategy on '['Added to cart']' ... SUCCESS
+2026-11-18 22:28:01,131 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:01,164 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:01,211 - INFO - Trying ImageDetectionStrategy on 'cart.png' ... SUCCESS
+2026-11-18 22:28:01,246 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:01,249 - INFO - Trying TextElementStrategy on 'Check out' ... SUCCESS
+2026-11-18 22:28:01,313 - INFO - Trying ScreenshotStrategy on 'screenshot' ... SUCCESS
+2026-11-18 22:28:01,462 - INFO - No events to send.
