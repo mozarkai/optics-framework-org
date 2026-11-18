@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<testsuites>
+  <testsuite name="birch-tests" id="b2d36934-862b-44c2-a61e-fff58c5af1e8" tests="5" failures="0" errors="0" skipped="0" time="2.47" timestamp="2026-11-18T22:31:29.994+05:30">
+    <testcase name="Suite Setup" id="0ee87231-94cb-4f58-82e0-58f7dc32e9d1" classname="birch-tests" kind="suite_setup" time="0.84" timestamp="2026-11-18T22:31:29.994+05:30" status="PASS">
+      <kw name="Open Birch" type="setup" status="PASS" starttime="20261118 22:31:29.994" endtime="20261118 22:31:30.829" elapsed="0.84">
+        <kw name="Read Data" status="PASS" starttime="20261118 22:31:29.994" endtime="20261118 22:31:29.999" elapsed="0.00"/>
+        <kw name="Launch App" status="PASS" starttime="20261118 22:31:29.999" endtime="20261118 22:31:30.829" elapsed="0.83"/>
+      </kw>
+    </testcase>
+    <testcase name="Shopper can sign in" id="a04e037d-e94c-41a9-a161-28c877349f4b" classname="birch-tests" kind="test" time="0.31" timestamp="2026-11-18T22:31:30.830+05:30" status="PASS">
+      <kw name="Sign In" type="setup" status="PASS" starttime="20261118 22:31:30.830" endtime="20261118 22:31:31.142" elapsed="0.31">
+        <kw name="Enter Text" status="PASS" starttime="20261118 22:31:30.831" endtime="20261118 22:31:30.940" elapsed="0.11">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying XPathStrategy on '//input[@id='email']' ... SUCCESS</log>
+        </kw>
+        <kw name="Enter Text" status="PASS" starttime="20261118 22:31:30.940" endtime="20261118 22:31:31.017" elapsed="0.08">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying XPathStrategy on '//input[@id='password']' ... SUCCESS</log>
+        </kw>
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:31.017" endtime="20261118 22:31:31.107" elapsed="0.09">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on 'Sign in' ... SUCCESS</log>
+        </kw>
+        <kw name="Assert Presence" status="PASS" starttime="20261118 22:31:31.107" endtime="20261118 22:31:31.141" elapsed="0.03">
+          <log>Asserting (assert_elements) elements: ['Picked for you'] with rule: any and timeout: 30s</log>
+          <log>Trying TextElementStrategy on '['Picked for you']' ... SUCCESS</log>
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+        </kw>
+      </kw>
+    </testcase>
+    <testcase name="Shopper can find a shoe" id="4d40ad68-4db0-4dc6-9ef8-e453a15bb286" classname="birch-tests" kind="test" time="0.94" timestamp="2026-11-18T22:31:31.142+05:30" status="PASS">
+      <kw name="Find A Shoe" type="setup" status="PASS" starttime="20261118 22:31:31.142" endtime="20261118 22:31:32.077" elapsed="0.93">
+        <kw name="Assert Presence" status="PASS" starttime="20261118 22:31:31.143" endtime="20261118 22:31:31.961" elapsed="0.82">
+          <log>Asserting (assert_elements) elements: ['Free returns'] with rule: any and timeout: 30s</log>
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextDetectionStrategy on '['Free returns']' ... SUCCESS</log>
+        </kw>
+        <kw name="Enter Text" status="PASS" starttime="20261118 22:31:31.962" endtime="20261118 22:31:31.999" elapsed="0.04">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on 'css=#search' ... SUCCESS</log>
+        </kw>
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:32.000" endtime="20261118 22:31:32.077" elapsed="0.08">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on 'Trail Runner 2' ... SUCCESS</log>
+        </kw>
+      </kw>
+    </testcase>
+    <testcase name="Shopper can add it to the cart" id="f914bf6b-8679-4c19-9a4d-39c42868b801" classname="birch-tests" kind="test" time="0.19" timestamp="2026-11-18T22:31:32.078+05:30" status="PASS">
+      <kw name="Add To Cart" type="setup" status="PASS" starttime="20261118 22:31:32.078" endtime="20261118 22:31:32.272" elapsed="0.19">
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:32.078" endtime="20261118 22:31:32.158" elapsed="0.08">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on '10' ... SUCCESS</log>
+        </kw>
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:32.159" endtime="20261118 22:31:32.243" elapsed="0.08">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on 'Add to cart' ... SUCCESS</log>
+        </kw>
+        <kw name="Assert Presence" status="PASS" starttime="20261118 22:31:32.244" endtime="20261118 22:31:32.272" elapsed="0.03">
+          <log>Asserting (assert_elements) elements: ['Added to cart'] with rule: any and timeout: 30s</log>
+          <log>Trying TextElementStrategy on '['Added to cart']' ... SUCCESS</log>
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+        </kw>
+      </kw>
+    </testcase>
+    <testcase name="Shopper can check out" id="a57514ec-0476-4fa1-bece-6eeec6688eed" classname="birch-tests" kind="test" time="0.19" timestamp="2026-11-18T22:31:32.273+05:30" status="PASS">
+      <kw name="Check Out" type="setup" status="PASS" starttime="20261118 22:31:32.273" endtime="20261118 22:31:32.459" elapsed="0.19">
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:32.273" endtime="20261118 22:31:32.377" elapsed="0.10">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying ImageDetectionStrategy on 'cart.png' ... SUCCESS</log>
+        </kw>
+        <kw name="Press Element" status="PASS" starttime="20261118 22:31:32.378" endtime="20261118 22:31:32.459" elapsed="0.08">
+          <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
+          <log>Trying TextElementStrategy on 'Check out' ... SUCCESS</log>
+        </kw>
+      </kw>
+    </testcase>
+  </testsuite>
+</testsuites>
