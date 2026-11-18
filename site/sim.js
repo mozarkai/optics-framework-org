@@ -330,7 +330,7 @@
         var t = result ? S.tally(result.releases, s, k) : null;
         ROWS.forEach(function (r) {
           var td = body.querySelector('[data-k="' + r[0] + '"]').children[c + 1];
-          td.textContent = !t || (r[0] === "healed" && s !== "ai") ? "–" : r[0] === "green" ? t.green + "/" + t.runs : t[r[0]];
+          td.innerHTML = !t || (r[0] === "healed" && s !== "ai") ? "–" : r[0] === "green" ? t.green + "<small>/" + t.runs + "</small>" : t[r[0]];
           td.classList.toggle("on", s === cfg.strategy);
           td.classList.toggle("hot", !!t && t[r[0]] > 0);
         });
