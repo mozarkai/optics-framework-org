@@ -164,7 +164,7 @@ Good to know:
 - An element that is never found fails with error E0201, so Optics tries the next value of `${name}`.
 - An element found only by OCR or image fails at once with error E0401.
 - On a web page that Appium drives in a mobile browser, Assert Text reads the text of the web element.
-- With an `@:` prefix on `expected`, both texts show as `****` in the error.
+- With an `@:` prefix on `expected`, Optics compares the text without the prefix, and both texts show as `****` in the error.
 - AI self-heal does not cover Assert Text.
 
 ### Is Element

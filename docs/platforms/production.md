@@ -208,20 +208,22 @@ The camera frame shows more than the screen. Optics must know where the four cor
 
 | Setting | What Optics does |
 |---|---|
-| `find_screen: brightness` | The driver presses `brightnessdown` 8 times, then `brightnessup` 8 times. Only the screen changes, so Optics finds it on any page that is not black. If the screen does not change, Optics uses `frame`. |
+| `find_screen: brightness` | The driver presses `brightnessdown` 8 times, then `brightnessup` 8 times. Only the screen changes, so Optics finds it on any page that is not black. The screen goes back to its brightness. If it started below the middle level, it ends at the middle level. The `ble` driver has these keys. If the driver cannot press them, or the screen does not change, Optics uses `frame`. |
 | `find_screen: frame` | Optics finds the bright area inside the dark bezel in one frame. The page must be bright from edge to edge. No driver is necessary. |
 | `deskew_corners` | You give the four corners as `"x,y"`: top left, top right, bottom right, bottom left. |
 
 When Optics finds the screen, it saves `camera_screen_found_<time>.jpg` in the output folder, with the screen marked. The log gives the corners as a `deskew_corners` value. Open the picture after the first run. If the mark is correct, you can put that value in config.yaml in place of `find_screen`.
 
-The screen in the camera must have the same shape as `out_width` x `out_height`, with a tolerance of 4%. If an edge of the screen is black, for example in dark mode, Optics cannot find that edge and stops with `E0305`.
+With a webcam and `find_screen: brightness`, you do not measure `deskew_corners`. The dongle taps at exact positions, so the taps are as accurate as the screen corners that Optics finds.
+
+Optics fits a straight line to each edge of the screen and puts the corners where the lines meet, so rounded corners and a notch do not move them. The screen in the camera must have the same shape as `out_width` x `out_height`, with a tolerance of 4%. Optics corrects for the angle of the camera. Show a bright screen when the run starts. If an edge of the screen is black, for example in dark mode or with a black status bar, Optics cannot find that edge and stops with `E0305`.
 
 At each capture, Optics compares the area around the screen with the first capture:
 
-- **The device or the camera moved.** With `find_screen`, Optics finds the screen again. With `deskew_corners`, the run stops with `E0305`.
+- **The device or the camera moved.** With `find_screen`, Optics finds the screen again. With `deskew_corners`, the run stops with `E0305`. Screen content cannot change the area around the screen. If that area has no texture, for example a plain black holder, Optics cannot see a movement, and the log says so.
 - **The screen is dark for 3 seconds.** The run stops with `E0305` and "the screen is off".
 
-With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Element` and the other element keywords stop at once, because no fallback can help.
+With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Element` and the other element keywords stop at once, because no fallback element and no wait can help. `Assert Presence` stops at once too, unless another element source, such as a page source, can find the element. Then it continues to look there until its timeout.
 
 ## Settings
 
@@ -242,11 +244,11 @@ With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Elemen
 
 | Method | Steps | Default for |
 |---|---|---|
-| `launcher_key` | The launcher shortcut (Cmd+Space or Ctrl+Esc), the name, Enter | `ios`, `macos`, `windows` |
-| `drawer_search` | Home, Meta (the app drawer), the name, Enter | `android` |
+| `launcher_key` | The launcher shortcut (Cmd+Space or Ctrl+Esc), the name, Enter. On iOS, the driver first presses Home twice, because Home from an app that Spotlight opened goes back to Spotlight. | `ios`, `macos`, `windows` |
+| `drawer_search` | Home, Meta (the app drawer), the name, Enter. This opens the top result on launchers that filter as you type. | `android` |
 | `drawer_tap` | Home, Meta, a tap on `app_search`, the name, Up, Enter | `android` with `app_search` |
 | `search_key` | The Search media key, the name, Enter | None |
-| `home_icon` | Home, then a tap on the icon above the name of the app. It needs a camera and finds only apps on the first home screen. | Last on `ios` and `android` |
+| `home_icon` | Home, then a tap on the icon above the name of the app. It needs a camera and finds only apps on the first home screen. Use it for launchers that have no app drawer, or that give Meta to the assistant. | Last on `ios` and `android` |
 
 ```yaml title="config.yaml"
 capabilities:
@@ -255,9 +257,9 @@ capabilities:
   launch: [search_key, drawer_search, home_icon]
 ```
 
-With a camera and an OCR engine, Optics checks each method. After it types the name, the screen must show the name two times: in the search box and as a result. If a method fails, Optics presses Home and tries the next method. When all methods fail, `Launch App` stops with `E0405`. When a method other than the first opens the app, the log gives the `launch` value that tries that method first.
+With a camera and an OCR engine, Optics checks each method. After it types the name, the screen must show the name two times: in the search box and as a result. After Enter, both must be gone from where they were. The match ignores case and spaces, joins words that OCR reads apart on one line, and accepts a result label that the launcher cut off with an ellipsis. If a method fails, Optics presses Home and tries the next method. When all methods fail, `Launch App` stops with `E0405`. When a method other than the first opens the app, the log gives the `launch` value that tries that method first.
 
-Without a camera, Optics uses the first method that needs no camera and does not check the result. On `linux`, there is no default method. Without `launch: [search_key]`, `Launch App` fails with `E0105`.
+Without a camera, Optics uses the first method that needs no camera and does not check the result. When the camera reads no text after Enter, Optics does not check the result either, and the log says so. On `linux`, there is no default method. Without `launch: [search_key]`, `Launch App` fails with `E0105`.
 
 On iOS, do not press `home` just before `Launch App`. Home a few seconds after Spotlight opened an app shows Spotlight again.
 
@@ -276,7 +278,7 @@ On iOS, do not press `home` just before `Launch App`. Home a few seconds after S
 | `header_size` | `8` | Frame server only. The length of the size header in bytes, `4` or `8`. |
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
 
-With `camera_index`, each capture is a new frame. Optics discards the frames that the camera kept in its buffer, so a frame after a tap shows the screen after the tap. When the camera opens, Optics waits 1 second for the exposure. Then it locks focus, white balance and exposure, if the camera lets it.
+With `camera_index`, each capture is a new frame. Optics discards the frames that the camera kept in its buffer, so a frame after a tap shows the screen after the tap. When the camera opens, Optics waits 1 second for the exposure. Then it locks focus, white balance and exposure, if the camera lets it. The log gives the capture size, the frame rate and the locked controls.
 
 Without `find_screen` or `deskew_corners`, and when you set `out_width` and `out_height`, Optics scales each frame to that size. Use this only for a source that shows the screen and nothing more, such as a capture card.
 
@@ -300,21 +302,23 @@ A frame server receives the line `screenshot`. It replies with the size of the p
 | Enter Text | Finds the field with the camera, taps it, then types. |
 | Enter Text Using Keyboard, Enter Text Direct | Types into the field that has focus. ASCII text on a US layout only. |
 | Press By Coordinates, Press By Percentage | Taps a position in `frame`. |
-| Press Keycode | A key (`enter`, `escape`, `tab`, `f1` to `f24`, the arrows), a combination (`cmd+space`, `ctrl+shift+t`) or a media key (`home`, `back`, `volumeup`, `volumedown`, `mute`, `playpause`, `brightnessup`, `brightnessdown`). `search` opens the system search. `power` and `camera` fail with `E0105`. |
+| Press Keycode | A key (`enter`, `escape`, `tab`, `f1` to `f24`, the arrows), a combination (`cmd+space`, `ctrl+shift+t`) or a media key (`home`, `back`, `volumeup`, `volumedown`, `mute`, `playpause`, `next`, `previous`, `stop`, `brightnessup`, `brightnessdown`). `search` opens the system search. On a computer, `home` is the Home key. `power` and `camera` fail with `E0105`. |
 | Clear Text | Selects all text (Cmd+A on iOS and macOS, Ctrl+A on the others), then presses Backspace. |
 | Go Back | The Back key on Android, Cmd+[ on macOS, Alt+Left on Windows and Linux. iOS has no Back: the step fails with `E0105`. Tap the back button of the app. |
-| Scroll | iOS turns the mouse wheel for up and down, about half a screen each time, and drags for left and right. Android drags slowly for 4 seconds. A computer turns the wheel. |
-| Swipe, Swipe By Percentage | A drag. On a phone, the content can move farther than the drag. |
+| Scroll | iOS turns the mouse wheel over the middle of the screen for up and down. This moves the content about half a screen, the same distance each time, where a drag moves it a different distance each time because iOS amplifies a pointer drag. Left and right are drags. Android drags slowly for 4 seconds, so the content moves about as far as the finger: a faster drag flings the content on, by up to a screen. A computer turns the wheel. There, `Scroll down` shows lower content only when natural scrolling is off, so turn it off for the mouse (macOS turns it on by default). |
+| Swipe, Swipe By Percentage | A drag. On a touch screen, a swipe or a drag scroll moves at least 0.75 screen heights per second, because iOS takes a slower drag for a tap. On a phone, the content can move farther than the drag. |
 | Launch App, Launch Other App | By the name on the device. See [Open apps](#open-apps). |
-| Force Terminate App | iOS and Android. Opens the app, then closes it from the App Switcher, so that the next `Launch App` starts from the first screen. |
+| Force Terminate App | iOS and Android. Opens the app, then closes it from the App Switcher (Recents on Android, opened with Meta+Tab), so that the next `Launch App` starts from the first screen. The App Switcher can keep a card on a slow frame, so when a test needs the first screen, assert it after `Launch App`. Without a camera, Optics does not check which app opened, so it closes the newest card. |
 | Get App Version, Execute Script | Not available. The step fails with `E0105`. |
 | Get Text | Not available. OCR and image matching give a position, not the text of an element. |
 | XPath, CSS and UI-tree text | There is no UI tree. Use visible text or images. |
 | [Error detection](/docs/run/error-detection) | It needs a page source. Add `Assert Presence` checks for the error messages that you know. |
 
-On the iOS home screen, tap the icon of an app, not its name. Use an image of the icon, or use `Launch App`.
+On the iOS home screen, tap the icon of an app, not its name. Use an image of the icon, give `Press Element` on the name an `offset_y` up to the icon, or use `Launch App`.
 
-On Android, the dongle acts as a touch screen, so taps are touches with no pointer. This needs firmware 0.1.2 or later. On iOS and iPadOS, the pointer moves to the top-right corner after each tap and swipe. Thus it does not hide the next element from the camera.
+The dongle times taps, swipes and typing itself and answers every command. The element keywords of the driver, such as `press_element` and `get_text_element`, come from the camera.
+
+On Android, the dongle acts as a touch screen, so taps are touches with no pointer. This needs firmware 0.1.2 or later. On iOS and iPadOS, the pointer moves to the top-right corner after each tap and swipe. Thus it does not hide the next element from the camera. This needs airhand firmware 0.1.1 or later.
 
 If the device disconnects from the dongle, a keyword waits up to 10 seconds for it, then the run stops with `E0106`.
 
@@ -349,7 +353,7 @@ elements_sources:
         out_height: 2400
 ```
 
-Optics maps OCR and image matches on the camera frame into the Appium window, as it does for an Appium screenshot. Appium then taps the correct point on the device.
+Optics maps OCR and image matches on the camera frame into the Appium window, as it does for an Appium screenshot. Appium then taps the correct point on the device. For this, the frame must show only the screen, with the aspect ratio of the screenshot. Other drivers get the pixels of the frame unchanged.
 
 :::tip
 Set `deskew_corners` or `find_screen: frame`, so that the frame shows only the screen. Set `out_width` and `out_height` to the screenshot size of the device, so that the frame has the same shape as the screen. With `deskew_corners`, a moved camera stops the run with `E0305`.

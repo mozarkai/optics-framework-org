@@ -104,6 +104,7 @@ Close Birch,Close And Terminate App
 
 Good to know:
 
+- On Appium and Selenium, it quits the WebDriver session. On Playwright, it closes the page, the browser context and the browser. On the BLE driver, it releases any held input and closes the serial port. With every driver, Optics then drops the driver.
 - On a desktop, it stops only the apps that the session started. An app that you attached to with `appName` stays open.
 - After this keyword, later steps have no session. Put it in your last module or a teardown test case. See [Organise tests](/docs/create/organise).
 

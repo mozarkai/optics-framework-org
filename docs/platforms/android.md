@@ -37,7 +37,7 @@ $ npm install -g appium
 $ appium driver install uiautomator2
 ```
 
-UiAutomator2 is the Appium driver for Android. It needs the `ANDROID_HOME` environment variable set to your SDK folder, and Java installed. Run `appium driver doctor uiautomator2` to check both.
+UiAutomator2 is the Appium driver for Android. It needs the `ANDROID_HOME` environment variable set to your SDK folder, and a Java JDK 17 or newer. Run `appium driver doctor uiautomator2` to check both.
 
 ### Make adb available
 
@@ -236,7 +236,7 @@ Android's [KeyEvent list](https://developer.android.com/reference/android/view/K
 - **Steps do not wait for an idle screen.** UiAutomator2 waits up to 10 seconds for the app to stop changing before each command. Optics sets this limit to 1 second. To change it, set `waitForIdleTimeout` in milliseconds under `appium:settings`. `0` turns the wait off.
 - **App data is kept between runs.** Optics starts each session with `noReset: true`, so Appium doesn't clear the app's data and a signed-in user stays signed in. Add `noReset: false` to `capabilities` to start every run from a fresh app.
 - **Pick a device with `udid`.** When several devices are connected, set `udid` to the serial from `adb devices`. `deviceName` is only a label.
-- **Include off-screen elements.** Android leaves elements that are scrolled out of view out of the UI tree. Add `appium:settings: {allowInvisibleElements: true}` under `capabilities` to include them.
+- **Include off-screen elements.** Android leaves elements that are scrolled out of view out of the UI tree, so `Capture Pagesource` and the page source element sources do not show them. Then `Assert Visibility` cannot tell an element that is off screen from one that does not exist. Add `appium:settings: {allowInvisibleElements: true}` under `capabilities` to include them. iOS needs no such setting. See [iOS](/docs/platforms/ios#if-it-isnt-working).
 - **Switch devices in `optics live`.** When you plug in another Android device during `optics live`, Optics notices and switches the session to it.
 - **Android TV uses the same setup.** See [Test TV apps](/docs/platforms/tv) for remote-control keys.
 

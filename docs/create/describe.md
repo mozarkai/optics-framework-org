@@ -36,6 +36,14 @@ Install that name, for example:
 $ optics setup --install gemini
 ```
 
+With pip, install the extra of the same name. The `llm` extra installs all three:
+
+```shell
+$ pip install 'optics-framework[gemini]'
+```
+
+The engine's package is not in the base install. Optics loads it only when the engine is enabled, so projects without AI do not need it.
+
 ### Turn it on in config.yaml
 
 Add an `llm_models` section to your project's `config.yaml`, using the same name:
@@ -74,7 +82,7 @@ Write the key as a reference, such as `api_key: ${GEMINI_API_KEY}`. Optics reads
 
 ## Describe a flow
 
-Start `optics live`, then press [[Ctrl]]+[[N]]. The prompt changes from `›` to `ai ›`. Type what you want in plain English:
+Start `optics live`, then press [[Ctrl]]+[[N]]. The prompt changes from `›` to `ai ›`. It works with every driver: Appium, Selenium and Playwright. If config.yaml has no enabled `llm_models` entry, the session tells you to add one. If the engine's extra is not installed, it gives you the install command. Type what you want in plain English, such as `type "movies for kids" in the search bar`:
 
 ```terminal
 ai › add trail runners to the cart
@@ -93,7 +101,7 @@ ai › add trail runners to the cart
      done · 4 step(s) · 9.4s · recorded 4 (/save to keep)
 ```
 
-Each turn, the model sees the screen as rows, such as `e7 button "Search Birch" [tap] #search`. It also sees the last 8 steps, your project's element names and the keyword list. The model picks one action on a ref, such as `e7`, and names the text that the next screen must show. Optics runs the action with a locator that matches only that element. Then it reads the screen again and judges the step as pass, fail or unknown.
+Each turn, the model sees the screen as rows, such as `e7 button "Search Birch" [tap] #search`. It also sees the last 8 steps, your project's element names and the keyword list. The model picks one action on a ref, such as `e7`: `tap`, `type`, `select`, `scroll`, `key`, `open`, `check` or any keyword. It also names the text that the next screen must show or lose. Optics runs the action with a locator that matches only that element. Then it reads the screen again and judges the step as pass, fail or unknown.
 
 The model's thoughts appear as `thinking:` lines. Every action is a normal keyword, and the history shows the locator it used.
 
@@ -103,7 +111,7 @@ Press [[Ctrl]]+[[X]] to stop a run, or [[Ctrl]]+[[N]] again to go back to typing
 
 The model ends a run with `done` and the text that proves the goal. Optics accepts `done` only when that text is on the screen. If the model gives no text, the run ends as `PASS (unverified)`. Check the app yourself before you keep those steps.
 
-When the run ends with `done`, Optics asks the model to remove dead ends and detours. Only the steps that mattered stay.
+When the run ends with `done`, Optics asks the model to remove dead ends, backtracks and gestures that did nothing. Only the steps that mattered stay, so you save a short script that you can run again, not a log of every try. Only the elements that those steps use are added. If this pass does not give a usable result, Optics keeps every step that passed, so a working recording is never lost.
 
 Save the steps the same way as a manual recording:
 
@@ -115,7 +123,7 @@ Optics records only runs that end with `done` or `PASS (unverified)`. If the mod
 
 ### Review what you saved
 
-The agent turns each element it acts on into a named element, such as `${add_to_cart_button}`. Its values are the element's locators, then its label as the last fallback. If a project element has the same first locator, the agent uses that element. `/save` writes the steps to `modules/modules.csv` and the new elements to your elements CSV. Read both before you commit them. See [Define elements](/docs/elements/define).
+The agent turns each element it acts on into a named element, such as `${add_to_cart_button}`. Its values are the element's locators, then its label as the last fallback. If a project element has the same first locator, the agent uses that element. The recorded step is then, for example, `press_element ${add_to_cart_button}`. The new elements join the session only when the instruction completes. `/save` writes the steps to `modules/modules.csv` and the new elements to your elements CSV. Read both before you commit them. See [Define elements](/docs/elements/define).
 
 ## Write goals the model can finish
 

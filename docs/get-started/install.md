@@ -68,6 +68,17 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 ```shell
 $ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,rapidocr
 ```
+
+Keep the `-f`. Without it, curl sends an HTTP error page into your shell.
+
+On Windows, piping into `iex` passes no parameters, so set the variable first:
+
+```powershell
+PS> $env:OPTICS_EXTRA = "appium,llm"
+PS> irm https://optics-framework.org/install.ps1 | iex
+```
+
+When you download `install.ps1` as a file, it takes `-Version`, `-Extra`, `-Dir`, `-NoModifyPath`, `-DryRun` and `-Uninstall` directly.
 :::
 
 ## Add engines for your platform
@@ -147,6 +158,7 @@ Web
 - **`optics: command not found`.** Open a new terminal. If it still fails, add `~/.optics/bin` to your PATH, as the installer printed.
 - **`optics setup` refuses to install.** Conda, pipx and tool-managed environments (uv tool, Poetry, PDM) manage their own packages, so `optics setup` prints the right command for that tool instead. Run that command, or use a plain virtual environment.
 - **EasyOCR fails under Conda.** EasyOCR and Optics need different NumPy versions under Conda. Use the installer or a standard `venv`.
+- **EasyOCR does not install on an Intel-based Mac.** Use `apple-vision` or `rapidocr` instead.
 
 [Troubleshooting](/docs/help/troubleshooting) covers more cases.
 
