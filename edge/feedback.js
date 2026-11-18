@@ -3,7 +3,7 @@
 // path because the free plan gives each request 10 ms of CPU.
 
 export const FEEDBACK_PATH = "/api/feedback";
-export const DAILY_CAP = 300;
+export const DAILY_CAP = 5000;
 export const KINDS = new Set(["broken", "missing", "confusing", "idea", "worked"]);
 export const IMPACTS = new Set(["blocked", "worked_around", "friction", "none"]);
 const TRANSPORTS = new Set(["stdio", "http"]);
@@ -11,11 +11,18 @@ const MAX_BODY = 16384;
 const LIMITS = { task: 200, description: 4000, tool: 100, error: 1000, suggestion: 1000, client: 100, platform: 40 };
 const VERSION = /^[\w.+-]{1,40}$/;
 const MAX_ISSUE_BODY = 60000;
+const DIGEST_REPORTS = 40;
 
 const INSERT =
   "INSERT INTO feedback (ts, day, kind, impact, task, description, tool, error, suggestion, version, client, transport, platform, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-const COUNT_DAY = "SELECT COUNT(*) AS n FROM feedback WHERE day = ?";
-const SELECT_DAY = "SELECT * FROM feedback WHERE day = ? ORDER BY ts";
+// Takes one of the day's places, or returns no row once the day is full.
+const TAKE_PLACE =
+  "INSERT INTO feedback_days (day, n) VALUES (?, 1) ON CONFLICT (day) DO UPDATE SET n = n + 1 WHERE n < ? RETURNING n";
+const TALLY = "SELECT kind, impact, COUNT(*) AS n FROM feedback WHERE day = ? GROUP BY kind, impact";
+const TOOLS = "SELECT tool, COUNT(*) AS n FROM feedback WHERE day = ? AND tool IS NOT NULL GROUP BY tool ORDER BY n DESC LIMIT 10";
+// The reports that cost an agent most come first.
+const TOP =
+  "SELECT * FROM feedback WHERE day = ? ORDER BY CASE impact WHEN 'blocked' THEN 0 WHEN 'worked_around' THEN 1 WHEN 'friction' THEN 2 ELSE 3 END, ts LIMIT ?";
 
 // Credentials and personal data an agent may paste by mistake. The Optics client scrubs too;
 // this pass covers any other caller.
@@ -76,16 +83,17 @@ export async function receive(request, env, now = Date.now()) {
   const report = body.length <= MAX_BODY ? parseReport(body) : null;
   if (!report) return reply(400, { error: "The report does not match the expected fields." });
   const today = day(now);
-  const { n } = await env.DB.prepare(COUNT_DAY).bind(today).first();
-  if (n >= DAILY_CAP) return reply(429, { error: "Today's reports are full. Do not retry; carry on with your task." });
+  const place = await env.DB.prepare(TAKE_PLACE).bind(today, DAILY_CAP).first();
+  if (!place) return reply(429, { error: "Today's reports are full. Do not retry; carry on with your task." });
   const row = [now, today, report.kind, report.impact, report.task, report.description, report.tool, report.error,
     report.suggestion, report.version, report.client, report.transport, report.platform, request.cf?.country ?? null];
   const { meta } = await env.DB.prepare(INSERT).bind(...row).run();
   return reply(201, { id: meta.last_row_id, received: true });
 }
 
-const tally = (rows, key) =>
-  Object.entries(rows.reduce((counts, row) => ({ ...counts, [row[key]]: (counts[row[key]] ?? 0) + 1 }), {}))
+const tally = (counts, key) =>
+  Object.entries(counts.reduce((sums, row) => ({ ...sums, [row[key]]: (sums[row[key]] ?? 0) + row.n }), {}))
+    .sort(([, a], [, b]) => b - a)
     .map(([name, n]) => `${name} ${n}`)
     .join(", ");
 
@@ -113,35 +121,41 @@ function entry(row, i) {
 
 const plural = (n) => `${n} report${n === 1 ? "" : "s"}`;
 
-// The issue for one day's reports, or null when there were none. Entries past GitHub's
-// body limit stay in D1 and the issue says how many.
-export function digest(rows, date) {
-  if (!rows.length) return null;
-  const head = `${plural(rows.length)} from agents on ${date} (UTC).\n\nKinds: ${tally(rows, "kind")}\nImpact: ${tally(rows, "impact")}`;
+// The issue for one day, or null when there were no reports: the day's totals, then the
+// reports that cost agents most, as many as fit. The rest stay in D1 and the issue says so.
+export function digest({ counts, tools }, rows, date) {
+  const total = counts.reduce((sum, row) => sum + row.n, 0);
+  if (!total) return null;
+  const head = [
+    `${plural(total)} from agents on ${date} (UTC).`,
+    `Kinds: ${tally(counts, "kind")}\nImpact: ${tally(counts, "impact")}`,
+    ...(tools.length ? [`Most reported tools:\n\n${fenced(tools.map((t) => `${t.tool} ${t.n}`).join("\n"))}`] : []),
+  ].join("\n\n");
   const parts = [head];
   let size = head.length;
   for (const [i, row] of rows.entries()) {
     const part = entry(row, i);
-    if (size + part.length > MAX_ISSUE_BODY) {
-      parts.push(`${plural(rows.length - i)} more are in D1: \`SELECT * FROM feedback WHERE day = '${date}'\``);
-      break;
-    }
+    if (size + part.length > MAX_ISSUE_BODY) break;
     parts.push(part);
     size += part.length + 2;
   }
+  const left = total - (parts.length - 1);
+  if (left) parts.push(`Not shown: ${plural(left)}. Read them in D1: \`SELECT * FROM feedback WHERE day = '${date}'\``);
   return {
-    title: `Optics feedback ${date}: ${plural(rows.length)}`,
+    title: `Optics feedback ${date}: ${plural(total)}`,
     body: parts.join("\n\n"),
-    labels: [...new Set(rows.map((row) => row.kind))],
+    labels: [...new Set(counts.map((row) => row.kind))],
   };
 }
+
+const all = async (env, sql, ...args) => (await env.DB.prepare(sql).bind(...args).all()).results;
 
 // Yesterday's reports, filed once a day as an issue in the private repository FEEDBACK_REPO.
 export async function sendDigest(env, now = Date.now(), post = fetch) {
   if (!env.DB || !env.GITHUB_TOKEN || !env.FEEDBACK_REPO) return null;
   const date = day(now - 86_400_000);
-  const { results } = await env.DB.prepare(SELECT_DAY).bind(date).all();
-  const issue = digest(results, date);
+  const summary = { counts: await all(env, TALLY, date), tools: await all(env, TOOLS, date) };
+  const issue = digest(summary, summary.counts.length ? await all(env, TOP, date, DIGEST_REPORTS) : [], date);
   if (!issue) return null;
   const response = await post(`https://api.github.com/repos/${env.FEEDBACK_REPO}/issues`, {
     method: "POST",
