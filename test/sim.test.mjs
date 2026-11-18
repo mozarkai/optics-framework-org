@@ -29,15 +29,29 @@ test("raising one odds slider keeps every other change in place", () => {
   assert.deepEqual(keyed(base), keyed({ ...base, odds: { ...base.odds, word: 90 } }));
 });
 
-test("a deleted element fails its step in every strategy, and self-heal never passes it", () => {
+test("a deleted element never passes its step, with or without self-heal", () => {
   let seen = 0;
   for (const seed of SEEDS) for (const s of S.STRATEGIES) for (const run of runs(loud(seed), s)) {
-    for (const bug of run.caught.filter((b) => b.key === "gone")) {
-      assert.equal(run.steps[bug.el].st, "fail");
+    for (const bug of [...run.caught, ...run.unseen].filter((b) => b.key === "gone")) {
+      assert.ok(["fail", "notrun"].includes(run.steps[bug.el].st));
       seen++;
     }
   }
   assert.ok(seen > 0);
+});
+
+test("every odds slider changes some run outcome", () => {
+  const totals = (cfg) => JSON.stringify(S.simulate(cfg).releases.map((r) => r.runs));
+  for (const key of Object.keys(loud("x").odds)) {
+    const at = (n) => SEEDS.map((seed) => { const c = loud(seed); c.odds[key] = n; return totals(c); }).join();
+    assert.notEqual(at(0), at(100), key);
+  }
+});
+
+test("each rung in the key finds a step for some seed", () => {
+  const found = new Set();
+  for (const seed of SEEDS) for (const s of S.STRATEGIES) for (const run of runs(loud(seed), s)) run.steps.forEach((x) => found.add(x.rung));
+  assert.deepEqual([...found].filter((r) => r != null).sort(), [0, 1, 2, 3, 4]);
 });
 
 test("Assert Presence never heals", () => {

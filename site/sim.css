@@ -1,5 +1,6 @@
 .pg.sim { display: grid; grid-template-columns: clamp(280px, 24vw, 340px) minmax(0, 1fr); margin-top: clamp(80px, 8vw, 112px); --h: 14px; --gap: 3px; }
-.pg.sim :focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+.pg.sim :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sim-board :focus-visible { outline-color: var(--sun); }
 
 .sim-ctl { display: flex; flex-direction: column; min-width: 0; border-right: 1.5px solid var(--ink); }
 .sim-set { min-width: 0; margin: 0; padding: 16px 16px 8px; border: 0; border-bottom: 1px solid var(--line-2); }
@@ -26,7 +27,7 @@
 .sim-n input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
 .sim-n label span { display: grid; place-items: center; min-width: 48px; height: 36px; padding: 0 10px; border: 1.5px solid var(--line-2); font: 500 .8125rem/1 var(--mono); color: var(--ink-2); transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
 .sim-n input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-.sim-n input:focus-visible + span { outline: 2px solid var(--sun); outline-offset: 2px; }
+.sim-n input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
 .sim-ship { height: 46px; }
 .sim-ship svg { width: 11px; height: 11px; fill: currentColor; }
 .pg.sim.running .sim-ship svg { display: none; }

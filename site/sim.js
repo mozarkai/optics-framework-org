@@ -6,7 +6,8 @@
     { name: "search_bar", kw: "enter_text", id: "search", heal: true, labels: ["Search Birch", "Search", "Find shoes"] },
     { name: "Trail Runner 2", literal: true, kw: "press_element", heal: true, picture: true, gone: "the Trail Runner 2 card", labels: ["Trail Runner 2", "Trail Runner II"] },
     { name: "add_to_cart", kw: "press_element", id: "add", image: true, heal: true, gone: "the Add to cart button", labels: ["Add to cart", "Add to bag", "Add to basket"] },
-    { name: "added_toast", kw: "assert_presence", id: "toast", heal: false, picture: true, labels: ["Added to cart", "Added to bag", "In your cart"] },
+    { name: "added_toast", kw: "assert_presence", id: "toast", heal: false, labels: ["Added to cart", "Added to bag", "In your cart"] },
+    { name: "cart_icon", kw: "press_element", id: "cart", image: true, icon: true, heal: true, gone: "the cart icon", labels: ["cart"] },
   ];
   var FAULTS = [
     { key: "id", odds: 15, name: "Rename an id" },
@@ -51,7 +52,6 @@
     ELEMENTS.forEach(function (e, i) { if (test(e)) list.push(i); });
     return list[Math.floor(u * list.length)];
   }
-  function any() { return true; }
 
   // Three draws per fault per release, used or not, so one slider never reshuffles the others.
   function draws(cfg) {
@@ -69,7 +69,7 @@
       return { key: "id", el: i, from: idName(ELEMENTS[i], s.idV - 1), to: idName(ELEMENTS[i], s.idV) };
     },
     word: function (app, d) {
-      var i = pick(any, d.a), n = ELEMENTS[i].labels.length, from = shown(i, app);
+      var i = pick(function (e) { return !e.icon; }, d.a), n = ELEMENTS[i].labels.length, from = shown(i, app);
       app.el[i].label = (app.el[i].label + 1 + Math.floor(d.b * (n - 1))) % n;
       return { key: "word", el: i, from: from, to: shown(i, app) };
     },
@@ -80,7 +80,7 @@
       return { key: "pic", el: i, on: app.el[i].pic, text: shown(i, app) };
     },
     gone: function (app, d) { return { key: "gone", el: pick(function (e) { return e.gone; }, d.a), bug: true }; },
-    out: function (app, d) { return { key: "out", after: 2 + Math.floor(d.a * 5), bug: true }; },
+    out: function (app, d) { return { key: "out", after: 2 + Math.floor(d.a * (ELEMENTS.length - 2)), bug: true }; },
     blip: function (app, d) { return { key: "blip", after: Math.floor(d.a * ELEMENTS.length), bug: true }; },
   };
 
@@ -90,7 +90,7 @@
   function values(i, app, strategy) {
     var e = ELEMENTS[i], text = shown(i, app);
     if (strategy === "one") return e.id ? { id: idName(e, app.el[i].idV) } : { text: text };
-    return { id: e.id ? idName(e, app.el[i].idV) : null, text: text, img: e.image ? look(text, app.style) : null };
+    return { id: e.id ? idName(e, app.el[i].idV) : null, text: e.icon ? null : text, img: e.image ? look(text, app.style) : null };
   }
 
   // Each value in elements.csv order, each with the methods that fit its kind.
@@ -123,7 +123,7 @@
   function arrive(world, shipped) {
     shipped.forEach(function (c) {
       if (c.key === "gone") world.gone[c.el] = true;
-      if (c.key === "out" && world.out == null) world.out = c.after;
+      if (c.key === "out") world.out = world.out == null ? c.after : Math.min(world.out, c.after);
     });
   }
   function lastScreen(world, stop, defs) {
@@ -249,8 +249,8 @@
           "<li><b>One value</b> keeps only the first value of each element. <b>Every value</b> keeps all of them.</li>" +
           "<li>AI self-heal starts only when every value fails, and only for actions. Assert Presence does not heal. Here it recovers each action whose element is still on screen. A real model can fail or press the wrong thing.</li>" +
           "<li>Error detection reads the text on the last screen once, at the end of the run. An error that goes away before the end is not seen.</li>" +
-          "<li>After a false failure or a healed step, the team updates that element to match the app.</li>" +
-          "<li>The suite signs in, searches, opens Trail Runner 2, adds it to the cart and checks for “Added to cart”. The simulation counts outcomes. It has no timings.</li>" +
+          "<li>After a false failure, a healed step or a pass on a later value, the team updates that element to match the app.</li>" +
+          "<li>The suite signs in, searches, opens Trail Runner 2, adds it to the cart, checks for “Added to cart” and opens the cart. The cart icon has no text, so its values are an id and an image. The simulation counts outcomes. It has no timings.</li>" +
         "</ul></details>" +
       "</form>" +
       '<div class="sim-main">' +
@@ -258,7 +258,7 @@
           '<button class="btn btn-sun sim-ship" type="submit" form="sim-form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><span></span></button>' +
           '<button class="btn btn-sm sim-copy" type="button">Copy link</button>' +
           '<p class="label"><span class="sim-id"></span><span class="sim-prog"></span></p></div>' +
-          '<div class="sim-grid" aria-label="Releases"></div>' +
+          '<div class="sim-grid" role="group" aria-label="Releases"></div>' +
           '<ul class="sim-key label" aria-label="Key">' +
             '<li><i class="c-first"></i>First try</li><li><i class="c-1"></i>Text</li><li><i class="c-2"></i>OCR</li><li><i class="c-3"></i>Image</li><li><i class="c-4"></i>AI self-heal</li>' +
             '<li><i class="c-false"></i>False failure</li><li><i class="c-bug"></i>Bug caught</li><li><i class="c-unseen"></i>Bug unseen</li></ul></div>' +
