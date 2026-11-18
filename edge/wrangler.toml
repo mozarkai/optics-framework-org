@@ -11,5 +11,10 @@ database_name = "optics-analytics"
 database_id = "7b05bbb3-0cca-4e43-892f-6a066dd46545"
 migrations_dir = "migrations"
 
+# The daily feedback digest is an issue in this private repository. GITHUB_TOKEN is a secret:
+# a fine-grained token limited to this repository with Issues read and write.
+[vars]
+FEEDBACK_REPO = "chinmayajha/optics-feedback"
+
 [triggers]
-crons = ["17 4 * * *"]
+crons = ["17 4 * * *", "47 4 * * *"]
