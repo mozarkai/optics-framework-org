@@ -96,22 +96,28 @@
   // Each value in elements.csv order, each with the methods that fit its kind.
   function locate(i, app, known, on) {
     var s = app.el[i], text = shown(i, app);
-    return [
-      known.id ? on && known.id === idName(ELEMENTS[i], s.idV) : null,
-      known.text ? on && !s.pic && known.text === text : null,
-      known.text ? on && known.text === text : null,
-      known.img ? on && known.img === look(text, app.style) : null,
+    var tries = [
+      [known.id, function () { return known.id === idName(ELEMENTS[i], s.idV); }],
+      [known.text, function () { return !s.pic && known.text === text; }],
+      [known.text, function () { return known.text === text; }],
+      [known.img, function () { return known.img === look(text, app.style); }],
     ];
+    return tries.map(function (t) { return t[0] ? on && t[1]() : null; });
   }
+  function reach(i, world) {
+    var covered = world.out != null && i > world.out;
+    return { covered: covered, on: !world.gone[i] && !covered };
+  }
+  function blame(i, world, r) { return world.gone[i] ? "gone" : r.covered ? "out" : "false"; }
+  function kind(found, first) { return found === 4 ? "healed" : VALUE_OF[found] > VALUE_OF[first] ? "fallback" : "first"; }
   function step(i, app, world, strategy) {
-    var covered = world.out != null && i > world.out, on = !world.gone[i] && !covered;
-    var t = locate(i, app, world.known[i], on), found = t.indexOf(true), first = t.findIndex(function (x) { return x !== null; });
-    var heal = strategy === "ai" && ELEMENTS[i].heal;
-    if (found < 0 && heal && on) found = 4;
-    t.push(heal ? found === 4 || (found < 0 ? false : null) : null);
+    var r = reach(i, world), t = locate(i, app, world.known[i], r.on);
+    var found = t.indexOf(true), first = t.findIndex(function (x) { return x !== null; });
+    t.push(strategy === "ai" && ELEMENTS[i].heal && found < 0 ? r.on : null);
+    if (t[4]) found = 4;
     var trace = t.map(function (x, k) { return found >= 0 && k > found ? null : x; });
-    if (found < 0) return { st: "fail", trace: trace, cause: world.gone[i] ? "gone" : covered ? "out" : "false" };
-    return { st: found === 4 ? "healed" : VALUE_OF[found] > VALUE_OF[first] ? "fallback" : "first", trace: trace, rung: found, first: first };
+    if (found < 0) return { st: "fail", trace: trace, cause: blame(i, world, r) };
+    return { st: kind(found, first), trace: trace, rung: found, first: first };
   }
 
   function arrive(world, shipped) {
@@ -120,12 +126,15 @@
       if (c.key === "out" && world.out == null) world.out = c.after;
     });
   }
+  function lastScreen(world, stop, defs) {
+    if (world.out == null || (stop >= 0 && stop <= world.out)) return "clear";
+    return defs ? "match" : "unseen";
+  }
   function judge(world, steps, stop, defs, shipped) {
-    var signedOut = world.out != null && (stop < 0 || stop > world.out);
-    var end = signedOut ? (defs ? "match" : "unseen") : "clear";
-    var caught = [], unseen = [];
+    var end = lastScreen(world, stop, defs), caught = [], unseen = [];
     Object.keys(world.gone).forEach(function (k) { (stop === +k ? caught : unseen).push({ key: "gone", el: +k }); });
-    if (world.out != null) (end === "match" || (stop >= 0 && steps[stop].cause === "out") ? caught : unseen).push({ key: "out" });
+    var outSeen = end === "match" || (stop >= 0 && steps[stop].cause === "out");
+    if (world.out != null) (outSeen ? caught : unseen).push({ key: "out" });
     shipped.forEach(function (c) { if (c.key === "blip") unseen.push({ key: "blip" }); });
     return { end: end, caught: caught, unseen: unseen };
   }
