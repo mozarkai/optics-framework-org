@@ -50,19 +50,21 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 
 ### How OCR matches text
 
-OCR looks for your text as complete words, in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
+OCR looks for your text as words in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
 
-| Text value | On the screen | Found |
-|---|---|---|
-| `Sign in` | "Sign in to your account" | Yes |
-| `sign IN` | "Sign in" | Yes |
-| `World clock` | "World" at the end of one line, "clock" at the start of the next | Yes, and the tap goes to "World" |
-| `Pay` | "Payment" | No |
-| `Sign in.` | "Sign in" | No |
+By default, your text can also be a part of a word. Set `strict_element_match: true` in `config.yaml` to find complete words only.
+
+| Text value | On the screen | Found | Found when strict |
+|---|---|---|---|
+| `Sign in` | "Sign in to your account" | Yes | Yes |
+| `sign IN` | "Sign in" | Yes | Yes |
+| `World clock` | "World" at the end of one line, "clock" at the start of the next | Yes, and the tap goes to "World" | Yes |
+| `Pay` | "Payment" | Yes | No |
+| `Sign in.` | "Sign in" | No | No |
 
 In Chinese, Japanese, Thai and other scripts with no spaces between words, each character counts as a word, so `设置` finds "打开设置页面". Arabic and Hebrew are read from right to left.
 
-When the text shows more than once, `index` picks one: `0` is the first, counted from the top and then from left to right.
+When the text shows more than once, `index` picks one: `0` is the first. Complete words come first, then parts of words. Each group is counted from the top and then from left to right.
 
 ### OCR engines
 
