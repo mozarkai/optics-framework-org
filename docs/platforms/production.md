@@ -367,11 +367,7 @@ The driver before 1.11.5 used a different dongle and needed calibration. The new
 | `device_id` | Remove it. |
 | None | Add `platform`. |
 
-Optics refuses a config that has a v1 setting. `optics doctor` shows the setting to remove:
-
-```text
-  ❌ config: ble settings        capabilities: Value error, device_id, mickeys_height, mickeys_width, pixel_height, pixel_width belong to the v1 ble driver; see 'Migrating from the v1 ble driver' in the configuration docs
-```
+Optics refuses a config that has a v1 setting, and `optics doctor` names the settings to remove.
 
 ## If it is not working
 
