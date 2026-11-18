@@ -312,6 +312,24 @@ test("llms-full.txt holds the text of the homepage, the text pages and every doc
   assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/llms-full\.txt\)/);
 });
 
+test("the wild flows show real keywords, and each tile's lines come from the files it opens", () => {
+  const keywords = new Set(
+    [...readFileSync("docs/reference/keywords/index.md", "utf8").matchAll(/^\| ([A-Z][\w ]+?) \| .+\| \[[^\]]+\]\(\/docs\/reference\/keywords\//gm)].map((m) => m[1]),
+  );
+  const unescape = (s) => s.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+  const tiles = [...read("index.html").matchAll(/<article class="wild-t[^"]*" data-scene="(\w+)">([\s\S]*?)<\/article>/g)];
+  assert.ok(tiles.length >= 7);
+  for (const [, scene, body] of tiles) {
+    const files = [...body.matchAll(/<figcaption>([^<]+)<\/figcaption><pre><code>([\s\S]*?)<\/code>/g)].map(([, name, code]) => ({ name, rows: unescape(code).split("\n") }));
+    for (const { rows } of files.filter((f) => f.name === "modules/modules.csv")) {
+      for (const row of rows.slice(1)) assert.ok(keywords.has(row.split(",")[1]), `${scene}: ${row}`);
+    }
+    for (const [, line] of body.matchAll(/<span class="wl"(?: data-pick="[\d ]+")?>([^<]+)<\/span>/g)) {
+      assert.ok(files.some((f) => f.rows.includes(unescape(line))), `${scene}: "${line}" is in none of its files`);
+    }
+  }
+});
+
 test("the homepage and every text page link to the docs", () => {
   for (const page of ["index.html", ...TRUST_PAGES.map((p) => `${p}.html`)]) {
     assert.match(read(page), /href="(\.\/)?docs\/"/, `${page} has no docs link`);
