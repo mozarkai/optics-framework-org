@@ -7,6 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { itemUrl, loadBlog } from "../lib/blog.mjs";
 import { loadRun } from "../lib/run.mjs";
+import { render } from "../lib/markdown.mjs";
 
 const ORIGIN = "https://optics-framework.org";
 const TRUST_PAGES = ["about", "contact", "privacy"];
@@ -262,6 +263,27 @@ test("every docs page is built with its Markdown twin, title and canonical URL",
   }
 });
 
+test("each diagram is drawn in the site's tokens and keeps its Mermaid source for agents", () => {
+  let seen = 0;
+  for (const page of docsPages()) {
+    const html = read(page.file);
+    const figures = html.match(/<figure class="diagram"/g)?.length ?? 0;
+    if (!figures) continue;
+    seen += figures;
+    const svgs = html.match(/<figure class="diagram"[\s\S]*?<\/figure>/g).join("");
+    assert.doesNotMatch(svgs, /#a0000\d|Menlo/i, `${page.id}: a diagram kept a placeholder colour or the measuring font`);
+    assert.equal(new Set(svgs.match(/<svg id="d-[0-9a-f]+"/g)).size, figures, `${page.id}: two diagrams share an id`);
+    const md = read(page.file.replace(/\.html$/, ".md"));
+    assert.equal(md.match(/^```mermaid$/gm)?.length ?? 0, figures, `${page.id}.md lost a diagram's source`);
+  }
+  assert.ok(seen > 0, "no page has a diagram");
+});
+
+test("a diagram with no title or no drawing stops the build and says how to fix it", () => {
+  assert.throws(() => render("```mermaid\nflowchart LR\n  a --> b\n```", {}), /needs title=/);
+  assert.throws(() => render('```mermaid title="Never drawn"\nflowchart LR\n  never --> drawn\n```', {}), /run node scripts\/diagrams\.mjs/);
+});
+
 test("links and assets on docs pages resolve to built files", () => {
   for (const page of docsPages()) {
     const dir = page.file.split("/").slice(0, -1).join("/");
@@ -304,9 +326,14 @@ test("docs search index and agent index cover every page", () => {
   }
 });
 
-test("llms-full.txt holds the text of the homepage, the text pages and every docs page", () => {
+test("llms-full.txt holds the text of the homepage, the text pages and every docs page outside Contribute", () => {
   const full = read("llms-full.txt");
-  for (const url of ["", ...TRUST_PAGES, ...docsPages().map((p) => p.url)]) {
+  const internal = (p) => p.id.startsWith("contribute/");
+  const internals = docsPages().filter(internal);
+  const pages = docsPages().filter((p) => !internal(p));
+  assert.ok(internals.length > 0);
+  for (const p of internals) assert.ok(!full.includes(`Source: ${ORIGIN}/${p.url}\n`), `llms-full.txt has /${p.url}`);
+  for (const url of ["", ...TRUST_PAGES, ...pages.map((p) => p.url)]) {
     assert.ok(full.includes(`Source: ${ORIGIN}/${url}\n`), `llms-full.txt lacks /${url}`);
   }
   assert.doesNotMatch(full, /\]\((?!https?:|mailto:|#)[^)]+\)/, "llms-full.txt has a relative link");

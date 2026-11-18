@@ -209,10 +209,11 @@ writeFileSync(
 const docs = buildDocs({ lastModified });
 
 // Every page in one file for agents: the homepage, about and contact, the docs in reading
-// order, then privacy. The articles stay out to keep the file under about 500 KB.
+// order (without the Contribute section), then privacy. The articles stay out to keep the
+// file under about 500 KB.
 const fullText = (path, file) => `Source: ${ORIGIN}/${path}\n\n${readFileSync(file, "utf8").trim()}\n`;
 const llmsFull = [
-  `# Optics, full text\n\n> Every page of optics-framework.org in one file: the homepage, about and contact, every docs page in reading order, then privacy. The docs index is ${ORIGIN}/docs/llms.txt and the blog articles are listed at ${ORIGIN}/blog.md.\n`,
+  `# Optics, full text\n\n> Every page of optics-framework.org in one file: the homepage, about and contact, every docs page in reading order except the Contribute section, then privacy. The docs index is ${ORIGIN}/docs/llms.txt and the blog articles are listed at ${ORIGIN}/blog.md.\n`,
   fullText("", "out/index.md"),
   fullText("about", "out/about.md"),
   fullText("contact", "out/contact.md"),

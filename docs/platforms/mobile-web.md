@@ -15,7 +15,14 @@ To test a website in a desktop browser, or in a browser that only emulates a pho
 
 The session stays in the native context. Visible text, resource ids, native XPath and OCR work on web pages too. Chrome and Safari put the text, links and fields of the page into the native UI tree.
 
-Web locators, `css=…` and DOM XPath such as `//button[@type='submit']`, go to the `appium_web` element source. It finds the element in the page in front, scrolls it into view, and gives its position on the screen. The tap or text entry that follows is a native action at that position.
+Web locators, `css=...` and DOM XPath such as `//button[@type='submit']`, go to the `appium_web` element source. For each lookup, it:
+
+1. finds the web content of the app in front, and its front tab. On Android, that is Chrome or a debuggable WebView. On iOS, it is Safari, an in-app Safari sheet (`SFSafariViewController`), an inspectable `WKWebView` or another inspectable browser.
+2. finds the element in the page and scrolls it into view. It closes the on-screen keyboard if the keyboard covers the element.
+3. converts the position of the element to screen coordinates.
+4. goes back to the native context.
+
+The tap or text entry that follows is a native action at that position.
 
 ## Before you begin
 
@@ -39,7 +46,7 @@ Or set `appium:chromedriverExecutableDir` to a folder of chromedriver binaries. 
 
 Enable `appium_web` next to the other Appium sources. `optics quickstart` and `optics configure` do this for Android and iOS projects.
 
-:::tabs{group="os"}
+:::tabs{group="platform"}
 ::tab[Android]
 ```yaml title="config.yaml"
 driver_sources:
@@ -83,14 +90,16 @@ Do not set `browserName: Safari`. It turns off the web lookups that `appium_web`
 
 ### Let Optics read the page
 
-:::tabs{group="os"}
+:::tabs{group="platform"}
 ::tab[Android]
 Chrome needs no setup. An app's WebView is readable only when the app calls `WebView.setWebContentsDebuggingEnabled(true)`. Debug builds usually do.
 
 ::tab[iOS]
-Simulators need no setup. On a real device, turn on **Web Inspector** and **Remote Automation** in **Settings > Apps > Safari > Advanced**.
+No extra driver is needed: XCUITest reads web pages through the Web Inspector of Safari. Simulators need no setup. On a real device, turn on **Web Inspector** and **Remote Automation** in **Settings > Apps > Safari > Advanced**.
 
-Safari and in-app Safari sheets are always readable. An app's `WKWebView` is readable when the app sets `isInspectable = true`.
+Safari and in-app Safari sheets are always readable. An app's `WKWebView` is readable when the app sets `isInspectable = true`. Apps built with the iOS 16.4 SDK or later need this, also in debug builds.
+
+Chrome, Firefox and other iOS browsers are read the same way when they allow inspection. Firefox tabs allow it by default. Chrome needs **Settings > Content Settings > Web Inspector**.
 :::
 
 ### Run the sample
@@ -98,7 +107,7 @@ Safari and in-app Safari sheets are always readable. An app's `WKWebView` is rea
 The `mobile_web` sample searches Wikipedia in Chrome on Android:
 
 ```shell
-$ optics init --name wiki --template mobile_web
+$ optics init wiki --template mobile_web
 $ optics execute wiki
 ```
 :::
@@ -115,6 +124,13 @@ Back to the app,Launch App,com.example.shop
 
 On iOS, Launch App opens the URL in Safari. To go back to your app, use Launch App with its bundle id.
 
+To open a page in Chrome on Android when another browser is the default, call the deep link with the package of Chrome:
+
+```csv title="modules/modules.csv"
+module_name,module_step,param_1
+Open Shop In Chrome,Execute Script,"{""script"": ""mobile: deepLink"", ""args"": {""url"": ""https://shop.example.com/"", ""package"": ""com.android.chrome""}}"
+```
+
 ## Locators for web pages
 
 | Locator | Example | Found by |
@@ -122,9 +138,9 @@ On iOS, Launch App opens the URL in Safari. To go back to your app, use Launch A
 | Visible text | `Sign in` | The native UI tree, then OCR |
 | HTML id | `searchInput` | The native UI tree. Chrome gives HTML ids as resource ids. |
 | CSS | `css=input[name='q']`, `#searchInput` | `appium_web` |
-| DOM XPath | `//button[@type='submit']` | The native sources first, then `appium_web` |
+| DOM XPath | `//button[@type='submit']` | The native sources first, then `appium_web`. Assertions skip the native sources for an XPath that only HTML has. |
 
-An XPath that names a native class or attribute, such as `android.widget.Button` or `@resource-id`, goes only to the native sources. Web locators search the top page, not the inside of an `iframe`.
+An XPath that names an Android or iOS class (`android.widget.Button`, `XCUIElementTypeButton`) or a native attribute (`@resource-id`, `@text`, `@bounds` and the like) outside quotes goes only to the native sources. Web locators search the top page, not the inside of an `iframe`. Use text locators or OCR for content in a frame. A web locator that matches nothing fails at once.
 
 Assert Presence with a web locator checks the page, so an element that is off screen passes. Assert Visibility passes only when the element is in the visible part of the page.
 
@@ -147,6 +163,8 @@ Read the policy,Assert Presence,Refund policy,20
 - **Browser to app.** A link that an app handles, such as a Play Store link, opens that app. Its native elements are available immediately.
 - **Two apps can open the link.** Android asks which app to use. Answer with Detect And Press on the app's name, then on `Just once`.
 
+Nothing in a test says which app is in front. On iOS, when several web views are on screen, web locators use the one that holds the element.
+
 ## Covered elements
 
 When a banner, a dialog or a panel covers the element, Optics does not tap it, because the tap will hit the cover. The step fails with "is covered by another element on the page". Close the cover first. Get Text still reads a covered element.
@@ -163,17 +181,27 @@ Prepare Chrome,Launch App,https://www.wikipedia.org/
 Prepare Chrome,Detect And Press,negative_button,5
 ```
 
-Detect And Press closes a pop-up only if it shows, and does not fail if it does not. Other buttons to close: `No thanks`, `Stay signed out` or `signin_fre_dismiss_button`.
+Detect And Press closes a pop-up only if it shows, and does not fail if it does not. Give it a timeout of 5 seconds or more, because the pop-up appears after the page loads. Other buttons to close: `No thanks` or `negative_button` for the notification prompt, and `Stay signed out` or `signin_fre_dismiss_button` for the sign-in offer.
 
 ## Screen elements
 
-With `appium_web` on, Get Interactive Elements, the MCP `elements` resource and `optics live` list the web page next to the native elements. Each web control has a `loc`: a `css=` or `xpath=` locator that matches only that element and stays the same between runs. Copy it into your elements file.
+With `appium_web` on, Get Interactive Elements, Get Screen Elements, the MCP `elements` resource and the plain-English mode of `optics live` list the web page next to the native elements. One call returns:
+
+- the native elements, such as the toolbar of Chrome or the app around a WebView.
+- every control, text and image of the web page, with its bounds on the screen. An element outside the visible part of the page has `offscreen: true`. A press on it by locator scrolls it into view.
+- a `loc` on each web control and text: a `css=` or `xpath=` locator that matches only that element. Copy it into your elements file.
+
+A web entry replaces the copy of it that UiAutomator2 or XCUITest shows in the native tree.
+
+`loc` stays the same between runs. It uses a test attribute (`data-testid`), an id, a name or label, or the text of the element. When those are shared, it names the element inside its card or row, for example `xpath=//article[.//h2[normalize-space()='Red Mug']]//button[normalize-space()='Add to cart']`. A CSS path is the last choice. It skips generated ids and classes, and it matches "Cart (0)" by its first words, so a count that changes does not change it.
 
 ## Limits
 
 - A web lookup takes one to two seconds on a remote device. Use native locators where they work.
 - iOS sign-in sheets (`ASWebAuthenticationSession`) cannot be read. Use text locators or OCR.
 - Optics adds capabilities that keep web lookups fast. Values in your `capabilities` replace them. The [config.yaml reference](/docs/reference/config#appium-capabilities) lists them.
+- On Android, Optics adds `ensureWebviewsHavePages: false` and `extractChromeAndroidPackageFromContextName: true`, so a frozen app in the background with WebView debugging on adds at most 2 s to a web lookup.
+- On iOS, Optics adds `includeSafariInWebviews: true`, `additionalWebviewBundleIds: ["*"]`, `webviewConnectRetries: 3` and `webviewAtomWaitTimeout: 5000`, so Optics sees the web content of every app, and a page that does not answer costs seconds, not minutes.
 
 ## If it isn't working
 

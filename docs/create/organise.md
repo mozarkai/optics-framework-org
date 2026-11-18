@@ -123,7 +123,21 @@ The run's tree and the JUnit report use your names, so a good name saves a trip 
 
 - **Test cases** describe an outcome: *Shopper can add a backpack*, not *Test 3*.
 - **Modules** describe a task: *Sign In*, *Apply Discount Code*.
-- **Elements** describe what's on screen: `sign_in`, `cart_badge`, `promo_code_field`.
+- **Elements** describe what's on screen: `sign_in`, `cart_badge`, `promo_code_field`. Put the kind of element at the end, such as `_button`, `_field`, `_icon` or `_tab`. When one element has a value per locator kind, name each one for its kind, such as `login_button_xpath` and `login_button_text`.
+
+Use one spelling for a name everywhere. Element and module names are case-sensitive, so `${cart_badge}` does not find a row named `Cart_Badge`.
+
+## Keep a suite easy to fix
+
+- **Keep each module to one task**, and give it a name that says what it does. A failed step then tells you what broke.
+- **Do not hard-code values that change.** Put them in the elements file and use `${name}`, so a module works with other data.
+- **Give each element stable values, and more than one.** A text or image value next to an XPath keeps the step working when one of them breaks. Check that Optics can find each element, and update the elements file when the app's UI changes.
+- **Start each test case from a known state.** Use Suite Setup and Suite Teardown, and a per-test Setup that resets the app. Clean up in a teardown.
+- **Test one feature in each test case**, and group related test cases together.
+- **Try modules one at a time** before you combine them into long test cases.
+- **Run `optics dry_run` before `optics execute`.** It finds a missing keyword, parameter or `${name}` in seconds.
+- **To debug, set `log_level: DEBUG` and `file_log: true`** in config.yaml. The logs then show each strategy Optics tries and are saved in the output folder.
+- **Keep image templates current.** Check that each file is in the project and named as its element value, and cut it again when the UI changes. See [Capture a good template](/docs/elements/text-and-images#capture-a-good-template).
 
 ## See also
 

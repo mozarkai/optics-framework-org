@@ -71,6 +71,16 @@
       ]
     },
     {
+      "id": "contribute",
+      "title": "Contribute",
+      "groups": [
+        { "title": null, "pages": ["contribute/index", "contribute/setup"] },
+        { "title": "How Optics is built", "pages": ["contribute/architecture", "contribute/components", "contribute/engines", "contribute/strategies", "contribute/execution", "contribute/events", "contribute/errors", "contribute/logging"] },
+        { "title": "Entry points", "pages": ["contribute/cli-layer", "contribute/api-layer", "contribute/library-layer"] },
+        { "title": "Change Optics", "pages": ["contribute/extending", "contribute/decisions", "contribute/roadmap"] }
+      ]
+    },
+    {
       "id": "help",
       "title": "Help",
       "groups": [

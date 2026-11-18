@@ -37,7 +37,7 @@ Optics  ──WebDriver──>  Appium + appium-xa11y-driver  ──accessibilit
 - On macOS, access to System Settings to give two permissions one time.
 - On Windows, an administrator one time, if the Visual C++ runtime is not installed.
 
-The setup script installs its own Node.js, Appium 3 and the driver. You do not need Node.js before you start.
+The setup script installs its own Node.js, Appium 3 and the driver. You do not need Node.js before you start. If Appium 3 is already on the Host, you can install only the driver with `appium driver install --source=npm appium-xa11y-driver`. On macOS, then give Accessibility and Screen & System Audio Recording to the app that runs Appium.
 
 ## Set up
 

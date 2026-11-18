@@ -73,7 +73,9 @@ elements_sources:
   - selenium_screenshot:   {enabled: true}
 ```
 
-`capabilities` must include `browserName`, and only `chrome` and `firefox` work. `optics configure` writes `capabilities: {}` for Selenium, which can't start, so add these keys by hand. Other keys under `capabilities` are passed to the browser as WebDriver capabilities.
+`capabilities` must include `browserName`, and only `chrome` and `firefox` work. `optics configure` writes `capabilities: {}` for Selenium, which can't start, so add these keys by hand. Other keys under `capabilities`, such as `browserVersion` or `platformName`, are passed to the browser as WebDriver capabilities.
+
+Optics reads two capabilities itself and does not send them to the server: `browserURL`, the page that `Launch App` opens when it gets no URL, and `element_timeout_ms`, how long Optics waits for an element before it acts on it (default `10000`).
 
 Before each run, `optics execute` checks that the server answers at `url`. If it doesn't, Optics stops with a "Cannot start" panel. Set `OPTICS_SKIP_PREFLIGHT=1` to skip the check.
 :::
@@ -199,6 +201,21 @@ driver_sources:
 The file holds live session cookies. Do not commit it to version control.
 :::
 
+To save the state of a Chrome profile that is already signed in, start Chrome with `--remote-debugging-port=9222 --user-data-dir=<dir>`, then run:
+
+```python
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    p.chromium.connect_over_cdp("http://127.0.0.1:9222").contexts[0].storage_state(path="auth.json")
+```
+
+Every run then opens a fresh context with the saved sign-ins, on this computer or in a remote browser, and you can still use `device` or `viewport`.
+
+- Cookies that belong to a browser extension are left out, because Chromium refuses to set them in a new context.
+- Some sites end a session when the user agent changes, so a `device` can sign you out of them.
+- Through `optics serve` or `optics mcp`, send the JSON object of the state as `storage_state`, not a path.
+
 ## Start signed in with a browser profile
 
 Use a browser profile when you are signed in to the site in Chrome or Edge on the same computer. Optics copies the sign-ins of that profile, so you do not sign in again. Each of the three options keeps sign-ins in a different place:
@@ -258,9 +275,23 @@ driver_sources:
 | `cdp` (default) | A Chrome DevTools Protocol endpoint, such as Browserless or Chrome started with `--remote-debugging-port=9222` (`url: "http://127.0.0.1:9222"`). Chromium only. |
 | `playwright` | A Playwright server, such as `npx playwright run-server`, BrowserStack or LambdaTest. The server's Playwright version must match. |
 
-`${NAME}` in `url` or in a header is read from that environment variable when the browser starts, so your credentials stay out of the suite. If the variable is not set, the run stops and names it.
+`cdp` uses Playwright's `connect_over_cdp` and takes a `ws://`, `wss://` or `http://` url (for `/json/version` discovery). `playwright` uses Playwright's `connect` and works with any `browser`. Use the protocol that the provider documents for `connect_over_cdp` or `connect`. A `/playwright` path in a url does not by itself mean the `playwright` protocol, and a wrong protocol shows as a connect timeout.
 
-Optics opens a new context in the remote browser. To use the browser's own context and open tab instead, for example to use a profile that is signed in, set `context: existing`.
+Put what the provider needs, such as a browser version, an OS or session options, in the query string of the url, as the provider documents it. This is often URL-encoded JSON, for example `wss://grid.example.com/session?options=%7B%22browserVersion%22%3A%22latest%22%7D`. Put credentials in `headers` or in the url:
+
+| Remote browser | `url` | `protocol` | Credentials |
+|---|---|---|---|
+| Chrome started with `--remote-debugging-port=9222 --user-data-dir=<dir>` | `http://127.0.0.1:9222` | `cdp` | None, or the profile's own sign-ins with `context: existing` |
+| A CDP grid that takes a token in the query, such as Browserless | `wss://<host>?token=${GRID_TOKEN}` | `cdp` | In the url |
+| A CDP grid that takes headers | `wss://<host>/<path>` | `cdp` | `headers` |
+| A Playwright server or grid, such as `npx playwright run-server` | `ws://<host>:<port>/` | `playwright` | `headers`, if any |
+| A Playwright grid with capabilities in the query, such as BrowserStack (`caps=`) or LambdaTest (`capabilities=`) | `wss://<host>/playwright?caps=<URL-encoded JSON with ${USER} and ${ACCESS_KEY}>` | `playwright` | In the capabilities JSON |
+
+Check the docs of each provider for its current endpoint and options.
+
+`${NAME}` in `url` or in a header is read from that environment variable when the browser starts, so your credentials stay out of the suite. Optics puts in the value as it is, so in a URL-encoded query write the reference itself without encoding. If the variable is not set or is empty, the run stops and names it. The log shows only the host of the url, and connect errors mask secret values and the path and query of the url. `Close And Terminate App`, or the end of the run, closes the connection, which ends the session at the provider.
+
+Optics opens a new context in the remote browser, with the configured `viewport`. Set `context: existing` to use the browser's own context and its open tab instead. Use it when a provider documents `browser.contexts[0]` because its session settings or recording are there, when a browser cannot make new contexts, or to use a profile that is signed in. The page then keeps the browser's own window size, Optics does not apply `viewport`, and at the end of the run Optics disconnects without closing the tabs of that context.
 
 ## Timeouts
 

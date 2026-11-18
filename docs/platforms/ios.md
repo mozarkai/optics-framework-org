@@ -182,6 +182,7 @@ iOS has no Back key and no Android key numbers, so Press Keycode does not work o
 - **WebDriverAgent fails to build or install on a device.** This is a signing problem. See the [XCUITest driver docs](https://appium.github.io/appium-xcuitest-driver/latest/).
 - **`E0104` "Unsupported platform".** Check the spelling of `platformName`. Use `iOS`.
 - **Each step takes about 10 seconds.** The app never stops changing, for example a timer. Optics limits XCUITest's idle wait to 1 second. To turn it off, set `appium:settings: {waitForIdleTimeout: 0}`.
+- **An off-screen element is in the UI tree.** XCUITest includes elements that are scrolled out of view, with the attribute `visible="false"`. Android leaves them out unless you set `allowInvisibleElements`.
 - **An element isn't found.** Actions don't wait, so put `Assert Presence` before them. [Troubleshooting](/docs/help/troubleshooting) covers more cases.
 
 ## See also

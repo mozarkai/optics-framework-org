@@ -8,19 +8,43 @@ layout: wide
 
 Every reply is one text block, plus a JPEG when `observe` takes a screenshot. The core tools send no `structuredContent` and have no output schema, so a client or script reads the text.
 
+The server does not depend on a driver or a device type. It never runs `adb`. It only calls the driver server that you give to `start_session`, such as a local Appium server with a device or emulator, or a remote Appium hub. For a website, Playwright starts its own browser, so there is nothing else to run.
+
 For a guided walkthrough, see [Build tests with an AI agent](/docs/create/agent).
 
 ## Install
 
-The server needs the `mcp` extra. The [install scripts](/docs/reference/cli#install-scripts) always include it. With pip, add it yourself: `optics setup` can't install it, and the `all` bundle doesn't include it.
-
-```shell
-$ pip install "optics-framework[mcp]"
-```
-
-The extra installs fastmcp 3.4.4 or newer.
+The server needs Python 3.12 or later and the `mcp` extra. The [install scripts](/docs/reference/cli#install-scripts) always include the extra. Otherwise, install it with `optics setup --install mcp`, or add it with pip. The `all` bundle doesn't include it.
 
 You also need the extras for your driver, for example `appium` or `playwright`. See [Engines and extras](/docs/reference/engines).
+
+:::tabs{group="install"}
+::tab[macOS and Linux]
+Install Optics, then the engine for your target: `playwright` for websites (it also downloads Chromium), or `appium` for a device.
+
+```bash
+curl -fsSL https://optics-framework.org/install | sh
+optics setup --install playwright
+```
+::tab[Windows]
+```powershell
+irm https://optics-framework.org/install.ps1 | iex
+optics setup --install playwright
+```
+::tab[pip]
+With an older Python, pip fails or installs an old release of Optics.
+
+```bash
+python3.12 -m venv .venv && source .venv/bin/activate
+pip install 'optics-framework[mcp,playwright]' && playwright install chromium
+```
+::tab[Source checkout]
+```bash
+poetry install --extras mcp
+```
+:::
+
+The extra installs fastmcp 3.4.4 or newer. Without it, `optics mcp` stops with a message that gives the install command. The other commands still work.
 
 ## Start the server
 
@@ -90,7 +114,9 @@ Most other agents read a JSON file that lists MCP servers. For Claude Desktop, t
 }
 ```
 
-If your agent cannot find `optics`, use the full path that `optics mcp install` prints. Agents do not expand `~` in a JSON file.
+If your agent cannot find `optics`, use the full path that `optics mcp install` prints, such as `/path/to/.venv/bin/optics`. Agents do not expand `~` in a JSON file. You can also start the server through Python: `"command": "python", "args": ["-m", "optics_framework.helper.cli", "mcp"]`.
+
+In Claude Code, `claude mcp add optics -- optics mcp` writes the same entry, but only for the current folder. `optics mcp install` registers it for all folders.
 
 An agent reads its MCP servers when a session starts. After you add the server, start a new session, then make sure that the optics tools, such as `start_session`, are in its tool list. An agent that does not have the tools yet can pick another tool for the job, such as AppleScript for a desktop app.
 
@@ -105,6 +131,36 @@ For the `http` transport, point the agent at the URL instead:
   }
 }
 ```
+
+### Run the server in Docker
+
+The optics-framework repository has two images for the MCP server, in `Docker/mcp/`. Both install the `mcp` extra and run the `http` transport on port 8090 in the container, bound to `0.0.0.0`. A container never uses `stdio`. Run the commands from the root of an optics-framework checkout.
+
+The `mcp` service is the production image, which installs Optics from PyPI. It listens on host port 8090:
+
+```bash
+docker compose -f Docker/docker-compose.yml up --build mcp
+```
+
+The `mcp-dev` service is the development image, which installs a local `.whl` file. It listens on host port 8091:
+
+```bash
+docker compose -f Docker/docker-compose.yml up --build mcp-dev
+```
+
+The compose file publishes the ports on `127.0.0.1` and sets `OPTICS_ALLOWED_HOSTS=localhost`, so a request with another `Host` gets `421`. To build and run the production image without compose:
+
+```bash
+docker build -f Docker/mcp/prod/Dockerfile -t optics-mcp-prod .
+docker run -d -p 127.0.0.1:8090:8090 -e OPTICS_ALLOWED_HOSTS=localhost --name optics-mcp-prod optics-mcp-prod
+```
+
+- The production image installs the Optics release in its `OPTICS_FRAMEWORK_VERSION` build argument. Set it to the release you want: `--build-arg OPTICS_FRAMEWORK_VERSION=<version>`.
+- `--build-arg VISION_BACKEND=` picks the OCR engine: `easyocr` (the default), `google-vision` or `pytesseract`.
+- For Google Vision, mount your service account file and point to it: `-e GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json -v /path/to/service-account.json:/app/service-account.json`.
+- The `mcp-dev` service installs a wheel that you build with `poetry build`. Pass its file name in the `WHL_FILE` build argument.
+
+Connect your client to `http://127.0.0.1:8090/mcp`, or port 8091 for `mcp-dev`. Sessions in the container are not shared with an `optics serve` container. See [`Docker/deployment.md`](https://github.com/mozarkai/optics-framework/blob/main/Docker/deployment.md) for every option.
 
 When the server runs in Docker and Appium runs on your machine, pass `url: "http://host.docker.internal:4723"` to `start_session`.
 
@@ -124,9 +180,11 @@ e4 button "Sign in" [tap] #login
 - A row shows what a control holds: `= "text"` for a field or a selected option, `(checked)` or `(unchecked)` for a checkbox, radio button or switch, and `(filled)` for a password field. A password is never shown.
 - `in "x"` after a row names its group, when more than one row has the same label.
 - A web row marked `(off-screen)` is on the page but scrolled out of view. A tap scrolls it into view.
-- A ref stays with its control when the text around it changes. A ref never moves to a different element. A ref that is gone from the screen gives a `stale_ref` error with the current rows.
+- On a device, a field's label is the text it holds. A device row shows the short class name and the id, such as `Button` and `#search_button`.
+- A ref stays with its control when the text around it changes. A control with its own id, a field that gets text, and the rows under a window title keep their refs. A ref never moves to a different element. A ref that is gone from the screen gives a `stale_ref` error with the current rows.
+- A line break in the text of a field shows as `\n`.
 
-A tap on a ref uses a locator that matches only that element. The agent can also pass an exact label or a locator (`css=`, `xpath=`, `text=`) as the target.
+A tap on a ref uses a locator that matches only that element, never fuzzy text or OCR, so a ref is the safest target. The agent can also pass an exact label or a locator (`css=`, `xpath=`, `text=`, an id or an image file) as the target.
 
 ## Core tools
 
@@ -139,7 +197,7 @@ The default toolset has 11 tools. Every tool except `start_session` takes `sessi
 | `observe` | `query` (""), `screenshot` (false), `max_rows` (80, 1–300) | Lists the rows. `query` keeps the rows whose text, name, id or role holds the text, or the one row of a ref. `screenshot` adds a JPEG of at most 1024 px, and each row ends with its box in that image, such as `@479,592,545,606`. |
 | `tap` | `target`, `repeat` (1, 1–20) | Runs `press_element`. Refuses a row that has no `tap`, `long`, `toggle` or `input`. |
 | `type_text` | `target`, `text`, `clear_first` (false) | Runs `enter_text`, after `clear_element_text` when `clear_first` is true. Refuses a row without `input`. |
-| `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
+| `scroll` | `direction` (`up`, `down`, `left`, `right`), `until` (""), `timeout_s` (10, 1–60) | Runs `scroll`. `direction` is the way the content moves, so `down` shows what is below. `left` and `right` swipe on a device and scroll the page on a web driver; the steps record them as `Scroll`. With `until`, runs `scroll_until_element_appears` (up and down only). |
 | `press_key` | `key` | `back` runs `go_back` on any driver. Another value runs `press_keycode`: a key name such as `Enter`, `Escape`, `esc` or `ArrowDown`, or an Android KeyEvent number such as `66`. On the web, case and a `KEYCODE_` prefix do not matter. A ref is refused with a hint to use `tap`. |
 | `launch_app` | `app` ("") | Opens an app id or a URL. Empty opens the configured app. |
 | `batch` | `steps` (1–12) | Runs the steps in order on one screen, such as a form, and stops at the first that fails. A step is `{"tool": "tap", "target"}`, `{"tool": "type_text", "target", "text"}` or `{"tool": "press_key", "key"}`. `expect_present` and `expect_absent` check the screen after the last step. See [batch](#batch). |
@@ -188,6 +246,37 @@ The server refuses a `${NAME}` reference in `url` or in a `capabilities.headers`
 
 The first session against a remote device farm can take 30 to 60 seconds to start.
 
+Name the device in `capabilities`, for example with `deviceName` or `udid`. The server needs no `adb` of its own. This starts the Settings app on an Android emulator:
+
+```json
+{
+  "driver": "appium",
+  "url": "http://127.0.0.1:4723",
+  "capabilities": {
+    "platformName": "Android",
+    "appium:automationName": "UiAutomator2",
+    "appium:deviceName": "emulator-5554",
+    "appium:appPackage": "com.android.settings",
+    "appium:appActivity": ".Settings"
+  },
+  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
+}
+```
+
+Leave out `appPackage` and `appActivity` to work with the app that is on the screen. For a remote hub, set `url` to the hub and add the capabilities the hub needs, such as an auth token or a device id, as in config.yaml.
+
+This opens a website in a visible Chromium:
+
+```json
+{
+  "driver": "playwright",
+  "capabilities": { "browser": "chromium", "headless": false },
+  "app": "https://www.saucedemo.com"
+}
+```
+
+A later `launch_app(app="<url>")` opens another page in the same browser. The capabilities are those of Playwright in config.yaml, such as `browser`, `channel`, `headless`, `viewport`, `profile` and `element_timeout_ms`. See [Test websites](/docs/platforms/web).
+
 For a desktop app, give the app and the OS. The session starts the app. On macOS, it attaches to the app if the app runs:
 
 ```json
@@ -199,14 +288,15 @@ For a desktop app, give the app and the OS. The session starts the app. On macOS
 }
 ```
 
-`app` is an app name, a bundle id or an `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, and `launch_app` opens another app in the same session. See [Test desktop apps](/docs/platforms/desktop).
+`app` is an app name, a bundle id or an `.app` path on macOS, and an executable on Linux and Windows. On a desktop, `press_key` takes a key combination such as `primary+s`, `cmd+a` on macOS or `ctrl+a` on Linux and Windows, and `launch_app` opens another app in the same session. See [Test desktop apps](/docs/platforms/desktop).
 
 ### Sessions without a screen source
 
 The `ble` driver has no element source of its own. When you leave out `elements_sources`, the session reads the server's camera if the server sets `WEBCAM_SCREENSHOT_URL`. A `camera_screenshot` that you name in `elements_sources` gets the same setup:
 
 - The camera picture has the size of `capabilities.frame` when it has both `width` and `height`. A side outside 1 to 8192 stops `start_session` with a validation error.
-- The session gets the fastest installed OCR engine and `templatematch`, unless you pass `text_detection` or `image_detection`.
+- With only one of `width` and `height`, the camera keeps its default size of 1080 × 1920.
+- The session gets the fastest installed OCR engine and `templatematch`, unless you pass `text_detection` or `image_detection`. Pass an empty list for no engine.
 
 ```json
 {
@@ -223,7 +313,7 @@ A session that cannot list rows still starts. The reply says what it lacks, in p
 | `No screen source: position and key keywords run; observe and check need a camera.` | The session has no element source, for example with `elements_sources: []`. |
 | `No OCR engine: observe and check cannot list a camera's rows; pass text_detection to read them.` | The camera has no OCR engine, for example with `text_detection: []`. |
 
-When the rows come from OCR, each row is a text that the OCR engine reads, such as `e7 Text "Settings" [tap]`. OCR cannot tell a button from a label, so every row offers only `tap`. To type, tap the field, then call `run_keyword` with `enter_text_using_keyboard` and `{"text_input": "..."}`. A row keeps its ref while its letters and digits stay the same, so a camera frame that moves a little does not give new refs. A tap on an OCR row is found by OCR, so `verified` stays `unknown`. Read the `check` lines instead.
+When the rows come from OCR, each row is a text that the OCR engine reads, such as `e7 Text "Settings" [tap]`. OCR cannot tell a button from a label, so every row offers only `tap`. To type, tap the field, then call `run_keyword` with `enter_text_using_keyboard` and `{"text_input": "..."}`. A row keeps its ref while its letters and digits stay the same, so a camera frame that moves a little does not give new refs. A read that differs only in case or punctuation keeps the text of the row. OCR can still split or misread a line between frames, and that line then gets a new ref. When two rows hold the same text, a tap on the second one presses that text with `index=1`, and the steps record it that way. Other actions refuse such a row. The index follows the order in which the OCR engine reads the screen. A tap on an OCR row is found by OCR, so `verified` stays `unknown`. Read the `check` lines instead.
 
 An `http` server checks more, because the caller is on another machine. Each refusal is `E0501`:
 
@@ -272,7 +362,7 @@ e14 h1 "Example Domains" #example-domains
 That is the reply to `tap(target="e7", expect_present=["Example Domains"])` on example.com.
 
 - `ok` means only that the keyword ran. The word in brackets is the strategy that found the element.
-- `verified` is `pass`, `fail` or `unknown`. It is `pass` only when every expectation is met and the action caused it. Without `expect_present` or `expect_absent`, it stays `unknown`, and the head line ends with `(add expect_present/expect_absent to verify)`.
+- `verified` is `pass`, `fail` or `unknown`. It is `pass` only when every expectation is met and the action caused it. Without `expect_present` or `expect_absent`, it stays `unknown`, and the head line ends with `(add expect_present/expect_absent to verify)`. See [The verdict](#the-verdict).
 - An action waits up to 5 seconds for `expect_present` and `expect_absent` before it judges them. A page that loads after a redirect can still pass.
 - An `expect_present` that is the value the action typed, and that is not in the rows, is not checked, because the rows often do not hold a typed value. Its check line says `not checked, a typed value is not in the rows`.
 - `note:` lines tell the agent what to trust less. For example, a `scroll` is `ok` even when nothing moved, and a row with no unique locator is found by its label.
@@ -294,9 +384,44 @@ screen 171915 · changed (+0 -0 ~1)
 ~ e2 input "Email" [tap,input] = "ava@birch.shop" #email
 ```
 
+When an action on a checkbox, a switch or a field leaves the screen unchanged, a note says that the control did not change, so the action may have missed it.
+
 After an action, the server reads the screen until it stops changing. A screen with no rows counts as a page that is still loading, so the server reads it again for up to 6 seconds. A keyword that only reads, and `execute_script` when the screen stays the same, are read once. The reply text is cut at 8,000 characters.
 
-When self-heal recovers a keyword that `run_keyword` ran, the `result:` line holds the heal report, with `result`, `healed`, `heal_summary` and `suggested_steps`, so your agent can write the extra steps into the test. The other tools do not show the heal report.
+#### The verdict
+
+| Result | `verified` |
+|---|---|
+| the keyword failed | `fail` |
+| no expectations | `unknown` |
+| every expectation met, and the screen changed or an `expect_present` that was not met before is met now | `pass` |
+| every expectation met, but each one was already met before the action and the screen did not change | `unknown` |
+| an expectation not met, and the screen did not change | `fail` |
+| an expectation not met, but the screen changed | `unknown`; the check lines list the unmet ones |
+| the screen could not be read after the action | `unknown` (or `fail` when the keyword failed); the expectations are not checked |
+| the target was not an exact label or locator, and OCR or an image found it | `unknown` |
+
+#### Loops
+
+The same action can run three times in a row without progress. The fourth try is refused with a `loop` error, and the keyword does not run. Progress is a `pass` verdict or a screen change. `observe`, `check` or a different action resets the count. `press_key`, keywords that only read, `press_keycode` and `sleep` do not count.
+
+#### Self-heal reports
+
+When self-heal recovers a keyword that `run_keyword` ran, the call still passes, and the `result:` line holds the heal report, so your agent can write the extra steps into the test. The other tools do not show the heal report:
+
+```json
+{
+  "result": null,
+  "healed": true,
+  "heal_summary": "AI self-heal recovered 'press_element' after 2 steps: scroll down; press_element Login",
+  "suggested_steps": [
+    { "keyword": "scroll", "params": ["down"] },
+    { "keyword": "press_element", "params": ["Login"] }
+  ]
+}
+```
+
+`suggested_steps` holds only the steps that worked, cut to the smallest set that reaches the goal. Save them in place of the failing step, and the next run passes without self-heal. `POST /v1/sessions/{id}/action` of [`optics serve`](/docs/reference/http-api#responses) returns the same object in `data`. A call that self-heal did not change returns the plain result.
 
 ### batch
 
@@ -344,7 +469,7 @@ result: Picked for you
 screen 622118 · unchanged
 ```
 
-The `optics://keywords` resource lists every keyword that `run_keyword` accepts. Flow control, deprecated keywords and the coordinate keywords are not in it. With one session open, it also leaves out the keywords that the session's driver does not support. `start_session` names them, and `run_keyword` refuses them as `unsupported`. When a call has one parameter name that the keyword does not have, and the keyword still needs exactly one parameter, `run_keyword` uses the value for that parameter. Optics caps a `timeout` parameter at 60 seconds.
+The `optics://keywords` resource lists every keyword that `run_keyword` accepts. Flow control, deprecated keywords and the coordinate keywords are not in it. With one session open, it also leaves out the keywords that the session's driver does not support. `start_session` names them, and `run_keyword` refuses them as `unsupported`. When a call has one parameter name that the keyword does not have, and the keyword still needs exactly one parameter, `run_keyword` uses the value for that parameter, for example `script` for `script_or_json`. Optics caps a `timeout` parameter at 60 seconds. Clients see `run_keyword` marked as destructive, because it can run `force_terminate_app`, `close_and_terminate_app` and `execute_script`.
 
 ## Full toolset
 
@@ -356,7 +481,7 @@ The full toolset also has:
 - `screenshot`, which returns the screen as a PNG image.
 - Deprecated keywords, `swipe`, `get_interactive_elements`, `initialise_setup`, `start_appium_session` and `get_driver_session_id`.
 
-A keyword tool returns the keyword's result, and an error raises with `[E0201] message`. It does not return the screen.
+A keyword tool returns the keyword's result, and an error raises a `ToolError` with `[E0201] message`. It does not return the screen.
 
 ## Coordinate taps
 
@@ -366,6 +491,21 @@ Agents that guess coordinates write fragile tests, so the server hides the coord
 - In the full toolset, the `press_by_coordinates` and `press_by_percentage` tools appear.
 
 Self-heal can still tap by percentage when it recovers a step.
+
+## Element sources decide what works
+
+The keywords that work depend on the `elements_sources`, `text_detection` and `image_detection` of the session, as in a project's config.yaml. Leave out `elements_sources` to get every source of the driver. Pass it only to narrow or extend that set:
+
+| What you want | What it needs |
+|---|---|
+| Locate by `xpath` / `text` / `id`, tap, type | `appium_find_element` |
+| Screenshots & image-based location | `appium_screenshot` |
+| Page source, `observe`, `get_interactive_elements`, source-based extraction | `appium_page_source` |
+| `css=` / DOM XPath in a mobile browser or debuggable WebView (Android and iOS), and that page's elements in `get_interactive_elements` | `appium_web` |
+| OCR / locate visible text on screen | a `text_detection` engine, for example `googlevision` or `rapidocr` |
+| Image template matching | an `image_detection` engine, for example `templatematch` |
+
+With only `appium_find_element` and `appium_screenshot`, `get_interactive_elements` fails with `E0202: No interactive elements retrieved using available strategies`. This is expected. Add `appium_page_source`, or an OCR engine, for that keyword. An OCR or image engine needs its own credentials and settings, the same as in config.yaml.
 
 ## Resources
 
@@ -470,6 +610,17 @@ Read `optics://session/{session_id}/steps` and `optics://project-format`. Write 
 - **Images come from a project.** There is no upload tool. On `stdio`, pass `project_path` to use template images. An `http` server has no template images.
 - **Selenium has no rows.** The tools run keywords on Selenium, but `verified` stays `unknown` and `observe` fails. Read `/source` instead.
 
+## Troubleshooting
+
+- **The first `start_session` against a remote hub is slow.** It can take 30 to 60 seconds to get and start a device. Give your client a long timeout. The `fastmcp` Python client takes `Client(url, timeout=180)`.
+- **`No module named 'fastmcp'`, or the server asks for the mcp extra.** Install `optics-framework[mcp]`, or run `optics setup --install mcp`.
+- **A session from `optics serve` or `optics live` is not there.** Each is a separate process with its own sessions. Call `start_session` on this server first. You cannot attach to a session from another process.
+- **The hub says the device is busy.** Free the device through the API of your device farm, then call `start_session` again.
+- **`observe` or the `source` resource fails.** An element source is usually missing. See [Element sources decide what works](#element-sources-decide-what-works).
+- **A call timed out, and the next call says the session is busy.** The driver call still runs, and it cannot be cancelled. Wait, then call `observe`. If your client allows longer calls, raise `OPTICS_MCP_CALL_TIMEOUT_S`.
+- **The device cannot be reached, or the driver does not run.** The server only talks to the driver server at the `url` you pass. Make sure that server runs and can see the device. For Appium with Android, the Appium host needs the Android SDK; the MCP server needs none. Run `optics doctor` on that host to check its tools.
+- **Where do the suites go?** Where you write them. The server has no folder of its own. Write the CSV project at a path you choose, as `optics://project-format` describes, and run it with `optics execute`.
+
 ## Errors
 
 A core tool does not raise. A failed call returns an error result with the code, a `Next:` line, and the current rows:
@@ -492,22 +643,22 @@ An `observe` query that matches no row is not an error. The reply gives the numb
 screen b5dfb4 · no row of 7 holds "Sign in"
 ```
 
-| Kind | When |
-|---|---|
-| `not_found` | No strategy found the element. |
-| `stale_ref` | The ref is not on the current screen. |
-| `unknown_ref` | No row has that ref. |
-| `ambiguous` | The target matches more than one row. |
-| `no_locator` | The row has no locator that matches only it. |
-| `invalid_params` | A parameter is missing or wrong, such as `type_text` on a row without `input`. The reply shows an example call. |
-| `silent_failure` | The keyword reported an error but did not fail (`E0401` or `E0405`). The message reads `[E0401] <keyword> reported an error: ...`. Read the screen before you continue. |
-| `unsupported` | The platform does not support the keyword. |
-| `loop` | The same action ran 3 times in a row without progress. The fourth try does not run. |
-| `timeout` | The call took longer than `OPTICS_MCP_CALL_TIMEOUT_S`. |
-| `busy` | An earlier call on the session still runs. |
-| `session_lost` | The driver session ended. Start a new session. |
-| `unknown_session` | No such session, or none is open. When the session ended, the message says how and where its steps are. |
-| `session_required` | More than one session is open, and `session_id` was left out. The message lists the ids. |
-| `other` | Any other error, such as a refused `start_session`. |
+| Kind | When | Example message |
+|---|---|---|
+| `not_found` | No strategy found the element. The current rows follow. | `[E0201] not found: tried <locators>.` |
+| `stale_ref` | The ref is not on the current screen. The current rows follow. | `e3 ("Sign in" button) is not on the current screen.` |
+| `unknown_ref` | No row has that ref. | `No e99; current refs are e1–e12.` |
+| `ambiguous` | The target matches more than one row. The message lists their refs. | |
+| `no_locator` | `run_keyword` got the ref of a row that has no locator that matches only it. Pass a locator or the label. | |
+| `invalid_params` | A parameter is missing or wrong, such as `type_text` on a row without `input`. The reply gives the real parameters and an example call. | |
+| `silent_failure` | The keyword reported an error but did not fail (`E0401` or `E0405`). The screen change follows. Read the screen before you continue. | `[E0401] <keyword> reported an error: …` |
+| `unsupported` | The platform does not support the keyword. | `[E0105] <tool> is not supported on this platform.` |
+| `loop` | The same action ran 3 times in a row without progress. The fourth try does not run. | `<action> ran 3 times in a row without progress; not run again.` |
+| `timeout` | The call took longer than `OPTICS_MCP_CALL_TIMEOUT_S`. | |
+| `busy` | An earlier call on the session still runs, for example one that timed out. | |
+| `session_lost` | The driver session ended. The session is closed. Start a new session. | `[E0106] the driver session ended.` |
+| `unknown_session` | No such session, or none is open. When the session ended, the message says how and where its steps are. | |
+| `session_required` | More than one session is open, and `session_id` was left out. The message lists the ids. | |
+| `other` | Any other error, such as a refused `start_session`. | |
 
 A tool in the full toolset raises its error as `[E0201] message`. A keyword with several fallback values fails with `All fallback values failed for keyword '…'` and the code of the last try.

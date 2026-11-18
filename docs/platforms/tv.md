@@ -25,7 +25,11 @@ $ optics setup --install appium
 $ npm install -g appium
 ```
 
-Each TV also needs its own setup: developer mode on the TV, the vendor's tools, and the TV on the same network as your machine. Those steps belong to each Appium driver, and its project page covers them.
+:::warning[Use Appium 2 for Tizen and webOS]
+The Tizen and webOS drivers need Appium 2.x. They do not support Appium 3 yet. Install Appium 2 for these TVs, for example `npm install -g appium@2`.
+:::
+
+Each TV also needs its own setup: developer mode on the TV, the vendor's tools, and the TV on the same network as your machine. The sections for [Samsung Tizen](#samsung-tizen) and [LG webOS](#lg-webos) list the steps. Each Appium driver's project page gives more detail.
 
 ## Android TV
 
@@ -44,6 +48,14 @@ Touch and typing keywords work on Android TV, but most TV apps expect the D-pad.
 Remote key names such as `UP` do not work on Android TV. They only apply to Tizen and webOS.
 
 ## Samsung Tizen
+
+Prepare the TV and your machine:
+
+1. Install [Tizen Studio](https://developer.samsung.com/smarttv) and set `TIZEN_HOME` to its folder.
+2. Put the TV in Developer Mode. In Settings, enter `12345` with the 123 button of the remote, turn on Developer Mode, and set **Client IP** to the address of the machine that runs Appium.
+3. Connect to the TV with `sdb connect <tv-ip>`, then check that `sdb devices` lists it.
+4. Get a debug-signed `.wgt` build of the app.
+5. Get the chromedriver version that matches the Chromium of the TV. See [Know the limits](#know-the-limits-of-screenshots-and-video).
 
 Install the Tizen driver into Appium:
 
@@ -70,11 +82,26 @@ elements_sources:
   - appium_find_element: {enabled: true}
 ```
 
-Optics reads `platformName` and the app id (`appPackage`, with or without the `appium:` prefix). It passes every other capability to the Tizen driver unchanged. The [driver's README](https://github.com/headspinio/appium-tizen-tv-driver) explains each one, including how to get the `rcToken`.
+Get the remote-control token for `rcToken` once. Run this command and accept the prompt on the TV:
+
+```shell
+$ appium driver run tizentv pair-remote --host <tv-ip>
+```
+
+Optics reads `platformName` and the app id (`appPackage`, with or without the `appium:` prefix). It passes every other capability to the Tizen driver unchanged. The [driver's README](https://github.com/headspinio/appium-tizen-tv-driver) explains each one.
 
 A native screenshot makes a Tizen TV stop answering, so `appium_screenshot` refuses to take one there. To capture the screen, add the `camera_screenshot` element source. See [BLE and camera](/docs/reference/config#ble-and-camera) for its settings.
 
 ## LG webOS
+
+Prepare the TV and your machine:
+
+1. Install the [webOS TV SDK](https://webostv.developer.lge.com/), so that `ares-cli` is on your PATH.
+2. Put the TV in Developer Mode: install the Developer Mode app on the TV, sign in, and turn Dev Mode on. Dev Mode expires after about 50 hours. Turn it on again when it expires.
+3. Register the TV with `ares-setup-device -n <name> -i <ip>`.
+4. Get the chromedriver version that matches the Chromium of the TV.
+
+You do not pair the remote by hand. The driver pairs it at the first session. Accept the prompt on the TV.
 
 Install the webOS driver into Appium:
 
@@ -215,6 +242,8 @@ A native screenshot makes a Tizen TV stop answering. For this reason `appium_scr
 
 DRM-protected video appears black in a screenshot. To check playback, check elements in the app, such as a pause button or a progress bar.
 
+The chromedriver version must match the Chromium of the TV exactly. For example, webOS 6 uses Chromium 79, so it needs chromedriver 79.x. A different version fails with "cannot connect to chrome".
+
 ## Example: open a title from a grid
 
 A TV app usually shows rows of tiles. This module moves down one row, right one tile, opens it and starts playback. It checks the screen after each move that changes the page:
@@ -255,6 +284,7 @@ A few habits make TV tests reliable:
 ## See also
 
 - [Test Android apps](/docs/platforms/android)
+- [LG webOS TV developer site](https://webostv.developer.lge.com/) and [Samsung Developers: Smart TV](https://developer.samsung.com/smarttv)
 - [Find elements by text and image](/docs/elements/text-and-images)
 - [Press Keycode](/docs/reference/keywords/actions#press-keycode)
 - [Verification keywords](/docs/reference/keywords/verification)

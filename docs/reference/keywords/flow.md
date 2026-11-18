@@ -18,7 +18,7 @@ Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 - **Targets are module names.** Execute Module, Run Loop and Condition run modules, not single keywords. Multi-word names are fine in CSV. In YAML, quote them: `"Add Product"`.
 - **Write the variable you create as `${name}`.** Read Data, Evaluate, Date Evaluate and Run Loop take the name of a variable to write. Write `${total}`. Optics does not replace this cell before the keyword runs. A bare name such as `total` also works, but the log shows a warning.
 - **Dry runs know these variables.** `optics dry_run` counts a name that Read Data, Evaluate, Date Evaluate or `store_as` writes as defined.
-- **Values are text.** Every variable holds text. Compare with quoted literals: `${status} == 'ready'`, `${count} == '3'`. A numeric comparison such as `${count} > 3` fails in Condition. See [Compare numbers](#compare-numbers) for the workaround.
+- **Values are text.** Every variable holds text. In Condition, a value that reads as a number compares with a number as a number: `${count} > 3`. Compare text with quoted literals: `${status} == 'ready'`. See [Compare numbers](#compare-numbers).
 - **Lists use pipes.** Separate values with `|`: `Trail Runner 2|Pace Knit`.
 - **Steps inside a target are stricter.** In a module run by Execute Module, Run Loop or Condition, write every parameter positionally, because `name=value` isn't recognized there. Only [`store_as=name`](/docs/reference/keywords/#store-as) works. `${name}` uses only the first value, with no fallback to the next one. Any error inside is reported as error E0401.
 
@@ -111,7 +111,7 @@ The conditions are checked in order. The first true one runs its target, and the
 A condition is one of two kinds:
 
 - **A module name.** Optics runs that module. If every step passes, the condition is true. Start the name with `!` to flip it: `!Is Signed In` is true when the module fails.
-- **An expression.** Each `${name}` is replaced with its value as quoted text, so compare it with a quoted literal. You can use `==`, `!=`, `in`, `not in`, `and`, `or` and `not`. Start the expression with `!` to negate it. An expression that Optics refuses fails with E0406, also with `!`.
+- **An expression.** Write each `${name}` without quotes. Its value compares with a number as a number, and with text as text: `${count} > 3`, `${payment} == 'card'`. You can use `==`, `!=`, `<`, `<=`, `>`, `>=`, `in`, `not in`, `and`, `or` and `not`. Start the expression with `!` to negate it. An expression that Optics refuses fails with E0406, also with `!`.
 
 ```csv
 Start,Condition,Is Signed In,Go Home,Sign In
@@ -129,10 +129,18 @@ Good to know:
 - If no condition is true and there's no else target, the step passes and nothing runs.
 - If the target module fails, the step fails.
 - In YAML, quote an expression that contains spaces: `"${payment} == 'card'"`.
+- A `${name}` inside quotes, such as `'${payment}' == 'card'`, fails with E0403: "has a ${variable} inside quotes. Write it without the quotes."
+- An undefined `${name}` fails the step with E0403: "Variable '<name>' not found for condition resolution."
 
 ### Compare numbers
 
-Condition compares text, so `${count} > 3` fails. Compute the comparison with [Evaluate](#evaluate) first, which does arithmetic, then test its `True` or `False` result:
+A value that reads as a number compares with a number as a number. `${count} == 3` and `${count} == '3'` are both true when `count` is `3`.
+
+```csv
+Shipping,Condition,${item_count} > 3,Expect Free Shipping,Expect Paid Shipping
+```
+
+A value that doesn't read as a number fails the step with E0403 when you compare it with a number, for example `abc > 3`. To keep the result of a comparison, compute it with [Evaluate](#evaluate) and test its `True` or `False` result:
 
 ```csv
 Shipping,Evaluate,${free_shipping},${item_count} > 3
@@ -157,7 +165,7 @@ The query has parts separated by `;`:
 - A filter such as `tier == 'gold'` keeps the matching rows. Several filters must all match.
 - `${name}` inside the query is replaced with its value in single quotes, so write `email == ${email}`.
 
-A filter compares columns with values. You can use `== != < <= > >=`, `and`, `or`, `not`, and `column in ['a', 'b']` or `not in`. Put a column name that has spaces between backticks: `` `user tier` == 'gold' ``. Optics refuses arithmetic on columns, function calls, and the pandas operators `&`, `|` and `~`, with E0406. Write `and`, `or` and `not` instead.
+A filter compares columns with values. You can use `== != < <= > >=`, `and`, `or`, `not`, and `column in ['a', 'b']` or `not in`. Put a column name that has spaces between backticks: `` `user tier` == 'gold' ``. The pandas operators `&`, `|` and `~` also work, as `and`, `or` and `not`. Optics refuses arithmetic on columns and function calls, with E0406.
 
 Given this data file:
 
@@ -186,7 +194,7 @@ Good to know:
 - A query that matches nothing fails with "No data found". A missing column fails with error E0403: "Column '<name>' is not in the data." A filter that compares no column also fails with E0403. A missing file or environment variable fails with error E0501.
 - `optics serve` and `optics mcp` refuse a file and `ENV:` with E0501. Send the data in the request instead.
 - **JSON files** can be a list of objects, one per row. If the top level is an object, Optics uses its first list. Nested keys become dotted column names, such as `address.city`.
-- **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{` or `[` is read as JSON, and one with several lines is read as CSV.
+- **Environment variables** are stored as they are, such as `ENV:BIRCH_API_TOKEN` giving `abc123`. A value that starts with `{`, `[` or `"` is read as JSON, and one with several lines is read as CSV. A JSON string such as `"abc"` gives `abc`.
 - In CSV, wrap a query that contains commas in double quotes: `"tier == 'gold';select=email,password"`.
 - In YAML, quote a filter that contains spaces: `"role == 'admin';select=email"`.
 
@@ -212,11 +220,32 @@ Cart,Evaluate,${greeting},'Hello ' + '${first_name}'
 Good to know:
 
 - Each `${name}` is replaced with its value as written, without quotes. Numbers work as numbers. Put quotes around text values: `'${first_name}'`. An unknown name fails with E0403.
-- You can use numbers, quoted text, lists, `+ - * / % **`, comparisons, `in`, `and`, `or`, `not` and `x if condition else y`.
-- Optics computes the expression itself and runs no Python. Function calls such as `int(...)` or `len(...)` are not allowed. They fail with E0406: "Expression '<expression>' refused: only these calls are allowed: none."
+- You can use numbers, quoted text, lists, tuples, `+ - * / % **`, comparisons, `in`, `and`, `or`, `not` and `x if condition else y`.
+- Optics computes the expression itself and runs no Python. Function calls such as `int(...)` or `len(...)`, attribute access, imports and f-strings are not allowed. They fail with E0406: "Expression '<expression>' refused: only these calls are allowed: none."
 - Optics also refuses an expression that is too large, with E0406. The limits are 100,000 characters, 2,000 parts, numbers of 10,000 bits, and 1,000,000 items in one value.
 - The result is saved as text. A comparison saves `True` or `False`.
 - In CSV, wrap an expression that contains commas in double quotes.
+
+More examples, with the value that each step saves:
+
+```csv
+Math,Evaluate,${a},5
+Math,Evaluate,${b},3
+Math,Evaluate,${sum},${a} + ${b}
+Math,Evaluate,${is_valid},${sum} > 10
+Math,Evaluate,${result},'Pass' if ${sum} >= 5 else 'Fail'
+Math,Evaluate,${name},'Alice'
+Math,Evaluate,${message},"'Hello, ' + '${name}'"
+Math,Evaluate,${numbers},"[1, 2, 3, 4]"
+```
+
+| Variable | Value |
+|---|---|
+| `${sum}` | `8` |
+| `${is_valid}` | `False` |
+| `${result}` | `Pass` |
+| `${message}` | `Hello, Alice` |
+| `${numbers}` | `[1, 2, 3, 4]` |
 
 ### Date Evaluate
 
@@ -252,7 +281,7 @@ With `order_date` set to `2026-10-10` in your elements file, `${delivery_date}` 
 
 Good to know:
 
-- Only days work. `+1 week` fails with error E0403. Put a space between the number and `days`.
+- Only days work. `+1 week` fails with error E0403. Put a space between the number and `days`. `+1 day` also works.
 - `today` and `now` don't read the clock. They keep the start date as it is, which is useful to reformat a date.
 - An ambiguous date such as `03/04/2026` is read as March 4.
 - The new date replaces the earlier value of the variable, so you can use the same name in a loop.

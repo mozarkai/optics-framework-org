@@ -190,6 +190,7 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 
 /* ---------- playground ---------- */
 .play { padding-block: 0 clamp(64px, 8vw, 120px); }
+.play[id], .pg[id] { scroll-margin-top: 44px; }
 .play-tag { position: absolute; left: -1.5px; top: -1.5px; z-index: 6; transform: translateY(-100%); display: inline-flex; gap: 10px; padding: 9px 12px; background: var(--ink); color: var(--bg); }
 .play-tag em { font-style: normal; color: var(--sun); }
 [data-theme="dark"] .play-tag em { color: #8A6A00; }
@@ -481,6 +482,7 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 @media (max-width: 400px) {
   .nav-row { gap: 6px; }
   .nav-links { gap: 0; }
+  .nav-links a { padding-inline: 6px; }
   .nav-actions { gap: 6px; }
 }
 @media (pointer: coarse) and (max-width: 520px) {
