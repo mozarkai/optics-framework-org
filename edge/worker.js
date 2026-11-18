@@ -10,7 +10,10 @@
 
 import { isAiBot } from "./agents.js";
 import { collect, isBeacon, recordHit } from "./analytics.js";
+import { isFeedback, receive, sendDigest } from "./feedback.js";
 import { snapshot } from "./snapshot.js";
+
+export const DIGEST_CRON = "47 4 * * *";
 
 export { isAiBot };
 
@@ -209,12 +212,16 @@ export async function handle(request, upstream = fetch) {
 // Analytics writes run after the response is sent and never fail it.
 export async function serve(request, env, ctx, upstream = fetch) {
   if (isBeacon(request)) return collect(request, env);
+  if (isFeedback(request)) return receive(request, env);
   const response = await handle(request, upstream);
   ctx?.waitUntil(recordHit(env, request, response));
   return response;
 }
 
+// Each job has its own trigger, so each gets the free plan's 10 ms of CPU to itself.
+export const scheduled = (event, env) => (event.cron === DIGEST_CRON ? sendDigest(env) : snapshot(env));
+
 export default {
   fetch: (request, env, ctx) => serve(request, env, ctx),
-  scheduled: (event, env, ctx) => ctx.waitUntil(snapshot(env)),
+  scheduled: (event, env, ctx) => ctx.waitUntil(scheduled(event, env)),
 };
