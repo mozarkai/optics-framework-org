@@ -11,6 +11,7 @@ const TYPES = {
   ".html": "text/html; charset=utf-8",
   ".md": "text/markdown; charset=utf-8",
   ".txt": "text/plain; charset=utf-8",
+  ".log": "text/plain; charset=utf-8",
   ".xml": "application/xml",
   ".json": "application/json; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -53,7 +54,12 @@ export function pagesOrigin(dir) {
     const path = found ?? join(dir, "404.html");
     const body = request.method === "HEAD" ? null : await readFile(path);
     const type = TYPES[extname(path)] ?? "application/octet-stream";
-    return new Response(body, { status: found ? 200 : 404, headers: { "content-type": type, vary: "Accept-Encoding" } });
+    const range = found && body && /^bytes=(\d+)-(\d*)$/.exec(request.headers.get("range") ?? "");
+    if (range) {
+      const start = Number(range[1]), end = Math.min(range[2] ? Number(range[2]) : body.length - 1, body.length - 1);
+      return new Response(body.subarray(start, end + 1), { status: 206, headers: { "content-type": type, "content-range": `bytes ${start}-${end}/${body.length}`, "accept-ranges": "bytes" } });
+    }
+    return new Response(body, { status: found ? 200 : 404, headers: { "content-type": type, "accept-ranges": "bytes", vary: "Accept-Encoding" } });
   };
 }
 
@@ -61,7 +67,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const origin = pagesOrigin("out");
   const port = Number(process.env.PORT ?? 4173);
   createServer(async (req, res) => {
-    const request = new Request(new URL(req.url, `http://${req.headers.host}`), { method: req.method, headers: { accept: req.headers.accept ?? "*/*", "user-agent": req.headers["user-agent"] ?? "" } });
+    const request = new Request(new URL(req.url, `http://${req.headers.host}`), { method: req.method, headers: { accept: req.headers.accept ?? "*/*", "user-agent": req.headers["user-agent"] ?? "", range: req.headers.range ?? "" } });
     const response = await handle(request, origin);
     res.writeHead(response.status, Object.fromEntries(response.headers));
     res.end(Buffer.from(await response.arrayBuffer()));
