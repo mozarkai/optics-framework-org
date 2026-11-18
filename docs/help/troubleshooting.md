@@ -43,6 +43,12 @@ Use the installer or a standard `venv` instead of Conda.
 
 The install scripts include it. With pip, install it yourself: `pip install "optics-framework[mcp]"`. See [MCP server](/docs/reference/mcp#install).
 
+### "Operation not permitted" for a project or venv in Documents on macOS {#macos-operation-not-permitted}
+
+macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the terminal does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
+
+Give the terminal access in **System Settings > Privacy & Security > Files & Folders**, then open a new terminal. Or keep the virtual environment and the project in a different folder, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders.
+
 ## Setting up a project
 
 ### "Cannot start: E0104": No driver enabled in …/config.yaml {#no-driver-enabled}
