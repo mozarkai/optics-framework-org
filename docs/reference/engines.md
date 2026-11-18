@@ -47,12 +47,14 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
+| `apple_vision` | `apple-vision` | Local OCR with the macOS Vision framework. The fastest and most accurate engine: about 0.3 s for a phone screenshot, and it reads blurred camera pictures well. `recognition_level` is `accurate` (default) or `fast`; `languages` defaults to `["en-US"]`. | macOS |
+| `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 0.7 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
+| `easyocr` | `easyocr` | Local OCR. Slow on CPU (15 s or more for a phone screenshot). Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
 | `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
-We recommend `easyocr` to start with. It needs nothing else installed.
+We recommend `apple_vision` on a Mac and `rapidocr` everywhere else. Neither needs anything else installed.
 
 ## Image matching
 
@@ -89,9 +91,9 @@ A bundle installs several extras at once.
 |---|---|
 | `mobile` | `appium` |
 | `web` | `selenium`, `playwright` |
-| `vision` | `easyocr`, `pytesseract`, `google-vision` |
+| `vision` | `apple-vision` (macOS only), `rapidocr`, `easyocr`, `pytesseract`, `google-vision` |
 | `llm` | `gemini`, `openai`, `anthropic` |
-| `all` | `appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`. Not `mcp`. |
+| `all` | `appium`, `ble`, `selenium`, `playwright`, `apple-vision` (macOS only), `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`. Not `mcp`. |
 
 ## Install with optics setup
 
@@ -104,7 +106,7 @@ optics setup [--install NAME [NAME ...]] [--list]
 Without flags, it opens a picker with a checkbox for each engine. In scripts and CI, name the engines:
 
 ```shell
-$ optics setup --install appium easyocr
+$ optics setup --install appium rapidocr
 $ optics setup --install web gemini
 $ optics setup --install appium==6.1.2
 ```
@@ -121,14 +123,16 @@ Available engines (install with `optics setup --install <name>`):
 
 Action Drivers:
   appium          (appium-python-client)
-  ble             (pyserial)
+  ble             (airhand)
   selenium        (selenium)
   playwright      (playwright)
 
 OCR Engines:
+  apple-vision    (pyobjc-framework-vision)
+  rapidocr        (rapidocr, onnxruntime)
   easyocr         (easyocr)
   pytesseract     (pytesseract, pillow)
-  google-vision   (google-cloud-vision)
+  google-vision   (google-cloud-vision, google-auth)
 
 LLM Engines:
   gemini          (google-genai)
@@ -138,9 +142,9 @@ LLM Engines:
 Bundles (install several at once):
   mobile          (appium)
   web             (selenium, playwright)
-  vision          (easyocr, pytesseract, google-vision)
+  vision          (apple-vision, rapidocr, easyocr, pytesseract, google-vision)
   llm             (gemini, openai, anthropic)
-  all             (appium, ble, selenium, playwright, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
+  all             (appium, ble, selenium, playwright, apple-vision, rapidocr, easyocr, pytesseract, google-vision, gemini, openai, anthropic)
 ```
 
 On success, Optics reminds you that services such as the Appium server still need to be started separately. Run `optics doctor` to confirm each engine shows ✅.
@@ -150,12 +154,12 @@ On success, Optics reminds you that services such as the Appium server still nee
 Name the extras in brackets:
 
 ```shell
-$ pip install "optics-framework[appium,easyocr]"
+$ pip install "optics-framework[appium,rapidocr]"
 $ pip install "optics-framework[playwright]" && playwright install chromium
 $ pip install "optics-framework[mcp]"
 ```
 
-If you installed Optics with the [install script](/docs/reference/cli#install-scripts), pass extras with `--extra appium,easyocr` (or `OPTICS_EXTRA` on Windows).
+If you installed Optics with the [install script](/docs/reference/cli#install-scripts), pass extras with `--extra appium,rapidocr` (or `OPTICS_EXTRA` on Windows).
 
 ## Where installs are refused
 
@@ -164,8 +168,8 @@ If you installed Optics with the [install script](/docs/reference/cli#install-sc
 | Environment | What to do instead |
 |---|---|
 | Conda | Use a virtual environment. EasyOCR and Optics need conflicting versions of NumPy under Conda. |
-| `pipx` | Reinstall with the extras: `pipx install --force "optics-framework[appium,easyocr]"`, or add packages with `pipx inject optics-framework <package>`. |
-| `uv tool` or `uvx` | Reinstall with the extras: `uv tool install "optics-framework[appium,easyocr]"`. |
+| `pipx` | Reinstall with the extras: `pipx install --force "optics-framework[appium,rapidocr]"`, or add packages with `pipx inject optics-framework <package>`. |
+| `uv tool` or `uvx` | Reinstall with the extras: `uv tool install "optics-framework[appium,rapidocr]"`. |
 | A project managed by uv, Poetry, PDM or Pipenv | Add the extra with your tool, for example `uv add "optics-framework[appium]"` or `poetry add "optics-framework[appium]"`. |
 | System Python marked as externally managed | Use a virtual environment. |
 | Read-only site-packages | Use a virtual environment you can write to. |

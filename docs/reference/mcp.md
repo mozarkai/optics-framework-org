@@ -132,7 +132,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app` and 
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](/docs/platforms/web#use-a-remote-browser). |
 | `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. Passing `[]` makes the session fail to start. |
-| `text_detection` | `[]` | OCR engines, for example `["easyocr"]`. |
+| `text_detection` | `[]` | OCR engines, for example `["rapidocr"]`. A `ble` session that uses the server's camera gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. |
 | `image_detection` | `[]` | Image engines, for example `["templatematch"]`. |
 | `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](/docs/elements/self-heal). |

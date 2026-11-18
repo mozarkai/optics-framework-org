@@ -53,7 +53,7 @@ Every element can have several identities, tried cheapest first:
 
 1. **XPath:** a native query through the accessibility tree.
 2. **Text:** the visible text, CSS or class in the page source.
-3. **OCR:** reads the screenshot with EasyOCR, Tesseract or Google Vision.
+3. **OCR:** reads the screenshot with Apple Vision, RapidOCR, EasyOCR, Tesseract or Google Vision.
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
 

@@ -59,14 +59,14 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 | Option | Windows variable | What it does |
 |---|---|---|
 | `--version 1.11.4` | `OPTICS_VERSION` | Install a specific release. |
-| `--extra appium,easyocr` | `OPTICS_EXTRA` | Install engines at the same time. |
+| `--extra appium,rapidocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
 | `--dry-run` | | Print what would happen and change nothing. |
 | `--uninstall` | | Remove Optics and the PATH entry it added. |
 
 ```shell
-$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,easyocr
+$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra playwright,rapidocr
 ```
 :::
 
@@ -105,7 +105,9 @@ Add these when a page tells you to. You don't need them for your first test.
 
 | Engine | Install name | Adds |
 |---|---|---|
-| EasyOCR | `easyocr` | Finds elements by reading text on a screenshot. Runs locally. |
+| Apple Vision | `apple-vision` | Finds elements by reading text on a screenshot. The fastest OCR engine. macOS only. |
+| RapidOCR | `rapidocr` | Finds elements by reading text on a screenshot. Runs on any OS, on the CPU. |
+| EasyOCR | `easyocr` | An OCR engine that is quick with a GPU. |
 | Tesseract | `pytesseract` | A lighter OCR engine. Needs the Tesseract program installed too. |
 | Google Vision | `google-vision` | Cloud OCR. Needs Google Cloud credentials. |
 | AI model | `gemini`, `openai` or `anthropic` | Plain-English test creation and AI self-heal. Pick the one for your account; see [Describe it](/docs/create/describe#before-you-begin). |

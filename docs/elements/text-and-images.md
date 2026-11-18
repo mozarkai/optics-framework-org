@@ -15,13 +15,18 @@ Both are slower than the UI tree, so Optics only uses them after the faster ways
 :::steps
 ### Install an OCR engine
 
-We recommend EasyOCR. It runs on your machine and needs no account.
+We recommend Apple Vision on a Mac and RapidOCR everywhere else. Both run on your machine, need no account and work offline.
 
+:::tabs{group="os"}
+::tab[macOS]
 ```shell
-$ optics setup --install easyocr
+$ optics setup --install apple-vision
 ```
-
-The first run downloads EasyOCR's models, which takes a minute.
+::tab[Linux and Windows]
+```shell
+$ optics setup --install rapidocr
+```
+:::
 
 ### Enable it, and a screenshot source
 
@@ -37,7 +42,7 @@ elements_sources:
       enabled: true
 
 text_detection:
-  - easyocr:
+  - rapidocr:             # apple_vision on a Mac
       enabled: true
 ```
 
@@ -52,7 +57,9 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 
 | Engine | Name in config | Install | Good to know |
 |---|---|---|---|
-| EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
+| Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.3 s for a phone screenshot, and good on camera pictures. |
+| RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 0.7 s for a phone screenshot, and good on camera pictures. |
+| EasyOCR | `easyocr` | `optics setup --install easyocr` | Local. Needs a GPU to be quick: 15 s or more for a phone screenshot on a CPU. Reads English. |
 | Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
 | Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](/docs/reference/engines). |

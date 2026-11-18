@@ -90,7 +90,7 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 |---|---|---|
 | `driver_sources` | list | The driver. Each item is a name (`"playwright"`) or `{"appium": {"url": ..., "capabilities": {...}}}`. A listed item is enabled unless it says `"enabled": false`. |
 | `elements_sources` | list | Element sources by name, for example `["appium_find_element", "appium_page_source", "appium_screenshot"]`. There's no default here, so always list them. |
-| `text_detection` | list | OCR engines, for example `["easyocr"]`. |
+| `text_detection` | list | OCR engines, for example `["rapidocr"]`. |
 | `image_detection` | list | Image engines, for example `["templatematch"]`. |
 | `project_path` | string | Refused with `400` and E0501. Upload templates with `POST /v1/sessions/{id}/templates`. |
 | `api_data` | object | API definitions for `Invoke API`, inline. File paths aren't supported. |
