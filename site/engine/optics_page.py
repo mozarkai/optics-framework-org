@@ -18,18 +18,24 @@ from optics_framework.helper.execute import DryRunRunner, ExecuteRunner, RunnerA
 
 PROJECT = "/home/pyodide/birch-shop"
 RUNNERS = {"dry_run": DryRunRunner, "execute": ExecuteRunner}
-blocking_sleep = time.sleep
+skipped = 0.0
 
 
 def sleep(seconds):
-    # With JSPI a wait hands the tab back to the browser; without it, Pyodide blocks.
+    # Without JSPI the page cannot change while Python runs, so a wait only moves the clock on.
+    global skipped
     if can_run_sync():
         run_sync(asyncio.sleep(seconds))
     else:
-        blocking_sleep(seconds)
+        skipped += seconds
+
+
+def skipping(clock):
+    return lambda: clock() + skipped
 
 
 time.sleep = sleep
+time.time, time.monotonic, time.perf_counter = skipping(time.time), skipping(time.monotonic), skipping(time.perf_counter)
 execute_keyword = TestRunner._execute_keyword
 dry_run_keyword = TestRunner._dry_run_keyword
 

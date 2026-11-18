@@ -65,7 +65,7 @@
             <div><dt>Python</dt><dd>CPython 3.14 in WebAssembly, from <a href="https://pyodide.org/">Pyodide</a> 314.0.8, with numpy, pandas, lxml, pydantic and the other libraries Optics imports. This site serves every file.</dd></div>
             <div><dt>Driver</dt><dd>On your machine, Optics drives apps through Appium, Playwright or Selenium. Here, a small driver written for this page drives Birch, and an element source reads Birch as an Android-style UI tree.</dd></div>
             <div><dt>Left out</dt><dd>Image and OCR matching (OpenCV), screenshot comparison (scikit-image) and the pytest runner. Text matching uses difflib, not python-Levenshtein, so a near match can score differently.</dd></div>
-            <div><dt>Pace</dt><dd>The page waits after each step so you can watch the phone. The times in the run are the times Optics measured.</dd></div>
+            <div><dt>Pace</dt><dd>The page waits after each step so you can watch the phone. The times in the run are the times Optics measured. In a browser without JSPI, the page cannot change while Python runs, so Optics skips its waits and moves its clock on instead.</dd></div>
           </dl>
         </div>
       </section>
