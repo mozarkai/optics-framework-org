@@ -32,6 +32,11 @@ jobs:
 
       - run: npm ci
 
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/optics-framework.org/engine
+          key: engine-${{ hashFiles('lib/engine-lock.json') }}
+
       - name: Resolve deploy target
         id: target
         run: |

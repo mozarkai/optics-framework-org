@@ -50,6 +50,7 @@ test("a page request is logged with who asked, where from and which campaign", a
 test("installer fetches and missing assets are logged; assets that load are not", async () => {
   assert.equal(column((await request("/install", { headers: { "user-agent": "curl/8.7.1" } })).hits[0], "agent"), "curl/8.7.1");
   assert.equal((await request("/styles.css", { headers: { "user-agent": CHROME } })).hits.length, 0);
+  assert.equal((await request("/engine/optics_page.py", { headers: { "user-agent": CHROME } })).hits.length, 0);
   assert.equal(column((await request("/nope.css")).hits[0], "status"), 404);
 });
 

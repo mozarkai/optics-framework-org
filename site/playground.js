@@ -97,12 +97,7 @@
       }
       return clock.wait(200 * k, g).then(function () {
         X.unlock();
-        if (name === "signin") A.show("home");
-        else if (name === "card") A.open(+f.t.dataset.i);
-        else if (name === "chip" || name === "size") A.pick(f.t);
-        else if (name === "add") A.toast(true);
-        else if (name === "back") A.show("home");
-        else if (name in { email: 1, password: 1, search: 1 }) f.t.classList.add("focus");
+        A.press(f.t);
         return clock.wait(260 * k, g).then(function () { return done(f.tag, base); });
       });
     });
