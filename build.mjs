@@ -168,6 +168,17 @@ fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
 const proof = loadProof();
 fill("out/index.html", "<!-- proof -->", proofBand(proof));
+const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
+  .split(/\n\n+/)
+  .map((cue) => cue.match(/(\d+):(\d+):([\d.]+) --> [^\n]+\n(.+)/))
+  .filter(Boolean)
+  .map(([, h, m, s, title]) => {
+    const t = +h * 3600 + +m * 60 + +s;
+    const stamp = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+    return `<li><button type="button" data-t="${t}"><span>${stamp}</span>${title.trim()}</button></li>`;
+  });
+fill("out/index.html", "<!-- film:chapters -->", `<ol aria-label="Chapters">${filmChapters.join("")}</ol>`);
+
 fill("out/index.md", "<!-- proof -->", proofMarkdown(proof));
 fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
 fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
