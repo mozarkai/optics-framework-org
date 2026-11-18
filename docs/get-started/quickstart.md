@@ -24,7 +24,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 ```
 ::tab[pip]
 ```shell
-$ pip install optics-framework
+$ pip install "optics-framework[mcp]"
 ```
 :::
 
