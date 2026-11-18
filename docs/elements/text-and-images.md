@@ -57,8 +57,8 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 
 | Engine | Name in config | Install | Good to know |
 |---|---|---|---|
-| Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.3 s for a phone screenshot, and good on camera pictures. |
-| RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 0.7 s for a phone screenshot, and good on camera pictures. |
+| Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.2 s for a phone screenshot, and good on camera pictures. |
+| RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 1 s for a phone screenshot, and good on camera pictures. |
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local. Needs a GPU to be quick: 15 s or more for a phone screenshot on a CPU. Reads English. |
 | Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
 | Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |

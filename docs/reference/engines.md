@@ -47,8 +47,8 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `apple_vision` | `apple-vision` | Local OCR with the macOS Vision framework. The fastest and most accurate engine: about 0.3 s for a phone screenshot, and it reads blurred camera pictures well. `recognition_level` is `accurate` (default) or `fast`; `languages` defaults to `["en-US"]`. | macOS |
-| `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 0.7 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
+| `apple_vision` | `apple-vision` | Local OCR with the macOS Vision framework. The fastest and most accurate engine: about 0.2 s for a phone screenshot, and it reads blurred camera pictures well. `recognition_level` is `accurate` (default) or `fast`; `languages` defaults to `["en-US"]`. | macOS |
+| `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 1 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
 | `easyocr` | `easyocr` | Local OCR. Slow on CPU (15 s or more for a phone screenshot). Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
 | `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
