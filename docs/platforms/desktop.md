@@ -44,7 +44,7 @@ The setup script installs its own Node.js, Appium 3 and the driver. You do not n
 :::steps
 ### Set up the Host
 
-Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. It is safe to run the script again: it changes only what is missing.
+Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. To use a different port, add `--port <port>`, or `-Port <port>` on Windows. Then use the same port in `url` in `config.yaml`. It is safe to run the script again: it changes only what is missing.
 
 Download the script to a temporary folder, not to your project. Do not send it to `bash` through a pipe: the script copies its own file to make the service script `host.sh`.
 
@@ -117,7 +117,7 @@ Or make the sample project yourself:
 $ optics init notes --template desktop_editor
 ```
 
-The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. On Linux or Windows, change `platformName` and `app` in `notes/config.yaml` first. [Write config.yaml](#write-config-yaml) shows the values.
+The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
 
 ### Check and run
 
