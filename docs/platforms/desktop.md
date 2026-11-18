@@ -69,6 +69,8 @@ The script installs Xvfb, Openbox, D-Bus and AT-SPI with `apt`. That step needs 
 
 The service is the systemd user unit `appium-xa11y`. It uses the X11 display that is there. If there is no display, it starts Xvfb on `:99`. To see the log, run `journalctl --user -u appium-xa11y`.
 
+When the Host has no user D-Bus session, an app that you start on the display outside Appium uses the same D-Bus session as Appium. An example is an app that you start from an SSH shell. For the Xvfb display, set `DISPLAY=:99` and `XAUTHORITY=~/.local/share/appium-xa11y/Xauthority` for that app.
+
 ::tab[Windows]
 In PowerShell:
 
