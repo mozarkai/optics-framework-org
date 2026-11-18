@@ -2,7 +2,7 @@
 
 > Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 
-The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.4.
+The `optics` command creates projects, checks your setup, runs tests and starts the integration servers. This page covers Optics 1.11.5.
 
 Commands are grouped by when you use them: getting started, running tests, integrating with other tools, and everything else. Run `optics <command> --help` to see the same flags in your terminal.
 
@@ -14,7 +14,7 @@ optics [--version] [--help] <command> [options]
 
 | Flag | What it does |
 |---|---|
-| `--version` | Prints `Optics Framework 1.11.4` and exits with code 0. |
+| `--version` | Prints `Optics Framework 1.11.5` and exits with code 0. |
 | `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
@@ -77,6 +77,20 @@ birch-tests/
 ├── modules/modules.csv         # module_name,module_step,param_1,param_2,param_3
 ├── test_cases/test_cases.csv   # test_case,test_step
 └── test_data/elements.csv      # Element_Name,Element_ID
+```
+
+`optics init` writes `name: <name>` in config.yaml, for a blank project and for a sample. The name labels the [JUnit report](https://optics-framework.org/docs/run/results#read-the-junit-report), and `optics configure` keeps it. The Appium entry of the starter config has commented lines for a desktop app (`platformName: Mac`, `automationName: Xa11y`, `app: com.apple.TextEdit`). After a blank project, Optics prints the command that replaces it with a sample:
+
+```terminal
+Or replace it with a sample: optics init birch-tests --force --template <sample>
+  contact          Contacts
+  clock            Clock
+  calendar         Calendar
+  youtube          YouTube
+  gmail_web        Gmail Web
+  playwright       Playwright Web
+  mobile_web       Mobile Web
+  desktop_editor   Desktop Editor
 ```
 
 | Sample | Target | Engines it uses |
@@ -145,14 +159,14 @@ optics doctor [folder] [--check]
 | `folder` | None | The project to validate. Without it, doctor checks your environment only. It shows a ⚠️ row if the current folder has no config.yaml. With a folder that has no config.yaml, it shows a ❌ row. |
 | `--check` | Off | Exits with code 1 if any row is ❌. Use it in CI. |
 
-Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed) or ❌ failure. Each problem row has a `→` hint with the fix. If the terminal cannot show emoji, doctor writes `OK`, `WARN`, `FAIL` and `->` instead.
+Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet needed), ❌ failure or ℹ️ information. Each problem row has a `→` hint with the fix. An ℹ️ row is a hint that doctor does not check, and the counts at the end do not include it. If the terminal cannot show emoji, doctor writes `OK`, `WARN`, `FAIL`, `INFO` and `->` instead.
 
 | Section | What it checks |
 |---|---|
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
-| Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic. |
+| Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, Apple Vision, RapidOCR, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic and the MCP server. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
-| Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS a reminder of the Accessibility and Screen Recording permissions. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](https://optics-framework.org/docs/platforms/desktop#check-and-run). |
+| Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS an ℹ️ row for the Accessibility and Screen Recording permissions. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](https://optics-framework.org/docs/platforms/desktop#check-and-run). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
 | Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, `bundleId` on iOS, and `app` or `appName` on a desktop). |
 
@@ -162,6 +176,16 @@ Doctor doesn't check Selenium `capabilities`, and it doesn't create any output f
 
 ```shell
 $ optics doctor ./birch-tests --check
+```
+
+This is the Desktop section on a Mac with Appium and the driver installed:
+
+```terminal
+Desktop
+  ✅ appium server       reachable at 127.0.0.1:4723
+  ✅ xa11y driver        appium-xa11y-driver 0.1.3 in ~/.appium
+  ℹ️ macOS permissions   not checked by doctor
+      → System Settings > Privacy & Security: give Accessibility, and Screen Recording for screenshots, to the Node.js that runs Appium (setup.sh shows its path), or to your terminal if you start Appium in it. Then restart Appium: launchctl kickstart -k gui/$(id -u)/appium-xa11y
 ```
 
 ## `optics setup`
@@ -178,15 +202,16 @@ optics setup [--install NAME [NAME ...]] [--list]
 | `--list` | Prints every engine and bundle you can install. Wins if you also pass `--install`. |
 | `--install` | Installs the named engines or bundles. |
 
-Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `apple-vision`, `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
+Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `apple-vision`, `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`, `mcp`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). The `all` bundle does not include `mcp`. Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](https://optics-framework.org/docs/reference/engines#where-installs-are-refused).
 
-The MCP server isn't an engine here. The install scripts include it; with pip, install it with `pip install "optics-framework[mcp]"`.
+`optics setup --list` shows the MCP server under `Servers`. The install scripts include it.
 
 ```shell
 $ optics setup --install appium rapidocr
 $ optics setup --install web gemini
+$ optics setup --install mcp
 ```
 
 Exit code 1 if a name is unknown, a version specifier is malformed (`appium=6.1.2`), or the install fails.
@@ -213,7 +238,34 @@ A dry run checks that:
 
 - Each test step names a module (or a keyword).
 - Each module step names a real keyword. A typo gets a suggestion: `Did you mean 'Press Element'?`
+- Each step gives its keyword the parameters that it takes. A step with a missing parameter, too many values, or the same parameter twice fails with E0403.
 - Each `${name}` is defined, as a whole cell or inside a longer value. An unknown name fails with `Variable '${name}' in '<value>' is not defined.`
+
+For example, this is the `playwright` sample with no element for `Press Element`:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1
+Open Example Page,Launch App,https://example.com
+Verify Example Page,Press Element
+Close Browser,Close And Terminate App
+```
+
+The dry run fails the step, names the command that shows the parameters, and exits with code 1:
+
+```terminal
+$ optics dry_run pw
+…
+╭──────────────────────────────── Failure details ─────────────────────────────────╮
+│ TC1 Verify Landing → step 'Press Element' — Code.E0403: 'Press Element' cannot   │
+│ take these params: missing a required argument: 'element'. See its params with:  │
+│ optics list Press Element                                                        │
+╰──────────────────────────────────────────────────────────────────────────────────╯
+dry_run checks the keywords, their params and the names they use. It does not check locators, the app or the device: optics execute does.
+```
+
+Too many values give `too many positional arguments`. A value in a column and the same parameter as `name=value` give `multiple values for argument '<name>'`. The dry run does not check the steps of a module that `Execute Module`, `Run Loop` or `Condition` runs.
 
 A dry run counts a variable as defined when an earlier step creates it: the first parameter of `Read Data`, `Evaluate` and `Date Evaluate`, and each `store_as=` name. Do not add placeholder rows for them.
 
@@ -407,7 +459,17 @@ optics mcp [--transport stdio|http] [--host HOST] [--port PORT] [--toolset core|
 | `--port` | `8090` | The port to listen on. `http` only. |
 | `--toolset` | `core`, or `OPTICS_MCP_TOOLSET` | `core` gives the agent a small set of tools. `full` also adds one tool for each keyword. |
 
-It needs the `mcp` extra, which the install scripts include. With pip: `pip install "optics-framework[mcp]"`. The `all` bundle doesn't include it. Without the extra, the command exits with code 1 and prints the install command. See [MCP server](https://optics-framework.org/docs/reference/mcp).
+It needs the `mcp` extra, which the install scripts include. The `all` bundle doesn't include it. Without the extra, the command exits with code 1:
+
+```terminal
+╭──────────────────────── Cannot start ────────────────────────╮
+│ The Optics MCP server needs the mcp extra. Install it with:  │
+│                                                              │
+│   optics setup --install mcp                                 │
+╰──────────────────────────────────────────────────────────────╯
+```
+
+See [MCP server](https://optics-framework.org/docs/reference/mcp).
 
 ## `optics generate`
 
@@ -445,25 +507,47 @@ $ optics generate ./birch-tests --framework robot --output smoke.robot
 
 ## `optics list`
 
-Prints every keyword you can use, grouped by category.
+Prints every keyword, or the parameters of one keyword.
 
 ```text
-optics list
+optics list [keyword]
 ```
 
-Names are printed in snake_case. In a module, write them in Title Case with spaces: `press_element` becomes `Press Element`. Matching ignores case and spaces, so both forms work.
+Without a keyword, it prints each keyword on one line, as you write it in a module:
 
 ```terminal
-ActionKeyword:
-  - clear_element_text
-  - detect_and_press
-  ...
-AppManagement:
-  - launch_app
-  ...
+$ optics list
+Assert Equality
+Assert Presence
+Assert Text
+…
 ```
 
-For parameters and examples, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
+With a keyword, it prints the parameters in CSV column order, with their defaults, then the keyword's description. `param_1` is the first column after `module_step`:
+
+```terminal
+$ optics list Assert Presence
+Assert Presence
+  param_1  elements
+  param_2  timeout_str = 30
+  param_3  rule = any
+  param_4  event_name = None
+  param_5  fail = True
+
+Asserts the presence of elements -- anywhere in the page/DOM, visible or not.
+…
+```
+
+A parameter without `=` is required. Case, spaces and underscores do not matter, so `Assert Presence`, `"assert presence"` and `assert_presence` give the same result. A keyword that takes any number of values, such as `Run Loop`, shows them as `param_2...  args...`.
+
+An unknown name prints a suggestion and exits with code 1:
+
+```terminal
+$ optics list Asert Presense
+Keyword not found: Asert Presense. Did you mean 'Assert Presence'? (run `optics list` to see all keywords)
+```
+
+When `optics dry_run` finds a step with the wrong parameters, its message ends with the `optics list <keyword>` command to run. For examples, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
 
 ## `optics completion`
 

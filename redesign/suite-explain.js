@@ -77,6 +77,26 @@
     return bound;
   }
 
+  // TestRunner._check_params: inspect.signature(method).bind on the split params, with Python's messages.
+  function bindError(kw, params) {
+    var bound = bind(kw, params), named = new Set(), args = 0;
+    bound.forEach(function (b) { if (b.named) named.add(b.name); else args++; });
+    var i = 0;
+    for (; i < args; i++) {
+      var slot = kw.params[i];
+      if (!slot) return "too many positional arguments";
+      if (slot.variadic) { i = kw.params.length; break; }
+      if (named.has(slot.name)) return "multiple values for argument '" + slot.name + "'";
+    }
+    var missing = kw.params.slice(i).filter(function (p) { return p.required && !named.has(p.name); })[0];
+    return missing ? "missing a required argument: '" + missing.name + "'" : null;
+  }
+
+  function checkParams(keyword, kw, params) {
+    var error = bindError(kw, params);
+    return error && "'" + keyword + "' cannot take these params: " + error + ". See its params with: optics list " + keyword;
+  }
+
   function eachStep(p, fn) { p.modules.forEach(function (m) { m.steps.forEach(fn); }); }
 
   function loopVars(params) {
@@ -162,6 +182,7 @@
     var params = S.splitStoreAs(step.params).params, insideFlow = !r.direct.has(step.module) && r.via.has(step.module);
     var bound = bind(kw, params, insideFlow);
     bound.forEach(function (b) { paramNotes(p, kw, b, insideFlow, out); });
+    if (insideFlow) missingNote(kw, params, step, out);
     aoiNote(bound, step, out);
     flowNotes(p, kw, params, step, out);
   }
@@ -174,11 +195,16 @@
   }
 
   function paramNotes(p, kw, b, insideFlow, out) {
-    if (b.extra) out.push(note("fail", b.p.at, kw.title + " takes " + kw.params.length + " values at most, so this one is too many. The step fails when it runs.", kw.url));
+    if (b.extra) out.push(note("fail", b.p.at, kw.title + " takes " + kw.params.length + " values at most, so this one is too many. " + (insideFlow ? "The step fails when it runs." : "optics dry_run fails the step with E0403."), kw.url));
     if (insideFlow && isNamed(b.value) && !/^\s*store_as\s*=/.test(b.value) && kw.params.some(function (x) { return x.name === b.value.split("=")[0].trim(); })) {
       out.push(note("warn", b.p.at, "A module run by Execute Module, Run Loop or Condition reads no name=value, so this reaches " + kw.title + " as the text " + b.value + ".", DOCS.flow));
     }
     if (b.name === "element" || b.name === "elements") locatorNotes(p, b, out);
+  }
+
+  function missingNote(kw, params, step, out) {
+    var missing = kw.params.slice(params.length).filter(function (x) { return x.required; })[0];
+    if (missing) out.push(note("fail", step.at, kw.title + " needs " + missing.name + ". optics dry_run does not check a module that a flow keyword runs, so the step fails when it runs.", kw.url));
   }
 
   function locatorNotes(p, b, out) {
@@ -287,7 +313,7 @@
   }
 
   root.OpticsExplain = {
-    SAY: SAY, HOW: HOW, AOI: AOI, DOCS: DOCS, bind: bind, provenance: provenance, locators: locators, reach: reach, notes: notes,
+    SAY: SAY, HOW: HOW, AOI: AOI, DOCS: DOCS, bind: bind, checkParams: checkParams, provenance: provenance, locators: locators, reach: reach, notes: notes,
     conditionParts: conditionParts, loopVars: loopVars, aoiValues: aoiValues, recordAt: recordAt, usages: usages, isNamed: isNamed,
   };
 })(typeof globalThis !== "undefined" ? globalThis : this);

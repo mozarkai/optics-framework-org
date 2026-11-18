@@ -88,8 +88,8 @@
 <h2 id="check-the-suite-first">Check the suite first<a class="anchor" href="#check-the-suite-first" aria-label="Link to this section">#</a></h2>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics dry_run birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> dry_run birch-tests</code></pre></figure>
 <p>A dry run reads every file and checks that:</p>
-<ul><li>every test step names a module or keyword that exists,</li><li>every keyword in every module exists, with a suggestion when you mistype one,</li><li>every <code class="ic">${name}</code> is defined in an elements file or by an earlier step, such as <code class="ic">Evaluate</code>, <code class="ic">Read Data</code> or <code class="ic">store_as</code>. This includes a <code class="ic">${name}</code> inside a longer value.</li></ul>
-<p>It does not tap, type or open anything, so it is quick and safe to run before every commit. It still starts the engines in your <code class="ic">config.yaml</code>, so they must be installed and a driver must be enabled. <code class="ic">optics dry-run</code> is the same command.</p>
+<ul><li>every test step names a module or keyword that exists,</li><li>every keyword in every module exists, with a suggestion when you mistype one,</li><li>every step gives its keyword the parameters that it takes: none missing, none too many and none given twice. A wrong step fails with E0403 and names the <code class="ic">optics list &lt;keyword&gt;</code> command that shows the parameters,</li><li>every <code class="ic">${name}</code> is defined in an elements file or by an earlier step, such as <code class="ic">Evaluate</code>, <code class="ic">Read Data</code> or <code class="ic">store_as</code>. This includes a <code class="ic">${name}</code> inside a longer value.</li></ul>
+<p>It does not tap, type or open anything, so it is quick and safe to run before every commit. It does not check that a locator finds its element, or the app and the device. The last line of its output says so. It still starts the engines in your <code class="ic">config.yaml</code>, so they must be installed and a driver must be enabled. <code class="ic">optics dry-run</code> is the same command.</p>
 <p>A suite that uses only <a href="../../docs/reference/keywords/flow">flow control keywords</a>, such as <code class="ic">Evaluate</code> and <code class="ic">Condition</code>, needs no driver. <code class="ic">optics execute</code> follows the same rule.</p>
 <h2 id="run-it">Run it<a class="anchor" href="#run-it" aria-label="Link to this section">#</a></h2>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
@@ -189,6 +189,6 @@
   <script src="../../track.js?v=a7621959d3" defer></script>
   <script src="../../docs.js?v=771c6a77b1" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
-  <script src="../../scene-defs.js?v=8dbd2ed764" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>
 </html>

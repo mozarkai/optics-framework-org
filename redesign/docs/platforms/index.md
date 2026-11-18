@@ -17,7 +17,7 @@ Optics runs the same tests on phones, TVs, browsers, desktop apps and locked pro
 | Web (Playwright) | `playwright` | `playwright_find_element`, `playwright_page_source`, `playwright_screenshot` | No server. Opens Chromium, Firefox or WebKit on your machine, or connects to a remote browser. Can emulate a phone. |
 | Web (Selenium) | `selenium` | `selenium_find_element`, `selenium_page_source`, `selenium_screenshot` | Needs a WebDriver server or Grid. Chrome or Firefox. |
 | Desktop (macOS, Linux, Windows) | `appium` (`automationName: Xa11y`) | `appium_find_element`, `appium_page_source`, `appium_screenshot` | Needs Appium and appium-xa11y-driver on the computer that shows the app. Windows is experimental. |
-| Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps through a Bluetooth mouse and keyboard, and sees the screen through a camera. |
+| Production devices (BLE + camera) | `ble` | `camera_screenshot`, plus OCR or image matching | Taps, types and opens apps through an airhand dongle that the device sees as a Bluetooth keyboard and pointer, and sees the screen through a camera. iOS, Android, macOS, Windows and Linux. Without a camera, position and key keywords still work. |
 
 Enable one driver and the element sources whose names start with that driver's name. The [config.yaml reference](https://optics-framework.org/docs/reference/config) lists every key, and the [engines reference](https://optics-framework.org/docs/reference/engines) lists what each engine installs.
 

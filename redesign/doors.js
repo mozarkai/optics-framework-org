@@ -134,7 +134,6 @@
       .concat(d.added.slice(0, 40).map(function (r) { return "+ " + row(r); }))
       .concat(d.removed.slice(0, 10).map(function (r) { return "- " + r.ref + ' "' + r.label + '"'; }));
   }
-  function unchanged(step) { return screenLines(step)[0].slice(-9) === "unchanged"; }
   function allRows(s) { return ["screen " + s.digest + " · " + s.rows.length + " row" + (s.rows.length === 1 ? "" : "s")].concat(rows(s)); }
 
   function mcpHead(step, verb, args) {
@@ -151,7 +150,8 @@
     }
     if (!step.result.ok) return (verb === "tap" ? miss.tap_miss : miss.type_miss).map(function (l) { return l.split("{target}").join(args.target); }).concat(allRows(step.after));
     var tag = step.result.tag ? "ok (" + step.result.tag + ")" : "ok";
-    return [mcpHead(step, verb, args) + " -> " + tag + " · verified: unknown" + (unchanged(step) ? " (add expect_present/expect_absent to verify)" : "")].concat(screenLines(step));
+    var verdict = miss.tap_label[0].slice(miss.tap_label[0].indexOf(" · verified: "));
+    return [mcpHead(step, verb, args) + " -> " + tag + verdict].concat(screenLines(step));
   }
   function mcp(step) {
     var verb = MCP_VERB[step.kw], args = mcpArgs(step);

@@ -371,7 +371,7 @@ Element_Name,Element_ID
         <h2 class="h2" id="run-h">Run a suite</h2>
         <div class="two">
           <div class="run-copy">
-            <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which validates every keyword, element and module reference.</p>
+            <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which checks every keyword and its parameters, and every element and module reference.</p>
             <p class="body-text">Birch is a real web app. <a href="birch/">Open it</a>, then watch Optics run the Birch suite against two releases of it. Each frame is a file that the run wrote.</p>
           </div>
           <dl class="outputs">
@@ -642,7 +642,7 @@ Add To Cart,Assert Presence,Added to cart,10</code></pre></figure>
       - <span class="c-dim">uses:</span> actions/setup-python@v7
         <span class="c-dim">with:</span>
           <span class="c-dim">python-version:</span> <span class="c-lit">"3.12"</span>
-      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.11.4"</span>
+      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.11.5"</span>
       - <span class="c-dim">run:</span> python -m playwright install --with-deps chromium
       - <span class="c-dim">run:</span> <b>optics execute birch-tests</b> --no-use-printer
       - <span class="c-dim">if:</span> always()
@@ -992,8 +992,8 @@ Add To Cart,Assert Presence,Added to cart,10</code></pre></figure>
   <script src="app.js?v=d5c83ebd2b" defer></script>
   <script src="track.js?v=a7621959d3" defer></script>
   <script src="birch.js?v=6d339e774b" defer></script>
-  <script src="doors-contract.js?v=bdad6f0507" defer></script>
-  <script src="doors.js?v=cdddffc2f8" defer></script>
+  <script src="doors-contract.js?v=584d6862c6" defer></script>
+  <script src="doors.js?v=817d09fff7" defer></script>
   <script src="playground.js?v=7fb62154a0" defer></script>
   <script src="sim.js?v=8e827f4416" defer></script>
   <script src="wild.js?v=3e6dc26d71" defer></script>

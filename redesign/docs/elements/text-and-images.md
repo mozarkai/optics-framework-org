@@ -74,7 +74,7 @@ When the text shows more than once, `index` picks one: `0` is the first. Complet
 | Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.2 s for a phone screenshot, and good on camera pictures. |
 | RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 1 s for a phone screenshot, and good on camera pictures. |
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local. Needs a GPU to be quick: 15 s or more for a phone screenshot on a CPU. Reads English. |
-| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
+| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. |
 | Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
@@ -82,7 +82,9 @@ List more than one engine and Optics tries them in order.
 
 ### Pictures from a camera
 
-The `camera_screenshot` source gives OCR and image matching a picture. The picture comes from one of three places: a webcam (`camera_index`), an HTTP(S) URL (`url`, with an optional `token`) or a TCP frame server (`url: ip:port`). See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera).
+The `camera_screenshot` source gives OCR and image matching a picture. The picture comes from one of three places: a webcam (`camera_index`), an HTTP(S) URL (`url`, with an optional `token`) or a TCP frame server (`url: ip:port`). With `find_screen`, Optics finds the device screen in the camera frame and makes it straight. See [BLE and camera](https://optics-framework.org/docs/reference/config#ble-and-camera).
+
+When no element source lists the elements of the screen, as with a camera only, OCR gives the screen rows. Then `optics live`, `optics serve` and `optics mcp` show each text that OCR reads as a row.
 
 ## Turn on image matching
 
@@ -112,11 +114,33 @@ The picture is called a **template**. How you crop it decides whether matching w
 
 1. Take a screenshot on the same kind of device you test on. Run the test once and use a `pre_…` screenshot from `execution_output/`, or run `/screenshot` in `optics live`.
 2. Crop tightly around the element. Include its distinctive shape, and as little background as possible.
-3. Don't resize the crop. Matching works best at the screen's own resolution, though it tolerates some scaling and rotation. Playwright screenshots are at CSS pixel scale, so crop Playwright templates from a Playwright run.
+3. Do not resize the crop. Playwright screenshots are at CSS pixel scale, so crop Playwright templates from a Playwright run.
 4. Save it as PNG anywhere in the project folder. The templates use `test_data/input_templates/`.
 5. Refer to it by file name only: `cart_icon.png`, not a path. File names must be unique across the project.
 
 Optics also picks up images inside `execution_output/`. Give templates distinctive names, so they never clash with a screenshot's name.
+
+### Use one template on many devices
+
+A template that you cut on one device also matches on a screen with a different size. Optics looks for the template in three passes:
+
+1. At the size of the template.
+2. If the first pass finds nothing, at each size in `scale_range`, from 0.8 to 1.25 times by default.
+3. If the second pass finds nothing, a feature search that also finds rotated templates.
+
+When screens differ by more than that, set a wider `scale_range`. For example, use `[0.5, 1.25]` for templates that you cut from device screenshots and match on a smaller camera frame:
+
+`config.yaml`:
+
+```yaml
+image_detection:
+  - templatematch:
+      enabled: true
+      capabilities:
+        scale_range: [0.5, 1.25]
+```
+
+`index` counts the matches at one size, from the top down and from left to right.
 
 Before a tap, Optics changes the position of an OCR or image match from screenshot pixels to screen points, so that taps land correctly on iOS and on scaled screens.
 

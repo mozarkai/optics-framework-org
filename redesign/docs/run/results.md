@@ -25,7 +25,7 @@ birch-tests/execution_output/
 |---|---|---|
 | `junit_output.xml` | Every run | Show results in CI. Standard JUnit XML that GitHub Actions, GitLab, Jenkins and others read. |
 | `…pre_<keyword>.jpg` | Before each step that finds an element, with `save_captures: true` | See what was on screen when the step started. |
-| `…_detection_result.jpg` | When Optics found an element by position, with `save_captures: true` | See exactly what Optics found, boxed in green. |
+| `…_detection_result.jpg` | When Optics found an element by position, with `save_captures: true` | See exactly what Optics found, boxed in green. When Optics cannot read the position of the element, it saves the screenshot with no box, and the step result does not change. |
 | `…_with_aoi.jpg` | When a step uses an [area of interest](https://optics-framework.org/docs/elements/area-of-interest), with `save_captures: true` | Check the area covers the right part of the screen. It's drawn in blue. |
 | `…failure_<test case>.jpg` and `.xml` | When a test case fails. Web pages write `.html`. | See the screen and the UI tree where the test case ended. |
 | `…end_of_run.jpg` | At the end of the run, before Suite Teardown | See where the app was left. |
@@ -59,7 +59,19 @@ log_level: DEBUG    # more detail in the terminal and log files
 
 ## Read the JUnit report
 
-`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the name of the project folder, so name the folder after the suite. Each `<testcase>` has `kind`, `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
+`junit_output.xml` has one `<testsuite>` and one `<testcase>` for each test case. Suite Setup and Suite Teardown also have one. The suite `name` and each `classname` are the `name` in config.yaml, or the name of the project folder when config.yaml has no `name`. `optics init` writes `name`, so the report keeps its name when you copy the project to a different folder:
+
+`config.yaml`:
+
+```yaml
+name: birch-tests
+```
+
+```xml
+<testsuite name="birch-tests" id="b1cdc702-…" tests="3" failures="0" errors="0" skipped="0" time="0.00" …>
+```
+
+Each `<testcase>` has `kind`, `timestamp`, `time` and `status`. A failed test case also has a `<failure>`.
 
 `kind` tells you the role of the test case: `suite_setup`, `setup`, `test`, `teardown` or `suite_teardown`. Use it to filter setup and teardown out of your test counts. A `<failure>` or `<error>` has a `code` attribute with the error code, such as `E0201`, when the failure has a code.
 

@@ -30,7 +30,7 @@ Optics looks at a value and decides what kind it is, then tries the ways that fi
 | An XPath, such as `//*[@resource-id='login']` | The UI tree | A driver that exposes a UI tree |
 | Text, such as `Sign in` | 1. The UI tree<br>2. OCR on a screenshot | OCR needs a [text detection engine](https://optics-framework.org/docs/elements/text-and-images) |
 | An image file, such as `sign_in.png` | Image matching on a screenshot | An [image detection engine](https://optics-framework.org/docs/elements/text-and-images) |
-| CSS, such as `css=#login` | The web page | Playwright, or a web page on Appium. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web). |
+| CSS, such as `css=#login` | The web page | Playwright, Selenium, or a web page on Appium. See [Mobile web](https://optics-framework.org/docs/platforms/mobile-web). |
 | `text_only:Sign in` | OCR only, skipping the UI tree | A text detection engine |
 
 Looking something up in the UI tree takes milliseconds. OCR and image matching read a screenshot, which takes longer, so Optics only uses them when the tree can't help. [Define elements](https://optics-framework.org/docs/elements/define) shows every kind of value.

@@ -1,6 +1,6 @@
 # Explain a suite
 
-An interactive page at https://optics-framework.org/explain. Edit an Optics suite (test cases, modules, elements, API and error definition files, in CSV or YAML) and the page explains the row under the cursor: the keyword and what it does with each value, where each `${name}` gets its value, which kind of locator each value is and how Optics looks for it. It also predicts what `optics dry_run` reports, following the rules of optics-framework 1.11.4, and lists the problems that only a run finds. The suite is kept in the URL fragment, so a link shares it.
+An interactive page at https://optics-framework.org/explain. Edit an Optics suite (test cases, modules, elements, API and error definition files, in CSV or YAML) and the page explains the row under the cursor: the keyword and what it does with each value, where each `${name}` gets its value, which kind of locator each value is and how Optics looks for it. It also predicts what `optics dry_run` reports, following the rules of optics-framework 1.11.5, and lists the problems that only a run finds. The suite is kept in the URL fragment, so a link shares it.
 
 To check a real project, run `optics dry_run <project folder>`. See the CLI reference: https://optics-framework.org/docs/reference/cli
 

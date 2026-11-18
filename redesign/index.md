@@ -54,7 +54,7 @@ Add To Cart,Press Element,Add to cart
 
 ## Run a suite
 
-`optics execute <folder>` replays the suite step by step. `optics dry_run <folder>` validates every keyword, element and module reference without a device. Each run writes:
+`optics execute <folder>` replays the suite step by step. `optics dry_run <folder>` checks every keyword and its parameters, and every element and module reference, without a device. Each run writes:
 
 - `junit_output.xml`, written once when the run ends, also when you stop the run.
 - Screenshots of the screen before each step that finds an element, and the same screen with a box around what Optics found.
@@ -118,7 +118,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.4"
+      - run: pip install "optics-framework[playwright]==1.11.5"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()

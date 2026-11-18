@@ -698,6 +698,8 @@
     var resolved = split.params.map(function (param, i) { return raw.indexOf(i) >= 0 ? param.v : resolveParam(param, store); });
     defineNames(method, split, store);
     if (!method) throw new Failure("E0402", "Keyword not found: " + step.keyword + "." + suggestion(step.keyword, p.catalogue), step.at);
+    var unbound = root.OpticsExplain.checkParams(step.keyword, method, split.params);
+    if (unbound) throw new Failure("E0403", unbound, step.at);
     return resolved;
   }
 
