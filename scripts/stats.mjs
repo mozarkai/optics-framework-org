@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { githubRows, pypiRows } from "../edge/snapshot.js";
+import { githubRows, pypiRows, REAL_INSTALLERS as INSTALLERS } from "../edge/snapshot.js";
 import { html, journeys, p75 } from "./report.mjs";
 
 const DB = readFileSync("edge/wrangler.toml", "utf8").match(/database_id = "([^"]+)"/)[1];
@@ -15,7 +15,7 @@ const args = process.argv.slice(2);
 const days = Number(args[args.indexOf("--days") + 1]) || 7;
 const today = new Date().toISOString().slice(0, 10);
 const since = new Date(Date.now() - (days - 1) * 864e5).toISOString().slice(0, 10);
-const REAL_INSTALLERS = "('pip', 'uv', 'poetry', 'pdm', 'pipenv', 'pipx', 'requests')";
+const REAL_INSTALLERS = `(${INSTALLERS.map((i) => `'${i}'`).join(", ")})`;
 const INSTALL_COPY = "(target LIKE '%optics-framework.org/install%' OR target LIKE '%pip install optics-framework%' OR target LIKE 'manual:%install%')";
 
 function d1(statements) {

@@ -6,6 +6,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
+import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
@@ -118,6 +119,9 @@ const fill = (file, marker, text) => {
 };
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
+const proof = loadProof();
+fill("out/index.html", "<!-- proof -->", proofBand(proof));
+fill("out/index.md", "<!-- proof -->", proofMarkdown(proof));
 fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
 fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
 

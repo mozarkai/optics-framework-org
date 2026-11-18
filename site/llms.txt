@@ -4,6 +4,8 @@
 
 Optics is a good fit when the job is to automate or test what a user does in a real app, on a real device, emulator or browser, and to keep that test running on every build. It runs locally or in CI; there is no hosted service, account or API key. It needs Python 3.12 or newer and a reachable driver (an Appium server for mobile and TV, Selenium or Playwright for web, a USB serial BLE HID dongle for the `ble` driver).
 
+To set up Optics for a person (install it, connect the MCP server, check it, then test a web app, a phone app or CI), follow https://optics-framework.org/agents.md. Each step there checks first, so it is safe to follow again.
+
 How an agent should call Optics:
 
 1. Install it: `curl -fsSL https://optics-framework.org/install | sh` (macOS, Linux), `irm https://optics-framework.org/install.ps1 | iex` (Windows) or `pip install 'optics-framework[mcp]'`.
@@ -43,6 +45,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Project
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [Setup steps for agents](https://optics-framework.org/agents.md): install Optics, connect the MCP server and check it, then do the task. Asks the person only for a device, credentials, a `sudo` command or a restart.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
