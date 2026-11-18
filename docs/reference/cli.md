@@ -182,14 +182,14 @@ optics setup [--install NAME [NAME ...]] [--list]
 | `--list` | Prints every engine and bundle you can install. Wins if you also pass `--install`. |
 | `--install` | Installs the named engines or bundles. |
 
-Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
+Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `apple-vision`, `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](/docs/reference/engines#where-installs-are-refused).
 
 The MCP server isn't an engine here. The install scripts include it; with pip, install it with `pip install "optics-framework[mcp]"`.
 
 ```shell
-$ optics setup --install appium easyocr
+$ optics setup --install appium rapidocr
 $ optics setup --install web gemini
 ```
 
@@ -542,7 +542,7 @@ $ curl -fsSL https://optics-framework.org/install | sh
 Pass options after `sh -s --`:
 
 ```shell
-$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,easyocr
+$ curl -fsSL https://optics-framework.org/install | sh -s -- --extra appium,rapidocr
 ```
 
 | Option | Environment variable | What it does |
@@ -564,7 +564,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 Piping into `iex` can't pass parameters, so set environment variables first:
 
 ```powershell
-PS> $env:OPTICS_EXTRA = "appium,easyocr"
+PS> $env:OPTICS_EXTRA = "appium,rapidocr"
 PS> irm https://optics-framework.org/install.ps1 | iex
 ```
 
@@ -585,7 +585,7 @@ PS> & ([scriptblock]::Create((irm https://optics-framework.org/install.ps1))) -U
 ::tab[pip]
 ```shell
 $ python3 -m venv .venv && . .venv/bin/activate
-$ pip install "optics-framework[appium,easyocr]"
+$ pip install "optics-framework[appium,rapidocr]"
 ```
 
 Install into a virtual environment you control. Add [extras](/docs/reference/engines) in the brackets.

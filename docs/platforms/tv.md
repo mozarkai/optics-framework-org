@@ -102,7 +102,7 @@ elements_sources:
   - appium_screenshot: {enabled: true}
 ```
 
-`appium_find_element` finds text in the app's DOM. Add an OCR engine (`optics setup --install easyocr`) to read text that the app draws as an image, or [image matching](/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
+`appium_find_element` finds text in the app's DOM. Add an OCR engine (`optics setup --install rapidocr`) to read text that the app draws as an image, or [image matching](/docs/elements/text-and-images) for icons. The [driver's README](https://github.com/headspinio/appium-lg-webos-driver) explains the capabilities.
 
 ## Check the setup
 

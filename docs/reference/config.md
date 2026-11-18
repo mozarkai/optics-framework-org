@@ -165,7 +165,9 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 | Name | Extra | Settings |
 |---|---|---|
-| `easyocr` | `easyocr` | None. Accurate but slow on CPU. Downloads its models on first use. The language is always English. |
+| `apple_vision` | `apple-vision` | macOS only. `capabilities.recognition_level`: `accurate` (default) or `fast`. `capabilities.languages`: the languages to read, default `["en-US"]`. |
+| `rapidocr` | `rapidocr` | None. Runs on the CPU with the models that come with the package. |
+| `easyocr` | `easyocr` | None. Slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
 | `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
@@ -313,7 +315,7 @@ elements_sources:
   - appium_page_source:  {enabled: true}   # UI tree search (uses strict_element_match)
   - appium_screenshot:   {enabled: true}   # screenshots for OCR, images, self-heal
 text_detection:
-  - easyocr: {enabled: true}               # extra: easyocr
+  - rapidocr: {enabled: true}              # extra: rapidocr
 image_detection:
   - templatematch: {enabled: true}
 log_level: INFO
@@ -537,7 +539,7 @@ elements_sources:
       capabilities:
         camera_index: 0                   # a webcam, or url: for a screenshot URL or a TCP frame server
 text_detection:
-  - easyocr: {enabled: true}
+  - rapidocr: {enabled: true}
 image_detection:
   - templatematch: {enabled: true}
 ```

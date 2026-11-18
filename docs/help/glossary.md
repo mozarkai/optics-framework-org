@@ -89,7 +89,7 @@ The execution output is the `execution_output/` folder in a project, where each 
 
 ### Extra {#extra}
 
-An extra is the pip name for an optional engine, such as `appium`, `easyocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web`, `llm` and `all` install several at once. See [Engines and extras](/docs/reference/engines).
+An extra is the pip name for an optional engine, such as `appium`, `rapidocr` or `gemini`, installed with `optics setup --install <name>` or `pip install "optics-framework[<name>]"`. Bundles such as `web`, `llm` and `all` install several at once. See [Engines and extras](/docs/reference/engines).
 
 ## F
 
@@ -229,7 +229,7 @@ A test case is a flow you want to check, made of modules run in order, such as *
 
 ### Text detection {#text-detection}
 
-Text detection finds an element by reading the text on a screenshot with an OCR engine, such as EasyOCR or Tesseract. Turn it on under `text_detection` in `config.yaml`. See [Turn on OCR](/docs/elements/text-and-images#turn-on-ocr).
+Text detection finds an element by reading the text on a screenshot with an OCR engine, such as Apple Vision or RapidOCR. Turn it on under `text_detection` in `config.yaml`. See [Turn on OCR](/docs/elements/text-and-images#turn-on-ocr).
 
 ## U
 

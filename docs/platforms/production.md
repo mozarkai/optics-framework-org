@@ -24,7 +24,7 @@ If you can use Appium or a browser driver, do. They're faster, read the UI tree 
 
 - **A USB serial BLE HID dongle.** It plugs into your machine as a serial port, and pairs with the device as a Bluetooth mouse and keyboard.
 - **A way to see the screen.** Use one of these: a camera or capture card that your machine sees as a webcam, an HTTP(S) URL that returns a picture, or a TCP frame server.
-- **An OCR engine**, such as EasyOCR, to read text in the camera picture.
+- **An OCR engine**, such as Apple Vision on a Mac or RapidOCR elsewhere, to read text in the camera picture.
 - **Image templates** (optional), cropped pictures of icons that have no text. See [Find elements by text and image](/docs/elements/text-and-images).
 - **A stand** that holds the camera square over the screen, so the picture doesn't shift between runs.
 
@@ -34,10 +34,14 @@ If you can use Appium or a browser driver, do. They're faster, read the UI tree 
 ### Install the engines
 
 ```shell
-$ optics setup --install ble easyocr
+$ optics setup --install ble rapidocr        # or: ble apple-vision on a Mac
 ```
 
 The `ble` engine adds serial-port support. The camera source and image matching need no extra install.
+
+:::tip
+Each step reads the screen once: one screenshot and one OCR pass. Most of a step's time is the OCR engine, so a camera rig gets the most from `apple_vision` or `rapidocr`.
+:::
 
 ### Pair the dongle with the device
 
@@ -80,7 +84,7 @@ elements_sources:
       capabilities:
         camera_index: 0                      # or url: a screenshot URL, or "192.168.1.20:9000" for a frame server
 text_detection:
-  - easyocr: {enabled: true}
+  - rapidocr: {enabled: true}                # apple_vision on a Mac
 image_detection:
   - templatematch: {enabled: true}
 ```

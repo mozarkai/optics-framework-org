@@ -31,7 +31,7 @@ If Appium works and the app blocks screenshots only on some screens, keep Appium
 - **A camera or capture card** that your machine sees as a webcam, or a TCP frame server that sends a picture on request.
 - **A stand** that holds the camera square over the screen, so the picture doesn't shift between runs.
 
-You also need an OCR engine, such as EasyOCR, to read text in the camera picture.
+You also need an OCR engine, such as Apple Vision on a Mac or RapidOCR elsewhere, to read text in the camera picture.
 
 ## Set up
 
@@ -39,7 +39,7 @@ You also need an OCR engine, such as EasyOCR, to read text in the camera picture
 ### Install the engines
 
 ```shell
-$ optics setup --install ble easyocr
+$ optics setup --install ble rapidocr        # or: ble apple-vision on a Mac
 ```
 
 ### Pair the dongle and frame the screen
