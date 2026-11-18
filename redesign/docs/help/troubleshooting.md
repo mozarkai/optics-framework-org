@@ -159,6 +159,8 @@ Image values refer to a picture by file name, and Optics searches the whole proj
 - Use `.png`, `.jpg`, `.jpeg` or `.bmp`. Other formats aren't treated as images.
 - Enable `templatematch` under `image_detection` and a screenshot source under `elements_sources`.
 
+- Cut the template again on the same device and at the same resolution as the test run.
+
 See [Capture a good template](https://optics-framework.org/docs/elements/text-and-images#capture-a-good-template).
 
 ### OCR is slow on the first run
@@ -199,6 +201,10 @@ Someone pressed Ctrl+C (exit code `130`), or the CI system sent SIGTERM (exit co
 
 Run the suite again. A CI job that you cancel on purpose gives the same result. See [What each outcome writes](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
 
+### A test stops and waits
+
+Check whether the app waits for input or is still loading. Put `Assert Presence` on an element of the next screen before the next action.
+
 ### Test cases end as ERROR with `E0106`
 
 The driver session ended during the run. The Appium or Selenium server stopped, or it dropped the session. The test case in progress and each later test case is `ERROR` in the report. Optics does not reconnect.
@@ -211,11 +217,9 @@ Action keywords act on the screen as it is at that moment. They don't wait for a
 
 Put `Assert Presence` before the action, which waits up to 30 seconds by default: `Search,Assert Presence,${search_bar},15`. Use `Detect And Press` for pop-ups that may or may not appear. See [Action keywords don't wait](https://optics-framework.org/docs/reference/keywords/#action-keywords-dont-wait).
 
-### Condition with numbers fails with `E0403`
+### Condition fails with `E0403`
 
-Condition compares values as text, so `${count} > 5` can't be evaluated.
-
-Compare with quoted values: `${count} == '7'` or `${status} == 'ready'`. For greater-than or less-than, compute the result with Evaluate first, then test it: see [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
+A value that reads as a number compares with a number as a number, so `${count} > 5` works. The step fails with `E0403` when the value is not a number, such as `abc > 5`, or when you put `${name}` in quotes. Write `${status} == 'ready'`, not `'${status}' == 'ready'`. See [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
 
 ### `ValueError: invalid literal for int()`
 

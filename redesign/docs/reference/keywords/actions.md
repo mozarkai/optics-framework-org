@@ -159,7 +159,9 @@ Good to know:
 
 - Optics taps the dropdown and picks the option if it's visible. Otherwise it finds the list that opened and scrolls it down half a list at a time, until the option appears or the list stops moving.
 - It assumes the list opens with its first option visible.
-- If the option isn't found, the error lists the options Optics did see.
+- If the option isn't found within the timeout, the step fails with error E0201, and the error lists the options Optics did see. Optics never picks a different option.
+- Optics scrolls only inside the list, never the page behind it.
+- When no page source is available, or Optics finds no list that opened, it checks the screen once and doesn't scroll.
 - On Samsung Tizen and LG webOS TVs, the step fails with error E0105.
 
 ## Type
@@ -189,7 +191,7 @@ Sign In,Enter Text,${password_field},@:pw-ana
 Good to know:
 
 - On Appium, Enter Text does not clear the field first. Use [Clear Element Text](#clear-element-text) before it if the field can have text. Playwright and Selenium replace the text in the field.
-- When the element is a caption or label, such as `Email`, Optics types into the field that it names.
+- When the element is a caption or label, such as `Email`, Optics types into the field that it names. On the web, that is the `<label>` control, or the one field labelled with the caption's text. On Android and iOS, it is the one field whose hint or accessibility label holds the caption's text. Otherwise, it is the only field next to the caption. When several fields fit, the step fails and types nothing.
 - `event_name` comes before `index` here, unlike Press Element. Set `index` by name: `index=1`.
 - When the field was found by OCR or image, Optics taps it, then types.
 - A value that is exactly one special key in angle brackets presses that key. Appium supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, `<back>`, `<home>`, `<menu>`, `<volumeup>`, `<volumedown>`, `<power>`, `<camera>` and `<search>`. Playwright supports `<enter>`, `<tab>`, `<backspace>`, `<space>`, `<escape>`, the arrow keys `<up>`, `<down>`, `<left>` and `<right>`, `<insert>`, `<delete>`, `<home>`, `<end>`, `<pageup>`, `<pagedown>` and `<f1>` to `<f12>`. On Playwright, another key such as `<back>` fails with error E0105. On a desktop, the keys are the Playwright keys plus the number pad keys, and phone keys such as `<back>` fail with error E0105. An unknown name is typed literally.

@@ -84,6 +84,86 @@
     ta.remove();
     return Promise.resolve();
   }
+  // Diagrams: a light runs along each line in drawing order once when the diagram comes
+  // into view, again on hover, focus or Replay; Expand opens it at full width.
+  var still = matchMedia("(prefers-reduced-motion: reduce), (max-width: 640px)");
+  var full;
+  var ICON_REPLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 4.7l1.9.6A5 5 0 1 0 12 7v3L7.5 6 12 2z"/></svg>';
+  function lines(svg) {
+    return Array.prototype.slice.call(svg.querySelectorAll("path.flowchart-link, path.transition, .messageLine0, .messageLine1"));
+  }
+  function addPulses(fig) {
+    var svg = fig.querySelector(".diagram-canvas > svg");
+    var edges = lines(svg);
+    var step = Math.min(0.32, 3.2 / Math.max(edges.length, 1));
+    edges.forEach(function (edge, i) {
+      var len = edge.getTotalLength ? edge.getTotalLength() : Math.hypot(edge.x2.baseVal.value - edge.x1.baseVal.value, edge.y2.baseVal.value - edge.y1.baseVal.value);
+      if (!len) return;
+      var pulse = edge.cloneNode(false);
+      pulse.removeAttribute("id");
+      pulse.removeAttribute("marker-end");
+      pulse.removeAttribute("marker-start");
+      pulse.removeAttribute("style");
+      pulse.setAttribute("class", "dg-pulse");
+      pulse.style.setProperty("--len", len + "px");
+      pulse.style.setProperty("--seg", Math.min(36, len * 0.6) + "px");
+      pulse.style.setProperty("--run", Math.max(0.7, Math.min(1.4, len / 260)) + "s");
+      pulse.style.setProperty("--at", (i * step).toFixed(2) + "s");
+      edge.parentNode.insertBefore(pulse, edge.nextSibling);
+    });
+  }
+  function play(fig) {
+    if (still.matches) return;
+    fig.classList.remove("dg-play");
+    void fig.offsetWidth;
+    fig.classList.add("dg-play");
+  }
+  function expand(fig) {
+    if (!full) {
+      full = document.createElement("dialog");
+      full.className = "diagram-full";
+      full.addEventListener("click", function (e) { if (e.target === full) full.close(); });
+      document.body.appendChild(full);
+    }
+    var copy = fig.cloneNode(true);
+    copy.classList.remove("dg-play");
+    copy.querySelectorAll(".diagram-act").forEach(function (b) { b.remove(); });
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "diagram-act";
+    close.textContent = "Close";
+    close.addEventListener("click", function () { full.close(); });
+    copy.querySelector("figcaption").appendChild(close);
+    full.replaceChildren(copy);
+    full.showModal();
+    close.focus();
+  }
+  var seen = "IntersectionObserver" in window && new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { play(e.target); seen.unobserve(e.target); } });
+  }, { threshold: 0.45 });
+  document.querySelectorAll(".prose .diagram").forEach(function (fig) {
+    var cap = fig.querySelector("figcaption");
+    addPulses(fig);
+    var replay = document.createElement("button");
+    replay.type = "button";
+    replay.className = "diagram-act diagram-replay";
+    replay.setAttribute("aria-label", "Replay the flow");
+    replay.innerHTML = ICON_REPLAY;
+    replay.addEventListener("click", function () { play(fig); });
+    var open = document.createElement("button");
+    open.type = "button";
+    open.className = "diagram-act";
+    open.textContent = "Expand";
+    open.addEventListener("click", function () { expand(fig); });
+    cap.appendChild(replay);
+    cap.appendChild(open);
+    var canvas = fig.querySelector(".diagram-canvas");
+    canvas.scrollLeft = (canvas.scrollWidth - canvas.clientWidth) / 2;
+    canvas.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") play(fig); });
+    canvas.addEventListener("focus", function () { play(fig); });
+    if (seen) seen.observe(fig);
+  });
+
   document.querySelectorAll(".doc-code .copy").forEach(function (btn) {
     btn.addEventListener("click", function () { writeClipboard(btn.dataset.copy).then(function () { copied(btn); }); });
   });

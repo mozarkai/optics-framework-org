@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contribute to Optics · Optics Framework docs</title>
+  <meta name="description" content="How to report a bug, ask for a feature, and send a change to Optics, and the rules that every contributor obeys.">
+  <meta name="ai-summary" content="How to report a bug, ask for a feature, and send a change to Optics, and the rules that every contributor obeys.">
+  <link rel="canonical" href="https://optics-framework.org/docs/contribute/">
+  <link rel="alternate" type="text/markdown" href="index.md" title="This page as Markdown">
+  <meta property="og:title" content="Contribute to Optics · Optics Framework docs">
+  <meta property="og:description" content="How to report a bug, ask for a feature, and send a change to Optics, and the rules that every contributor obeys.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/contribute/" aria-current="true">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/" aria-current="page">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/contribute/">Contribute</a></nav>
+        <header class="doc-head">
+          <h1>Contribute to Optics</h1>
+          <p class="doc-summary">How to report a bug, ask for a feature, and send a change to Optics, and the rules that every contributor obeys.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="index.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="index.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>We welcome bug reports, feature requests, documentation improvements and code. Each of them has the same value to us. These contributing guidelines tell you how to contribute. The repository files <a href="https://github.com/mozarkai/optics-framework/blob/main/CONTRIBUTING.md" rel="noopener">CONTRIBUTING.md</a> and <a href="https://github.com/mozarkai/optics-framework/blob/main/CODE_OF_CONDUCT.md" rel="noopener">CODE_OF_CONDUCT.md</a> have the same rules.</p>
+<aside class="callout callout-important"><p class="callout-title">Before you contribute</p><p>Read the <a href="#code-of-conduct">Code of Conduct</a>. It gives the standards of behavior that we expect from all contributors.</p></aside>
+<h2 id="code-of-conduct">Code of conduct<a class="anchor" href="#code-of-conduct" aria-label="Link to this section">#</a></h2>
+<p>The Optics Code of Conduct is in one place only, so that it cannot drift: <a href="https://github.com/mozarkai/optics-framework/blob/main/CODE_OF_CONDUCT.md" rel="noopener"><code class="ic">CODE_OF_CONDUCT.md</code></a> at the root of the repository. It is the Contributor Covenant.</p>
+<p>It applies to all persons in the project, in issues, pull requests, discussions and all other project spaces. When you take part in the project, you agree to obey it.</p>
+<p>To report unacceptable behavior, write to the maintainers at <a href="mailto:lalit@mozark.ai">lalit@mozark.ai</a>, as the <a href="https://github.com/mozarkai/optics-framework/blob/main/CODE_OF_CONDUCT.md#enforcement" rel="noopener">Enforcement section</a> tells you.</p>
+<h2 id="ways-to-contribute">Ways to contribute<a class="anchor" href="#ways-to-contribute" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>If you want to</th><th>Start here</th></tr></thead><tbody><tr><td>Report a bug</td><td><a href="https://github.com/mozarkai/optics-framework/issues/new?template=bug_report.yml" rel="noopener">Bug report form</a></td></tr><tr><td>Ask for a feature</td><td><a href="https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml" rel="noopener">Feature request form</a></td></tr><tr><td>Do a larger task</td><td><a href="https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22" rel="noopener"><code class="ic">help wanted</code> queue</a> and the <a href="../../docs/contribute/roadmap">roadmap</a></td></tr><tr><td>Improve the documentation</td><td>For a typo or a small fix, you do not need an issue. For a large rewrite, open an issue first.</td></tr></tbody></table></div>
+<p>Before you open an issue, search the <a href="https://github.com/mozarkai/optics-framework/issues" rel="noopener">existing issues</a>. If your issue exists, add a thumbs-up reaction and any new details to it. Do not open a duplicate.</p>
+<h2 id="how-to-contribute">How to contribute<a class="anchor" href="#how-to-contribute" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="fork-the-repository">Fork the repository<a class="anchor" href="#fork-the-repository" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>On the repository page, click <strong>Fork</strong> (top right). GitHub makes a copy of the repository in your GitHub account.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="clone-the-repository">Clone the repository<a class="anchor" href="#clone-the-repository" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Clone your fork to your computer:</p>
+<figure class="code doc-code" data-lang="bash"><button class="copy" type="button" aria-label="Copy code" data-copy="git clone &lt;your_forked_repository_url&gt;">Copy</button><pre><code>git clone &lt;your_forked_repository_url&gt;</code></pre></figure>
+<p>To install the tools, see <a href="../../docs/contribute/setup">Set up a development environment</a>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="create-a-branch">Create a branch<a class="anchor" href="#create-a-branch" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Create a new branch for your contribution:</p>
+<figure class="code doc-code" data-lang="bash"><button class="copy" type="button" aria-label="Copy code" data-copy="git checkout -b &lt;branch_name&gt;">Copy</button><pre><code>git checkout -b &lt;branch_name&gt;</code></pre></figure>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="make-changes">Make changes<a class="anchor" href="#make-changes" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Make your changes to the code, the documentation or the tests. Before your first code change, read <a href="../../docs/contribute/extending">Extend Optics</a>. It shows how to add a keyword from start to end and how to add an engine.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">5</span><h3 id="commit-changes">Commit changes<a class="anchor" href="#commit-changes" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Commit your changes with a descriptive commit message. See <a href="#commit-messages">Commit messages</a>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">6</span><h3 id="rebase-on-main">Rebase on main<a class="anchor" href="#rebase-on-main" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>We do not accept merge commits. Rebase your branch on <code class="ic">main</code> before you open the pull request, and keep it rebased until the merge:</p>
+<figure class="code doc-code" data-lang="bash"><button class="copy" type="button" aria-label="Copy code" data-copy="git fetch origin &amp;&amp; git rebase origin/main">Copy</button><pre><code>git fetch origin &amp;&amp; git rebase origin/main</code></pre></figure>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">7</span><h3 id="push-changes">Push changes<a class="anchor" href="#push-changes" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Push your branch to your fork.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">8</span><h3 id="create-a-pull-request">Create a pull request<a class="anchor" href="#create-a-pull-request" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Create a pull request from your fork to the main repository. See <a href="#pull-requests">Pull requests</a>.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">9</span><h3 id="review-and-merge">Review and merge<a class="anchor" href="#review-and-merge" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>The maintainers review your pull request. If it obeys the project guidelines, they merge it.</p></div></li></ol>
+<h2 id="commit-messages">Commit messages<a class="anchor" href="#commit-messages" aria-label="Link to this section">#</a></h2>
+<p>Write each commit message in the <a href="https://www.conventionalcommits.org/en/v1.0.0/" rel="noopener">Conventional Commits</a> format, for example <code class="ic">feat: add new feature</code> or <code class="ic">fix: resolve bug #123</code>. The allowed types are <code class="ic">feat:</code>, <code class="ic">fix:</code>, <code class="ic">refactor:</code>, <code class="ic">docs:</code>, <code class="ic">chore:</code>, <code class="ic">test:</code>, <code class="ic">perf:</code>, <code class="ic">style:</code>, <code class="ic">build:</code> and <code class="ic">ci:</code>. The commit-msg hook (<code class="ic">commitizen</code>) refuses all other messages.</p>
+<p>You can add a scope when it makes the message clearer, for example <code class="ic">fix(runner): advance the param-fallback ladder</code>. To make a correct message interactively:</p>
+<figure class="code doc-code" data-lang="bash"><button class="copy" type="button" aria-label="Copy code" data-copy="poetry run cz commit">Copy</button><pre><code>poetry run cz commit</code></pre></figure>
+<aside class="callout callout-note"><p class="callout-title">Signing commits</p><p>We like it when you sign off your commits with the <a href="https://developercertificate.org/" rel="noopener">Developer Certificate of Origin (DCO)</a>, but it is not necessary. Use <code class="ic">git commit -s</code> to add a <code class="ic">Signed-off-by</code> line.</p></aside>
+<p>Do not add AI co-author trailers. The human committer is the author of each commit.</p>
+<p>For a large change, you can divide the work into a small number of logical commits, for example scaffolding, then core logic, then tests, then docs. This makes the review easier, but it is not a rule.</p>
+<h2 id="pull-requests">Pull requests<a class="anchor" href="#pull-requests" aria-label="Link to this section">#</a></h2>
+<p>You can open a pull request at any time. A rough draft that asks for direction is as welcome as finished work. Early feedback is better than a surprise. Nothing in this list stops a merge:</p>
+<ul><li>If you fix an issue, reference it in the pull request message with <code class="ic">Fixes #&lt;issue_number&gt;</code>. GitHub then closes the issue automatically at the merge.</li><li>Smaller diffs usually get a faster review.</li><li>The pull request template gives a description shape: <strong>What</strong> changed, <strong>Why</strong>, the <strong>non-obvious choices</strong> that a reviewer must otherwise reconstruct, how you <strong>validated</strong> it in addition to CI (new tests, manual steps), and optional <strong>follow-ups</strong>. Skip the parts that do not apply.</li><li>Before you push, run the pre-commit hooks and the tests. This saves one review cycle:</li></ul>
+<figure class="code doc-code" data-lang="bash"><button class="copy" type="button" aria-label="Copy code" data-copy="poetry run pre-commit run --files $(git diff --name-only main)
+poetry run pytest">Copy</button><pre><code>poetry run pre-commit run --files $(git diff --name-only main)
+poetry run pytest</code></pre></figure>
+<p>On each pull request, CI runs the test suite, CodeQL, the pre-commit hooks and a documentation preview. A red build is not a problem: fix it and push again. SonarQube and Scorecard run on each push to <code class="ic">main</code>. To run the SonarQube checks before you push, see <a href="../../docs/contribute/setup#local-static-analysis-sonarqube-optional">Local static analysis</a>.</p>
+<p>A review usually comes in a few days. If your pull request gets no reply for longer, add a short comment to it.</p>
+<h2 id="reporting-issues">Reporting issues<a class="anchor" href="#reporting-issues" aria-label="Link to this section">#</a></h2>
+<p>To report a bug, do these steps:</p>
+<ol><li><strong>Check existing issues:</strong> search the existing issues. The bug can be in an existing issue already.</li><li><strong>Create a new issue:</strong> if nobody reported the bug, create a new issue with these details:
+<ol><li><strong>Issue title:</strong> a descriptive title that summarizes the bug.</li><li><strong>Description:</strong> a full description of the bug, with the steps to reproduce it.</li><li><strong>Expected behavior:</strong> what you expected to occur.</li><li><strong>Actual behavior:</strong> what occurred.</li><li><strong>Environment:</strong> details about your environment, for example the operating system, the Python version and other related information.</li><li><strong>Screenshots:</strong> if they help to show the bug, add screenshots.</li><li><strong>Labels:</strong> add the applicable labels, for example <code class="ic">bug</code> or <code class="ic">enhancement</code>. The bug report form adds <code class="ic">bug</code> and the feature request form adds <code class="ic">enhancement</code> automatically.</li></ol></li></ol>
+<h2 id="questions">Questions<a class="anchor" href="#questions" aria-label="Link to this section">#</a></h2>
+<p>To ask a question about how to use Optics, first search the <a href="https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+label%3Aquestion" rel="noopener">existing questions</a>. Then open a <a href="https://github.com/mozarkai/optics-framework/issues/new/choose" rel="noopener">new issue</a> with the <code class="ic">question</code> label. You can also write to the maintainers at <a href="mailto:lalit@mozark.ai">lalit@mozark.ai</a>.</p>
+<p>Do not report a security vulnerability in a public issue. Follow <a href="https://github.com/mozarkai/optics-framework/blob/main/SECURITY.md" rel="noopener">SECURITY.md</a>.</p>
+<h2 id="next-steps">Next steps<a class="anchor" href="#next-steps" aria-label="Link to this section">#</a></h2>
+<div class="cards cols-2"><a class="card" href="../../docs/contribute/setup"><span class="card-title">Development setup</span><span class="card-text">Clone Optics, install the tools, run the tests and the static analysis.</span></a><a class="card" href="../../docs/contribute/architecture"><span class="card-title">Architecture</span><span class="card-text">The parts of Optics and how they work together.</span></a><a class="card" href="../../docs/contribute/extending"><span class="card-title">Extend Optics</span><span class="card-text">Add a keyword, a driver, an element source or a vision engine.</span></a><a class="card" href="../../docs/contribute/decisions"><span class="card-title">Architecture decisions</span><span class="card-text">Why Optics has its current design.</span></a><a class="card" href="../../docs/contribute/roadmap"><span class="card-title">Roadmap</span><span class="card-text">Open work that needs a contributor.</span></a></div>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Contribute%20to%20Optics&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2F%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Contribute%20to%20Optics&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2F%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/reference/errors"><span>Previous</span>Error codes</a><a class="pager-next" href="../../docs/contribute/setup"><span>Next</span>Development setup</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/contribute/index.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#code-of-conduct">Code of conduct</a></li><li class="toc-l2"><a href="#ways-to-contribute">Ways to contribute</a></li><li class="toc-l2"><a href="#how-to-contribute">How to contribute</a></li><li class="toc-l3"><a href="#fork-the-repository">Fork the repository</a></li><li class="toc-l3"><a href="#clone-the-repository">Clone the repository</a></li><li class="toc-l3"><a href="#create-a-branch">Create a branch</a></li><li class="toc-l3"><a href="#make-changes">Make changes</a></li><li class="toc-l3"><a href="#commit-changes">Commit changes</a></li><li class="toc-l3"><a href="#rebase-on-main">Rebase on main</a></li><li class="toc-l3"><a href="#push-changes">Push changes</a></li><li class="toc-l3"><a href="#create-a-pull-request">Create a pull request</a></li><li class="toc-l3"><a href="#review-and-merge">Review and merge</a></li><li class="toc-l2"><a href="#commit-messages">Commit messages</a></li><li class="toc-l2"><a href="#pull-requests">Pull requests</a></li><li class="toc-l2"><a href="#reporting-issues">Reporting issues</a></li><li class="toc-l2"><a href="#questions">Questions</a></li><li class="toc-l2"><a href="#next-steps">Next steps</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+</body>
+</html>

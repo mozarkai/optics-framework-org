@@ -57,11 +57,20 @@ module_name,module_step,param_1,param_2,param_3,param_4,param_5
 Choose Flow,Condition,${account_type} == 'business',Business Checkout,${account_type} == 'gift',Gift Checkout,Standard Checkout
 ```
 
-Optics puts each variable's value in quotes before checking, so always compare with **quoted text**: `${account_type} == 'business'`, `${count} == '3'`.
+Write each variable without quotes and compare it with **quoted text**: `${account_type} == 'business'`. `'${account_type}' == 'business'` fails with E0403.
 
 ### Compare numbers
 
-Because values are compared as text, `${count} > 5` fails. Compute the comparison with `Evaluate` first, then check its result:
+A value that reads as a number compares with a number as a number, so `${count} > 5` works:
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2,param_3
+Check Cart,Condition,${count} > 5,Offer Free Shipping
+```
+
+To keep the result for later steps, compute it with `Evaluate` first, then check it:
 
 `modules/modules.csv`:
 
@@ -71,7 +80,7 @@ Check Cart,Evaluate,${cart_is_big},${count} > 5
 Check Cart,Condition,${cart_is_big} == 'True',Offer Free Shipping
 ```
 
-`Evaluate` puts values into the expression without quotes, so `${count} > 5` works there and stores `True` or `False`.
+`Evaluate` stores `True` or `False`.
 
 ## Run one module from another
 

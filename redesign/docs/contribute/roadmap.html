@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help wanted · Optics Framework docs</title>
+  <meta name="description" content="The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.">
+  <meta name="ai-summary" content="The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.">
+  <link rel="canonical" href="https://optics-framework.org/docs/contribute/roadmap">
+  <link rel="alternate" type="text/markdown" href="roadmap.md" title="This page as Markdown">
+  <meta property="og:title" content="Help wanted · Optics Framework docs">
+  <meta property="og:description" content="The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/contribute/" aria-current="true">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap" aria-current="page">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/contribute/">Contribute</a><span class="sep" aria-hidden="true">/</span><span>Change Optics</span></nav>
+        <header class="doc-head">
+          <h1>Help wanted</h1>
+          <p class="doc-summary">The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="roadmap.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="roadmap.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>This page lists the areas where Optics needs help. Each area gives the current state, the goal, the implementation details and the priority. Some areas suit a first contribution. Others need deep knowledge of the framework. Parts that current code already does are marked <strong>Done</strong>, with the file that does it.</p>
+<aside class="callout callout-important"><p class="callout-title">Open issues</p><p>Today, one issue has the <code class="ic">help wanted</code> label: <a href="https://github.com/mozarkai/optics-framework/issues/364" rel="noopener">#364, introduce fuzzy testing</a>. None of the areas on this page has that label. Search the <a href="https://github.com/mozarkai/optics-framework/issues" rel="noopener">open issues</a> before you start, because some of this work may already have an issue.</p></aside>
+<h2 id="propose-work">Propose work<a class="anchor" href="#propose-work" aria-label="Link to this section">#</a></h2>
+<ol><li>Read the area on this page, and the code it names.</li><li>Search the open issues. If an issue for the work exists, add your plan to it.</li><li>If there is no issue, <a href="https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml" rel="noopener">open one</a> with the feature request form. Say which area and which item you want to work on, and how you plan to do it.</li><li>Set up your environment with <a href="../../docs/contribute/setup">Set up for development</a>, then follow the steps in <a href="#making-your-contribution">Making your contribution</a>.</li></ol>
+<p>A typo or a small fix needs no issue. For a bigger change, open the issue first. You can open a draft pull request at any time to ask for direction.</p>
+<h2 id="priority-and-difficulty-levels">Priority and difficulty levels<a class="anchor" href="#priority-and-difficulty-levels" aria-label="Link to this section">#</a></h2>
+<p>Each area has a priority and a difficulty.</p>
+<div class="table-wrap"><table><thead><tr><th>Level</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>High Priority</strong></td><td>Critical for production use or security</td></tr><tr><td><strong>Medium Priority</strong></td><td>Important for usability and completeness</td></tr><tr><td><strong>Low Priority</strong></td><td>Nice to have improvements</td></tr><tr><td><strong>Beginner</strong></td><td>Good first contribution, minimal framework knowledge needed</td></tr><tr><td><strong>Intermediate</strong></td><td>Requires some framework knowledge</td></tr><tr><td><strong>Advanced</strong></td><td>Requires deep framework understanding</td></tr></tbody></table></div>
+<h2 id="the-areas">The areas<a class="anchor" href="#the-areas" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Area</th><th>Priority</th><th>Difficulty</th><th>Status</th></tr></thead><tbody><tr><td><a href="#1-stateless-api-layer">1. Stateless API layer</a></td><td>High</td><td>Advanced</td><td>Open</td></tr><tr><td><a href="#2-parallel-strategy-execution">2. Parallel strategy execution</a></td><td>High</td><td>Advanced</td><td>Open</td></tr><tr><td><a href="#3-flexible-driver-specific-strategies">3. Flexible driver-specific strategies</a></td><td>High</td><td>Intermediate</td><td>Partly done</td></tr><tr><td><a href="#4-additional-image-detection-drivers">4. Additional image detection drivers</a></td><td>Medium</td><td>Intermediate to Advanced</td><td>Open</td></tr><tr><td><a href="#5-interactive-test-creation">5. Interactive test creation</a></td><td>Medium</td><td>Advanced</td><td>Partly done</td></tr><tr><td><a href="#6-code-simplification-unification">6. Code simplification and unification</a></td><td>Medium</td><td>Intermediate</td><td>Partly done</td></tr><tr><td><a href="#7-test-coverage">7. Test coverage</a></td><td>High</td><td>Beginner to Intermediate</td><td>Partly done</td></tr><tr><td><a href="#8-security-improvements">8. Security improvements</a></td><td>High</td><td>Intermediate</td><td>Partly done</td></tr><tr><td><a href="#9-feature-development">9. Feature development</a></td><td>Medium to High</td><td>Intermediate to Advanced</td><td>Partly done</td></tr><tr><td><a href="#10-performance-optimizations">10. Performance optimizations</a></td><td>Medium</td><td>Intermediate</td><td>Partly done</td></tr><tr><td><a href="#11-documentation">11. Documentation</a></td><td>Medium</td><td>Beginner to Intermediate</td><td>Partly done</td></tr><tr><td><a href="#12-infrastructure">12. Infrastructure</a></td><td>Low to Medium</td><td>Intermediate</td><td>Partly done</td></tr></tbody></table></div>
+<h2 id="1-stateless-api-layer">1. Stateless API layer<a class="anchor" href="#1-stateless-api-layer" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: High | <strong>Difficulty</strong>: Advanced | <strong>Status</strong>: Open</p>
+<h3 id="api-current-state">Current state<a class="anchor" href="#api-current-state" aria-label="Link to this section">#</a></h3>
+<p>The API layer keeps its state in <code class="ic">SessionManager</code>, which stores sessions in memory (<code class="ic">self.sessions</code> in <code class="ic">optics_framework/common/session_manager.py</code>). You cannot move a session from one instance to another. This makes it difficult to scale horizontally or to recover from an instance failure. When a driver session drops, Optics does not reconnect: you must stop the session and start a new one (<code class="ic">optics_framework/common/session_liveness.py</code>).</p>
+<h3 id="api-goal">Goal<a class="anchor" href="#api-goal" aria-label="Link to this section">#</a></h3>
+<p>Make the API layer stateless, so that you can move a session from one instance to another and keep its context. This enables:</p>
+<ul><li>Horizontal scaling of API instances</li><li>Session recovery after instance failures</li><li>Load balancing across multiple instances</li><li>Zero-downtime deployments</li></ul>
+<h3 id="api-key-areas">Key areas<a class="anchor" href="#api-key-areas" aria-label="Link to this section">#</a></h3>
+<h4 id="session-storage">Session storage<a class="anchor" href="#session-storage" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Sessions stored in-memory only (<code class="ic">optics_framework/common/session_manager.py</code>)</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>External session storage (database, Redis, etc.)</li><li>Session serialization/deserialization</li><li>Session state export/import functionality</li></ul>
+<h4 id="session-context">Session context<a class="anchor" href="#session-context" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Session contains driver instances, element sources, vision models that cannot be serialized</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>Serialize all session state (configuration, driver state, element sources, vision models)</li><li>Reconstruct session from serialized state</li><li>Handle driver reconnection on migration</li><li>Store driver session IDs and connection details</li></ul>
+<h4 id="api-endpoints">API endpoints<a class="anchor" href="#api-endpoints" aria-label="Link to this section">#</a></h4>
+<p><strong>New Endpoints Needed</strong>:</p>
+<ul><li><code class="ic">POST /v1/sessions/{id}/export</code> - Export session state as JSON</li><li><code class="ic">POST /v1/sessions/import</code> - Import session state and recreate session</li><li><code class="ic">POST /v1/sessions/{id}/migrate</code> - Migrate session to another instance</li></ul>
+<p>None of these endpoints exists yet. The session endpoints today are listed in the <a href="../../docs/reference/http-api">HTTP API reference</a>.</p>
+<h3 id="api-files">Files to modify<a class="anchor" href="#api-files" aria-label="Link to this section">#</a></h3>
+<ul><li><code class="ic">optics_framework/common/session_manager.py</code> - Add serialization support</li><li><code class="ic">optics_framework/common/expose_api.py</code> - Add migration endpoints</li><li><code class="ic">optics_framework/common/models.py</code> - Add session state models (Pydantic)</li><li><code class="ic">optics_framework/common/optics_builder.py</code> - Support session reconstruction</li></ul>
+<h3 id="api-related">Related documentation<a class="anchor" href="#api-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/components#sessionmanager">Session Management</a></li><li><a href="../../docs/contribute/api-layer">REST API Layer</a></li></ul>
+<h2 id="2-parallel-strategy-execution">2. Parallel strategy execution<a class="anchor" href="#2-parallel-strategy-execution" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: High | <strong>Difficulty</strong>: Advanced | <strong>Status</strong>: Open</p>
+<h3 id="parallel-current-state">Current state<a class="anchor" href="#parallel-current-state" aria-label="Link to this section">#</a></h3>
+<p>Strategies run <strong>sequentially</strong> (one after another) in a fallback chain. <code class="ic">StrategyManager.locate()</code> in <code class="ic">optics_framework/common/strategies.py</code> is a generator that tries Strategy 1, waits for it to finish (success or failure), then tries Strategy 2, and so on. This is reliable, but slower than necessary, because:</p>
+<ol><li><strong>Independent strategies wait unnecessarily</strong>: Many strategies can run simultaneously since they don't depend on each other</li><li><strong>Total execution time is sum of all strategies</strong>: If Strategy 1 takes 2s and Strategy 2 takes 3s, total time is 5s even if Strategy 2 could succeed immediately</li><li><strong>Resource underutilization</strong>: CPU, I/O, and network resources are idle while waiting for sequential execution</li></ol>
+<p><strong>Example of Current Sequential Flow</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Current: Sequential execution
+1. Try XPathStrategy.find_element() → Wait 2s → Fail
+2. Try TextElementStrategy.find_element() → Wait 1s → Fail
+3. Try TextDetectionStrategy.find_element() → Wait 3s → Success
+# Total time: 6 seconds">Copy</button><pre><code><span class="c-dim"># Current: Sequential execution</span>
+1. Try XPathStrategy.find_element() → Wait 2s → Fail
+2. Try TextElementStrategy.find_element() → Wait 1s → Fail
+3. Try TextDetectionStrategy.find_element() → Wait 3s → Success
+<span class="c-dim"># Total time: 6 seconds</span></code></pre></figure>
+<h3 id="parallel-goal">Goal<a class="anchor" href="#parallel-goal" aria-label="Link to this section">#</a></h3>
+<p>Run independent strategies at the same time. This cuts the time to locate an element, and keeps the same reliability and fallback behaviour.</p>
+<p><strong>Benefits</strong>:</p>
+<ul><li><strong>Faster element location</strong>: Strategies execute concurrently, returning the first successful result</li><li><strong>Better resource utilization</strong>: CPU, I/O, and network resources used efficiently</li><li><strong>Faster tests</strong>: Tests execute faster, especially with multiple fallback strategies</li><li><strong>Maintains reliability</strong>: Still supports fallback, but optimizes for the common case</li></ul>
+<p><strong>Example of Desired Parallel Flow</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Desired: Parallel execution
+1. Start XPathStrategy.find_element() → (runs in background)
+2. Start TextElementStrategy.find_element() → (runs in background)
+3. Start TextDetectionStrategy.find_element() → (runs in background)
+4. First successful result returns → Total time: ~3 seconds (longest strategy)">Copy</button><pre><code><span class="c-dim"># Desired: Parallel execution</span>
+1. Start XPathStrategy.find_element() → (runs <span class="c-info">in</span> background)
+2. Start TextElementStrategy.find_element() → (runs <span class="c-info">in</span> background)
+3. Start TextDetectionStrategy.find_element() → (runs <span class="c-info">in</span> background)
+4. First successful result returns → Total time: ~3 seconds (longest strategy)</code></pre></figure>
+<h3 id="execution-semantics">Execution semantics<a class="anchor" href="#execution-semantics" aria-label="Link to this section">#</a></h3>
+<p><strong>Critical Requirement</strong>: Only one strategy should execute the final keyword/action. Once a strategy successfully performs the keyword, all remaining strategies must be immediately aborted.</p>
+<p><strong>Execution Rules</strong>:</p>
+<ol><li><strong>Parallel Location Phase</strong>: Multiple strategies run in parallel to locate the element
+<ul><li>All strategies attempt to find the element simultaneously</li><li>First successful location result is selected</li><li>Remaining location attempts are cancelled/aborted</li></ul></li><li><strong>Single Action Execution</strong>: Only the winning strategy executes the keyword/action
+<ul><li>The strategy that successfully located the element proceeds to execute the action</li><li>Other strategies are aborted before they can execute any actions</li><li>This prevents duplicate actions (e.g., clicking the same button twice)</li></ul></li><li><strong>Fallback Behavior</strong>: If the selected strategy fails to execute the keyword
+<ul><li>Abort the failed strategy</li><li>Move to the next successful location result (if available)</li><li>If no other strategies succeeded in location, try the next strategy in sequence</li></ul></li></ol>
+<p><strong>Example Flow</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Parallel location phase
+strategy1_result = await XPathStrategy.locate(element)      # Success: found element
+strategy2_result = await TextStrategy.locate(element)      # Success: found element
+strategy3_result = await OCRStrategy.locate(element)       # Still running...
+
+# Strategy 1 wins (first success)
+if strategy1_result:
+    # Abort strategy 2 and 3 immediately
+    abort_strategy(strategy2)
+    abort_strategy(strategy3)
+
+    # Only strategy 1 executes the keyword
+    try:
+        await strategy1.execute_keyword(&quot;press_element&quot;, strategy1_result)
+        return success  # Done! No other strategies execute
+    except Exception:
+        # Strategy 1 failed to execute, try strategy 2
+        abort_strategy(strategy1)
+        await strategy2.execute_keyword(&quot;press_element&quot;, strategy2_result)
+        return success">Copy</button><pre><code><span class="c-dim"># Parallel location phase</span>
+strategy1_result = <span class="c-info">await</span> XPathStrategy.locate(element)      <span class="c-dim"># Success: found element</span>
+strategy2_result = <span class="c-info">await</span> TextStrategy.locate(element)      <span class="c-dim"># Success: found element</span>
+strategy3_result = <span class="c-info">await</span> OCRStrategy.locate(element)       <span class="c-dim"># Still running...</span>
+
+<span class="c-dim"># Strategy 1 wins (first success)</span>
+<span class="c-info">if</span> strategy1_result:
+    <span class="c-dim"># Abort strategy 2 and 3 immediately</span>
+    abort_strategy(strategy2)
+    abort_strategy(strategy3)
+
+    <span class="c-dim"># Only strategy 1 executes the keyword</span>
+    <span class="c-info">try</span>:
+        <span class="c-info">await</span> strategy1.execute_keyword(<span class="c-lit">"press_element"</span>, strategy1_result)
+        <span class="c-info">return</span> success  <span class="c-dim"># Done! No other strategies execute</span>
+    <span class="c-info">except</span> Exception:
+        <span class="c-dim"># Strategy 1 failed to execute, try strategy 2</span>
+        abort_strategy(strategy1)
+        <span class="c-info">await</span> strategy2.execute_keyword(<span class="c-lit">"press_element"</span>, strategy2_result)
+        <span class="c-info">return</span> success</code></pre></figure>
+<p><strong>Implementation Requirements</strong>:</p>
+<ul><li><strong>Cancellation Tokens</strong>: Use <code class="ic">asyncio.CancelledError</code> or cancellation tokens to abort strategies</li><li><strong>Early Exit</strong>: Return immediately when first strategy succeeds</li><li><strong>Resource Cleanup</strong>: Properly clean up aborted strategies (close connections, release locks)</li><li><strong>Error Handling</strong>: Handle cancellation gracefully without side effects</li></ul>
+<h3 id="key-scenarios">Key scenarios<a class="anchor" href="#key-scenarios" aria-label="Link to this section">#</a></h3>
+<h4 id="scenario-1-xpath-with-parallel-coordinate-discovery">Scenario 1: XPath with parallel coordinate discovery<a class="anchor" href="#scenario-1-xpath-with-parallel-coordinate-discovery" aria-label="Link to this section">#</a></h4>
+<p><strong>Current Behavior</strong>: When given an XPath, the framework:</p>
+<ol><li>Tries <code class="ic">find_element()</code> using the XPath directly</li><li>If that fails, tries other strategies sequentially</li></ol>
+<p><strong>Desired Parallel Behavior</strong>: When given an XPath, simultaneously:</p>
+<ol><li><strong>Primary path</strong>: Execute <code class="ic">find_element()</code> using the XPath directly</li><li><strong>Parallel path</strong>: Search page source to find the XPath and extract coordinates</li><li><strong>Fallback path</strong>: If XPath is not accessible, use coordinates from page source</li></ol>
+<p><strong>Implementation Flow</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Parallel execution
+async def locate_with_xpath(element: str):
+    tasks = [
+        # Task 1: Direct findElement
+        find_element_direct(element),
+
+        # Task 2: Parse page source for XPath and get coordinates
+        parse_page_source_for_coordinates(element),
+
+        # Task 3: Alternative XPath variations
+        try_xpath_variations(element)
+    ]
+
+    # Return first successful result
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    return first_successful_result(results)">Copy</button><pre><code><span class="c-dim"># Parallel execution</span>
+<span class="c-info">async</span> <span class="c-info">def</span> locate_with_xpath(element: str):
+    tasks = [
+        <span class="c-dim"># Task 1: Direct findElement</span>
+        find_element_direct(element),
+
+        <span class="c-dim"># Task 2: Parse page source for XPath and get coordinates</span>
+        parse_page_source_for_coordinates(element),
+
+        <span class="c-dim"># Task 3: Alternative XPath variations</span>
+        try_xpath_variations(element)
+    ]
+
+    <span class="c-dim"># Return first successful result</span>
+    results = <span class="c-info">await</span> asyncio.gather(*tasks, return_exceptions=<span class="c-info">True</span>)
+    <span class="c-info">return</span> first_successful_result(results)</code></pre></figure>
+<h4 id="scenario-2-text-with-parallel-xpath-discovery-and-ocr">Scenario 2: Text with parallel XPath discovery and OCR<a class="anchor" href="#scenario-2-text-with-parallel-xpath-discovery-and-ocr" aria-label="Link to this section">#</a></h4>
+<p><strong>Current Behavior</strong>: When given text, the framework:</p>
+<ol><li>Tries text-based element location</li><li>If that fails, tries OCR sequentially</li><li>If that fails, tries other strategies</li></ol>
+<p><strong>Desired Parallel Behavior</strong>: When given text, simultaneously:</p>
+<ol><li><strong>Path A</strong>: Search page source to find text and convert to XPath, then execute <code class="ic">find_element()</code></li><li><strong>Path B</strong>: Capture screenshot and use OCR/text detection to find coordinates</li><li><strong>Path C</strong>: Try direct text matching in element source</li></ol>
+<p><strong>Implementation Flow</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Parallel execution for text
+async def locate_with_text(text: str):
+    tasks = [
+        # Task 1: Page source → XPath → findElement
+        page_source_to_xpath_to_find_element(text),
+
+        # Task 2: Screenshot → OCR → Coordinates
+        screenshot_ocr_to_coordinates(text),
+
+        # Task 3: Direct text element location
+        direct_text_element_location(text)
+    ]
+
+    # Return first successful result
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    return first_successful_result(results)">Copy</button><pre><code><span class="c-dim"># Parallel execution for text</span>
+<span class="c-info">async</span> <span class="c-info">def</span> locate_with_text(text: str):
+    tasks = [
+        <span class="c-dim"># Task 1: Page source → XPath → findElement</span>
+        page_source_to_xpath_to_find_element(text),
+
+        <span class="c-dim"># Task 2: Screenshot → OCR → Coordinates</span>
+        screenshot_ocr_to_coordinates(text),
+
+        <span class="c-dim"># Task 3: Direct text element location</span>
+        direct_text_element_location(text)
+    ]
+
+    <span class="c-dim"># Return first successful result</span>
+    results = <span class="c-info">await</span> asyncio.gather(*tasks, return_exceptions=<span class="c-info">True</span>)
+    <span class="c-info">return</span> first_successful_result(results)</code></pre></figure>
+<h4 id="scenario-3-image-template-with-parallel-detection-methods">Scenario 3: Image template with parallel detection methods<a class="anchor" href="#scenario-3-image-template-with-parallel-detection-methods" aria-label="Link to this section">#</a></h4>
+<p><strong>Current Behavior</strong>: When given an image template, tries image detection strategies sequentially.</p>
+<p><strong>Desired Parallel Behavior</strong>: Simultaneously:</p>
+<ol><li>Template matching (OpenCV)</li><li>Remote OIR service</li><li>Alternative image detection models</li></ol>
+<h3 id="implementation-approach">Implementation approach<a class="anchor" href="#implementation-approach" aria-label="Link to this section">#</a></h3>
+<h4 id="architecture-changes">Architecture changes<a class="anchor" href="#architecture-changes" aria-label="Link to this section">#</a></h4>
+<p>The four sketches below show the proposed design. They are not current code.</p>
+<details class="doc-details"><summary>1. Strategy execution model</summary><div class="details-body"><p>Convert from sequential to parallel execution with abort capability:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Current: Sequential
+class StrategyManager:
+    def locate(self, element: str):
+        for strategy in self.strategies:
+            result = strategy.locate(element)  # Blocks here
+            if result:
+                return result
+        raise ElementNotFoundError()
+
+# Desired: Parallel with abort
+class StrategyManager:
+    async def locate(self, element: str):
+        # Create tasks with cancellation support
+        tasks = {
+            strategy: asyncio.create_task(strategy.locate_async(element))
+            for strategy in self.strategies
+        }
+
+        # Wait for first success, then abort others
+        for strategy, task in tasks.items():
+            try:
+                result = await task
+                if result:
+                    # Abort all remaining tasks
+                    for other_strategy, other_task in tasks.items():
+                        if other_strategy != strategy and not other_task.done():
+                            other_task.cancel()
+                    return result
+            except asyncio.CancelledError:
+                continue
+
+        raise ElementNotFoundError()">Copy</button><pre><code><span class="c-dim"># Current: Sequential</span>
+<span class="c-info">class</span> StrategyManager:
+    <span class="c-info">def</span> locate(self, element: str):
+        <span class="c-info">for</span> strategy <span class="c-info">in</span> self.strategies:
+            result = strategy.locate(element)  <span class="c-dim"># Blocks here</span>
+            <span class="c-info">if</span> result:
+                <span class="c-info">return</span> result
+        raise ElementNotFoundError()
+
+<span class="c-dim"># Desired: Parallel with abort</span>
+<span class="c-info">class</span> StrategyManager:
+    <span class="c-info">async</span> <span class="c-info">def</span> locate(self, element: str):
+        <span class="c-dim"># Create tasks with cancellation support</span>
+        tasks = {
+            strategy: asyncio.create_task(strategy.locate_async(element))
+            <span class="c-info">for</span> strategy <span class="c-info">in</span> self.strategies
+        }
+
+        <span class="c-dim"># Wait for first success, then abort others</span>
+        <span class="c-info">for</span> strategy, task <span class="c-info">in</span> tasks.items():
+            <span class="c-info">try</span>:
+                result = <span class="c-info">await</span> task
+                <span class="c-info">if</span> result:
+                    <span class="c-dim"># Abort all remaining tasks</span>
+                    <span class="c-info">for</span> other_strategy, other_task <span class="c-info">in</span> tasks.items():
+                        <span class="c-info">if</span> other_strategy != strategy <span class="c-info">and</span> <span class="c-info">not</span> other_task.done():
+                            other_task.cancel()
+                    <span class="c-info">return</span> result
+            <span class="c-info">except</span> asyncio.CancelledError:
+                continue
+
+        raise ElementNotFoundError()</code></pre></figure>
+<p>The "Current" half is simplified. The real <code class="ic">StrategyManager.locate()</code> takes the element, an optional area of interest and an index, and yields a <code class="ic">LocateResult</code> for each strategy that finds the element.</p></div></details>
+<details class="doc-details"><summary>2. Strategy interface updates</summary><div class="details-body"><p>Make strategies async-compatible:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Current
+class LocatorStrategy(ABC):
+    def locate(self, element: str, index: int = 0):
+        # Synchronous implementation
+        pass
+
+# Desired
+class LocatorStrategy(ABC):
+    async def locate_async(self, element: str, index: int = 0):
+        # Asynchronous implementation
+        pass
+
+    def locate(self, element: str, index: int = 0):
+        # Synchronous wrapper for backward compatibility
+        return run_async(self.locate_async(element, index))">Copy</button><pre><code><span class="c-dim"># Current</span>
+<span class="c-info">class</span> LocatorStrategy(ABC):
+    <span class="c-info">def</span> locate(self, element: str, index: int = 0):
+        <span class="c-dim"># Synchronous implementation</span>
+        pass
+
+<span class="c-dim"># Desired</span>
+<span class="c-info">class</span> LocatorStrategy(ABC):
+    <span class="c-info">async</span> <span class="c-info">def</span> locate_async(self, element: str, index: int = 0):
+        <span class="c-dim"># Asynchronous implementation</span>
+        pass
+
+    <span class="c-info">def</span> locate(self, element: str, index: int = 0):
+        <span class="c-dim"># Synchronous wrapper for backward compatibility</span>
+        <span class="c-info">return</span> run_async(self.locate_async(element, index))</code></pre></figure>
+<p><code class="ic">run_async()</code> exists in <code class="ic">optics_framework/common/async_utils.py</code>. It now also needs a <code class="ic">timeout</code> argument: <code class="ic">run_async(coro, timeout)</code>.</p></div></details>
+<details class="doc-details"><summary>3. Parallel execution groups with abort</summary><div class="details-body"><p>Group strategies that can run in parallel with abort capability:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="class ParallelStrategyGroup:
+    &quot;&quot;&quot;Groups strategies that can execute in parallel&quot;&quot;&quot;
+
+    def __init__(self, strategies: List[LocatorStrategy]):
+        self.strategies = strategies
+        self.priority = min(s.priority for s in strategies)
+
+    async def execute_parallel(self, element: str):
+        &quot;&quot;&quot;Execute all strategies in parallel, return first success, abort others&quot;&quot;&quot;
+        # Create cancellable tasks
+        tasks = {
+            strategy: asyncio.create_task(strategy.locate_async(element))
+            for strategy in self.strategies
+        }
+
+        # Wait for first success
+        for strategy, task in tasks.items():
+            try:
+                result = await task
+                if result:
+                    # Abort all remaining tasks
+                    self._abort_remaining(tasks, strategy)
+                    return result
+            except asyncio.CancelledError:
+                continue
+
+        return None
+
+    def _abort_remaining(self, tasks: dict, winner: LocatorStrategy):
+        &quot;&quot;&quot;Cancel all tasks except the winner&quot;&quot;&quot;
+        for strategy, task in tasks.items():
+            if strategy != winner and not task.done():
+                task.cancel()">Copy</button><pre><code><span class="c-info">class</span> ParallelStrategyGroup:
+    <span class="c-lit">""</span><span class="c-lit">"Groups strategies that can execute in parallel"</span><span class="c-lit">""</span>
+
+    <span class="c-info">def</span> __init__(self, strategies: List[LocatorStrategy]):
+        self.strategies = strategies
+        self.priority = min(s.priority <span class="c-info">for</span> s <span class="c-info">in</span> strategies)
+
+    <span class="c-info">async</span> <span class="c-info">def</span> execute_parallel(self, element: str):
+        <span class="c-lit">""</span><span class="c-lit">"Execute all strategies in parallel, return first success, abort others"</span><span class="c-lit">""</span>
+        <span class="c-dim"># Create cancellable tasks</span>
+        tasks = {
+            strategy: asyncio.create_task(strategy.locate_async(element))
+            <span class="c-info">for</span> strategy <span class="c-info">in</span> self.strategies
+        }
+
+        <span class="c-dim"># Wait for first success</span>
+        <span class="c-info">for</span> strategy, task <span class="c-info">in</span> tasks.items():
+            <span class="c-info">try</span>:
+                result = <span class="c-info">await</span> task
+                <span class="c-info">if</span> result:
+                    <span class="c-dim"># Abort all remaining tasks</span>
+                    self._abort_remaining(tasks, strategy)
+                    <span class="c-info">return</span> result
+            <span class="c-info">except</span> asyncio.CancelledError:
+                continue
+
+        <span class="c-info">return</span> <span class="c-info">None</span>
+
+    <span class="c-info">def</span> _abort_remaining(self, tasks: dict, winner: LocatorStrategy):
+        <span class="c-lit">""</span><span class="c-lit">"Cancel all tasks except the winner"</span><span class="c-lit">""</span>
+        <span class="c-info">for</span> strategy, task <span class="c-info">in</span> tasks.items():
+            <span class="c-info">if</span> strategy != winner <span class="c-info">and</span> <span class="c-info">not</span> task.done():
+                task.cancel()</code></pre></figure></div></details>
+<details class="doc-details"><summary>4. Dependency management</summary><div class="details-body"><p>Identify which strategies can run in parallel vs. which must be sequential:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="class StrategyDependencyGraph:
+    &quot;&quot;&quot;Manages strategy dependencies and parallel execution&quot;&quot;&quot;
+
+    def can_run_parallel(self, strategy1: LocatorStrategy, strategy2: LocatorStrategy) -&gt; bool:
+        &quot;&quot;&quot;Check if two strategies can run in parallel&quot;&quot;&quot;
+        # Strategies can run in parallel if:
+        # 1. They don't modify shared state
+        # 2. They don't depend on each other's results
+        # 3. They use different resources (e.g., page source vs screenshot)
+        return (
+            not strategy1.modifies_shared_state() and
+            not strategy2.modifies_shared_state() and
+            strategy1.resource_type() != strategy2.resource_type()
+        )">Copy</button><pre><code><span class="c-info">class</span> StrategyDependencyGraph:
+    <span class="c-lit">""</span><span class="c-lit">"Manages strategy dependencies and parallel execution"</span><span class="c-lit">""</span>
+
+    <span class="c-info">def</span> can_run_parallel(self, strategy1: LocatorStrategy, strategy2: LocatorStrategy) -&gt; bool:
+        <span class="c-lit">""</span><span class="c-lit">"Check if two strategies can run in parallel"</span><span class="c-lit">""</span>
+        <span class="c-dim"># Strategies can run in parallel if:</span>
+        <span class="c-dim"># 1. They don't modify shared state</span>
+        <span class="c-dim"># 2. They don't depend on each other's results</span>
+        <span class="c-dim"># 3. They use different resources (e.g., page source vs screenshot)</span>
+        <span class="c-info">return</span> (
+            <span class="c-info">not</span> strategy1.modifies_shared_state() <span class="c-info">and</span>
+            <span class="c-info">not</span> strategy2.modifies_shared_state() <span class="c-info">and</span>
+            strategy1.resource_type() != strategy2.resource_type()
+        )</code></pre></figure></div></details>
+<h4 id="specific-implementation-patterns">Specific implementation patterns<a class="anchor" href="#specific-implementation-patterns" aria-label="Link to this section">#</a></h4>
+<details class="doc-details"><summary>Pattern 1: XPath with coordinate discovery</summary><div class="details-body"><figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="async def locate_xpath_parallel(element: str):
+    &quot;&quot;&quot;Locate element by XPath with parallel coordinate discovery&quot;&quot;&quot;
+
+    async def direct_find():
+        &quot;&quot;&quot;Direct findElement using XPath&quot;&quot;&quot;
+        return await element_source.locate(element)
+
+    async def page_source_coords():
+        &quot;&quot;&quot;Parse page source to find XPath and get coordinates&quot;&quot;&quot;
+        page_source, _ = await element_source.get_page_source()
+        xpath_node = parse_xpath_from_page_source(page_source, element)
+        if xpath_node:
+            return get_coordinates_from_node(xpath_node)
+        return None
+
+    # Execute both in parallel
+    results = await asyncio.gather(
+        direct_find(),
+        page_source_coords(),
+        return_exceptions=True
+    )
+
+    # Prefer direct find, fallback to coordinates
+    if results[0] and not isinstance(results[0], Exception):
+        return results[0]
+    if results[1] and not isinstance(results[1], Exception):
+        return results[1]
+    raise ElementNotFoundError()">Copy</button><pre><code><span class="c-info">async</span> <span class="c-info">def</span> locate_xpath_parallel(element: str):
+    <span class="c-lit">""</span><span class="c-lit">"Locate element by XPath with parallel coordinate discovery"</span><span class="c-lit">""</span>
+
+    <span class="c-info">async</span> <span class="c-info">def</span> direct_find():
+        <span class="c-lit">""</span><span class="c-lit">"Direct findElement using XPath"</span><span class="c-lit">""</span>
+        <span class="c-info">return</span> <span class="c-info">await</span> element_source.locate(element)
+
+    <span class="c-info">async</span> <span class="c-info">def</span> page_source_coords():
+        <span class="c-lit">""</span><span class="c-lit">"Parse page source to find XPath and get coordinates"</span><span class="c-lit">""</span>
+        page_source, _ = <span class="c-info">await</span> element_source.get_page_source()
+        xpath_node = parse_xpath_from_page_source(page_source, element)
+        <span class="c-info">if</span> xpath_node:
+            <span class="c-info">return</span> get_coordinates_from_node(xpath_node)
+        <span class="c-info">return</span> <span class="c-info">None</span>
+
+    <span class="c-dim"># Execute both in parallel</span>
+    results = <span class="c-info">await</span> asyncio.gather(
+        direct_find(),
+        page_source_coords(),
+        return_exceptions=<span class="c-info">True</span>
+    )
+
+    <span class="c-dim"># Prefer direct find, fallback to coordinates</span>
+    <span class="c-info">if</span> results[0] <span class="c-info">and</span> <span class="c-info">not</span> isinstance(results[0], Exception):
+        <span class="c-info">return</span> results[0]
+    <span class="c-info">if</span> results[1] <span class="c-info">and</span> <span class="c-info">not</span> isinstance(results[1], Exception):
+        <span class="c-info">return</span> results[1]
+    raise ElementNotFoundError()</code></pre></figure></div></details>
+<details class="doc-details"><summary>Pattern 2: Text with multi-path discovery</summary><div class="details-body"><figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="async def locate_text_parallel(text: str):
+    &quot;&quot;&quot;Locate element by text with parallel multi-path discovery&quot;&quot;&quot;
+
+    async def page_source_path():
+        &quot;&quot;&quot;Page source → Find text → Convert to XPath → findElement&quot;&quot;&quot;
+        page_source, _ = await element_source.get_page_source()
+        xpath = find_text_in_page_source(page_source, text)
+        if xpath:
+            return await element_source.locate(xpath)
+        return None
+
+    async def screenshot_ocr_path():
+        &quot;&quot;&quot;Screenshot → OCR → Find coordinates&quot;&quot;&quot;
+        screenshot = await element_source.capture()
+        text_locations = await text_detection.find_element(screenshot, text)
+        if text_locations:
+            return text_locations[0]  # Return first match
+        return None
+
+    async def direct_text_path():
+        &quot;&quot;&quot;Direct text element location&quot;&quot;&quot;
+        return await element_source.locate_by_text(text)
+
+    # Execute all three paths in parallel
+    results = await asyncio.gather(
+        page_source_path(),
+        screenshot_ocr_path(),
+        direct_text_path(),
+        return_exceptions=True
+    )
+
+    # Return first successful result
+    for result in results:
+        if result and not isinstance(result, Exception):
+            return result
+    raise ElementNotFoundError()">Copy</button><pre><code><span class="c-info">async</span> <span class="c-info">def</span> locate_text_parallel(text: str):
+    <span class="c-lit">""</span><span class="c-lit">"Locate element by text with parallel multi-path discovery"</span><span class="c-lit">""</span>
+
+    <span class="c-info">async</span> <span class="c-info">def</span> page_source_path():
+        <span class="c-lit">""</span><span class="c-lit">"Page source → Find text → Convert to XPath → findElement"</span><span class="c-lit">""</span>
+        page_source, _ = <span class="c-info">await</span> element_source.get_page_source()
+        xpath = find_text_in_page_source(page_source, text)
+        <span class="c-info">if</span> xpath:
+            <span class="c-info">return</span> <span class="c-info">await</span> element_source.locate(xpath)
+        <span class="c-info">return</span> <span class="c-info">None</span>
+
+    <span class="c-info">async</span> <span class="c-info">def</span> screenshot_ocr_path():
+        <span class="c-lit">""</span><span class="c-lit">"Screenshot → OCR → Find coordinates"</span><span class="c-lit">""</span>
+        screenshot = <span class="c-info">await</span> element_source.capture()
+        text_locations = <span class="c-info">await</span> text_detection.find_element(screenshot, text)
+        <span class="c-info">if</span> text_locations:
+            <span class="c-info">return</span> text_locations[0]  <span class="c-dim"># Return first match</span>
+        <span class="c-info">return</span> <span class="c-info">None</span>
+
+    <span class="c-info">async</span> <span class="c-info">def</span> direct_text_path():
+        <span class="c-lit">""</span><span class="c-lit">"Direct text element location"</span><span class="c-lit">""</span>
+        <span class="c-info">return</span> <span class="c-info">await</span> element_source.locate_by_text(text)
+
+    <span class="c-dim"># Execute all three paths in parallel</span>
+    results = <span class="c-info">await</span> asyncio.gather(
+        page_source_path(),
+        screenshot_ocr_path(),
+        direct_text_path(),
+        return_exceptions=<span class="c-info">True</span>
+    )
+
+    <span class="c-dim"># Return first successful result</span>
+    <span class="c-info">for</span> result <span class="c-info">in</span> results:
+        <span class="c-info">if</span> result <span class="c-info">and</span> <span class="c-info">not</span> isinstance(result, Exception):
+            <span class="c-info">return</span> result
+    raise ElementNotFoundError()</code></pre></figure></div></details>
+<details class="doc-details"><summary>Pattern 3: Resource-aware parallel execution</summary><div class="details-body"><figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="class ResourceAwareStrategyExecutor:
+    &quot;&quot;&quot;Executes strategies in parallel while managing resources&quot;&quot;&quot;
+
+    def __init__(self):
+        self.page_source_lock = asyncio.Lock()
+        self.screenshot_lock = asyncio.Lock()
+        self.driver_lock = asyncio.Lock()
+
+    async def execute_parallel(self, strategies: List[LocatorStrategy], element: str):
+        &quot;&quot;&quot;Execute strategies in parallel with resource management&quot;&quot;&quot;
+
+        # Group strategies by resource type
+        page_source_strategies = [s for s in strategies if s.uses_page_source()]
+        screenshot_strategies = [s for s in strategies if s.uses_screenshot()]
+        driver_strategies = [s for s in strategies if s.uses_driver()]
+
+        # Execute groups in parallel, but serialize within groups if needed
+        tasks = []
+
+        if page_source_strategies:
+            tasks.append(self._execute_with_lock(
+                page_source_strategies, element, self.page_source_lock
+            ))
+
+        if screenshot_strategies:
+            tasks.append(self._execute_with_lock(
+                screenshot_strategies, element, self.screenshot_lock
+            ))
+
+        if driver_strategies:
+            tasks.append(self._execute_with_lock(
+                driver_strategies, element, self.driver_lock
+            ))
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        return first_successful_result(results)">Copy</button><pre><code><span class="c-info">class</span> ResourceAwareStrategyExecutor:
+    <span class="c-lit">""</span><span class="c-lit">"Executes strategies in parallel while managing resources"</span><span class="c-lit">""</span>
+
+    <span class="c-info">def</span> __init__(self):
+        self.page_source_lock = asyncio.Lock()
+        self.screenshot_lock = asyncio.Lock()
+        self.driver_lock = asyncio.Lock()
+
+    <span class="c-info">async</span> <span class="c-info">def</span> execute_parallel(self, strategies: List[LocatorStrategy], element: str):
+        <span class="c-lit">""</span><span class="c-lit">"Execute strategies in parallel with resource management"</span><span class="c-lit">""</span>
+
+        <span class="c-dim"># Group strategies by resource type</span>
+        page_source_strategies = [s <span class="c-info">for</span> s <span class="c-info">in</span> strategies <span class="c-info">if</span> s.uses_page_source()]
+        screenshot_strategies = [s <span class="c-info">for</span> s <span class="c-info">in</span> strategies <span class="c-info">if</span> s.uses_screenshot()]
+        driver_strategies = [s <span class="c-info">for</span> s <span class="c-info">in</span> strategies <span class="c-info">if</span> s.uses_driver()]
+
+        <span class="c-dim"># Execute groups in parallel, but serialize within groups if needed</span>
+        tasks = []
+
+        <span class="c-info">if</span> page_source_strategies:
+            tasks.append(self._execute_with_lock(
+                page_source_strategies, element, self.page_source_lock
+            ))
+
+        <span class="c-info">if</span> screenshot_strategies:
+            tasks.append(self._execute_with_lock(
+                screenshot_strategies, element, self.screenshot_lock
+            ))
+
+        <span class="c-info">if</span> driver_strategies:
+            tasks.append(self._execute_with_lock(
+                driver_strategies, element, self.driver_lock
+            ))
+
+        results = <span class="c-info">await</span> asyncio.gather(*tasks, return_exceptions=<span class="c-info">True</span>)
+        <span class="c-info">return</span> first_successful_result(results)</code></pre></figure></div></details>
+<h3 id="key-implementation-areas">Key implementation areas<a class="anchor" href="#key-implementation-areas" aria-label="Link to this section">#</a></h3>
+<h4 id="1-async-strategy-interface">1. Async strategy interface<a class="anchor" href="#1-async-strategy-interface" aria-label="Link to this section">#</a></h4>
+<p><strong>Files to Modify</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/strategies.py</code> - Add async methods to <code class="ic">LocatorStrategy</code></li><li>All strategy implementations - Add <code class="ic">locate_async()</code> methods</li></ul>
+<p><strong>Changes Needed</strong>:</p>
+<ul><li>Convert <code class="ic">locate()</code> methods to async</li><li>Maintain backward compatibility with sync wrappers</li><li>Update strategy base class</li></ul>
+<h4 id="2-parallel-execution-engine">2. Parallel execution engine<a class="anchor" href="#2-parallel-execution-engine" aria-label="Link to this section">#</a></h4>
+<p><strong>Files to Create/Modify</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/parallel_strategy_executor.py</code> - New parallel executor</li><li><code class="ic">optics_framework/common/strategies.py</code> - Update <code class="ic">StrategyManager</code> for parallel execution</li></ul>
+<p><strong>Features</strong>:</p>
+<ul><li>Parallel task execution using <code class="ic">asyncio.create_task()</code> and cancellation</li><li>First-success-wins semantics with immediate abort of remaining strategies</li><li>Exception handling and aggregation</li><li>Resource management (locks for shared resources)</li><li>Cancellation token support for graceful abort</li><li>Only winning strategy executes the keyword/action</li></ul>
+<h4 id="3-strategy-dependency-analysis">3. Strategy dependency analysis<a class="anchor" href="#3-strategy-dependency-analysis" aria-label="Link to this section">#</a></h4>
+<p><strong>Files to Create</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/strategy_dependencies.py</code> - Dependency analysis</li></ul>
+<p><strong>Features</strong>:</p>
+<ul><li>Identify which strategies can run in parallel</li><li>Group strategies by resource requirements</li><li>Manage resource locks (page source, screenshot, driver)</li></ul>
+<h4 id="4-configuration-and-control">4. Configuration and control<a class="anchor" href="#4-configuration-and-control" aria-label="Link to this section">#</a></h4>
+<p><strong>Files to Modify</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/config_handler.py</code> - Add parallel execution config</li><li><code class="ic">optics_framework/common/models.py</code> - Add configuration models</li></ul>
+<p><strong>Configuration Options</strong> (proposed; <code class="ic">config.yaml</code> has no <code class="ic">strategy_execution</code> key yet):</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="strategy_execution:
+  mode: &quot;parallel&quot;  # &quot;sequential&quot; or &quot;parallel&quot;
+  max_parallel_strategies: 5
+  timeout_per_strategy: 10
+  resource_locks:
+    page_source: true
+    screenshot: true
+    driver: false">Copy</button><pre><code><span class="c-mod">strategy_execution</span><span class="c-dim">:</span>
+  <span class="c-mod">mode</span><span class="c-dim">:</span> <span class="c-lit">"parallel"</span> <span class="c-dim"> # "sequential" or "parallel"</span>
+  <span class="c-mod">max_parallel_strategies</span><span class="c-dim">:</span> <span class="c-info">5</span>
+  <span class="c-mod">timeout_per_strategy</span><span class="c-dim">:</span> <span class="c-info">10</span>
+  <span class="c-mod">resource_locks</span><span class="c-dim">:</span>
+    <span class="c-mod">page_source</span><span class="c-dim">:</span> <span class="c-info">true</span>
+    <span class="c-mod">screenshot</span><span class="c-dim">:</span> <span class="c-info">true</span>
+    <span class="c-mod">driver</span><span class="c-dim">:</span> <span class="c-info">false</span></code></pre></figure>
+<h3 id="parallel-performance">Performance considerations<a class="anchor" href="#parallel-performance" aria-label="Link to this section">#</a></h3>
+<h4 id="expected-improvements">Expected improvements<a class="anchor" href="#expected-improvements" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>XPath location</strong>: 40-60% faster (2-3 strategies in parallel)</li><li><strong>Text location</strong>: 50-70% faster (3-4 strategies in parallel)</li><li><strong>Image location</strong>: 30-50% faster (2-3 detection methods in parallel)</li><li><strong>Overall test execution</strong>: 20-40% faster for tests with many element locations</li></ul>
+<p>These are estimates. Measure them before and after your change.</p>
+<h4 id="resource-management">Resource management<a class="anchor" href="#resource-management" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>CPU</strong>: Better utilization with parallel I/O operations</li><li><strong>Memory</strong>: Slight increase due to parallel task execution</li><li><strong>Network</strong>: Better utilization for remote services (OCR, OIR)</li><li><strong>Driver</strong>: Careful locking to prevent driver conflicts</li></ul>
+<h3 id="testing-requirements">Testing requirements<a class="anchor" href="#testing-requirements" aria-label="Link to this section">#</a></h3>
+<h4 id="parallel-unit-tests">Unit tests<a class="anchor" href="#parallel-unit-tests" aria-label="Link to this section">#</a></h4>
+<ul><li>Test parallel execution with mock strategies</li><li>Test first-success-wins behavior</li><li>Test abort/cancellation of remaining strategies when one succeeds</li><li>Test that only one strategy executes the keyword/action</li><li>Test exception handling</li><li>Test resource locking</li><li>Test graceful cancellation cleanup</li></ul>
+<h4 id="parallel-integration-tests">Integration tests<a class="anchor" href="#parallel-integration-tests" aria-label="Link to this section">#</a></h4>
+<ul><li>Test with real drivers and element sources</li><li>Test performance improvements</li><li>Test backward compatibility</li><li>Test configuration options</li></ul>
+<h3 id="migration-path">Migration path<a class="anchor" href="#migration-path" aria-label="Link to this section">#</a></h3>
+<h4 id="phase-1-add-async-support-non-breaking">Phase 1: Add async support (non-breaking)<a class="anchor" href="#phase-1-add-async-support-non-breaking" aria-label="Link to this section">#</a></h4>
+<ul><li>Add async methods alongside sync methods</li><li>Maintain backward compatibility</li><li>No behavior changes</li></ul>
+<h4 id="phase-2-parallel-execution-opt-in">Phase 2: Parallel execution (opt-in)<a class="anchor" href="#phase-2-parallel-execution-opt-in" aria-label="Link to this section">#</a></h4>
+<ul><li>Add configuration option for parallel execution</li><li>Default to sequential for safety</li><li>Allow users to opt-in</li></ul>
+<h4 id="phase-3-parallel-by-default">Phase 3: Parallel by default<a class="anchor" href="#phase-3-parallel-by-default" aria-label="Link to this section">#</a></h4>
+<ul><li>Make parallel execution the default</li><li>Keep sequential as fallback option</li><li>Optimize based on real-world usage</li></ul>
+<h3 id="parallel-files">Files to modify<a class="anchor" href="#parallel-files" aria-label="Link to this section">#</a></h3>
+<p><strong>Core Strategy System</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/strategies.py</code> - Add parallel execution support</li><li><code class="ic">optics_framework/common/execution.py</code> - Update execution flow</li></ul>
+<p><strong>Strategy Implementations</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/strategies.py</code> - Update all strategy classes</li><li>All element source implementations - Add async support</li></ul>
+<p><strong>Configuration</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/config_handler.py</code> - Add parallel execution config</li><li><code class="ic">optics_framework/common/models.py</code> - Add configuration models</li></ul>
+<p><strong>New Files</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/parallel_strategy_executor.py</code> - Parallel executor</li><li><code class="ic">optics_framework/common/strategy_dependencies.py</code> - Dependency management</li></ul>
+<h3 id="parallel-related">Related documentation<a class="anchor" href="#parallel-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/strategies">Strategy Pattern</a></li><li><a href="../../docs/contribute/execution">Execution Architecture</a></li></ul>
+<h3 id="challenges-and-considerations">Challenges and considerations<a class="anchor" href="#challenges-and-considerations" aria-label="Link to this section">#</a></h3>
+<h4 id="challenge-1-resource-conflicts">Challenge 1: Resource conflicts<a class="anchor" href="#challenge-1-resource-conflicts" aria-label="Link to this section">#</a></h4>
+<p><strong>Problem</strong>: Multiple strategies accessing the same resource (driver, page source) simultaneously</p>
+<p><strong>Solution</strong>:</p>
+<ul><li>Use asyncio locks for shared resources</li><li>Group strategies by resource type</li><li>Serialize access to shared resources</li></ul>
+<h4 id="challenge-2-backward-compatibility">Challenge 2: Backward compatibility<a class="anchor" href="#challenge-2-backward-compatibility" aria-label="Link to this section">#</a></h4>
+<p><strong>Problem</strong>: Existing code expects synchronous strategy execution</p>
+<p><strong>Solution</strong>:</p>
+<ul><li>Maintain sync wrappers for async methods</li><li>Use <code class="ic">run_async()</code> utility for compatibility</li><li>Gradual migration path</li></ul>
+<h4 id="challenge-3-error-handling">Challenge 3: Error handling<a class="anchor" href="#challenge-3-error-handling" aria-label="Link to this section">#</a></h4>
+<p><strong>Problem</strong>: Multiple strategies may fail in parallel</p>
+<p><strong>Solution</strong>:</p>
+<ul><li>Aggregate all exceptions</li><li>Return most informative error</li><li>Log all strategy attempts</li></ul>
+<h4 id="challenge-4-performance-tuning">Challenge 4: Performance tuning<a class="anchor" href="#challenge-4-performance-tuning" aria-label="Link to this section">#</a></h4>
+<p><strong>Problem</strong>: Too many parallel tasks may degrade performance</p>
+<p><strong>Solution</strong>:</p>
+<ul><li>Configurable max parallel strategies</li><li>Resource-aware task scheduling</li><li>Monitor and optimize based on metrics</li></ul>
+<h4 id="challenge-5-ensuring-single-action-execution">Challenge 5: Ensuring single action execution<a class="anchor" href="#challenge-5-ensuring-single-action-execution" aria-label="Link to this section">#</a></h4>
+<p><strong>Problem</strong>: Multiple strategies might try to execute the same keyword/action</p>
+<p><strong>Solution</strong>:</p>
+<ul><li>Implement strict abort mechanism when first strategy succeeds</li><li>Use cancellation tokens to immediately stop remaining strategies</li><li>Only allow the winning strategy to proceed to action execution</li><li>Add validation to prevent duplicate actions</li><li>Implement proper cleanup for aborted strategies</li></ul>
+<h2 id="3-flexible-driver-specific-strategies">3. Flexible driver-specific strategies<a class="anchor" href="#3-flexible-driver-specific-strategies" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: High | <strong>Difficulty</strong>: Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="driver-strategies-current-state">Current state<a class="anchor" href="#driver-strategies-current-state" aria-label="Link to this section">#</a></h3>
+<p>The locator strategies are generic and work across all drivers. <code class="ic">StrategyFactory</code> builds them from a fixed list (<code class="ic">self._registry</code> in <code class="ic">optics_framework/common/strategies.py</code>): <code class="ic">XPathStrategy</code>, <code class="ic">TextElementStrategy</code>, <code class="ic">TextDetectionStrategy</code> and <code class="ic">ImageDetectionStrategy</code>. A driver cannot add its own strategy to that list.</p>
+<p>Since this item was written, each element source learned to read driver-specific locators inside the existing strategies. The items below say which ones.</p>
+<h3 id="driver-strategies-goal">Goal<a class="anchor" href="#driver-strategies-goal" aria-label="Link to this section">#</a></h3>
+<p>Let a driver add strategies of its own, so that each driver can use its best features and still keep the fallback mechanism.</p>
+<h3 id="driver-strategies-key-areas">Key areas<a class="anchor" href="#driver-strategies-key-areas" aria-label="Link to this section">#</a></h3>
+<h4 id="playwright-specific-strategies">Playwright-specific strategies<a class="anchor" href="#playwright-specific-strategies" aria-label="Link to this section">#</a></h4>
+<p>Playwright provides locator methods that the generic strategies did not use:</p>
+<ul><li><code class="ic">get_by_role()</code> - Locate by ARIA role (button, textbox, etc.). <strong>Done</strong>: the <code class="ic">role=</code> prefix, and plain text also tries buttons and links by role.</li><li><code class="ic">get_by_test_id()</code> - Locate by test ID attribute. <strong>Done</strong>: the <code class="ic">data-testid=</code> and <code class="ic">testid=</code> prefixes.</li><li><code class="ic">get_by_label()</code> - Locate by associated label. <strong>Done</strong>: the <code class="ic">label=</code> prefix.</li><li><code class="ic">get_by_placeholder()</code> - Locate by placeholder text. <strong>Done</strong>: the <code class="ic">placeholder=</code> prefix.</li><li><code class="ic">get_by_text()</code> - Locate by visible text. <strong>Done</strong>: the <code class="ic">text=</code> prefix.</li><li><code class="ic">get_by_title()</code> - Locate by title attribute. <strong>Done</strong>: the <code class="ic">title=</code> prefix.</li><li><code class="ic">get_by_alt_text()</code> - Locate by alt text (for images). <strong>Done</strong>: the <code class="ic">alt=</code> prefix.</li></ul>
+<p>Evidence: <code class="ic">optics_framework/engines/drivers/playwright_locator.py</code>. A plain value such as <code class="ic">Submit</code> tries text, label, placeholder, button and link, exact matches first.</p>
+<p><strong>Example</strong>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Current: Generic text strategy
+element = &quot;Submit Button&quot;
+
+# With Playwright role strategy:
+element = &quot;role:button[name='Submit']&quot;">Copy</button><pre><code><span class="c-dim"># Current: Generic text strategy</span>
+element = <span class="c-lit">"Submit Button"</span>
+
+<span class="c-dim"># With Playwright role strategy:</span>
+element = <span class="c-lit">"role:button[name='Submit']"</span></code></pre></figure>
+<p>The <code class="ic">role:</code> spelling above was the proposal. The shipped syntax uses Playwright's own selector engine: <code class="ic">role=button[name="Submit"]</code>.</p>
+<h4 id="seleniumplaywright-css-strategies">Selenium/Playwright CSS strategies<a class="anchor" href="#seleniumplaywright-css-strategies" aria-label="Link to this section">#</a></h4>
+<p>The old state was that only XPath was supported. CSS selectors are faster and easier to read:</p>
+<ul><li>CSS selector support (not just XPath). <strong>Done</strong> for Playwright (<code class="ic">optics_framework/engines/drivers/playwright_locator.py</code>), Selenium (<code class="ic">optics_framework/engines/drivers/selenium_locator.py</code>) and Appium web contexts (<code class="ic">optics_framework/engines/elementsources/appium_find_element.py</code>, <code class="ic">optics_framework/engines/elementsources/appium_web.py</code>). Use the <code class="ic">css=</code> prefix, or a value that looks like CSS, such as <code class="ic">#login</code> or <code class="ic">button.primary</code>.</li><li>CSS pseudo-selectors (<code class="ic">:first-child</code>, <code class="ic">:nth-of-type</code>, etc.). <strong>Done</strong>: they work inside a <code class="ic">css=</code> value.</li><li>CSS attribute selectors (<code class="ic">[data-testid="submit"]</code>). <strong>Done</strong>: they work as a <code class="ic">css=</code> value, and a value with <code class="ic">[...]</code> is read as CSS.</li></ul>
+<h4 id="appium-specific-strategies">Appium-specific strategies<a class="anchor" href="#appium-specific-strategies" aria-label="Link to this section">#</a></h4>
+<ul><li>UI Automator selectors (Android). Open: you cannot give a UI Automator selector as an element value. Optics uses UI Automator only internally, to measure web views.</li><li>iOS predicate strings. Open.</li><li>Accessibility ID strategies. <strong>Done</strong>: a text value on a native app is looked up by accessibility ID (<code class="ic">optics_framework/engines/elementsources/appium_find_element.py</code>).</li><li>Class name strategies. <strong>Done</strong>: a value that starts with <code class="ic">android.</code> or <code class="ic">XCUI</code> is looked up by class name (<code class="ic">determine_element_type()</code> in <code class="ic">optics_framework/common/utils.py</code>).</li></ul>
+<h4 id="strategy-registration">Strategy registration<a class="anchor" href="#strategy-registration" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Driver-specific strategy factory</li><li>Strategy priority per driver</li><li>Dynamic strategy discovery mechanism</li><li>Strategy registration API for drivers</li></ul>
+<h3 id="driver-strategies-files">Files to modify<a class="anchor" href="#driver-strategies-files" aria-label="Link to this section">#</a></h3>
+<ul><li><code class="ic">optics_framework/common/strategies.py</code> - Add driver-specific strategy support</li><li><code class="ic">optics_framework/engines/drivers/playwright.py</code> - Add Playwright-specific strategies (the locator rules now live in <code class="ic">optics_framework/engines/drivers/playwright_locator.py</code>)</li><li><code class="ic">optics_framework/engines/drivers/selenium.py</code> - Add CSS selector strategies (the locator rules now live in <code class="ic">optics_framework/engines/drivers/selenium_locator.py</code>)</li><li><code class="ic">optics_framework/engines/drivers/appium.py</code> - Add Appium-specific strategies</li></ul>
+<h3 id="driver-strategies-related">Related documentation<a class="anchor" href="#driver-strategies-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/strategies">Strategy Pattern</a></li><li><a href="../../docs/contribute/extending#creating-new-strategies">Extending the Framework</a></li></ul>
+<h2 id="4-additional-image-detection-drivers">4. Additional image detection drivers<a class="anchor" href="#4-additional-image-detection-drivers" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium | <strong>Difficulty</strong>: Intermediate to Advanced | <strong>Status</strong>: Open</p>
+<h3 id="image-current-state">Current state<a class="anchor" href="#image-current-state" aria-label="Link to this section">#</a></h3>
+<p>Only two image detection models are available:</p>
+<ul><li><strong>TemplateMatch</strong> (OpenCV-based) - Local template matching. Engine name <code class="ic">templatematch</code>, class <code class="ic">TemplateMatchingHelper</code> in <code class="ic">optics_framework/engines/vision_models/image_models/templatematch.py</code>.</li><li><strong>RemoteOIR</strong> (Remote service) - Remote object image recognition. Engine name <code class="ic">remote_oir</code>, class <code class="ic">RemoteImageDetection</code> in <code class="ic">optics_framework/engines/vision_models/image_models/remote_oir.py</code>.</li></ul>
+<h3 id="image-goal">Goal<a class="anchor" href="#image-goal" aria-label="Link to this section">#</a></h3>
+<p>Add more image detection and vision models. This gives users more options, better accuracy, and other use cases.</p>
+<h3 id="potential-additions">Potential additions<a class="anchor" href="#potential-additions" aria-label="Link to this section">#</a></h3>
+<h4 id="yolo-integration">YOLO integration<a class="anchor" href="#yolo-integration" aria-label="Link to this section">#</a></h4>
+<p>Object detection using YOLO (You Only Look Once) models:</p>
+<ul><li>Real-time object detection</li><li>Pre-trained models for UI elements</li><li>Custom model support</li></ul>
+<p><strong>File to Create</strong>: <code class="ic">optics_framework/engines/vision_models/image_models/yolo.py</code></p>
+<h4 id="cloud-vision-services">Cloud vision services<a class="anchor" href="#cloud-vision-services" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>AWS Rekognition</strong>: Amazon's image recognition service</li><li><strong>Azure Computer Vision</strong>: Microsoft's vision API</li><li><strong>Google Cloud Vision</strong>: Google's image analysis API (for object detection, not just OCR)</li></ul>
+<p><strong>Files to Create</strong>:</p>
+<ul><li><code class="ic">optics_framework/engines/vision_models/image_models/aws_rekognition.py</code></li><li><code class="ic">optics_framework/engines/vision_models/image_models/azure_vision.py</code></li><li><code class="ic">optics_framework/engines/vision_models/image_models/google_vision_detection.py</code></li></ul>
+<h4 id="deep-learning-models">Deep learning models<a class="anchor" href="#deep-learning-models" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>TensorFlow/PyTorch Models</strong>: Support for custom trained models</li><li>Pre-trained models for UI element detection</li><li>Model loading and inference</li></ul>
+<p><strong>File to Create</strong>: <code class="ic">optics_framework/engines/vision_models/image_models/tensorflow_model.py</code></p>
+<h4 id="advanced-opencv-algorithms">Advanced OpenCV algorithms<a class="anchor" href="#advanced-opencv-algorithms" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>ORB</strong> (Oriented FAST and Rotated BRIEF)</li><li><strong>BRISK</strong> (Binary Robust Invariant Scalable Keypoints)</li><li><strong>AKAZE</strong> (Accelerated-KAZE)</li><li>Feature matching alternatives to SIFT</li></ul>
+<h3 id="implementation-guidelines">Implementation guidelines<a class="anchor" href="#implementation-guidelines" aria-label="Link to this section">#</a></h3>
+<p>All image detection models must implement the <code class="ic">ImageInterface</code>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.image_interface import ImageInterface
+
+class YourImageDetection(ImageInterface):
+    def element_exist(self, input_data, reference_data):
+        # Implementation
+        pass
+
+    def find_element(self, input_data, image, index=None):
+        # Implementation
+        pass
+
+    def assert_elements(self, input_data, elements, rule=&quot;any&quot;):
+        # Implementation
+        pass">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.image_interface <span class="c-info">import</span> ImageInterface
+
+<span class="c-info">class</span> YourImageDetection(ImageInterface):
+    <span class="c-info">def</span> element_exist(self, input_data, reference_data):
+        <span class="c-dim"># Implementation</span>
+        pass
+
+    <span class="c-info">def</span> find_element(self, input_data, image, index=<span class="c-info">None</span>):
+        <span class="c-dim"># Implementation</span>
+        pass
+
+    <span class="c-info">def</span> assert_elements(self, input_data, elements, rule=<span class="c-lit">"any"</span>):
+        <span class="c-dim"># Implementation</span>
+        pass</code></pre></figure>
+<p><code class="ic">element_exist()</code> returns <code class="ic">(True, (x, y), matches)</code> or <code class="ic">(False, (None, None), None)</code>. <code class="ic">find_element()</code> returns <code class="ic">(found, center, bounds)</code>, where <code class="ic">bounds</code> is <code class="ic">((x1, y1), (x2, y2))</code>, or <code class="ic">None</code>. The shared helpers in <code class="ic">optics_framework/engines/vision_models/base_methods.py</code> load a template and draw the match on the screenshot; both shipped models use them.</p>
+<h3 id="image-files">Files to create<a class="anchor" href="#image-files" aria-label="Link to this section">#</a></h3>
+<ul><li><code class="ic">optics_framework/engines/vision_models/image_models/yolo.py</code></li><li><code class="ic">optics_framework/engines/vision_models/image_models/aws_rekognition.py</code></li><li><code class="ic">optics_framework/engines/vision_models/image_models/azure_vision.py</code></li><li><code class="ic">optics_framework/engines/vision_models/image_models/tensorflow_model.py</code></li></ul>
+<h3 id="image-related">Related documentation<a class="anchor" href="#image-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/engines#vision-models">Vision Models</a></li><li><a href="../../docs/contribute/extending#creating-new-image-detection-models">Extending Vision Models</a></li></ul>
+<h2 id="5-interactive-test-creation">5. Interactive test creation<a class="anchor" href="#5-interactive-test-creation" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium | <strong>Difficulty</strong>: Advanced | <strong>Status</strong>: Partly done</p>
+<h3 id="interactive-current-state">Current state<a class="anchor" href="#interactive-current-state" aria-label="Link to this section">#</a></h3>
+<p>You can write tests as CSV or YAML files, or in code. Since this item was written, <code class="ic">optics live</code> added an interactive mode: you run one keyword at a time against the live app, and <code class="ic">/save</code> writes the steps that worked into your suite as a module. See <a href="../../docs/create/record">Record a test</a>. The code is in <code class="ic">optics_framework/helper/live.py</code> and <code class="ic">optics_framework/helper/live_tui.py</code>. There is still no visual tool for people who do not want to type keywords.</p>
+<h3 id="interactive-goal">Goal<a class="anchor" href="#interactive-goal" aria-label="Link to this section">#</a></h3>
+<p>Support interactive test creation where users can:</p>
+<ul><li>Record interactions automatically</li><li>Visually select elements on screen</li><li>Generate test steps automatically. <strong>Done</strong> in two ways: <code class="ic">optics live</code> records each step that passes and <code class="ic">/save</code> writes them as CSV, and in plain-English mode an AI model picks the steps for a goal you describe (<code class="ic">optics_framework/common/nl_agent.py</code>, see <a href="../../docs/create/describe">Describe a test in plain English</a>).</li><li>Edit tests in a visual interface</li><li>Preview test execution step-by-step. <strong>Done</strong> in the terminal: <code class="ic">optics live</code> runs each step as you type it.</li></ul>
+<h3 id="key-features">Key features<a class="anchor" href="#key-features" aria-label="Link to this section">#</a></h3>
+<h4 id="test-recorder">Test recorder<a class="anchor" href="#test-recorder" aria-label="Link to this section">#</a></h4>
+<p>Record user interactions and generate test steps:</p>
+<ul><li>Capture mouse clicks, keyboard input, scrolls</li><li>Automatically detect element locators</li><li>Generate test steps in CSV/YAML format. <strong>Done</strong> for CSV through <code class="ic">optics live</code> and <code class="ic">/save</code>.</li><li>Support for multiple strategies (XPath, text, image)</li></ul>
+<h4 id="visual-element-selector">Visual element selector<a class="anchor" href="#visual-element-selector" aria-label="Link to this section">#</a></h4>
+<p>Click on screen to select elements:</p>
+<ul><li>Highlight elements on hover</li><li>Show element information (XPath, text, attributes)</li><li>Suggest multiple locator strategies</li><li>Validate element locators</li></ul>
+<h4 id="test-editor">Test editor<a class="anchor" href="#test-editor" aria-label="Link to this section">#</a></h4>
+<p>Visual editor for test cases:</p>
+<ul><li>Drag-and-drop test step reordering</li><li>Edit step parameters</li><li>Add/remove test steps</li><li>Preview test structure</li></ul>
+<h4 id="element-inspector">Element inspector<a class="anchor" href="#element-inspector" aria-label="Link to this section">#</a></h4>
+<p>Inspect and validate element locators:</p>
+<ul><li>Show all available locators for an element. Partly done: <code class="ic">GET /v1/sessions/{session_id}/screen_elements</code> and the MCP server list the elements on screen with ways to find each one (<code class="ic">optics_framework/common/screen_snapshot.py</code>).</li><li>Test locator validity</li><li>Suggest better locators</li><li>Show element hierarchy</li></ul>
+<h3 id="potential-implementation">Potential implementation<a class="anchor" href="#potential-implementation" aria-label="Link to this section">#</a></h3>
+<ul><li><strong>Web-based UI</strong>: React/Vue.js frontend with FastAPI backend</li><li><strong>Browser Extension</strong>: Chrome/Firefox extension for recording</li><li><strong>Desktop Application</strong>: Electron app for test authoring</li><li><strong>CLI Integration</strong>: Extend existing CLI with interactive mode. <strong>Done</strong>: <code class="ic">optics live</code>.</li></ul>
+<h3 id="interactive-files">Files to create<a class="anchor" href="#interactive-files" aria-label="Link to this section">#</a></h3>
+<ul><li><code class="ic">optics_framework/helper/recorder.py</code> - Test recording functionality (the keyword recorder of <code class="ic">optics live</code> is in <code class="ic">optics_framework/helper/live.py</code>)</li><li><code class="ic">optics_framework/helper/inspector.py</code> - Element inspection tools</li><li><code class="ic">optics_framework/api/recorder_api.py</code> - API endpoints for recorder</li><li>Web UI components (separate repo or <code class="ic">optics_framework/web_ui/</code>)</li></ul>
+<h3 id="interactive-related">Related documentation<a class="anchor" href="#interactive-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/reference/cli">CLI Usage</a></li><li><a href="../../docs/create/organise">User Workflow</a></li></ul>
+<h2 id="6-code-simplification-unification">6. Code simplification &amp; unification<a class="anchor" href="#6-code-simplification-unification" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium | <strong>Difficulty</strong>: Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="simplify-current-state">Current state<a class="anchor" href="#simplify-current-state" aria-label="Link to this section">#</a></h3>
+<p>Several parts of the code repeat the same patterns. If you unify them, the code is easier to maintain.</p>
+<h3 id="simplify-areas">Areas identified<a class="anchor" href="#simplify-areas" aria-label="Link to this section">#</a></h3>
+<h4 id="driver-method-patterns">Driver method patterns<a class="anchor" href="#driver-method-patterns" aria-label="Link to this section">#</a></h4>
+<p>Similar implementations across Appium, Selenium, and Playwright:</p>
+<ul><li><code class="ic">press_element()</code>, <code class="ic">enter_text()</code>, <code class="ic">clear_text()</code>, <code class="ic">scroll()</code> have similar patterns</li><li>Common error handling</li><li>Similar event logging</li></ul>
+<p><strong>Files</strong>:</p>
+<ul><li><code class="ic">optics_framework/engines/drivers/appium.py</code></li><li><code class="ic">optics_framework/engines/drivers/selenium.py</code></li><li><code class="ic">optics_framework/engines/drivers/playwright.py</code></li></ul>
+<p><strong>Solution</strong>: Create base driver mixins or helper classes</p>
+<h4 id="element-source-patterns">Element source patterns<a class="anchor" href="#element-source-patterns" aria-label="Link to this section">#</a></h4>
+<p>Similar code in find_element, page_source, screenshot classes:</p>
+<ul><li>Common initialization patterns</li><li>Similar error handling</li><li>Common interface implementations</li></ul>
+<p><strong>Files</strong>: <code class="ic">optics_framework/engines/elementsources/*.py</code></p>
+<p><strong>Solution</strong>: Create common base class for element source implementations. Partly done: <code class="ic">EncodedScreenshotSource</code> in <code class="ic">optics_framework/common/elementsource_interface.py</code> is the shared base of the Appium, Selenium and Playwright screenshot sources, and decodes their screenshots with one set of size limits.</p>
+<h4 id="vision-model-patterns">Vision model patterns<a class="anchor" href="#vision-model-patterns" aria-label="Link to this section">#</a></h4>
+<p>OCR models share similar structure:</p>
+<ul><li>Common text detection patterns. Partly done: <code class="ic">TextInterface</code> in <code class="ic">optics_framework/common/text_interface.py</code> gives every OCR model one <code class="ic">find_element()</code> and reads each frame only once.</li><li>Similar configuration handling</li><li>Common error handling</li></ul>
+<p><strong>Files</strong>: <code class="ic">optics_framework/engines/vision_models/ocr_models/*.py</code></p>
+<p><strong>Solution</strong>: Enhanced base classes for vision models</p>
+<h4 id="strategy-factory-pattern">Strategy factory pattern<a class="anchor" href="#strategy-factory-pattern" aria-label="Link to this section">#</a></h4>
+<p>Current implementation has hard-coded strategy registry:</p>
+<ul><li>Strategy registration is static</li><li>Limited flexibility for custom strategies</li></ul>
+<p><strong>File</strong>: <code class="ic">optics_framework/common/strategies.py</code></p>
+<p><strong>Solution</strong>: Make strategy registration more flexible and dynamic</p>
+<h4 id="simplify-session-management">Session management<a class="anchor" href="#simplify-session-management" aria-label="Link to this section">#</a></h4>
+<p>Complex builder pattern could be simplified:</p>
+<ul><li>Many intermediate steps</li><li>Could use simpler factory pattern in some cases</li></ul>
+<p><strong>File</strong>: <code class="ic">optics_framework/common/optics_builder.py</code></p>
+<p><strong>Solution</strong>: Simplify builder pattern or add convenience methods</p>
+<h3 id="specific-unification-opportunities">Specific unification opportunities<a class="anchor" href="#specific-unification-opportunities" aria-label="Link to this section">#</a></h3>
+<ol><li><strong>Base Driver Mixin</strong>: Create <code class="ic">BaseWebDriverMixin</code> for common web driver methods</li><li><strong>Element Source Base</strong>: Common base class for element source implementations</li><li><strong>Vision Model Base</strong>: Enhanced base classes for vision models</li><li><strong>Strategy Registry</strong>: Make strategy registration more flexible</li><li><strong>Configuration Normalization</strong>: Unify configuration handling across components</li><li><strong>Error Handling Utilities</strong>: Standardize error handling patterns</li></ol>
+<h3 id="simplify-files">Files to create/modify<a class="anchor" href="#simplify-files" aria-label="Link to this section">#</a></h3>
+<p><strong>Create</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/base_driver_mixin.py</code> - Common driver methods</li><li><code class="ic">optics_framework/common/base_element_source.py</code> - Common element source base</li><li><code class="ic">optics_framework/common/error_utils.py</code> - Error handling utilities</li></ul>
+<p><strong>Modify</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/strategies.py</code> - Flexible strategy registration</li><li><code class="ic">optics_framework/common/optics_builder.py</code> - Simplify builder pattern</li><li>All driver implementations to use mixins</li><li>All element source implementations to use base class</li></ul>
+<h3 id="simplify-related">Related documentation<a class="anchor" href="#simplify-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/architecture">Architecture Overview</a></li><li><a href="../../docs/contribute/extending">Extending the Framework</a></li></ul>
+<h2 id="7-test-coverage">7. Test coverage<a class="anchor" href="#7-test-coverage" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: High | <strong>Difficulty</strong>: Beginner to Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="tests-current-state">Current state<a class="anchor" href="#tests-current-state" aria-label="Link to this section">#</a></h3>
+<p>The test suite has grown since this item was written: <code class="ic">tests/units/</code> has tests for the API, the common modules, the engines and the CLI helpers, and <code class="ic">tests/integration/</code> runs Playwright, Selenium and desktop journeys. Many core components still lack complete tests.</p>
+<h3 id="missing-tests-for">Missing tests for<a class="anchor" href="#missing-tests-for" aria-label="Link to this section">#</a></h3>
+<ul><li>Most engine implementations (drivers, element sources, vision models). Partly done: <code class="ic">tests/units/engines/</code> tests the drivers and element sources. Vision models have few tests.</li><li>Strategy manager and location strategies. Partly done: <code class="ic">tests/units/common/test_strategies.py</code>.</li><li>Event system and event handlers. Partly done: <code class="ic">tests/units/common/test_junit_eventhandler.py</code>.</li><li>Session management edge cases</li><li>Error handling scenarios</li><li>Factory pattern implementations. Partly done: <code class="ic">tests/units/common/test_factories.py</code>.</li><li>API layer endpoints. Partly done: <code class="ic">tests/units/common/test_expose_api.py</code> and <code class="ic">tests/units/api/</code>.</li><li>CLI commands. Partly done: <code class="ic">tests/units/helpers/test_cli.py</code> and <code class="ic">tests/integration/test_cli_list.py</code>.</li></ul>
+<h3 id="test-files-to-create">Test files to create<a class="anchor" href="#test-files-to-create" aria-label="Link to this section">#</a></h3>
+<h4 id="tests-unit">Unit tests<a class="anchor" href="#tests-unit" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">tests/units/engines/drivers/test_ble.py</code> - BLE driver tests. <strong>Exists.</strong></li><li><code class="ic">tests/units/engines/drivers/test_playwright.py</code> - Playwright driver tests. Partly done: <code class="ic">test_playwright_locator.py</code> and <code class="ic">test_playwright_settings_and_text.py</code> exist.</li><li><code class="ic">tests/units/engines/drivers/test_appium.py</code> - Appium driver tests (if missing). Partly done: several <code class="ic">test_appium_*.py</code> files exist in the same folder.</li><li><code class="ic">tests/units/engines/elementsources/test_playwright_find_element.py</code>. <strong>Exists.</strong></li><li><code class="ic">tests/units/engines/elementsources/test_playwright_page_source.py</code>. <strong>Exists.</strong></li><li><code class="ic">tests/units/engines/elementsources/test_playwright_screenshot.py</code></li><li><code class="ic">tests/units/common/test_strategies.py</code> - Strategy manager tests. <strong>Exists.</strong></li><li><code class="ic">tests/units/common/test_session_manager.py</code> - Session management tests</li><li><code class="ic">tests/units/api/test_verifier.py</code> - Verifier API tests. <strong>Exists.</strong></li><li><code class="ic">tests/units/common/test_factories.py</code> - Factory pattern tests. <strong>Exists.</strong></li></ul>
+<h4 id="tests-integration">Integration tests<a class="anchor" href="#tests-integration" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">tests/integration/test_api_endpoints.py</code> - API endpoint integration tests. Unit tests for the endpoints exist in <code class="ic">tests/units/common/test_expose_api.py</code>.</li><li><code class="ic">tests/integration/test_session_lifecycle.py</code> - Full session lifecycle</li><li><code class="ic">tests/integration/test_driver_fallback.py</code> - Driver fallback mechanism</li></ul>
+<h4 id="functional-tests">Functional tests<a class="anchor" href="#functional-tests" aria-label="Link to this section">#</a></h4>
+<p>There is no <code class="ic">tests/functional/</code> folder yet.</p>
+<ul><li><code class="ic">tests/functional/test_end_to_end.py</code> - End-to-end test execution. Partly done: <code class="ic">tests/integration/test_playwright_journey.py</code> and <code class="ic">tests/integration/test_selenium_journey.py</code> run whole journeys.</li><li><code class="ic">tests/functional/test_vision_detection.py</code> - Vision detection workflows</li></ul>
+<h3 id="testing-guidelines">Testing guidelines<a class="anchor" href="#testing-guidelines" aria-label="Link to this section">#</a></h3>
+<ul><li>Use <code class="ic">pytest</code> for all tests</li><li>Follow existing test patterns in <code class="ic">tests/units/</code></li><li>Use fixtures from <code class="ic">tests/units/conftest.py</code></li><li>Aim for &gt;80% code coverage</li><li>Test both success and failure scenarios</li><li>Include edge cases and error conditions</li></ul>
+<h3 id="tests-related">Related documentation<a class="anchor" href="#tests-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/setup#run-tests">Developer Guide</a></li><li><a href="../../docs/contribute/architecture">Architecture Overview</a></li></ul>
+<h2 id="8-security-improvements">8. Security improvements<a class="anchor" href="#8-security-improvements" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: High | <strong>Difficulty</strong>: Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="security-current-state">Current state<a class="anchor" href="#security-current-state" aria-label="Link to this section">#</a></h3>
+<p>The <a href="../../docs/contribute/api-layer">REST API layer</a> page lists the security work that production use needs. <code class="ic">optics serve</code> and <code class="ic">optics mcp</code> have no authentication of their own. When you bind either one to an address other than loopback, it logs a warning (<code class="ic">warn_if_exposed()</code> in <code class="ic">optics_framework/common/http_guard.py</code>).</p>
+<h3 id="cors-configuration">CORS configuration<a class="anchor" href="#cors-configuration" aria-label="Link to this section">#</a></h3>
+<p><strong>Done</strong>, with a stricter default than this item proposed.</p>
+<p>The old state was that CORS allowed all origins (<code class="ic">allow_origins=["*"]</code>) in <code class="ic">optics_framework/common/expose_api.py</code>. The item asked for configurable CORS with environment-based restrictions. The proposed implementation was:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Allow configuration via environment variables
+allowed_origins = os.getenv(&quot;OPTICS_CORS_ORIGINS&quot;, &quot;*&quot;).split(&quot;,&quot;)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins if &quot;*&quot; not in allowed_origins else [&quot;*&quot;],
+    allow_credentials=True,
+    allow_methods=[&quot;*&quot;],
+    allow_headers=[&quot;*&quot;],
+)">Copy</button><pre><code><span class="c-dim"># Allow configuration via environment variables</span>
+allowed_origins = os.getenv(<span class="c-lit">"OPTICS_CORS_ORIGINS"</span>, <span class="c-lit">"*"</span>).split(<span class="c-lit">","</span>)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins <span class="c-info">if</span> <span class="c-lit">"*"</span> <span class="c-info">not</span> <span class="c-info">in</span> allowed_origins <span class="c-info">else</span> [<span class="c-lit">"*"</span>],
+    allow_credentials=<span class="c-info">True</span>,
+    allow_methods=[<span class="c-lit">"*"</span>],
+    allow_headers=[<span class="c-lit">"*"</span>],
+)</code></pre></figure>
+<p>What shipped, in <code class="ic">add_http_guards()</code> in <code class="ic">optics_framework/common/http_guard.py</code>:</p>
+<ul><li><code class="ic">OPTICS_CORS_ORIGINS</code> is a comma-separated allowlist. With no value, no browser origin is allowed.</li><li><code class="ic">*</code> is refused with error <code class="ic">E0501</code>, because any web page could then drive the server.</li><li>A Host check refuses requests whose <code class="ic">Host</code> header is not a loopback name or a name in <code class="ic">OPTICS_ALLOWED_HOSTS</code>. This stops a web page from rebinding its domain to <code class="ic">127.0.0.1</code>.</li></ul>
+<h3 id="authentication">Authentication<a class="anchor" href="#authentication" aria-label="Link to this section">#</a></h3>
+<p><strong>Current</strong>: No authentication currently</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>API key authentication</li><li>Bearer token authentication</li><li>Session-based authentication</li></ul>
+<p><strong>Files to Modify</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/expose_api.py</code> - Add authentication middleware</li><li><code class="ic">optics_framework/common/auth.py</code> - Create authentication module (new file)</li></ul>
+<h3 id="input-validation">Input validation<a class="anchor" href="#input-validation" aria-label="Link to this section">#</a></h3>
+<p><strong>Current</strong>: Using Pydantic for validation</p>
+<p><strong>Enhancements Needed</strong>:</p>
+<ul><li>Rate limiting per IP/session</li><li>Request size limits. Partly done: uploaded images are refused above 64 MB encoded or 64 megapixels (<code class="ic">optics_framework/common/image_decode.py</code>).</li><li>SQL injection prevention (if adding database support)</li><li>XSS prevention for string inputs</li></ul>
+<h3 id="security-related">Related documentation<a class="anchor" href="#security-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/api-layer#security-considerations">REST API Layer</a></li><li><a href="https://github.com/mozarkai/optics-framework/blob/main/SECURITY.md" rel="noopener">Security Policy</a></li></ul>
+<h2 id="9-feature-development">9. Feature development<a class="anchor" href="#9-feature-development" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium to High | <strong>Difficulty</strong>: Intermediate to Advanced | <strong>Status</strong>: Partly done</p>
+<h3 id="mcp-servicer">MCP servicer<a class="anchor" href="#mcp-servicer" aria-label="Link to this section">#</a></h3>
+<p><strong>Done.</strong> The roadmap item was: introduce a dedicated service to handle MCP (Model Context Protocol), to make the framework more scalable and modular. <code class="ic">optics mcp</code> now runs an MCP server (<code class="ic">optics_framework/helper/mcp_server.py</code>). See the <a href="../../docs/reference/mcp">MCP reference</a>.</p>
+<p><strong>Needed</strong> (all done):</p>
+<ul><li>MCP protocol implementation</li><li>Service architecture design</li><li>Integration with existing framework</li></ul>
+<h3 id="omniparser-integration">Omniparser integration<a class="anchor" href="#omniparser-integration" aria-label="Link to this section">#</a></h3>
+<p><strong>From Roadmap</strong>: Integrate Omniparser for flexible element extraction and location</p>
+<p><strong>Goal</strong>: Enable more flexible element parsing capabilities</p>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Omniparser library integration</li><li>Parser configuration</li><li>Strategy integration</li></ul>
+<h3 id="playwright-integration-enhancements">Playwright integration enhancements<a class="anchor" href="#playwright-integration-enhancements" aria-label="Link to this section">#</a></h3>
+<p><strong>From Roadmap</strong>: Add support for Playwright. <strong>Done</strong>: the <code class="ic">playwright</code> driver and its element sources ship (<code class="ic">optics_framework/engines/drivers/playwright.py</code>, <code class="ic">optics_framework/engines/elementsources/playwright_*.py</code>). See <a href="../../docs/platforms/web">Web</a>.</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>Complete remaining Playwright methods. Mostly done: a few calls are not supported, for example <code class="ic">get_app_version</code>, <code class="ic">force_terminate_app</code> and special keys that have no web key name.</li><li>Add driver-specific strategies (see <a href="#3-flexible-driver-specific-strategies">section 3</a>). Partly done there.</li><li>Improve error handling</li></ul>
+<h3 id="audio-support">Audio support<a class="anchor" href="#audio-support" aria-label="Link to this section">#</a></h3>
+<p><strong>From Roadmap</strong>: Extend the framework to support audio inputs and outputs</p>
+<p><strong>Goal</strong>: Enable testing and verification of voice-based or sound-related interactions</p>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Audio input capture</li><li>Audio output verification</li><li>Speech recognition integration</li><li>Audio comparison utilities</li></ul>
+<h3 id="session-persistence">Session persistence<a class="anchor" href="#session-persistence" aria-label="Link to this section">#</a></h3>
+<p><strong>Identified in</strong>: the <a href="../../docs/contribute/components">components</a> page</p>
+<p><strong>Current</strong>: Sessions are in-memory only, lost on process termination</p>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Session serialization</li><li>Session recovery on restart</li><li>Session state snapshots</li><li>Persistent storage backend</li></ul>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>This overlaps with <a href="#1-stateless-api-layer">section 1 (Stateless API Layer)</a> but focuses on persistence rather than migration.</p></aside>
+<h3 id="additional-drivers">Additional drivers<a class="anchor" href="#additional-drivers" aria-label="Link to this section">#</a></h3>
+<ul><li>iOS driver enhancements</li><li>Additional browser drivers (Edge, Safari). Partly done: the Playwright driver runs Chromium, Firefox or WebKit (the engine of Safari) through its <code class="ic">browser</code> setting, and Microsoft Edge through <code class="ic">channel: msedge</code>. Selenium supports Chrome and Firefox only.</li><li>IoT device drivers</li><li>Desktop application drivers (Windows, macOS, Linux). <strong>Done</strong>: Appium with the Xa11y driver drives desktop apps on all three (<code class="ic">optics_framework/engines/drivers/appium_platforms.py</code>). See <a href="../../docs/platforms/desktop">Desktop</a>.</li></ul>
+<h2 id="10-performance-optimizations">10. Performance optimizations<a class="anchor" href="#10-performance-optimizations" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium | <strong>Difficulty</strong>: Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="performance-areas">Areas identified<a class="anchor" href="#performance-areas" aria-label="Link to this section">#</a></h3>
+<h4 id="strategy-execution">Strategy execution<a class="anchor" href="#strategy-execution" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Strategies executed sequentially</p>
+<p><strong>Opportunities</strong>:</p>
+<ul><li>Parallel strategy attempts where safe (see <a href="#2-parallel-strategy-execution">section 2</a>)</li><li>Early exit optimization</li><li>Strategy result caching</li></ul>
+<p><strong>File</strong>: <code class="ic">optics_framework/common/strategies.py</code></p>
+<h4 id="factory-caching">Factory caching<a class="anchor" href="#factory-caching" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Instance caching implemented (<code class="ic">_create_or_retrieve()</code> in <code class="ic">optics_framework/common/base_factory.py</code>, cleared with <code class="ic">clear_instances()</code>)</p>
+<p><strong>Enhancements</strong>:</p>
+<ul><li>Cache invalidation strategies</li><li>Memory-aware caching</li><li>Cache size limits</li></ul>
+<p><strong>File</strong>: <code class="ic">optics_framework/common/base_factory.py</code></p>
+<h4 id="event-processing">Event processing<a class="anchor" href="#event-processing" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: <code class="ic">EventManager</code> puts events on an <code class="ic">asyncio.Queue</code> and processes them in a background task (<code class="ic">optics_framework/common/events.py</code>). <code class="ic">EventSDK</code> sends events in batches (<code class="ic">send_batch_events()</code> in <code class="ic">optics_framework/common/eventSDK.py</code>).</p>
+<p><strong>Opportunities</strong>:</p>
+<ul><li>Batch events for better throughput. <strong>Done</strong> for <code class="ic">EventSDK</code>.</li><li>Async event processing. <strong>Done</strong> in <code class="ic">EventManager</code>.</li><li>Event queue optimization</li></ul>
+<p><strong>Files</strong>:</p>
+<ul><li><code class="ic">optics_framework/common/events.py</code></li><li><code class="ic">optics_framework/common/eventSDK.py</code></li></ul>
+<h4 id="image-processing">Image processing<a class="anchor" href="#image-processing" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: OCR and template matching operations</p>
+<p><strong>Opportunities</strong>:</p>
+<ul><li>Parallel image processing</li><li>Image caching. Partly done: each OCR model keeps its result for the last 4 frames, so a repeated read of the same screen is free (<code class="ic">FRAMES_REMEMBERED</code> in <code class="ic">optics_framework/common/text_interface.py</code>).</li><li>Optimize OpenCV operations</li><li>GPU acceleration where available</li></ul>
+<p><strong>Files</strong>:</p>
+<ul><li><code class="ic">optics_framework/engines/vision_models/image_models/templatematch.py</code></li><li><code class="ic">optics_framework/engines/vision_models/ocr_models/*.py</code></li></ul>
+<h3 id="performance-related">Related documentation<a class="anchor" href="#performance-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/decisions">Architecture Decisions</a></li><li><a href="../../docs/contribute/components#performance-considerations">Performance Considerations</a></li></ul>
+<h2 id="11-documentation">11. Documentation<a class="anchor" href="#11-documentation" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Medium | <strong>Difficulty</strong>: Beginner to Intermediate | <strong>Status</strong>: Partly done</p>
+<p>The docs are in the <a href="https://github.com/mozarkai/optics-framework-org" rel="noopener">optics-framework-org repository</a>, under <code class="ic">docs/</code>.</p>
+<h3 id="documentation-gaps">Documentation gaps<a class="anchor" href="#documentation-gaps" aria-label="Link to this section">#</a></h3>
+<h4 id="api-examples">API examples<a class="anchor" href="#api-examples" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: API reference exists but lacks practical examples. Partly done: <a href="../../docs/create/python">Python API</a> has a complete pytest example, and <a href="../../docs/reference/http-api">HTTP API</a> has a walkthrough and an errors section.</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>More code examples in API reference</li><li>Common use case examples</li><li>Error handling examples</li></ul>
+<p><strong>Pages</strong>: <a href="../../docs/create/python">Python API</a> and <a href="../../docs/reference/http-api">HTTP API</a></p>
+<h4 id="troubleshooting-guides">Troubleshooting guides<a class="anchor" href="#troubleshooting-guides" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Partly done. <a href="../../docs/help/troubleshooting">Troubleshooting</a> lists common problems by the message Optics prints, and <a href="../../docs/reference/errors">Error codes</a> lists each code.</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>Common issues and solutions. <strong>Done</strong>: <a href="../../docs/help/troubleshooting">Troubleshooting</a>.</li><li>Debugging guides</li><li>Performance troubleshooting</li><li>Error code reference with solutions. <strong>Done</strong>: <a href="../../docs/reference/errors">Error codes</a>.</li></ul>
+<h4 id="performance-tuning">Performance tuning<a class="anchor" href="#performance-tuning" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>: Guide for optimizing framework performance</p>
+<p><strong>Topics</strong>:</p>
+<ul><li>Configuration optimization</li><li>Strategy selection guidance</li><li>Memory management</li><li>Parallel execution tips</li></ul>
+<h4 id="migration-guides">Migration guides<a class="anchor" href="#migration-guides" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>: When breaking changes occur</p>
+<p><strong>Topics</strong>:</p>
+<ul><li>Version migration guides</li><li>Configuration migration</li><li>API migration guides</li></ul>
+<h4 id="video-tutorials">Video tutorials<a class="anchor" href="#video-tutorials" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>: Screen recordings for complex workflows</p>
+<p><strong>Topics</strong>:</p>
+<ul><li>Getting started walkthrough</li><li>Creating your first test</li><li>Advanced features</li><li>Troubleshooting common issues</li></ul>
+<h4 id="best-practices">Best practices<a class="anchor" href="#best-practices" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>: Complete best practices guide. Partly done: the <a href="../../docs/run/checklist">readiness checklist</a> covers suites that run in CI.</p>
+<p><strong>Topics</strong>:</p>
+<ul><li>Test design patterns</li><li>Element locator best practices</li><li>Configuration management</li><li>CI/CD integration</li><li>Error handling strategies</li></ul>
+<h4 id="integration-examples">Integration examples<a class="anchor" href="#integration-examples" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>: Examples with CI/CD systems</p>
+<p><strong>Examples</strong>:</p>
+<ul><li>GitHub Actions. <strong>Done</strong>: <a href="../../docs/run/ci">Run in CI</a>.</li><li>Jenkins</li><li>GitLab CI. <strong>Done</strong>: <a href="../../docs/run/ci">Run in CI</a>.</li><li>Azure DevOps</li><li>CircleCI</li></ul>
+<h3 id="docs-related">Related documentation<a class="anchor" href="#docs-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/">Contributing Guidelines</a></li><li><a href="../../docs/contribute/setup#documentation-changes">Developer Guide</a></li></ul>
+<h2 id="12-infrastructure">12. Infrastructure<a class="anchor" href="#12-infrastructure" aria-label="Link to this section">#</a></h2>
+<p><strong>Priority</strong>: Low to Medium | <strong>Difficulty</strong>: Intermediate | <strong>Status</strong>: Partly done</p>
+<h3 id="cicd-enhancements">CI/CD enhancements<a class="anchor" href="#cicd-enhancements" aria-label="Link to this section">#</a></h3>
+<h4 id="test-coverage-reporting">Test coverage reporting<a class="anchor" href="#test-coverage-reporting" aria-label="Link to this section">#</a></h4>
+<p><code class="ic">pytest.toml</code> collects coverage (<code class="ic">--cov=optics_framework</code>), but the test workflow runs with <code class="ic">--no-cov</code> (<code class="ic">.github/workflows/tests.yml</code>).</p>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Automated coverage reports</li><li>Coverage badges</li><li>Coverage trend tracking</li><li>Coverage thresholds</li></ul>
+<h4 id="performance-benchmarking">Performance benchmarking<a class="anchor" href="#performance-benchmarking" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong> (all open):</p>
+<ul><li>Automated performance tests</li><li>Performance regression detection</li><li>Benchmark comparisons</li><li>Performance reports</li></ul>
+<h4 id="security-scanning-automation">Security scanning automation<a class="anchor" href="#security-scanning-automation" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>:</p>
+<ul><li>Automated dependency scanning. <strong>Done</strong>: Dependabot (<code class="ic">.github/dependabot.yml</code>) and the OpenSSF Scorecard workflow (<code class="ic">.github/workflows/scorecard.yml</code>).</li><li>Code security scanning. <strong>Done</strong>: CodeQL (<code class="ic">.github/workflows/codeql.yml</code>), and Bandit and Gitleaks in the pre-commit hooks (<code class="ic">.pre-commit-config.yaml</code>).</li><li>Container security scanning</li><li>Automated security updates. Partly done: Dependabot opens weekly update pull requests for pip packages.</li></ul>
+<h3 id="tooling">Tooling<a class="anchor" href="#tooling" aria-label="Link to this section">#</a></h3>
+<h4 id="pre-commit-hooks-enhancements">Pre-commit hooks enhancements<a class="anchor" href="#pre-commit-hooks-enhancements" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: <code class="ic">.pre-commit-config.yaml</code> runs Ruff, Bandit, trailing-whitespace, end-of-file-fixer, check-yaml, check-json, Commitizen and Gitleaks.</p>
+<p><strong>Enhancements</strong>:</p>
+<ul><li>Additional linting rules</li><li>Documentation checks</li><li>Test coverage checks</li><li>Commit message validation improvements</li></ul>
+<h4 id="code-quality-metrics-dashboard">Code quality metrics dashboard<a class="anchor" href="#code-quality-metrics-dashboard" aria-label="Link to this section">#</a></h4>
+<p><strong>Current</strong>: Partly done: a SonarQube scan runs in <code class="ic">.github/workflows/mozarksonar.yml</code>.</p>
+<p><strong>Needed</strong>:</p>
+<ul><li>Code quality metrics</li><li>Technical debt tracking</li><li>Code complexity metrics</li><li>Maintainability index</li></ul>
+<h4 id="dependency-update-automation">Dependency update automation<a class="anchor" href="#dependency-update-automation" aria-label="Link to this section">#</a></h4>
+<p><strong>Needed</strong>:</p>
+<ul><li>Automated dependency updates. <strong>Done</strong>: Dependabot, weekly, for pip.</li><li>Security update prioritization</li><li>Update testing automation</li><li>Changelog generation. Configured: <code class="ic">.cz.toml</code> sets <code class="ic">update_changelog_on_bump</code>, so Commitizen updates the changelog when it bumps the version.</li></ul>
+<h3 id="infra-related">Related documentation<a class="anchor" href="#infra-related" aria-label="Link to this section">#</a></h3>
+<ul><li><a href="../../docs/contribute/setup">Developer Guide</a></li><li><a href="https://github.com/mozarkai/optics-framework/tree/main/.github/workflows" rel="noopener">CI/CD Workflows</a></li></ul>
+<h2 id="getting-started">Getting started<a class="anchor" href="#getting-started" aria-label="Link to this section">#</a></h2>
+<h3 id="choose-an-area">Choose an area<a class="anchor" href="#choose-an-area" aria-label="Link to this section">#</a></h3>
+<ol><li>Review the sections above and identify an area that interests you</li><li>Check the priority and difficulty levels</li><li>Review related documentation</li><li>Look at existing code to understand patterns</li></ol>
+<h3 id="before-you-start">Before you start<a class="anchor" href="#before-you-start" aria-label="Link to this section">#</a></h3>
+<ol><li>Read the <a href="../../docs/contribute/">Contributing Guidelines</a></li><li>Read the <a href="../../docs/contribute/setup">Developer Guide</a></li><li>Set up your development environment</li><li>Familiarize yourself with the codebase</li><li><a href="#propose-work">Open an issue</a> for anything larger than a small fix</li></ol>
+<h3 id="making-your-contribution">Making your contribution<a class="anchor" href="#making-your-contribution" aria-label="Link to this section">#</a></h3>
+<ol><li><strong>Fork the Repository</strong>: Create your own fork</li><li><strong>Create a Branch</strong>: Use a descriptive branch name</li><li><strong>Make Changes</strong>: Follow coding standards and patterns</li><li><strong>Write Tests</strong>: Add tests for your changes</li><li><strong>Update Documentation</strong>: Update relevant docs</li><li><strong>Submit PR</strong>: Create a pull request with clear description</li></ol>
+<h3 id="need-help">Need help?<a class="anchor" href="#need-help" aria-label="Link to this section">#</a></h3>
+<ul><li>Open an issue on GitHub for questions</li><li>Check existing documentation</li><li>Review similar implementations in the codebase</li><li>Ask in pull request comments</li></ul>
+<h3 id="recognition">Recognition<a class="anchor" href="#recognition" aria-label="Link to this section">#</a></h3>
+<p>Contributors will be:</p>
+<ul><li>Listed in the project's contributors</li><li>Credited in release notes</li><li>Acknowledged in documentation (for significant contributions)</li></ul>
+<h2 id="summary">Summary<a class="anchor" href="#summary" aria-label="Link to this section">#</a></h2>
+<p>The areas fall into five groups:</p>
+<ul><li><strong>Architecture</strong>: Stateless API, flexible strategies</li><li><strong>Features</strong>: New drivers, interactive tools</li><li><strong>Quality</strong>: Tests, documentation, code simplification</li><li><strong>Performance</strong>: Optimizations and enhancements</li><li><strong>Security</strong>: Authentication, validation, hardening</li></ul>
+<aside class="callout callout-tip"><p class="callout-title">Start small</p><p>If you are new to the project, start with documentation improvements or test coverage. They are a good way to learn the codebase while you make a useful contribution.</p></aside>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Help%20wanted&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Froadmap%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Help%20wanted&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Froadmap%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/contribute/decisions"><span>Previous</span>Decisions</a><a class="pager-next" href="../../docs/help/"><span>Next</span>Overview</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/contribute/roadmap.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#propose-work">Propose work</a></li><li class="toc-l2"><a href="#priority-and-difficulty-levels">Priority and difficulty levels</a></li><li class="toc-l2"><a href="#the-areas">The areas</a></li><li class="toc-l2"><a href="#1-stateless-api-layer">1. Stateless API layer</a></li><li class="toc-l3"><a href="#api-current-state">Current state</a></li><li class="toc-l3"><a href="#api-goal">Goal</a></li><li class="toc-l3"><a href="#api-key-areas">Key areas</a></li><li class="toc-l3"><a href="#api-files">Files to modify</a></li><li class="toc-l3"><a href="#api-related">Related documentation</a></li><li class="toc-l2"><a href="#2-parallel-strategy-execution">2. Parallel strategy execution</a></li><li class="toc-l3"><a href="#parallel-current-state">Current state</a></li><li class="toc-l3"><a href="#parallel-goal">Goal</a></li><li class="toc-l3"><a href="#execution-semantics">Execution semantics</a></li><li class="toc-l3"><a href="#key-scenarios">Key scenarios</a></li><li class="toc-l3"><a href="#implementation-approach">Implementation approach</a></li><li class="toc-l3"><a href="#key-implementation-areas">Key implementation areas</a></li><li class="toc-l3"><a href="#parallel-performance">Performance considerations</a></li><li class="toc-l3"><a href="#testing-requirements">Testing requirements</a></li><li class="toc-l3"><a href="#migration-path">Migration path</a></li><li class="toc-l3"><a href="#parallel-files">Files to modify</a></li><li class="toc-l3"><a href="#parallel-related">Related documentation</a></li><li class="toc-l3"><a href="#challenges-and-considerations">Challenges and considerations</a></li><li class="toc-l2"><a href="#3-flexible-driver-specific-strategies">3. Flexible driver-specific strategies</a></li><li class="toc-l3"><a href="#driver-strategies-current-state">Current state</a></li><li class="toc-l3"><a href="#driver-strategies-goal">Goal</a></li><li class="toc-l3"><a href="#driver-strategies-key-areas">Key areas</a></li><li class="toc-l3"><a href="#driver-strategies-files">Files to modify</a></li><li class="toc-l3"><a href="#driver-strategies-related">Related documentation</a></li><li class="toc-l2"><a href="#4-additional-image-detection-drivers">4. Additional image detection drivers</a></li><li class="toc-l3"><a href="#image-current-state">Current state</a></li><li class="toc-l3"><a href="#image-goal">Goal</a></li><li class="toc-l3"><a href="#potential-additions">Potential additions</a></li><li class="toc-l3"><a href="#implementation-guidelines">Implementation guidelines</a></li><li class="toc-l3"><a href="#image-files">Files to create</a></li><li class="toc-l3"><a href="#image-related">Related documentation</a></li><li class="toc-l2"><a href="#5-interactive-test-creation">5. Interactive test creation</a></li><li class="toc-l3"><a href="#interactive-current-state">Current state</a></li><li class="toc-l3"><a href="#interactive-goal">Goal</a></li><li class="toc-l3"><a href="#key-features">Key features</a></li><li class="toc-l3"><a href="#potential-implementation">Potential implementation</a></li><li class="toc-l3"><a href="#interactive-files">Files to create</a></li><li class="toc-l3"><a href="#interactive-related">Related documentation</a></li><li class="toc-l2"><a href="#6-code-simplification-unification">6. Code simplification &amp; unification</a></li><li class="toc-l3"><a href="#simplify-current-state">Current state</a></li><li class="toc-l3"><a href="#simplify-areas">Areas identified</a></li><li class="toc-l3"><a href="#specific-unification-opportunities">Specific unification opportunities</a></li><li class="toc-l3"><a href="#simplify-files">Files to create/modify</a></li><li class="toc-l3"><a href="#simplify-related">Related documentation</a></li><li class="toc-l2"><a href="#7-test-coverage">7. Test coverage</a></li><li class="toc-l3"><a href="#tests-current-state">Current state</a></li><li class="toc-l3"><a href="#missing-tests-for">Missing tests for</a></li><li class="toc-l3"><a href="#test-files-to-create">Test files to create</a></li><li class="toc-l3"><a href="#testing-guidelines">Testing guidelines</a></li><li class="toc-l3"><a href="#tests-related">Related documentation</a></li><li class="toc-l2"><a href="#8-security-improvements">8. Security improvements</a></li><li class="toc-l3"><a href="#security-current-state">Current state</a></li><li class="toc-l3"><a href="#cors-configuration">CORS configuration</a></li><li class="toc-l3"><a href="#authentication">Authentication</a></li><li class="toc-l3"><a href="#input-validation">Input validation</a></li><li class="toc-l3"><a href="#security-related">Related documentation</a></li><li class="toc-l2"><a href="#9-feature-development">9. Feature development</a></li><li class="toc-l3"><a href="#mcp-servicer">MCP servicer</a></li><li class="toc-l3"><a href="#omniparser-integration">Omniparser integration</a></li><li class="toc-l3"><a href="#playwright-integration-enhancements">Playwright integration enhancements</a></li><li class="toc-l3"><a href="#audio-support">Audio support</a></li><li class="toc-l3"><a href="#session-persistence">Session persistence</a></li><li class="toc-l3"><a href="#additional-drivers">Additional drivers</a></li><li class="toc-l2"><a href="#10-performance-optimizations">10. Performance optimizations</a></li><li class="toc-l3"><a href="#performance-areas">Areas identified</a></li><li class="toc-l3"><a href="#performance-related">Related documentation</a></li><li class="toc-l2"><a href="#11-documentation">11. Documentation</a></li><li class="toc-l3"><a href="#documentation-gaps">Documentation gaps</a></li><li class="toc-l3"><a href="#docs-related">Related documentation</a></li><li class="toc-l2"><a href="#12-infrastructure">12. Infrastructure</a></li><li class="toc-l3"><a href="#cicd-enhancements">CI/CD enhancements</a></li><li class="toc-l3"><a href="#tooling">Tooling</a></li><li class="toc-l3"><a href="#infra-related">Related documentation</a></li><li class="toc-l2"><a href="#getting-started">Getting started</a></li><li class="toc-l3"><a href="#choose-an-area">Choose an area</a></li><li class="toc-l3"><a href="#before-you-start">Before you start</a></li><li class="toc-l3"><a href="#making-your-contribution">Making your contribution</a></li><li class="toc-l3"><a href="#need-help">Need help?</a></li><li class="toc-l3"><a href="#recognition">Recognition</a></li><li class="toc-l2"><a href="#summary">Summary</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+</body>
+</html>

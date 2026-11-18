@@ -186,6 +186,17 @@ in ./checkout, run optics dry_run on it, and tell me how to run it.
 
 For a phone app, include the Appium details: *start an appium session at http://127.0.0.1:4723 with platformName Android, deviceName emulator-5554, appPackage com.birch.shop*.
 
+### Lint the suite (optional)
+
+The [optics-framework-lsp](https://github.com/mozarkai/optics-framework-lsp) package lints a suite and lists every problem in one run, such as a keyword with the wrong number of parameters. Install it, then ask the agent to run it on the folder it wrote:
+
+```shell
+$ pip install optics-framework-lsp
+$ optics-lsp lint checkout --json
+```
+
+The exit code is 0 whenever the lint ran, also when it finds problems. Read `status` and the `diagnostics` list in the JSON to decide what blocks the run.
+
 ### Review and run the suite
 
 The agent writes the same files you would: test cases, modules and elements, in CSV. Read them like a colleague's pull request, then run them:
@@ -193,6 +204,8 @@ The agent writes the same files you would: test cases, modules and elements, in 
 ```shell
 $ optics execute checkout
 ```
+
+Results go to `execution_output/`. When a step fails, `failed_steps_elements.json` lists the elements on the screen where it failed. See [Read the results](https://optics-framework.org/docs/run/results).
 
 ## What the agent can do
 
@@ -210,7 +223,8 @@ A typical session goes: start a session, act on rows, check the result, end the 
 
 - **The agent asks you before it signs in.** For a website that needs a sign-in, the agent reads `optics://browser-profiles`. It asks you which profile to use. If you choose none, it asks you for the credentials. Only a server that starts with the default `stdio` transport accepts a profile. See [Sign in with a browser profile](https://optics-framework.org/docs/reference/mcp#sign-in-with-a-browser-profile).
 - **Agents tap by reference, not by position.** The server hides coordinate taps by default, because those tests break on any other screen size. To allow them, set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before you start the server.
-- **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run` before it finishes.
+- **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run`, or `optics-lsp lint <folder> --json`, before it finishes.
+- **Values go in the elements file.** The agent puts run-specific values in `elements.csv` and uses them as `${name}`. A cell that is only `${name}` tries each value of `name` in order. A `${name}` inside a longer value uses the first value.
 - **Loops and conditions** (`Run Loop`, `Condition`, `Read Data` and the rest) aren't tools, because they only make sense inside suite files. The agent can still write them into modules.
 - **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the agent calls `terminate_session` or the server stops. Its steps stay readable after that, also after a restart. When more than one session is open, the agent must pass `session_id`. The error lists the ids.
 
