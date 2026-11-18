@@ -11,7 +11,7 @@ export const EVENTS = new Set([
   "filter", "search", "result", "helpful", "check", "details", "ui", "vital", "error",
 ]);
 const DEVICES = new Set(["mobile", "tablet", "desktop"]);
-const ASSET = /\.(css|js|mjs|map|svg|png|jpe?g|webp|gif|ico|avif|woff2?|ttf|mp4|webm|vtt)$/i;
+const ASSET = /\.(css|js|mjs|map|svg|png|jpe?g|webp|gif|ico|avif|woff2?|ttf|mp4|webm|vtt)$|\/engine\//i;
 const MAX_BODY = 16384;
 const MAX_EVENTS = 25;
 

@@ -1,0 +1,74 @@
+      <section class="eng" aria-labelledby="eng-h">
+        <header class="eng-head">
+          <p class="label">Playground</p>
+          <h1 class="eng-h" id="eng-h">Run Optics in your browser.</h1>
+          <p class="eng-lede">This page runs the <a href="https://pypi.org/project/optics-framework/1.11.4/">optics-framework 1.11.4</a> wheel from PyPI on Python, compiled to WebAssembly. Edit the suite, then run it on Birch.</p>
+        </header>
+
+        <div class="eng-lab" data-state="off">
+          <div class="eng-pane eng-src">
+            <div class="eng-tabs" role="tablist" aria-label="Project files">
+              <button type="button" role="tab" aria-selected="true" aria-controls="eng-suite" id="eng-tab-suite">checkout.yaml</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="eng-config" id="eng-tab-config" tabindex="-1">config.yaml</button>
+            </div>
+            <div class="eng-file" id="eng-suite" role="tabpanel" aria-labelledby="eng-tab-suite">
+              <div class="eng-try" role="group" aria-label="Change the suite">
+                <button type="button" data-try="as-written" aria-pressed="true">As written</button>
+                <button type="button" data-try="typo" aria-pressed="false">Typo</button>
+                <button type="button" data-try="moved" aria-pressed="false">Stale locator</button>
+                <button type="button" data-try="no-fallback" aria-pressed="false">No fallback</button>
+                <button type="button" data-try="never" aria-pressed="false">Never appears</button>
+              </div>
+              <div class="eng-code">
+                <pre class="eng-paint" aria-hidden="true"></pre>
+                <textarea class="eng-edit" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="checkout.yaml"></textarea>
+              </div>
+            </div>
+            <div class="eng-file" id="eng-config" role="tabpanel" aria-labelledby="eng-tab-config" hidden>
+              <pre class="eng-config"></pre>
+            </div>
+          </div>
+
+          <div class="eng-dev">
+            <div class="pg-stage"><div class="pg-world"></div></div>
+          </div>
+
+          <div class="eng-pane eng-out">
+            <div class="eng-bar">
+              <div class="eng-tabs" role="tablist" aria-label="Output">
+                <button type="button" role="tab" aria-selected="true" aria-controls="eng-run" id="eng-tab-run">Run</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="eng-tree" id="eng-tab-tree" tabindex="-1">Page source</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="eng-junit" id="eng-tab-junit" tabindex="-1">junit_output.xml</button>
+              </div>
+              <div class="eng-go">
+                <button type="button" class="eng-btn" data-mode="dry_run" disabled>Dry run</button>
+                <button type="button" class="eng-btn eng-btn-main" data-mode="execute" disabled>Execute</button>
+              </div>
+            </div>
+            <div class="eng-file eng-run" id="eng-run" role="tabpanel" aria-labelledby="eng-tab-run">
+              <div class="eng-boot">
+                <ul class="eng-parts"></ul>
+                <button type="button" class="eng-load"><span>Load Optics</span><b class="eng-size"></b></button>
+                <div class="eng-meter" hidden><i></i></div>
+              </div>
+              <div class="eng-log" role="log" aria-live="polite"></div>
+            </div>
+            <div class="eng-file" id="eng-tree" role="tabpanel" aria-labelledby="eng-tab-tree" hidden><pre class="eng-xml"></pre></div>
+            <div class="eng-file" id="eng-junit" role="tabpanel" aria-labelledby="eng-tab-junit" hidden><pre class="eng-xml"></pre></div>
+          </div>
+        </div>
+
+        <div class="eng-facts">
+          <h2 class="eng-h2">What runs here</h2>
+          <dl>
+            <div><dt>Optics</dt><dd>The optics-framework 1.11.4 wheel from PyPI, unchanged: suite loading, <code>dry_run</code>, keywords, element fallbacks, events and the JUnit report.</dd></div>
+            <div><dt>Python</dt><dd>CPython 3.14 in WebAssembly, from <a href="https://pyodide.org/">Pyodide</a> 314.0.8, with numpy, pandas, lxml, pydantic and the other libraries Optics imports. This site serves every file.</dd></div>
+            <div><dt>Driver</dt><dd>On your machine, Optics drives apps through Appium, Playwright or Selenium. Here, a small driver written for this page drives Birch, and an element source reads Birch as an Android-style UI tree.</dd></div>
+            <div><dt>Left out</dt><dd>Image and OCR matching (OpenCV), screenshot comparison (scikit-image) and the pytest runner. Text matching uses difflib, not python-Levenshtein, so a near match can score differently.</dd></div>
+            <div><dt>Pace</dt><dd>The page waits after each step so you can watch the phone. The times in the run are the times Optics measured.</dd></div>
+          </dl>
+        </div>
+      </section>
+      <script type="application/json" id="engine-manifest">{{engine}}</script>
+      <script src="birch.js" defer></script>
+      <script src="engine.js" defer></script>

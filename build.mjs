@@ -6,6 +6,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFi
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
+import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 
 const ORIGIN = "https://optics-framework.org";
@@ -79,6 +80,27 @@ for (const page of PAGES) {
   writeFileSync(`out/${page.path}.md`, pageMarkdown(readFileSync(page.src, "utf8")));
 }
 writeFileSync("out/404.html", render(NOT_FOUND, { root: `${base}/`, home: `${base}/` }));
+
+// The playground runs the real engine in the page, loaded from out/engine/ when asked.
+const PLAYGROUND = {
+  src: "pages/playground.html",
+  path: "playground",
+  title: "Optics playground: run the real engine in your browser",
+  description: "Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.",
+};
+const engine = await buildEngine();
+writeFileSync(
+  "out/playground.html",
+  render(
+    {
+      ...PLAYGROUND,
+      body: readFileSync(PLAYGROUND.src, "utf8").replace("{{engine}}", () => JSON.stringify(engine)),
+      head: `<link rel="alternate" type="text/markdown" href="playground.md" title="${PLAYGROUND.title}, as Markdown">\n  <link rel="stylesheet" href="playground.css">\n  <link rel="stylesheet" href="engine.css">`,
+    },
+    { root: "", home: "./", canonical: `${ORIGIN}/playground` },
+  ),
+);
+cpSync("pages/playground.md", "out/playground.md");
 
 // The blog lists articles, videos and posts, hosted here or elsewhere, from any author:
 // /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
@@ -164,7 +186,7 @@ writeFileSync(
   "out/sitemap.xml",
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
-    ...PAGES.map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    ...[...PAGES, PLAYGROUND].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     ...docs.entries,
@@ -181,7 +203,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|engine\.js|engine\.css|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);
