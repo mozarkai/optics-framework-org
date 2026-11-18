@@ -395,7 +395,7 @@
       window.fetch = realFetch;
       var site = py.runPython("import site; site.getsitepackages()[0]");
       return Promise.all(M.python.map(function (f) {
-        return realFetch("engine/" + f.path + "?v=" + f.v).then(function (r) { return r.text(); }).then(function (text) {
+        return realFetch("engine/" + f.path + "?v=" + f.v).then(function (r) { if (!r.ok) throw new Error(f.path + " answered " + r.status); return r.text(); }).then(function (text) {
           var dest = site + "/" + f.path;
           py.FS.mkdirTree(dest.slice(0, dest.lastIndexOf("/")));
           py.FS.writeFile(dest, text);
