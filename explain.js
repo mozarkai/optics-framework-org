@@ -31,9 +31,10 @@
   function decodeState(hash) {
     var m = /^#([su])=(.+)$/.exec(hash);
     if (!m) return Promise.resolve(null);
-    var bytes = unb64(m[2]);
-    var raw = m[1] === "s" ? pipe(bytes, new DecompressionStream("deflate-raw")) : Promise.resolve(bytes);
-    return raw.then(function (b) { var o = JSON.parse(new TextDecoder().decode(b)); return { files: o.f.map(function (f) { return { path: f[0], text: f[1] }; }), active: o.a || 0, caret: o.c || 0 }; });
+    return Promise.resolve().then(function () {
+      var bytes = unb64(m[2]);
+      return m[1] === "s" ? pipe(bytes, new DecompressionStream("deflate-raw")) : bytes;
+    }).then(function (b) { var o = JSON.parse(new TextDecoder().decode(b)); return { files: o.f.map(function (f) { return { path: f[0], text: f[1] }; }), active: o.a || 0, caret: o.c || 0 }; });
   }
 
   var saveTimer;
@@ -41,6 +42,7 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(function () {
       var ex = pristineExample();
+      ui.examples.querySelectorAll(".xp-ex").forEach(function (b) { b.setAttribute("aria-pressed", String(!!ex && b.dataset.ex === ex.slug)); });
       if (ex) return history.replaceState(null, "", "#" + ex.slug);
       encodeState().then(function (h) { history.replaceState(null, "", "#" + h); });
     }, 250);
@@ -585,7 +587,7 @@
 
   function explainFile() {
     var f = model.files[state.active];
-    var counts = { test_cases: model.testCases.order.size + " test cases", modules: model.modules.size + " modules", elements: model.elements.size + " elements", error_definitions: model.errors.size + " error definitions", api: model.apis.size + " API collections" };
+    var counts = { test_cases: model.testCases.order.size + " test cases", modules: model.modules.size + " modules", elements: model.elements.size + (model.elements.size === 1 ? " element" : " elements"), error_definitions: model.errors.size + " error definitions", api: model.apis.size + " API collections" };
     return head("File", esc(f.path)) + '<div class="xp-body"><p>' + (f.kinds.length ? f.kinds.map(function (k) { return esc(counts[k]); }).join(", ") + " in the suite." : "Optics doesn't read this file as part of the suite.") + "</p></div>";
   }
 
@@ -616,12 +618,13 @@
   ui.input.addEventListener("input", onEdit);
   ui.input.addEventListener("scroll", syncScroll);
   ["keyup", "click", "focus"].forEach(function (t) { ui.input.addEventListener(t, function () { renderExplain(); save(); }); });
-  // In YAML, Tab indents; Escape first lets the next Tab leave the editor, as in most code editors.
+  // In YAML, Tab indents where a line starts; anywhere else, or after Escape, it leaves the editor.
   var tabLeaves = false;
   ui.input.addEventListener("keydown", function (e) {
-    var leave = tabLeaves;
+    var leave = tabLeaves, v = ui.input.value, at = ui.input.selectionStart;
     tabLeaves = e.key === "Escape";
-    if (leave || e.key !== "Tab" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || !/\.ya?ml$/i.test(state.files[state.active].path)) return;
+    var indenting = at === ui.input.selectionEnd && /^\s*$/.test(v.slice(v.lastIndexOf("\n", at - 1) + 1, at));
+    if (leave || !indenting || e.key !== "Tab" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || !/\.ya?ml$/i.test(state.files[state.active].path)) return;
     e.preventDefault();
     document.execCommand("insertText", false, "  ");
   });
@@ -639,13 +642,16 @@
     var t = e.target.closest("[data-ex], [data-file], [data-close], .xp-add, [data-at], .xp-copy");
     if (!t) return;
     if (t.dataset.ex) return openExample(t.dataset.ex, true);
-    if (t.dataset.file) { state.active = Number(t.dataset.file); ui.input.value = state.files[state.active].text; renderAll(); return save(); }
+    if (t.dataset.file) {
+      if (e.detail > 1) return renameFile(Number(t.dataset.file));
+      if (Number(t.dataset.file) === state.active) return;
+      state.active = Number(t.dataset.file); ui.input.value = state.files[state.active].text; renderAll(); return save();
+    }
     if (t.dataset.close) return removeFile(Number(t.dataset.close));
     if (t.classList.contains("xp-add")) return addFile();
     if (t.classList.contains("xp-copy")) return copyLink();
     jump(readAt(t));
   });
-  root.addEventListener("dblclick", function (e) { var t = e.target.closest("[data-file]"); if (t) renameFile(Number(t.dataset.file)); });
   root.addEventListener("mouseover", function (e) { hover(e.target.closest(".xp-box, .xp-tok, .xp-chip[data-i]")); });
   root.addEventListener("focusin", function (e) { hover(e.target.closest(".xp-box")); });
   window.addEventListener("hashchange", fromHash);
@@ -687,12 +693,20 @@
     function commit(keep) {
       if (done) return;
       done = true;
-      if (keep && field.value.trim()) { state.files[i].path = field.value.trim(); state.example = null; analyse(); save(); }
+      var name = field.value.trim();
+      var ok = /\.(csv|ya?ml)$/i.test(name) && !state.files.some(function (f, k) { return k !== i && f.path === name; });
+      if (keep && ok) { state.files[i].path = name; state.example = null; analyse(); save(); }
       renderAll();
     }
     var finish = function (keep) { commit(keep); ui.tabs.querySelector('[data-file="' + i + '"]').focus(); };
-    field.addEventListener("keydown", function (e) { if (e.key === "Enter") finish(true); if (e.key === "Escape") finish(false); });
-    field.addEventListener("blur", function () { commit(true); });
+    field.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); finish(true); }
+      if (e.key === "Escape") finish(false);
+    });
+    field.addEventListener("blur", function () {
+      commit(true);
+      setTimeout(function () { if (document.activeElement === document.body) ui.tabs.querySelector('[data-file="' + i + '"]').focus(); });
+    });
   }
 
   function copyLink() {
@@ -705,9 +719,11 @@
   }
 
   function flash(text) {
-    var label = ui.copy.querySelector("span"), was = label.textContent;
+    var label = ui.copy.querySelector("span");
+    label.dataset.label = label.dataset.label || label.textContent;
     label.textContent = text;
-    setTimeout(function () { label.textContent = was; }, 1600);
+    clearTimeout(flash.timer);
+    flash.timer = setTimeout(function () { label.textContent = label.dataset.label; }, 1600);
   }
 
   fromHash();

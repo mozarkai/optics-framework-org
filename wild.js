@@ -468,6 +468,7 @@
 
   var big = null;
   function open(t) {
+    if (big) big.stop();
     var a = t.querySelector(".wild-a");
     dlg.innerHTML =
       '<button class="wd-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
@@ -488,6 +489,7 @@
     track("wild:" + t.dataset.scene);
   }
   dlg.addEventListener("close", function () {
+    if (dlg.open) return;
     if (big) big.stop();
     big = null;
     dlg.innerHTML = "";

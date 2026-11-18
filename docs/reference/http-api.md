@@ -25,7 +25,7 @@ The API has no authentication. Anyone who can reach the port can control your de
 
 Two more checks keep web pages away from the server:
 
-- **CORS is off.** A web page cannot call the server, unless you list its origin in `OPTICS_CORS_ORIGINS`, such as `https://dash.example.com`. Separate origins with commas. The value `*` stops the server with E0501.
+- **CORS is off.** A web page cannot read the server's replies or send preflighted requests, such as a JSON body, unless you list its origin in `OPTICS_CORS_ORIGINS`, such as `https://dash.example.com`. Separate origins with commas. The value `*` stops the server with E0501. CORS does not stop a simple cross-origin request from reaching the server.
 - **The Host header must be a loopback name.** On `127.0.0.1`, a request with another `Host`, such as a domain that points to `127.0.0.1`, gets `421 Misdirected Request`. To allow more names, or to apply the check on any address, list the names in `OPTICS_ALLOWED_HOSTS`. Separate names with commas. Loopback names stay allowed.
 
 In a container, publish the port on the host loopback and set `OPTICS_ALLOWED_HOSTS=localhost`:
@@ -69,6 +69,68 @@ With `compact=true`, each element is one row:
 - `loc` is a locator that matches only this element. Use it as the element of a keyword.
 - `offscreen: true` marks a web element that is on the page but scrolled out of view.
 
+### Image templates
+
+`POST /v1/sessions/{id}/templates` stores an image for the rest of the session. A second upload with the same name replaces the first. The server deletes the files when the session ends.
+
+```shell
+$ curl -X POST "http://127.0.0.1:8000/v1/sessions/$SID/templates" \
+>   -H "Content-Type: application/json" \
+>   -d '{"name": "my_button", "image_base64": "<base64-encoded-png>"}'
+{"name":"my_button","status":"ok"}
+```
+
+Then use the name as the element. You do not send the image again:
+
+```json
+{"mode": "keyword", "keyword": "Press Element", "params": {"element": "my_button"}}
+```
+
+To use an image for one request only, send it in `template_images` with the same name that `params` uses:
+
+```json
+{"mode": "keyword", "keyword": "Press Element", "params": {"element": "my_button"}, "template_images": {"my_button": "<base64-encoded-png>"}}
+```
+
+### API definitions for Invoke API
+
+`Invoke API` needs API definitions in the session. Send them as `api_data` in [SessionConfig](#sessionconfig), or later with `POST /v1/sessions/{id}/api`. The body replaces the API data of the session, the same as the `Add API` keyword. It is either `{"api": {...}}` or the same content at the root. It has `collections` and optional `global_defaults`. Each collection has `name`, `base_url`, `global_headers` and `apis`, and each API has `endpoint`, `request` and `expected_result`. See [Call APIs](https://optics-framework.org/docs/advanced/api-calls) for every field.
+
+```bash
+curl -X POST "http://127.0.0.1:8000/v1/sessions/$SID/api" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "api": {
+      "collections": {
+        "auth": {
+          "name": "Auth APIs",
+          "base_url": "https://api.example.com",
+          "apis": {
+            "token": {
+              "name": "Get Token",
+              "endpoint": "/token",
+              "request": { "method": "POST", "body": {"user": "x"} },
+              "expected_result": { "expected_status": 200, "extract": {"access_token": "access_token"} }
+            }
+          }
+        }
+      }
+    }
+  }'
+```
+
+Then run `Invoke API` with `<collection>.<api>`, such as `auth.token`:
+
+```json
+{"mode": "keyword", "keyword": "Invoke API", "params": ["auth.token"]}
+```
+
+`data` holds the response: `status_code`, `headers`, `body` and `elapsed_ms`. The values that `extract` names go into the session variables, where later keywords can use them and `GET /v1/sessions/{id}/variables` shows them:
+
+```json
+{"variables": {"access_token": ["eyJhbGci..."], "otp": ["482913"]}}
+```
+
 ### Keyword list
 
 Each item of `/v1/keywords` has the keyword's name, slug, description and parameters:
@@ -107,7 +169,7 @@ The server does not read its own environment or files for a caller. It refuses t
 - `capabilities.profile`. A browser profile holds the sign-ins of the person who runs the server, so only a local stdio MCP server accepts it.
 - `project_path`, and `credentials_path` in any capabilities.
 - A `file:` URL, or another URL that opens a local resource of the browser, such as `chrome:`, `view-source:` or `about:` other than `about:blank`. This applies to `Launch App` and to each capability value, including a browser argument such as `--app=<url>`.
-- `Read Data` from a file or from `ENV:`. Send the rows in the step instead.
+- `Read Data` from a file or from `ENV:`. A step can't send rows either: each parameter is a string or a list of strings. Read the data in your client and send the values in the steps.
 
 ```terminal
 {"detail":{"type":"optics:config","code":"E0501","status":400,"message":"playwright: a browser profile works only through a local stdio MCP server","details":null,"meta":null,"cause":null}}
@@ -123,8 +185,9 @@ The body of `POST /v1/sessions/{id}/action`.
 |---|---|---|
 | `mode` | string | Required. Must be `"keyword"`. |
 | `keyword` | string | The keyword. `"Press Element"` and `"press_element"` both work. |
-| `params` | list or object | Positional values as a list, or named values as an object: `{"element": "text=Sign in"}`. A value can be a list of strings: Optics tries each one until the keyword passes. |
-| `template_images` | object | `{"name": "<base64>"}` images available to this request only. |
+| `params` | list or object | Positional values as a list, or named values as an object: `{"element": "text=Sign in"}`. Optics puts named values in the order of the keyword's parameters. A value can be a list of strings, such as `[["button_login", "login_btn"], "1"]`: Optics tries each one until the keyword passes. |
+| `template_images` | object | `{"name": "<base64>"}` images available to this request only. A value can be raw base64 or a `data:image/png;base64,...` URL. See [Image templates](#image-templates). |
+| `test_case` | string | Not used. |
 
 The session has no elements file, so pass locators directly, or define variables first with keywords such as `Evaluate`.
 
@@ -171,6 +234,9 @@ A keyword that does not find its element returns `404`:
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
 
+**The code reads `Code.E0201` on Python 3.11 and later:**
+The server writes the `code` field and the code in `cause` with the enum class name in front: `"code": "Code.E0201"`, `"cause": "Code.E0201: Element 'css=#nope' not found."`. Until the fix ships, remove a leading `Code.` before you compare the code, for example `code.removeprefix("Code.")` in Python.
+
 ## Streams
 
 Both stream endpoints use server-sent events (SSE): the connection stays open and each event is a `data:` line of JSON.
@@ -194,7 +260,7 @@ data: {"execution_id": "4f1c...", "status": "SUCCESS", "message": "Keyword press
 | `include_source` | `false` | Adds the UI tree or HTML as `source`. |
 | `filter_config` | | Filters the elements, as for `/elements`. |
 
-Each event is `{"screenshot", "elements", "screenshotFailed"}`, plus `source` when requested. It's sent only when the screen or elements change. Otherwise a `{"type": "heartbeat"}` arrives every 15 seconds, and errors arrive as `{"type": "error", "message"}`. The stream ends when the session ends.
+Each event is `{"screenshot", "elements", "screenshotFailed"}`, plus `source` when requested. It's sent only when the screen or elements change. Otherwise a `{"type": "heartbeat", "timestamp": <seconds>}` arrives every 15 seconds, and errors arrive as `{"type": "error", "message"}`. The stream ends when the session ends.
 
 ## Walkthrough
 

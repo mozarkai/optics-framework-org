@@ -92,7 +92,7 @@
 
   // ---- copy buttons --------------------------------------------------------
   // Blog articles reuse the docs code blocks, which carry their text on the button.
-  document.querySelectorAll(".cmd .copy, .doc-code .copy").forEach(function (btn) {
+  document.querySelectorAll(document.body.classList.contains("docs") ? ".cmd .copy" : ".cmd .copy, .doc-code .copy").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var text = btn.dataset.copy || btn.closest(".cmd").dataset.copy;
       var done = function () {

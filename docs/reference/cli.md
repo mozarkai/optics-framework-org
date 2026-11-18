@@ -19,7 +19,7 @@ optics [--version] [--help] <command> [options]
 
 There's no `optics version` command. Use `optics --version`.
 
-When you run `optics` with no command for the first time, it prints a welcome panel that points to `optics quickstart`, `optics doctor` and `optics --help`. After that, it prints a one-line reminder. Optics remembers the first run in a small marker file under `~/.optics` (or `$OPTICS_HOME`).
+When you run `optics` with no command for the first time, it prints a welcome panel that points to `optics quickstart`, `optics doctor` and `optics --help`. After that, it prints a one-line reminder. Optics remembers the first run in the marker file `~/.optics/.onboarded`. Delete the file to see the welcome panel again. If `~/.optics` is not writable, for example with a read-only home folder, in a container or in CI, set `OPTICS_HOME` to a folder that is. The marker then goes there.
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
 
@@ -37,13 +37,15 @@ optics quickstart
 
 There are no flags. The command asks these questions in order:
 
-1. **What do you want to automate?** `mobile`, `web` or `desktop`.
+1. **What do you want to automate?** `mobile` (default), `web`, `desktop` or `bluetooth`. Use `bluetooth` for any device that an airhand dongle drives: it offers to install the `ble` engine, then asks which device the dongle drives (default `ios`), the dongle serial, the screen size and a camera screenshot URL.
 2. **Install the engine now?** Appium for mobile and desktop; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
 3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web, the `desktop_editor` sample for desktop. Decline to pick an empty project or another sample.
 4. **Project name** (default `my-optics-project`) and **where it should live** (default: the current folder). If the folder exists, it asks for another name.
 5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and desktop, and no for web. For desktop, it asks which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (default `com.apple.TextEdit`, `gedit` or `notepad.exe`) and the Appium server URL.
 6. It runs `optics doctor` on the new project and shows the report.
 7. If the report shows no blocking problems, it offers to run your first test with `optics execute`.
+
+Every question has a default, so if you press Enter at each one, you get a project that runs. To answer the config questions again later, run `optics configure <folder>`.
 
 Quickstart never runs `optics dry_run`. It writes the same files as [`optics init`](#optics-init) and [`optics configure`](#optics-configure).
 
@@ -62,7 +64,7 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project from `optics_framework/samples/`. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. Each name is a folder there. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
@@ -95,11 +97,11 @@ Or replace it with a sample: optics init birch-tests --force --template <sample>
 
 | Sample | Target | Engines it uses |
 |---|---|---|
-| `contact` | Google Contacts on an Android emulator | Appium, EasyOCR. Includes an error definitions file. |
+| `contact` | Google Contacts on an Android emulator | Appium, EasyOCR. Fills in a contact form from test data (`${First_Name}`), checks each screen with `Assert Presence`, and includes an error definitions file. |
 | `clock` | Android Clock app | Appium, Pytesseract, image templates. Shows `Run Loop`. |
 | `calendar` | Android Calendar app | Appium, EasyOCR. Shows `Invoke API` and `Date Evaluate`. |
 | `youtube` | YouTube on Android | Appium, EasyOCR, image templates. Shows `Condition`. |
-| `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. |
+| `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. Opens the sign-in and the create-account flows and enters text, with text locators only. |
 | `playwright` | `https://example.com` | Playwright. Needs no device or server. |
 | `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
 | `desktop_editor` | TextEdit on macOS: types a note, checks it, clears it and closes the editor | Appium with appium-xa11y-driver. Change `platformName` and `app` for Linux or Windows. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop). |
@@ -109,6 +111,8 @@ Example:
 ```shell
 $ optics init birch-tests --template playwright --path ~/work --git-init
 ```
+
+After it creates the project, Optics prints the next steps. For a blank project, they are `optics configure`, then `optics dry_run`, and a line that says the test steps go in `test_cases/test_cases.csv` and `optics list` shows every step. For a sample, they are `optics dry_run`, then `optics execute`.
 
 Exit code 3 if the project already exists, the template name is unknown, or the name is empty.
 
@@ -135,7 +139,7 @@ optics configure [folder] [--edit]
 | `web-selenium` | Selenium server URL (`http://127.0.0.1:4444/wd/hub`) |
 | `web-playwright` | Browser (`chromium`), headless (no) |
 
-For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element source. It has no effect on a desktop app. Every platform then asks whether to find elements by on-screen text with EasyOCR, and the log level. If config.yaml already exists, Optics asks before overwriting it.
+For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element source. It has no effect on a desktop app. Every platform then asks whether to also find elements by on-screen text with the fastest local OCR engine: an installed one, else `apple_vision` on macOS and `rapidocr` on other systems. The default is no, or yes when you gave a camera URL. Then it asks for the log level: `DEBUG`, `INFO` (default), `WARNING` or `ERROR`. If config.yaml already exists, Optics asks before overwriting it.
 
 **Warning:**
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform).
@@ -166,7 +170,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 | Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, Apple Vision, RapidOCR, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic and the MCP server. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
-| Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS an ℹ️ row for the Accessibility and Screen Recording permissions. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](https://optics-framework.org/docs/platforms/desktop#check-and-run). |
+| Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS an ℹ️ row for the Accessibility and Screen Recording permissions. When the driver is missing, the hint is `appium driver install --source=npm appium-xa11y-driver`. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](https://optics-framework.org/docs/platforms/desktop#check-and-run). |
 | Web | The Playwright Chromium browser, and `chromedriver` or `geckodriver` on your PATH. If the project's Playwright entry has a `url`, the row shows ✅ "remote browser configured; no local download needed". |
 | Project | With a folder: config.yaml parses and every `${NAME}` environment variable it uses is set. A ❌ `config: references` row names a missing variable. Exactly one driver is enabled, its element sources are enabled, and it has the settings it needs (for example `url`, `platformName`, `bundleId` on iOS, and `app` or `appName` on a desktop). |
 
@@ -202,7 +206,15 @@ optics setup [--install NAME [NAME ...]] [--list]
 | `--list` | Prints every engine and bundle you can install. Wins if you also pass `--install`. |
 | `--install` | Installs the named engines or bundles. |
 
-Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `apple-vision`, `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`, `mcp`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). The `all` bundle does not include `mcp`. Pin the engine's main package with a standard specifier such as `appium==6.1.2` or `"easyocr>=1.7,<2.0"`. The version must be in the range that your Optics release supports.
+The command installs the matching extras of `optics-framework`, pinned to the Optics version you have. `optics setup --install appium easyocr` is the same as `pip install "optics-framework[appium,easyocr]"`. Use the names that `optics setup --list` shows.
+
+Names are case-insensitive. You can use an engine name (`appium`, `ble`, `selenium`, `playwright`, `apple-vision`, `rapidocr`, `easyocr`, `pytesseract`, `google-vision`, `gemini`, `openai`, `anthropic`, `mcp`), a display name (`Gemini`, `Google Vision`) or a bundle (`mobile`, `web`, `vision`, `llm`, `all`). The `all` bundle does not include `mcp`. Pin the engine's main package with a standard specifier, for example for reproducible CI:
+
+```shell
+$ optics setup --install appium==6.1.2 "easyocr>=1.7,<2.0"
+```
+
+The version must be in the range that your Optics release supports. A pin outside that range fails, so Optics never installs an older version without telling you. Optics refuses these before it installs anything: a malformed specifier (`appium=6.1.2`, with one `=`), two different versions for the same engine, and a specifier on a bundle (`all==1.0`).
 
 `optics setup` installs into the same Python environment as Optics. If you install Playwright, it also downloads the Chromium browser. Some environments refuse installs, for example Conda, pipx and uv tool. See [Engines and extras](https://optics-framework.org/docs/reference/engines#where-installs-are-refused).
 
@@ -213,6 +225,8 @@ $ optics setup --install appium rapidocr
 $ optics setup --install web gemini
 $ optics setup --install mcp
 ```
+
+After a successful install, Optics prints the next steps: `optics init`, then `optics configure`, then `optics doctor`.
 
 Exit code 1 if a name is unknown, a version specifier is malformed (`appium=6.1.2`), or the install fails.
 
@@ -298,8 +312,9 @@ optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
 $ optics execute ./birch-tests --include "shopper can*" --exclude "Shopper can check out"
 ```
 
-- Each flag takes one or more names. You can also give a flag more than once.
-- Matching ignores case and extra spaces, and must match the full name. `*` and `?` are wildcards.
+- Each flag takes one or more names (`--include A B`). You can also give a flag more than once (`--include A --include B`), or do both. Put the folder before the flags, or end the list of names with `--`. Otherwise Optics reads the folder as one more test case name.
+- Matching ignores case, and a run of spaces counts as one space, so `"login   TEST"` selects `Login Test`. A name must match the full test case name; it is not a substring search.
+- `*` matches any run of characters and `?` matches exactly one. Every other character, including `[`, `]` and `.`, is literal.
 - You can use both flags. Optics applies `--include` first, then removes the `--exclude` matches.
 - Suite Setup, Suite Teardown and the per-test setup and teardown always stay in the run. You cannot include or exclude them.
 - Either flag replaces `include` and `exclude` in [config.yaml](https://optics-framework.org/docs/reference/config#include-and-exclude) for that run.
@@ -436,7 +451,7 @@ optics serve [--host HOST] [--port PORT] [--workers N]
 **Warning:**
 The API has no authentication. Keep the default `127.0.0.1`, unless you are on a trusted network. On another address, the server logs a warning when it starts.
 
-Web pages cannot call the server unless you list their origins in `OPTICS_CORS_ORIGINS`. A request whose `Host` is not a loopback name gets `421`. Add other names in `OPTICS_ALLOWED_HOSTS`.
+Web pages cannot read the server's replies or send preflighted requests, such as a JSON body, unless you list their origins in `OPTICS_CORS_ORIGINS`. CORS does not stop a simple cross-origin request from reaching the server. A request whose `Host` is not a loopback name gets `421`. Add other names in `OPTICS_ALLOWED_HOSTS`.
 
 The server doesn't read config.yaml. Each session gets its settings from the request. Interactive API docs are at `http://127.0.0.1:8000/docs`. See [HTTP API](https://optics-framework.org/docs/reference/http-api).
 

@@ -155,6 +155,9 @@ Modules:
 | `module_step` | A keyword name, such as `Press Element`. Case and spaces don't matter: `press_element` works too. To run another module from inside a module, use `Execute Module,<name>`. |
 | `param_1`, `param_2`, … | The keyword's parameters, in order. Add as many `param_` columns as you need. |
 
+**Give the header enough param columns:**
+Optics reads only the columns that the header names. A value past the last `param_` column of the header is dropped without a warning, so the step gets fewer parameters and can fail. Give the header as many `param_` columns as the longest step needs.
+
 Parameter rules:
 
 - **Empty cells are dropped**, and the values after them move left. You can't skip a parameter by leaving its cell blank. Use a named parameter instead.
@@ -296,6 +299,91 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 **Encoding.** Save files as UTF-8. Some spreadsheet apps add a byte order mark (BOM) at the start of the file, which can stop Optics recognizing the header row.
 
 **YAML quoting.** Optics removes the quotes around a value, also when the value contains `=`: `Condition "${size} == '9'" "Pick Size" "Show Error"`.
+
+## A complete example
+
+The `youtube` sample drives the YouTube Android app in three ways: by on-screen text, by XPath and by image matching. Create it with `optics init my_project --template youtube`, or pick it in `optics quickstart`.
+
+`test_cases/test_cases.csv`:
+
+```csv
+test_case,test_step
+Suite Setup,Launch Youtube App
+Suite Teardown,Close Youtube App
+Running youtube Repeat,Repeat Test
+```
+
+`modules/modules.csv`:
+
+```csv
+module_name,module_step,param_1,param_2,param_3,param_4,param_5
+Launch Youtube App,Launch App,,,,
+Launch Youtube App,Press Element,${popup_element_text},,,
+Close Youtube App,Close And Terminate App,,,,
+Interact using text,Assert Presence,${Subscriptions_text},,,
+Interact using text,Press Element,${Subscriptions_text},,,
+Interact using text,Press Element,${Home_text},,,
+Interact using xpath,Assert Presence,${Subscriptions_xpath},,,
+Interact using xpath,Press Element,${Subscriptions_xpath},,,
+Interact using xpath,Press Element,${Home_xpath},,,
+Interact using images,Press Element,${Subscriptions_image},,,
+Interact using images,Press Element,${Home_image},,,
+Dynamic Launch,condition,${METHOD} == 'text',Interact using text,${METHOD} == 'xpath',Interact using xpath,Interact using images
+Repeat Test,Run Loop,Dynamic Launch,${METHOD},${List}
+```
+
+`test_data/elements.csv`:
+
+```csv
+Element_Name,Element_ID
+popup_element_text,Allow
+Subscriptions_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Subscriptions"]
+you_xpath,(//android.widget.ImageView[@resource-id="com.google.android.youtube:id/image"])[4]
+Home_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Home"]
+Subscriptions_text,Subscriptions
+you_text,Library
+Home_text,Home
+Subscriptions_image,sub.jpeg
+Youtube_image,youtube.jpeg
+Home_image,home.png
+METHOD,text
+List,"[""xpath"",""text"",""images""]"
+```
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: "http://localhost:4723"
+      capabilities:
+        appActivity: "com.google.android.youtube.app.honeycomb.Shell$HomeActivity"
+        appPackage: "com.google.android.youtube"
+        automationName: "UiAutomator2"
+        deviceName: "emulator-5554"
+        platformName: "Android"
+```
+
+`Repeat Test` runs `Dynamic Launch` once for each value in `List`, with `${METHOD}` set to that value. `Dynamic Launch` uses `Condition` to pick the module for the current method. The images `home.png`, `sub.jpeg` and `youtube.jpeg` are in `test_data/input_templates/`. The sample also enables EasyOCR and template matching. The full sample has more steps (Shorts, Scroll and Search) and more elements.
+
+```tree
+youtube/
+├── config.yaml
+├── test_cases/
+│   └── test_cases.csv
+├── modules/
+│   └── modules.csv
+├── test_data/
+│   ├── elements.csv
+│   └── input_templates/
+│       ├── home.png
+│       ├── sub.jpeg
+│       └── youtube.jpeg
+└── execution_output/        # generated at run time
+```
+
+Check it with `optics dry_run ./youtube`, then run it with `optics execute ./youtube`. Both take a project folder, not a single test case.
 
 ## Outputs
 

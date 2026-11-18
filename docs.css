@@ -120,6 +120,9 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .table-more:hover { color: var(--ink); }
 .table-filter { display: block; width: min(100%, 320px); height: 36px; margin-bottom: 10px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--bg); color: var(--ink); font: 500 .9375rem/1 var(--sans); }
 .table-filter:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.table-none:not(.shown) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.table-none.shown { margin: 12px 0 0; color: var(--ink-3); font-size: .9375rem; }
+.task-body { cursor: pointer; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media print { .long-table tbody > tr.more { display: table-row !important; } .table-more, .table-filter { display: none; } }
 
@@ -266,6 +269,30 @@ a.card:hover .card-title, a.card:focus-visible .card-title { text-decoration-col
 .scene-fig { margin-top: 28px !important; margin-bottom: 8px; }
 .scene-fig figcaption { margin-top: 10px; font-size: .875rem; color: var(--ink-3); line-height: 1.5; text-align: center; text-wrap: balance; }
 
+/* ---------- diagrams (drawn by scripts/diagrams.mjs, coloured by these tokens) ---------- */
+.docs { --d-note: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.diagram { margin: 28px 0 8px !important; border: 1px solid var(--line); background: var(--panel); }
+.diagram figcaption { display: flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 6px 0 20px; border-bottom: 1px solid var(--line); font: 500 var(--t-label)/1.3 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
+.diagram figcaption span { flex: 1; padding: 12px 0; }
+.diagram-act { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; min-width: 32px; padding: 0 10px; border: 0; background: transparent; color: var(--ink-2); font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; transition: color .15s ease, background-color .15s ease; }
+.diagram-act:hover { color: var(--ink); background: var(--bg-2); }
+.diagram-act:active { transform: translateY(1px); }
+.diagram-act svg { width: 16px; height: 16px; fill: currentColor; }
+.diagram-canvas { overflow-x: auto; padding: 24px 20px; }
+.diagram-canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.diagram-canvas > svg { display: block; margin: 0 auto; height: auto; min-width: min(var(--w, 0px), 640px); }
+.diagram svg .label { font: inherit; text-transform: none; letter-spacing: normal; }
+.diagram .dg-pulse { fill: none !important; stroke: var(--accent) !important; stroke-width: 2.25px !important; stroke-linecap: round; stroke-dasharray: var(--seg) calc(var(--len) + var(--seg)); stroke-dashoffset: var(--seg); opacity: 0; pointer-events: none; }
+.diagram.dg-play .dg-pulse { animation: dg-pulse var(--run) cubic-bezier(.45, 0, .55, 1) var(--at) 1 both; }
+@keyframes dg-pulse { 0% { opacity: 1; stroke-dashoffset: var(--seg); } 85% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: calc(-1 * var(--len)); } }
+@media (prefers-reduced-motion: reduce), (max-width: 640px) { .diagram .dg-pulse, .diagram-replay { display: none; } }
+.diagram-full { width: min(96vw, 1600px); max-width: none; max-height: 92vh; padding: 0; border: 1px solid var(--line-2); background: var(--bg); color: var(--ink); }
+.diagram-full::backdrop { background: rgba(8, 9, 26, .72); }
+.diagram-full .diagram { margin: 0 !important; border: 0; }
+.diagram-full .diagram-canvas { overflow: auto; max-height: calc(92vh - 46px); }
+.diagram-full .diagram-canvas > svg { max-width: none !important; width: max(100%, var(--w, 0px)); }
+@media (hover: none) { .diagram-act { height: 44px; min-width: 44px; } }
+
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {
   .doc { grid-template-columns: minmax(0, 1fr); }
@@ -276,11 +303,11 @@ a.card:hover .card-title, a.card:focus-visible .card-title { text-decoration-col
   .menu-toggle { display: grid; }
   .dtabs { display: none; }
   .docs { --head-h: var(--bar-h); }
-  .sidebar { position: fixed; z-index: 60; top: 0; left: 0; bottom: 0; height: auto; width: min(320px, 86vw); background: var(--bg); border-right: 1px solid var(--line); transform: translateX(-102%); transition: transform .3s var(--ease); }
+  .sidebar { position: fixed; z-index: 60; top: var(--head-h); left: 0; bottom: 0; height: auto; width: min(320px, 86vw); background: var(--bg); border-right: 1px solid var(--line); transform: translateX(-102%); transition: transform .3s var(--ease); }
   .doc-home .sidebar { display: block; }
   .sidebar.open { transform: none; box-shadow: 0 0 80px rgba(6, 8, 28, .4); }
   .side-section { display: block; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
-  .scrim { position: fixed; inset: 0; z-index: 55; background: rgba(6, 8, 28, .4); }
+  .scrim { position: fixed; inset: var(--head-h) 0 0; z-index: 55; background: rgba(6, 8, 28, .4); }
   .search-open { width: auto; margin-left: auto; }
   .search-ph, .search-kbd { display: none; }
   .nav-text { display: none; }

@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log from Optics code · Optics Framework docs</title>
+  <meta name="description" content="How the two Optics loggers, their handlers, the log files and secret masking work, and how to log from framework code.">
+  <meta name="ai-summary" content="How the two Optics loggers, their handlers, the log files and secret masking work, and how to log from framework code.">
+  <link rel="canonical" href="https://optics-framework.org/docs/contribute/logging">
+  <link rel="alternate" type="text/markdown" href="logging.md" title="This page as Markdown">
+  <meta property="og:title" content="Log from Optics code · Optics Framework docs">
+  <meta property="og:description" content="How the two Optics loggers, their handlers, the log files and secret masking work, and how to log from framework code.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/contribute/" aria-current="true">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging" aria-current="page">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/contribute/">Contribute</a><span class="sep" aria-hidden="true">/</span><span>How Optics is built</span></nav>
+        <header class="doc-head">
+          <h1>Log from Optics code</h1>
+          <p class="doc-summary">How the two Optics loggers, their handlers, the log files and secret masking work, and how to log from framework code.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Advanced, about 10 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="logging.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="logging.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics has a structured logging system with two loggers, file output and secret masking. It also connects to execution tracking. This page explains the logging architecture, its configuration and how to use it. For the user settings, see <a href="../../docs/reference/config#logging">Logging</a> in the configuration reference.</p>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The logging system has these parts:</p>
+<ol><li><strong>Multiple logger instances</strong>: one logger for each concern.</li><li><strong>Queue-based logging</strong>: queue handlers that write records from a background thread.</li><li><strong>Rich console output</strong>: formatted console output from the Rich library.</li><li><strong>File logging</strong>: rotating file handlers for persistent logs.</li><li><strong>Sensitive data sanitization</strong>: Optics masks secrets in every record.</li><li><strong>Session context</strong>: session-scoped logging with a context manager.</li><li><strong>Log capture</strong>: Optics keeps the logs of each keyword.</li></ol>
+<p>All of it is in <a href="https://github.com/mozarkai/optics-framework/blob/main/optics_framework/common/logging_config.py" rel="noopener"><code class="ic">optics_framework/common/logging_config.py</code></a>. <code class="ic">LoggingManager</code> builds the loggers and handlers once, when the module loads.</p>
+<h2 id="logger-architecture">Logger architecture<a class="anchor" href="#logger-architecture" aria-label="Link to this section">#</a></h2>
+<figure class="diagram" style="--w:1292px"><figcaption><span>Where a log record goes from each Optics logger</span></figcaption><div class="diagram-canvas" role="img" aria-label="Where a log record goes from each Optics logger" tabindex="0"><svg id="d-21b905e4c4b7" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1292.23px; background-color: transparent;" viewBox="0 0 1292.23046875 889.8937377929688" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#d-21b905e4c4b7{font-family:var(--mono);font-size:13px;fill:var(--ink);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#d-21b905e4c4b7 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#d-21b905e4c4b7 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#d-21b905e4c4b7 .error-icon{fill:var(--panel);}#d-21b905e4c4b7 .error-text{fill:#5ffff9;stroke:#5ffff9;}#d-21b905e4c4b7 .edge-thickness-normal{stroke-width:1px;}#d-21b905e4c4b7 .edge-thickness-thick{stroke-width:3.5px;}#d-21b905e4c4b7 .edge-pattern-solid{stroke-dasharray:0;}#d-21b905e4c4b7 .edge-thickness-invisible{stroke-width:0;fill:none;}#d-21b905e4c4b7 .edge-pattern-dashed{stroke-dasharray:3;}#d-21b905e4c4b7 .edge-pattern-dotted{stroke-dasharray:2;}#d-21b905e4c4b7 .marker{fill:var(--ink-3);stroke:var(--ink-3);}#d-21b905e4c4b7 .marker.cross{stroke:var(--ink-3);}#d-21b905e4c4b7 svg{font-family:var(--mono);font-size:13px;}#d-21b905e4c4b7 p{margin:0;}#d-21b905e4c4b7 .label{font-family:var(--mono);color:var(--ink);}#d-21b905e4c4b7 .cluster-label text{fill:var(--ink);}#d-21b905e4c4b7 .cluster-label span{color:var(--ink);}#d-21b905e4c4b7 .cluster-label span p{background-color:transparent;}#d-21b905e4c4b7 .label text,#d-21b905e4c4b7 span{fill:var(--ink);color:var(--ink);}#d-21b905e4c4b7 .node rect,#d-21b905e4c4b7 .node circle,#d-21b905e4c4b7 .node ellipse,#d-21b905e4c4b7 .node polygon,#d-21b905e4c4b7 .node path{fill:var(--bg-2);stroke:var(--line-2);stroke-width:1px;}#d-21b905e4c4b7 .rough-node .label text,#d-21b905e4c4b7 .node .label text,#d-21b905e4c4b7 .image-shape .label,#d-21b905e4c4b7 .icon-shape .label{text-anchor:middle;}#d-21b905e4c4b7 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#d-21b905e4c4b7 .rough-node .label,#d-21b905e4c4b7 .node .label,#d-21b905e4c4b7 .image-shape .label,#d-21b905e4c4b7 .icon-shape .label{text-align:center;}#d-21b905e4c4b7 .node.clickable{cursor:pointer;}#d-21b905e4c4b7 .root .anchor path{fill:var(--ink-3)!important;stroke-width:0;stroke:var(--ink-3);}#d-21b905e4c4b7 .arrowheadPath{fill:#5fffff;}#d-21b905e4c4b7 .edgePaths .path{stroke:var(--ink-3);stroke-width:1px;}#d-21b905e4c4b7 .flowchart-link{stroke:var(--ink-3);fill:none;}#d-21b905e4c4b7 .edgeLabel{background-color:var(--bg);text-align:center;}#d-21b905e4c4b7 .edgeLabel p{background-color:var(--bg);}#d-21b905e4c4b7 .edgeLabel rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-21b905e4c4b7 .labelBkg{background-color:rgba(160, 0, 0, 0.5);}#d-21b905e4c4b7 .cluster rect{fill:var(--panel);stroke:var(--line-2);stroke-width:1px;}#d-21b905e4c4b7 .cluster text{fill:var(--ink);}#d-21b905e4c4b7 .cluster span{color:var(--ink);}#d-21b905e4c4b7 .node .collapsed-indicator{fill:var(--line-2);stroke:none;opacity:0.6;}#d-21b905e4c4b7 .node .collapsed-separator{stroke:var(--line-2);stroke-width:0.75px;}#d-21b905e4c4b7 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:var(--mono);font-size:12px;background:var(--panel);border:1px solid hsl(357.75, 60%, 21.3725490196%);border-radius:2px;pointer-events:none;z-index:100;}#d-21b905e4c4b7 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:var(--ink);}#d-21b905e4c4b7 rect.text{fill:none;stroke-width:0;}#d-21b905e4c4b7 .icon-shape,#d-21b905e4c4b7 .image-shape{background-color:var(--bg);text-align:center;}#d-21b905e4c4b7 .icon-shape p,#d-21b905e4c4b7 .image-shape p{background-color:var(--bg);padding:2px;}#d-21b905e4c4b7 .icon-shape .label rect,#d-21b905e4c4b7 .image-shape .label rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-21b905e4c4b7 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#d-21b905e4c4b7 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#d-21b905e4c4b7 .node .neo-node{stroke:var(--line-2);}#d-21b905e4c4b7 [data-look="neo"].node rect,#d-21b905e4c4b7 [data-look="neo"].cluster rect,#d-21b905e4c4b7 [data-look="neo"].node polygon{stroke:url(#d-21b905e4c4b7-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-21b905e4c4b7 [data-look="neo"].swimlane.cluster rect{filter:none;}#d-21b905e4c4b7 [data-look="neo"].node path{stroke:url(#d-21b905e4c4b7-gradient);stroke-width:1px;}#d-21b905e4c4b7 [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-21b905e4c4b7 [data-look="neo"].node .neo-line path{stroke:var(--line-2);filter:none;}#d-21b905e4c4b7 [data-look="neo"].node circle{stroke:url(#d-21b905e4c4b7-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-21b905e4c4b7 [data-look="neo"].node circle .state-start{fill:#000000;}#d-21b905e4c4b7 [data-look="neo"].icon-shape .icon{fill:url(#d-21b905e4c4b7-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-21b905e4c4b7 [data-look="neo"].icon-shape .icon-neo path{stroke:url(#d-21b905e4c4b7-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-21b905e4c4b7 :root{--mermaid-font-family:var(--mono);}</style><g><marker id="d-21b905e4c4b7_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="d-21b905e4c4b7_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M543.469,55.5L543.469,59.5C543.469,63.5,543.469,71.5,543.469,78.833C543.469,86.167,543.469,92.833,543.469,96.167L543.469,99.5" id="d-21b905e4c4b7-L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6NTQzLjQ2ODc1LCJ5Ijo1NS41fSx7IngiOjU0My40Njg3NSwieSI6NzkuNX0seyJ4Ijo1NDMuNDY4NzUsInkiOjEwMy41fV0=" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M543.469,151L543.469,155C543.469,159,543.469,167,543.469,174.333C543.469,181.667,543.469,188.333,543.469,191.667L543.469,195" id="d-21b905e4c4b7-L_B_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6NTQzLjQ2ODc1LCJ5IjoxNTF9LHsieCI6NTQzLjQ2ODc1LCJ5IjoxNzV9LHsieCI6NTQzLjQ2ODc1LCJ5IjoxOTl9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M490.803,279.928L437.28,294.289C383.758,308.65,276.713,337.372,223.19,356.649C169.668,375.927,169.668,385.76,169.668,390.677L169.668,395.594" id="d-21b905e4c4b7-L_C_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_D_0" data-points="W3sieCI6NDkwLjgwMjk2NzQ3NDE5MDI3LCJ5IjoyNzkuOTI3OTY3NDc0MTkwMjd9LHsieCI6MTY5LjY2Nzk2ODc1LCJ5IjozNjYuMDkzNzV9LHsieCI6MTY5LjY2Nzk2ODc1LCJ5IjozOTkuNTkzNzV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M592.778,283.285L631.692,297.086C670.607,310.888,748.436,338.491,787.351,357.209C826.266,375.927,826.266,385.76,826.266,390.677L826.266,395.594" id="d-21b905e4c4b7-L_C_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_E_0" data-points="W3sieCI6NTkyLjc3NzY5MjAyNzI4NjEsInkiOjI4My4yODQ4MDc5NzI3MTM5fSx7IngiOjgyNi4yNjU2MjUsInkiOjM2Ni4wOTM3NX0seyJ4Ijo4MjYuMjY1NjI1LCJ5IjozOTkuNTkzNzV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M128.81,447.094L117.155,453.869C105.5,460.644,82.189,474.194,70.534,493.327C58.879,512.46,58.879,537.177,58.879,559.119C58.879,581.06,58.879,600.227,58.879,617.769C58.879,635.31,58.879,651.227,58.879,667.144C58.879,683.06,58.879,698.977,58.879,714.894C58.879,730.81,58.879,746.727,58.879,762.644C58.879,778.56,58.879,794.477,63.014,806C67.15,817.523,75.421,824.653,79.556,828.217L83.691,831.782" id="d-21b905e4c4b7-L_D_L_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_L_0" data-points="W3sieCI6MTI4LjgxMDIwMDg5MzQ2MjcsInkiOjQ0Ny4wOTM3NX0seyJ4Ijo1OC44Nzg5MDYyNSwieSI6NDg3Ljc0Mzc0OTYxODUzMDN9LHsieCI6NTguODc4OTA2MjUsInkiOjU2MS44OTM3NDkyMzcwNjA1fSx7IngiOjU4Ljg3ODkwNjI1LCJ5Ijo2MTkuMzkzNzQ5MjM3MDYwNX0seyJ4Ijo1OC44Nzg5MDYyNSwieSI6NjY3LjE0Mzc0OTIzNzA2MDV9LHsieCI6NTguODc4OTA2MjUsInkiOjcxNC44OTM3NDkyMzcwNjA1fSx7IngiOjU4Ljg3ODkwNjI1LCJ5Ijo3NjIuNjQzNzQ5MjM3MDYwNX0seyJ4Ijo1OC44Nzg5MDYyNSwieSI6ODEwLjM5Mzc0OTIzNzA2MDV9LHsieCI6ODYuNzIxMTgzNzM2OTExLCJ5Ijo4MzQuMzkzNzQ5MjM3MDYwNX1d" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M169.668,447.094L169.668,453.869C169.668,460.644,169.668,474.194,169.668,488.702C169.668,503.21,169.668,518.677,169.668,526.41L169.668,534.144" id="d-21b905e4c4b7-L_D_F_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_F_0" data-points="W3sieCI6MTY5LjY2Nzk2ODc1LCJ5Ijo0NDcuMDkzNzV9LHsieCI6MTY5LjY2Nzk2ODc1LCJ5Ijo0ODcuNzQzNzQ5NjE4NTMwM30seyJ4IjoxNjkuNjY3OTY4NzUsInkiOjUzOC4xNDM3NDkyMzcwNjA1fV0=" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M169.668,585.644L169.668,591.269C169.668,596.894,169.668,608.144,169.668,617.102C169.668,626.06,169.668,632.727,169.668,636.06L169.668,639.394" id="d-21b905e4c4b7-L_F_H_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_F_H_0" data-points="W3sieCI6MTY5LjY2Nzk2ODc1LCJ5Ijo1ODUuNjQzNzQ5MjM3MDYwNX0seyJ4IjoxNjkuNjY3OTY4NzUsInkiOjYxOS4zOTM3NDkyMzcwNjA1fSx7IngiOjE2OS42Njc5Njg3NSwieSI6NjQzLjM5Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M169.668,690.894L169.668,694.894C169.668,698.894,169.668,706.894,169.668,714.227C169.668,721.56,169.668,728.227,169.668,731.56L169.668,734.894" id="d-21b905e4c4b7-L_H_J_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_H_J_0" data-points="W3sieCI6MTY5LjY2Nzk2ODc1LCJ5Ijo2OTAuODkzNzQ5MjM3MDYwNX0seyJ4IjoxNjkuNjY3OTY4NzUsInkiOjcxNC44OTM3NDkyMzcwNjA1fSx7IngiOjE2OS42Njc5Njg3NSwieSI6NzM4Ljg5Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M169.668,786.394L169.668,790.394C169.668,794.394,169.668,802.394,165.533,809.958C161.397,817.523,153.126,824.653,148.991,828.217L144.855,831.782" id="d-21b905e4c4b7-L_J_L_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_L_0" data-points="W3sieCI6MTY5LjY2Nzk2ODc1LCJ5Ijo3ODYuMzkzNzQ5MjM3MDYwNX0seyJ4IjoxNjkuNjY3OTY4NzUsInkiOjgxMC4zOTM3NDkyMzcwNjA1fSx7IngiOjE0MS44MjU2OTEyNjMwODksInkiOjgzNC4zOTM3NDkyMzcwNjA1fV0=" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M735.648,444.417L704.597,451.638C673.546,458.859,611.443,473.302,580.391,488.256C549.34,503.21,549.34,518.677,549.34,526.41L549.34,534.144" id="d-21b905e4c4b7-L_E_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_G_0" data-points="W3sieCI6NzM1LjY0ODQzNzUsInkiOjQ0NC40MTcwNzQ0NjI5MzIzNn0seyJ4Ijo1NDkuMzM5ODQzNzUsInkiOjQ4Ny43NDM3NDk2MTg1MzAzfSx7IngiOjU0OS4zMzk4NDM3NSwieSI6NTM4LjE0Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M549.34,585.644L549.34,591.269C549.34,596.894,549.34,608.144,549.34,617.102C549.34,626.06,549.34,632.727,549.34,636.06L549.34,639.394" id="d-21b905e4c4b7-L_G_I_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_G_I_0" data-points="W3sieCI6NTQ5LjMzOTg0Mzc1LCJ5Ijo1ODUuNjQzNzQ5MjM3MDYwNX0seyJ4Ijo1NDkuMzM5ODQzNzUsInkiOjYxOS4zOTM3NDkyMzcwNjA1fSx7IngiOjU0OS4zMzk4NDM3NSwieSI6NjQzLjM5Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M792.704,447.094L783.131,453.869C773.557,460.644,754.409,474.194,744.835,488.702C735.262,503.21,735.262,518.677,735.262,526.41L735.262,534.144" id="d-21b905e4c4b7-L_E_R_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_R_0" data-points="W3sieCI6NzkyLjcwNDQwMTYxMTE3ODcsInkiOjQ0Ny4wOTM3NX0seyJ4Ijo3MzUuMjYxNzE4NzUsInkiOjQ4Ny43NDM3NDk2MTg1MzAzfSx7IngiOjczNS4yNjE3MTg3NSwieSI6NTM4LjE0Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M239.677,447.094L259.648,453.869C279.62,460.644,319.562,474.194,339.533,488.702C359.504,503.21,359.504,518.677,359.504,526.41L359.504,534.144" id="d-21b905e4c4b7-L_D_N_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_N_0" data-points="W3sieCI6MjM5LjY3NzM0MDUyNTMzMzE2LCJ5Ijo0NDcuMDkzNzV9LHsieCI6MzU5LjUwMzkwNjI1LCJ5Ijo0ODcuNzQzNzQ5NjE4NTMwM30seyJ4IjozNTkuNTAzOTA2MjUsInkiOjUzOC4xNDM3NDkyMzcwNjA1fV0=" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M859.827,447.094L869.401,453.869C878.974,460.644,898.122,474.194,907.696,488.702C917.27,503.21,917.27,518.677,917.27,526.41L917.27,534.144" id="d-21b905e4c4b7-L_E_O_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_O_0" data-points="W3sieCI6ODU5LjgyNjg0ODM4ODgyMTMsInkiOjQ0Ny4wOTM3NX0seyJ4Ijo5MTcuMjY5NTMxMjUsInkiOjQ4Ny43NDM3NDk2MTg1MzAzfSx7IngiOjkxNy4yNjk1MzEyNSwieSI6NTM4LjE0Mzc0OTIzNzA2MDV9XQ==" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/><path d="M916.883,441.03L956.774,448.815C996.665,456.601,1076.448,472.172,1116.339,486.066C1156.23,499.96,1156.23,512.177,1156.23,518.285L1156.23,524.394" id="d-21b905e4c4b7-L_E_P_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_P_0" data-points="W3sieCI6OTE2Ljg4MjgxMjUsInkiOjQ0MS4wMjk3MTU0OTI4OTg5fSx7IngiOjExNTYuMjMwNDY4NzUsInkiOjQ4Ny43NDM3NDk2MTg1MzAzfSx7IngiOjExNTYuMjMwNDY4NzUsInkiOjUyOC4zOTM3NDkyMzcwNjA1fV0=" data-look="classic" marker-end="url(#d-21b905e4c4b7_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_A_B_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_C_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel" transform="translate(169.66796875, 366.09375)"><g class="label" data-id="L_C_D_0" transform="translate(0, -8.5)"><g><rect class="background" style="" x="-33.3125" y="-1" width="66.625" height="19"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Internal</tspan></tspan></text></g></g></g><g class="edgeLabel" transform="translate(826.265625, 366.09375)"><g class="label" data-id="L_C_E_0" transform="translate(0, -8.5)"><g><rect class="background" style="" x="-37.2265625" y="-1" width="74.453125" height="19"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Execution</tspan></tspan></text></g></g></g><g class="edgeLabel"><g class="label" data-id="L_D_L_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel" transform="translate(169.66796875, 487.7437496185303)"><g class="label" data-id="L_D_F_0" transform="translate(0, -15.649999618530273)"><g><rect class="background" style="" x="-84.1875" y="-1" width="168.375" height="33.29999923706055"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">after</tspan></tspan><tspan class="text-outer-tspan row" x="0" y="1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">decouple_console_logs</tspan></tspan></text></g></g></g><g class="edgeLabel"><g class="label" data-id="L_F_H_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_H_J_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_J_L_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_E_G_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_G_I_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel" transform="translate(735.26171875, 487.7437496185303)"><g class="label" data-id="L_E_R_0" transform="translate(0, -8.5)"><g><rect class="background" style="" x="-37.2265625" y="-1" width="74.453125" height="19"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">propagate</tspan></tspan></text></g></g></g><g class="edgeLabel" transform="translate(359.50390625, 487.7437496185303)"><g class="label" data-id="L_D_N_0" transform="translate(0, -8.5)"><g><rect class="background" style="" x="-33.3125" y="-1" width="66.625" height="19"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">file_log</tspan></tspan></text></g></g></g><g class="edgeLabel" transform="translate(917.26953125, 487.7437496185303)"><g class="label" data-id="L_E_O_0" transform="translate(0, -8.5)"><g><rect class="background" style="" x="-33.3125" y="-1" width="66.625" height="19"/><text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">file_log</tspan></tspan></text></g></g></g><g class="edgeLabel"><g class="label" data-id="L_E_P_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g></g><g class="nodes"><g class="node default" id="d-21b905e4c4b7-flowchart-A-0" data-look="classic" transform="translate(543.46875, 31.75)"><rect class="basic label-container" style="" x="-90.6171875" y="-23.75" width="181.234375" height="47.5"/><g class="label" style="" transform="translate(-62.6171875, -9.75)"><rect/><foreignObject width="125.234375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Application Code</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-B-1" data-look="classic" transform="translate(543.46875, 127.25)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Logger Instance</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-C-3" data-look="classic" transform="translate(543.46875, 265.796875)"><polygon points="66.796875,0 133.59375,-66.796875 66.796875,-133.59375 0,-66.796875" class="label-container" transform="translate(-66.296875, 66.796875)"/><g class="label" style="" transform="translate(-43.046875, -9.75)"><rect/><foreignObject width="86.09375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Logger Type</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-D-5" data-look="classic" transform="translate(169.66796875, 423.34375)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>internal_logger</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-E-7" data-look="classic" transform="translate(826.265625, 423.34375)"><rect class="basic label-container" style="" x="-90.6171875" y="-23.75" width="181.234375" height="47.5"/><g class="label" style="" transform="translate(-62.6171875, -9.75)"><rect/><foreignObject width="125.234375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>execution_logger</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-L-9" data-look="classic" transform="translate(114.2734375, 858.1437492370605)"><rect class="basic label-container" style="" x="-106.2734375" y="-23.75" width="212.546875" height="47.5"/><g class="label" style="" transform="translate(-78.2734375, -9.75)"><rect/><foreignObject width="156.546875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Rich Console Handler</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-F-11" data-look="classic" transform="translate(169.66796875, 561.8937492370605)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Queue Handler</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-H-13" data-look="classic" transform="translate(169.66796875, 667.1437492370605)"><rect class="basic label-container" style="" x="-82.7890625" y="-23.75" width="165.578125" height="47.5"/><g class="label" style="" transform="translate(-54.7890625, -9.75)"><rect/><foreignObject width="109.578125" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Internal Queue</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-J-15" data-look="classic" transform="translate(169.66796875, 762.6437492370605)"><rect class="basic label-container" style="" x="-82.7890625" y="-23.75" width="165.578125" height="47.5"/><g class="label" style="" transform="translate(-54.7890625, -9.75)"><rect/><foreignObject width="109.578125" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Queue Listener</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-G-19" data-look="classic" transform="translate(549.33984375, 561.8937492370605)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Queue Handler</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-I-21" data-look="classic" transform="translate(549.33984375, 667.1437492370605)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Execution Queue</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-R-23" data-look="classic" transform="translate(735.26171875, 561.8937492370605)"><rect class="basic label-container" style="" x="-71.046875" y="-23.75" width="142.09375" height="47.5"/><g class="label" style="" transform="translate(-43.046875, -9.75)"><rect/><foreignObject width="86.09375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Root Logger</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-N-25" data-look="classic" transform="translate(359.50390625, 561.8937492370605)"><rect class="basic label-container" style="" x="-74.9609375" y="-23.75" width="149.921875" height="47.5"/><g class="label" style="" transform="translate(-46.9609375, -9.75)"><rect/><foreignObject width="93.921875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>File Handler</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-O-27" data-look="classic" transform="translate(917.26953125, 561.8937492370605)"><rect class="basic label-container" style="" x="-74.9609375" y="-23.75" width="149.921875" height="47.5"/><g class="label" style="" transform="translate(-46.9609375, -9.75)"><rect/><foreignObject width="93.921875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>File Handler</p></span></div></foreignObject></g></g><g class="node default" id="d-21b905e4c4b7-flowchart-P-29" data-look="classic" transform="translate(1156.23046875, 561.8937492370605)"><rect class="basic label-container" style="" x="-128" y="-33.5" width="256" height="67"/><g class="label" style="" transform="translate(-100, -19.5)"><rect/><foreignObject width="200" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>LogCaptureBuffer per keyword</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="d-21b905e4c4b7-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="d-21b905e4c4b7-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="d-21b905e4c4b7-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--line-2)" stop-opacity="1"/><stop offset="100%" stop-color="hsl(358.125, 60%, 21.3725490196%)" stop-opacity="1"/></linearGradient></svg></div></figure>
+<p>The handlers are not the same for the two loggers:</p>
+<ul><li><code class="ic">internal_logger</code> writes to its Rich console handler directly. Only <code class="ic">decouple_console_logs()</code> puts a queue between them. The stdio MCP server (<code class="ic">optics mcp</code>) calls it, so a client that does not read stderr cannot block the logger.</li><li><code class="ic">execution_logger</code> has a queue handler on the execution queue. No <code class="ic">QueueListener</code> reads that queue, and no code attaches <code class="ic">execution_console_handler</code>. Execution records reach the console only through the root logger, if the root has a handler. They also go to the log files when <code class="ic">file_log</code> is on, and to the <code class="ic">LogCaptureBuffer</code> of the keyword that runs.</li><li><code class="ic">shutdown_logging()</code> empties both queues at exit.</li></ul>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>The execution queue has no reader, so its records stay in memory until the process ends. Keep this in mind for a long-lived process such as <code class="ic">optics serve</code>.</p></aside>
+<h2 id="logger-instances">Logger instances<a class="anchor" href="#logger-instances" aria-label="Link to this section">#</a></h2>
+<h3 id="internal-logger">Internal logger<a class="anchor" href="#internal-logger" aria-label="Link to this section">#</a></h3>
+<p><strong>Name:</strong> <code class="ic">optics.internal</code> <strong>Purpose:</strong> Framework-internal operations, debugging and development.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import internal_logger
+
+internal_logger.debug(&quot;Debug message&quot;)
+internal_logger.info(&quot;Information message&quot;)
+internal_logger.warning(&quot;Warning message&quot;)
+internal_logger.error(&quot;Error message&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> internal_logger
+
+internal_logger.debug(<span class="c-lit">"Debug message"</span>)
+internal_logger.info(<span class="c-lit">"Information message"</span>)
+internal_logger.warning(<span class="c-lit">"Warning message"</span>)
+internal_logger.error(<span class="c-lit">"Error message"</span>)</code></pre></figure>
+<p><strong>Characteristics:</strong></p>
+<ul><li>Propagates to the root logger: <strong>No</strong> (<code class="ic">propagate = False</code>).</li><li>Rich tracebacks: <strong>No</strong>. The console handler is <code class="ic">RichHandler(show_time=True, show_level=True)</code>. <code class="ic">SecretMaskingFilter</code> writes the traceback as masked text before a handler gets the record.</li><li>Use cases: framework debugging, component initialization, error details.</li><li>Every <code class="ic">ERROR</code> record also goes to the outcome of the current keyword (<code class="ic">keyword_outcome.py</code>). A keyword that logs an error without a raise can then show that error.</li></ul>
+<h3 id="execution-logger">Execution logger<a class="anchor" href="#execution-logger" aria-label="Link to this section">#</a></h3>
+<p><strong>Name:</strong> <code class="ic">optics.execution</code> <strong>Purpose:</strong> Test execution events, keyword execution and information for the user.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import execution_logger
+
+execution_logger.info(&quot;Test case started&quot;)
+execution_logger.info(&quot;Keyword executed successfully&quot;)
+execution_logger.warning(&quot;Element not found, trying fallback&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> execution_logger
+
+execution_logger.info(<span class="c-lit">"Test case started"</span>)
+execution_logger.info(<span class="c-lit">"Keyword executed successfully"</span>)
+execution_logger.warning(<span class="c-lit">"Element not found, trying fallback"</span>)</code></pre></figure>
+<p><strong>Characteristics:</strong></p>
+<ul><li>Propagates to the root logger: <strong>Yes</strong> (<code class="ic">propagate = True</code>).</li><li>Rich tracebacks: <strong>No</strong> (cleaner output).</li><li>Use cases: test execution tracking, keyword results, execution tracer logs.</li></ul>
+<h2 id="logging-configuration">Logging configuration<a class="anchor" href="#logging-configuration" aria-label="Link to this section">#</a></h2>
+<h3 id="configuration-structure">Configuration structure<a class="anchor" href="#configuration-structure" aria-label="Link to this section">#</a></h3>
+<p>You configure logging in the main configuration:</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="# config.yaml
+log_level: &quot;INFO&quot;  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+file_log: true
+log_path: &quot;./logs/test_execution.log&quot;  # Optional
+json_log: false
+json_path: &quot;./logs/test_logs.json&quot;  # Optional
+execution_output_path: &quot;./output&quot;">Copy</button><pre><code><span class="c-dim"># config.yaml</span>
+<span class="c-mod">log_level</span><span class="c-dim">:</span> <span class="c-lit">"INFO"</span> <span class="c-dim"> # DEBUG, INFO, WARNING, ERROR, CRITICAL</span>
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">log_path</span><span class="c-dim">:</span> <span class="c-lit">"./logs/test_execution.log"</span> <span class="c-dim"> # Optional</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">false</span>
+<span class="c-mod">json_path</span><span class="c-dim">:</span> <span class="c-lit">"./logs/test_logs.json"</span> <span class="c-dim"> # Optional</span>
+<span class="c-mod">execution_output_path</span><span class="c-dim">:</span> <span class="c-lit">"./output"</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Default</th><th>What logging does with it</th></tr></thead><tbody><tr><td><code class="ic">log_level</code></td><td><code class="ic">INFO</code></td><td>Sets the level of both loggers and both console handlers. An unknown name becomes <code class="ic">INFO</code>.</td></tr><tr><td><code class="ic">file_log</code></td><td><code class="ic">false</code></td><td>Adds a file handler to each logger.</td></tr><tr><td><code class="ic">log_path</code></td><td>None</td><td>Sends both loggers to this one file. Without it, Optics writes <code class="ic">internal_logs.log</code> and <code class="ic">execution_logs.log</code>.</td></tr><tr><td><code class="ic">execution_output_path</code></td><td><code class="ic">&lt;project&gt;/execution_output</code></td><td>The folder for the two log files. When it is not set, Optics uses <code class="ic">logs/</code> in the current folder.</td></tr><tr><td><code class="ic">json_log</code>, <code class="ic">json_path</code></td><td><code class="ic">false</code>, None</td><td>Not part of <code class="ic">logging_config.py</code>. The JUnit event handler writes the JSON event log (<code class="ic">logs.json</code>). See <a href="../../docs/run/results">Read results</a>.</td></tr></tbody></table></div>
+<p>The <code class="ic">LoggingConfig</code> model in <code class="ic">logging_config.py</code> holds the four logging keys: <code class="ic">log_level</code>, <code class="ic">log_path</code>, <code class="ic">file_log</code> and <code class="ic">execution_output_path</code>. <code class="ic">initialize_handlers()</code> accepts a <code class="ic">LoggingConfig</code> or a full <code class="ic">Config</code>.</p>
+<h3 id="log-levels">Log levels<a class="anchor" href="#log-levels" aria-label="Link to this section">#</a></h3>
+<p>The framework uses the standard Python log levels:</p>
+<ul><li><strong>DEBUG</strong>: detailed information for troubleshooting.</li><li><strong>INFO</strong>: general information (the default).</li><li><strong>WARNING</strong>: warnings.</li><li><strong>ERROR</strong>: errors.</li><li><strong>CRITICAL</strong>: critical failures.</li></ul>
+<h3 id="dynamic-reconfiguration">Dynamic reconfiguration<a class="anchor" href="#dynamic-reconfiguration" aria-label="Link to this section">#</a></h3>
+<p>You can reconfigure logging at runtime:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import reconfigure_logging
+from optics_framework.common.config_handler import ConfigHandler
+
+config_handler = ConfigHandler(config)
+reconfigure_logging(config_handler.config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> reconfigure_logging
+<span class="c-info">from</span> optics_framework.common.config_handler <span class="c-info">import</span> ConfigHandler
+
+config_handler = ConfigHandler(config)
+reconfigure_logging(config_handler.config)</code></pre></figure>
+<p><strong>When reconfiguration occurs:</strong></p>
+<ul><li>Session creation: <code class="ic">ConfigHandler.__init__</code> calls <code class="ic">initialize_handlers()</code>, and the HTTP API calls <code class="ic">reconfigure_logging()</code> for each new session.</li><li>Configuration updates: <code class="ic">optics live</code> calls <code class="ic">initialize_handlers()</code> when it starts, with the config of the project and its screenshots folder as the output folder.</li><li>Runtime configuration changes: any code can call <code class="ic">reconfigure_logging()</code>.</li></ul>
+<p><code class="ic">initialize_handlers()</code> does not add a second file handler for a path that already has one.</p>
+<h2 id="log-handlers">Log handlers<a class="anchor" href="#log-handlers" aria-label="Link to this section">#</a></h2>
+<h3 id="console-handlers">Console handlers<a class="anchor" href="#console-handlers" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">LoggingManager</code> makes one Rich console handler for each logger:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Internal logger - Rich, no tracebacks
+internal_console_handler = RichHandler(
+    show_time=True,
+    show_level=True
+)
+
+# Execution logger - Clean Rich output
+execution_console_handler = RichHandler(
+    rich_tracebacks=False,
+    show_time=True,
+    show_level=True,
+    markup=True
+)">Copy</button><pre><code><span class="c-dim"># Internal logger - Rich, no tracebacks</span>
+internal_console_handler = RichHandler(
+    show_time=<span class="c-info">True</span>,
+    show_level=<span class="c-info">True</span>
+)
+
+<span class="c-dim"># Execution logger - Clean Rich output</span>
+execution_console_handler = RichHandler(
+    rich_tracebacks=<span class="c-info">False</span>,
+    show_time=<span class="c-info">True</span>,
+    show_level=<span class="c-info">True</span>,
+    markup=<span class="c-info">True</span>
+)</code></pre></figure>
+<p>Earlier versions of the internal handler had <code class="ic">rich_tracebacks=True,</code> and <code class="ic">tracebacks_show_locals=True,</code>. Current code sets neither. As the <a href="#logger-architecture">Logger architecture</a> shows, no code attaches <code class="ic">execution_console_handler</code> to a logger.</p>
+<p><code class="ic">quiet_console_logs()</code> sets both console handlers to <code class="ic">WARNING</code> after the result printer shows its summary. <code class="ic">restore_console_logs()</code> sets them back when a new live display starts. The file handlers keep their levels.</p>
+<h3 id="file-handlers">File handlers<a class="anchor" href="#file-handlers" aria-label="Link to this section">#</a></h3>
+<p>The file handlers are rotating file handlers:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="handler = RotatingFileHandler(
+    path,
+    maxBytes=10 * 1024 * 1024,  # 10MB
+    backupCount=10  # Keep 10 backup files
+)">Copy</button><pre><code>handler = RotatingFileHandler(
+    path,
+    maxBytes=10 * 1024 * 1024,  <span class="c-dim"># 10MB</span>
+    backupCount=10  <span class="c-dim"># Keep 10 backup files</span>
+)</code></pre></figure>
+<p><strong>File handler features:</strong></p>
+<ul><li>Rotation at 10MB.</li><li>Keeps 10 backup files.</li><li>Separate files for internal and execution logs: <code class="ic">internal_logs.log</code> and <code class="ic">execution_logs.log</code>.</li><li>Configurable log paths. <code class="ic">log_path</code> puts both logs in one file.</li></ul>
+<p><code class="ic">create_file_handler(path, log_level, formatter=None, use_sensitive=False)</code> makes each handler. The handlers go on the loggers directly, not through a queue.</p>
+<h3 id="queue-handlers">Queue handlers<a class="anchor" href="#queue-handlers" aria-label="Link to this section">#</a></h3>
+<p>The execution logger, and the internal logger after <code class="ic">decouple_console_logs()</code>, use a queue handler:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="execution_queue_handler = QueueHandler(self.execution_log_queue)
+self.execution_logger.addHandler(self.execution_queue_handler)">Copy</button><pre><code>execution_queue_handler = QueueHandler(self.execution_log_queue)
+self.execution_logger.addHandler(self.execution_queue_handler)</code></pre></figure>
+<p><strong>Benefits:</strong></p>
+<ul><li>Thread-safe logging.</li><li>Non-blocking log writes.</li><li>Background processing, when a <code class="ic">QueueListener</code> reads the queue.</li><li>Better performance.</li></ul>
+<h2 id="sensitive-data-sanitization">Sensitive data sanitization<a class="anchor" href="#sensitive-data-sanitization" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">mask_secrets</code> in <code class="ic">logging_config.py</code> writes <code class="ic">****</code> in place of secrets. <code class="ic">SecretMaskingFilter</code> and <code class="ic">SensitiveDataFormatter</code> apply it to every log record. The JUnit handler applies it to the text and <code class="ic">message</code> values of <code class="ic">junit_output.xml</code> and to the <code class="ic">message</code>, <code class="ic">args</code> and <code class="ic">logs</code> of each <code class="ic">logs.json</code> event, before it writes them. The CLI applies it to error output and the <em>Cannot start</em> panel.</p>
+<p>It masks:</p>
+<ul><li>The secrets of the current session (<code class="ic">register_secret</code>, for example a value that a keyword keeps with <code class="ic">store_as</code> under a secret name).</li><li>Secret-named text values from the config file and the environment variables it uses (<code class="ic">register_config_secret</code>, called by <code class="ic">resolve_config_file</code>). See <a href="../../docs/reference/config#logging">Configuration</a> for the names that count as secret.</li><li>Passwords in URLs: <code class="ic">https://user:****@host</code>.</li><li>Query parameters with a secret name: <code class="ic">?token=****</code>.</li><li><code class="ic">@:name</code> references: <code class="ic">@:api_key</code> becomes <code class="ic">@:****</code>.</li></ul>
+<p><code class="ic">SecretMaskingFilter</code> is on both loggers, so every handler gets the masked line. It also masks the traceback and the stack text. While a keyword reads a value for <code class="ic">store_as</code> under a secret name, <code class="ic">holding_logs_for_secret()</code> holds the log lines of that keyword. It releases them after the value is registered, so those lines are masked too.</p>
+<h2 id="session-context-logging">Session context logging<a class="anchor" href="#session-context-logging" aria-label="Link to this section">#</a></h2>
+<p>The framework has session-scoped logging:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import LoggerContext
+
+with LoggerContext(session_id) as (session_execution_logger, session_internal_logger):
+    session_execution_logger.info(&quot;Session-specific log message&quot;)
+    # Logs include session_id automatically">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> LoggerContext
+
+<span class="c-info">with</span> LoggerContext(session_id) <span class="c-info">as</span> (session_execution_logger, session_internal_logger):
+    session_execution_logger.info(<span class="c-lit">"Session-specific log message"</span>)
+    <span class="c-dim"># Logs include session_id automatically</span></code></pre></figure>
+<p>The execution engine (<code class="ic">execution.py</code>) opens a <code class="ic">LoggerContext</code> for each run.</p>
+<p><strong>SessionLoggerAdapter:</strong></p>
+<ul><li>Adds <code class="ic">session_id</code> to the <code class="ic">extra</code> of each log record. No formatter prints it, so it shows only to a handler that reads <code class="ic">record.session_id</code>.</li><li>Gives session-scoped logging.</li><li>Used during test execution.</li></ul>
+<h2 id="log-capture">Log capture<a class="anchor" href="#log-capture" aria-label="Link to this section">#</a></h2>
+<p>Optics captures the logs of each keyword with <code class="ic">LogCaptureBuffer</code>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import LogCaptureBuffer
+
+class LogCaptureBuffer(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.records = []
+
+    def emit(self, record):
+        self.records.append(record)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> LogCaptureBuffer
+
+<span class="c-info">class</span> LogCaptureBuffer(logging.Handler):
+    <span class="c-info">def</span> __init__(self):
+        super().__init__()
+        self.records = []
+
+    <span class="c-info">def</span> emit(self, record):
+        self.records.append(record)</code></pre></figure>
+<p>It also has <code class="ic">clear()</code> and <code class="ic">get_records()</code>. <code class="ic">Junit_eventhandler.py</code> has its own copy of the same class.</p>
+<p><strong>Usage in test runner:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="capture_handler = LogCaptureBuffer()
+execution_logger.addHandler(capture_handler)
+
+# Execute keyword
+execute_keyword(...)
+
+# Get captured logs
+logs = capture_handler.get_records()">Copy</button><pre><code>capture_handler = LogCaptureBuffer()
+execution_logger.addHandler(capture_handler)
+
+<span class="c-dim"># Execute keyword</span>
+execute_keyword(...)
+
+<span class="c-dim"># Get captured logs</span>
+logs = capture_handler.get_records()</code></pre></figure>
+<p><code class="ic">TestRunner._execute_keyword</code> in <code class="ic">common/runner/test_runnner.py</code> does this for each keyword.</p>
+<p><strong>Use cases:</strong></p>
+<ul><li>Capturing logs during keyword execution.</li><li>Including logs in test results.</li><li>Debugging keyword failures.</li><li>Event logging.</li></ul>
+<h2 id="integration-with-execution-tracer">Integration with execution tracer<a class="anchor" href="#integration-with-execution-tracer" aria-label="Link to this section">#</a></h2>
+<p>The execution tracer writes to the execution logger:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import execution_logger
+from optics_framework.common.execution_tracer import execution_tracer
+
+# Execution tracer automatically logs to execution_logger
+execution_tracer.log_attempt(
+    strategy=xpath_strategy,
+    element=&quot;submit_button&quot;,
+    status=&quot;success&quot;,
+    duration=0.15
+)
+# Logs: &quot;Trying XPathStrategy on 'submit_button' ... SUCCESS, duration: 0.15s&quot;">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> execution_logger
+<span class="c-info">from</span> optics_framework.common.execution_tracer <span class="c-info">import</span> execution_tracer
+
+<span class="c-dim"># Execution tracer automatically logs to execution_logger</span>
+execution_tracer.log_attempt(
+    strategy=xpath_strategy,
+    element=<span class="c-lit">"submit_button"</span>,
+    status=<span class="c-lit">"success"</span>,
+    duration=0.15
+)
+<span class="c-dim"># Logs: "Trying XPathStrategy on 'submit_button' ... SUCCESS, duration: 0.15s"</span></code></pre></figure>
+<p><code class="ic">log_attempt(strategy, element, status, duration=None, error=None)</code> reads the name from <code class="ic">strategy.__class__.__name__</code>, so give a strategy instance, not the class. With the class <code class="ic">XPathStrategy</code>, the line names the metaclass. With <code class="ic">error</code>, the line is <code class="ic">Trying XPathStrategy on 'submit_button' ... FAIL (error: &lt;error&gt;)</code>. <code class="ic">log_attempt</code> also records the result for the outcome of the keyword.</p>
+<p>Strategies do not call the tracer. <code class="ic">StrategyManager</code> calls <code class="ic">log_attempt</code> for each strategy that it tries, with the status <code class="ic">"success"</code> or <code class="ic">"fail"</code> and no duration. The line then shows <code class="ic">SUCCESS</code> or <code class="ic">FAIL</code>.</p>
+<h2 id="log-format">Log format<a class="anchor" href="#log-format" aria-label="Link to this section">#</a></h2>
+<h3 id="console-format">Console format<a class="anchor" href="#console-format" aria-label="Link to this section">#</a></h3>
+<p>The Rich handler adds the time and the level. The message format is <code class="ic">%(message)s</code>.</p>
+<p><strong>Internal logger:</strong></p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="12:34:56 INFO     Debug message">Copy</button><pre><code>12:34:56 INFO     Debug message</code></pre></figure>
+<p><strong>Execution logger:</strong></p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="12:34:56 INFO     Test case started">Copy</button><pre><code>12:34:56 INFO     Test case started</code></pre></figure>
+<p>This is the format of <code class="ic">execution_console_handler</code>. No code attaches it now, so you see execution lines in this format only if your code attaches the handler.</p>
+<h3 id="file-format">File format<a class="anchor" href="#file-format" aria-label="Link to this section">#</a></h3>
+<p>The log files use this format:</p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="2024-01-01 12:34:56,789 - INFO - Log message">Copy</button><pre><code>2024-01-01 12:34:56,789 - INFO - Log message</code></pre></figure>
+<p><strong>Format components:</strong></p>
+<ul><li>Timestamp, with milliseconds.</li><li>Level name.</li><li>Message.</li></ul>
+<p><code class="ic">initialize_handlers()</code> calls <code class="ic">create_file_handler(..., use_sensitive=True)</code>, which uses <code class="ic">TextLogFormatter('%(asctime)s - %(levelname)s - %(message)s')</code>. <code class="ic">TextLogFormatter</code> writes line breaks and control characters in a message as escapes, so a message cannot make a false record.</p>
+<p>The module also has <code class="ic">LOG_FORMATTER</code>, which gives this format:</p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="INFO | 2024-01-01 12:34:56 | optics.internal:function_name:123 | Log message">Copy</button><pre><code>INFO | 2024-01-01 12:34:56 | optics.internal:function_name:123 | Log message</code></pre></figure>
+<p>Only a call to <code class="ic">create_file_handler()</code> with <code class="ic">use_sensitive=False</code> uses <code class="ic">LOG_FORMATTER</code>. The log files from <code class="ic">file_log</code> do not.</p>
+<h2 id="logging-manager">Logging manager<a class="anchor" href="#logging-manager" aria-label="Link to this section">#</a></h2>
+<p>The <code class="ic">LoggingManager</code> class manages all logging infrastructure:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="class LoggingManager:
+    def __init__(self):
+        # Initialize loggers
+        # Set up handlers
+        # Configure queues
+
+    def initialize_handlers(self, config):
+        # Configure handlers based on config
+        # Add file handlers if enabled
+        # Set log levels
+
+    def shutdown_logging(self):
+        # Clean shutdown
+        # Stop listeners
+
+    def stop_listeners(self):
+        # Stop the queue listeners">Copy</button><pre><code><span class="c-info">class</span> LoggingManager:
+    <span class="c-info">def</span> __init__(self):
+        <span class="c-dim"># Initialize loggers</span>
+        <span class="c-dim"># Set up handlers</span>
+        <span class="c-dim"># Configure queues</span>
+
+    <span class="c-info">def</span> initialize_handlers(self, config):
+        <span class="c-dim"># Configure handlers based on config</span>
+        <span class="c-dim"># Add file handlers if enabled</span>
+        <span class="c-dim"># Set log levels</span>
+
+    <span class="c-info">def</span> shutdown_logging(self):
+        <span class="c-dim"># Clean shutdown</span>
+        <span class="c-dim"># Stop listeners</span>
+
+    <span class="c-info">def</span> stop_listeners(self):
+        <span class="c-dim"># Stop the queue listeners</span></code></pre></figure>
+<p>It also has <code class="ic">disable_logger()</code>, <code class="ic">get_internal_logger()</code>, <code class="ic">get_execution_logger()</code> and <code class="ic">get_listeners()</code>. The module makes one instance, <code class="ic">logging_manager</code>. The module-level functions <code class="ic">initialize_handlers()</code>, <code class="ic">reconfigure_logging()</code> and <code class="ic">shutdown_logging()</code> call it.</p>
+<h2 id="shutdown-and-cleanup">Shutdown and cleanup<a class="anchor" href="#shutdown-and-cleanup" aria-label="Link to this section">#</a></h2>
+<p>The framework shuts down logging cleanly:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import shutdown_logging
+
+# Automatically called on exit
+atexit.register(shutdown_logging)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.logging_config <span class="c-info">import</span> shutdown_logging
+
+<span class="c-dim"># Automatically called on exit</span>
+atexit.register(shutdown_logging)</code></pre></figure>
+<p><code class="ic">logging_config.py</code> registers <code class="ic">shutdown_logging</code> with <code class="ic">atexit</code> when it loads.</p>
+<p><strong>Shutdown process:</strong></p>
+<ol><li>Disable the root logger.</li><li>Stop the queue listeners.</li><li>Wait up to 2 seconds for the listener threads to stop.</li><li>Flush the handlers: close the JUnit handler of each active session.</li><li>Clear the log queues.</li></ol>
+<h2 id="best-practices">Best practices<a class="anchor" href="#best-practices" aria-label="Link to this section">#</a></h2>
+<h3 id="1-use-appropriate-logger">1. Use appropriate logger<a class="anchor" href="#1-use-appropriate-logger" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Framework debugging
+internal_logger.debug(&quot;Component initialized&quot;)
+
+# Test execution events
+execution_logger.info(&quot;Keyword executed&quot;)">Copy</button><pre><code><span class="c-dim"># Framework debugging</span>
+internal_logger.debug(<span class="c-lit">"Component initialized"</span>)
+
+<span class="c-dim"># Test execution events</span>
+execution_logger.info(<span class="c-lit">"Keyword executed"</span>)</code></pre></figure>
+<h3 id="2-log-levels">2. Log levels<a class="anchor" href="#2-log-levels" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Debug: Detailed troubleshooting
+internal_logger.debug(&quot;Element coordinates: (100, 200)&quot;)
+
+# Info: General information
+execution_logger.info(&quot;Test case completed&quot;)
+
+# Warning: Non-critical issues
+execution_logger.warning(&quot;Element not found, using fallback&quot;)
+
+# Error: Errors that don't stop execution
+execution_logger.error(&quot;Driver connection failed&quot;)
+
+# Critical: Critical failures
+internal_logger.critical(&quot;System error, shutting down&quot;)">Copy</button><pre><code><span class="c-dim"># Debug: Detailed troubleshooting</span>
+internal_logger.debug(<span class="c-lit">"Element coordinates: (100, 200)"</span>)
+
+<span class="c-dim"># Info: General information</span>
+execution_logger.info(<span class="c-lit">"Test case completed"</span>)
+
+<span class="c-dim"># Warning: Non-critical issues</span>
+execution_logger.warning(<span class="c-lit">"Element not found, using fallback"</span>)
+
+<span class="c-dim"># Error: Errors that don't stop execution</span>
+execution_logger.error(<span class="c-lit">"Driver connection failed"</span>)
+
+<span class="c-dim"># Critical: Critical failures</span>
+internal_logger.critical(<span class="c-lit">"System error, shutting down"</span>)</code></pre></figure>
+<h3 id="3-sensitive-data">3. Sensitive data<a class="anchor" href="#3-sensitive-data" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Good - sanitized
+internal_logger.info(&quot;API key: @:api_key&quot;)
+
+# Bad - exposed
+internal_logger.info(f&quot;API key: {api_key}&quot;)">Copy</button><pre><code><span class="c-dim"># Good - sanitized</span>
+internal_logger.info(<span class="c-lit">"API key: @:api_key"</span>)
+
+<span class="c-dim"># Bad - exposed</span>
+internal_logger.info(f<span class="c-lit">"API key: {api_key}"</span>)</code></pre></figure>
+<p>A value with the <code class="ic">@:</code> prefix shows as <code class="ic">@:****</code>. A plain value is masked only when Optics registered it as a secret before.</p>
+<h3 id="4-context-information">4. Context information<a class="anchor" href="#4-context-information" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Include context in messages
+execution_logger.info(f&quot;Element '{element_id}' located at ({x}, {y})&quot;)">Copy</button><pre><code><span class="c-dim"># Include context in messages</span>
+execution_logger.info(f<span class="c-lit">"Element '{element_id}' located at ({x}, {y})"</span>)</code></pre></figure>
+<h3 id="5-exception-logging">5. Exception logging<a class="anchor" href="#5-exception-logging" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="try:
+    operation()
+except Exception as e:
+    internal_logger.exception(&quot;Operation failed&quot;, exc_info=e)
+    # Logs full traceback">Copy</button><pre><code><span class="c-info">try</span>:
+    operation()
+<span class="c-info">except</span> Exception <span class="c-info">as</span> e:
+    internal_logger.exception(<span class="c-lit">"Operation failed"</span>, exc_info=e)
+    <span class="c-dim"># Logs full traceback</span></code></pre></figure>
+<h2 id="configuration-examples">Configuration examples<a class="anchor" href="#configuration-examples" aria-label="Link to this section">#</a></h2>
+<h3 id="development-configuration">Development configuration<a class="anchor" href="#development-configuration" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="log_level: &quot;DEBUG&quot;
+file_log: true
+log_path: &quot;./logs/dev.log&quot;">Copy</button><pre><code><span class="c-mod">log_level</span><span class="c-dim">:</span> <span class="c-lit">"DEBUG"</span>
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">log_path</span><span class="c-dim">:</span> <span class="c-lit">"./logs/dev.log"</span></code></pre></figure>
+<h3 id="production-configuration">Production configuration<a class="anchor" href="#production-configuration" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="log_level: &quot;INFO&quot;
+file_log: true
+log_path: &quot;./logs/production.log&quot;
+json_log: true
+json_path: &quot;./logs/production.json&quot;">Copy</button><pre><code><span class="c-mod">log_level</span><span class="c-dim">:</span> <span class="c-lit">"INFO"</span>
+<span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">log_path</span><span class="c-dim">:</span> <span class="c-lit">"./logs/production.log"</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true</span>
+<span class="c-mod">json_path</span><span class="c-dim">:</span> <span class="c-lit">"./logs/production.json"</span></code></pre></figure>
+<h3 id="minimal-configuration">Minimal configuration<a class="anchor" href="#minimal-configuration" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="log_level: &quot;INFO&quot;
+# Uses defaults for everything else">Copy</button><pre><code><span class="c-mod">log_level</span><span class="c-dim">:</span> <span class="c-lit">"INFO"</span>
+<span class="c-dim"># Uses defaults for everything else</span></code></pre></figure>
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting" aria-label="Link to this section">#</a></h2>
+<h3 id="logs-not-appearing">Logs not appearing<a class="anchor" href="#logs-not-appearing" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Logs do not show in the console or in the files.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Check the log level configuration.</li><li>Make sure that the handlers are initialized. File handlers need <code class="ic">file_log: true</code>.</li><li>Check the file permissions for file logging.</li><li>Check how the configuration loads.</li><li>Remember that execution logger records reach the console only through a root logger handler.</li></ol>
+<h3 id="too-many-logs">Too many logs<a class="anchor" href="#too-many-logs" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> There is too much log output.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Increase the log level (INFO → WARNING).</li><li>Disable file logging if you do not need it.</li><li>Remove debug statements that you do not need.</li></ol>
+<h3 id="missing-logs">Missing logs<a class="anchor" href="#missing-logs" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Some logs are missing.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Check the logger propagation settings.</li><li>Make sure that the handlers are attached.</li><li>Check the log level filters.</li><li>Check the queue listener status.</li></ol>
+<h3 id="performance-issues">Performance issues<a class="anchor" href="#performance-issues" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Logging causes performance problems.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Decrease the log output with a higher log level.</li><li>Disable file logging.</li><li>Check how often the code logs a message.</li><li>Check the queue sizes.</li></ol>
+<h2 id="related-documentation">Related documentation<a class="anchor" href="#related-documentation" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/contribute/execution">Execution architecture</a>: the execution tracer and strategy attempt logging.</li><li><a href="../../docs/contribute/errors">Error handling</a>: error logging patterns.</li><li><a href="../../docs/reference/config#logging">Configuration</a>: logging configuration options.</li><li><a href="../../docs/contribute/components">Components</a>: component logging usage.</li><li><a href="../../docs/contribute/decisions">Architecture decisions</a>: logging system design decisions.</li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Log%20from%20Optics%20code&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Flogging%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Log%20from%20Optics%20code&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Flogging%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/contribute/errors"><span>Previous</span>Error handling</a><a class="pager-next" href="../../docs/contribute/cli-layer"><span>Next</span>CLI layer</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/contribute/logging.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#overview">Overview</a></li><li class="toc-l2"><a href="#logger-architecture">Logger architecture</a></li><li class="toc-l2"><a href="#logger-instances">Logger instances</a></li><li class="toc-l3"><a href="#internal-logger">Internal logger</a></li><li class="toc-l3"><a href="#execution-logger">Execution logger</a></li><li class="toc-l2"><a href="#logging-configuration">Logging configuration</a></li><li class="toc-l3"><a href="#configuration-structure">Configuration structure</a></li><li class="toc-l3"><a href="#log-levels">Log levels</a></li><li class="toc-l3"><a href="#dynamic-reconfiguration">Dynamic reconfiguration</a></li><li class="toc-l2"><a href="#log-handlers">Log handlers</a></li><li class="toc-l3"><a href="#console-handlers">Console handlers</a></li><li class="toc-l3"><a href="#file-handlers">File handlers</a></li><li class="toc-l3"><a href="#queue-handlers">Queue handlers</a></li><li class="toc-l2"><a href="#sensitive-data-sanitization">Sensitive data sanitization</a></li><li class="toc-l2"><a href="#session-context-logging">Session context logging</a></li><li class="toc-l2"><a href="#log-capture">Log capture</a></li><li class="toc-l2"><a href="#integration-with-execution-tracer">Integration with execution tracer</a></li><li class="toc-l2"><a href="#log-format">Log format</a></li><li class="toc-l3"><a href="#console-format">Console format</a></li><li class="toc-l3"><a href="#file-format">File format</a></li><li class="toc-l2"><a href="#logging-manager">Logging manager</a></li><li class="toc-l2"><a href="#shutdown-and-cleanup">Shutdown and cleanup</a></li><li class="toc-l2"><a href="#best-practices">Best practices</a></li><li class="toc-l3"><a href="#1-use-appropriate-logger">1. Use appropriate logger</a></li><li class="toc-l3"><a href="#2-log-levels">2. Log levels</a></li><li class="toc-l3"><a href="#3-sensitive-data">3. Sensitive data</a></li><li class="toc-l3"><a href="#4-context-information">4. Context information</a></li><li class="toc-l3"><a href="#5-exception-logging">5. Exception logging</a></li><li class="toc-l2"><a href="#configuration-examples">Configuration examples</a></li><li class="toc-l3"><a href="#development-configuration">Development configuration</a></li><li class="toc-l3"><a href="#production-configuration">Production configuration</a></li><li class="toc-l3"><a href="#minimal-configuration">Minimal configuration</a></li><li class="toc-l2"><a href="#troubleshooting">Troubleshooting</a></li><li class="toc-l3"><a href="#logs-not-appearing">Logs not appearing</a></li><li class="toc-l3"><a href="#too-many-logs">Too many logs</a></li><li class="toc-l3"><a href="#missing-logs">Missing logs</a></li><li class="toc-l3"><a href="#performance-issues">Performance issues</a></li><li class="toc-l2"><a href="#related-documentation">Related documentation</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaea8dc074" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+</body>
+</html>

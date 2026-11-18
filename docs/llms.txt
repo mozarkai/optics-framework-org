@@ -88,6 +88,25 @@
 - [HTTP API reference](https://optics-framework.org/docs/reference/http-api.md): Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.
 - [Error codes](https://optics-framework.org/docs/reference/errors.md): Learn what each Optics error code means and how to fix it.
 
+## Contribute
+
+- [Contribute to Optics](https://optics-framework.org/docs/contribute/index.md): How to report a bug, ask for a feature, and send a change to Optics, and the rules that every contributor obeys.
+- [Set up a development environment](https://optics-framework.org/docs/contribute/setup.md): Clone Optics, install the tools, make a change, run the tests and the static analysis, then commit.
+- [Architecture overview](https://optics-framework.org/docs/contribute/architecture.md): See how Optics is built, from the systems around it down to the layers inside it, and where to read about each part.
+- [Components](https://optics-framework.org/docs/contribute/components.md): Read what each core component of Optics does, how it is built, and how the components work together.
+- [Engine implementations](https://optics-framework.org/docs/contribute/engines.md): Learn how the drivers, element sources, vision models and LLM engines are built, how the factories load them, and how Optics chooses one.
+- [Strategies and self-healing](https://optics-framework.org/docs/contribute/strategies.md): Learn how the StrategyManager tries each way to find an element in turn, and how a keyword falls back to the next result when its action fails.
+- [Test execution architecture](https://optics-framework.org/docs/contribute/execution.md): How Optics runs a test, from the execution engine through executors, runners and the keyword registry to events, results and the execution tracer.
+- [Event system and EventSDK](https://optics-framework.org/docs/contribute/events.md): How Optics records labelled driver actions and sends them to an external event API, and how the event attributes file controls it.
+- [Handle errors in Optics code](https://optics-framework.org/docs/contribute/errors.md): How Optics names, raises, carries and reports errors, from a driver call up to the CLI and the HTTP API.
+- [Log from Optics code](https://optics-framework.org/docs/contribute/logging.md): How the two Optics loggers, their handlers, the log files and secret masking work, and how to log from framework code.
+- [CLI layer](https://optics-framework.org/docs/contribute/cli-layer.md): How the `optics` command parses its arguments, hands each command to a helper module and reaches the core framework.
+- [REST API layer](https://optics-framework.org/docs/contribute/api-layer.md): How `optics serve` turns HTTP requests into sessions, keyword runs and event streams on top of the core framework.
+- [Python library layer](https://optics-framework.org/docs/contribute/library-layer.md): How the `Optics` class wraps sessions and the keyword classes so Python code and Robot Framework can call Optics directly.
+- [Extend Optics](https://optics-framework.org/docs/contribute/extending.md): Add a driver, element source, vision model, LLM engine, keyword, event subscriber, executor, result printer or locator strategy to Optics.
+- [Architecture decisions](https://optics-framework.org/docs/contribute/decisions.md): The main design choices in Optics, why we made them, what we rejected and what each choice costs.
+- [Help wanted](https://optics-framework.org/docs/contribute/roadmap.md): The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.
+
 ## Help
 
 - [Get help](https://optics-framework.org/docs/help/index.md): Find the answer to a problem yourself, or report it so someone else can.

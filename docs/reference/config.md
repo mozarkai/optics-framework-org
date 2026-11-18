@@ -39,14 +39,14 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `json_log` | `false` | Writes a JSON array of every test, module and keyword event to `logs.json` at the end of the run. |
 | `json_path` | None | Where to write the JSON events instead of `<output>/logs.json`. `~` is expanded. |
 | `console` | `true` | **Has no effect.** Nothing reads it. Use `log_level` to control console output. |
-| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. A path that starts with `./` or `../` is relative to the project folder. Other relative paths are relative to the folder you run `optics` from. |
+| `execution_output_path` | `<project>/execution_output` | Where results, screenshots and logs go. A path that starts with `./` or `../` is relative to the project folder. Other relative paths are relative to the folder you run `optics` from. In the Python SDK without `project_path`, the default is `execution_output` in the current folder. |
 | `include` | None | Run only these test cases. See [include and exclude](#include-and-exclude). |
 | `exclude` | None | Skip these test cases. |
 | `ai_self_heal` | `false` | Lets an LLM try to recover when an element can't be found. See [ai_self_heal](#ai-self-heal). |
 | `strict_element_match` | `false` | Turns off fuzzy and partial text matching. See [strict_element_match](#strict-element-match). |
 | `save_captures` | `true` | Whether Optics writes screenshots of steps and captures. See [save_captures](#save-captures). |
 | `halt_duration` | `0.1` | Seconds to wait after a keyword fails every fallback. It isn't a pause between steps. |
-| `event_attributes_json` | None | Path to a JSON file of event attributes. When it includes an `eventUrl`, events you label with `event_name` are sent there at the end of the session. |
+| `event_attributes_json` | None | Path to a JSON file of event attributes, for example `./creds/event_attributes.json`. When it includes an `eventUrl`, events you label with `event_name` are sent there at the end of the session. See [Event attributes file](https://optics-framework.org/docs/contribute/events#event-attributes-file) for the format. |
 | `project_path` | The project folder | The CLI always sets this to the folder you pass, so leave it out. It only matters for the Python SDK. |
 
 **Note:**
@@ -102,6 +102,28 @@ The last message does not show the value of the variable.
 
 **Note:**
 The commands `optics execute`, `optics dry_run`, `optics live` and `optics doctor` resolve references. The Python SDK, `optics serve` and `optics mcp` take the settings as data and resolve nothing. `optics configure --edit` keeps references as you wrote them when it saves the file.
+
+This Appium example takes the server URL, with its token, from the environment, and the app from the project folder:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: $APPIUM_URL
+      capabilities:
+        udid: ${DEVICE_UDID:-emulator-5554}
+        app: ./apps/app.apk
+event_attributes_json: ./creds/event_attributes.json
+```
+
+```shell
+$ export APPIUM_URL="https://hub.example.com/wd/hub?token=..."
+$ optics execute my_project
+```
+
+A tool of your own that reads config.yaml, for example to see if `driver_sources.appium.enabled` or `elements_sources.camera_screenshot.enabled` is on, must accept both `elements_sources` and `element_sources`. It must also expand references first, because `enabled` can be a reference such as `enabled: ${USE_APPIUM}`.
 
 A Playwright `url` and `capabilities.headers` are the exception. The driver resolves them when it connects, so it can mask the values in its errors. An unset variable in them still stops the command when it reads the file. Do not use `$from` in `headers`. Write each header on its own line.
 
@@ -167,7 +189,7 @@ Enable the sources that match your driver. We recommend the locator, page source
 | `rapidocr` | `rapidocr` | None. Runs on the CPU with the models that come with the package. |
 | `easyocr` | `easyocr` | None. Slow on CPU. Downloads its models on first use. The language is always English. |
 | `pytesseract` | `pytesseract` | None. Needs the Tesseract program installed and on your PATH. |
-| `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials, such as `GOOGLE_APPLICATION_CREDENTIALS`. `googlevision` also works. |
+| `google_vision` | `google-vision` | `capabilities.api_key`: a Cloud Vision API key, or `capabilities.credentials_path`: a service account key file. Set only one: both stop the run with E0501. Without them, Optics uses Application Default Credentials: `GOOGLE_APPLICATION_CREDENTIALS`, or the sign-in from `gcloud auth application-default login`. A key file that is missing or is not a service account key stops the run with E0501 before the first test. `googlevision` also works. |
 | `remote_ocr` | None | `url` (required): your OCR service. `capabilities`: `timeout` (30), `method` (`easyocr`), `language` (`en`). Optics posts screenshots to `<url>/detect-text`. |
 
 ### image_detection
@@ -179,11 +201,19 @@ Enable the sources that match your driver. We recommend the locator, page source
 
 ### llm_models
 
-Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails.
+Optics supports three LLM engines: `gemini`, `openai` and `anthropic`. Each has an extra of the same name, and the `llm` bundle installs all three. If you enable more than one entry, Optics tries them in list order and moves to the next when a call fails. Optics imports an engine's SDK only when the engine is enabled, so a project without `llm_models` does not load any of them.
+
+| You have | Engine |
+|---|---|
+| A Gemini API key, or Vertex AI | `gemini` |
+| An OpenAI key, OpenRouter, Azure OpenAI, or a local server (Ollama, vLLM, LM Studio) | `openai` |
+| A Claude key, or Claude on Amazon Bedrock / Google Vertex AI | `anthropic` |
 
 Each engine reads its API key from `capabilities.api_key` first, then from an environment variable. To keep the key out of the file, write a reference such as `api_key: ${GEMINI_API_KEY}`. Optics reads the variable when it loads the file. If the variable is not set, the run stops with [E0501](https://optics-framework.org/docs/reference/errors#e05-files-and-config) before it starts. Logs and reports show `****` in place of the key.
 
-Each engine also takes `timeout_s` under `capabilities`: the seconds that one request can take, default `60`. A value that is not a positive number fails with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines).
+Each engine also takes `capabilities.timeout_s`: the seconds that one request can take, default `60`. A request that takes longer fails like any other LLM error, so a stalled connection cannot make a run wait forever. The `openai` and `anthropic` SDKs try a timed-out request two more times before it fails. A value that is not a positive number fails with [E0601](https://optics-framework.org/docs/reference/errors#e06-modules-and-engines).
+
+AI self-heal and the plain-English mode of `optics live` send screenshots, so pick a model that accepts images.
 
 #### gemini
 
@@ -192,7 +222,7 @@ Each engine also takes `timeout_s` under `capabilities`: the seconds that one re
 | `model` | `gemini-2.5-flash` | The Gemini model. |
 | `use_vertexai` | From `GOOGLE_GENAI_USE_VERTEXAI` | `true` uses Vertex AI instead of the Gemini API. |
 | `project`, `location` | From `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` | The Vertex AI project and region. |
-| `temperature` | The model's default | Sampling temperature. |
+| `temperature` | The model's default | Sampling temperature. Gemini 3 models recommend `1.0`. |
 | `credentials_path` | None | A Vertex AI service account key file. It selects Vertex AI and sets the project to the `project_id` of the key. |
 | `api_key` | None | The Gemini API key, or a reference such as `${GEMINI_API_KEY}`. `gemini_api_key` also works. |
 
@@ -288,9 +318,9 @@ nl_agent:
 
 | Setting | Default | What it does |
 |---|---|---|
-| `vision` | `auto` | When Optics sends a screenshot with the screen elements. `auto` sends one when the element list is not sufficient, for example after a failed step. `always` and `never` do what they say. |
+| `vision` | `auto` | When Optics sends a screenshot with the screen elements. `auto` sends one on the first turn, after a step that Optics could not confirm, when the screen has fewer than three controls or a control with no label, and when no element list is available. `always` sends one on every turn. `never` sends no image, for models that read text only. |
 | `max_steps` | `15` | The maximum number of steps for one instruction. It must be 1 or more. |
-| `escalation_model` | `""` | A stronger model for difficult steps, such as a retry after a failure. It uses the engine of the first enabled `llm_models` entry. Empty uses the same model for all steps. |
+| `escalation_model` | `""` | A stronger model ID for difficult turns: a second try after a reply that Optics could not use, a turn after two failures in a row, and a turn with a guard note. It uses the engine of the first enabled `llm_models` entry. Empty uses the same model for all turns. |
 
 ## Examples by platform
 
@@ -433,7 +463,7 @@ capabilities:
 | platformName | Defaults |
 |---|---|
 | `Android` | `ensureWebviewsHavePages: false`, `extractChromeAndroidPackageFromContextName: true` |
-| `iOS` | `includeSafariInWebviews: true`, `additionalWebviewBundleIds: ["*"]`, `webviewConnectRetries: 1`, `webviewAtomWaitTimeout: 5000` |
+| `iOS` | `includeSafariInWebviews: true`, `additionalWebviewBundleIds: ["*"]`, `webviewConnectRetries: 3`, `webviewAtomWaitTimeout: 5000` |
 
 The iOS defaults apply only to app sessions. With `browserName` or `autoWebview`, the session starts in the browser and Optics leaves them out. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web).
 
@@ -459,7 +489,7 @@ Optics reads each key from `capabilities` or from the top level of the `playwrig
 | `navigation_wait_until` | `domcontentloaded` | The load event that a page load waits for: `domcontentloaded`, `load`, `networkidle` or `commit`. |
 | `settle_timeout_ms` | `3000` | The wait for the page to stop changes before Optics reads it. `0` turns it off. |
 | `connect_timeout_ms` | `90000` | The limit for the connection to a remote browser. |
-| `action_timeout_ms` | `15000` | The limit for each other browser call, such as a key press or a screenshot. |
+| `action_timeout_ms` | `15000` | The limit for each other browser call, such as a click at coordinates, a key press, a scroll, a screenshot or a script. Optics also adds it as a margin on top of the other limits. |
 
 Optics ignores a capability that it does not know and logs a warning. Local Chromium starts without the automation flags, so `navigator.webdriver` is `false`.
 
@@ -620,7 +650,7 @@ exclude:
 
 | Key | Default | What it does |
 |---|---|---|
-| `log_level` | `INFO` | The level for the console and the log files. Set `DEBUG` to see every strategy Optics tries. |
+| `log_level` | `INFO` | The level for the console and the log files. Set `DEBUG` while you write tests, to see every strategy Optics tries. Use `INFO` or `WARNING` for regular runs. |
 | `file_log` | `false` | Writes `internal_logs.log` and `execution_logs.log` to the output folder. Each rotates at 10 MB and keeps 10 old files. |
 | `log_path` | None | Sends both logs to this one file. |
 | `json_log` | `false` | Writes `logs.json`: a list of events with name, status, timings and log lines for each test case, module and keyword. |

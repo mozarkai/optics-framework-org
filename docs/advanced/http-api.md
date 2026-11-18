@@ -46,14 +46,22 @@ Keep the `session_id`. Starting a session also opens the app, as `Launch App` wo
 }
 ```
 
-For a desktop app, give the OS and the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop):
+For a desktop app, give the OS, `automationName: Xa11y` and the app. The server launches the app. Run Appium with `appium-xa11y-driver` on the machine that shows the app. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop). This script starts a session, types a note, lists the elements and stops the session:
 
-```json
-{
-  "driver_sources": [{"appium": {"enabled": true, "url": "http://127.0.0.1:4723", "capabilities": {
-    "platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
-  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]
-}
+```bash
+SESSION=$(curl -sf -X POST "http://localhost:8000/v1/sessions/start" \
+  -H "Content-Type: application/json" \
+  -d '{"driver_sources": [{"appium": {"enabled": true, "url": "http://127.0.0.1:4723", "capabilities": {"platformName": "Mac", "automationName": "Xa11y", "app": "com.apple.TextEdit"}}}],
+       "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"]}' \
+  | python3 -c 'import json, sys; print(json.load(sys.stdin)["session_id"])')
+
+curl -sf -X POST "http://localhost:8000/v1/sessions/$SESSION/action" \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "keyword", "keyword": "Enter Text", "params": ["//text_area", "Hello from Optics"]}'
+
+curl -sf "http://localhost:8000/v1/sessions/$SESSION/elements"
+
+curl -sf -X DELETE "http://localhost:8000/v1/sessions/$SESSION/stop"
 ```
 
 ### Run keywords
@@ -99,7 +107,7 @@ This closes the app and ends the session.
 Two endpoints stream updates as [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events):
 
 - `/v1/sessions/{id}/events` sends a message when each keyword starts, passes or fails.
-- `/v1/sessions/{id}/workspace/stream` sends a new screenshot and element list whenever the screen changes, which is handy for showing a live view of the device.
+- `/v1/sessions/{id}/workspace/stream` sends a new screenshot and element list whenever the screen changes, which is handy for showing a live view of the device. Optics compares each new read with the last one and sends nothing when they are the same, so the stream puts little load on the driver.
 
 ```shell
 $ curl -N http://127.0.0.1:8000/v1/sessions/$SESSION/events

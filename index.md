@@ -130,7 +130,7 @@ jobs:
 ## Built in the open
 
 - 9,347 downloads from PyPI by pip, uv and requests, 18 Apr 2025 to 17 Nov 2026, out of 75,053 downloads in all (the rest are mirrors, browsers and unnamed clients). Source: PyPI public download logs via ClickPy, https://clickpy.clickhouse.com/dashboard/optics-framework.
-- 100 stars and 30 forks on GitHub, read 18 Nov 2026. Source: https://github.com/mozarkai/optics-framework/stargazers.
+- 100 stars and 30 forks on GitHub, read 18 Nov 2026. Source: https://github.com/mozarkai/optics-framework.
 - 12 releases in the 90 days to 18 Nov 2026. Source: https://github.com/mozarkai/optics-framework/releases.
 
 What the last three releases added:

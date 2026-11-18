@@ -53,7 +53,7 @@ Without an OCR engine, a text miss ends with "OCR was not tried: no text_detecti
 
 OCR looks for your text as words in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
 
-By default, your text can also be a part of a word. Set `strict_element_match: true` in `config.yaml` to find complete words only.
+By default, your text can also be a part of a word. Set `strict_element_match: true` in `config.yaml` to find complete words only. Spaces are still not compared, so `Log in` also finds "Login": OCR often reads two words without the space between them.
 
 | Text value | On the screen | Found | Found when strict |
 |---|---|---|---|
@@ -65,6 +65,8 @@ By default, your text can also be a part of a word. Set `strict_element_match: t
 
 In Chinese, Japanese, Thai and other scripts with no spaces between words, each character counts as a word, so `设置` finds "打开设置页面". Arabic and Hebrew are read from right to left.
 
+A tap goes to the center of the words that match. When the text continues on the next line, the tap goes to the center of its words on the first line.
+
 When the text shows more than once, `index` picks one: `0` is the first. Complete words come first, then parts of words. Each group is counted from the top and then from left to right.
 
 ### OCR engines
@@ -74,8 +76,8 @@ When the text shows more than once, `index` picks one: `0` is the first. Complet
 | Apple Vision | `apple_vision` | `optics setup --install apple-vision` | macOS only. The fastest and most accurate: about 0.2 s for a phone screenshot, and good on camera pictures. |
 | RapidOCR | `rapidocr` | `optics setup --install rapidocr` | Any OS, on the CPU. About 1 s for a phone screenshot, and good on camera pictures. |
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local. Needs a GPU to be quick: 15 s or more for a phone screenshot on a CPU. Reads English. |
-| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. |
-| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
+| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast, but less accurate than EasyOCR on complex text and unusual fonts. |
+| Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key, for example `api_key: ${VISION_API_KEY}`, or `capabilities.credentials_path` to a service account key file. Set only one of the two. Without them, Optics uses Application Default Credentials: `GOOGLE_APPLICATION_CREDENTIALS`, or the sign-in from `gcloud auth application-default login`. A key file that is missing or is not a service account key stops the run with E0501 before the first test. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
 List more than one engine and Optics tries them in order.
@@ -115,8 +117,10 @@ The picture is called a **template**. How you crop it decides whether matching w
 1. Take a screenshot on the same kind of device you test on. Run the test once and use a `pre_…` screenshot from `execution_output/`, or run `/screenshot` in `optics live`.
 2. Crop tightly around the element. Include its distinctive shape, and as little background as possible.
 3. Do not resize the crop. Playwright screenshots are at CSS pixel scale, so crop Playwright templates from a Playwright run.
-4. Save it as PNG anywhere in the project folder. The templates use `test_data/input_templates/`.
-5. Refer to it by file name only: `cart_icon.png`, not a path. File names must be unique across the project.
+4. Save it as PNG anywhere in the project folder. The templates use `test_data/input_templates/`. You can sort the templates into subfolders, one for each screen.
+5. Refer to it by file name only: `cart_icon.png`, not a path. File names must be unique across the project. Give the file the name of its element, for example `button_login.png` for `login_button`, not `button1.png`.
+
+When the UI changes, cut the template again. When a match fails, cut it again on the same device, at the same resolution, and check the crop and the quality of the picture.
 
 Optics also picks up images inside `execution_output/`. Give templates distinctive names, so they never clash with a screenshot's name.
 
@@ -124,11 +128,24 @@ Optics also picks up images inside `execution_output/`. Give templates distincti
 
 A template that you cut on one device also matches on a screen with a different size. Optics looks for the template in three passes:
 
-1. At the size of the template.
-2. If the first pass finds nothing, at each size in `scale_range`, from 0.8 to 1.25 times by default.
-3. If the second pass finds nothing, a feature search that also finds rotated templates.
+1. At the size of the template. This pass runs on a smaller copy of the screen, then measures each match at full resolution, so the coordinates stay exact.
+2. If the first pass finds nothing, at each size in `scale_range`, in steps of 5%. This pass compares images with equalised local contrast, so the extra sizes do not match icons that only look similar. The size with the best score wins.
+3. If the second pass finds nothing, a SIFT + FLANN + RANSAC feature search that also finds rotated templates. `sift_nfeatures` sets the maximum number of features that SIFT reads from each frame.
 
-When screens differ by more than that, set a wider `scale_range`. For example, use `[0.5, 1.25]` for templates that you cut from device screenshots and match on a smaller camera frame:
+Matching runs on your machine with OpenCV and needs no service. The defaults:
+
+`config.yaml`:
+
+```yaml
+image_detection:
+  - templatematch:
+      enabled: true
+      capabilities:
+        scale_range: [0.8, 1.25]
+        sift_nfeatures: 2000
+```
+
+When screens differ by more than 20%, set a wider `scale_range`. For example, use `[0.5, 1.25]` for templates that you cut from device screenshots and match on a smaller camera frame:
 
 `config.yaml`:
 
@@ -139,6 +156,8 @@ image_detection:
       capabilities:
         scale_range: [0.5, 1.25]
 ```
+
+Cut each template tight around the element: background and badges make icons that look alike more similar. With a camera, keep reflections off the screen. Highlights that are pure white cannot be matched.
 
 `index` counts the matches at one size, from the top down and from left to right.
 

@@ -49,7 +49,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 | `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 1 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
 | `easyocr` | `easyocr` | Local OCR. Slow on CPU (15 s or more for a phone screenshot). Downloads its models the first time it runs. English only. | All |
 | `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or Application Default Credentials (`GOOGLE_APPLICATION_CREDENTIALS` or `gcloud auth application-default login`). Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `apple_vision` on a Mac and `rapidocr` everywhere else. Neither needs anything else installed.
@@ -79,7 +79,7 @@ Each engine reads its API key from `capabilities.api_key` in config.yaml, else f
 
 | Extra | What it's for |
 |---|---|
-| `mcp` | The [MCP server](https://optics-framework.org/docs/reference/mcp), `optics mcp`. Install it with pip; `optics setup` can't install it, and the `all` bundle doesn't include it. |
+| `mcp` | The [MCP server](https://optics-framework.org/docs/reference/mcp), `optics mcp`. It installs `fastmcp`. Install it with pip; `optics setup` can't install it, and the `all` bundle doesn't include it. |
 
 ## Bundles
 
@@ -161,15 +161,17 @@ If you installed Optics with the [install script](https://optics-framework.org/d
 
 ## Where installs are refused
 
-`optics setup` and `optics quickstart` refuse to install into environments that another tool manages, because changing them would break that tool. `optics doctor` shows an `environment` ⚠️ row when this applies.
+In a virtual environment made with `python -m venv` or `virtualenv`, `optics setup` installs with pip. In one made with `uv venv`, which has no pip, it installs with uv.
+
+`optics setup` and `optics quickstart` refuse to install into environments that another tool manages, because changing them would break that tool. Tool installers rebuild their environment on every upgrade, and project managers remove each package that their lockfile does not list. An install that seemed to work would be gone after the next `uv tool upgrade` or `uv sync`. `optics doctor` shows an `environment` ⚠️ row when this applies.
 
 | Environment | What to do instead |
 |---|---|
 | Conda | Use a virtual environment. EasyOCR and Optics need conflicting versions of NumPy under Conda. |
 | `pipx` | Reinstall with the extras: `pipx install --force "optics-framework[appium,rapidocr]"`, or add packages with `pipx inject optics-framework <package>`. |
 | `uv tool` or `uvx` | Reinstall with the extras: `uv tool install "optics-framework[appium,rapidocr]"`. |
-| A project managed by uv, Poetry, PDM or Pipenv | Add the extra with your tool, for example `uv add "optics-framework[appium]"` or `poetry add "optics-framework[appium]"`. |
-| System Python marked as externally managed | Use a virtual environment. |
+| A project managed by uv, Poetry, PDM or Pipenv | Add the extra with your tool, for example `uv add "optics-framework[appium]"` or `poetry add "optics-framework[appium]"`. With PDM or Pipenv, use `pdm add` or `pipenv install`. |
+| System Python marked as externally managed ([PEP 668](https://peps.python.org/pep-0668/)), as on Debian 12+, Ubuntu 23.04+, Fedora, Arch and Homebrew | Use a virtual environment. |
 | Read-only site-packages | Use a virtual environment you can write to. |
 | No pip and no uv | Install pip, or use a virtual environment. |
 
@@ -187,3 +189,6 @@ PS> python -m venv .venv; .venv\Scripts\Activate.ps1; pip install optics-framewo
 ```
 
 In a virtual environment without pip, `optics setup` uses `uv` if it's available.
+
+**Tool installs give you the command, not the library:**
+`pipx install optics-framework` and `uv tool install optics-framework` put `optics` on your PATH in an environment of its own. That is enough for `optics execute`, `optics live`, `optics serve` and `optics mcp`. Your own Python code cannot import `optics_framework` from that environment, so the [Python SDK](https://optics-framework.org/docs/create/python) and the [Robot Framework](https://optics-framework.org/docs/create/robot) library (`Library    optics_framework.optics.Optics`) do not find it. For those, install Optics into the virtual environment that runs your tests.
