@@ -8,6 +8,10 @@
 # 3.12+ is the one prerequisite: this script reports it plainly rather than
 # provisioning a runtime behind your back.
 #
+# Running it again upgrades. An Optics that is already installed (by this
+# script, uv tool, pipx or pip) is upgraded where it is, never joined by a
+# second copy.
+#
 # Options (curl ... | sh -s -- <options>):
 #   --version X.Y.Z    install a specific release        [$OPTICS_VERSION]
 #   --extra a,b        engine extras on top of mcp, e.g. --extra appium,llm
@@ -25,8 +29,10 @@ EXTRAS=""
 MODIFY_PATH=1
 DRY_RUN=0
 UNINSTALL=0
+DIR_SET=0
 
 if [ -n "${OPTICS_NO_MODIFY_PATH:-}" ]; then MODIFY_PATH=0; fi
+if [ -n "${OPTICS_INSTALL_DIR:-}" ]; then DIR_SET=1; fi
 
 # Colour only when stdout is a terminal; `curl | sh` into a pipe stays plain.
 if [ -t 1 ]; then
@@ -61,6 +67,9 @@ Options (curl ... | sh -s -- <options>):
 
 Optics is installed into its own virtual environment under ~/.optics; nothing
 is installed into your system Python. Python 3.12+ is the one prerequisite.
+
+Run it again to upgrade. An Optics installed with uv tool, pipx or pip is
+upgraded where it is; --dir skips that search.
 USAGE
     exit 0
 }
@@ -71,8 +80,8 @@ while [ $# -gt 0 ]; do
         --version=*) VERSION="${1#*=}"; shift ;;
         --extra) EXTRAS="${2:?--extra needs a value}"; shift 2 ;;
         --extra=*) EXTRAS="${1#*=}"; shift ;;
-        --dir) INSTALL_DIR="${2:?--dir needs a value}"; shift 2 ;;
-        --dir=*) INSTALL_DIR="${1#*=}"; shift ;;
+        --dir) INSTALL_DIR="${2:?--dir needs a value}"; DIR_SET=1; shift 2 ;;
+        --dir=*) INSTALL_DIR="${1#*=}"; DIR_SET=1; shift ;;
         --no-modify-path) MODIFY_PATH=0; shift ;;
         --dry-run) DRY_RUN=1; shift ;;
         --uninstall) UNINSTALL=1; shift ;;
@@ -88,11 +97,14 @@ case "$INSTALL_DIR" in \~|\~/*) INSTALL_DIR="$HOME${INSTALL_DIR#\~}" ;; esac
 case "$INSTALL_DIR" in /*) ;; *) INSTALL_DIR="$PWD/$INSTALL_DIR" ;; esac
 INSTALL_DIR="${INSTALL_DIR%/}"
 
-VENV="$INSTALL_DIR/venv"
-BIN="$INSTALL_DIR/bin"
-# shellcheck disable=SC2016  # $PATH must land in the profile literally
-PATH_LINE=$(printf 'export PATH="%s:$PATH"' "$BIN")
-FISH_LINE=$(printf 'fish_add_path "%s"' "$BIN")
+set_paths() {
+    VENV="$INSTALL_DIR/venv"
+    BIN="$INSTALL_DIR/bin"
+    # shellcheck disable=SC2016  # $PATH must land in the profile literally
+    PATH_LINE=$(printf 'export PATH="%s:$PATH"' "$BIN")
+    FISH_LINE=$(printf 'fish_add_path "%s"' "$BIN")
+}
+set_paths
 FISH_PROFILE="$HOME/.config/fish/conf.d/optics.fish"
 
 # Drop the "# Optics Framework" block this script appended to a profile: the
@@ -158,6 +170,252 @@ case "$(uname -s)" in
         ;;
 esac
 
+# ---------------------------------------------------------- existing copy --
+# Re-running the install command is how most people upgrade, so look for every
+# Optics already installed before creating anything. Each child command reads
+# /dev/null: under `curl | sh` the rest of this script is still on stdin.
+
+# Fields are split on the unit separator, which, unlike a tab, keeps empty ones.
+SEP=$(printf '\037')
+
+real_dir() { (cd "$1" 2>/dev/null && pwd -P); }
+
+# The Python behind an optics launcher: its shebang, pip's /bin/sh trampoline
+# for long or spaced paths, or this script's shim, followed to its venv.
+launcher_python() {
+    first=$(head -n 1 "$1" 2>/dev/null) || return 1
+    case "$first" in
+        '#!/bin/sh'*)
+            second=$(sed -n 2p "$1")
+            case "$second" in
+                "'''exec' "*)
+                    rest=${second#"'''exec' "}
+                    case "$rest" in
+                        \"*) rest=${rest#\"}; printf '%s\n' "${rest%%\"*}" ;;
+                        \'*) rest=${rest#\'}; printf '%s\n' "${rest%%\'*}" ;;
+                        *) printf '%s\n' "${rest%% *}" ;;
+                    esac ;;
+                'exec "'*) rest=${second#'exec "'}; launcher_python "${rest%%\"*}" ;;
+                *) return 1 ;;
+            esac ;;
+        '#!'*)
+            interp=${first#??}; interp=${interp# }
+            case "$interp" in
+                */env\ *) name=${interp#* }; name=${name%% *}; command -v "$name" ;;
+                *) printf '%s\n' "${interp%% *}" ;;
+            esac ;;
+        *) return 1 ;;
+    esac
+}
+
+# One line each: version, prefix, PEP 668 lock (1/0), pip present (1/0), and
+# the extras whose packages are all installed, so an upgrade keeps them.
+PROBE='import importlib.metadata as m, importlib.util as u, os, re, sys, sysconfig
+d = m.distribution("optics-framework")
+need = {}
+for r in d.requires or ():
+    x = re.search(r"extra\s*==\s*.([\w.-]+)", r)
+    if x:
+        need.setdefault(x.group(1), []).append(re.split(r"[\s;\[<>=!~(]", r, maxsplit=1)[0])
+def have(n):
+    try:
+        m.distribution(n)
+        return True
+    except m.PackageNotFoundError:
+        return False
+locked = sys.prefix == sys.base_prefix and os.path.exists(os.path.join(sysconfig.get_path("stdlib"), "EXTERNALLY-MANAGED"))
+print(d.version, sys.prefix, int(locked), int(u.find_spec("pip") is not None), ",".join(e for e, ns in need.items() if all(map(have, ns))), sep="\n")'
+
+uv_tools() { if command -v uv >/dev/null 2>&1; then uv tool dir 2>/dev/null </dev/null; fi; }
+pipx_venvs() { if command -v pipx >/dev/null 2>&1; then pipx environment --value PIPX_LOCAL_VENVS 2>/dev/null </dev/null; fi; }
+
+# Every optics launcher: PATH order first, then this script's default install
+# and tool environments whose bin folder is off PATH.
+launchers() {
+    set -f; old_ifs=$IFS; IFS=:
+    for dir in $PATH; do
+        if [ -n "$dir" ] && [ -f "$dir/optics" ] && [ -x "$dir/optics" ]; then printf '%s\n' "$dir/optics"; fi
+    done
+    IFS=$old_ifs; set +f
+    if [ -x "$BIN/optics" ]; then printf '%s\n' "$BIN/optics"; fi
+    for dir in "$(uv_tools)" "$(pipx_venvs)" "$HOME/.local/share/uv/tools" "$HOME/.local/pipx/venvs" "$HOME/.local/share/pipx/venvs"; do
+        if [ -n "$dir" ] && [ -x "$dir/optics-framework/bin/optics" ]; then printf '%s\n' "$dir/optics-framework/bin/optics"; fi
+    done
+}
+
+# installer, uv, pipx, project:<lockfile>, venv, locked or pip.
+kind_of() {
+    prefix=$1
+    if [ "${prefix##*/}" = venv ] && grep -q '^exec ".*/venv/bin/optics"' "${prefix%/venv}/bin/optics" 2>/dev/null; then
+        echo installer; return
+    fi
+    for tools in "$(uv_tools)" "$HOME/.local/share/uv/tools"; do
+        tools=$(real_dir "$tools") || continue
+        case "$prefix/" in "$tools"/*) echo uv; return ;; esac
+    done
+    case "$prefix/" in */uv/tools/*) echo uv; return ;; */pipx/venvs/*) echo pipx; return ;; esac
+    if [ -f "$prefix/pyvenv.cfg" ]; then
+        for lock in uv.lock poetry.lock pdm.lock Pipfile.lock; do
+            if [ -f "${prefix%/*}/$lock" ]; then echo "project:$lock"; return; fi
+        done
+        echo venv; return
+    fi
+    if [ "$2" = 1 ]; then echo locked; else echo pip; fi
+}
+
+# One record per environment, first on PATH first:
+# kind, prefix, python, launcher, version, pip (1/0), extras.
+find_copies() {
+    seen=""
+    launchers | while IFS= read -r launcher; do
+        case "$launcher" in
+            */shims/optics) launcher=$({ pyenv which optics || asdf which optics; } 2>/dev/null </dev/null) || continue ;;
+        esac
+        python=$(launcher_python "$launcher") || continue
+        [ -x "$python" ] || continue
+        probe=$("$python" -c "$PROBE" 2>/dev/null </dev/null) || continue
+        key=$(real_dir "$(printf '%s\n' "$probe" | sed -n 2p)")
+        case "$seen" in *"$SEP$key$SEP"*) continue ;; esac
+        seen="$seen$SEP$key$SEP"
+        line() { printf '%s\n' "$probe" | sed -n "$1p"; }
+        printf '%s\n' "$(kind_of "$key" "$(line 3)")$SEP$key$SEP$python$SEP$launcher$SEP$(line 1)$SEP$(line 4)$SEP$(line 5)"
+    done
+}
+
+label() {
+    case "$1" in
+        uv) echo "uv tool" ;;
+        pipx) echo "pipx" ;;
+        project:*) echo "project" ;;
+        venv) echo "virtual environment" ;;
+        locked) echo "system Python" ;;
+        *) echo "pip" ;;
+    esac
+}
+
+join_extras() { printf '%s\n' "$@" | tr ',' '\n' | awk 'NF && !seen[$0]++' | paste -s -d, -; }
+
+with_extras() {
+    spec="$PACKAGE"
+    if [ -n "$1" ]; then spec="${spec}[$1]"; fi
+    if [ -n "$VERSION" ]; then spec="$spec==$VERSION"; fi
+    printf '%s\n' "$spec"
+}
+
+removal() {
+    case "$1" in
+        installer)
+            if [ "${2%/venv}" = "$(real_dir "$HOME/.optics")" ]; then echo "curl -fsSL https://optics-framework.org/install | sh -s -- --uninstall"
+            else printf 'curl -fsSL https://optics-framework.org/install | sh -s -- --uninstall --dir "%s"\n' "${2%/venv}"; fi ;;
+        uv) echo "uv tool uninstall $PACKAGE" ;;
+        pipx) echo "pipx uninstall $PACKAGE" ;;
+        project:*) echo "remove $PACKAGE from the project in ${2%/*}" ;;
+        *) printf '"%s" -m pip uninstall %s\n' "$3" "$PACKAGE" ;;
+    esac
+}
+
+run() {
+    if [ "$DRY_RUN" -eq 1 ]; then step "would run: $*"; return 0; fi
+    step "$*"
+    "$@" </dev/null
+}
+
+project_command() {
+    case "$1" in
+        project:uv.lock) if [ -n "$VERSION" ]; then echo "uv add $PACKAGE==$VERSION"; else echo "uv sync --upgrade-package $PACKAGE"; fi ;;
+        project:poetry.lock) echo "poetry add $PACKAGE@${VERSION:-latest}" ;;
+        project:pdm.lock) if [ -n "$VERSION" ]; then echo "pdm add $PACKAGE==$VERSION"; else echo "pdm update --unconstrained $PACKAGE"; fi ;;
+        *) if [ -n "$VERSION" ]; then echo "pipenv install $PACKAGE==$VERSION"; else echo "pipenv update $PACKAGE"; fi ;;
+    esac
+}
+
+# A reinstall rather than `uv tool upgrade` or `pipx upgrade`, which keep the
+# version pinned at install time; the spec carries the extras already there.
+upgrade_tool() {
+    command -v "$KIND" >/dev/null 2>&1 \
+        || die "Optics $FOUND_VERSION is a $KIND tool, and $KIND is not on PATH." "" "Install $KIND, then run this script again."
+    if [ "$KIND" = pipx ]; then
+        run pipx install --force "$SPEC_OUT" || die "pipx could not install $SPEC_OUT."
+    elif [ -n "$VERSION" ]; then
+        run uv tool install "$SPEC_OUT" || die "uv could not install $SPEC_OUT."
+    else
+        run uv tool install "$SPEC_OUT@latest" || die "uv could not install $SPEC_OUT@latest."
+    fi
+}
+
+upgrade_env() {
+    if [ "$FOUND_PIP" = 1 ]; then
+        run "$FOUND_PYTHON" -m pip install --quiet --disable-pip-version-check --upgrade "$SPEC_OUT" \
+            || die "pip could not upgrade Optics in $FOUND_PREFIX."
+    elif command -v uv >/dev/null 2>&1; then
+        run uv pip install --quiet --python "$FOUND_PYTHON" --upgrade "$SPEC_OUT" \
+            || die "uv could not upgrade Optics in $FOUND_PREFIX."
+    else
+        die "The environment in $FOUND_PREFIX has no pip, and uv is not on PATH." \
+            "" "Upgrade it with the tool that created it."
+    fi
+}
+
+upgrade_found() {
+    case "$KIND" in
+        uv|pipx) upgrade_tool ;;
+        project:*)
+            say "Optics $FOUND_VERSION belongs to the project in ${FOUND_PREFIX%/*}, and its lockfile sets the version."
+            say "Upgrade it from that folder with:"
+            say ""
+            say "  $(project_command "$KIND")"
+            say ""
+            exit 0
+            ;;
+        locked)
+            die "Optics $FOUND_VERSION is in the system Python at $FOUND_PYTHON, which only your OS package manager may change." \
+                "" "Remove it, then run this script again for an install of its own:" \
+                "" "  $(removal pip "$FOUND_PREFIX" "$FOUND_PYTHON") --break-system-packages"
+            ;;
+        *) upgrade_env ;;
+    esac
+}
+
+warn_others() {
+    printf '%s\n' "$COPIES" | sed 1d | while IFS="$SEP" read -r kind prefix python _ version _ _; do
+        say ""
+        say "  ${DIM}Optics $version is also installed in $prefix. Remove one copy so they do not drift:${R}"
+        say "    $(removal "$kind" "$prefix" "$python")"
+    done
+}
+
+KIND=""
+FOUND_EXTRAS=""
+COPIES=""
+if [ "$DIR_SET" -eq 0 ]; then COPIES=$(find_copies); fi
+if [ -n "$COPIES" ]; then
+    IFS="$SEP" read -r KIND FOUND_PREFIX FOUND_PYTHON FOUND_LAUNCHER FOUND_VERSION FOUND_PIP FOUND_EXTRAS <<EOF
+$(printf '%s\n' "$COPIES" | sed -n 1p)
+EOF
+fi
+
+if [ "$KIND" = installer ]; then
+    INSTALL_DIR="${FOUND_PREFIX%/venv}"
+    set_paths
+    ok "Found Optics $FOUND_VERSION in $INSTALL_DIR"
+elif [ -n "$KIND" ]; then
+    SPEC_OUT=$(with_extras "$(join_extras "$FOUND_EXTRAS" "$EXTRAS")")
+    ok "Found Optics $FOUND_VERSION in $FOUND_PREFIX ($(label "$KIND"))"
+    if [ "$DRY_RUN" -eq 1 ]; then say "Dry run — nothing will be changed."; fi
+    upgrade_found
+    if [ "$DRY_RUN" -eq 0 ]; then
+        if ! VERSION_OUTPUT=$("$FOUND_LAUNCHER" --version 2>&1 </dev/null); then
+            die "Upgraded, but optics could not start:" "" "$VERSION_OUTPUT"
+        fi
+        ok "$VERSION_OUTPUT"
+    fi
+    warn_others
+    say ""
+    say "${B}Agent:${R}   claude mcp add -s user optics -- \"$FOUND_LAUNCHER\" mcp"
+    say ""
+    exit 0
+fi
+
 # ------------------------------------------------------------------ python --
 # Lowest supported version first, deliberately. Optics pulls opencv, scikit-image
 # and (via easyocr) torch; on a just-released Python those have no wheels yet and
@@ -185,18 +443,18 @@ fi
 PY_VERSION=$("$PYTHON" -c 'import sys; print("%d.%d.%d" % sys.version_info[:3])')
 ok "Python $PY_VERSION at $PYTHON"
 
-SPEC="${PACKAGE}[mcp${EXTRAS:+,$EXTRAS}]"
-if [ -n "$VERSION" ]; then SPEC="${SPEC}==${VERSION}"; fi
+SPEC=$(with_extras "$(join_extras mcp "$FOUND_EXTRAS" "$EXTRAS")")
 
 if [ "$DRY_RUN" -eq 1 ]; then
     say ""
     say "Dry run — nothing will be changed."
-    step "create virtual environment at $VENV"
+    if [ -x "$VENV/bin/python" ]; then step "reuse the virtual environment at $VENV"; else step "create virtual environment at $VENV"; fi
     step "install $SPEC into it"
     step "link the optics CLI into $BIN"
     if [ "$MODIFY_PATH" -eq 1 ]; then
         step "add $BIN to PATH in your shell profile"
     fi
+    warn_others
     say ""
     exit 0
 fi
@@ -224,7 +482,7 @@ fi
 
 # ---------------------------------------------------------------- install ---
 step "Installing $SPEC"
-if ! "$VENV/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade "$SPEC"; then
+if ! "$VENV/bin/python" -m pip install --quiet --disable-pip-version-check --upgrade "$SPEC" </dev/null; then
     die "pip could not install $SPEC." \
         "" "Re-run with --version to pin a known-good release, or see" \
         "  https://pypi.org/project/optics-framework/"
@@ -246,7 +504,7 @@ chmod +x "$BIN/optics"
 # and still fail to start if a system library it links against is missing.
 # Optics diagnoses that itself and names the library, so show what it said
 # instead of guessing at the cause here.
-if ! VERSION_OUTPUT=$("$BIN/optics" --version 2>&1); then
+if ! VERSION_OUTPUT=$("$BIN/optics" --version 2>&1 </dev/null); then
     printf '\n%sInstalled, but optics could not start:%s\n\n' "$RED" "$R" >&2
     printf '%s\n' "$VERSION_OUTPUT" >&2
     printf '\nFix the above, then run:  %s --version\n' "$BIN/optics" >&2
@@ -295,6 +553,7 @@ else
     say "  ${DIM}Open a new terminal, or run:${R} export PATH=\"$BIN:\$PATH\""
 fi
 
+warn_others
 say ""
 say "${B}Next:${R}    optics quickstart"
 say "         ${DIM}Builds a project, checks your setup, and runs your first test.${R}"
