@@ -2341,12 +2341,30 @@ Nothing changes in your tests. Any text value, such as `Press Element,Trail Runn
 
 Without an OCR engine, a text miss ends with "OCR was not tried: no text_detection engine is configured."
 
+### How OCR matches text
+
+OCR looks for your text as words in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
+
+By default, your text can also be a part of a word. Set `strict_element_match: true` in `config.yaml` to find complete words only.
+
+| Text value | On the screen | Found | Found when strict |
+|---|---|---|---|
+| `Sign in` | "Sign in to your account" | Yes | Yes |
+| `sign IN` | "Sign in" | Yes | Yes |
+| `World clock` | "World" at the end of one line, "clock" at the start of the next | Yes, and the tap goes to "World" | Yes |
+| `Pay` | "Payment" | Yes | No |
+| `Sign in.` | "Sign in" | No | No |
+
+In Chinese, Japanese, Thai and other scripts with no spaces between words, each character counts as a word, so `设置` finds "打开设置页面". Arabic and Hebrew are read from right to left.
+
+When the text shows more than once, `index` picks one: `0` is the first. Complete words come first, then parts of words. Each group is counted from the top and then from left to right.
+
 ### OCR engines
 
 | Engine | Name in config | Install | Good to know |
 |---|---|---|---|
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
-| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
+| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. |
 | Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](https://optics-framework.org/docs/reference/engines). |
 
@@ -9970,7 +9988,7 @@ llm_models:
 strict_element_match: true
 ```
 
-By default the page-source element sources (`appium_page_source`, `selenium_page_source`, `playwright_page_source`) accept close or partial text matches, so `Sign in` can match `Sign in with email`. Set `strict_element_match: true` to accept only exact matches. Turn it on when similar labels make tests press the wrong element.
+By default the page-source element sources (`appium_page_source`, `selenium_page_source`, `playwright_page_source`) accept close or partial text matches, so `Sign in` can match `Sign in with email`. OCR also finds text inside a longer word, so `Pay` can match `Payment`. Set `strict_element_match: true` to accept only exact matches, and complete words for OCR. See [How OCR matches text](https://optics-framework.org/docs/elements/text-and-images#how-ocr-matches-text). Turn it on when similar labels make tests press the wrong element.
 
 ## save_captures
 
@@ -10383,12 +10401,12 @@ Only `appium_page_source`, `appium_web` and `playwright_page_source` can list in
 
 ## Text recognition (OCR)
 
-OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Enable engines under `text_detection`.
+OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Every engine matches text the same way: [complete words, in order](https://optics-framework.org/docs/elements/text-and-images#how-ocr-matches-text). Enable engines under `text_detection`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
-| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
+| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. | All |
 | `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 

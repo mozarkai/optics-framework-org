@@ -41,12 +41,12 @@ Only `appium_page_source`, `appium_web` and `playwright_page_source` can list in
 
 ## Text recognition (OCR)
 
-OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Enable engines under `text_detection`.
+OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Every engine matches text the same way: [complete words, in order](https://optics-framework.org/docs/elements/text-and-images#how-ocr-matches-text). Enable engines under `text_detection`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
-| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
+| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. | All |
 | `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
