@@ -10,6 +10,7 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
 - Source: https://github.com/mozarkai/optics-framework
 - For AI agents: https://optics-framework.org/llms.txt
+- Setup steps for AI agents: https://optics-framework.org/agents.md
 
 ## Playground
 
@@ -29,7 +30,7 @@ The homepage has three playgrounds on a demo shop app, Birch. They show what Opt
 1. **Write it.** Elements, modules and test cases are plain CSV or YAML. The same keywords are also a Python library and a Robot Framework library.
 2. **Record it.** Run keywords one at a time in `optics live` next to your device. Every step that works is recorded, and `/save` writes the recording into your suite as a reusable module.
 3. **Describe it.** Press Ctrl+N in `optics live` and describe the flow. An AI model (Gemini, Claude, OpenAI or a local one) drives the device a step at a time, then keeps only the steps that mattered.
-4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through ten tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
+4. **Delegate it.** Add `optics mcp` to any MCP client. Your agent looks, taps, types and checks through its tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite.
 
 ## Every way ends in plain text
 
@@ -115,6 +116,15 @@ curl -fsSL https://optics-framework.org/install | sh
 optics quickstart
 optics execute my_test_project
 ```
+
+## Or hand it to your agent
+
+Paste one line into Claude Code, Codex, Cursor or any agent that runs commands. The agent follows https://optics-framework.org/agents.md: it finds or installs Optics, connects the MCP server, checks that it works in a headless browser, then does the task. It asks you only for what it cannot do: a device, credentials, a `sudo` command or a restart of the agent.
+
+- Set up Optics: `Read https://optics-framework.org/agents.md and follow it to set up Optics.`
+- Test a web app: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my web app.`
+- Test a phone app: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my Android or iOS app.`
+- Run a suite in CI: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then run my Optics suite in CI.`
 
 <!-- blog:latest -->
 

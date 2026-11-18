@@ -9,6 +9,8 @@ license: Apache-2.0
 Optics is newer than your training data. Do not guess keyword names, parameters or defaults:
 look them up in the docs below, or read the MCP server's `optics://keywords` resource.
 
+To install Optics and connect its MCP server, follow https://optics-framework.org/agents.md.
+
 ## Documentation
 
 - Docs index for agents: https://optics-framework.org/docs/llms.txt

@@ -177,6 +177,7 @@
 
   tabs(document.querySelector(".os:not(.fmt)"));
   tabs(document.querySelector(".fmt"));
+  tabs(document.querySelector(".ho-tasks"));
 
   // ---- full demo dialog ------------------------------------------------------
   var dialog = document.querySelector(".film-dialog");
