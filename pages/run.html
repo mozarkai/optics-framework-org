@@ -23,17 +23,17 @@
         </li>
         <li>
           <p class="body-text">Run it against Birch on this site. Release 2.1 exits with 0. Release 2.2 exits with 1.</p>
-          <div class="cmd" data-copy="BIRCH_URL=https://optics-framework.org/birch/ optics execute birch-tests">
-            <code><span class="prompt">$</span> BIRCH_URL=https://optics-framework.org/birch/ optics execute birch-tests</code>
+          <div class="cmd" data-copy="BIRCH_URL={{run:origin}}/birch/ optics execute birch-tests">
+            <code><span class="prompt">$</span> BIRCH_URL={{run:origin}}/birch/ optics execute birch-tests</code>
             <button class="copy" type="button" aria-label="Copy the run command for release 2.1">Copy</button>
           </div>
-          <div class="cmd" data-copy="BIRCH_URL='https://optics-framework.org/birch/?release=2.2' optics execute birch-tests">
-            <code><span class="prompt">$</span> BIRCH_URL='https://optics-framework.org/birch/?release=2.2' optics execute birch-tests</code>
+          <div class="cmd" data-copy="BIRCH_URL='{{run:origin}}/birch/?release=2.2' optics execute birch-tests">
+            <code><span class="prompt">$</span> BIRCH_URL='{{run:origin}}/birch/?release=2.2' optics execute birch-tests</code>
             <button class="copy" type="button" aria-label="Copy the run command for release 2.2">Copy</button>
           </div>
         </li>
       </ol>
-      <p class="body-text">The run above used a copy of Birch served on <code class="ic">127.0.0.1:4180</code>, from the same files as <a href="birch/">optics-framework.org/birch/</a>. Your timings will differ. The steps, the boxes and the exit codes will not.</p>
+      <p class="body-text">The run above used a copy of Birch served on <code class="ic">127.0.0.1:4180</code>, from the same files as <a href="birch/">optics-framework.org/birch/</a>. Your timings will differ. We ran each release three times on macOS, and the steps, the boxes and the exit codes did not change.</p>
 
       <h2 class="h3">The suite</h2>
       <p class="body-text">The suite finds elements in four ways. XPath finds the two fields. Text finds the buttons and the search field. OCR reads “Free returns”, which Birch draws on a canvas. Image matching finds the cart button from <code class="ic">cart.png</code>. The last test case presses Check out and asserts nothing.</p>
@@ -47,7 +47,7 @@
         <li><b>The screenshots.</b> Each one is a JPEG that Optics wrote, converted to WebP. Nothing else changed. The yellow corners mark the green box that Optics drew.</li>
         <li><b>The numbers.</b> Statuses, timings and log lines come from <code class="ic">logs.json</code>. The tree is the terminal output.</li>
         <li><b>The pace.</b> The replay slows each step down so that you can read it. Real speed plays the steps at the timings of the run.</li>
-        <li><b>The script.</b> <a href="https://github.com/mozarkai/optics-framework.org/blob/main/scripts/birch-run.py">scripts/birch-run.py</a> runs the suite and writes this page’s data.</li>
+        <li><b>The script.</b> <a href="https://github.com/mozarkai/optics-framework-org/blob/main/scripts/birch-run.py">scripts/birch-run.py</a> runs the suite and writes this page’s data.</li>
       </ul>
 
       <h2 class="h3">Every file the run wrote</h2>
