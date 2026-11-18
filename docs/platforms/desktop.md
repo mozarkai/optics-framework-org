@@ -419,10 +419,12 @@ Add numbers,Press Element,${Seven}
 Add numbers,Press Element,${Plus}
 Add numbers,Press Element,5
 Add numbers,Press Element,${Equals}
-Add numbers,Assert Presence,12
+Add numbers,Assert Text,(//text_area)[1],12
 Add numbers,Force Terminate App,gnome-calculator
 Back to the editor,Launch App
 ```
+
+In gnome-calculator, the first `text_area` is the display. Assert Text checks the value of that element. Do not use `Assert Presence,12` for a result. It passes when any element shows `12`, for example a line in the history of the calculator. See [Assert Presence](/docs/reference/keywords/verification#assert-presence).
 
 Keys, typing and mouse actions go only to the app of the session. Before each of these steps, the driver brings that app to the front. If a different window stays in front, for example a system alert, the step fails and sends nothing.
 
