@@ -63,6 +63,7 @@ test("assistants fetching for a person, crawlers, scripts, bots and browsers are
   const cases = [
     ["Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ChatGPT-User/1.0; +https://openai.com/bot)", "ai-user", "ChatGPT-User"],
     ["Claude-User/1.0", "ai-user", "Claude-User"],
+    ["optics/1.11.4 (mcp; darwin)", "optics", "1.11.4 mcp darwin"],
     ["Mozilla/5.0 (compatible; GPTBot/1.2; +https://openai.com/gptbot)", "ai-crawler", "GPTBot"],
     ["Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)", "search", "Googlebot"],
     ["Mozilla/5.0 (Windows NT 10.0; Microsoft Windows 10.0.26100; en-US) PowerShell/7.4.6", "script", "PowerShell/7.4.6"],

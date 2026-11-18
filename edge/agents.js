@@ -1,6 +1,6 @@
-// Who sent a request, read from its User-Agent: an AI agent fetching for a person, an AI
-// crawler, a search engine, a script (curl, PowerShell, an HTTP library), another bot or a
-// browser.
+// Who sent a request, read from its User-Agent: Optics itself checking for a release, an AI
+// agent fetching for a person, an AI crawler, a search engine, a script (curl, PowerShell, an
+// HTTP library), another bot or a browser.
 
 // AI crawlers and agents, matched as case-insensitive substrings of the User-Agent.
 const AI_BOTS = [
@@ -36,8 +36,16 @@ const matched = (client, re) => (ua) => {
   return found && { client, agent: found[0].slice(0, 60) };
 };
 
+// The Optics CLI and MCP server checking for a release: "optics/1.11.4 (cli; darwin)".
+const OPTICS = /^optics\/([\w.+-]{1,40}) \((\w{1,10}); ([\w.-]{1,20})\)$/;
+const optics = (ua) => {
+  const found = ua.match(OPTICS);
+  return found && { client: "optics", agent: `${found[1]} ${found[2]} ${found[3]}` };
+};
+
 // Checked in order; the first that recognises the User-Agent decides.
 const RULES = [
+  optics,
   (ua) => {
     const ai = aiBot(ua);
     return ai && { client: AI_USERS.has(ai) ? "ai-user" : "ai-crawler", agent: ai };
