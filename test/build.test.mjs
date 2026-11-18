@@ -143,7 +143,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/blog`, ...articles];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/blog`, ...articles];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
@@ -420,7 +420,7 @@ test("every hosted article is a full page with its own canonical URL, schema and
 // The privacy page promises the site loads nothing from third-party servers. Links may
 // point anywhere; images, scripts, styles and media must come from this site.
 test("no page loads an asset from another server", () => {
-  const pages = ["index.html", "blog.html", ...hosted().map((i) => `blog/${i.slug}.html`), ...TRUST_PAGES.map((p) => `${p}.html`), ...docsPages().map((p) => p.file)];
+  const pages = ["index.html", "blog.html", "playground.html", ...hosted().map((i) => `blog/${i.slug}.html`), ...TRUST_PAGES.map((p) => `${p}.html`), ...docsPages().map((p) => p.file)];
   for (const page of pages) {
     const html = read(page);
     for (const [tag] of html.matchAll(/<(?:img|script|source|video|iframe|link)\b[^>]*>/g)) {
