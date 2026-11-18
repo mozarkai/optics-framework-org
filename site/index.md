@@ -13,11 +13,11 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 
 ## Playground
 
-The homepage runs a sample suite on a demo shop app. Change the app and see what Optics reports:
+The homepage has three playgrounds on a demo shop app, Birch. They show what Optics does. They do not run Optics.
 
-- **The sign-in button gets a new id.** XPath finds no match, so Optics finds the button by its text. The suite passes with exit code 0.
-- **The text fallback for `sign_in` is also deleted.** No locator matches. The step fails, the steps after it are NOT_RUN, and the run ends with exit code 1.
-- **The app ends on "Session expired".** Error-screen detection matches the screen and adds a failed test case. The run ends with exit code 1.
+- **Tap it, Optics writes it.** A copy of `optics live` sits next to a phone. Type a keyword, or tap the phone to type the keyword for that element. Each step runs at once and shows how Optics found the element. `/save` writes the steps that passed into `modules.csv` and `elements.csv`, with the password kept out of the module. `optics execute` then replays the suite.
+- **Break the test.** Ship a new release of the app: rename the sign-in button's id, change its words, draw it as a picture, translate the app or delete the button. Each step of the fallback ladder shows if it found the button. A missing button or a "Session expired" screen is a real bug and fails the run. A button that Optics cannot find, but that still works, is a false failure; add its new text to `elements.csv` and run again.
+- **One suite, every screen.** Move the slider to run the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. Only the driver changes.
 
 ## Every test has two lives
 
@@ -64,6 +64,16 @@ Every element can have several identities, tried cheapest first:
 3. **OCR:** reads the screenshot with EasyOCR, Tesseract or Google Vision.
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
+
+## One suite, every screen
+
+The same `modules.csv` runs on a phone, in a browser, on a TV and on a locked production device. Only the driver changes:
+
+- **Android:** `appium` with UiAutomator2. Press Element taps the element.
+- **iOS:** `appium` with XCUITest. Press Element taps the element.
+- **Web:** `playwright` with Chromium. Press Element clicks the element.
+- **TV:** `appium` with TizenTV. Press Element presses the arrow keys until the element has focus, then ENTER.
+- **Production device:** `ble` with `camera_screenshot`. Press Element moves a Bluetooth mouse and clicks.
 
 ## Where suites run
 
