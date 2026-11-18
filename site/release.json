@@ -1,0 +1,8 @@
+{
+  "releases": {
+    "1.11.4": {
+      "headline": "Desktop apps: test macOS, Windows and Linux apps with the same CSV suites.",
+      "url": "https://optics-framework.org/docs/guides/desktop-apps"
+    }
+  }
+}
