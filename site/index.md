@@ -106,6 +106,8 @@ jobs:
           report_paths: birch-tests/execution_output/junit_output.xml
 ```
 
+<!-- proof -->
+
 ## Get started
 
 ```sh

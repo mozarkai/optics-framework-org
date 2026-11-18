@@ -2,9 +2,11 @@
 // so rerunning a day replaces it. GitHub keeps traffic for 14 days and its API needs a
 // token with push access, so traffic is collected only when the GITHUB_TOKEN secret is set.
 
-const REPO = "mozarkai/optics-framework";
-const UA = "optics-framework.org analytics";
-const CLICKHOUSE = "https://sql-clickhouse.clickhouse.com/?user=demo";
+export const REPO = "mozarkai/optics-framework";
+export const UA = "optics-framework.org analytics";
+export const CLICKHOUSE = "https://sql-clickhouse.clickhouse.com/?user=demo";
+// Installers people run; mirrors (bandersnatch), browsers and unnamed clients are left out.
+export const REAL_INSTALLERS = ["pip", "uv", "poetry", "pdm", "pipenv", "pipx", "requests"];
 const UPSERT_PYPI =
   "INSERT INTO pypi (day, version, installer, type, country, downloads) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT (day, version, installer, type, country) DO UPDATE SET downloads = excluded.downloads";
 const UPSERT_GITHUB = "INSERT INTO github (day, metric, dim, value) VALUES (?, ?, ?, ?) ON CONFLICT (day, metric, dim) DO UPDATE SET value = excluded.value";
@@ -14,7 +16,7 @@ FROM pypi.pypi_downloads_per_day_by_version_by_installer_by_type_by_country
 WHERE project = 'optics-framework' AND date >= today() - 7
 GROUP BY ALL FORMAT JSONCompact`;
 
-async function json(url, init) {
+export async function json(url, init) {
   const response = await fetch(url, init);
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
   return response.json();

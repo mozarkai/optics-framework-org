@@ -13,6 +13,10 @@ Static landing page and documentation for Optics. No framework, no dependencies.
 - Local preview: `npm run dev` then open http://localhost:4173. It serves `out/` the way Pages does (`/about` → `about.html`, missing paths → `404.html`) through the edge worker, so `curl -H 'Accept: text/markdown' http://localhost:4173/` shows what agents get.
 - Tests: `npm test` (builds, then `node --test`).
 
+## Numbers on the homepage (`content/proof.json`)
+
+The "Built in the open" band (`#proof`) shows PyPI installs, GitHub stars and the last three releases, each with its source and date. `npm run proof` (`scripts/proof.mjs`) reads them from the public PyPI download logs (via ClickPy) and the GitHub API and writes `content/proof.json`; commit the file. The build renders it into `site/index.html` and `site/index.md` at the `<!-- proof -->` marker through `lib/proof.mjs` and never goes online. Installs count only the installers in `REAL_INSTALLERS` (`edge/snapshot.js`); mirrors, browsers and unnamed clients are shown apart under "Sources and method". A release's lines are its `feat` pull request titles. Refresh after each release.
+
 ## Blog (`content/blog.json`)
 
 `/blog` lists articles, videos and posts. Articles we write are hosted here at `/blog/<slug>` and are the canonical copy: copies on Medium, dev.to and Hashnode set their canonical URL to the page here, and translations link to it. Items published elsewhere (YouTube, LinkedIn, X, Instagram, other authors) link out to the original. `lib/blog.mjs` turns `content/blog.json` into `out/blog.html`, its Markdown twin `out/blog.md`, the RSS feed `out/feed.xml`, the "From the blog" band on the homepage (filled in at the `<!-- blog:latest -->` marker in `site/index.html` and `site/index.md`; the band disappears when there are no items), and for each hosted article `out/blog/<slug>.html` plus `out/blog/<slug>.md`, both listed in `sitemap.xml`.
