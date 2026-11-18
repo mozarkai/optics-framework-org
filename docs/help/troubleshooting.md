@@ -368,7 +368,7 @@ The driver tried to bring your app to the front, but a different window stays in
 
 ### Nothing works on macOS after the setup script {#desktop-mac-permissions}
 
-Appium needs the Accessibility and Screen & System Audio Recording permissions. Give them to the Node.js path that the setup script printed, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. See [Give the permissions](/docs/platforms/desktop#give-the-permissions-macos-only).
+Appium needs the Accessibility and Screen & System Audio Recording permissions. The setup script names the app or Node.js that gets them, and opens the panes of the missing permissions. Give the permissions to that app or Node.js, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. To see the missing permissions, run `curl -s http://127.0.0.1:4723/xa11y/status`. See [Give the permissions](/docs/platforms/desktop#give-the-permissions-macos-only).
 
 ### Go Back fails with E0105 on a desktop {#desktop-go-back}
 

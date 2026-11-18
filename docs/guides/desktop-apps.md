@@ -38,7 +38,7 @@ $ optics setup --install appium
 
 The Host is the computer that shows the app. Run the setup script of the driver there. It installs Node.js, Appium and the driver, and runs Appium as a service. [Set up the Host](/docs/platforms/desktop#set-up-the-host) has the command for each OS.
 
-On macOS, give the Accessibility and Screen & System Audio Recording permissions to the Node.js path that the script prints. Then restart Appium.
+On macOS, Appium needs the Accessibility and Screen & System Audio Recording permissions. The script names the app or Node.js that gets them, and opens their panes in System Settings. Give the permissions, then restart Appium.
 
 ### Make a project and run it
 

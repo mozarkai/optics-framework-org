@@ -83,19 +83,18 @@ The service is the logon task `appium-xa11y` of the user that runs the script. T
 
 ### Give the permissions (macOS only)
 
-macOS lets an app read other apps only when you give it **Accessibility**. Screenshots also need **Screen & System Audio Recording**. At the end, the setup script prints the path of the Node.js that runs Appium.
+macOS lets an app read other apps only when you give it **Accessibility**. Screenshots also need **Screen & System Audio Recording**. When a permission is missing, the setup script prints the next step. The step names the permissions, the app or Node.js that gets them, and the restart command. The script also opens the panes of the missing permissions in **System Settings > Privacy & Security**.
 
-1. Open **System Settings > Privacy & Security > Accessibility**.
-2. Click **+**, press **Cmd+Shift+G**, paste the path, and add it. Make sure that its switch is on.
-3. Do the same steps in **Privacy & Security > Screen & System Audio Recording**.
-4. Restart Appium:
+1. In the **Accessibility** pane, click **+**, press **Cmd+Shift+G**, paste the path that the script printed, and add it. Make sure that its switch is on.
+2. Do the same steps in the **Screen & System Audio Recording** pane.
+3. Restart Appium:
 
 ```shell
 $ launchctl kickstart -k gui/$(id -u)/appium-xa11y
 ```
 
 :::mistake
-Do not give the permissions to your terminal app. The service does not run in your terminal. Give them to the Node.js path that the script prints. Give them to the terminal app only when you start Appium yourself with `host.sh run`.
+Do not give the permissions to your terminal app. The service does not run in your terminal. Give them to the app or Node.js that the script names. Give them to the terminal app only when you start Appium yourself with `host.sh run`.
 :::
 
 ### Check that Appium runs
@@ -106,6 +105,19 @@ $ curl -s http://127.0.0.1:4723/status
 ```
 
 If you set `--port`, or `-Port` on Windows, use that port in the URL. If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
+
+`GET /xa11y/status` gives the OS of the Host and, on macOS, the permissions. It needs no session:
+
+```shell
+$ curl -s http://127.0.0.1:4723/xa11y/status
+```
+
+| Field | Meaning |
+|---|---|
+| `platformName` | The OS of the Host: `Mac`, `Linux` or `Windows`. Use the same value in `config.yaml`. |
+| `accessibility`, `screenRecording` | macOS only. `true` when Appium has the permission now. |
+| `grantTo` | macOS only. The app or Node.js that gets the permissions. |
+| `next` | macOS only. The next step when a permission is missing. |
 
 ### Make a project
 
@@ -580,7 +592,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 ## If it isn't working
 
 - **No answer from `http://127.0.0.1:4723/status`, or from the port that you set with `--port` or `-Port`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
-- **A message about the Accessibility or Screen Recording permission.** On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.
+- **A message about the Accessibility or Screen Recording permission.** On macOS, the message names the app or Node.js that gets the permissions. It also gives the restart command. Give both permissions to it, then restart Appium. `/xa11y/status` shows the missing permissions.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
 - **"<app> has no window to activate".** The app runs, but it has no open window. Open a window first, for example with Press Keycode `primary+n`.
