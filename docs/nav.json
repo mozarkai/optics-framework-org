@@ -40,7 +40,7 @@
       "title": "Platforms",
       "groups": [
         { "title": null, "pages": ["platforms/index"] },
-        { "title": "Targets", "pages": ["platforms/android", "platforms/ios", "platforms/web", "platforms/mobile-web", "platforms/tv", "platforms/production"] }
+        { "title": "Targets", "pages": ["platforms/android", "platforms/ios", "platforms/web", "platforms/mobile-web", "platforms/tv", "platforms/desktop", "platforms/production"] }
       ]
     },
     {
@@ -57,7 +57,7 @@
       "title": "Guides",
       "groups": [
         { "title": null, "pages": ["guides/index"] },
-        { "title": "Task guides", "pages": ["guides/smart-tv-apps", "guides/protected-apps", "guides/ai-agent-phone"] },
+        { "title": "Task guides", "pages": ["guides/smart-tv-apps", "guides/desktop-apps", "guides/protected-apps", "guides/ai-agent-phone"] },
         { "title": "Compare", "pages": ["guides/optics-vs-maestro", "guides/optics-and-appium"] }
       ]
     },

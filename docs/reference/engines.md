@@ -14,12 +14,12 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV |
+| `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV, macOS, Linux and Windows desktop apps |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
 | `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
 | `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
 
-The Appium server itself, and its UiAutomator2 or XCUITest driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android) and [Test iOS apps](/docs/platforms/ios).
+The Appium server itself, and its UiAutomator2, XCUITest or Xa11y driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android), [Test iOS apps](/docs/platforms/ios) and [Test desktop apps](/docs/platforms/desktop#set-up-the-host).
 
 ## Element sources
 
@@ -27,9 +27,9 @@ An element source is how Optics looks at the screen for a driver. They need no e
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV |
-| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV |
-| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV |
+| `appium_find_element` | `appium` | Finds elements by XPath, accessibility id or class. | Android, iOS, TV, desktop |
+| `appium_page_source` | `appium` | Searches the UI tree by XPath and text. Lists interactive elements. | Android, iOS, TV, desktop |
+| `appium_screenshot` | `appium` | Screenshots for OCR, image matching and AI self-heal. | Android, iOS, TV, desktop |
 | `appium_web` | `appium` | Finds `css=` and DOM XPath locators in web pages in the phone's browser and in WebViews. Lists interactive elements. | Android, iOS |
 | `selenium_find_element` | `selenium` | Finds elements by XPath, text, id, name, CSS or link text. | Web |
 | `selenium_page_source` | `selenium` | Searches the page HTML. | Web |
@@ -43,13 +43,13 @@ Only `appium_page_source`, `appium_web` and `playwright_page_source` can list in
 
 ## Text recognition (OCR)
 
-OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Enable engines under `text_detection`.
+OCR finds elements by the text visible in a screenshot. Optics uses it when the UI tree doesn't have the text, or when you write `text_only:`. Every engine matches text the same way: [complete words, in order](/docs/elements/text-and-images#how-ocr-matches-text). Enable engines under `text_detection`.
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
 | `easyocr` | `easyocr` | Local OCR. Accurate but slow on CPU. Downloads its models the first time it runs. English only. | All |
-| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
-| `google_vision` | `google-vision` | Google Cloud Vision. Needs Google Cloud credentials: a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. | All |
+| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. | All |
+| `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
 We recommend `easyocr` to start with. It needs nothing else installed.
@@ -73,7 +73,7 @@ An LLM powers [AI self-heal](/docs/elements/self-heal) and the plain-English mod
 | `openai` | `openai` | OpenAI, and any server with an OpenAI-compatible API: OpenRouter, Azure OpenAI, or a local model in Ollama, vLLM or LM Studio. | All |
 | `anthropic` | `anthropic` | Claude, through the Claude API, Amazon Bedrock or Google Vertex AI. | All |
 
-Each engine reads its credentials from the environment. See [llm_models](/docs/reference/config#llm-models) for its settings and credentials.
+Each engine reads its API key from `capabilities.api_key` in config.yaml, else from the environment. See [llm_models](/docs/reference/config#llm-models) for its settings and credentials.
 
 ## Other extras
 

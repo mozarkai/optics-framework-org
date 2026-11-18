@@ -1,10 +1,10 @@
 # Optics: create it your way, run it forever
 
-Optics is open-source test automation for Android, iOS, web and TV. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
+Optics is open-source test automation for Android, iOS, web, TV and desktop. Write a test by hand, record it, describe it in plain English or hand it to your AI agent, then run that same suite on every build and every device.
 
 - Install (macOS and Linux): `curl -fsSL https://optics-framework.org/install | sh`
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
-- Install (pip): `pip install optics-framework`
+- Install (pip): `pip install "optics-framework[mcp]"`
 - Licence: Apache 2.0. Needs Python 3.12 or newer.
 - Docs: https://optics-framework.org/docs/ (every page is also Markdown; index for agents: https://optics-framework.org/docs/llms.txt)
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
@@ -100,7 +100,7 @@ A locked phone through Bluetooth and a camera. A TV through its remote. A game t
 
 - **On every build:** in CI. `optics execute` exits with 1 when a test fails, and the JUnit report becomes a check on the pull request. On-screen error detection runs too. GitLab and Android versions: https://optics-framework.org/docs/run/ci
 - **Before every release:** on your own emulator or device, with annotated screenshots.
-- **On every device:** Android, iOS, Android TV, Samsung Tizen and LG webOS through Appium; web through Selenium or Playwright.
+- **On every device:** Android, iOS, Android TV, Samsung Tizen, LG webOS and macOS, Linux and Windows desktop apps through Appium; web through Selenium or Playwright.
 - **In production:** on a schedule against your live app, including a Bluetooth driver for locked-down devices.
 
 ```yaml
@@ -118,7 +118,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.2"
+      - run: pip install "optics-framework[playwright]==1.11.4"
       - run: python -m playwright install --with-deps chromium
       - run: optics execute birch-tests --no-use-printer
       - if: always()

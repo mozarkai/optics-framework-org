@@ -45,6 +45,8 @@ Shopper Can Sign In
     Assert Presence    Picked for you|Search Birch    timeout=20    rule=any
 ```
 
+The suite reads `config.yaml`, so the same suite style works for a desktop app with a [desktop config](/docs/platforms/desktop#write-config-yaml). On a desktop, `Press Keycode` takes a key combination such as `primary+a`.
+
 Run it like any Robot suite:
 
 ```shell

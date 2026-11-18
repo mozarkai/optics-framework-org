@@ -13,7 +13,8 @@
       "representativeQueries": [
         "tap a button in my Android app from an AI agent",
         "let Claude drive a browser and write the test",
-        "automate a smart TV app over MCP"
+        "automate a smart TV app over MCP",
+        "test a macOS, Linux or Windows desktop app from an AI agent"
       ]
     },
     {

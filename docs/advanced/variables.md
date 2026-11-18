@@ -103,23 +103,23 @@ Every value is text, even when it looks like a number. That matters in expressio
 
 - **Evaluate** puts the value into the expression as you wrote it. `${price} + 5` with `price` set to `64` becomes `64 + 5`, which is `69`. To join text, quote it: `'${first_name}' + ' ' + '${last_name}'`.
 - **Read Data** puts quotes around a value in its query, unless the value is already between quotes. `name == ${user}` works.
-- **Condition** puts quotes around each value. `${count} == '3'` works. `${count} > 2` fails, because it compares text with a number. Compare against quoted text, or compute the comparison with Evaluate first. See [Conditions and loops](/docs/advanced/conditions).
+- **Condition** puts each value in quotes as text. `${count} == '3'` works. `${count} > 2` fails, because it compares text with a number. Compare against quoted text, or compute the comparison with Evaluate first. See [Conditions and loops](/docs/advanced/conditions).
 
-Evaluate allows arithmetic (`+ - * / % **`), comparisons, `and`, `or`, `not` and `x if condition else y`. It doesn't allow function calls such as `int()`.
+Evaluate allows arithmetic (`+ - * / % **`), comparisons, `in`, `and`, `or`, `not` and `x if condition else y`. It does not allow function calls such as `int()`. An expression with other parts, or one that is too large to compute, fails with E0406.
 
 ## Hide sensitive values
 
 Optics writes `****` in place of a secret in the console, the log files, `logs.json`, `junit_output.xml`, `failed_steps_elements.json`, the run tree and error output. Optics masks these items:
 
 - A value that `store_as` or `Read Data` sets under a secret name.
-- A value in the elements file or a step that starts with `@:`.
+- A value in the elements file or a step that starts with `@:`. When the step runs, Optics also masks the value without the prefix in all later output of the run.
 - A text value in `config.yaml` under a secret name, such as `api_key`. This includes a value that the config reads from an environment variable with a secret name.
 - A password in a URL: `https://user:****@host`.
 - A query parameter with a secret name: `?token=****`.
 
 A name is secret when it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `user_password`, `loginOTP` and `myApiToken` match. `passkey` and `pincode` do not.
 
-A stored value or a config value must have 4 or more characters to be masked.
+A value must have 4 or more characters to be masked. This also applies to a value with `@:`.
 
 Optics does not hide a value from the elements file, `Evaluate`, `Run Loop` or an `Invoke API` `extract` by its name. To hide an elements-file value, start it with `@:`: `password,@:correct-horse`. Optics logs `****` and types the value without the prefix.
 

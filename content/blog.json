@@ -2,6 +2,17 @@
   "items": [
     {
       "type": "article",
+      "slug": "small-model-self-heal",
+      "title": "Self-heal broken locators with a 2B model on your own GPU",
+      "summary": "I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.",
+      "date": "2026-11-09",
+      "author": "Chinmay Jha",
+      "length": "6 min read",
+      "image": "media/blog/small-model-self-heal.webp",
+      "alt": "The headline Self-heal on your own GPU beside a self-heal request for id/primary_action and the reply press_element e4, with the next assert passed"
+    },
+    {
+      "type": "article",
       "slug": "ai-agent-writes-the-test-once",
       "title": "Your AI agent writes the test once. Optics runs it with no model.",
       "summary": "An AI agent drives a real browser through the Optics MCP server and writes a CSV test suite. Later runs replay that suite with no model, in about 3 seconds.",

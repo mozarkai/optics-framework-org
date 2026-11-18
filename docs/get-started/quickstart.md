@@ -24,7 +24,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 ```
 ::tab[pip]
 ```shell
-$ pip install optics-framework
+$ pip install "optics-framework[mcp]"
 ```
 :::
 
@@ -32,7 +32,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.2
+Optics Framework 1.11.4
 ```
 
 ### Create a project
@@ -102,7 +102,7 @@ Run the test again. This time it fails:
 ╭────────────────────────────── Failure details ───────────────────────────────╮
 │ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
 │ Keyword 'Validate Element' failed after fallback attempts; last error:       │
-│ Code.E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR   │
+│ E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR        │
 │ was not tried: no text_detection engine is configured.                       │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
@@ -139,6 +139,10 @@ Close Browser,Close And Terminate App
 ## Testing a phone app instead
 
 Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from a sample for the Android Contacts app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](/docs/platforms/android) walks through both.
+
+## Testing a desktop app instead
+
+Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `desktop_editor` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](/docs/platforms/desktop) walks through it.
 
 ## Next steps
 

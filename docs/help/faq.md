@@ -4,7 +4,7 @@ nav: FAQ
 summary: Learn what Optics can and can't do, with short answers to the questions people ask most.
 ---
 
-Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.2.
+Short answers, with links to the pages that explain each one in full. These docs describe Optics 1.11.4.
 
 ## About Optics
 
@@ -27,9 +27,13 @@ With the [MCP server](/docs/create/agent), Optics itself calls no AI service. Yo
 
 ### What can I test, and where does it run?
 
-Optics tests Android and iOS apps through Appium, websites through Playwright or Selenium, and Android TV, Samsung Tizen and LG webOS apps through Appium. It can also drive locked-down [production devices](/docs/platforms/production) as a Bluetooth mouse and keyboard, with a camera watching the screen.
+Optics tests Android and iOS apps through Appium, websites through Playwright or Selenium, Android TV, Samsung Tizen and LG webOS apps through Appium, and native desktop apps on macOS, Linux and Windows through Appium and appium-xa11y-driver. It can also drive locked-down [production devices](/docs/platforms/production) as a Bluetooth mouse and keyboard, with a camera watching the screen.
 
 Optics itself runs on macOS, Linux and Windows with Python 3.12 or newer. Testing iOS apps needs a Mac with Xcode. See [Platforms](/docs/platforms/).
+
+### Can Optics test desktop apps?
+
+Yes. Optics tests native apps on macOS, Linux and Windows through Appium and appium-xa11y-driver, which read the accessibility tree of the OS. You use the same CSV tests and keywords as for phones. Windows support is experimental. See [Test desktop apps](/docs/platforms/desktop).
 
 ### Do I need to know how to code?
 

@@ -43,6 +43,12 @@ Use the installer or a standard `venv` instead of Conda.
 
 The install scripts include it. With pip, install it yourself: `pip install "optics-framework[mcp]"`. See [MCP server](/docs/reference/mcp#install).
 
+### "Operation not permitted" for a project or venv in Documents on macOS {#macos-operation-not-permitted}
+
+macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the app that runs your shell does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
+
+Make a new virtual environment outside these folders, for example in your home folder, and install Optics in it again. Do not move the old one: a virtual environment does not work at a different path. The installer puts Optics in `~/.optics`, outside these folders. Or give the app that runs your shell access in **System Settings > Privacy & Security > Files & Folders**, then open a new shell.
+
 ## Setting up a project
 
 ### "Cannot start: E0104": No driver enabled in …/config.yaml {#no-driver-enabled}
@@ -63,7 +69,7 @@ Check the first line of each file: `test_case,test_step` for test cases and `mod
 
 Before a run, `optics execute` checks that the Appium server answers at the `url` in `config.yaml`. Nothing is listening there. The report `junit_output.xml` shows each test case as `ERROR` with the same message.
 
-Start the server in another terminal with `appium`, then run again. If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
+Start the server in another terminal with `appium`, then run again. For a desktop app, check that the Appium service of the Host runs: see [Check that Appium runs](/docs/platforms/desktop#check-that-appium-runs). If the server runs on another port or machine, fix `url` under `driver_sources`. On Android, the same panel appears when `adb` isn't installed or no device is connected; check with `adb devices`.
 
 ### "Cannot start: E0102": No Selenium/WebDriver server reachable at … {#selenium-not-reachable}
 
@@ -79,7 +85,7 @@ Add `browserName: chrome` or `browserName: firefox` under `capabilities`. Those 
 
 ### `E0104` Appium capabilities not found or unsupported platform {#appium-capabilities}
 
-The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV` or `LGTV`.
+The Appium driver needs non-empty `capabilities` with a `platformName` of `Android`, `iOS`, `TizenTV`, `LGTV`, `Mac`, `Linux` or `Windows`. A desktop session also needs `app` or `appName`. See [Write config.yaml](/docs/platforms/desktop#write-config-yaml).
 
 Fill in the capabilities for your platform. Run `optics configure <project>` to answer a few questions instead of writing them by hand. See [Error codes](/docs/reference/errors#e01-driver-and-session).
 
@@ -330,13 +336,13 @@ Install it by that name, for example `optics setup --install openai`.
 
 ### `E0601`: the LLM engine needs a model or a key {#llm-not-configured}
 
-The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](/docs/reference/config#llm-models).
+The `openai` and `anthropic` engines have no default model, so set `capabilities.model`. The `openai` engine also stops when it finds no key and no `url`: set `capabilities.api_key`, `OPENAI_API_KEY`, or the variable you named in `api_key_env`. See [llm_models](/docs/reference/config#llm-models).
 
 ### `E0801` or authentication errors from the model {#llm-auth}
 
 The model provider rejected the request, usually because the key is missing, wrong or out of quota, or the model name is wrong.
 
-Set your engine's key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`) in the terminal you run Optics from, and check your quota with the provider. See [Environment variables](/docs/reference/cli#environment-variables).
+Set your engine's key in `capabilities.api_key`, or in the terminal you run Optics from (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or the variable in `api_key_env`). Then check your quota with the provider. See [Environment variables](/docs/reference/cli#environment-variables).
 
 ### AI self-heal does nothing {#self-heal-inactive}
 
@@ -349,6 +355,32 @@ Check each item in [Turn it on](/docs/elements/self-heal#turn-it-on). Self-heal 
 Each instruction stops after 15 steps, after 3 failed steps in a row, or after 3 taps, swipes or scrolls in a row that are not checked ("Repeated gesture/coordinate actions did not reach the goal"). It also stops when 4 actions in a row do not change the screen ("No progress: the screen did not change after repeated actions.").
 
 Break the goal into smaller instructions, and use the words shown on screen. See [Write goals the model can finish](/docs/create/describe#write-goals-the-model-can-finish).
+
+## Desktop apps
+
+### A desktop session fails with E0104: "needs its app when it starts" {#desktop-no-app}
+
+The capabilities name no app. Without one, the driver would attach to the app in front, which can be your terminal. Set `app` to start the app, or `appName` to attach to an app that runs. See [Write config.yaml](/docs/platforms/desktop#write-config-yaml).
+
+### Keys or clicks fail with "did not come to the front" {#desktop-not-frontmost}
+
+The driver tried to bring your app to the front, but a different window stays in front, for example a system alert. The driver sends no keys or clicks, because they can go to that window. Close that window, then run the step again.
+
+### Nothing works on macOS after the setup script {#desktop-mac-permissions}
+
+Appium needs the Accessibility and Screen & System Audio Recording permissions. The setup script names the app or Node.js that gets them, and opens the panes of the missing permissions. Give the permissions to that app or Node.js, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. To see the missing permissions, run `curl -s http://127.0.0.1:4723/xa11y/status`. See [Give the permissions](/docs/platforms/desktop#give-the-permissions-macos-only).
+
+### The setup script stops with "port 4723 is in use" {#desktop-port-in-use}
+
+A different process holds the Appium port, for example an Appium that you started yourself. The setup script, `host.sh run` and `host.ps1` stop before they start Appium, and the message names that process. Stop that process, or run the setup script again with `--port <port>`, or `-Port <port>` on Windows. Then use that port in `url` in `config.yaml`.
+
+### A desktop session fails with "cannot start a session with platformName" {#desktop-wrong-host}
+
+The `platformName` in `config.yaml` is not the OS of the Host. A Host starts sessions only for its own OS, and Optics shows `E0102` with the OS of the Host in the message. Set `platformName` to that OS. If you use a tunnel, make sure that `url` goes to the Host, not to a local Appium. `curl -s <url>/xa11y/status` gives the `platformName` of the Host. See [Use a Host on a different computer](/docs/platforms/desktop#use-a-host-on-a-different-computer).
+
+### Go Back fails with E0105 on a desktop {#desktop-go-back}
+
+Go Back and Get App Version work only on phones. On a desktop, press the app's key combination with Press Keycode, for example `Press Keycode,cmd+[`. See [Keywords that differ on a desktop](/docs/platforms/desktop#keywords-that-differ-on-a-desktop).
 
 ## Web and Playwright
 

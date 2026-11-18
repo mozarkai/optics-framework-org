@@ -4,7 +4,7 @@ nav: Overview
 summary: Learn what Optics does, what it tests, and the fastest way to see it run.
 ---
 
-Optics is open-source test automation for apps on Android, iOS, the web and TV. You describe what a person does in your app, such as signing in or adding a product to the cart. Optics repeats it on a real device, an emulator or a browser, and tells you when the app stops behaving.
+Optics is open-source test automation for apps on Android, iOS, the web, TV and the desktop. You describe what a person does in your app, such as signing in or adding a product to the cart. Optics repeats it on a real device, an emulator or a browser, and tells you when the app stops behaving.
 
 ::scene{name="fourways" caption="Four ways to create a test. Each one writes the same plain-text suite, which runs the same way on every build."}
 
@@ -23,6 +23,7 @@ When a run finishes, you get a pass or fail for every step, screenshots of what 
 | Android and iOS apps | Through [Appium](/docs/platforms/android), on emulators, simulators and real phones |
 | Websites | Through [Playwright or Selenium](/docs/platforms/web), no device needed |
 | Android TV, Samsung Tizen, LG webOS | Through Appium, with the remote's arrow keys. See [TV](/docs/platforms/tv) |
+| macOS, Linux and Windows desktop apps | Through Appium and the accessibility tree of the OS. See [Desktop](/docs/platforms/desktop) |
 | Locked-down production devices | As a Bluetooth mouse and keyboard, with a camera watching the screen. See [Production devices](/docs/platforms/production) |
 
 Optics runs on macOS, Linux and Windows with Python 3.12 or newer. There is no account, cloud service or API key. Everything runs on your machine or in your CI.
