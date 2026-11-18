@@ -8,7 +8,7 @@ Open an issue on [GitHub Issues](https://github.com/mozarkai/optics-framework/is
 
 ## Questions and ideas
 
-Ask in [GitHub Discussions](https://github.com/mozarkai/optics-framework/discussions) for help writing a suite, choosing a driver or OCR engine, or wiring Optics into CI. Check the [documentation](https://mozarkai.github.io/optics-framework/) first; many answers are already there.
+Ask in [GitHub Discussions](https://github.com/mozarkai/optics-framework/discussions) for help writing a suite, choosing a driver or OCR engine, or wiring Optics into CI.
 
 ## Security vulnerabilities
 

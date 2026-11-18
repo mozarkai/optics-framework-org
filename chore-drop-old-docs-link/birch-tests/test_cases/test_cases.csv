@@ -1,6 +1,0 @@
-test_case,test_step
-Suite Setup,Open Birch
-Shopper can sign in,Sign In
-Shopper can find a shoe,Find A Shoe
-Shopper can add it to the cart,Add To Cart
-Shopper can check out,Check Out
