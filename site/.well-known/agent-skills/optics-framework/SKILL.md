@@ -35,6 +35,7 @@ look them up in the docs below, or read the MCP server's `optics://keywords` res
      that shows the app. `capabilities: {"platformName": "Mac", "automationName": "Xa11y"}`
      (or `Linux`, `Windows`) and `app`: an app name such as `TextEdit` or a bundle id on macOS,
      an executable elsewhere. On macOS, a session attaches to an app that runs already.
+     `platformName` must be the OS of that computer: `GET <appium url>/xa11y/status` gives it.
      `press_key` takes a key combination such as `primary+s`; `"back"` fails on a desktop.
      Do every step on the app with these tools. Do not use AppleScript, `osascript`, `xdotool`
      or other UI automation on it. If the optics tools are missing, start a new agent session.
