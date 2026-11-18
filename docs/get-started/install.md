@@ -38,8 +38,10 @@ Use pip when you manage your own virtual environment, for example inside a CI jo
 ```shell
 $ python3 -m venv .venv
 $ source .venv/bin/activate
-$ pip install optics-framework
+$ pip install "optics-framework[mcp]"
 ```
+
+The `mcp` extra adds the MCP server, as the installer does. Without it, `optics mcp` does not start.
 :::
 
 The installer also prints the command that adds Optics to Claude Code, with the full path of `optics`. See [Let your AI agent build tests](/docs/create/agent).

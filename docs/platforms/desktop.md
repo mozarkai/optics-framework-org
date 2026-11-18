@@ -32,7 +32,7 @@ Optics  ──WebDriver──>  Appium + appium-xa11y-driver  ──accessibilit
 
 ## Before you begin
 
-- [Optics installed](/docs/get-started/install) with the Appium engine: `optics setup --install appium`.
+- [Optics installed](/docs/get-started/install) with the Appium engine: `optics setup --install appium`. With pip, run `pip install "optics-framework[mcp,appium]"`.
 - A Host that runs macOS, Linux with X11 (Debian 13 is tested), or Windows (Windows Server 2022 is tested).
 - On macOS, access to System Settings to give two permissions one time.
 - On Windows, an administrator one time, if the Visual C++ runtime is not installed.
