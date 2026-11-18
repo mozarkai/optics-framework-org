@@ -52,7 +52,7 @@ Download the script to a temporary folder, not to your project. Do not send it t
 ::tab[macOS]
 ```shell
 $ setup="$(mktemp -d)/setup.sh"
-$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/mac/setup.sh
+$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/mac/setup.sh
 $ bash "$setup"
 ```
 
@@ -61,7 +61,7 @@ The service is the LaunchAgent `appium-xa11y`. Its log is `~/Library/Logs/appium
 ::tab[Linux]
 ```shell
 $ setup="$(mktemp -d)/setup.sh"
-$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/linux/setup.sh
+$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/linux/setup.sh
 $ bash "$setup"
 ```
 
@@ -74,7 +74,7 @@ In PowerShell:
 
 ```powershell
 PS> $setup = Join-Path $env:TEMP 'setup.ps1'
-PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.3/hosts/windows/setup.ps1 -OutFile $setup
+PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/windows/setup.ps1 -OutFile $setup
 PS> powershell -ExecutionPolicy Bypass -File $setup
 ```
 
@@ -282,7 +282,7 @@ Each step is one round trip through the tunnel, so a suite is slower over a netw
 The driver has a Dockerfile for a Linux Host with Xvfb and the sample apps:
 
 ```shell
-$ git clone --branch v0.1.3 https://github.com/chinmayajha/appium-xa11y-driver
+$ git clone --branch v0.1.4 https://github.com/chinmayajha/appium-xa11y-driver
 $ docker build -f appium-xa11y-driver/docker/linux/Dockerfile -t appium-xa11y-linux appium-xa11y-driver
 $ docker run -d --name appium -p 127.0.0.1:4723:4723 appium-xa11y-linux
 ```
@@ -510,7 +510,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: chinmayajha/appium-xa11y-driver
-          ref: v0.1.3
+          ref: v0.1.4
           path: xa11y-driver
       - name: Start the Linux Host
         run: |
@@ -536,7 +536,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: chinmayajha/appium-xa11y-driver
-          ref: v0.1.3
+          ref: v0.1.4
           path: xa11y-driver
       - name: Prepare the Windows Host
         shell: powershell
