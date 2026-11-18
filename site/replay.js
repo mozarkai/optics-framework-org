@@ -273,11 +273,11 @@
       ret.classList.toggle("lock", found && !!st.box);
       if (found && st.box) aim(st.box);
       ret.querySelector("em").textContent = rungOf(st) + " · " + secs(st.elapsed);
-      shotCap.innerHTML = st.found
+      shotCap.innerHTML = st.found && st.pre
         ? '<button type="button" aria-pressed="' + !found + '">Before</button><button type="button" aria-pressed="' + found + '">Found</button>'
         : "";
       Array.prototype.forEach.call(shotCap.children, function (b, k) {
-        b.addEventListener("click", function () { stop(); view(st, k === 1); });
+        b.addEventListener("click", function () { stop(); view(st, k === 1); shotCap.children[k].focus(); });
       });
     }
 
@@ -339,7 +339,7 @@
           ? '<p class="rp-note">Every step passed. Then Optics read the last screen, found “' + esc(r.errors[0].match_string) + '” from <code>error_definitions.csv</code>, and failed the run.</p><div class="rp-sec"><p class="label">detected_errors.json</p>' + errs + "</div>"
           : '<p class="rp-note">Every step passed, and the last screen matched no error definition.</p>' + (S.run > 0 ? "" : nextRelease()));
       var nb = step.querySelector(".rp-next");
-      if (nb) nb.addEventListener("click", function () { choose(S.run + 1, true); });
+      if (nb) nb.addEventListener("click", function () { choose(S.run + 1, true); relBtns[S.run].focus(); });
       stop();
     }
 
@@ -349,13 +349,13 @@
     }
 
     function start() {
-      if (S.i < 0 || S.i >= steps().length) go(-1);
+      if (S.i < 0 || S.i >= steps().length) S.i = 0;
       S.playing = true;
       host.classList.add("playing");
       play.innerHTML = ICON.pause;
       play.setAttribute("aria-label", "Pause");
       document.dispatchEvent(new CustomEvent("optics:play", { detail: "replay" }));
-      go(S.i + 1);
+      go(S.i);
     }
 
     function stop() {
@@ -367,7 +367,7 @@
     }
 
     host.addEventListener("keydown", function (e) {
-      if (e.target.closest("input, a")) return;
+      if (e.target.closest("input, a, pre")) return;
       if (e.key === "ArrowRight") { stop(); go(Math.min(steps().length, S.i + 1)); e.preventDefault(); }
       if (e.key === "ArrowLeft") { stop(); go(Math.max(0, S.i - 1)); e.preventDefault(); }
     });
