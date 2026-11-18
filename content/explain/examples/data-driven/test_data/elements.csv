@@ -1,0 +1,6 @@
+Element_Name,Element_ID
+search_bar,//*[@resource-id='com.birch.shop:id/search']
+search_bar,Search Birch
+email_field,//*[@resource-id='com.birch.shop:id/email']
+sign_in,//*[@resource-id='com.birch.shop:id/login']
+sign_in,Sign in

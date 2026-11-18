@@ -1,0 +1,10 @@
+module_name,module_step,param_1,param_2,param_3,param_4,param_5
+Open Birch,Launch App,com.birch.shop
+Search Every Term,Run Loop,Search And Check,${term},trail|pace|ridge,${expected},Trail Runner 2|Pace Knit|Ridge GTX
+Search And Check,Press Element,${search_bar}
+Search And Check,Enter Text Direct,${term}
+Search And Check,Assert Presence,${expected},10
+Sign In As Gold Shopper,Read Data,${gold_email},test_data/users.csv,tier == 'gold';select=email
+Sign In As Gold Shopper,Enter Text,${email_field},${gold_email}
+Sign In As Gold Shopper,Press Element,${sign_in}
+Sign In As Gold Shopper,Assert Presence,Gold member,10

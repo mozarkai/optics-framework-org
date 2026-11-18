@@ -1,0 +1,7 @@
+Element_Name,Element_ID,Element_ID_text,Element_ID_image
+email_field,//*[@resource-id='com.birch.shop:id/email'],Email,
+password_field,//*[@resource-id='com.birch.shop:id/password'],Password,
+sign_in,//*[@resource-id='com.birch.shop:id/login'],Sign in,sign_in.png
+greeting,//*[@resource-id='com.birch.shop:id/greeting'],,
+email,ava@birch.shop,,
+password,@:correct-horse,,

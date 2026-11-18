@@ -1,0 +1,7 @@
+Element_Name,Element_ID
+not_now,//*[@resource-id='com.birch.shop:id/dismiss']
+not_now,Not now
+search_bar,//*[@resource-id='com.birch.shop:id/search']
+email_field,//*[@resource-id='com.birch.shop:id/email']
+sign_in,//*[@resource-id='com.birch.shop:id/login']
+payment,wallet

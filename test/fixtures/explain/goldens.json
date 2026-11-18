@@ -1,0 +1,459 @@
+{
+ "examples/api": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "An order placed over the API shows in the app",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/area-of-interest": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Add the second shoe to the cart",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/broken": {
+  "exit": 1,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Sign up",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: sign_up"
+   },
+   {
+    "name": "Say hello",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0403",
+    "message": "Code.E0403: Variable '${first_name}' in 'Hi ${first_name}!' is not defined."
+   },
+   {
+    "name": "Tap the banner",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Check out",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Unknown keyword or module: 'Pay For Cart'"
+   }
+  ]
+ },
+ "examples/data-driven": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Every search finds its shoe",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Gold shoppers see their badge",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/error-screens": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Browse after a long break",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Suite Teardown",
+    "kind": "suite_teardown",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/popups": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Setup (Shop as whoever is signed in)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Shop as whoever is signed in",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Pay the way the account prefers)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Pay the way the account prefers",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/sign-in": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Sign in with email",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Suite Teardown",
+    "kind": "suite_teardown",
+    "status": "PASS"
+   }
+  ]
+ },
+ "examples/yaml": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Fill the cart",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "explain/csv-quirks": {
+  "exit": 1,
+  "cases": [
+   {
+    "name": "Extra cells are dropped",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Quoted commas stay in one cell",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Empty element has no value",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: blank"
+   },
+   {
+    "name": "Element from a second file",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "explain/step-order": {
+  "exit": 1,
+  "cases": [
+   {
+    "name": "Missing element before unknown keyword",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: missing"
+   },
+   {
+    "name": "Inline variable first",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0403",
+    "message": "Code.E0403: Variable '${nobody}' in 'Hi ${nobody}' is not defined."
+   },
+   {
+    "name": "Unknown keyword last",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Pres Element. Did you mean 'Press Element'? (run `optics list` to see all keywords)"
+   },
+   {
+    "name": "Near miss",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Asert Presense. Did you mean 'Assert Presence'? (run `optics list` to see all keywords)"
+   },
+   {
+    "name": "Far miss",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Tap."
+   },
+   {
+    "name": "Case and spaces",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Snake case",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0403",
+    "message": "Code.E0403: store_as needs a name, e.g. store_as=balance."
+   },
+   {
+    "name": "Missing module",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Unknown keyword or module: 'No Such Module'"
+   },
+   {
+    "name": "Keyword as a test step",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Empty module name row",
+    "kind": "test",
+    "status": "PASS"
+   }
+  ]
+ },
+ "explain/two-setups": {
+  "exit": 1,
+  "output": "22:11:55 ERROR The test cases have more than one test setup: 'Login Setup' and 'Cart Setup'. execute.py:812 A test case whose name ends with 'Setup' is the test setup. Rename the others. \u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 Cannot start: E0503 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e \u2502 The test cases have more than one test setup: 'Login Setup' and 'Cart Setup'. \u2502 \u2502 A test case whose name ends with 'Setup' is the test setup. Rename the others. \u2502 \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f"
+ },
+ "explain/variables": {
+  "exit": 1,
+  "cases": [
+   {
+    "name": "Suite Setup",
+    "kind": "suite_setup",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: total"
+   },
+   {
+    "name": "Setup (Store a value)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Store a value",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Store a value)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Reuse it)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Reuse it",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Reuse it)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Read data defines)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Read data defines",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Read data defines)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Evaluate defines)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Evaluate defines",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Evaluate defines)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Loop variable stays undefined)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Loop variable stays undefined",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: size"
+   },
+   {
+    "name": "Teardown (Loop variable stays undefined)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (API extract stays undefined)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "API extract stays undefined",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: auth_token"
+   },
+   {
+    "name": "Teardown (API extract stays undefined)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Condition leaves its own variables)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Condition leaves its own variables",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Condition leaves its own variables)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Condition resolves a whole variable)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Condition resolves a whole variable",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0201",
+    "message": "Code.E0201: Element not found: flag"
+   },
+   {
+    "name": "Teardown (Condition resolves a whole variable)",
+    "kind": "teardown",
+    "status": "PASS"
+   },
+   {
+    "name": "Setup (Store with a variable name)",
+    "kind": "setup",
+    "status": "PASS"
+   },
+   {
+    "name": "Store with a variable name",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "Teardown (Store with a variable name)",
+    "kind": "teardown",
+    "status": "PASS"
+   }
+  ]
+ },
+ "explain/yaml-steps": {
+  "exit": 1,
+  "cases": [
+   {
+    "name": "Sleep takes a plain value",
+    "kind": "test",
+    "status": "PASS"
+   },
+   {
+    "name": "A misspelt longer keyword",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Swipe By Percent. Did you mean 'Swipe By Percentage'? (run `optics list` to see all keywords)"
+   },
+   {
+    "name": "A module named as a step",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Sleep Well. Did you mean 'Sleep'? (run `optics list` to see all keywords)"
+   },
+   {
+    "name": "Quoted values keep their spaces",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0403",
+    "message": "Code.E0403: Variable '${missing}' in 'Add ${missing}' is not defined."
+   },
+   {
+    "name": "Too many words for a keyword",
+    "kind": "test",
+    "status": "FAIL",
+    "code": "E0402",
+    "message": "Code.E0402: Keyword not found: Scroll To Element foo. Did you mean 'Scroll From Element'? (run `optics list` to see all keywords)"
+   }
+  ]
+ }
+}
