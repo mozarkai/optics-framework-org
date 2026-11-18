@@ -98,7 +98,7 @@ $ curl -s http://127.0.0.1:4723/status
 {"value":{"ready":true,"message":"The server is ready to accept new connections", ...}}
 ```
 
-If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
+If you set `--port`, or `-Port` on Windows, use that port in the URL. If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
 
 ### Make a project
 
@@ -594,7 +594,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 
 ## If it isn't working
 
-- **No answer from `http://127.0.0.1:4723/status`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
+- **No answer from `http://127.0.0.1:4723/status`, or from the port that you set with `--port` or `-Port`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.

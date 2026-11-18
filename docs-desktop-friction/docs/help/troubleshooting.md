@@ -46,7 +46,7 @@ The install scripts include it. With pip, install it yourself: `pip install "opt
 
 macOS protects the Documents, Desktop and Downloads folders. Each app must get access to them. When the app that runs your shell does not have access, Python cannot read `pyvenv.cfg` and stops with `PermissionError: [Errno 1] Operation not permitted`. Access can stop while the terminal runs.
 
-Keep the virtual environment and the project outside these folders, for example in your home folder. The installer puts Optics in `~/.optics`, outside these folders. Or give the app that runs your shell access in **System Settings > Privacy & Security > Files & Folders**, then open a new shell.
+Make a new virtual environment outside these folders, for example in your home folder, and install Optics in it again. Do not move the old one: a virtual environment does not work at a different path. The installer puts Optics in `~/.optics`, outside these folders. Or give the app that runs your shell access in **System Settings > Privacy & Security > Files & Folders**, then open a new shell.
 
 ## Setting up a project
 
