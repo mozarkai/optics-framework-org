@@ -61,6 +61,34 @@ jobs:
           sh public/install.sh --uninstall
           test ! -e "$HOME/.optics"
 
+      - uses: astral-sh/setup-uv@v6
+
+      # The documented install command doubles as the upgrade command, so an
+      # Optics from uv tool, pipx or pip must be upgraded where it is.
+      - name: an existing Optics is upgraded in place, not installed twice
+        run: |
+          set -eu
+          old=1.11.3
+          moved() { if "$1" --version | grep -q "$old"; then echo "$1 is still on $old"; exit 1; fi; }
+          export UV_TOOL_DIR="$RUNNER_TEMP/uvtools" UV_TOOL_BIN_DIR="$RUNNER_TEMP/uvbin"
+          uv tool install --python 3.12 "optics-framework==$old"
+          PATH="$UV_TOOL_BIN_DIR:$PATH" sh public/install.sh
+          moved "$UV_TOOL_BIN_DIR/optics"
+          uv tool uninstall optics-framework
+          uv venv --seed --python 3.12 "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/python" -m pip install --quiet "optics-framework[mcp]==$old"
+          PATH="$RUNNER_TEMP/venv/bin:$PATH" sh public/install.sh
+          moved "$RUNNER_TEMP/venv/bin/optics"
+          "$RUNNER_TEMP/venv/bin/python" -c 'import fastmcp'
+          rm -rf "$RUNNER_TEMP/venv"
+          if command -v pipx > /dev/null; then
+            export PIPX_HOME="$RUNNER_TEMP/pipx" PIPX_BIN_DIR="$RUNNER_TEMP/pipxbin"
+            pipx install --python "$(uv python find 3.12)" "optics-framework==$old"
+            PATH="$PIPX_BIN_DIR:$PATH" sh public/install.sh
+            moved "$PIPX_BIN_DIR/optics"
+          fi
+          test ! -e "$HOME/.optics"
+
       - name: uninstall from a shared folder keeps what Optics did not create
         run: |
           set -eu
@@ -148,6 +176,32 @@ jobs:
           if ($after -notlike '*%USERPROFILE%\keep-this-reference*') { throw "uninstall expanded or dropped another PATH entry: $after" }
           $out = & "$env:GITHUB_WORKSPACE/public/install.ps1" -Uninstall -Dir shared 6>&1 | Out-String
           if ($out -notmatch 'Nothing to uninstall') { throw "second uninstall said: $out" }
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: an existing Optics is upgraded in place, not installed twice
+        shell: pwsh
+        run: |
+          $old = '1.11.3'
+          function Assert-Moved { param($Optics) $v = & $Optics --version; if ($v -match [regex]::Escape($old)) { throw "$Optics is still on $v" } }
+          $env:UV_TOOL_DIR = Join-Path $env:RUNNER_TEMP 'uvtools'
+          $env:UV_TOOL_BIN_DIR = Join-Path $env:RUNNER_TEMP 'uvbin'
+          uv tool install --python 3.12 "optics-framework==$old"
+          $saved = $env:Path
+          $env:Path = "$env:UV_TOOL_BIN_DIR;$saved"
+          ./public/install.ps1 -NoModifyPath
+          Assert-Moved (Join-Path $env:UV_TOOL_BIN_DIR 'optics.exe')
+          uv tool uninstall optics-framework
+          $venv = Join-Path $env:RUNNER_TEMP 'venv'
+          uv venv --seed --python 3.12 $venv
+          & (Join-Path $venv 'Scripts\python.exe') -m pip install --quiet "optics-framework[mcp]==$old"
+          $env:Path = "$venv\Scripts;$saved"
+          ./public/install.ps1 -NoModifyPath
+          Assert-Moved (Join-Path $venv 'Scripts\optics.exe')
+          & (Join-Path $venv 'Scripts\python.exe') -c 'import fastmcp'
+          if ($LASTEXITCODE -ne 0) { throw 'the upgrade dropped the mcp extra' }
+          $env:Path = $saved
+          if (Test-Path (Join-Path $HOME '.optics')) { throw 'the installer made a second copy' }
 
       # The documented command. Windows PowerShell 5.1 is what a fresh Windows
       # opens, and an `exit` from inside iex would close the user's window.
