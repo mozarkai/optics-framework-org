@@ -16,21 +16,27 @@
     return rows;
   }
 
+  var LINE_END = /\r?\n?/y;
   function csvRow(text, i, row) {
     var line = row.line;
     for (;;) {
       var cell = { start: i, line: line, v: "" };
-      if (text[i] === '"') i = csvQuoted(text, i + 1, cell, function () { line++; });
-      while (i < text.length && text[i] !== "," && text[i] !== "\n" && text[i] !== "\r") cell.v += text[i++];
-      cell.end = i;
+      i = csvCell(text, i, cell, function () { line++; });
       var blank = !row.cells.length && cell.start === cell.end && text[i] !== ",";
       if (!blank) row.cells.push(cell);
       if (text[i] !== ",") break;
       i++;
     }
     row.endLine = line;
-    if (text[i] === "\r") i++;
-    if (text[i] === "\n") i++;
+    LINE_END.lastIndex = i;
+    LINE_END.exec(text);
+    return LINE_END.lastIndex;
+  }
+
+  function csvCell(text, i, cell, newline) {
+    if (text[i] === '"') i = csvQuoted(text, i + 1, cell, newline);
+    while (i < text.length && ",\n\r".indexOf(text[i]) < 0) cell.v += text[i++];
+    cell.end = i;
     return i;
   }
 
@@ -81,11 +87,13 @@
     for (var i = 0; i < line.length; i++) {
       var c = line[i];
       if (quote) { if (c === quote) quote = null; continue; }
-      if ((c === '"' || c === "'") && (i === 0 || /[\s[,:-]/.test(line[i - 1]))) quote = c;
-      else if (c === "#" && (i === 0 || /\s/.test(line[i - 1]))) return line.slice(0, i).replace(/\s+$/, "");
+      if ("\"'".indexOf(c) >= 0 && after(line, i, /[\s[,:-]/)) quote = c;
+      else if (c === "#" && after(line, i, /\s/)) return line.slice(0, i).replace(/\s+$/, "");
     }
     return line;
   }
+
+  function after(line, i, re) { return i === 0 || re.test(line[i - 1]); }
 
   function parseYaml(text) {
     var lines = yamlLines(text), state = { lines: lines, k: 0 };
@@ -236,19 +244,21 @@
 
   // ---- locators: utils.determine_element_type -------------------------------------------
   var CSS_TAGS = ["input", "button", "div", "span", "a", "img", "select", "textarea", "form", "label", "p", "h1", "h2", "h3", "h4", "h5", "h6"];
+  var LOCATOR_RULES = [
+    [/^text_only:/, "text_only"], [/^text=/, "Text"], [/\.(jpg|jpeg|png|bmp)$/, "Image"], [/^css=/, "CSS"],
+    [/^(xpath=|\/|\()/, "XPath"], [/^id:/, "ID"], [/^(android\.|xcui)/, "Class"],
+  ];
   function locatorType(element) {
     var e = element.trim(), l = e.toLowerCase();
-    if (l.indexOf("text_only:") === 0) return "text_only";
-    if (l.indexOf("text=") === 0) return "Text";
-    if (/\.(jpg|jpeg|png|bmp)$/.test(l)) return "Image";
-    if (l.indexOf("css=") === 0) return "CSS";
-    if (l.indexOf("xpath=") === 0 || /^(\/|\(|\/\/)/.test(e)) return "XPath";
-    if (l.indexOf("id:") === 0) return "ID";
-    if (/^(android\.|xcui)/.test(l)) return "Class";
-    var cssId = e[0] === "#" && e.length > 1 && /[A-Za-z_-]/.test(e[1]);
-    var cssTag = CSS_TAGS.some(function (t) { return /^[[#.]/.test(l.slice(t.length)) && l.indexOf(t) === 0; });
-    if ((e.indexOf("[") >= 0 && e.indexOf("]") >= 0) || e[0] === "." || cssId || cssTag) return "CSS";
-    return "Text";
+    var rule = LOCATOR_RULES.filter(function (r) { return r[0].test(l); })[0];
+    if (rule) return rule[1];
+    return looksLikeCss(e, l) ? "CSS" : "Text";
+  }
+
+  function looksLikeCss(e, l) {
+    if (e.indexOf("[") >= 0 && e.indexOf("]") >= 0) return true;
+    if (/^(\.|#[A-Za-z_-])/.test(e)) return true;
+    return CSS_TAGS.some(function (t) { return l.indexOf(t) === 0 && /^[[#.]/.test(l.slice(t.length)); });
   }
 
   // ---- difflib.get_close_matches(word, possibilities, n=1, cutoff=0.6) --------------------
@@ -260,10 +270,16 @@
       var q = queue.pop(), m = longest(a, b2j, q[0], q[1], q[2], q[3]);
       if (!m[2]) continue;
       matched += m[2];
-      if (q[0] < m[0] && q[2] < m[1]) queue.push([q[0], m[0], q[2], m[1]]);
-      if (m[0] + m[2] < q[1] && m[1] + m[2] < q[3]) queue.push([m[0] + m[2], q[1], m[1] + m[2], q[3]]);
+      queue.push.apply(queue, sides(q, m));
     }
     return a.length + b.length ? (2 * matched) / (a.length + b.length) : 1;
+  }
+
+  function sides(q, m) {
+    var out = [];
+    if (q[0] < m[0] && q[2] < m[1]) out.push([q[0], m[0], q[2], m[1]]);
+    if (m[0] + m[2] < q[1] && m[1] + m[2] < q[3]) out.push([m[0] + m[2], q[1], m[1] + m[2], q[3]]);
+    return out;
   }
 
   function longest(a, b2j, alo, ahi, blo, bhi) {
@@ -680,27 +696,32 @@
     substituteInline(method, split.params, store);
     var raw = (method && method.raw) || [];
     var resolved = split.params.map(function (param, i) { return raw.indexOf(i) >= 0 ? param.v : resolveParam(param, store); });
-    if (split.storeAs) {
-      if (!split.storeAs.v) throw new Failure("E0403", "store_as needs a name, e.g. store_as=balance.", split.storeAs.cell.at);
-      store.set(split.storeAs.v, ["<" + split.storeAs.v + ">"]);
-    }
-    if (method && method.definesVariable && split.params.length) {
-      var defined = wholeVarName(split.params[0].v) || split.params[0].v.trim();
-      store.set(defined, ["<" + defined + ">"]);
-    }
+    defineNames(method, split, store);
     if (!method) throw new Failure("E0402", "Keyword not found: " + step.keyword + "." + suggestion(step.keyword, p.catalogue), step.at);
     return resolved;
+  }
+
+  function defineNames(method, split, store) {
+    var define = function (name) { store.set(name, ["<" + name + ">"]); };
+    if (split.storeAs) {
+      if (!split.storeAs.v) throw new Failure("E0403", "store_as needs a name, e.g. store_as=balance.", split.storeAs.cell.at);
+      define(split.storeAs.v);
+    }
+    if (method && method.definesVariable && split.params.length) define(wholeVarName(split.params[0].v) || split.params[0].v.trim());
   }
 
   function substituteInline(method, params, store) {
     if (method && method.substitutesOwnVars) return;
     var raw = (method && method.raw) || [];
     params.forEach(function (param, i) {
-      if (raw.indexOf(i) >= 0 || param.v.indexOf("${") < 0 || wholeVarName(param.v) !== null) return;
-      varRefs(param.v).forEach(function (ref) {
-        var values = store.get(ref.name.trim());
-        if (!ref.escaped && !(values && values.length)) throw new Failure("E0403", "Variable '${" + ref.name + "}' in '" + param.v + "' is not defined.", param.at);
-      });
+      if (raw.indexOf(i) < 0 && wholeVarName(param.v) === null) checkInline(param, store);
+    });
+  }
+
+  function checkInline(param, store) {
+    varRefs(param.v).forEach(function (ref) {
+      var values = store.get(ref.name.trim());
+      if (!ref.escaped && !(values && values.length)) throw new Failure("E0403", "Variable '${" + ref.name + "}' in '" + param.v + "' is not defined.", param.at);
     });
   }
 
