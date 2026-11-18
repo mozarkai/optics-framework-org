@@ -48,12 +48,28 @@ Nothing changes in your tests. Any text value, such as `Press Element,Trail Runn
 Without an OCR engine, a text miss ends with "OCR was not tried: no text_detection engine is configured."
 :::
 
+### How OCR matches text
+
+OCR looks for your text as complete words, in the same order. It ignores letter case and the spaces between words. Every other character must be the same. All engines use this rule.
+
+| Text value | On the screen | Found |
+|---|---|---|
+| `Sign in` | "Sign in to your account" | Yes |
+| `sign IN` | "Sign in" | Yes |
+| `World clock` | "World" at the end of one line, "clock" at the start of the next | Yes, and the tap goes to "World" |
+| `Pay` | "Payment" | No |
+| `Sign in.` | "Sign in" | No |
+
+In Chinese, Japanese, Thai and other scripts with no spaces between words, each character counts as a word, so `设置` finds "打开设置页面". Arabic and Hebrew are read from right to left.
+
+When the text shows more than once, `index` picks one: `0` is the first, counted from the top and then from left to right.
+
 ### OCR engines
 
 | Engine | Name in config | Install | Good to know |
 |---|---|---|---|
 | EasyOCR | `easyocr` | `optics setup --install easyocr` | Local and accurate. Slower on the first call while models load. Reads English. |
-| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. Matches whole words exactly. |
+| Tesseract | `pytesseract` | `optics setup --install pytesseract`, plus the [Tesseract program](https://tesseract-ocr.github.io/tessdoc/Installation.html) | Light and fast. |
 | Google Cloud Vision | `google_vision` | `optics setup --install google-vision` | Cloud service. Set `capabilities.api_key` to a Vision API key or `capabilities.credentials_path` to a service account key file, or set `GOOGLE_APPLICATION_CREDENTIALS`. Screenshots leave your machine. |
 | Your own service | `remote_ocr` | Nothing | Sends screenshots to a URL you run. See the [engines reference](/docs/reference/engines). |
 
