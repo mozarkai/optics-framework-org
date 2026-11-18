@@ -160,6 +160,7 @@ Good to know:
 
 - Optics reads the element about every half second until the text is the same as `expected`. The comparison is exact and case-sensitive. Spaces at the start and end are ignored.
 - Wrong text at the timeout fails with error E0401, such as `Element 'css=h3' shows 'Checkboxes' but expected 'Radio Buttons'.` The next value of `${name}` is not tried.
+- Assert Text reads only the first element that the locator matches. When the locator matches more, the error says so: `Element '//p' shows '7+5' but expected '12'. The locator matches 2 elements; only the first was checked.` Make the locator match one element, for example `(//p)[2]`.
 - An element that is never found fails with error E0201, so Optics tries the next value of `${name}`.
 - An element found only by OCR or image fails at once with error E0401.
 - On a web page that Appium drives in a mobile browser, Assert Text reads the text of the web element.
@@ -194,6 +195,7 @@ Good to know:
 - `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. OCR and image matches do not have these states. An element found only by OCR or image fails the step with error E0401: `Cannot check the <state> state of '<element>': it was found only by OCR or image.`
 - On a web page, Optics reads the state from the page. This includes a web page that Appium drives in a mobile browser. `disabled` and `aria-disabled="true"` count as disabled. `aria-checked`, `checked` and `selected` count as checked.
 - On Samsung Tizen and LG webOS TVs, `checked` and `unchecked` fail with error E0105. See [TV](/docs/platforms/tv).
+- Like Assert Text, Is Element checks only the first match. A failure on a locator with several matches ends with `The locator matches <n> elements; only the first was checked.`
 - Another state fails with error E0403.
 - You must give a timeout, even for `enabled`, `disabled`, `checked` and `unchecked`.
 

@@ -1,5 +1,5 @@
 window.OPTICS_DOORS = {
- "version": "1.11.4",
+ "version": "1.11.5",
  "keywords": {
   "launch_app": {
    "robot": "Launch App",
@@ -372,10 +372,10 @@ window.OPTICS_DOORS = {
   },
   "replies": {
    "type_xpath": [
-    "type_text \"xpath=//*[@id='email']\" -> ok (XPath) · verified: unknown"
+    "type_text \"xpath=//*[@id='email']\" -> ok (XPath) · verified: unknown (add expect_present/expect_absent to verify)"
    ],
    "tap_label": [
-    "tap e4 \"Sign in\" -> ok (Text) · verified: unknown"
+    "tap e4 \"Sign in\" -> ok (Text) · verified: unknown (add expect_present/expect_absent to verify)"
    ],
    "check": [
     "check -> passed",
@@ -396,7 +396,7 @@ window.OPTICS_DOORS = {
     "Next: Pick a ref from the current screen."
    ],
    "back": [
-    "press_key back -> ok · verified: unknown"
+    "press_key back -> ok · verified: unknown (add expect_present/expect_absent to verify)"
    ],
    "launch_same": [
     "launch_app -> ok · verified: unknown (add expect_present/expect_absent to verify)"

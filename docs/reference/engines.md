@@ -17,7 +17,7 @@ A driver controls the device or browser. Enable one under `driver_sources`.
 | `appium` | `appium` | Native and hybrid apps through an Appium server. | Android, iOS, Android TV, Samsung Tizen TV, LG webOS TV, macOS, Linux and Windows desktop apps |
 | `selenium` | `selenium` | Websites through a Selenium server or Grid. Chrome and Firefox only. | Web |
 | `playwright` | `playwright` | Websites in Chromium, Firefox or WebKit, with no server to run. It can also connect to a remote browser, emulate a phone, and start signed in with a Chrome or Edge profile. | Web |
-| `ble` | `ble` | Taps and typing through a Bluetooth mouse-and-keyboard dongle, for devices with no automation access. | Any device that accepts a Bluetooth mouse and keyboard |
+| `ble` | `ble` | Taps, keys and typing through an airhand dongle that the device sees as a Bluetooth keyboard, mouse and media remote. For devices with no automation access. Add `camera_screenshot` to read the screen. See [Test production devices](/docs/platforms/production). | iOS, iPadOS, Android, macOS, Windows, Linux |
 
 The Appium server itself, and its UiAutomator2, XCUITest or Xa11y driver, aren't Python packages. Install and start them separately. See [Test Android apps](/docs/platforms/android), [Test iOS apps](/docs/platforms/ios) and [Test desktop apps](/docs/platforms/desktop#set-up-the-host).
 
@@ -37,7 +37,7 @@ An element source is how Optics looks at the screen for a driver. They need no e
 | `playwright_find_element` | `playwright` | Finds elements by `xpath=`, `css=`, `text=`, `label=`, `alt=`, `title=`, `role=`, `id=`, `testid=` and other locators. | Web |
 | `playwright_page_source` | `playwright` | Searches the page and lists interactive elements. | Web |
 | `playwright_screenshot` | `playwright` | Screenshots for OCR and image matching. | Web |
-| `camera_screenshot` | None | Frames from a webcam, an HTTP(S) screenshot URL (with an optional bearer token) or a TCP frame server. | Any, usually with `ble` |
+| `camera_screenshot` | None | Frames from a webcam, an HTTP(S) screenshot URL (with an optional bearer token) or a TCP frame server. It can find the device screen in the frame (`find_screen`). With no other element source, OCR gives the screen rows. | Any, usually with `ble` |
 
 Only `appium_page_source`, `appium_web` and `playwright_page_source` can list interactive elements. With Selenium, `Get Interactive Elements`, the HTTP `/elements` endpoint and the MCP elements resource fail with [E0202](/docs/reference/errors#e02-elements).
 
@@ -50,7 +50,7 @@ OCR finds elements by the text visible in a screenshot. Optics uses it when the 
 | `apple_vision` | `apple-vision` | Local OCR with the macOS Vision framework. The fastest and most accurate engine: about 0.2 s for a phone screenshot, and it reads blurred camera pictures well. `recognition_level` is `accurate` (default) or `fast`; `languages` defaults to `["en-US"]`. | macOS |
 | `rapidocr` | `rapidocr` | Local OCR on the CPU, no GPU needed. About 1 s for a phone screenshot and good on camera pictures. Its models come with the package, so it works offline. | All |
 | `easyocr` | `easyocr` | Local OCR. Slow on CPU (15 s or more for a phone screenshot). Downloads its models the first time it runs. English only. | All |
-| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. Matches whole words. | All |
+| `pytesseract` | `pytesseract` | Local OCR with Tesseract. Needs the Tesseract program installed and on your PATH. | All |
 | `google_vision` | `google-vision` | Google Cloud Vision. Needs a Vision API key in `api_key`, a service account key file in `credentials_path`, or `GOOGLE_APPLICATION_CREDENTIALS`. Set only one of `api_key` and `credentials_path`. | All |
 | `remote_ocr` | None | Your own OCR service over HTTP. Set its `url`. | All |
 
@@ -62,7 +62,7 @@ Image matching finds an element by a template image you saved in the project. En
 
 | Name in config | Extra | What it's for | Platforms |
 |---|---|---|---|
-| `templatematch` | None | Local matching. Finds templates even when they're scaled or rotated. | All |
+| `templatematch` | None | Local matching. A template cut on one device also matches on screens 0.8 to 1.25 times its size (`capabilities.scale_range`). A last pass finds rotated templates. | All |
 | `remote_oir` | None | Your own image matching service over HTTP. Set its `url`. | All |
 
 ## LLM

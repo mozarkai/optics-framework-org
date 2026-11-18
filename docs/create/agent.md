@@ -12,6 +12,101 @@ time: 10 min
 
 The agent is yours. Optics doesn't call any AI service in this mode, so it works with whichever model your client uses.
 
+## Example session
+
+This session ran against https://example.com. Each reply is the text that the agent gets, cut with `…` where a page has many rows.
+
+Install Optics and register the server for all your folders:
+
+```shell
+$ curl -fsSL https://optics-framework.org/install | sh
+$ ~/.optics/bin/optics setup --install playwright
+$ ~/.optics/bin/optics mcp install
+Registered optics for all folders: /Users/ana/.optics/venv/bin/optics mcp
+A client loads its MCP servers only when a session starts: start a new session, then check that the optics tools are listed.
+In Claude Code, `claude --continue` keeps the conversation, and /mcp shows optics as connected.
+```
+
+Start a new Claude Code session and ask: *Use the optics tools to open https://example.com, follow "Learn more", check that the page says "Example Domains", then go back.* These are the calls and the replies.
+
+`start_session` opens the browser and returns the first screen:
+
+```json
+{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}
+```
+
+```text
+session 3c4fc8b3-8b6a-4b52-b293-325b178caec8 (playwright)
+run_keyword cannot run here: force_terminate_app
+launch_app "https://example.com" -> ok · verified: unknown (add expect_present/expect_absent to verify)
+screen b5dfb4 · 7 rows
+e1 p "This domain is for use in documentation examples without needing permission. Thi…"
+…
+e7 a "Learn more" [tap]
+```
+
+`tap` acts on the ref `e7` and says the text it expects. The reply gives the verdict and the new screen:
+
+```json
+{"target": "e7", "expect_present": ["Example Domains"]}
+```
+
+```text
+tap e7 "Learn more" -> ok (Text) · verified: pass
+check present "Example Domains": met
+screen 47fb7e · new screen
+e8 a "Homepage" [tap]
+…
+e14 h1 "Example Domains" #example-domains
+…
+```
+
+`press_key` goes back, and `check` gives a verdict without an action:
+
+```json
+{"key": "back", "expect_present": ["Learn more"]}
+```
+
+```text
+press_key back -> ok · verified: pass
+check present "Learn more": met
+screen b5dfb4 · new screen
+…
+```
+
+```json
+{"present": ["Learn more"], "absent": ["Example Domains"]}
+```
+
+```text
+check -> passed
+present "Learn more": met
+absent "Example Domains": met
+```
+
+`terminate_session` closes the browser and says where the steps are. They stay readable after the session ends:
+
+```text
+session 3c4fc8b3-8b6a-4b52-b293-325b178caec8 terminated. Its 4 recorded steps are at optics://session/3c4fc8b3-8b6a-4b52-b293-325b178caec8/steps.
+```
+
+The steps resource gives the rows of the suite:
+
+```csv title="modules_csv"
+module_name,module_step,param_1,param_2
+recorded,Launch App,https://example.com
+recorded,Press Element,${learn_more_a}
+recorded,Go Back
+recorded,Assert Presence,Learn more,rule=all
+```
+
+```csv title="elements_csv"
+Element_Name,Element_ID,Element_ID_2
+learn_more_a,"css=a[href=""https://iana.org/help/example-domains""]",Learn more
+```
+
+The `absent` check has no keyword, so `notes` says `absent checks are not recordable as keywords`. A failed call has the error code, a `Next:` hint and the current rows. See [Errors](/docs/reference/mcp#errors).
+
 ## Before you begin
 
 - An MCP client, such as Claude Code, Claude Desktop, Cursor or VS Code.
@@ -31,10 +126,10 @@ $ pip install "optics-framework[mcp]"
 :::tabs{group="client"}
 ::tab[Claude Code]
 ```shell
-$ claude mcp add -s user optics -- ~/.optics/bin/optics mcp
+$ ~/.optics/bin/optics mcp install
 ```
 
-`-s user` adds the server for all your folders, not only the current folder. Give the full path of `optics`, because the installer adds `~/.optics/bin` to `PATH` only in new terminals. If you installed with pip, use the path that `command -v optics` shows.
+The command registers the server for all your folders, with the absolute path of this install. It also removes an `optics` entry that `claude mcp add` made for the current folder only, and names the entries that still win. Give the full path of `optics` the first time, because the installer adds `~/.optics/bin` to `PATH` only in new terminals. If you installed with pip, run `optics mcp install` in that environment. See [Connect your agent](/docs/reference/mcp#connect-your-agent).
 ::tab[Claude Desktop]
 Add this to `claude_desktop_config.json` (**Settings → Developer → Edit config**), then restart Claude Desktop:
 
@@ -105,7 +200,7 @@ The server gives the agent:
 
 The screen comes back as rows such as `e4 input "Login" [tap] #login-button`. The agent taps `e4`, and Optics uses a locator that matches only that element. Each action returns the rows that changed. When the agent adds the text it expects, such as `expect_present: ["Products"]`, the reply also gives a `verified` verdict. Optics waits up to 5 seconds for that text, so a page that loads late can still pass.
 
-A typical session goes: start a session, act on rows, check the result, read the steps and the project format, write the files, run `optics dry_run`, and end the session. The [MCP reference](/docs/reference/mcp) lists every tool and resource. For one tool per keyword, start the server with `--toolset full`.
+A typical session goes: start a session, act on rows, check the result, end the session, read the steps and the project format, write the files, and run `optics dry_run`. The [MCP reference](/docs/reference/mcp) lists every tool and resource. For one tool per keyword, start the server with `--toolset full`.
 
 ## Keep the agent on track
 
@@ -113,7 +208,7 @@ A typical session goes: start a session, act on rows, check the result, read the
 - **Agents tap by reference, not by position.** The server hides coordinate taps by default, because those tests break on any other screen size. To allow them, set `OPTICS_MCP_ALLOW_COORDINATE_TAPS=1` before you start the server.
 - **The steps resource is the start of the suite.** `optics://session/{id}/steps` gives the module and element rows for each step that passed. A typed password shows as `<redacted>`, so the agent must replace it. Ask the agent to run `optics dry_run` before it finishes.
 - **Loops and conditions** (`Run Loop`, `Condition`, `Read Data` and the rest) aren't tools, because they only make sense inside suite files. The agent can still write them into modules.
-- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the server stops, or after 15 minutes without a call. When more than one session is open, the agent must pass `session_id`. The error lists the ids.
+- **Sessions are private to the server.** `optics serve` and `optics live` cannot see a session started over MCP. It ends when the agent calls `terminate_session` or the server stops. Its steps stay readable after that, also after a restart. When more than one session is open, the agent must pass `session_id`. The error lists the ids.
 
 :::details[Run the server over HTTP]
 By default the server talks to one client over standard input and output. To share it on a network, or run it in a container, start it in HTTP mode:
@@ -142,7 +237,7 @@ $ optics mcp
 
 For OpenAI, Claude or a local model, also set `OPTICS_LLM_PROVIDER`, `OPTICS_LLM_MODEL` and the engine's key. See [Environment variables](/docs/reference/mcp#environment-variables).
 
-When a step is healed, the `result` of the reply includes `"healed": true` and the steps that worked, so the agent can update the suite.
+When self-heal recovers a keyword that `run_keyword` ran, the `result:` line of the reply holds the heal report, with `healed`, `heal_summary` and the steps that worked, so the agent can update the suite.
 :::
 
 ## See also

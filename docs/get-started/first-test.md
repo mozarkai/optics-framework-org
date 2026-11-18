@@ -108,7 +108,7 @@ Shopper can add a backpack,Add the backpack to the cart
 
 ### Check the test without running it
 
-`optics dry_run` reads every file and checks that each keyword exists and each `${name}` is defined. It doesn't click anything, so it's a quick way to catch typos:
+`optics dry_run` reads every file. It checks that each keyword exists, that each step gives its keyword the right parameters, and that each `${name}` is defined. It doesn't click anything, so it's a quick way to catch typos:
 
 ```shell
 $ optics dry_run first-test
@@ -116,14 +116,24 @@ $ optics dry_run first-test
 
 ```terminal
 Test Suite
-└── Shopper can add a backpack                                  |  0.00s |    PASS
-    ├── Open the store                                          |  0.00s |    PASS
-    ├── Sign in                                                 |  0.00s |    PASS
-    └── Add the backpack to the cart                            |  0.00s |    PASS
-╭──────────────────────────────────────────────────────╮
-│ Total Test Cases: 1 | Passed: 1 | Failed: 0          │
-╰──────────────────────────────────────────────────────╯
+└── Shopper can add a backpack                           |      0.00s |    PASS
+    ├── Open the store                                   |      0.00s |    PASS
+    │   └── Launch App (https://www.saucedemo.com)       |      0.00s |    PASS
+    ├── Sign in                                          |      0.00s |    PASS
+    │   ├── Enter Text (//input[@id='user-name'], sta... |      0.00s |    PASS
+    │   ├── Enter Text (//input[@id='password'], secr... |      0.00s |    PASS
+    │   ├── Press Element (//input[@id='login-button'])  |      0.00s |    PASS
+    │   └── Assert Presence (Products)                   |      0.00s |    PASS
+    └── Add the backpack to the cart                     |      0.00s |    PASS
+        ├── Press Element (//button[@id='add-to-cart-... |      0.00s |    PASS
+        └── Assert Presence (Remove)                     |      0.00s |    PASS
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Total Test Cases: 1 | Passed: 1 | Failed: 0                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+dry_run checks the keywords, their params and the names they use. It does not check locators, the app or the device: optics execute does.
 ```
+
+A pass does not prove that the XPaths find the fields. Only `optics execute` opens the store.
 
 ### Run it
 

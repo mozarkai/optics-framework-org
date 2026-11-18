@@ -1,5 +1,5 @@
 {
- "version": "1.11.4",
+ "version": "1.11.5",
  "keywords": [
   {
    "slug": "close_and_terminate_app",
@@ -1098,6 +1098,7 @@
   "W0302": "Fallback to next camera supported driver",
   "E0303": "Screenshot empty/black",
   "E0304": "Image too large to decode or not a valid image",
+  "E0305": "The camera does not see the device screen",
   "E0401": "Action failed",
   "X0401": "Action failed with exception",
   "E0402": "Keyword not found",

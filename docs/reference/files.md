@@ -197,6 +197,7 @@ Elements:
 | `Element_ID_*` | Fallbacks. Any column whose header starts with `Element_ID`, such as `Element_ID_text`, `Element_ID_image` or `Element_ID_2`, adds another value. They're tried in column order. |
 
 - Empty cells are ignored. Columns that don't start with `Element_ID`, such as `Element_Text`, are ignored.
+- A file with `Element_Name` and another `Element_` column, but no `Element_ID`, stops the run before a session starts. An example is `Element_Name,Element_Locator`. The `Cannot start: E0503` panel names the file. A [Read Data](/docs/reference/keywords/flow#read-data) file with an `element_name` column and no other `element_` column is not an elements file, so it still loads.
 - A second row with the same name adds more fallback values.
 - When a step uses `${name}`, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside `Run Loop`, `Condition` and `Execute Module` use only the first value.
 - Variables that a step creates while running, such as the target of `Evaluate`, `Read Data` or `store_as`, need no row. Do not add a placeholder row for them.

@@ -16,11 +16,25 @@ Sign In,Assert Presence,Welcome,20
 
 Write keyword names in Title Case in CSV and YAML files: `Press Element`, `Assert Presence`. In `optics live`, the MCP server and Python, the same keyword is written in snake_case: `press_element`, `assert_presence`.
 
-The runner ignores capitalization and collapses spaces, so `Press Element`, `press element` and `press_element` all reach the same keyword. If you misspell a name, the error suggests the closest match. Run `optics list` to print every keyword name in snake_case.
+The runner ignores capitalization and collapses spaces, so `Press Element`, `press element` and `press_element` all reach the same keyword. If you misspell a name, the error suggests the closest match. Run `optics list` to print every keyword name as you write it in a module.
 
 ## Parameters
 
-Parameters are positional. They fill the keyword's parameters in the order shown in each parameter table on these pages.
+Parameters are positional. They fill the keyword's parameters in the order shown in each parameter table on these pages. `optics list <keyword>` prints the same order in your terminal, with the CSV column of each parameter:
+
+```terminal
+$ optics list Press Element
+Press Element
+  param_1  element
+  param_2  repeat = 1
+  param_3  offset_x = 0
+  param_4  offset_y = 0
+  param_5  index = 0
+  param_6  aoi_x = 0
+  …
+```
+
+`optics dry_run` fails a step with E0403 when its values do not fit the keyword: a required value is missing, there are too many values, or a value in a column and a `name=value` set the same parameter.
 
 To set a parameter by name, write `name=value`. This works only when `name` is a real parameter of that keyword. Use it to skip parameters you want to leave at their defaults:
 
@@ -247,7 +261,7 @@ Press Checkbox and Press Radio Button still work but log a warning. Use [Press E
 ## Where each keyword works
 
 - **CSV and YAML suites, `optics live` and `optics serve`** have every keyword on this page.
-- **The MCP server** gives 10 core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](/docs/reference/mcp).
+- **The MCP server** gives a small set of core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](/docs/reference/mcp).
 - **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See [Write tests in Python](/docs/create/python).
 - **`optics generate`** skips flow-control keywords and a few others when it converts a suite to code.
 

@@ -61,11 +61,13 @@ irm https://optics-framework.org/install.ps1 | iex
 
 Register a stdio server named `optics` with the command `OPTICS` and the argument `mcp`. Always use the absolute path: a client that starts from a desktop icon does not read the shell PATH.
 
-First look for a server named `optics`. If it is there and its command is a working `OPTICS`, do not change it and go to step 4.
+First look for a server named `optics`. If it is there and its command is an `optics` that runs, do not change it and go to step 4. The command can be `OPTICS` or the `optics` of the same install, such as `~/.optics/venv/bin/optics`.
+
+For Claude Code, run `OPTICS mcp install`. It registers the server for all folders with an absolute command, removes an `optics` entry that applies only to the current folder, and names the entries that still win. Remove each entry that it names, as it says. If `OPTICS mcp install` is not a command, the install is older: run `claude mcp add --scope user optics -- OPTICS mcp`. For another client, add the entry from the table.
 
 | Client | Check | Add |
 |---|---|---|
-| Claude Code | `claude mcp get optics` | `claude mcp add --scope user optics -- OPTICS mcp` |
+| Claude Code | `claude mcp get optics` | `OPTICS mcp install` |
 | Codex | `~/.codex/config.toml` | a `[mcp_servers.optics]` table with `command = "OPTICS"` and `args = ["mcp"]` |
 | Cursor | `~/.cursor/mcp.json` | key `optics` under `mcpServers` |
 | Claude Desktop | `claude_desktop_config.json` (macOS: `~/Library/Application Support/Claude/`, Windows: `%APPDATA%\Claude\`) | key `optics` under `mcpServers` |
@@ -101,7 +103,7 @@ This check uses a browser on this machine. It needs no device.
 
 2. Call `start_session` with `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`. The reply gives the session id and the screen as rows, such as `e7 a "Learn more" [tap]`.
 3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must start with `check -> passed`.
-4. Call `terminate_session`.
+4. Call `terminate_session`. The reply ends with the address of the steps, in the form `Its <n> recorded steps are at optics://session/<id>/steps.`
 
 The server can write an `execution_output` folder in the folder where your client started it. Do not commit that folder.
 
@@ -118,7 +120,7 @@ Do the section below that matches the task the person gave you. If the task was 
 3. Call `start_session` with `"driver": "playwright"`, `"app"` set to the URL and `"capabilities": {"headless": true}`. For a phone-sized page, add `"device": "Pixel 7"` to the capabilities.
 4. Act on rows by their ref with `tap`, `type_text`, `batch` (for a form), `press_key` and `scroll`. Add `expect_present` to each action, so that the reply verifies the result. Do not tap by coordinates.
 5. If the app needs a sign-in, read `optics://browser-profiles` and ask the person which profile to use. If they choose none, ask for test credentials.
-6. Read `optics://session/{session_id}/steps` for the steps as ready `modules.csv` and `elements.csv` rows, and `optics://project-format` for the file rules.
+6. Read `optics://session/{session_id}/steps` for the steps as ready `modules.csv` and `elements.csv` rows, and `optics://project-format` for the file rules. The steps stay readable after `terminate_session`.
 7. Write the suite in a new folder of the project, for example `tests/optics/`. A typed secret comes back as `<redacted>`. Replace it with a `Read Data,${name},ENV:NAME` step, and tell the person which variable to set. Set `headless: true` in `config.yaml` if this machine has no display.
 8. Run `OPTICS dry_run tests/optics`, then `OPTICS execute tests/optics`. Fix the steps that fail and run again.
 9. Call `terminate_session`.

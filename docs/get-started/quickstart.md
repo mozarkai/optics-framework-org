@@ -32,7 +32,7 @@ Open a new terminal window, then check that the `optics` command works:
 
 ```shell
 $ optics --version
-Optics Framework 1.11.4
+Optics Framework 1.11.5
 ```
 
 ### Create a project

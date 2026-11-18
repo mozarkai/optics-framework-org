@@ -27,7 +27,7 @@ appium-xa11y-driver is the Appium driver that Optics uses for desktop apps on ma
 
 ### BLE driver {#ble}
 
-The BLE driver makes Optics act as a Bluetooth mouse and keyboard, for devices that allow no automation software. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](/docs/platforms/production).
+The BLE driver drives a phone or computer through an airhand USB dongle that the device sees as a Bluetooth keyboard and pointer, or a touch screen on Android. It needs no app on the device, so it works where automation software is not allowed. A camera watches the screen, and Optics finds elements with OCR and image matching. See [Production devices](/docs/platforms/production).
 
 ### Browser profile {#browser-profile}
 
@@ -59,7 +59,7 @@ A driver is the engine that controls the target: Appium for phones, TVs and desk
 
 ### Dry run {#dry-run}
 
-A dry run, started with `optics dry_run`, checks a project for unknown keywords, missing modules and undefined variables without tapping or typing anything. Run one before every commit. See [`optics dry_run`](/docs/reference/cli#optics-dry-run).
+A dry run, started with `optics dry_run`, checks a project for unknown keywords, missing modules, wrong keyword parameters and undefined variables without tapping or typing anything. It does not check locators, the app or the device. Run one before every commit. See [`optics dry_run`](/docs/reference/cli#optics-dry-run).
 
 ## E
 

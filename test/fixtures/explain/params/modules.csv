@@ -1,0 +1,10 @@
+module_name,module_step,param_1,param_2,param_3,param_4,param_5,param_6
+Tap Nothing,Press Element
+Wait Too Long,Validate Element,${label},10,any,check,extra
+Type Twice,Enter Text,${label},hello,text=again
+Loop Over Sizes,Run Loop,Pick Size,${size},S|M|L
+Pick Size,Press Element,${label}
+Run Inner,Execute Module,Inner
+Inner,Enter Text,${label}
+Read Label,Get Text,${label},store_as=seen
+Read Label,Assert Text,${label},${seen},5,done
