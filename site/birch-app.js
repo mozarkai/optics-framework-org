@@ -4,7 +4,8 @@
   var B = window.BIRCH;
   var root = document.getElementById("app");
   var release = new URLSearchParams(location.search).get("release") || "2.1";
-  var state = { screen: "login", product: 0, size: "9", cart: [], query: "", chip: "New" };
+  var state = { screen: "login", product: 0, size: "9", cart: [], query: "", chip: "New", signedIn: false };
+  var TAGS = [["Running", "Trail"], ["Running", "Sale"], ["Trail"], ["Running", "Sale"]];
   var toastTimer;
 
   var ICON = {
@@ -12,6 +13,7 @@
     search: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6.5"/><path d="M13.5 13.5L18 18"/></svg>',
     back: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4L6.5 10l6 6"/></svg>',
     tick: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>',
+    x: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
   };
   var LOGO = '<div class="logo"><i></i>birch</div>';
   var esc = B.esc;
@@ -22,10 +24,13 @@
   }
   function cards() {
     var q = state.query.trim().toLowerCase();
-    var hits = B.PRODUCTS.map(function (p, i) { return { p: p, i: i }; }).filter(function (x) { return !q || x.p.name.toLowerCase().indexOf(q) > -1; });
+    var chip = state.chip === "New" ? null : state.chip;
+    var hits = B.PRODUCTS.map(function (p, i) { return { p: p, i: i }; }).filter(function (x) {
+      return (!q || x.p.name.toLowerCase().indexOf(q) > -1) && (!chip || TAGS[x.i].indexOf(chip) > -1);
+    });
     return hits.map(function (x) {
       return '<button class="card" type="button" data-product="' + x.i + '">' + img(x.p, "img") + '<span class="nm">' + x.p.name + '</span><span class="pr">' + x.p.price + "</span></button>";
-    }).join("") || '<p class="none">No shoes match “' + esc(state.query) + "”.</p>";
+    }).join("") || '<p class="none">' + (state.query.trim() ? "No shoes match “" + esc(state.query) + "”." : "No shoes in " + state.chip + ".") + "</p>";
   }
   function pick(btn) {
     Array.prototype.forEach.call(btn.parentNode.children, function (b) { b.classList.toggle("on", b === btn); });
@@ -60,10 +65,10 @@
     },
     cart: function () {
       var total = 0;
-      var lines = state.cart.map(function (item) {
+      var lines = state.cart.map(function (item, n) {
         var p = B.PRODUCTS[item.i];
         total += Number(p.price.slice(1));
-        return '<div class="line">' + img(p, "img") + "<div><b>" + p.name + "</b><span>Size " + item.size + " · " + p.price + "</span></div></div>";
+        return '<div class="line">' + img(p, "img") + "<div><b>" + p.name + "</b><span>Size " + item.size + " · " + p.price + '</span></div><button class="remove" type="button" data-remove="' + n + '" aria-label="Remove ' + p.name + ", size " + item.size + '">' + ICON.x + "</button></div>";
       }).join("");
       return '<div class="screen cart-page"><div class="top"><button class="cart" type="button" data-go="home" aria-label="Back">' + ICON.back.replace("<svg", '<svg style="stroke-width:2.4"') + "</button></div>" +
         "<h1>Your cart</h1>" + (lines || '<p class="empty">Your cart is empty.</p>') +
@@ -75,10 +80,13 @@
     },
   };
 
-  function show(name) {
+  function show(name, how) {
     var t = document.querySelector(".toast");
     if (t) t.remove();
     state.screen = name;
+    var entry = { screen: name, product: state.product };
+    if (how === "replace") history.replaceState(entry, "");
+    else if (how !== "pop") history.pushState(entry, "");
     root.innerHTML = SCREENS[name]();
     if (name === "home") paintPromo(root.querySelector(".promo"));
     window.scrollTo(0, 0);
@@ -123,7 +131,19 @@
     toastTimer = setTimeout(function () { t.remove(); }, 5000);
   }
 
+  function signOut() {
+    var m = document.querySelector(".modal");
+    if (m) m.remove();
+    root.inert = false;
+    state.cart = [];
+    state.signedIn = false;
+    show("login", "replace");
+    root.querySelector("#email").focus();
+  }
+
   function sessionExpired() {
+    if (document.querySelector(".modal")) return;
+    root.inert = true;
     var m = document.createElement("div");
     m.className = "modal";
     m.setAttribute("role", "alertdialog");
@@ -131,12 +151,20 @@
     m.innerHTML = '<div><h2 id="expired">Session expired</h2><p>Please sign in again to keep shopping.</p><button type="button">OK</button></div>';
     document.body.appendChild(m);
     m.querySelector("button").focus();
-    m.querySelector("button").addEventListener("click", function () {
-      m.remove();
-      state.cart = [];
-      show("login");
+    m.querySelector("button").addEventListener("click", signOut);
+    m.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") signOut();
+      else if (e.key === "Tab") { e.preventDefault(); m.querySelector("button").focus(); }
     });
   }
+
+  window.addEventListener("popstate", function (e) {
+    if (document.querySelector(".modal")) return signOut();
+    var to = e.state || { screen: "login" };
+    if (!state.signedIn && to.screen !== "login") return show("login", "replace");
+    state.product = to.product || 0;
+    show(to.screen, "pop");
+  });
 
   root.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -145,7 +173,8 @@
       f.querySelector(".err").hidden = false;
       return;
     }
-    show("home");
+    state.signedIn = true;
+    show("home", "replace");
   });
 
   root.addEventListener("input", function (e) {
@@ -160,7 +189,9 @@
     var d = t.dataset;
     if (d.go) show(d.go);
     else if (d.product != null) { state.product = Number(d.product); state.size = "9"; show("product"); }
-    else if (d.chip) { state.chip = d.chip; pick(t); }
+    else if (d.chip) { state.chip = d.chip; pick(t); root.querySelector(".grid").innerHTML = cards(); }
+    else if (d.remove != null) { state.cart.splice(Number(d.remove), 1); show("cart", "replace"); }
+    else if (t.classList.contains("link")) toast("We sent a reset link to your email");
     else if (d.size) { state.size = d.size; pick(t); }
     else if (d.add != null) {
       state.cart.push({ i: state.product, size: state.size });
@@ -173,5 +204,5 @@
     }
   });
 
-  show("login");
+  show("login", "replace");
 })();
