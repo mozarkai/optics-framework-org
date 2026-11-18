@@ -238,7 +238,7 @@
       cmd.textContent = step.cmd;
       var out = API[door](step);
       ["req", "res"].forEach(function (k) {
-        panes[k].querySelector("h4").textContent = out[k][0];
+        panes[k].querySelector("h4").textContent = k === "res" && out[k][0] ? out[k][0] + " · simulated" : out[k][0];
         panes[k].querySelector("pre").innerHTML = out[k][1] || '<span class="doors-wait"></span>';
       });
     }

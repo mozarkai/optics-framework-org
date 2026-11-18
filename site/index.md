@@ -11,12 +11,13 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 - Source: https://github.com/mozarkai/optics-framework
 - For AI agents: https://optics-framework.org/llms.txt
 - Setup steps for AI agents: https://optics-framework.org/agents.md
+- One-minute demo film: https://optics-framework.org/media/optics-film.mp4 (transcript: https://optics-framework.org/media/optics-film-transcript.md)
 
 ## Playground
 
-The homepage has three playgrounds and a simulator on a demo shop app, Birch. They show what Optics does. They do not run Optics.
+The homepage has three playgrounds and a simulator on a demo shop app, Birch. They show what Optics does. They do not run Optics. To run the real Optics package in your browser, open https://optics-framework.org/playground.
 
-- **Tap it, Optics writes it.** A copy of `optics live` sits next to a phone. Type a keyword, or tap the phone to type the keyword for that element. Each step runs at once and shows how Optics found the element. `/save` writes the steps that passed into `modules.csv` and `elements.csv`, with the password kept out of the module. `optics execute` then replays the suite.
+- **Tap it, Optics writes it.** A copy of `optics live` sits next to a phone. Type a keyword, or tap the phone to type the keyword for that element. Each step runs at once and shows how Optics found the element. `/save` writes the steps that passed into `modules.csv` and `elements.csv`, with the password kept out of the module. `optics execute` then replays the suite. Under the phone, each step also shows as CSV, Python, Robot, an HTTP call and an MCP call, with replies in the form Optics gives.
 - **Break the test.** Ship a new release of the app: rename the sign-in button's id, change its words, draw it as a picture, translate the app or delete the button. Each step of the fallback ladder shows if it found the button. A missing button or a "Session expired" screen is a real bug and fails the run. A button that Optics cannot find, but that still works, is a false failure; add its new text to `elements.csv` and run again.
 - **Release simulator.** Set the odds that each release renames an id, rewords a label, restyles the buttons, draws text into a picture, deletes a button, signs the shopper out or flashes a server error. Then ship 25, 50 or 100 releases in a row. The same releases run three ways: one value per element, every value, and every value with AI self-heal. A table counts green runs, false failures, healed steps, test edits, bugs caught and runs with a bug unseen. Turn off `error_definitions.csv` to see a sign-out bug go unseen. The results are a simulation, not measurements. The seed and the odds make a run, and the link with `?sim=` replays it.
 - **One suite, every screen.** Move the slider to run the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. Only the driver changes.
@@ -55,7 +56,7 @@ Add To Cart,Press Element,Add to cart
 
 `optics execute <folder>` replays the suite step by step. `optics dry_run <folder>` validates every keyword, element and module reference without a device. Each run writes:
 
-- `junit_output.xml`, written as the run goes so CI sees progress live.
+- `junit_output.xml`, written once when the run ends, also when you stop the run.
 - Screenshots of the screen before each step that finds an element, and the same screen with a box around what Optics found.
 - Detected errors: crash dialogs and messages matched from `error_definitions.csv` on the last screen add a failure to the JUnit report, even without an assertion.
 

@@ -35,7 +35,7 @@
     Text: "Text. Optics looks in the UI tree first, then reads the screenshot with OCR if a text engine is on.",
     text_only: "Text, OCR only. Optics skips the UI tree and reads the screenshot.",
     Image: "Image. Optics matches this picture on a screenshot. The file can be anywhere in the project folder.",
-    CSS: "CSS selector. Playwright, and web pages on Appium.",
+    CSS: "CSS selector. Playwright, Selenium, and web pages on Appium.",
     ID: "An id: locator. No element source supports it, so this value always fails.",
     Class: "A class name. Assert Presence, Assert Visibility, Validate Element and Validate Screen skip class names.",
   };
@@ -229,14 +229,15 @@
   }
 
   function targetNote(p, param, step, out) {
-    if (!param || p.modules.has(param.v)) return;
-    if (param.v === step.module) out.push(note("fail", param.at, "A module can't run itself.", DOCS.flow));
-    else out.push(note("fail", param.at, "No module is named " + param.v + ". The step fails with E0601: Module '" + param.v + "' not found in modules.", DOCS.flow));
+    if (!param) return;
+    if (param.v === step.module) return out.push(note("warn", param.at, "This module runs itself. dry_run passes it, but at run time it starts again with no end.", DOCS.flow));
+    if (!p.modules.has(param.v)) out.push(note("fail", param.at, "No module is named " + param.v + ". The step fails with E0601: Module '" + param.v + "' not found in modules.", DOCS.flow));
   }
 
   function apiNote(p, param, out) {
-    var parts = param.v.split(".");
-    if (parts.length !== 2) return out.push(note("fail", param.at, "Write the API as collection.api. The step fails with E0403.", DOCS.api));
+    var dot = param.v.indexOf(".");
+    var parts = [param.v.slice(0, dot), param.v.slice(dot + 1)];
+    if (dot < 0) return out.push(note("fail", param.at, "Write the API as collection.api. The step fails with E0403.", DOCS.api));
     var col = p.apis.get(parts[0]);
     if (!col) out.push(note("fail", param.at, "No API file defines the collection " + parts[0] + ". The step fails with E0601.", DOCS.api));
     else if (!col.apis.has(parts[1])) out.push(note("fail", param.at, "The collection " + parts[0] + " has no API named " + parts[1] + ". The step fails with E0601.", DOCS.api));

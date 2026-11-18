@@ -159,9 +159,12 @@
         <p class="vh" id="pg-live-desc">A simulation of optics live next to a phone that shows Birch, a demo shop app. It does not run Optics. Type a keyword in the field, or select an element on the phone to type its keyword. Each step runs on the phone and shows how Optics found the element. Type /save to write the steps that passed into modules.csv and elements.csv, then open the optics execute tab to replay them.</p>
         <div class="play-cap">
           <p>In <code>optics live</code> you type a step and it runs on the device at once. <code>/save</code> writes the steps that worked into your suite.</p>
-          <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
-          </button>
+          <div class="play-acts">
+            <a class="btn btn-ghost btn-sm" href="playground">Run real Optics in your browser</a>
+            <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -372,7 +375,7 @@ Element_Name,Element_ID
             <p class="body-text">Birch is a real web app. <a href="birch/">Open it</a>, then watch Optics run the Birch suite against two releases of it. Each frame is a file that the run wrote.</p>
           </div>
           <dl class="outputs">
-            <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
+            <div><dt>junit_output.xml</dt><dd>Written once when the run ends, also when you stop the run.</dd></div>
             <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
             <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
           </dl>
@@ -823,7 +826,12 @@ Add To Cart,Assert Presence,Added to cart,10</code></pre></figure>
     <div class="film-dialog-frame">
       <video id="film-video" controls preload="none" playsinline poster="media/optics-film-poster.jpg">
         <source src="media/optics-film.mp4" type="video/mp4">
+        <track kind="chapters" src="media/optics-film-chapters.vtt" srclang="en" label="Chapters" default>
       </video>
+    </div>
+    <div class="film-chapters">
+      <!-- film:chapters -->
+      <a class="film-transcript" href="media/optics-film-transcript.md">Transcript</a>
     </div>
     <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
   </dialog>

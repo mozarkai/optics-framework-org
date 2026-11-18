@@ -100,7 +100,7 @@ This check uses a browser on this machine. It needs no device.
    If it stops on a network error, run it again. On Linux it can ask for a `sudo` password to install system libraries for Chromium. Do not type a password. Ask the person to run the command.
 
 2. Call `start_session` with `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`. The reply gives the session id and the screen as rows, such as `e7 a "Learn more" [tap]`.
-3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must say `passed`.
+3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must start with `check -> passed`.
 4. Call `terminate_session`.
 
 The server can write an `execution_output` folder in the folder where your client started it. Do not commit that folder.
