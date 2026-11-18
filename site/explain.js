@@ -12,7 +12,9 @@
   };
   var state = { files: [], active: 0, example: null }, model, run, notes, lineH = 22;
   var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
-  var prose = function (s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); };
+  var prose = function (s) {
+    return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\[([^\]]+)\]\(\/?([^)]+)\)/g, '<a href="$2">$1</a>');
+  };
   var reduce = matchMedia("(prefers-reduced-motion: reduce)");
 
   // The suite lives in the URL fragment, which the browser never sends to a server.
@@ -114,7 +116,7 @@
   function renderTabs() {
     ui.tabs.innerHTML = state.files.map(function (f, i) {
       var kinds = model.files[i].kinds, mark = fileMarks(f.path);
-      return '<div class="xp-tab" role="presentation"><button type="button" role="tab" class="xp-file" data-file="' + i + '" aria-selected="' + (i === state.active) + '"' +
+      return '<div class="xp-tab" role="presentation"><button type="button" role="tab" class="xp-file" data-file="' + i + '" aria-selected="' + (i === state.active) + '" tabindex="' + (i === state.active ? 0 : -1) + '"' +
         ' title="' + esc(kinds.length ? kinds.join(", ").replace(/_/g, " ") : "data") + '">' + (mark ? '<i class="xp-dot ' + mark + '" aria-label="' + (mark === "fail" ? "fails dry_run" : "has notes") + '"></i>' : "") +
         esc(f.path) + "</button>" + (state.files.length > 1 ? '<button type="button" class="xp-close" data-close="' + i + '" aria-label="Remove ' + esc(f.path) + '"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button>' : "") + "</div>";
     }).join("") + '<button type="button" class="xp-add" aria-label="Add a file"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2v8M2 6h8"/></svg></button>';
@@ -374,8 +376,8 @@
   function paramBox(b, kw, i, bound) {
     if (!kw) return varsBox(b.value, kw);
     if (b.extra) return "<p>" + esc(kw.title) + " has no parameter left for this value.</p>";
-    var loop = kw.slug === "run_loop" ? loopParam(b, kw, i, bound) : null;
-    if (loop !== null) return loop;
+    var special = SPECIAL_PARAMS[kw.slug] ? SPECIAL_PARAMS[kw.slug](b, kw, i, bound) : null;
+    if (special !== null) return special;
     var what = paramDocs(b, kw);
     if (kw.definesVariable && i === 0) return what + writesBox(S.wholeVarName(b.value) || b.value);
     if (/^elements?$/.test(b.name)) return what + ladder(b.value);
@@ -384,9 +386,17 @@
 
   function writesBox(name) { return "<p>This step writes " + chip(name, "s-var") + ". Later steps read it as ${" + esc(name) + "}.</p>"; }
 
+  var SPECIAL_PARAMS = { run_loop: loopParam, condition: conditionParam };
+
   function paramDocs(b, kw) {
     var what = b.name && kw.docs[b.name] ? "<p>" + prose(kw.docs[b.name]) + "</p>" : "";
     return b.named ? "<p>Set by name to " + chip(b.value, "s-lit") + ".</p>" + what : what;
+  }
+
+  function conditionParam(b, kw, i, bound) {
+    if (i % 2 === 1) return "<p>The module to run when the condition before it is true.</p>";
+    if (i === bound.length - 1) return "<p>The module to run when no condition is true.</p>";
+    return "<p>A module name, true when all its steps pass, or an expression. Start it with ! to flip it.</p>" + varsBox(b.value, kw);
   }
 
   function loopParam(b, kw, i, bound) {
@@ -541,7 +551,7 @@
     var e = rec.error, teardown = Array.from(model.testCases.order.keys()).some(function (n) { return S.caseKind(n) === "suite_teardown"; });
     return head("Error definition", esc(e.code), e.severity ? chip(e.severity, "s-lit") : "") + '<div class="xp-body">' +
       "<p>" + (teardown ? "Before Suite Teardown" : "After the last test case") + ", Optics reads the text in the UI tree of the screen once. If it contains " + chip(e.match, "s-lit") + " or " + chip(e.code, "s-lit") + ", in any case, the run gets a failed test case " + chip("on-screen-error-detection", "s-mod") + " and exits with code 1.</p>" +
-      (e.description ? "<p>The report says: " + esc(e.description) + "</p>" : "") +
+      (e.description ? "<p>The report says: " + esc(e.description) + (/[.!?]$/.test(e.description) ? "" : ".") + "</p>" : "") +
       "<p>optics dry_run, optics live, the HTTP API and MCP don't run this check. " + '<a href="' + X.DOCS.errors + '">Docs</a></p></div>';
   }
 
@@ -606,10 +616,24 @@
   ui.input.addEventListener("input", onEdit);
   ui.input.addEventListener("scroll", syncScroll);
   ["keyup", "click", "focus"].forEach(function (t) { ui.input.addEventListener(t, function () { renderExplain(); save(); }); });
+  // In YAML, Tab indents; Escape first lets the next Tab leave the editor, as in most code editors.
+  var tabLeaves = false;
   ui.input.addEventListener("keydown", function (e) {
-    if (e.key !== "Tab" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || !/\.ya?ml$/i.test(state.files[state.active].path)) return;
+    var leave = tabLeaves;
+    tabLeaves = e.key === "Escape";
+    if (leave || e.key !== "Tab" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || !/\.ya?ml$/i.test(state.files[state.active].path)) return;
     e.preventDefault();
     document.execCommand("insertText", false, "  ");
+  });
+  ui.tabs.addEventListener("keydown", function (e) {
+    var t = e.target.closest("[data-file]"), step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (!t) return;
+    if (e.key === "F2") return renameFile(Number(t.dataset.file));
+    if (!step) return;
+    e.preventDefault();
+    var next = (Number(t.dataset.file) + step + state.files.length) % state.files.length;
+    ui.tabs.querySelector('[data-file="' + next + '"]').click();
+    ui.tabs.querySelector('[data-file="' + next + '"]').focus();
   });
   root.addEventListener("click", function (e) {
     var t = e.target.closest("[data-ex], [data-file], [data-close], .xp-add, [data-at], .xp-copy");
@@ -666,7 +690,8 @@
       if (keep && field.value.trim()) { state.files[i].path = field.value.trim(); state.example = null; analyse(); save(); }
       renderAll();
     }
-    field.addEventListener("keydown", function (e) { if (e.key === "Enter") commit(true); if (e.key === "Escape") commit(false); });
+    var finish = function (keep) { commit(keep); ui.tabs.querySelector('[data-file="' + i + '"]').focus(); };
+    field.addEventListener("keydown", function (e) { if (e.key === "Enter") finish(true); if (e.key === "Escape") finish(false); });
     field.addEventListener("blur", function () { commit(true); });
   }
 
