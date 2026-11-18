@@ -128,7 +128,8 @@
         if (!B.reduced) return loop();
         clean();
         S.still(c);
-        lines.forEach(function (l, i) { if (!l.dataset.st) l.dataset.st = (S.stillSt || {})[i] || "ok"; });
+        var st = S.stillSt || {};
+        lines.forEach(function (l, i) { if (!l.dataset.st) l.dataset.st = i in st ? st[i] : "ok"; });
       },
       hold: function (h) {
         clock.hidden = h;

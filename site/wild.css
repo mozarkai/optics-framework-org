@@ -13,8 +13,10 @@
 .wild-cap { grid-row: 1; }
 .wild-stage { grid-row: 2; }
 .wild-t > .wild-code { grid-row: 3; }
-.wild-hero .wild-stage { grid-row: 2 / 6; }
-.wild-hero > .wild-code { grid-row: 6; }
+.wild-hero { grid-template-columns: minmax(0, 1fr) minmax(260px, 31%); }
+.wild-hero .wild-cap { grid-column: 1 / -1; }
+.wild-hero .wild-stage { grid-row: 2 / 7; grid-column: 1; }
+.wild-hero > .wild-code { grid-row: 2 / 7; grid-column: 2; display: flex; flex-direction: column; justify-content: center; padding-inline: 20px; }
 .wild-stage { position: relative; min-height: 340px; overflow: hidden; background: radial-gradient(closest-side, color-mix(in srgb, var(--sun) 14%, transparent), transparent) 50% 55% / 90% 100% no-repeat, var(--stage); }
 .wild-world { position: absolute; left: 50%; top: 50%; transform-origin: 50% 50%; --k: 1; }
 
@@ -215,9 +217,9 @@ html:has(.wild-dlg[open]) { overflow: hidden; }
 
 @media (max-width: 1100px) {
   .wild-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .wild-hero { grid-row: span 3; }
-  .wild-hero .wild-stage { grid-row: 2; min-height: 440px; }
-  .wild-hero > .wild-code { grid-row: 3; }
+  .wild-hero { grid-row: span 3; grid-template-columns: minmax(0, 1fr); }
+  .wild-hero .wild-stage { grid-row: 2; grid-column: auto; min-height: 440px; }
+  .wild-hero > .wild-code { grid-row: 3; grid-column: auto; display: block; padding-inline: 16px; }
 }
 @media (max-width: 760px) {
   .wild-dlg { width: 100vw; max-height: 100dvh; height: 100dvh; border: 0; }
