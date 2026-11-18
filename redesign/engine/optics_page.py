@@ -21,11 +21,22 @@ RUNNERS = {"dry_run": DryRunRunner, "execute": ExecuteRunner}
 skipped = 0.0
 
 
+class Stopped(BaseException):
+    """The visitor pressed Stop. Not an Exception, so the keyword retry loops let it through."""
+
+
+def stop_if_asked() -> None:
+    if getattr(js.opticsPage, "stopped", False):
+        raise Stopped
+
+
 def sleep(seconds):
     # Without JSPI the page cannot change while Python runs, so a wait only moves the clock on.
     global skipped
+    stop_if_asked()
     if can_run_sync():
         run_sync(asyncio.sleep(seconds))
+        stop_if_asked()
     else:
         skipped += seconds
 
@@ -46,6 +57,7 @@ def announce(keyword_node) -> None:
 
 async def paced_keyword(self, keyword_node, *args, **kwargs):
     announce(keyword_node)
+    stop_if_asked()
     await js.opticsPage.before()
     try:
         return await execute_keyword(self, keyword_node, *args, **kwargs)
@@ -95,6 +107,8 @@ async def run(mode: str, files_json: str) -> str:
             runner = RUNNERS[mode](RunnerArgs(folder_path=PROJECT, use_printer=False))
             get_event_manager(runner.session_id).subscribe("page", PageEvents())
             results = await runner.execute()
+    except Stopped:
+        return json.dumps({"stopped": True})
     except (Exception, SystemExit) as e:
         return json.dumps({"error": str(e) if isinstance(e, Exception) else stderr.getvalue().strip(), "code": getattr(e, "code", None) and str(e.code)})
     return json.dumps({

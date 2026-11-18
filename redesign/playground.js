@@ -110,9 +110,9 @@
       '<div class="live-term">' +
         '<div class="live-tabs" role="tablist" aria-label="Session">' +
           '<button type="button" role="tab" aria-selected="true" data-pane="live">optics live</button>' +
-          '<button type="button" role="tab" aria-selected="false" data-pane="modules">modules.csv</button>' +
-          '<button type="button" role="tab" aria-selected="false" data-pane="elements">elements.csv</button>' +
-          '<button type="button" role="tab" aria-selected="false" data-pane="run" hidden>optics execute</button>' +
+          '<button type="button" role="tab" aria-selected="false" tabindex="-1" data-pane="modules">modules.csv</button>' +
+          '<button type="button" role="tab" aria-selected="false" tabindex="-1" data-pane="elements">elements.csv</button>' +
+          '<button type="button" role="tab" aria-selected="false" tabindex="-1" data-pane="run" hidden>optics execute</button>' +
         "</div>" +
         '<div class="live-pane on" data-pane="live" role="tabpanel" aria-label="optics live">' +
           '<div class="live-hist" role="log" aria-live="polite"></div>' +
@@ -140,10 +140,20 @@
       root.querySelectorAll(".live-tabs [role=tab]").forEach(function (t) {
         var on = t.dataset.pane === name;
         t.setAttribute("aria-selected", on);
+        t.tabIndex = on ? 0 : -1;
         t.classList.remove("ping");
       });
       root.querySelectorAll(".live-pane").forEach(function (p) { p.classList.toggle("on", p.dataset.pane === name); });
     }
+    root.querySelector(".live-tabs").addEventListener("keydown", function (e) {
+      var all = Array.prototype.slice.call(root.querySelectorAll(".live-tabs [role=tab]:not([hidden])")), d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      var i = all.indexOf(e.target);
+      if (!d || i < 0) return;
+      e.preventDefault();
+      var next = all[(i + d + all.length) % all.length];
+      next.focus();
+      next.click();
+    });
     root.querySelector(".live-tabs").addEventListener("click", function (e) {
       var t = e.target.closest("[role=tab]");
       if (t) { tab(t.dataset.pane); track("live:tab:" + t.dataset.pane); }
@@ -455,7 +465,7 @@
       toast: function () { return 'assert_presence "Added to cart"'; },
     };
     A.root.addEventListener("click", function (e) {
-      var t = e.target.closest("[data-el], [data-t]");
+      var t = e.target.closest("[data-el]") || e.target.closest("[data-t]");
       if (!t || busy) return;
       e.preventDefault();
       var name = t.dataset.el, cmd;

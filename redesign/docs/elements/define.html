@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -122,7 +122,7 @@ sign_in,//*[@resource-id='com.birch.shop:id/login'],Sign in,sign_in.png">Copy</b
 <p><code class="ic">id:</code> values, such as <code class="ic">id:login</code>, aren't supported by any element source and always fail. Use an XPath on the id instead.</p>
 <p>Assert Presence, Assert Visibility, Validate Element and Validate Screen skip class names. If every element in the check is a class name, the step passes without a check.</p>
 <h2 id="find-the-right-locator">Find the right locator<a class="anchor" href="#find-the-right-locator" aria-label="Link to this section">#</a></h2>
-<ul><li>**In <code class="ic">optics live</code>**, try a value with <code class="ic">press_element</code> or <code class="ic">assert_presence</code> before you write it down. The history line shows whether it worked and how it was found.</li><li><strong>Android and iOS</strong>: <a href="https://github.com/appium/appium-inspector" rel="noopener">Appium Inspector</a> shows each element's id, text and XPath.</li><li><strong>Web</strong>: right-click an element in Chrome and choose <strong>Inspect</strong>.</li><li><strong>Any platform</strong>: the <code class="ic">Get Interactive Elements</code> keyword lists the buttons, fields and text on the current screen. In <code class="ic">optics live</code>, run <code class="ic">get_interactive_elements</code> and open the JSON file it writes to the output folder.</li></ul>
+<ul><li><strong>In <code class="ic">optics live</code></strong>, try a value with <code class="ic">press_element</code> or <code class="ic">assert_presence</code> before you write it down. The history line shows whether it worked and how it was found.</li><li><strong>Android and iOS</strong>: <a href="https://github.com/appium/appium-inspector" rel="noopener">Appium Inspector</a> shows each element's id, text and XPath.</li><li><strong>Web</strong>: right-click an element in Chrome and choose <strong>Inspect</strong>.</li><li><strong>Any platform</strong>: the <code class="ic">Get Interactive Elements</code> keyword lists the buttons, fields and text on the current screen. In <code class="ic">optics live</code>, run <code class="ic">get_interactive_elements</code> and open the JSON file it writes to the output folder.</li></ul>
 <h2 id="pick-one-of-several-matches">Pick one of several matches<a class="anchor" href="#pick-one-of-several-matches" aria-label="Link to this section">#</a></h2>
 <p>When the same text appears more than once, <code class="ic">index</code> picks a match, counting from 0:</p>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
@@ -197,9 +197,9 @@ Add Second Product,Press Element,Add to cart,index=1">Copy</button><pre><code><s
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

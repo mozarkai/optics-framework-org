@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -129,7 +129,7 @@ appium:emulator-5554  ·  rec ●  ·  /help · /quit · Tab complete · Ctrl-K 
 <div class="table-wrap"><table><thead><tr><th>Path</th><th>What's in it</th></tr></thead><tbody><tr><td><code class="ic">modules/modules.csv</code>, <code class="ic">test_cases/test_cases.csv</code></td><td>Saved modules and test cases</td></tr><tr><td><code class="ic">screenshots/session_&lt;time&gt;/</code></td><td>Screenshots from every step in the session</td></tr><tr><td><code class="ic">execution_output/&lt;module&gt;/</code></td><td>A copy of the session's screenshots, made by <code class="ic">/save</code></td></tr><tr><td><code class="ic">logs/optics_live_&lt;time&gt;.log</code></td><td>A full log of the session, useful when a step fails for unclear reasons</td></tr></tbody></table></div>
 <ul><li>Every step, typed or from plain-English mode, saves the screenshot before the action, the result image and the area-of-interest captures to <code class="ic">screenshots/session_&lt;time&gt;/</code>. The folder stays after <code class="ic">/quit</code>. If the session took no screenshots, Optics deletes the empty folder when you quit.</li><li><code class="ic">/save</code> copies these screenshots to <code class="ic">execution_output/&lt;module&gt;/</code>, so a saved test has its pictures with it. Running <code class="ic">/save</code> again for the same module updates the copy.</li><li>The screenshots that plain-English mode sends to the model are not saved.</li><li>The log has the internal and the execution log lines in time order. <code class="ic">&lt;time&gt;</code> is the same in the log and the screenshot folder names. The first history line shows the log path, and Optics prints it again after <code class="ic">/quit</code>. The log stays whether you save or not.</li></ul>
 <h2 id="if-it-isnt-working">If it isn't working<a class="anchor" href="#if-it-isnt-working" aria-label="Link to this section">#</a></h2>
-<ul><li><strong>"optics live needs a config.yaml…"</strong>: run it from a project folder, or pass the folder: <code class="ic">optics live my_project</code>. To make a config.yaml for a folder, run <code class="ic">optics configure &lt;folder&gt;</code>. A config.yaml that is not valid shows its own parse or validation error.</li><li><strong>"optics live supports exactly one enabled driver"</strong>: set <code class="ic">enabled: false</code> on every driver in <code class="ic">config.yaml</code> except one.</li><li>**Every step fails with "run <code class="ic">launch_app</code> first"**: the app didn't open. Check that the Appium server is running and the device is connected (<code class="ic">optics doctor my_project</code>), then type <code class="ic">launch_app</code>.</li></ul>
+<ul><li><strong>"optics live needs a config.yaml…"</strong>: run it from a project folder, or pass the folder: <code class="ic">optics live my_project</code>. To make a config.yaml for a folder, run <code class="ic">optics configure &lt;folder&gt;</code>. A config.yaml that is not valid shows its own parse or validation error.</li><li><strong>"optics live supports exactly one enabled driver"</strong>: set <code class="ic">enabled: false</code> on every driver in <code class="ic">config.yaml</code> except one.</li><li><strong>Every step fails with "run <code class="ic">launch_app</code> first"</strong>: the app didn't open. Check that the Appium server is running and the device is connected (<code class="ic">optics doctor my_project</code>), then type <code class="ic">launch_app</code>.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/create/describe">Describe a test in plain English</a></li><li><a href="../../docs/create/write">Write a test suite</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li></ul>
         </div>
@@ -192,9 +192,9 @@ appium:emulator-5554  ·  rec ●  ·  /help · /quit · Tab complete · Ctrl-K 
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

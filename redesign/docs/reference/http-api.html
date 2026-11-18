@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs layout-wide" data-docs-root="../../docs/">
@@ -195,12 +195,12 @@
 <aside class="callout callout-mistake"><p class="callout-title">The code reads <code class="ic">Code.E0201</code> on Python 3.11 and later</p><p>The server writes the <code class="ic">code</code> field and the code in <code class="ic">cause</code> with the enum class name in front: <code class="ic">"code": "Code.E0201"</code>, <code class="ic">"cause": "Code.E0201: Element 'css=#nope' not found."</code>. Until the fix ships, remove a leading <code class="ic">Code.</code> before you compare the code, for example <code class="ic">code.removeprefix("Code.")</code> in Python.</p></aside>
 <h2 id="streams">Streams<a class="anchor" href="#streams" aria-label="Link to this section">#</a></h2>
 <p>Both stream endpoints use server-sent events (SSE): the connection stays open and each event is a <code class="ic">data:</code> line of JSON.</p>
-<p>**<code class="ic">/events</code>** sends one event when each keyword starts, passes or fails, including the automatic <code class="ic">launch_app</code> at start, <code class="ic">close_and_terminate_app</code> at stop, and the GET helpers such as <code class="ic">/screenshot</code>.</p>
+<p><strong><code class="ic">/events</code></strong> sends one event when each keyword starts, passes or fails, including the automatic <code class="ic">launch_app</code> at start, <code class="ic">close_and_terminate_app</code> at stop, and the GET helpers such as <code class="ic">/screenshot</code>.</p>
 <figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="data: {&quot;execution_id&quot;: &quot;4f1c...&quot;, &quot;status&quot;: &quot;RUNNING&quot;, &quot;message&quot;: &quot;Starting keyword: press_element&quot;}
 data: {&quot;execution_id&quot;: &quot;4f1c...&quot;, &quot;status&quot;: &quot;SUCCESS&quot;, &quot;message&quot;: &quot;Keyword press_element executed successfully&quot;}">Copy</button><pre><code>data: {"execution_id": "4f1c...", "status": "RUNNING", "message": "Starting keyword: press_element"}
 data: {"execution_id": "4f1c...", "status": "SUCCESS", "message": "Keyword press_element executed successfully"}</code></pre></figure>
 <ul><li>Statuses are <code class="ic">RUNNING</code>, <code class="ic">SUCCESS</code> and <code class="ic">FAIL</code>, plus <code class="ic">ERROR</code> or <code class="ic">CANCELLED</code> when the stream itself stops.</li><li>After 15 seconds without events, it sends <code class="ic">{"execution_id": "heartbeat", "status": "HEARTBEAT", ...}</code>.</li><li>Events wait in a queue until someone reads them. With several clients, each event goes to only one of them, so connect one client per session.</li></ul>
-<p>**<code class="ic">/workspace/stream</code>** sends the screen whenever it changes.</p>
+<p><strong><code class="ic">/workspace/stream</code></strong> sends the screen whenever it changes.</p>
 <div class="table-wrap"><table><thead><tr><th>Query</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">interval_ms</code></td><td><code class="ic">2000</code></td><td>How often to check the screen. Minimum <code class="ic">500</code>.</td></tr><tr><td><code class="ic">include_source</code></td><td><code class="ic">false</code></td><td>Adds the UI tree or HTML as <code class="ic">source</code>.</td></tr><tr><td><code class="ic">filter_config</code></td><td></td><td>Filters the elements, as for <code class="ic">/elements</code>.</td></tr></tbody></table></div>
 <p>Each event is <code class="ic">{"screenshot", "elements", "screenshotFailed"}</code>, plus <code class="ic">source</code> when requested. It's sent only when the screen or elements change. Otherwise a <code class="ic">{"type": "heartbeat", "timestamp": &lt;seconds&gt;}</code> arrives every 15 seconds, and errors arrive as <code class="ic">{"type": "error", "message"}</code>. The stream ends when the session ends.</p>
 <h2 id="walkthrough">Walkthrough<a class="anchor" href="#walkthrough" aria-label="Link to this section">#</a></h2>
@@ -319,9 +319,9 @@ curl -s -X POST http://127.0.0.1:8000/v1/sessions/$SID/action \
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

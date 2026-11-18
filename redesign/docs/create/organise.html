@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -164,7 +164,7 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
 <ul><li><strong>Test cases</strong> describe an outcome: <em>Shopper can add a backpack</em>, not <em>Test 3</em>.</li><li><strong>Modules</strong> describe a task: <em>Sign In</em>, <em>Apply Discount Code</em>.</li><li><strong>Elements</strong> describe what's on screen: <code class="ic">sign_in</code>, <code class="ic">cart_badge</code>, <code class="ic">promo_code_field</code>. Put the kind of element at the end, such as <code class="ic">_button</code>, <code class="ic">_field</code>, <code class="ic">_icon</code> or <code class="ic">_tab</code>. When one element has a value per locator kind, name each one for its kind, such as <code class="ic">login_button_xpath</code> and <code class="ic">login_button_text</code>.</li></ul>
 <p>Use one spelling for a name everywhere. Element and module names are case-sensitive, so <code class="ic">${cart_badge}</code> does not find a row named <code class="ic">Cart_Badge</code>.</p>
 <h2 id="keep-a-suite-easy-to-fix">Keep a suite easy to fix<a class="anchor" href="#keep-a-suite-easy-to-fix" aria-label="Link to this section">#</a></h2>
-<ul><li><strong>Keep each module to one task</strong>, and give it a name that says what it does. A failed step then tells you what broke.</li><li><strong>Do not hard-code values that change.</strong> Put them in the elements file and use <code class="ic">${name}</code>, so a module works with other data.</li><li><strong>Give each element stable values, and more than one.</strong> A text or image value next to an XPath keeps the step working when one of them breaks. Check that Optics can find each element, and update the elements file when the app's UI changes.</li><li><strong>Start each test case from a known state.</strong> Use Suite Setup and Suite Teardown, and a per-test Setup that resets the app. Clean up in a teardown.</li><li><strong>Test one feature in each test case</strong>, and group related test cases together.</li><li><strong>Try modules one at a time</strong> before you combine them into long test cases.</li><li>**Run <code class="ic">optics dry_run</code> before <code class="ic">optics execute</code>.** It finds a missing keyword, parameter or <code class="ic">${name}</code> in seconds.</li><li>**To debug, set <code class="ic">log_level: DEBUG</code> and <code class="ic">file_log: true</code>** in config.yaml. The logs then show each strategy Optics tries and are saved in the output folder.</li><li><strong>Keep image templates current.</strong> Check that each file is in the project and named as its element value, and cut it again when the UI changes. See <a href="../../docs/elements/text-and-images#capture-a-good-template">Capture a good template</a>.</li></ul>
+<ul><li><strong>Keep each module to one task</strong>, and give it a name that says what it does. A failed step then tells you what broke.</li><li><strong>Do not hard-code values that change.</strong> Put them in the elements file and use <code class="ic">${name}</code>, so a module works with other data.</li><li><strong>Give each element stable values, and more than one.</strong> A text or image value next to an XPath keeps the step working when one of them breaks. Check that Optics can find each element, and update the elements file when the app's UI changes.</li><li><strong>Start each test case from a known state.</strong> Use Suite Setup and Suite Teardown, and a per-test Setup that resets the app. Clean up in a teardown.</li><li><strong>Test one feature in each test case</strong>, and group related test cases together.</li><li><strong>Try modules one at a time</strong> before you combine them into long test cases.</li><li><strong>Run <code class="ic">optics dry_run</code> before <code class="ic">optics execute</code>.</strong> It finds a missing keyword, parameter or <code class="ic">${name}</code> in seconds.</li><li><strong>To debug, set <code class="ic">log_level: DEBUG</code> and <code class="ic">file_log: true</code></strong> in config.yaml. The logs then show each strategy Optics tries and are saved in the output folder.</li><li><strong>Keep image templates current.</strong> Check that each file is in the project and named as its element value, and cut it again when the UI changes. See <a href="../../docs/elements/text-and-images#capture-a-good-template">Capture a good template</a>.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/create/write">Write a test suite</a></li><li><a href="../../docs/create/yaml">Write tests in YAML</a></li><li><a href="../../docs/reference/files">Project files reference</a></li></ul>
         </div>
@@ -227,9 +227,9 @@ optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

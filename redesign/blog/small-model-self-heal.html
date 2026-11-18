@@ -7,7 +7,7 @@
   <meta name="description" content="I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.">
   <meta name="ai-summary" content="I taught Qwen3.5-2B the Optics Framework self-heal job with a weight edit and with a LoRA. On a Pixel 4a with Optics Framework 1.11.3, the LoRA model healed 113 of 114 broken locators.">
   <link rel="canonical" href="https://optics-framework.org/blog/small-model-self-heal">
-  <link rel="stylesheet" href="../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../docs.css?v=56de380154">
   <link rel="alternate" type="text/markdown" href="small-model-self-heal.md" title="Self-heal broken locators with a 2B model on your own GPU, as Markdown">
   <link rel="alternate" type="application/rss+xml" href="../feed.xml" title="Optics blog">
   <script type="application/ld+json">
@@ -50,7 +50,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=2c04e05495">
+  <link rel="stylesheet" href="../styles.css?v=9ed370b2c2">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -115,7 +115,7 @@ e5 android.widget.FrameLayout "Alarms" [tap] #com.google.android.deskclock:id/ta
 <h2 id="on-a-phone">On a phone<a class="anchor" href="#on-a-phone" aria-label="Link to this section">#</a></h2>
 <p>I served the LoRA model with vLLM and connected Optics Framework 1.11.3 to it. The suite operates Google Clock on a Pixel 4a. It has 2 test cases, with an assert after each press. I broke the locators in 7 ways and ran each break set 2 times. With <code class="ic">strict_element_match: true</code>, Optics Framework does not use its fuzzy match. Each broken locator goes to the model.</p>
 <p><img src="../media/blog/small-model-self-heal-pilot.webp?v=a9c20abca4" alt="Three screenshots: the stopwatch screen when the locator fails, the press on the Start button, and the stopwatch in operation at the next assert" loading="lazy"></p>
-<p>*A heal from the purpose set. The broken locator is <code class="ic">id/primary_action</code>. The model selected Start, and the next assert passed.*</p>
+<p><em>A heal from the purpose set. The broken locator is <code class="ic">id/primary_action</code>. The model selected Start, and the next assert passed.</em></p>
 <div class="table-wrap"><table><thead><tr><th>Break sets</th><th>Correct heals</th><th>Test cases passed</th></tr></thead><tbody><tr><td>Wrong ID (4 sets: old ID, camelCase, package, class)</td><td>64 of 64</td><td>16 of 16</td></tr><tr><td>Wrong words (3 sets: new label, purpose, purpose with correct tabs)</td><td>49 of 50</td><td>11 of 12</td></tr></tbody></table></div>
 <p>The model healed 109 of the 114 locators in 1 step and 5 in 2 steps. 1 of the 2-step heals was incorrect. The log of the purpose set shows each heal and the reason of the model:</p>
 <figure class="code doc-code no-copy" data-lang="text"><pre><code>AI self-heal: attempting recovery for 'press_element' on '//*[@content-desc="Chronometer"]'
@@ -187,7 +187,7 @@ llm_models:
     </symbol>
   </svg>
 
-  <script src="../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../app.js?v=aaea8dc074" defer></script>
   <script src="../track.js?v=a7621959d3" defer></script>
 </body>
 </html>

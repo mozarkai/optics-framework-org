@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -136,7 +136,7 @@ Shopper Can Sign In
 <p>Run it like any Robot suite:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="robot checkout.robot">Copy</button><pre><code><span class="prompt">$</span> <b>robot</b> checkout.robot</code></pre></figure>
 <h2 id="how-optics-keywords-behave-in-robot">How Optics keywords behave in Robot<a class="anchor" href="#how-optics-keywords-behave-in-robot" aria-label="Link to this section">#</a></h2>
-<ul><li><strong>Setup takes the config's contents, not its path.</strong> Read the file with <code class="ic">Get File</code> as shown above, then pass the text to <code class="ic">Setup</code>. If you use image elements, add <code class="ic">project_path: .</code> to the config so Optics can find the pictures.</li><li><strong>Pass fallbacks as a list.</strong> <code class="ic">Create List</code> builds the values to try in order. Writing several plain arguments fills the keyword's next parameters instead.</li><li><strong>Separate several elements with a pipe</strong> inside one argument: <code class="ic">Picked for you|Search Birch</code>.</li><li><strong>Named arguments use the Python names</strong>: <code class="ic">timeout=20</code>, <code class="ic">rule=any</code>, <code class="ic">index=1</code>.</li><li>**There is no <code class="ic">store_as</code>.** Keep the return value in a Robot variable: <code class="ic">${price}=    Get Text    ${PRICE_LABEL}</code>, then <code class="ic">Assert Text    ${CART_TOTAL}    ${price}</code>. Assert Text fails on different text.</li><li>**<code class="ic">Go Back</code>** goes back one screen, and **<code class="ic">Is Element</code>** accepts the states <code class="ic">checked</code> and <code class="ic">unchecked</code>.</li><li>**Robot replaces <code class="ic">${…}</code> itself.** To pass an Optics variable to <code class="ic">Evaluate</code> or <code class="ic">Condition</code>, escape it: <code class="ic">\${total}</code>.</li><li>**<code class="ic">Sleep</code> and <code class="ic">Evaluate</code> exist in Robot's BuiltIn library too.** Robot warns and uses the Optics version, which only accepts whole seconds. Write <code class="ic">BuiltIn.Sleep    2s</code> or <code class="ic">Optics.Sleep    2</code> to be explicit.</li></ul>
+<ul><li><strong>Setup takes the config's contents, not its path.</strong> Read the file with <code class="ic">Get File</code> as shown above, then pass the text to <code class="ic">Setup</code>. If you use image elements, add <code class="ic">project_path: .</code> to the config so Optics can find the pictures.</li><li><strong>Pass fallbacks as a list.</strong> <code class="ic">Create List</code> builds the values to try in order. Writing several plain arguments fills the keyword's next parameters instead.</li><li><strong>Separate several elements with a pipe</strong> inside one argument: <code class="ic">Picked for you|Search Birch</code>.</li><li><strong>Named arguments use the Python names</strong>: <code class="ic">timeout=20</code>, <code class="ic">rule=any</code>, <code class="ic">index=1</code>.</li><li><strong>There is no <code class="ic">store_as</code>.</strong> Keep the return value in a Robot variable: <code class="ic">${price}=    Get Text    ${PRICE_LABEL}</code>, then <code class="ic">Assert Text    ${CART_TOTAL}    ${price}</code>. Assert Text fails on different text.</li><li><strong><code class="ic">Go Back</code></strong> goes back one screen, and <strong><code class="ic">Is Element</code></strong> accepts the states <code class="ic">checked</code> and <code class="ic">unchecked</code>.</li><li><strong>Robot replaces <code class="ic">${…}</code> itself.</strong> To pass an Optics variable to <code class="ic">Evaluate</code> or <code class="ic">Condition</code>, escape it: <code class="ic">\${total}</code>.</li><li><strong><code class="ic">Sleep</code> and <code class="ic">Evaluate</code> exist in Robot's BuiltIn library too.</strong> Robot warns and uses the Optics version, which only accepts whole seconds. Write <code class="ic">BuiltIn.Sleep    2s</code> or <code class="ic">Optics.Sleep    2</code> to be explicit.</li></ul>
 <p>The <a href="../../docs/reference/keywords/">keyword reference</a> lists every keyword. The Python-only keywords in <a href="../../docs/create/python#python-only-methods">Use Optics from Python</a>, such as <code class="ic">Add Element</code> and <code class="ic">Add Module</code>, work in Robot too.</p>
 <h2 id="import-the-library">Import the library<a class="anchor" href="#import-the-library" aria-label="Link to this section">#</a></h2>
 <p>Import the <code class="ic">Optics</code> class by its full path:</p>
@@ -506,9 +506,9 @@ robot --outputdir results tests/">Copy</button><pre><code><span class="prompt">$
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

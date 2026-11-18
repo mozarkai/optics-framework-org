@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -191,7 +191,7 @@ elements_sources:
 <p>Optics reads the focus from the page after each key press, so you do not count presses. Each focus move costs one key press, and a key press takes 1 to 2 seconds on a TV. When 60 key presses do not bring the focus to the element, the step fails with <code class="ic">E0201</code>. The same error shows when the element is not on the screen.</p>
 <h2 id="type-on-a-tv">Type on a TV<a class="anchor" href="#type-on-a-tv" aria-label="Link to this section">#</a></h2>
 <p>Enter Text works on a TV in two ways. Optics picks the way from the element:</p>
-<ul><li>**A real <code class="ic">&lt;input&gt;</code> or <code class="ic">&lt;textarea&gt;</code>.** Optics types the text into the field directly.</li><li><strong>A field that the app draws itself.</strong> Optics moves the focus over the on-screen keyboard and presses each key. When the keyboard does not show a character, Optics switches the layer (<code class="ic">123</code>, <code class="ic">abc</code>) and looks again.</li></ul>
+<ul><li><strong>A real <code class="ic">&lt;input&gt;</code> or <code class="ic">&lt;textarea&gt;</code>.</strong> Optics types the text into the field directly.</li><li><strong>A field that the app draws itself.</strong> Optics moves the focus over the on-screen keyboard and presses each key. When the keyboard does not show a character, Optics switches the layer (<code class="ic">123</code>, <code class="ic">abc</code>) and looks again.</li></ul>
 <figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1,param_2
 Search,Enter Text,Search box,trail runner
 Search,Enter Text,Search box,&lt;enter&gt;">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1,param_2</span>
@@ -314,9 +314,9 @@ Watch a shoe video,Go home">Copy</button><pre><code><span class="c-dim">test_cas
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

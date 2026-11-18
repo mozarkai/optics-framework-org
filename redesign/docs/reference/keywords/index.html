@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../../docs/">
@@ -173,7 +173,7 @@ Cart,Assert Text,${cart_total},${price}">Copy</button><pre><code><span class="c-
 <h2 id="deprecated-keywords">Deprecated keywords<a class="anchor" href="#deprecated-keywords" aria-label="Link to this section">#</a></h2>
 <p>Press Checkbox and Press Radio Button still work but log a warning. Use <a href="../../../docs/reference/keywords/actions#press-element">Press Element</a> instead. Swipe Seekbar To Right Android fails on Appium. Use <a href="../../../docs/reference/keywords/actions#swipe-from-element">Swipe From Element</a> instead.</p>
 <h2 id="where-each-keyword-works">Where each keyword works<a class="anchor" href="#where-each-keyword-works" aria-label="Link to this section">#</a></h2>
-<ul><li>**CSV and YAML suites, <code class="ic">optics live</code> and <code class="ic">optics serve</code>** have every keyword on this page.</li><li><strong>The MCP server</strong> gives a small set of core tools by default. Its <code class="ic">run_keyword</code> tool runs most other keywords, but not the flow control keywords. See <a href="../../../docs/reference/mcp">MCP server</a>.</li><li><strong>Python and Robot Framework</strong> have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See <a href="../../../docs/create/python">Write tests in Python</a>.</li><li>**<code class="ic">optics generate</code>** skips flow-control keywords and a few others when it converts a suite to code.</li></ul>
+<ul><li><strong>CSV and YAML suites, <code class="ic">optics live</code> and <code class="ic">optics serve</code></strong> have every keyword on this page.</li><li><strong>The MCP server</strong> gives a small set of core tools by default. Its <code class="ic">run_keyword</code> tool runs most other keywords, but not the flow control keywords. See <a href="../../../docs/reference/mcp">MCP server</a>.</li><li><strong>Python and Robot Framework</strong> have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See <a href="../../../docs/create/python">Write tests in Python</a>.</li><li><strong><code class="ic">optics generate</code></strong> skips flow-control keywords and a few others when it converts a suite to code.</li></ul>
 <h2 id="python-and-robot-framework-only">Python and Robot Framework only<a class="anchor" href="#python-and-robot-framework-only" aria-label="Link to this section">#</a></h2>
 <p>These keywords exist only in the <a href="../../../docs/create/python">Python library</a> and the <a href="../../../docs/create/robot">Robot Framework library</a>. The CSV and YAML runner reports them as unknown keywords.</p>
 <div class="table-wrap"><table><thead><tr><th>Keyword</th><th>What it does</th></tr></thead><tbody><tr><td>Setup</td><td>Create a session from a config dictionary or YAML text</td></tr><tr><td>Setup From File</td><td>Create a session from a config file</td></tr><tr><td>Quit</td><td>End the session</td></tr><tr><td>Add Element</td><td>Add a value to a variable, after any values it already has</td></tr><tr><td>Get Element Value</td><td>Return the list of values for a variable</td></tr><tr><td>Add API</td><td>Load API definitions for Invoke API</td></tr><tr><td>Add Module</td><td>Define a module for Run Loop and Condition</td></tr><tr><td>Add Testcase</td><td>Set the session's test cases</td></tr><tr><td>Add Error Definitions</td><td>Add on-screen error definitions</td></tr><tr><td>Capture And Detect Errors</td><td>Check the current screen for defined errors and return any matches</td></tr><tr><td>Press Element With Index</td><td>Press Element with an index</td></tr></tbody></table></div>
@@ -237,9 +237,9 @@ Cart,Assert Text,${cart_total},${price}">Copy</button><pre><code><span class="c-
     </symbol>
   </svg>
 
-  <script src="../../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../../app.js?v=aaea8dc074" defer></script>
   <script src="../../../track.js?v=a7621959d3" defer></script>
-  <script src="../../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

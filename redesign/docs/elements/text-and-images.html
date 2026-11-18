@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -88,7 +88,7 @@
 <h2 id="turn-on-ocr">Turn on OCR<a class="anchor" href="#turn-on-ocr" aria-label="Link to this section">#</a></h2>
 <ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="install-an-ocr-engine">Install an OCR engine<a class="anchor" href="#install-an-ocr-engine" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>We recommend Apple Vision on a Mac and RapidOCR everywhere else. Both run on your machine, need no account and work offline.</p>
-<div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="macOS">macOS</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="Linux and Windows">Linux and Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install apple-vision">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> apple-vision</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install rapidocr">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> rapidocr</code></pre></figure></div></div>
+<div class="doc-tabs" data-group="ocr-os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-ocr-os-t0" aria-controls="tabs-ocr-os-p0" aria-selected="true"  data-tab="macOS">macOS</button><button class="os-tab" role="tab" id="tabs-ocr-os-t1" aria-controls="tabs-ocr-os-p1" aria-selected="false" tabindex="-1" data-tab="Linux and Windows">Linux and Windows</button></div><div class="tab-pane" role="tabpanel" id="tabs-ocr-os-p0" aria-labelledby="tabs-ocr-os-t0"><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install apple-vision">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> apple-vision</code></pre></figure></div><div class="tab-pane" role="tabpanel" id="tabs-ocr-os-p1" aria-labelledby="tabs-ocr-os-t1" hidden><figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics setup --install rapidocr">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> setup <span class="c-info">--install</span> rapidocr</code></pre></figure></div></div>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="enable-it-and-a-screenshot-source">Enable it, and a screenshot source<a class="anchor" href="#enable-it-and-a-screenshot-source" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>OCR reads screenshots, so <code class="ic">elements_sources</code> must include a screenshot source for your driver (<code class="ic">appium_screenshot</code>, <code class="ic">playwright_screenshot</code>, <code class="ic">selenium_screenshot</code>, or <code class="ic">camera_screenshot</code>):</p>
 <figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="elements_sources:
@@ -240,9 +240,9 @@ cart_icon,cart_icon.png">Copy</button><pre><code><span class="c-dim">Element_Nam
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -304,7 +304,7 @@ jobs:
 <p>Optics also writes <code class="ic">junit_output.xml</code> when it stops with <code class="ic">130</code> or <code class="ic">143</code>. A run that cannot start because of the project, such as a bad config, writes no report. See <a href="../../docs/run/results#what-each-outcome-writes">What each outcome writes</a>.</p>
 <p>An error screen adds a failing <code class="ic">on-screen-error-detection</code> test case to the report and changes the exit code to <code class="ic">1</code>. You do not need extra settings to fail the build on it.</p>
 <h2 id="make-ci-runs-reliable">Make CI runs reliable<a class="anchor" href="#make-ci-runs-reliable" aria-label="Link to this section">#</a></h2>
-<ul><li><strong>Pin the Optics version</strong> (<code class="ic">optics-framework==1.11.5</code>), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.</li><li>**Run <code class="ic">optics dry_run</code> first** in a fast job. It catches typos in seconds, before you pay for an emulator.</li><li><strong>Split a long suite</strong> into parallel jobs with <code class="ic">--include</code> and <code class="ic">--exclude</code>, for example <code class="ic">optics execute birch-tests --include "checkout*"</code> in one job. See <a href="../../docs/reference/cli#pick-test-cases">Pick test cases</a>.</li><li><strong>Start from a clean output folder.</strong> CI checkouts usually are. On reused machines, delete <code class="ic">execution_output/</code> before the run.</li><li><strong>Keep the artifacts.</strong> Upload <code class="ic">execution_output/</code> when a run fails (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.</li><li><strong>Keep secrets out of the suite.</strong> Pass model API keys such as <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code> or <code class="ic">ANTHROPIC_API_KEY</code> as CI secrets, in environment variables. Optics writes <code class="ic">****</code> in place of a secret in the console, the logs and the JUnit report. See <a href="../../docs/advanced/variables#hide-sensitive-values">Hide sensitive values</a>.</li><li><strong>Wait for screens to load.</strong> Runners are often slower than your laptop. Put <code class="ic">Assert Presence</code> before actions that follow a screen change, rather than adding <code class="ic">Sleep</code> steps.</li></ul>
+<ul><li><strong>Pin the Optics version</strong> (<code class="ic">optics-framework==1.11.5</code>), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.</li><li><strong>Run <code class="ic">optics dry_run</code> first</strong> in a fast job. It catches typos in seconds, before you pay for an emulator.</li><li><strong>Split a long suite</strong> into parallel jobs with <code class="ic">--include</code> and <code class="ic">--exclude</code>, for example <code class="ic">optics execute birch-tests --include "checkout*"</code> in one job. See <a href="../../docs/reference/cli#pick-test-cases">Pick test cases</a>.</li><li><strong>Start from a clean output folder.</strong> CI checkouts usually are. On reused machines, delete <code class="ic">execution_output/</code> before the run.</li><li><strong>Keep the artifacts.</strong> Upload <code class="ic">execution_output/</code> when a run fails (see the web example). Its logs and screenshots usually explain the failure faster than the CI log.</li><li><strong>Keep secrets out of the suite.</strong> Pass model API keys such as <code class="ic">GEMINI_API_KEY</code>, <code class="ic">OPENAI_API_KEY</code> or <code class="ic">ANTHROPIC_API_KEY</code> as CI secrets, in environment variables. Optics writes <code class="ic">****</code> in place of a secret in the console, the logs and the JUnit report. See <a href="../../docs/advanced/variables#hide-sensitive-values">Hide sensitive values</a>.</li><li><strong>Wait for screens to load.</strong> Runners are often slower than your laptop. Put <code class="ic">Assert Presence</code> before actions that follow a screen change, rather than adding <code class="ic">Sleep</code> steps.</li></ul>
 <h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
 <ul><li><a href="../../docs/run/checklist">Readiness checklist</a></li><li><a href="../../docs/run/results">Read the results</a></li><li><a href="../../docs/platforms/android">Android</a> and <a href="../../docs/platforms/web">Web</a> setup</li><li><a href="../../docs/platforms/desktop#run-in-ci">Run desktop tests in CI</a> on Linux and Windows runners</li></ul>
         </div>
@@ -367,9 +367,9 @@ jobs:
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

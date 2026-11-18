@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -99,7 +99,7 @@
 <p>Or set <code class="ic">appium:chromedriverExecutableDir</code> to a folder of chromedriver binaries. iOS needs no extra driver.</p>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="write-configyaml">Write config.yaml<a class="anchor" href="#write-configyaml" aria-label="Link to this section">#</a></h3></div><div class="step-body">
 <p>Enable <code class="ic">appium_web</code> next to the other Appium sources. <code class="ic">optics quickstart</code> and <code class="ic">optics configure</code> do this for Android and iOS projects.</p>
-<div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-t0" aria-controls="tabs-os-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-os-t1" aria-controls="tabs-os-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-p0" aria-labelledby="tabs-os-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+<div class="doc-tabs" data-group="platform"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-platform-t0" aria-controls="tabs-platform-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-platform-t1" aria-controls="tabs-platform-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p0" aria-labelledby="tabs-platform-t0"><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
   - appium:
       enabled: true
       url: &quot;http://localhost:4723&quot;
@@ -126,7 +126,7 @@ elements_sources:
   - <span class="c-mod">appium_page_source</span><span class="c-dim">:</span>  {enabled: true}
   - <span class="c-mod">appium_web</span><span class="c-dim">:</span>          {enabled: true}
   - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
-<p>With <code class="ic">browserName: Chrome</code>, the session starts in Chrome and web addresses open in Chrome, whatever the default browser is. To test an app that opens web pages, set <code class="ic">appPackage</code> and <code class="ic">appActivity</code> instead.</p></div><div class="tab-pane" role="tabpanel" id="tabs-os-p1" aria-labelledby="tabs-os-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+<p>With <code class="ic">browserName: Chrome</code>, the session starts in Chrome and web addresses open in Chrome, whatever the default browser is. To test an app that opens web pages, set <code class="ic">appPackage</code> and <code class="ic">appActivity</code> instead.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-p1" aria-labelledby="tabs-platform-t1" hidden><figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
   - appium:
       enabled: true
       url: &quot;http://localhost:4723&quot;
@@ -155,7 +155,7 @@ elements_sources:
   - <span class="c-mod">appium_screenshot</span><span class="c-dim">:</span>   {enabled: true}</code></pre></figure>
 <p>Do not set <code class="ic">browserName: Safari</code>. It turns off the web lookups that <code class="ic">appium_web</code> uses.</p></div></div>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="let-optics-read-the-page">Let Optics read the page<a class="anchor" href="#let-optics-read-the-page" aria-label="Link to this section">#</a></h3></div><div class="step-body">
-<div class="doc-tabs" data-group="os"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-os-2-t0" aria-controls="tabs-os-2-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-os-2-t1" aria-controls="tabs-os-2-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-os-2-p0" aria-labelledby="tabs-os-2-t0"><p>Chrome needs no setup. An app's WebView is readable only when the app calls <code class="ic">WebView.setWebContentsDebuggingEnabled(true)</code>. Debug builds usually do.</p></div><div class="tab-pane" role="tabpanel" id="tabs-os-2-p1" aria-labelledby="tabs-os-2-t1" hidden><p>No extra driver is needed: XCUITest reads web pages through the Web Inspector of Safari. Simulators need no setup. On a real device, turn on <strong>Web Inspector</strong> and <strong>Remote Automation</strong> in <strong>Settings &gt; Apps &gt; Safari &gt; Advanced</strong>.</p>
+<div class="doc-tabs" data-group="platform"><div class="os" role="tablist"><button class="os-tab" role="tab" id="tabs-platform-2-t0" aria-controls="tabs-platform-2-p0" aria-selected="true"  data-tab="Android">Android</button><button class="os-tab" role="tab" id="tabs-platform-2-t1" aria-controls="tabs-platform-2-p1" aria-selected="false" tabindex="-1" data-tab="iOS">iOS</button></div><div class="tab-pane" role="tabpanel" id="tabs-platform-2-p0" aria-labelledby="tabs-platform-2-t0"><p>Chrome needs no setup. An app's WebView is readable only when the app calls <code class="ic">WebView.setWebContentsDebuggingEnabled(true)</code>. Debug builds usually do.</p></div><div class="tab-pane" role="tabpanel" id="tabs-platform-2-p1" aria-labelledby="tabs-platform-2-t1" hidden><p>No extra driver is needed: XCUITest reads web pages through the Web Inspector of Safari. Simulators need no setup. On a real device, turn on <strong>Web Inspector</strong> and <strong>Remote Automation</strong> in <strong>Settings &gt; Apps &gt; Safari &gt; Advanced</strong>.</p>
 <p>Safari and in-app Safari sheets are always readable. An app's <code class="ic">WKWebView</code> is readable when the app sets <code class="ic">isInspectable = true</code>. Apps built with the iOS 16.4 SDK or later need this, also in debug builds.</p>
 <p>Chrome, Firefox and other iOS browsers are read the same way when they allow inspection. Firefox tabs allow it by default. Chrome needs <strong>Settings &gt; Content Settings &gt; Web Inspector</strong>.</p></div></div>
 </div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">4</span><h3 id="run-the-sample">Run the sample<a class="anchor" href="#run-the-sample" aria-label="Link to this section">#</a></h3></div><div class="step-body">
@@ -280,9 +280,9 @@ Prepare Chrome,Detect And Press,negative_button,5">Copy</button><pre><code><span
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

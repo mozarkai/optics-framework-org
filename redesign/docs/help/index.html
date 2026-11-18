@@ -23,8 +23,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=2c04e05495">
-  <link rel="stylesheet" href="../../docs.css?v=ff1c08479d">
+  <link rel="stylesheet" href="../../styles.css?v=9ed370b2c2">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
 <body class="docs " data-docs-root="../../docs/">
@@ -89,11 +89,11 @@
 <p>Run <code class="ic">optics doctor</code> on your project before anything else. It checks Python, every engine, the Appium server, connected devices and your <code class="ic">config.yaml</code>, and prints the fix next to each problem:</p>
 <figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics doctor my-project">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> doctor my-project</code></pre></figure>
 <p>Always pass the project folder. Without it, doctor checks your machine but not your config. If doctor shows no ❌ rows and the problem remains:</p>
-<ol><li>**Search <a href="../../docs/help/troubleshooting">Troubleshooting</a> for the exact message.** Problems are listed by the words Optics prints, such as <code class="ic">No driver enabled</code> or <code class="ic">Element not found</code>.</li><li><strong>Look up the code.</strong> If the message has a code like <code class="ic">E0201</code>, <a href="../../docs/reference/errors">Error codes</a> says what it means and what to do.</li><li>**Read the <a href="../../docs/help/faq">FAQ</a>** when something works differently from what you expected. Some behavior is a known limit, not a bug.</li></ol>
+<ol><li><strong>Search <a href="../../docs/help/troubleshooting">Troubleshooting</a> for the exact message.</strong> Problems are listed by the words Optics prints, such as <code class="ic">No driver enabled</code> or <code class="ic">Element not found</code>.</li><li><strong>Look up the code.</strong> If the message has a code like <code class="ic">E0201</code>, <a href="../../docs/reference/errors">Error codes</a> says what it means and what to do.</li><li><strong>Read the <a href="../../docs/help/faq">FAQ</a></strong> when something works differently from what you expected. Some behavior is a known limit, not a bug.</li></ol>
 <h2 id="ask-a-question-or-report-a-bug">Ask a question or report a bug<a class="anchor" href="#ask-a-question-or-report-a-bug" aria-label="Link to this section">#</a></h2>
 <p>Open an issue on <a href="https://github.com/mozarkai/optics-framework/issues" rel="noopener">GitHub</a>. Search the open and closed issues first, since someone may have hit the same problem.</p>
 <p>A good report lets someone reproduce the problem without asking you anything. Include:</p>
-<ul><li><strong>Your Optics version.</strong> Run <code class="ic">optics --version</code>.</li><li>**The <code class="ic">optics doctor</code> output for your project.** Run <code class="ic">optics doctor &lt;project&gt;</code> and paste everything it prints.</li><li>**Your <code class="ic">config.yaml</code>, without secrets.** Remove API keys, passwords and tokens, and replace private URLs with placeholders.</li><li><strong>The failing step.</strong> Paste the rows from <code class="ic">modules/modules.csv</code> and <code class="ic">test_data/elements.csv</code> that the step uses, and the full "Failure details" box from the run.</li><li><strong>The log.</strong> Choose the one that matches what you ran:
+<ul><li><strong>Your Optics version.</strong> Run <code class="ic">optics --version</code>.</li><li><strong>The <code class="ic">optics doctor</code> output for your project.</strong> Run <code class="ic">optics doctor &lt;project&gt;</code> and paste everything it prints.</li><li><strong>Your <code class="ic">config.yaml</code>, without secrets.</strong> Remove API keys, passwords and tokens, and replace private URLs with placeholders.</li><li><strong>The failing step.</strong> Paste the rows from <code class="ic">modules/modules.csv</code> and <code class="ic">test_data/elements.csv</code> that the step uses, and the full "Failure details" box from the run.</li><li><strong>The log.</strong> Choose the one that matches what you ran:
 <ul><li><code class="ic">optics execute</code>: set <code class="ic">file_log: true</code> in <code class="ic">config.yaml</code>, run again, and attach <code class="ic">execution_output/internal_logs.log</code> and <code class="ic">execution_output/execution_logs.log</code>. Set <code class="ic">log_level: DEBUG</code> for the most detail.</li><li><code class="ic">optics live</code>: attach <code class="ic">logs/optics_live_&lt;time&gt;.log</code> from the project folder. Its path is printed when you quit.</li></ul></li><li><strong>What you expected, and what happened instead.</strong> A screenshot from <code class="ic">execution_output/</code> often shows the difference at a glance.</li></ul>
 <aside class="callout callout-warning"><p class="callout-title">Warning</p><p>Logs and screenshots can contain personal data, such as names and email addresses on screen. Check them before you attach them to a public issue. Values written with the <code class="ic">@:</code> prefix are masked as <code class="ic">****</code> in log files, but screenshots show whatever was on screen.</p></aside>
 <h2 id="report-a-security-issue">Report a security issue<a class="anchor" href="#report-a-security-issue" aria-label="Link to this section">#</a></h2>
@@ -158,9 +158,9 @@
     </symbol>
   </svg>
 
-  <script src="../../app.js?v=d5c83ebd2b" defer></script>
+  <script src="../../app.js?v=aaea8dc074" defer></script>
   <script src="../../track.js?v=a7621959d3" defer></script>
-  <script src="../../docs.js?v=dbe99f4237" defer></script>
+  <script src="../../docs.js?v=ffee86ac7f" defer></script>
   <script src="../../scenes.js?v=3ec9937cca" defer></script>
   <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
 </body>

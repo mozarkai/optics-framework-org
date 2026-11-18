@@ -88,6 +88,10 @@ h1, h2 { margin: 0; font-weight: 720; letter-spacing: -.03em; }
 .line svg { width: 62px; }
 .line b { display: block; font-weight: 680; }
 .line span { color: var(--mute); font-size: 13.5px; }
+.line > div { flex: 1; }
+.remove { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--mute); }
+.remove:hover { background: var(--well); }
+.remove svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .total { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1.5px solid var(--line); font-weight: 680; font-size: 17px; }
 .cart-page .btn { margin-top: auto; }
 .empty { margin-top: 18px; color: var(--soft); }

@@ -21,6 +21,8 @@
   }
   menu.addEventListener("click", function () { drawer(!sidebar.classList.contains("open")); });
   scrim.addEventListener("click", function () { drawer(false); });
+  sidebar.addEventListener("click", function (e) { if (e.target.closest("a")) drawer(false); });
+  window.addEventListener("pageshow", function () { drawer(false); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sidebar.classList.contains("open")) drawer(false); });
   // Keep the current page in view in the desktop sidebar.
   var current = sidebar.querySelector('[aria-current="page"]');
@@ -70,10 +72,11 @@
   // ---- copy buttons ------------------------------------------------------------
   function copied(btn, label) {
     var span = btn.querySelector("span") || btn;
-    var was = span.textContent;
+    span.dataset.label = span.dataset.label || span.textContent;
     span.textContent = label || "Copied";
     btn.classList.add("done");
-    setTimeout(function () { span.textContent = was; btn.classList.remove("done"); }, 1600);
+    clearTimeout(btn.copiedTimer);
+    btn.copiedTimer = setTimeout(function () { span.textContent = span.dataset.label; btn.classList.remove("done"); }, 1600);
   }
   function writeClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
@@ -137,6 +140,8 @@
     full.replaceChildren(copy);
     full.showModal();
     close.focus();
+    var canvas = copy.querySelector(".diagram-canvas");
+    canvas.scrollLeft = (canvas.scrollWidth - canvas.clientWidth) / 2;
   }
   var seen = "IntersectionObserver" in window && new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { if (e.isIntersecting) { play(e.target); seen.unobserve(e.target); } });
@@ -229,10 +234,10 @@
       filter.setAttribute("aria-label", "Filter the rows of this table");
       filter.setAttribute("aria-controls", wrap.id);
       live = document.createElement("p");
-      live.className = "sr-only";
+      live.className = "table-none";
       live.setAttribute("aria-live", "polite");
       box.insertBefore(filter, wrap);
-      box.appendChild(live);
+      wrap.after(live);
       filter.addEventListener("input", function () {
         var q = filter.value.trim().toLowerCase();
         var hits = 0;
@@ -242,7 +247,8 @@
           if (on) hits++;
         });
         box.classList.toggle("filtering", !!q);
-        live.textContent = q ? hits + " of " + rows.length + " rows match" : "";
+        live.textContent = !q ? "" : hits ? hits + " of " + rows.length + " rows match" : "No rows match “" + filter.value.trim() + "”.";
+        live.classList.toggle("shown", !!q && !hits);
       });
     }
     setOpen(false);
@@ -278,6 +284,10 @@
     var key = "optics-check:" + location.pathname + ":" + (box.dataset.key || i);
     box.checked = store.get(key) === "1";
     box.addEventListener("change", function () { store.set(key, box.checked ? "1" : "0"); });
+    box.closest(".task").querySelector(".task-body").addEventListener("click", function (e) {
+      if (e.target.closest("a, button, summary, input") || String(getSelection())) return;
+      box.click();
+    });
   });
 
   // ---- search ------------------------------------------------------------------
@@ -299,7 +309,10 @@
     load().then(run);
   }
   document.querySelector(".search-open").addEventListener("click", openSearch);
-  dialog.querySelector(".search-close").addEventListener("click", function () { dialog.close(); });
+  var closeBtn = dialog.querySelector(".search-close");
+  closeBtn.addEventListener("click", function () { dialog.close(); });
+  if (matchMedia("(pointer: coarse)").matches) closeBtn.textContent = "Close";
+  input.addEventListener("keydown", function (e) { if (e.key === "Escape") { e.preventDefault(); dialog.close(); } });
   dialog.addEventListener("click", function (e) { if (e.target === dialog) dialog.close(); });
   document.addEventListener("keydown", function (e) {
     var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
