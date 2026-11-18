@@ -43,6 +43,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Project
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [A real run](https://optics-framework.org/run.md): Optics running the Birch suite against two releases of the real Birch web app, with every step, timing, strategy, terminal tree and output file, and the commands to run it yourself.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.

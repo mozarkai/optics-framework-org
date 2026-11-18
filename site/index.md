@@ -55,6 +55,8 @@ Add To Cart,Press Element,Add to cart
 - Screenshots of the screen before each step that finds an element, and the same screen with a box around what Optics found.
 - Detected errors: crash dialogs and messages matched from `error_definitions.csv` on the last screen add a failure to the JUnit report, even without an assertion.
 
+Birch, the demo shop in these examples, is a real web app at https://optics-framework.org/birch/. A real run of the Birch suite against two releases of it, with every file Optics wrote and the commands to run it yourself, is at https://optics-framework.org/run. Release 2.2 passes every step and fails the run, because the last screen shows "Session expired".
+
 ## How Optics finds an element
 
 Every element can have several identities, tried cheapest first:
