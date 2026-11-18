@@ -142,6 +142,19 @@ Web
 
 ✅ rows are ready. ⚠️ rows are optional or not needed for your platform. Pass a project folder (`optics doctor my_project`) to also check its `config.yaml`.
 
+## Upgrade
+
+Optics checks for a new release once a day. When there is one, it prints a short notice after a command, with what each skipped release added:
+
+```terminal
+Optics 1.11.4 is out (you have 1.11.3). Run `optics upgrade`.
+  1.11.4: Desktop apps: test macOS, Windows and Linux apps with the same CSV suites. https://optics-framework.org/docs/guides/desktop-apps
+```
+
+`optics upgrade` installs the newest release in the way your environment allows. A uv or pipx tool upgrades itself. A project that uv, Poetry, PDM or Pipenv manages gets the command to run, so its lockfile keeps the new version.
+
+The notice shows only in a terminal, never in CI or when the output goes to a pipe. Set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1` to turn the check off.
+
 ## If the install doesn't work
 
 - **`optics: command not found`.** Open a new terminal. If it still fails, add `~/.optics/bin` to your PATH, as the installer printed.

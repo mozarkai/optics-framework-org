@@ -130,7 +130,7 @@ A tap on a ref uses a locator that matches only that element. The agent can also
 
 ## Core tools
 
-The default toolset has 11 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
+The default toolset has 12 tools. Every tool except `start_session` and `send_feedback` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -145,6 +145,7 @@ The default toolset has 11 tools. Every tool except `start_session` takes `sessi
 | `batch` | `steps` (1–12) | Runs the steps in order on one screen, such as a form, and stops at the first that fails. A step is `{"tool": "tap", "target"}`, `{"tool": "type_text", "target", "text"}` or `{"tool": "press_key", "key"}`. `expect_present` and `expect_absent` check the screen after the last step. See [batch](#batch). |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–60) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
+| `send_feedback` | `kind`, `impact`, `task`, `description`, `tool` (""), `error` (""), `suggestion` ("") | Sends a report to the Optics maintainers. See [send_feedback](#send-feedback). |
 
 The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` and `run_keyword`) also take these parameters:
 
@@ -346,6 +347,12 @@ screen 622118 · unchanged
 
 The `optics://keywords` resource lists every keyword that `run_keyword` accepts. Flow control, deprecated keywords and the coordinate keywords are not in it. With one session open, it also leaves out the keywords that the session's driver does not support. `start_session` names them, and `run_keyword` refuses them as `unsupported`. When a call has one parameter name that the keyword does not have, and the keyword still needs exactly one parameter, `run_keyword` uses the value for that parameter. Optics caps a `timeout` parameter at 60 seconds.
 
+### send_feedback
+
+`send_feedback` tells the Optics maintainers what broke, was missing, confused the agent, or worked well. `kind` is `broken`, `missing`, `confusing`, `idea` or `worked`. `impact` is `blocked`, `worked_around`, `friction` or `none`. Replies to failures where Optics may be at fault, and the reply to `terminate_session`, point the agent to the tool.
+
+The report also carries the client name, the Optics version, the transport and the operating system. Optics masks secrets, keys and email addresses before it sends the report. It sends no screenshots, rows or session steps. The reply always tells the agent to carry on with its task, also when the report could not be sent. Set `OPTICS_NO_FEEDBACK=1` to remove the tool.
+
 ## Full toolset
 
 Start the server with `--toolset full`, or set `OPTICS_MCP_TOOLSET=full`, to add one tool for each app, action and verification keyword. The tool name is the keyword in snake_case, such as `press_element`, `enter_text`, `assert_text` or `go_back`. Each tool takes `session_id` plus the keyword's parameters, all as strings. An element parameter can be a ref. See [Keywords](/docs/reference/keywords/) for each parameter.
@@ -436,6 +443,9 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | `OPTICS_HOME` | `~/.optics` | Where a `stdio` server writes the steps of each session, in `mcp/steps/`. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `100` | The longest time one call can take. After it, the call returns a `timeout` error, and the session stays `busy` until the driver call ends. |
 | `OPTICS_ALLOWED_HOSTS` | | `http` only. Host names that the server answers in addition to loopback names, separated by commas. |
+| `OPTICS_NO_FEEDBACK` | off | Any value but `0` or `false` removes `send_feedback`. |
+| `OPTICS_NO_UPDATE_CHECK` | off | Any value but `0` or `false` stops the daily check for a new release. `start_session` then never names one. |
+| `DO_NOT_TRACK` | off | Does both of the above. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | off | `1`, `true`, `yes` or `on` allows the coordinate keywords. See [Coordinate taps](#coordinate-taps). |
 | `OPTICS_AI_SELF_HEAL` | off | `1`, `true`, `yes` or `on` turns self-heal on for every session unless `start_session` says otherwise. |
 | `OPTICS_LLM_PROVIDER` | `gemini` | The default LLM engine: `gemini`, `openai` or `anthropic`. |
