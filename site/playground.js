@@ -267,11 +267,29 @@
       quitArmed = false;
       var l2 = line('<span class="m"></span> ' + paint(cmd), "wait");
       if (p.args.length < p.kw[2]) { result(l2, { ok: false, err: p.kw[0] + " needs " + p.kw[2] + " value" + (p.kw[2] > 1 ? "s" : "") }); return Promise.resolve(); }
-      var screen = A.screen;
+      var screen = A.screen, secret = p.kw[0] === "enter_text" && p.args[0] === "${password_field}";
+      var told = tell(l2, cmd, p.kw[0], p.args.slice(0, p.kw[2]), secret);
       return act(dev, clock, g, { kw: p.kw, args: p.args }, false).then(function (r) {
         result(l2, r);
-        if (r.ok) rec.push({ kw: p.kw, args: p.args.slice(0, p.kw[2]), text: cmd, screen: screen, secret: p.kw[0] === "enter_text" && p.args[0] === "${password_field}" });
+        if (r.ok) rec.push({ kw: p.kw, args: p.args.slice(0, p.kw[2]), text: cmd, screen: screen, secret: secret });
+        told(r);
       });
+    }
+
+    // Tells the doors panel about a step before it runs and again with its result.
+    function tell(l, cmd, kw, args, secret) {
+      var named = {};
+      args.forEach(function (a) {
+        var m = /^\$\{(\w+)\}$/.exec(a);
+        if (m) named[m[1]] = ELEMENTS.filter(function (r) { return r[0] === m[1]; }).map(function (r) { return r[1]; });
+      });
+      var d = { line: l, cmd: cmd, kw: kw, args: args, named: named, secret: secret, module: moduleName(), app: A };
+      document.dispatchEvent(new CustomEvent("optics:step", { detail: d }));
+      return function (r) {
+        d.result = r;
+        d.module = moduleName();
+        document.dispatchEvent(new CustomEvent("optics:step", { detail: d }));
+      };
     }
 
     function slash(p, g) {
@@ -309,8 +327,8 @@
       quitArmed = false;
       rec = [];
       hist.innerHTML = "";
-      var l = line('<span class="m"></span> ' + paint("launch_app"), "wait");
-      return act(dev, clock, g, { kw: KEYWORDS[0], args: [] }).then(function (r) { result(l, r); rec.push({ kw: KEYWORDS[0], args: [], text: "launch_app", screen: "login" }); });
+      var l = line('<span class="m"></span> ' + paint("launch_app"), "wait"), told = tell(l, "launch_app", "launch_app", [], false);
+      return act(dev, clock, g, { kw: KEYWORDS[0], args: [] }).then(function (r) { result(l, r); told(r); rec.push({ kw: KEYWORDS[0], args: [], text: "launch_app", screen: "login" }); });
     }
 
     function execute() {
