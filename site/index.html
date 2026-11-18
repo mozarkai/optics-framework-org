@@ -151,7 +151,8 @@
     <!-- Playground: optics live beside a Birch phone you can tap. Each tap types the step; /save writes it; optics execute replays it. -->
     <section class="play" id="playground" data-hour="1" aria-label="Playground">
       <div class="wrap">
-        <div class="pg live"></div>
+        <div class="pg live" role="group" aria-label="Playground: optics live" aria-describedby="pg-live-desc"></div>
+        <p class="vh" id="pg-live-desc">A simulation of optics live next to a phone that shows Birch, a demo shop app. It does not run Optics. Type a keyword in the field, or select an element on the phone to type its keyword. Each step runs on the phone and shows how Optics found the element. Type /save to write the steps that passed into modules.csv and elements.csv, then open the optics execute tab to replay them.</p>
         <div class="play-cap">
           <p>In <code>optics live</code> you type a step and it runs on the device at once. <code>/save</code> writes the steps that worked into your suite.</p>
           <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
@@ -400,7 +401,8 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
           <p class="body-text">Most frameworks give an element one locator and fail when a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first, so vision only costs you time when the UI tree can't help.</p>
           <p class="body-text">Two more fallbacks sit alongside the ladder. List several values for the same element name and each is tried in turn. Enable a second driver or element source and it takes over when the first one fails.</p>
         </div>
-        <div class="pg brk">
+        <p class="vh" id="pg-brk-desc">A simulation of a new release of Birch, a demo shop app. It does not run Optics. Select the changes to make to the sign-in button, then select Ship. Each step of the ladder shows if it found the button. The result tells you if the test passes, fails on a real bug, or fails when the app still works.</p>
+        <div class="pg brk" role="group" aria-label="Playground: break the test" aria-describedby="pg-brk-desc">
           <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
         <ol class="rungs">
           <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
@@ -420,7 +422,8 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
           <h2 class="h2" id="screens-h">One suite, every screen</h2>
           <p class="body-text">The same <code class="ic">modules.csv</code> runs on a phone, in a browser, on a TV and on a locked production device. Only the driver changes.</p>
         </div>
-        <div class="pg scr"></div>
+        <div class="pg scr" role="group" aria-label="Playground: one suite, every screen" aria-describedby="pg-scr-desc"></div>
+        <p class="vh" id="pg-scr-desc">A simulation that runs the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. It does not run Optics. Use the Device slider to pick a device. The suite plays again and again on that device, and the text next to it names the driver and tells how Press Element works there.</p>
       </div>
     </section>
 
