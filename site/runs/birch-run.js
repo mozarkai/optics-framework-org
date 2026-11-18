@@ -15,23 +15,23 @@ window.BIRCH_RUN = {
    "command": "BIRCH_URL='http://127.0.0.1:4180/birch/' optics execute birch-tests",
    "exit": 0,
    "date": "2026-11-18",
-   "started": "2026-11-18T16:57:54+00:00",
-   "tree": "Test Suite\n\u251c\u2500\u2500 Suite Setup                                          |      0.67s |    PASS\n\u2502   \u2514\u2500\u2500 Open Birch                                       |      0.66s |    PASS\n\u2502       \u251c\u2500\u2500 Read Data (${birch_url}, ENV:BIRCH_URL)      |      0.01s |    PASS\n\u2502       \u2514\u2500\u2500 Launch App (${birch_url})                    |      0.66s |    PASS\n\u251c\u2500\u2500 Shopper can sign in                                  |      0.30s |    PASS\n\u2502   \u2514\u2500\u2500 Sign In                                          |      0.30s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='email'], ava@bir... |      0.11s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='password'], birc... |      0.06s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Sign in)                      |      0.09s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Picked for you)             |      0.05s |    PASS\n\u251c\u2500\u2500 Shopper can find a shoe                              |      0.89s |    PASS\n\u2502   \u2514\u2500\u2500 Find A Shoe                                      |      0.89s |    PASS\n\u2502       \u251c\u2500\u2500 Assert Presence (Free returns)               |      0.76s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (css=#search, trail)              |      0.05s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Trail Runner 2)               |      0.08s |    PASS\n\u251c\u2500\u2500 Shopper can add it to the cart                       |      0.19s |    PASS\n\u2502   \u2514\u2500\u2500 Add To Cart                                      |      0.19s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (10)                           |      0.08s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Add to cart)                  |      0.09s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Added to cart)              |      0.02s |    PASS\n\u2514\u2500\u2500 Shopper can check out                                |      0.15s |    PASS\n    \u2514\u2500\u2500 Check Out                                        |      0.15s |    PASS\n        \u251c\u2500\u2500 Press Element (cart.png)                     |      0.09s |    PASS\n        \u2514\u2500\u2500 Press Element (Check out)                    |      0.06s |    PASS\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502 Total Test Cases: 5 | Passed: 5 | Failed: 0                                  \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
+   "started": "2026-11-18T17:01:24+00:00",
+   "tree": "Test Suite\n\u251c\u2500\u2500 Suite Setup                                          |      0.84s |    PASS\n\u2502   \u2514\u2500\u2500 Open Birch                                       |      0.84s |    PASS\n\u2502       \u251c\u2500\u2500 Read Data (${birch_url}, ENV:BIRCH_URL)      |      0.00s |    PASS\n\u2502       \u2514\u2500\u2500 Launch App (${birch_url})                    |      0.83s |    PASS\n\u251c\u2500\u2500 Shopper can sign in                                  |      0.31s |    PASS\n\u2502   \u2514\u2500\u2500 Sign In                                          |      0.31s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='email'], ava@bir... |      0.11s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='password'], birc... |      0.08s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Sign in)                      |      0.09s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Picked for you)             |      0.03s |    PASS\n\u251c\u2500\u2500 Shopper can find a shoe                              |      0.94s |    PASS\n\u2502   \u2514\u2500\u2500 Find A Shoe                                      |      0.93s |    PASS\n\u2502       \u251c\u2500\u2500 Assert Presence (Free returns)               |      0.82s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (css=#search, trail)              |      0.04s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Trail Runner 2)               |      0.08s |    PASS\n\u251c\u2500\u2500 Shopper can add it to the cart                       |      0.19s |    PASS\n\u2502   \u2514\u2500\u2500 Add To Cart                                      |      0.19s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (10)                           |      0.08s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Add to cart)                  |      0.08s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Added to cart)              |      0.03s |    PASS\n\u2514\u2500\u2500 Shopper can check out                                |      0.19s |    PASS\n    \u2514\u2500\u2500 Check Out                                        |      0.19s |    PASS\n        \u251c\u2500\u2500 Press Element (cart.png)                     |      0.10s |    PASS\n        \u2514\u2500\u2500 Press Element (Check out)                    |      0.08s |    PASS\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502 Total Test Cases: 5 | Passed: 5 | Failed: 0                                  \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
    "cases": [
     {
      "name": "Suite Setup",
      "status": "PASS",
-     "time": 0.67
+     "time": 0.84
     },
     {
      "name": "Shopper can sign in",
      "status": "PASS",
-     "time": 0.3
+     "time": 0.31
     },
     {
      "name": "Shopper can find a shoe",
      "status": "PASS",
-     "time": 0.89
+     "time": 0.94
     },
     {
      "name": "Shopper can add it to the cart",
@@ -41,7 +41,7 @@ window.BIRCH_RUN = {
     {
      "name": "Shopper can check out",
      "status": "PASS",
-     "time": 0.15
+     "time": 0.19
     }
    ],
    "steps": [
@@ -54,8 +54,8 @@ window.BIRCH_RUN = {
       "ENV:BIRCH_URL"
      ],
      "status": "PASS",
-     "elapsed": 0.005,
-     "at": 0.002,
+     "elapsed": 0.004,
+     "at": 0.001,
      "found_by": [],
      "message": null
     },
@@ -67,8 +67,8 @@ window.BIRCH_RUN = {
       "${birch_url}"
      ],
      "status": "PASS",
-     "elapsed": 0.657,
-     "at": 0.008,
+     "elapsed": 0.829,
+     "at": 0.006,
      "found_by": [],
      "message": null
     },
@@ -81,8 +81,8 @@ window.BIRCH_RUN = {
       "ava@birch.shop"
      ],
      "status": "PASS",
-     "elapsed": 0.107,
-     "at": 0.666,
+     "elapsed": 0.109,
+     "at": 0.837,
      "found_by": [
       {
        "rung": "XPath",
@@ -110,8 +110,8 @@ window.BIRCH_RUN = {
       "birch-demo"
      ],
      "status": "PASS",
-     "elapsed": 0.056,
-     "at": 0.774,
+     "elapsed": 0.076,
+     "at": 0.947,
      "found_by": [
       {
        "rung": "XPath",
@@ -121,8 +121,8 @@ window.BIRCH_RUN = {
       }
      ],
      "message": null,
-     "pre": "runs/birch-2.1/04-pre.webp?v=e996ebeab2",
-     "found": "runs/birch-2.1/04-found.webp?v=57c6137911",
+     "pre": "runs/birch-2.1/04-pre.webp?v=2bbd480c42",
+     "found": "runs/birch-2.1/04-found.webp?v=3f226d37a0",
      "box": [
       31,
       316,
@@ -138,8 +138,8 @@ window.BIRCH_RUN = {
       "Sign in"
      ],
      "status": "PASS",
-     "elapsed": 0.091,
-     "at": 0.83,
+     "elapsed": 0.09,
+     "at": 1.023,
      "found_by": [
       {
        "rung": "Text",
@@ -166,8 +166,8 @@ window.BIRCH_RUN = {
       "Picked for you"
      ],
      "status": "PASS",
-     "elapsed": 0.047,
-     "at": 0.922,
+     "elapsed": 0.034,
+     "at": 1.113,
      "found_by": [
       {
        "rung": "Text",
@@ -193,8 +193,8 @@ window.BIRCH_RUN = {
       "Free returns"
      ],
      "status": "PASS",
-     "elapsed": 0.759,
-     "at": 0.971,
+     "elapsed": 0.818,
+     "at": 1.149,
      "found_by": [
       {
        "rung": "OCR",
@@ -221,8 +221,8 @@ window.BIRCH_RUN = {
       "trail"
      ],
      "status": "PASS",
-     "elapsed": 0.049,
-     "at": 1.73,
+     "elapsed": 0.038,
+     "at": 1.968,
      "found_by": [
       {
        "rung": "Text",
@@ -249,8 +249,8 @@ window.BIRCH_RUN = {
       "Trail Runner 2"
      ],
      "status": "PASS",
-     "elapsed": 0.079,
-     "at": 1.779,
+     "elapsed": 0.077,
+     "at": 2.006,
      "found_by": [
       {
        "rung": "Text",
@@ -278,7 +278,7 @@ window.BIRCH_RUN = {
      ],
      "status": "PASS",
      "elapsed": 0.08,
-     "at": 1.859,
+     "at": 2.084,
      "found_by": [
       {
        "rung": "Text",
@@ -305,8 +305,8 @@ window.BIRCH_RUN = {
       "Add to cart"
      ],
      "status": "PASS",
-     "elapsed": 0.086,
-     "at": 1.94,
+     "elapsed": 0.085,
+     "at": 2.165,
      "found_by": [
       {
        "rung": "Text",
@@ -333,8 +333,8 @@ window.BIRCH_RUN = {
       "Added to cart"
      ],
      "status": "PASS",
-     "elapsed": 0.025,
-     "at": 2.026,
+     "elapsed": 0.028,
+     "at": 2.25,
      "found_by": [
       {
        "rung": "Text",
@@ -360,8 +360,8 @@ window.BIRCH_RUN = {
       "${cart_button}"
      ],
      "status": "PASS",
-     "elapsed": 0.089,
-     "at": 2.053,
+     "elapsed": 0.104,
+     "at": 2.28,
      "found_by": [
       {
        "rung": "Image",
@@ -388,8 +388,8 @@ window.BIRCH_RUN = {
       "Check out"
      ],
      "status": "PASS",
-     "elapsed": 0.064,
-     "at": 2.142,
+     "elapsed": 0.081,
+     "at": 2.384,
      "found_by": [
       {
        "rung": "Text",
@@ -425,13 +425,13 @@ window.BIRCH_RUN = {
    "command": "BIRCH_URL='http://127.0.0.1:4180/birch/?release=2.2' optics execute birch-tests",
    "exit": 1,
    "date": "2026-11-18",
-   "started": "2026-11-18T16:58:02+00:00",
-   "tree": "Test Suite\n\u251c\u2500\u2500 Suite Setup                                          |      0.44s |    PASS\n\u2502   \u2514\u2500\u2500 Open Birch                                       |      0.44s |    PASS\n\u2502       \u251c\u2500\u2500 Read Data (${birch_url}, ENV:BIRCH_URL)      |      0.01s |    PASS\n\u2502       \u2514\u2500\u2500 Launch App (${birch_url})                    |      0.43s |    PASS\n\u251c\u2500\u2500 Shopper can sign in                                  |      0.25s |    PASS\n\u2502   \u2514\u2500\u2500 Sign In                                          |      0.25s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='email'], ava@bir... |      0.08s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='password'], birc... |      0.06s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Sign in)                      |      0.08s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Picked for you)             |      0.03s |    PASS\n\u251c\u2500\u2500 Shopper can find a shoe                              |      0.72s |    PASS\n\u2502   \u2514\u2500\u2500 Find A Shoe                                      |      0.72s |    PASS\n\u2502       \u251c\u2500\u2500 Assert Presence (Free returns)               |      0.60s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (css=#search, trail)              |      0.04s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Trail Runner 2)               |      0.08s |    PASS\n\u251c\u2500\u2500 Shopper can add it to the cart                       |      0.18s |    PASS\n\u2502   \u2514\u2500\u2500 Add To Cart                                      |      0.18s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (10)                           |      0.06s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Add to cart)                  |      0.08s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Added to cart)              |      0.03s |    PASS\n\u251c\u2500\u2500 Shopper can check out                                |      0.17s |    PASS\n\u2502   \u2514\u2500\u2500 Check Out                                        |      0.17s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (cart.png)                     |      0.09s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Check out)                    |      0.08s |    PASS\n\u2514\u2500\u2500 on-screen-error-detection                            |      0.00s |    FAIL\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502 Total Test Cases: 6 | Passed: 5 | Failed: 1                                  \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
+   "started": "2026-11-18T17:01:34+00:00",
+   "tree": "Test Suite\n\u251c\u2500\u2500 Suite Setup                                          |      0.49s |    PASS\n\u2502   \u2514\u2500\u2500 Open Birch                                       |      0.49s |    PASS\n\u2502       \u251c\u2500\u2500 Read Data (${birch_url}, ENV:BIRCH_URL)      |      0.01s |    PASS\n\u2502       \u2514\u2500\u2500 Launch App (${birch_url})                    |      0.48s |    PASS\n\u251c\u2500\u2500 Shopper can sign in                                  |      0.25s |    PASS\n\u2502   \u2514\u2500\u2500 Sign In                                          |      0.25s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='email'], ava@bir... |      0.07s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (//input[@id='password'], birc... |      0.06s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Sign in)                      |      0.09s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Picked for you)             |      0.02s |    PASS\n\u251c\u2500\u2500 Shopper can find a shoe                              |      0.70s |    PASS\n\u2502   \u2514\u2500\u2500 Find A Shoe                                      |      0.70s |    PASS\n\u2502       \u251c\u2500\u2500 Assert Presence (Free returns)               |      0.58s |    PASS\n\u2502       \u251c\u2500\u2500 Enter Text (css=#search, trail)              |      0.04s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Trail Runner 2)               |      0.08s |    PASS\n\u251c\u2500\u2500 Shopper can add it to the cart                       |      0.18s |    PASS\n\u2502   \u2514\u2500\u2500 Add To Cart                                      |      0.18s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (10)                           |      0.08s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (Add to cart)                  |      0.07s |    PASS\n\u2502       \u2514\u2500\u2500 Assert Presence (Added to cart)              |      0.03s |    PASS\n\u251c\u2500\u2500 Shopper can check out                                |      0.17s |    PASS\n\u2502   \u2514\u2500\u2500 Check Out                                        |      0.17s |    PASS\n\u2502       \u251c\u2500\u2500 Press Element (cart.png)                     |      0.10s |    PASS\n\u2502       \u2514\u2500\u2500 Press Element (Check out)                    |      0.07s |    PASS\n\u2514\u2500\u2500 on-screen-error-detection                            |      0.00s |    FAIL\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502 Total Test Cases: 6 | Passed: 5 | Failed: 1                                  \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
    "cases": [
     {
      "name": "Suite Setup",
      "status": "PASS",
-     "time": 0.44
+     "time": 0.49
     },
     {
      "name": "Shopper can sign in",
@@ -441,7 +441,7 @@ window.BIRCH_RUN = {
     {
      "name": "Shopper can find a shoe",
      "status": "PASS",
-     "time": 0.72
+     "time": 0.7
     },
     {
      "name": "Shopper can add it to the cart",
@@ -464,7 +464,7 @@ window.BIRCH_RUN = {
       "ENV:BIRCH_URL"
      ],
      "status": "PASS",
-     "elapsed": 0.01,
+     "elapsed": 0.007,
      "at": 0.001,
      "found_by": [],
      "message": null
@@ -477,8 +477,8 @@ window.BIRCH_RUN = {
       "${birch_url}"
      ],
      "status": "PASS",
-     "elapsed": 0.429,
-     "at": 0.012,
+     "elapsed": 0.479,
+     "at": 0.009,
      "found_by": [],
      "message": null
     },
@@ -491,8 +491,8 @@ window.BIRCH_RUN = {
       "ava@birch.shop"
      ],
      "status": "PASS",
-     "elapsed": 0.08,
-     "at": 0.442,
+     "elapsed": 0.066,
+     "at": 0.49,
      "found_by": [
       {
        "rung": "XPath",
@@ -520,8 +520,8 @@ window.BIRCH_RUN = {
       "birch-demo"
      ],
      "status": "PASS",
-     "elapsed": 0.06,
-     "at": 0.523,
+     "elapsed": 0.064,
+     "at": 0.556,
      "found_by": [
       {
        "rung": "XPath",
@@ -548,8 +548,8 @@ window.BIRCH_RUN = {
       "Sign in"
      ],
      "status": "PASS",
-     "elapsed": 0.082,
-     "at": 0.583,
+     "elapsed": 0.093,
+     "at": 0.621,
      "found_by": [
       {
        "rung": "Text",
@@ -576,8 +576,8 @@ window.BIRCH_RUN = {
       "Picked for you"
      ],
      "status": "PASS",
-     "elapsed": 0.026,
-     "at": 0.666,
+     "elapsed": 0.025,
+     "at": 0.714,
      "found_by": [
       {
        "rung": "Text",
@@ -603,8 +603,8 @@ window.BIRCH_RUN = {
       "Free returns"
      ],
      "status": "PASS",
-     "elapsed": 0.6,
-     "at": 0.693,
+     "elapsed": 0.581,
+     "at": 0.74,
      "found_by": [
       {
        "rung": "OCR",
@@ -631,8 +631,8 @@ window.BIRCH_RUN = {
       "trail"
      ],
      "status": "PASS",
-     "elapsed": 0.039,
-     "at": 1.293,
+     "elapsed": 0.042,
+     "at": 1.321,
      "found_by": [
       {
        "rung": "Text",
@@ -659,8 +659,8 @@ window.BIRCH_RUN = {
       "Trail Runner 2"
      ],
      "status": "PASS",
-     "elapsed": 0.077,
-     "at": 1.332,
+     "elapsed": 0.078,
+     "at": 1.363,
      "found_by": [
       {
        "rung": "Text",
@@ -687,8 +687,8 @@ window.BIRCH_RUN = {
       "10"
      ],
      "status": "PASS",
-     "elapsed": 0.064,
-     "at": 1.41,
+     "elapsed": 0.077,
+     "at": 1.445,
      "found_by": [
       {
        "rung": "Text",
@@ -715,8 +715,8 @@ window.BIRCH_RUN = {
       "Add to cart"
      ],
      "status": "PASS",
-     "elapsed": 0.084,
-     "at": 1.474,
+     "elapsed": 0.068,
+     "at": 1.522,
      "found_by": [
       {
        "rung": "Text",
@@ -744,7 +744,7 @@ window.BIRCH_RUN = {
      ],
      "status": "PASS",
      "elapsed": 0.028,
-     "at": 1.559,
+     "at": 1.591,
      "found_by": [
       {
        "rung": "Text",
@@ -770,8 +770,8 @@ window.BIRCH_RUN = {
       "${cart_button}"
      ],
      "status": "PASS",
-     "elapsed": 0.088,
-     "at": 1.588,
+     "elapsed": 0.102,
+     "at": 1.621,
      "found_by": [
       {
        "rung": "Image",
@@ -781,8 +781,8 @@ window.BIRCH_RUN = {
       }
      ],
      "message": null,
-     "pre": "runs/birch-2.2/13-pre.webp?v=b7be2fe29f",
-     "found": "runs/birch-2.2/13-found.webp?v=74451909f1",
+     "pre": "runs/birch-2.2/13-pre.webp?v=52ef24a487",
+     "found": "runs/birch-2.2/13-found.webp?v=372203fed0",
      "box": [
       360,
       24,
@@ -798,8 +798,8 @@ window.BIRCH_RUN = {
       "Check out"
      ],
      "status": "PASS",
-     "elapsed": 0.083,
-     "at": 1.676,
+     "elapsed": 0.065,
+     "at": 1.724,
      "found_by": [
       {
        "rung": "Text",

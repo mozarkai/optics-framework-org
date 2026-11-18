@@ -143,31 +143,35 @@ def attach(step, shots, folder, n):
         step["box"] = green_box(found)
 
 
-def steps(events, shots, folder):
-    final = final_events(events)
-    children = {}
-    for e in final:
-        children.setdefault(e["parent_id"], []).append(e)
+def keywords(events):
+    """Each test case, and each keyword it ran with the suite row that keyword came from."""
+    tree = {}
+    for e in final_events(events):
+        tree.setdefault(e["parent_id"], []).append(e)
+    cases = [c for c in tree.get(None, []) if c["entity_type"] == "test_case"]
     rows = module_rows()
-    cases, out = [], []
-    t_start = min(e["start_time"] for e in final if e["entity_type"] == "test_case")
-    for case in children.get(None, []):
-        if case["entity_type"] != "test_case":
-            continue
-        cases.append({"name": case["name"], "status": case["status"], "time": round(case["elapsed"] or 0, 2)})
-        for module in children.get(case["entity_id"], []):
-            for kw, row in zip(children.get(module["entity_id"], []), rows[module["name"]]):
-                step = {
-                    "case": case["name"], "module": module["name"], "keyword": kw["name"], "args": row[1:],
-                    "status": kw["status"], "elapsed": round(kw["elapsed"] or 0, 3),
-                    "at": round((kw["start_time"] or t_start) - t_start, 3),
-                    "t0": kw["start_time"] or 0, "t1": kw["end_time"] or 0,
-                    "found_by": found_by(kw["logs"]), "message": kw["message"] or None,
-                }
-                attach(step, shots, folder, len(out) + 1)
-                del step["t0"], step["t1"]
-                out.append(step)
-    return cases, out
+    modules = [(c, m) for c in cases for m in tree.get(c["entity_id"], [])]
+    return cases, [(c, m, kw, row) for c, m in modules for kw, row in zip(tree.get(m["entity_id"], []), rows[m["name"]])]
+
+
+def step(case, module, kw, row, t_start):
+    start = kw["start_time"] or t_start
+    return {
+        "case": case["name"], "module": module["name"], "keyword": kw["name"], "args": row[1:],
+        "status": kw["status"], "elapsed": round(kw["elapsed"] or 0, 3), "at": round(start - t_start, 3),
+        "t0": start, "t1": kw["end_time"] or start,
+        "found_by": found_by(kw["logs"]), "message": kw["message"] or None,
+    }
+
+
+def steps(events, shots, folder):
+    cases, ran = keywords(events)
+    t_start = min(c["start_time"] for c in cases)
+    out = [step(*k, t_start) for k in ran]
+    for n, s in enumerate(out, 1):
+        attach(s, shots, folder, n)
+        del s["t0"], s["t1"]
+    return [{"name": c["name"], "status": c["status"], "time": round(c["elapsed"] or 0, 2)} for c in cases], out
 
 
 def last_screen(src, folder, name):
