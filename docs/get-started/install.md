@@ -53,6 +53,8 @@ $ optics --version
 Optics Framework 1.11.5
 ```
 
+To upgrade, run the install command again. It finds the Optics you already have, from the installer, uv tool, pipx or pip, and upgrades it where it is, with the extras you installed.
+
 :::details[Installer options]
 Pass options after `sh -s --`. On Windows, set the matching environment variable before running the installer.
 
@@ -60,7 +62,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 |---|---|---|
 | `--version 1.11.5` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,rapidocr` | `OPTICS_EXTRA` | Install engines at the same time. |
-| `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
+| `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`, without looking for an existing Optics. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
 | `--dry-run` | | Print what would happen and change nothing. |
 | `--uninstall` | | Remove Optics and the PATH entry it added. |
