@@ -43,6 +43,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 ## Project
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
+- [Explain a suite](https://optics-framework.org/explain.md): an interactive page that explains a suite row by row and predicts `optics dry_run`. The Markdown twin holds the example suites.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
