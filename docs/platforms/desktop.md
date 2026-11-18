@@ -590,6 +590,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **"DISPLAY ':1' is not a local X11 display".** On Linux, the driver needs a local X11 display. Remove the `--display` option and run the setup script again, so that it starts Xvfb.
 - **An old document opens on macOS.** The app restored its last session. Add `appArguments: ["-ApplePersistenceIgnoreState", "YES"]`.
 - **The element is not found on Linux, but the locator has `@id`.** Linux has no ids. Use `@name` or visible text.
+- **`Operation not permitted` for a file in `~/Documents` on macOS.** macOS privacy blocks the terminal. See [Operation not permitted on macOS](/docs/help/troubleshooting#macos-operation-not-permitted).
 - **`optics doctor` warns about adb.** A desktop project does not need adb. The warning does not stop the run.
 
 ## See also
