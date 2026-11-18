@@ -93,8 +93,14 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=fde36fcac2">
+  <link rel="stylesheet" href="styles.css?v=2c04e05495">
   <link rel="stylesheet" href="playground.css?v=daa7d4382f">
+  <link rel="stylesheet" href="sim.css?v=aad2d11780">
+  <link rel="stylesheet" href="wild.css?v=c75042d7cd">
+  <link rel="stylesheet" href="proof.css?v=dd74c7ac92">
+  <link rel="stylesheet" href="handoff.css?v=c72228e7c4">
+  <link rel="stylesheet" href="replay.css?v=27500e3ff4">
+  <link rel="stylesheet" href="doors.css?v=9303ab8a42">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -139,7 +145,7 @@
               <a class="btn btn-solid" href="docs/get-started/quickstart">Get started</a>
               <a class="btn btn-ghost" href="https://github.com/mozarkai/optics-framework">View on GitHub</a>
             </div>
-            <p class="fineprint">Apache 2.0. Needs Python 3.12 or newer. Also installs on <a href="#install">Windows and with pip</a>. <a href="docs/">Read the docs</a>.</p>
+            <p class="fineprint">Apache 2.0. Needs Python 3.12 or newer. Also installs on <a href="#install">Windows and with pip</a>, or <a href="#agents">by your agent</a>. <a href="docs/">Read the docs</a>.</p>
           </div>
         </div>
 
@@ -149,12 +155,16 @@
     <!-- Playground: optics live beside a Birch phone you can tap. Each tap types the step; /save writes it; optics execute replays it. -->
     <section class="play" id="playground" data-hour="1" aria-label="Playground">
       <div class="wrap">
-        <div class="pg live"></div>
+        <div class="pg live" role="group" aria-label="Playground: optics live" aria-describedby="pg-live-desc"></div>
+        <p class="vh" id="pg-live-desc">A simulation of optics live next to a phone that shows Birch, a demo shop app. It does not run Optics. Type a keyword in the field, or select an element on the phone to type its keyword. Each step runs on the phone and shows how Optics found the element. Type /save to write the steps that passed into modules.csv and elements.csv, then open the optics execute tab to replay them.</p>
         <div class="play-cap">
           <p>In <code>optics live</code> you type a step and it runs on the device at once. <code>/save</code> writes the steps that worked into your suite.</p>
-          <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
-          </button>
+          <div class="play-acts">
+            <a class="btn btn-ghost btn-sm" href="playground">Run real Optics in your browser</a>
+            <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -259,7 +269,7 @@
 
             <div class="panel" role="tabpanel" id="panel-delegate" aria-labelledby="tab-delegate" data-way="delegate" hidden>
               <h3 class="panel-title">Delegate it</h3>
-              <p>Add <code class="ic">optics mcp</code> to any MCP client. Your agent looks, taps, types and checks through ten tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite. The agent is yours; Optics gives it eyes and hands.</p>
+              <p>Add <code class="ic">optics mcp</code> to any MCP client. Your agent looks, taps, types and checks through its tools, and every action returns what changed on screen. When it is done, it reads the steps it ran as a ready suite. The agent is yours; Optics gives it eyes and hands.</p>
               <figure class="code">
                 <figcaption>your agent</figcaption>
 <pre><code><span class="c-dim">⏺</span> optics · <b>start_session</b><span class="c-dim">(driver="appium")</span>
@@ -303,6 +313,7 @@
               <div><dt>Modules</dt><dd>The steps, one keyword each, reused by every test case that names them.</dd></div>
               <div><dt>Elements</dt><dd>Every name mapped to the ways to find it on screen. The only place a locator lives, so a redesign is an edit here and not in every test.</dd></div>
             </dl>
+            <p class="body-text"><a class="learn-link" href="explain">Explain a suite</a> reads one row by row and shows what <code class="ic">optics dry_run</code> would report.</p>
           </div>
           <div class="formats">
             <div class="os fmt" role="tablist" aria-label="File format">
@@ -361,32 +372,19 @@ Element_Name,Element_ID
         <div class="two">
           <div class="run-copy">
             <p class="body-text"><code class="ic">optics execute</code> replays the suite step by step. Check it first without a device using <code class="ic">optics dry_run</code>, which validates every keyword, element and module reference.</p>
-            <dl class="outputs">
-              <div><dt>junit_output.xml</dt><dd>Written as the run goes, so CI sees progress live.</dd></div>
-              <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
-              <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
-            </dl>
+            <p class="body-text">Birch is a real web app. <a href="birch/">Open it</a>, then watch Optics run the Birch suite against two releases of it. Each frame is a file that the run wrote.</p>
           </div>
-          <figure class="code">
-            <figcaption>~/birch</figcaption>
-<pre><code><span class="c-pass">~/birch</span> <span class="c-mod">❯</span> <b>optics execute checkout</b>
-Running tests <span class="bar"></span> 100% 0:00:04
-<b>Test Suite</b>
-<span class="c-dim">├── </span>Suite Setup                           <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">│   └── </span>Open Store                        <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">│       └── </span>Launch App                    <span class="c-dim">| 1.21s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">└── </span>Checkout                              <span class="c-dim">| 2.95s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    ├── </span>Sign In                           <span class="c-dim">| 0.83s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    │   ├── </span>Enter Text (//*[@resource-... <span class="c-dim">| 0.52s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    │   └── </span>Press Element (Sign in)       <span class="c-dim">| 0.31s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">    └── </span>Add To Cart                       <span class="c-dim">| 2.12s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        ├── </span>Enter Text Direct (running... <span class="c-dim">| 0.61s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        ├── </span>Press Element (Trail Runne... <span class="c-dim">| 1.22s |</span>    <span class="c-pass">PASS</span>
-<span class="c-dim">        └── </span>Assert Presence (Added to ... <span class="c-dim">| 0.29s |</span>    <span class="c-pass">PASS</span>
-
-Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></pre>
-          </figure>
+          <dl class="outputs">
+            <div><dt>junit_output.xml</dt><dd>Written once when the run ends, also when you stop the run.</dd></div>
+            <div><dt>Screenshots</dt><dd>The screen before each step that finds an element, and the same screen with a box around what Optics found.</dd></div>
+            <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
+          </dl>
         </div>
+        <!-- A real run of birch-tests against the real Birch app, from site/runs/birch-run.js (scripts/birch-run.py writes it). -->
+        <div class="pg rp" data-replay>
+          <noscript><p class="rp-noscript body-text">The replay needs JavaScript. The files of the run are on <a href="run">the run page</a>.</p></noscript>
+        </div>
+        <p class="rp-more"><a class="btn btn-ghost btn-sm" href="run">Run it yourself</a></p>
       </div>
     </section>
 
@@ -398,7 +396,8 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
           <p class="body-text">Most frameworks give an element one locator and fail when a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first, so vision only costs you time when the UI tree can't help.</p>
           <p class="body-text">Two more fallbacks sit alongside the ladder. List several values for the same element name and each is tried in turn. Enable a second driver or element source and it takes over when the first one fails.</p>
         </div>
-        <div class="pg brk">
+        <p class="vh" id="pg-brk-desc">A simulation of a new release of Birch, a demo shop app. It does not run Optics. Select the changes to make to the sign-in button, then select Ship. Each step of the ladder shows if it found the button. The result tells you if the test passes, fails on a real bug, or fails when the app still works.</p>
+        <div class="pg brk" role="group" aria-label="Playground: break the test" aria-describedby="pg-brk-desc">
           <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
         <ol class="rungs">
           <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
@@ -408,6 +407,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
           <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
         </ol>
         </div>
+        <div class="pg sim" id="simulator"></div>
       </div>
     </section>
 
@@ -418,7 +418,202 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
           <h2 class="h2" id="screens-h">One suite, every screen</h2>
           <p class="body-text">The same <code class="ic">modules.csv</code> runs on a phone, in a browser, on a TV and on a locked production device. Only the driver changes.</p>
         </div>
-        <div class="pg scr"></div>
+        <div class="pg scr" role="group" aria-label="Playground: one suite, every screen" aria-describedby="pg-scr-desc"></div>
+        <p class="vh" id="pg-scr-desc">A simulation that runs the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. It does not run Optics. Use the Device slider to pick a device. The suite plays again and again on that device, and the text next to it names the driver and tells how Press Element works there.</p>
+      </div>
+    </section>
+
+    <!-- No flow too wild: each hard target plays as a small scene beside the suite lines that drive it. -->
+    <section data-hour="6" class="band wild" id="wild" aria-labelledby="wild-h">
+      <div class="wrap">
+        <div class="head-row">
+          <h2 class="h2" id="wild-h">No flow too wild</h2>
+          <p class="body-text">A locked phone through Bluetooth and a camera. A TV through its remote. A game through OCR. Each flow uses the same keywords as every other test.</p>
+        </div>
+        <div class="wild-grid">
+          <article class="wild-t wild-hero" data-scene="ble">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/guides/protected-apps">A locked phone that blocks screenshots</a></h3><span class="label wild-how">Bluetooth + camera</span></div>
+            <pre class="wild-code"><code><span class="wl">Open Birch,Press Element,Birch</span>
+<span class="wl">Sign in,Enter Text,Password,@:trailrunner</span>
+<span class="wl">Sign in,Press Element,Sign in,aoi_y=50,aoi_height=50</span>
+<span class="wl">Sign in,Assert Presence,Trail Runner 2,20</span></code></pre>
+            <template>
+              <p class="wild-why">The app blocks screenshots, and the phone allows no USB debugging. A Bluetooth dongle moves the pointer and types. A camera shows Optics the screen, and OCR reads it. “Sign in” shows twice on this screen, so the area of interest keeps the button and skips the subtitle.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2,param_3
+Open Birch,Press Element,Birch
+Open Birch,Assert Presence,Sign in,20
+Sign in,Enter Text,Email,ava@birch.shop
+Sign in,Enter Text,Password,@:trailrunner
+Sign in,Press Element,Sign in,aoi_y=50,aoi_height=50
+Sign in,Assert Presence,Trail Runner 2,20</code></pre></figure>
+              <figure class="code"><figcaption>config.yaml</figcaption><pre><code>driver_sources:
+  - ble:
+      enabled: true
+      capabilities:
+        device_id: "Birch test phone"
+        port: /dev/ttyACM0
+        pixel_width: 1080
+        pixel_height: 2336
+        mickeys_width: 1080
+        mickeys_height: 2336
+elements_sources:
+  - camera_screenshot:
+      enabled: true
+      capabilities:
+        camera_index: 0
+text_detection:
+  - easyocr: {enabled: true}</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="tv">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/platforms/tv">A TV with only a remote</a></h3><span class="label wild-how">Tizen + webOS</span></div>
+            <pre class="wild-code"><code><span class="wl">Shop,Enter Text,Search Birch,trail</span>
+<span class="wl">Shop,Press Element,Trail Runner 2</span>
+<span class="wl">Shop,Assert Presence,Add to cart,10</span></code></pre>
+            <template>
+              <p class="wild-why">A Samsung Tizen or LG webOS TV has no touch screen. Optics presses the arrow keys until the element has focus, then ENTER. To type, it moves the focus over the on-screen keyboard and presses each key.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2
+Shop,Launch App
+Shop,Assert Presence,Search Birch,30
+Shop,Enter Text,Search Birch,trail
+Shop,Press Element,Trail Runner 2
+Shop,Assert Presence,Add to cart,10</code></pre></figure>
+              <figure class="code"><figcaption>config.yaml</figcaption><pre><code>driver_sources:
+  - appium:
+      enabled: true
+      url: "http://localhost:4723"
+      capabilities:
+        platformName: TizenTV
+        appium:automationName: TizenTV
+        appium:deviceAddress: 192.168.1.50
+        appium:appPackage: com.birch.tv
+elements_sources:
+  - appium_find_element: {enabled: true}</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="game">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/elements/text-and-images">A game with no UI tree</a></h3><span class="label wild-how">OCR</span></div>
+            <pre class="wild-code"><code><span class="wl">Play,Press Element,text_only:PLAY</span>
+<span class="wl">Play,Assert Presence,text_only:GAME OVER,30</span></code></pre>
+            <template>
+              <p class="wild-why">A game draws everything on one canvas, so its UI tree has no buttons and no text. OCR reads the words in the screenshot. <code class="ic">text_only:</code> skips the UI tree and goes straight to OCR.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2
+Play,Launch App
+Play,Press Element,text_only:PLAY
+Play,Assert Presence,text_only:GAME OVER,30</code></pre></figure>
+              <figure class="code"><figcaption>config.yaml</figcaption><pre><code>elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_screenshot: {enabled: true}
+text_detection:
+  - easyocr: {enabled: true}</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="icon">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/elements/text-and-images">An icon with no text or id</a></h3><span class="label wild-how">Image match</span></div>
+            <pre class="wild-code"><code><span class="wl">Cart,Press Element,cart_icon.png</span>
+<span class="wl">Cart,Assert Presence,Your cart,10</span></code></pre>
+            <template>
+              <p class="wild-why">The cart icon has no label and no id. Optics finds a cropped picture of it on the screen and taps the match.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2
+Cart,Press Element,cart_icon.png
+Cart,Assert Presence,Your cart,10</code></pre></figure>
+              <figure class="code"><figcaption>config.yaml</figcaption><pre><code>elements_sources:
+  - appium_find_element: {enabled: true}
+  - appium_screenshot: {enabled: true}
+image_detection:
+  - templatematch: {enabled: true}</code></pre></figure>
+              <figure class="code wild-png"><figcaption>test_data/input_templates/cart_icon.png</figcaption><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="popup">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/advanced/conditions">A popup that may not show</a></h3><span class="label wild-how">Detect And Press</span></div>
+            <pre class="wild-code"><code><span class="wl">Launch Birch,Launch App</span>
+<span class="wl">Launch Birch,Detect And Press,Not now,5</span>
+<span class="wl">Launch Birch,Assert Presence,Welcome back,10</span></code></pre>
+            <template>
+              <p class="wild-why">The popup shows on the first launch only. Detect And Press taps “Not now” when the popup shows. When it does not show, the step waits 5 seconds and passes.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2
+Launch Birch,Launch App
+Launch Birch,Detect And Press,Not now,5
+Launch Birch,Assert Presence,Welcome back,10</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="branch">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/advanced/conditions">A new user or a returning user</a></h3><span class="label wild-how">Condition</span></div>
+            <pre class="wild-code"><code><span class="wl" data-pick="3 4">Start,Condition,Is Signed In,Go To Search,Sign In</span>
+<span class="wl">Is Signed In,Assert Presence,Search Birch,5</span></code></pre>
+            <template>
+              <p class="wild-why">A returning user opens on the shop. A new user opens on sign-in. Condition runs the check module and, from its result, runs the next module.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2,param_3
+Start,Condition,Is Signed In,Go To Search,Sign In
+Is Signed In,Assert Presence,Search Birch,5
+Go To Search,Enter Text,Search Birch,ridge
+Sign In,Enter Text,Email,ava@birch.shop
+Sign In,Enter Text,Password,@:trailrunner
+Sign In,Press Element,Sign in</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="loop">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/advanced/data-driven">One module, many search terms</a></h3><span class="label wild-how">Run Loop</span></div>
+            <pre class="wild-code"><code><span class="wl">Every Search,Run Loop,Search And Check,${term},trail|pace|ridge,${expected},Trail Runner 2|Pace Knit|Ridge GTX</span>
+<span class="wl">Search And Check,Clear Element Text,${search_bar}</span>
+<span class="wl">Search And Check,Enter Text,${search_bar},${term}</span>
+<span class="wl">Search And Check,Assert Presence,${expected}</span></code></pre>
+            <template>
+              <p class="wild-why">Run Loop runs one module once for each value in the lists. Each pass sets <code class="ic">${term}</code> and <code class="ic">${expected}</code> from the same position in their lists.</p>
+              <figure class="code"><figcaption>test_data/elements.csv</figcaption><pre><code>Element_Name,Element_ID
+search_bar,//*[@resource-id='com.birch.shop:id/search']</code></pre></figure>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2,param_3,param_4,param_5
+Every Search,Run Loop,Search And Check,${term},trail|pace|ridge,${expected},Trail Runner 2|Pace Knit|Ridge GTX
+Search And Check,Clear Element Text,${search_bar}
+Search And Check,Enter Text,${search_bar},${term}
+Search And Check,Assert Presence,${expected}</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="crash">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/run/error-detection">A crash that no step checks</a></h3><span class="label wild-how">Error detection</span></div>
+            <pre class="wild-code"><code><span class="wl">ERR_CRASH,has stopped,The app crashed with a system dialog,critical</span>
+<span class="wl wl-cmd">$ optics execute birch-tests</span>
+<span class="wl" data-end="PASS">├── Buy Trail Runners</span>
+<span class="wl" data-end="FAIL">└── on-screen-error-detection</span></code></pre>
+            <template>
+              <p class="wild-why">Every step passes, then the app crashes. At the end of the run, Optics reads the last screen, finds “has stopped” and adds a failed test case. <code class="ic">optics execute</code> exits with 1.</p>
+              <figure class="code"><figcaption>test_data/error_definitions.csv</figcaption><pre><code>error_code,match_string,description,severity
+ERR_CRASH,has stopped,The app crashed with a system dialog,critical
+ERR_NOT_RESPONDING,isn't responding,Android shows an ANR dialog,critical
+ERR_SESSION,Session expired,The user was signed out,high</code></pre></figure>
+            </template>
+          </article>
+
+          <article class="wild-t" data-scene="aoi">
+            <div class="wild-stage" aria-hidden="true"></div>
+            <div class="wild-cap"><h3 class="wild-h"><a class="wild-a" href="docs/elements/area-of-interest">The same words twice</a></h3><span class="label wild-how">Area of interest</span></div>
+            <pre class="wild-code"><code><span class="wl">Add To Cart,Press Element,Add to cart,aoi_y=75,aoi_height=25</span>
+<span class="wl">Add To Cart,Assert Presence,Added to cart,10</span></code></pre>
+            <template>
+              <p class="wild-why">The banner and the button both say “Add to cart”. The area of interest covers the bottom quarter of the screen, so Optics skips the banner and presses the button.</p>
+              <figure class="code"><figcaption>modules/modules.csv</figcaption><pre><code>module_name,module_step,param_1,param_2,param_3
+Add To Cart,Press Element,Add to cart,aoi_y=75,aoi_height=25
+Add To Cart,Assert Presence,Added to cart,10</code></pre></figure>
+            </template>
+          </article>
+        </div>
+        <dialog class="wild-dlg" aria-labelledby="wild-dlg-h"></dialog>
       </div>
     </section>
 
@@ -473,6 +668,76 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       </div>
     </section>
 
+    <section class="band proof" id="proof" data-hour="7" aria-labelledby="proof-h">
+      <div class="wrap">
+        <div class="head-row">
+          <h2 class="h2" id="proof-h">Built in the open</h2>
+          <p class="head-note">Public numbers. Each one names its source and the date we read it.</p>
+        </div>
+        <div class="figs">
+          <figure class="fig fig-wide">
+            <p class="fig-n">9,347</p>
+            <figcaption>
+              <p class="fig-what">downloads from PyPI by pip, uv and requests, since <time datetime="2025-04-18">18 Apr 2025</time></p>
+              <p class="fig-note">75,053 downloads in all. Mirrors, browsers and clients with no name make up the other 88%.</p>
+            </figcaption>
+            <div class="bars-wrap">
+              <ol class="bars" aria-label="Downloads from PyPI by pip, uv and requests per month"><li class="part" style="--v:0.055" data-n="47"><span class="vh">Apr 2025 from 18 Apr: 47</span></li><li style="--v:0.041" data-n="35"><span class="vh">May 2025: 35</span></li><li style="--v:0.068" data-n="58"><span class="vh">Jun 2025: 58</span></li><li style="--v:0.888" data-n="763"><span class="vh">Jul 2025: 763</span></li><li style="--v:0.995" data-n="855"><span class="vh">Aug 2025: 855</span></li><li style="--v:0.891" data-n="765"><span class="vh">Sept 2025: 765</span></li><li style="--v:0.634" data-n="545"><span class="vh">Oct 2025: 545</span></li><li style="--v:0.447" data-n="384"><span class="vh">Nov 2025: 384</span></li><li style="--v:0.427" data-n="367"><span class="vh">Dec 2025: 367</span></li><li style="--v:0.705" data-n="606"><span class="vh">Jan 2026: 606</span></li><li style="--v:0.439" data-n="377"><span class="vh">Feb 2026: 377</span></li><li style="--v:0.659" data-n="566"><span class="vh">Mar 2026: 566</span></li><li style="--v:0.750" data-n="644"><span class="vh">Apr 2026: 644</span></li><li style="--v:0.796" data-n="684"><span class="vh">May 2026: 684</span></li><li style="--v:0.608" data-n="522"><span class="vh">Jun 2026: 522</span></li><li style="--v:0.418" data-n="359"><span class="vh">Jul 2026: 359</span></li><li style="--v:1.000" data-n="859"><span class="vh">Aug 2026: 859</span></li><li style="--v:0.321" data-n="276"><span class="vh">Sept 2026: 276</span></li><li style="--v:0.448" data-n="385"><span class="vh">Oct 2026: 385</span></li><li class="part" style="--v:0.291" data-n="250"><span class="vh">Nov 2026 to 17 Nov: 250</span></li></ol>
+              <p class="bars-axis label" aria-hidden="true"><span>Apr 2025</span><span>Peak 859 a month</span><span>Nov 2026</span></p>
+            </div>
+            <p class="fig-src label"><a href="https://clickpy.clickhouse.com/dashboard/optics-framework">PyPI download logs</a><span>to <time datetime="2026-11-17">17 Nov 2026</time></span></p>
+          </figure>
+          <figure class="fig">
+            <p class="fig-n">100</p>
+            <figcaption><p class="fig-what">stars on GitHub, and 30 forks</p></figcaption>
+            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework/stargazers">GitHub</a><span>read <time datetime="2026-11-18">18 Nov 2026</time></span></p>
+          </figure>
+          <figure class="fig">
+            <p class="fig-n">12</p>
+            <figcaption><p class="fig-what">releases in the 90 days to <time datetime="2026-11-18">18 Nov 2026</time>. The latest is <a href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a>.</p></figcaption>
+            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a><span>read <time datetime="2026-11-18">18 Nov 2026</time></span></p>
+          </figure>
+        </div>
+        <h3 class="h3 rel-h">What the last three releases added</h3>
+        <ol class="rels">
+            <li class="rel">
+              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a> <span class="label"><time datetime="2026-11-17">17 Nov 2026</time></span></p>
+              <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/719">Name the report after the project name kept in config.yaml</a></li><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/720">Cut agent turns and tokens, and fix what the runs found</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/714">Drive desktop apps through the Xa11y driver</a></li></ul>
+              
+            </li>
+            <li class="rel">
+              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.3">1.11.3</a> <span class="label"><time datetime="2026-11-10">10 Nov 2026</time></span></p>
+              <ul class="rel-added"><li><span class="rel-scope">self-heal</span><a href="https://github.com/mozarkai/optics-framework/pull/704">Keep small models on the target name</a></li><li><span class="rel-scope">config</span><a href="https://github.com/mozarkai/optics-framework/pull/706">Accept API keys in config.yaml</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/712">Mark setup and teardown in the report and stop tests a failed setup guards</a></li></ul>
+              <p class="rel-fixes">9 fixes</p>
+            </li>
+            <li class="rel">
+              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.2">1.11.2</a> <span class="label"><time datetime="2026-11-06">6 Nov 2026</time></span></p>
+              <ul class="rel-added"><li><span class="rel-scope">agent</span><a href="https://github.com/mozarkai/optics-framework/pull/673">Drive MCP and live NL mode by refs from one screen snapshot</a></li><li><span class="rel-scope">playwright</span><a href="https://github.com/mozarkai/optics-framework/pull/629">Remote browsers over CDP/Playwright protocol, configurable timeouts and phone emulation</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/631">Drive mobile web pages through the webview context (CSS / DOM XPath)</a></li><li class="rel-more">and 5 more</li></ul>
+              <p class="rel-fixes">8 fixes</p>
+            </li>
+        </ol>
+        <details class="sources">
+          <summary class="label">Sources and method</summary>
+          <div class="sources-body">
+            <div class="mix" role="img" aria-label="pip, uv and requests 12%, Mirrors 49%, Browsers 14%, No name 24% of 75,053 PyPI downloads">
+              <i class="mix-installers" style="flex-grow:9347"></i><i class="mix-mirrors" style="flex-grow:36990"></i><i class="mix-browsers" style="flex-grow:10641"></i><i class="mix-unnamed" style="flex-grow:18075"></i>
+            </div>
+            <ul class="mix-key label">
+              <li><i class="mix-installers"></i>pip, uv and requests 9,347 <span>12%</span></li>
+              <li><i class="mix-mirrors"></i>Mirrors 36,990 <span>49%</span></li>
+              <li><i class="mix-browsers"></i>Browsers 10,641 <span>14%</span></li>
+              <li><i class="mix-unnamed"></i>No name 18,075 <span>24%</span></li>
+            </ul>
+            <dl class="method">
+              <div><dt>Downloads</dt><dd>Daily download counts for the <a href="https://pypi.org/project/optics-framework/">optics-framework</a> package from PyPI's <a href="https://docs.pypi.org/api/bigquery/">public download logs</a>, read through <a href="https://clickpy.clickhouse.com/dashboard/optics-framework">ClickPy</a>. We count downloads by pip, uv, poetry, pdm, pipenv, pipx and requests, the tools that fetch a package to use it. We leave out mirrors (bandersnatch, Nexus, devpi, Artifactory), browsers and clients that send no name. One person can download many times, for example in CI, so downloads are not people.</dd></div>
+              <div><dt>Stars and forks</dt><dd>The counts on the <a href="https://github.com/mozarkai/optics-framework">GitHub repository</a> on the day we read them.</dd></div>
+              <div><dt>Releases</dt><dd>Published <a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a>. Each line is the title of a feature pull request from the release notes; dependency updates are not counted.</dd></div>
+              <div><dt>Updates</dt><dd>This page makes no requests to these sources. A script reads them and the result is committed with the site, so the numbers change only when the site is rebuilt.</dd></div>
+            </dl>
+          </div>
+        </details>
+      </div>
+    </section>
     <section data-hour="7" class="band start" id="install" aria-labelledby="start-h">
       <div class="wrap">
         <h2 class="h2" id="start-h">Install</h2>
@@ -527,6 +792,68 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
             </div>
           </li>
         </ol>
+      </div>
+    </section>
+    <!-- Hand it to your agent: one line to paste, with the task picked here. The agent follows agents.md. -->
+    <section data-hour="7" class="band handoff" id="agents" aria-labelledby="agents-h">
+      <div class="wrap">
+        <div class="head-row">
+          <h2 class="h2" id="agents-h">Or hand it to your agent</h2>
+          <p class="head-note">Paste one line into Claude Code, Codex, Cursor or any agent that runs commands. It follows <a class="learn-link" href="agents.md">agents.md</a> and asks you only for what it cannot do.</p>
+        </div>
+        <div class="ho">
+          <div class="ho-side">
+            <div class="ho-tasks" role="tablist" aria-label="Task for your agent" aria-orientation="vertical">
+              <button class="ho-task" role="tab" id="ho-tab-setup" aria-controls="ho-setup" aria-selected="true" data-tab="agent-setup"><span class="ho-n">01</span>Set up Optics</button>
+              <button class="ho-task" role="tab" id="ho-tab-web" aria-controls="ho-web" aria-selected="false" tabindex="-1" data-tab="agent-web"><span class="ho-n">02</span>Test my web app</button>
+              <button class="ho-task" role="tab" id="ho-tab-phone" aria-controls="ho-phone" aria-selected="false" tabindex="-1" data-tab="agent-phone"><span class="ho-n">03</span>Test my phone app</button>
+              <button class="ho-task" role="tab" id="ho-tab-ci" aria-controls="ho-ci" aria-selected="false" tabindex="-1" data-tab="agent-ci"><span class="ho-n">04</span>Run my suite in CI</button>
+            </div>
+            <a class="ho-file label" href="agents.md">Read agents.md <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          </div>
+          <div class="ho-panels">
+            <div class="ho-panel" role="tabpanel" id="ho-setup" aria-labelledby="ho-tab-setup">
+              <div class="cmd ho-card" data-copy="Read https://optics-framework.org/agents.md and follow it to set up Optics.">
+                <p class="ho-bar label"><span>Paste into your agent</span><button class="copy" type="button" aria-label="Copy the prompt for your agent">Copy</button></p>
+                <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics.</p>
+              </div>
+              <div class="ho-split">
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds Optics, or installs it in <code>~/.optics</code></li><li>Connects the <code>optics</code> MCP server to your client</li><li>Opens a page in a headless browser to prove it works</li></ol></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li></ul></div>
+              </div>
+            </div>
+            <div class="ho-panel" role="tabpanel" id="ho-web" aria-labelledby="ho-tab-web" hidden>
+              <div class="cmd ho-card" data-copy="Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my web app.">
+                <p class="ho-bar label"><span>Paste into your agent</span><button class="copy" type="button" aria-label="Copy the prompt for your agent">Copy</button></p>
+                <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then test my web app.</p>
+              </div>
+              <div class="ho-split">
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your dev server and picks the main flow</li><li>Drives the flow in a browser and checks each step</li><li>Writes the suite to <code>tests/optics</code> and runs it</li></ol></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>Sign-in details, if the app needs them</li></ul></div>
+              </div>
+            </div>
+            <div class="ho-panel" role="tabpanel" id="ho-phone" aria-labelledby="ho-tab-phone" hidden>
+              <div class="cmd ho-card" data-copy="Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my Android or iOS app.">
+                <p class="ho-bar label"><span>Paste into your agent</span><button class="copy" type="button" aria-label="Copy the prompt for your agent">Copy</button></p>
+                <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then test my Android or iOS app.</p>
+              </div>
+              <div class="ho-split">
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Installs Appium and the driver for your platform</li><li>Starts an emulator or simulator, if you have one</li><li>Drives your app and writes the suite</li></ol></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>Android Studio or Xcode, if they are missing</li><li>A phone, if there is no emulator or simulator to start</li><li>Sign-in details, if the app needs them</li></ul></div>
+              </div>
+            </div>
+            <div class="ho-panel" role="tabpanel" id="ho-ci" aria-labelledby="ho-tab-ci" hidden>
+              <div class="cmd ho-card" data-copy="Read https://optics-framework.org/agents.md and follow it to set up Optics, then run my Optics suite in CI.">
+                <p class="ho-bar label"><span>Paste into your agent</span><button class="copy" type="button" aria-label="Copy the prompt for your agent">Copy</button></p>
+                <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then run my Optics suite in CI.</p>
+              </div>
+              <div class="ho-split">
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job with the Optics version pinned</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>The secrets your suite reads, added to your CI settings</li></ul></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Docs: where to go after installing. -->
@@ -607,7 +934,12 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     <div class="film-dialog-frame">
       <video id="film-video" controls preload="none" playsinline poster="media/optics-film-poster.jpg?v=fde61b6773">
         <source src="media/optics-film.mp4?v=ed1d90e1b1" type="video/mp4">
+        <track kind="chapters" src="media/optics-film-chapters.vtt?v=c55a6b603d" srclang="en" label="Chapters" default>
       </video>
+    </div>
+    <div class="film-chapters">
+      <ol aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Create tests your way</button></li><li><button type="button" data-t="4.21"><span>0:04</span>Four ways to create a test</button></li><li><button type="button" data-t="7.368"><span>0:07</span>Record a test</button></li><li><button type="button" data-t="14.737"><span>0:14</span>Save the test as plain text</button></li><li><button type="button" data-t="16.842"><span>0:16</span>Run the test on every build</button></li><li><button type="button" data-t="25.263"><span>0:25</span>The app changes and the test passes</button></li><li><button type="button" data-t="33.684"><span>0:33</span>The app breaks and the test fails</button></li><li><button type="button" data-t="37.895"><span>0:37</span>Run one suite on every screen</button></li><li><button type="button" data-t="50.526"><span>0:50</span>Run it forever</button></li><li><button type="button" data-t="54.737"><span>0:54</span>Install Optics</button></li></ol>
+      <a class="film-transcript" href="media/optics-film-transcript.md?v=8c05186af8">Transcript</a>
     </div>
     <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
   </dialog>
@@ -648,9 +980,15 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
     </symbol>
   </svg>
 
-  <script src="app.js?v=5160aed22e" defer></script>
+  <script src="app.js?v=d5c83ebd2b" defer></script>
   <script src="track.js?v=a7621959d3" defer></script>
-  <script src="birch.js?v=b6031f31f4" defer></script>
-  <script src="playground.js?v=9098bb013d" defer></script>
+  <script src="birch.js?v=6d339e774b" defer></script>
+  <script src="doors-contract.js?v=bdad6f0507" defer></script>
+  <script src="doors.js?v=cdddffc2f8" defer></script>
+  <script src="playground.js?v=7fb62154a0" defer></script>
+  <script src="sim.js?v=8e827f4416" defer></script>
+  <script src="wild.js?v=3e6dc26d71" defer></script>
+  <script src="runs/birch-run.js?v=6686cf65a3" defer></script>
+  <script src="replay.js?v=a29e910bda" defer></script>
 </body>
 </html>

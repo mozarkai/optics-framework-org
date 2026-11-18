@@ -17,6 +17,10 @@
     <lastmod>2026-11-18</lastmod>
   </url>
   <url>
+    <loc>https://optics-framework.org/playground</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
     <loc>https://optics-framework.org/blog</loc>
     <lastmod>2026-10-20</lastmod>
   </url>
@@ -31,6 +35,14 @@
   <url>
     <loc>https://optics-framework.org/blog/introducing-optics-framework</loc>
     <lastmod>2026-10-20</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/run</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/explain</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/</loc>

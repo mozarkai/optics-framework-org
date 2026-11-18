@@ -176,6 +176,15 @@
         var group = btn.parentNode;
         Array.prototype.forEach.call(group.children, function (b) { b.classList.toggle("on", b === btn); });
       },
+      press: function (t) {
+        var name = t.dataset.el;
+        if (name === "signin") A.show("home");
+        else if (name === "card") A.open(+t.dataset.i);
+        else if (name === "chip" || name === "size") A.pick(t);
+        else if (name === "add") A.toast(true);
+        else if (name === "back") A.show("home");
+        else if (name in field) t.classList.add("focus");
+      },
       toastOn: false,
       toast: function (on) {
         clearTimeout(toastTimer);

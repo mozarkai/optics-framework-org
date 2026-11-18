@@ -106,6 +106,7 @@ code, kbd, pre { font-family: var(--mono); font-variant-ligatures: none; } /* sh
 .align-center { align-items: center; }
 .skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--ink); color: var(--bg); padding: 12px 16px; font: 500 var(--t-label)/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; text-decoration: none; }
 .skip:focus { top: 12px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* ---------- type ---------- */
 .h2 { font-size: var(--t-h2); font-weight: 860; font-stretch: 75%; line-height: .9; letter-spacing: -.012em; text-transform: uppercase; text-wrap: balance; }
@@ -155,7 +156,7 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 [data-hour="7"] { --hour: var(--h7); --from: var(--h6); }
 [data-hour="8"] { --hour: var(--h8); --from: var(--h7); }
 [data-hour="9"] { --hour: var(--h9); --from: var(--h8); }
-[data-hour="2"] + [data-hour="2"], [data-hour="8"] + [data-hour="8"] { --from: var(--hour); }
+[data-hour="2"] + [data-hour="2"], [data-hour="7"] + [data-hour="7"], [data-hour="8"] + [data-hour="8"] { --from: var(--hour); }
 /* late light is darker, so text on it goes one step darker too */
 :root:not([data-theme="dark"]) :is([data-hour="5"], [data-hour="6"], [data-hour="7"]) { --ink-2: #2E2A22; --ink-3: #3D382E; --line: rgba(23, 21, 15, .2); --panel: rgba(255, 248, 238, .4); }
 /* evening and night: the page turns over to light ink */
@@ -204,6 +205,7 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 .play-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: 18px; color: var(--ink-2); font-size: .9375rem; }
 .play-cap p { max-width: 70ch; }
 .play-cap code { font-size: .875em; color: var(--ink-2); }
+.play-acts { display: flex; flex-wrap: wrap; gap: 12px; }
 .film-open svg { width: 11px; height: 11px; fill: currentColor; }
 
 /* full demo dialog */
@@ -213,6 +215,14 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 .film-dialog video { width: 100%; height: 100%; }
 .film-close { position: absolute; top: -52px; right: 0; height: 40px; padding: 0 16px; border: 1.5px solid rgba(255, 255, 255, .4); background: transparent; color: #fff; font: 500 var(--t-label)/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; cursor: pointer; }
 .film-close:hover { background: rgba(255, 255, 255, .1); }
+.film-chapters { display: flex; align-items: flex-start; gap: 16px; margin-top: 14px; }
+.film-chapters ol { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; margin: 0; padding: 0; list-style: none; }
+.film-chapters button, .film-transcript { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border: 1px solid rgba(255, 255, 255, .22); background: transparent; color: rgba(255, 255, 255, .78); font: 500 .75rem/1 var(--mono); text-decoration: none; cursor: pointer; }
+.film-chapters button span { color: rgba(255, 255, 255, .45); }
+.film-chapters button:hover, .film-transcript:hover { border-color: rgba(255, 255, 255, .6); color: #fff; }
+.film-chapters button[aria-current] { border-color: var(--sun); color: #fff; }
+.film-chapters button[aria-current] span { color: var(--sun); }
+@media (max-width: 640px) { .film-chapters { flex-direction: column; } .film-chapters ol { max-height: 30vh; overflow-y: auto; } }
 
 /* ---------- command blocks ---------- */
 .cmd { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 8px 8px 18px; background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--code-line); }
