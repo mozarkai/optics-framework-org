@@ -34,7 +34,11 @@
   }
   function fill(s, step) {
     var v = values(step, step.args[0] || "");
-    return s.split("{target}").join(v[v.length - 1]);
+    return s.split("{target}").join(v[0]).split("{first}").join(v[0]).split("{last}").join(v[v.length - 1]).split("{text}").join(step.args[1] || "");
+  }
+  function missOf(set, step) {
+    var many = values(step, step.args[0] || "").length > 1;
+    return (many ? set.miss_list : set.miss)[step.kw];
   }
   function deep(o, step) { return JSON.parse(fill(JSON.stringify(o), step)); }
   function failed(step) { return step.result && !step.result.ok; }
@@ -57,7 +61,7 @@
   }
 
   function verdict(step) { return step.result.ok ? span("k-ok", "PASS") : span("k-bad", "FAIL"); }
-  function pyMiss(step) { return C.python.miss[step.kw] && fill(C.python.miss[step.kw], step); }
+  function pyMiss(step) { var m = missOf(C.python, step); return m ? fill(m, step) : ""; }
   function pyValue(v) { return v === null ? "None" : v === true ? "True" : v === false ? "False" : "'" + v + "'"; }
 
   function python(step) {
@@ -70,20 +74,20 @@
   }
 
   function robot(step) {
-    var vars = Object.keys(step.named).map(function (n) {
-      var v = step.named[n];
-      return span("k-var", (v.length > 1 ? "@{" : "${") + n + "}") + "    " + v.map(function (x) { return span("k-lit", x); }).join("    ");
+    var names = Object.keys(step.named), cell = function (x) { return "    " + span("k-lit", x); };
+    var vars = names.filter(function (n) { return step.named[n].length === 1; }).map(function (n) { return span("k-var", "${" + n + "}") + cell(step.named[n][0]); });
+    var lists = names.filter(function (n) { return step.named[n].length > 1; }).map(function (n) {
+      return "    " + span("k-var", "${" + n + "}=") + "    " + span("k-kw", "Create List") + step.named[n].map(cell).join("") + "\n";
     });
     var line = "    " + span("k-kw", C.keywords[step.kw].robot) + kwArgs(step).map(function (a) {
       return "    " + span(/^\$\{/.test(a) ? "k-var" : "k-lit", a);
     }).join("");
-    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\nCheckout\n" + line;
-    var res = step.result ? verdict(step) + (failed(step) ? "\n" + esc(pyMiss(step)) : "") : "";
-    return { req: ["birch.robot", req], res: ["result", res] };
+    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\nCheckout\n" + lists.join("") + line;
+    return { req: ["birch.robot", req], res: ["result", step.result ? verdict(step) : ""] };
   }
 
   function httpReply(step) {
-    if (failed(step)) return C.http.run.miss[step.kw] ? deep(C.http.run.miss[step.kw], step) : null;
+    if (failed(step)) { var m = missOf(C.http.run, step); return m ? deep(m, step) : null; }
     var ok = JSON.parse(JSON.stringify(C.http.run.ok));
     ok.body.data[C.http.result] = step.kw === "launch_app" ? "…" : C.python.returns[step.kw];
     return ok;

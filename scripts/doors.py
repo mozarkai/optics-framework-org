@@ -29,6 +29,7 @@ target = sys.argv[2] if len(sys.argv) > 2 else "site/doors-contract.js"
 sys.path.insert(0, str(checkout))
 
 from fastmcp import Client  # noqa: E402
+import optics_framework  # noqa: E402
 from optics_framework import Optics  # noqa: E402
 from optics_framework.common import expose_api  # noqa: E402
 from optics_framework.helper.mcp_server import build_server  # noqa: E402
@@ -36,6 +37,8 @@ from optics_framework.helper.version import VERSION  # noqa: E402
 
 KEYWORDS = ("launch_app", "enter_text", "press_element", "assert_presence", "go_back")
 HOLE = "{target}"
+HOLES = ["{first}", "{last}"]
+TEXT = "{text}"
 FIXTURE = Path(__file__).with_name("doors-fixture")
 UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
@@ -92,7 +95,8 @@ def python_run(url: str) -> dict:
         o.launch_app(url)
         return {
             "returns": {"enter_text": o.enter_text("//*[@id='email']", "ava@birch.shop"), "press_element": o.press_element("Sign in"), "assert_presence": o.assert_presence("Picked for you", timeout="5"), "go_back": o.go_back()},
-            "miss": {"press_element": failure(lambda: o.press_element(HOLE)), "enter_text": failure(lambda: o.enter_text(HOLE, "x")), "assert_presence": failure(lambda: o.assert_presence(HOLE, timeout="1"))},
+            "miss": {"press_element": failure(lambda: o.press_element(HOLE)), "enter_text": failure(lambda: o.enter_text(HOLE, TEXT)), "assert_presence": failure(lambda: o.assert_presence(HOLE, timeout="1"))},
+            "miss_list": {"press_element": failure(lambda: o.press_element(HOLES)), "enter_text": failure(lambda: o.enter_text(HOLES, TEXT))},
         }
 
 
@@ -123,7 +127,7 @@ def http_run(url: str) -> dict:
         start = json.loads(send(base, "POST", "/v1/sessions/start", {"driver_sources": ["playwright"], "elements_sources": ["playwright_find_element", "playwright_page_source"]})[1])
         sid = start["session_id"]
 
-        def act(keyword: str, *params: str) -> dict:
+        def act(keyword: str, *params: str | list[str]) -> dict:
             status, text = send(base, "POST", f"/v1/sessions/{sid}/action", {"mode": "keyword", "keyword": keyword, "params": list(params)})
             return {"status": status, "body": json.loads(UUID.sub("…", text))}
 
@@ -132,7 +136,8 @@ def http_run(url: str) -> dict:
             "start": sorted(start),
             "ok": act("Press Element", "Sign in"),
             "present": act("Assert Presence", "Picked for you", "5"),
-            "miss": {"press_element": act("Press Element", HOLE), "enter_text": act("Enter Text", HOLE, "x"), "assert_presence": act("Assert Presence", HOLE, "1")},
+            "miss": {"press_element": act("Press Element", HOLE), "enter_text": act("Enter Text", HOLE, TEXT), "assert_presence": act("Assert Presence", HOLE, "1")},
+            "miss_list": {"press_element": act("Press Element", HOLES), "enter_text": act("Enter Text", HOLES, TEXT)},
         }
         send(base, "DELETE", f"/v1/sessions/{sid}/stop")
         return out
@@ -161,7 +166,7 @@ async def mcp_run(url: str) -> dict:
                 "check": await call("check", {"present": ["Picked for you"]}),
                 "check_miss": await call("check", {"present": [HOLE], "timeout_s": 1}),
                 "tap_miss": await call("tap", {"target": HOLE}),
-                "type_miss": await call("type_text", {"target": HOLE, "text": "x"}),
+                "type_miss": await call("type_text", {"target": HOLE, "text": TEXT}),
                 "back": await call("press_key", {"key": "back"}),
                 "launch_same": await call("launch_app", {}),
             },
@@ -182,6 +187,8 @@ def run(door: str) -> dict:
 
 
 def main() -> None:
+    if not Path(optics_framework.__file__).resolve().is_relative_to(checkout):
+        raise SystemExit(f"optics_framework loaded from {optics_framework.__file__}, not from {checkout}")
     if target in RUNS:
         print(MARK + json.dumps(RUNS[target](serve())))
         return

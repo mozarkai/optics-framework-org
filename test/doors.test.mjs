@@ -23,6 +23,7 @@ const STEPS = [
   step("press_element", ["${sign_in}"], false, { sign_in: [XPATH, "Sign in"] }),
   step("assert_presence", ["Added to cart"]),
   step("assert_presence", ["Gone"], false),
+  step("enter_text", ["${sign_in}", "abc"], false, { sign_in: [XPATH, "Sign in"] }),
   step("go_back", []),
 ];
 
@@ -65,8 +66,12 @@ test("every Python call fits the method's signature", () => {
 
 test("a miss shows the reply the release gave, with the step's own value", () => {
   const miss = STEPS[3];
-  assert.match(D.python(miss).res[1], /FallbackExhausted: Code\.E0201: No valid strategies found for 'Sign in' in 'press_element'/);
+  assert.match(D.python(miss).res[1], /All 2 fallback combinations failed for press_element/);
+  assert.match(D.python(miss).res[1], /No valid strategies found for 'Sign in' in 'press_element'/);
   assert.match(D.http(miss).res[1], /404 Not Found/);
-  assert.doesNotMatch(D.http(miss).res[1] + D.mcp(miss).res[1] + D.robot(miss).res[1], /\{target\}/);
+  for (const s of STEPS.filter((x) => !x.result.ok)) {
+    const all = ["python", "http", "mcp", "robot"].map((d) => D[d](s).res[1]).join("\n");
+    assert.doesNotMatch(all, /\{(target|first|last|text)\}/, s.kw);
+  }
   assert.match(D.mcp(miss).res[1], new RegExp(`tap "xpath=${XPATH.replace(/[[\]*@/]/g, "\\$&")}" -&gt; FAIL`));
 });

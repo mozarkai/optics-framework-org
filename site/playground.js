@@ -276,13 +276,13 @@
       });
     }
 
-    // Tells the doors panel about a step before it runs and again with its result.
     function tell(l, cmd, kw, args, secret) {
       var named = {};
       args.forEach(function (a) {
         var m = /^\$\{(\w+)\}$/.exec(a);
         if (m) named[m[1]] = ELEMENTS.filter(function (r) { return r[0] === m[1]; }).map(function (r) { return r[1]; });
       });
+      if (Object.keys(named).some(function (n) { return !named[n].length; })) return function () {};
       var d = { line: l, cmd: cmd, kw: kw, args: args, named: named, secret: secret, module: moduleName(), app: A };
       document.dispatchEvent(new CustomEvent("optics:step", { detail: d }));
       return function (r) {

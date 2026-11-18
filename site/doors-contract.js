@@ -194,6 +194,36 @@ window.OPTICS_DOORS = {
       }
      }
     }
+   },
+   "miss_list": {
+    "press_element": {
+     "status": 404,
+     "body": {
+      "detail": {
+       "type": "optics:element",
+       "code": "Code.E0201",
+       "status": 404,
+       "message": "All 2 fallback combinations failed for keyword 'Press Element':\n('{first}',) -> Code.E0201: No valid strategies found for '{first}' in 'press_element' (cause: Code.E0201: Element '{first}' not found.)\n('{last}',) -> Code.E0201: No valid strategies found for '{last}' in 'press_element' (cause: Code.E0201: Element '{last}' not found.)",
+       "details": null,
+       "meta": null,
+       "cause": null
+      }
+     }
+    },
+    "enter_text": {
+     "status": 404,
+     "body": {
+      "detail": {
+       "type": "optics:element",
+       "code": "Code.E0201",
+       "status": 404,
+       "message": "All 2 fallback combinations failed for keyword 'Enter Text':\n('{first}', '{text}') -> Code.E0201: No valid strategies found for '{first}' in 'enter_text' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '{text}') -> Code.E0201: No valid strategies found for '{last}' in 'enter_text' (cause: Code.E0201: Element '{last}' not found.)",
+       "details": null,
+       "meta": null,
+       "cause": null
+      }
+     }
+    }
    }
   }
  },
@@ -208,6 +238,10 @@ window.OPTICS_DOORS = {
    "press_element": "FallbackExhausted: Code.E0201: No valid strategies found for '{target}' in 'press_element' (cause: Code.E0201: Element '{target}' not found.)",
    "enter_text": "FallbackExhausted: Code.E0201: No valid strategies found for '{target}' in 'enter_text' (cause: Code.E0201: Element '{target}' not found.)",
    "assert_presence": "FallbackExhausted: Code.E0201: ['{target}'] not found based on rule 'any'."
+  },
+  "miss_list": {
+   "press_element": "FallbackExhausted: Code.E0201: All 2 fallback combinations failed for press_element:\n('{first}', '1', '0', '0', '0') -> Code.E0201: No valid strategies found for '{first}' in 'press_element' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '1', '0', '0', '0') -> Code.E0201: No valid strategies found for '{last}' in 'press_element' (cause: Code.E0201: Element '{last}' not found.)",
+   "enter_text": "FallbackExhausted: Code.E0201: All 2 fallback combinations failed for enter_text:\n('{first}', '{text}') -> Code.E0201: No valid strategies found for '{first}' in 'enter_text' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '{text}') -> Code.E0201: No valid strategies found for '{last}' in 'enter_text' (cause: Code.E0201: Element '{last}' not found.)"
   }
  },
  "mcp": {
