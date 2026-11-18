@@ -181,7 +181,7 @@ const htmlFiles = (dir) =>
   );
 for (const file of htmlFiles("out")) {
   const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|media\/[^"?#]+)"/g,
+    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?(styles\.css|app\.js|track\.js|docs\.css|scenes\.css|docs\.js|scenes\.js|scene-defs\.js|birch\.js|playground\.js|playground\.css|wild\.js|wild\.css|media\/[^"?#]+)"/g,
     (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
   );
   writeFileSync(file, page);
