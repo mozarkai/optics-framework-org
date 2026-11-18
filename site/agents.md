@@ -12,7 +12,7 @@ Optics is open-source test automation for Android, iOS, TV and web apps. Its MCP
   - type a password for `sudo` or an administrator prompt,
   - restart or reload your client, so that it loads the new MCP tools.
 - Do not write a password or a secret in a command, a file or a commit. Read secrets from environment variables.
-- Change only the person's project, the `~/.optics` folder and your client's MCP configuration.
+- Change only the person's project, the `~/.optics` folder, your client's MCP configuration and skills folder, and the tools that a step on this page tells you to install.
 - Do not use `optics init --force`. It deletes the project folder.
 - Do not push, merge or deploy unless the person asks.
 
@@ -66,8 +66,7 @@ First look for a server named `optics`. If it is there and its command is a work
 | Client | Check | Add |
 |---|---|---|
 | Claude Code | `claude mcp get optics` | `claude mcp add --scope user optics -- OPTICS mcp` |
-| Codex CLI | `codex mcp list` | `codex mcp add optics -- OPTICS mcp` |
-| Gemini CLI | `gemini mcp list` | `gemini mcp add optics OPTICS mcp` |
+| Codex | `~/.codex/config.toml` | a `[mcp_servers.optics]` table with `command = "OPTICS"` and `args = ["mcp"]` |
 | Cursor | `~/.cursor/mcp.json` | key `optics` under `mcpServers` |
 | Claude Desktop | `claude_desktop_config.json` (macOS: `~/Library/Application Support/Claude/`, Windows: `%APPDATA%\Claude\`) | key `optics` under `mcpServers` |
 | VS Code | `.vscode/mcp.json` in the project | key `optics` under `servers`, with `"type": "stdio"` |
@@ -82,7 +81,7 @@ The entry for a JSON configuration file:
 }
 ```
 
-Read the file before you write it. Add the `optics` key to the object that is there and keep all other servers. If the file does not exist, create it. For any other MCP client, use the same command and argument.
+Read a configuration file before you write it. Add the `optics` key to the object that is there and keep all other servers. If the file does not exist, create it. For any other MCP client, use the same command and argument.
 
 ## 4. Load the tools
 
@@ -98,7 +97,7 @@ This check uses a browser on this machine. It needs no device.
    OPTICS setup --install playwright
    ```
 
-   On Linux it can ask for a `sudo` password to install system libraries for Chromium. Do not type a password. Ask the person to run the command.
+   If it stops on a network error, run it again. On Linux it can ask for a `sudo` password to install system libraries for Chromium. Do not type a password. Ask the person to run the command.
 
 2. Call `start_session` with `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`. The reply gives the session id and the screen as rows, such as `e7 a "Learn more" [tap]`.
 3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must say `passed`.
@@ -125,8 +124,8 @@ Do the section below that matches the task the person gave you. If the task was 
 ### Test an Android or iOS app
 
 1. Install the Appium engine: `OPTICS setup --install appium`.
-2. Check for Node.js 20 or newer with `node --version`. Install the Appium server if `appium --version` fails: `npm install -g appium`. Then install the driver if `appium driver list --installed` does not show it: `appium driver install uiautomator2` for Android, `appium driver install xcuitest` for iOS (macOS only).
-3. Find a device. For Android, `adb devices` must show a line that ends in `device`. If it shows none and `emulator -list-avds` lists an emulator, start it yourself with `emulator -avd <name>`. For iOS, `xcrun simctl list devices booted` must show a simulator; boot one with `xcrun simctl boot <udid>`. If there is no device that you can start, ask the person to start one or to connect a phone with USB debugging on. Do not continue without a device.
+2. Check for Node.js 20 or newer with `node --version`. If it is missing, install it with a package manager that needs no `sudo`, for example `brew install node`; if there is none, ask the person. For Android, `adb version` and `java -version` must work; if they do not, ask the person to install Android Studio, which includes the SDK. For iOS, `xcrun simctl help` must work; if it does not, ask the person to install Xcode. Install the Appium server if `appium --version` fails: `npm install -g appium`. Then install the driver if `appium driver list --installed` does not show it: `appium driver install uiautomator2` for Android, `appium driver install xcuitest` for iOS (macOS only).
+3. Find a device. For Android, `adb devices` must show a line that ends in `device`. If it shows none and `emulator -list-avds` lists an emulator, start it yourself in the background with `emulator -avd <name>`, then wait until `adb devices` shows it. For iOS, `xcrun simctl list devices booted` must show a simulator; boot one with `xcrun simctl boot <udid>`. If there is no device that you can start, ask the person to start one or to connect a phone with USB debugging on. Do not continue without a device.
 4. Find the app id: the Android `applicationId` (in `build.gradle`) or the iOS bundle identifier. The app must be on the device. If it is not, build and install it with the project's own tools.
 5. If `curl -s http://127.0.0.1:4723/status` gets no answer, start the Appium server in the background with `appium`.
 6. Call `start_session` with `"driver": "appium"`, `"app"` set to the app id and the capabilities: `{"platformName": "Android", "automationName": "UiAutomator2", "udid": "<serial from adb devices>", "appPackage": "<app id>"}`, or `{"platformName": "iOS", "automationName": "XCUITest", "udid": "<simulator udid>", "bundleId": "<app id>"}`.

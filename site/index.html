@@ -570,7 +570,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
               </div>
               <div class="ho-split">
                 <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your dev server and picks the main flow</li><li>Drives the flow in a browser and checks each step</li><li>Writes the suite to <code>tests/optics</code> and runs it</li></ol></div>
-                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>Sign-in details, if the app needs them</li></ul></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>Sign-in details, if the app needs them</li></ul></div>
               </div>
             </div>
             <div class="ho-panel" role="tabpanel" id="ho-phone" aria-labelledby="ho-tab-phone" hidden>
@@ -580,7 +580,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
               </div>
               <div class="ho-split">
                 <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Installs Appium and the driver for your platform</li><li>Starts an emulator or simulator, if you have one</li><li>Drives your app and writes the suite</li></ol></div>
-                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A phone, if there is no emulator or simulator to start</li><li>Sign-in details, if the app needs them</li></ul></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>Android Studio or Xcode, if they are missing</li><li>A phone, if there is no emulator or simulator to start</li><li>Sign-in details, if the app needs them</li></ul></div>
               </div>
             </div>
             <div class="ho-panel" role="tabpanel" id="ho-ci" aria-labelledby="ho-tab-ci" hidden>
@@ -590,7 +590,7 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
               </div>
               <div class="ho-split">
                 <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job with the Optics version pinned</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
-                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>The secrets your suite reads, added to your CI settings</li></ul></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>The secrets your suite reads, added to your CI settings</li></ul></div>
               </div>
             </div>
           </div>

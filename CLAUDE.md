@@ -16,7 +16,7 @@ Static landing page and documentation for Optics. No framework, no dependencies.
 
 ## Numbers on the homepage (`content/proof.json`)
 
-The "Built in the open" band (`#proof`) shows PyPI installs, GitHub stars and the last three releases, each with its source and date. `npm run proof` (`scripts/proof.mjs`) reads them from the public PyPI download logs (via ClickPy) and the GitHub API and writes `content/proof.json`; commit the file. The build renders it into `site/index.html` and `site/index.md` at the `<!-- proof -->` marker through `lib/proof.mjs` and never goes online. Installs count only the installers in `REAL_INSTALLERS` (`edge/snapshot.js`); mirrors, browsers and unnamed clients are shown apart under "Sources and method". A release's lines are its `feat` pull request titles. Refresh after each release.
+The "Built in the open" band (`#proof`) shows PyPI downloads, GitHub stars and the last three releases, each with its source and date. `npm run proof` (`scripts/proof.mjs`) reads them from the public PyPI download logs (via ClickPy) and the GitHub API and writes `content/proof.json`; commit the file. The build renders it into `site/index.html` and `site/index.md` at the `<!-- proof -->` marker through `lib/proof.mjs` and never goes online. The headline counts only downloads by the tools in `REAL_INSTALLERS` (`edge/snapshot.js`); mirrors, browsers and unnamed clients are shown apart under "Sources and method". A release's lines are its `feat` pull request titles. Refresh after each release.
 
 ## Blog (`content/blog.json`)
 
