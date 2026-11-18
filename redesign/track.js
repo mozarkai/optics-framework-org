@@ -146,7 +146,6 @@
       var action = el.matches(".sc-restart") ? "replay" : /pause/i.test(el.getAttribute("aria-label")) ? "pause" : "play";
       track("scene", (scene ? scene.dataset.scene : "scene") + ":" + action);
     }
-    else if (el.matches(".play-run")) track("scene", "playground:run");
     else if (el.matches(".film-open")) track("film", "open");
     else if (el.matches(".menu-toggle, .search-open")) track("ui", el.classList.contains("menu-toggle") ? "menu" : "search-open");
     if (el.matches("a[href]")) link(el);
@@ -162,8 +161,9 @@
     else track("copy", "text", sel ? sel.toString().length : null);
   });
 
+  on(document, "optics:play", function (e) { track("scene", "playground:" + e.detail); });
+
   on(document, "change", function (e) {
-    if (e.target.matches(".play-switch input")) track("scene", "playground:" + e.target.name + ":" + (e.target.checked ? "on" : "off"));
     if (e.target.matches(".task input[type=checkbox]")) {
       var item = e.target.closest("li") || e.target.parentElement;
       track("check", item.textContent.trim().slice(0, 80), e.target.checked ? 1 : 0);

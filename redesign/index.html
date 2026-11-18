@@ -93,8 +93,8 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=6e403a498a">
-  <link rel="stylesheet" href="scenes.css?v=82466becc5">
+  <link rel="stylesheet" href="styles.css?v=fde36fcac2">
+  <link rel="stylesheet" href="playground.css?v=daa7d4382f">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -146,27 +146,12 @@
       </div>
     </section>
 
-    <!-- Playground: the hero suite on the Birch phone. Each switch is a change to the app or the suite, and the run shows what Optics does about it. -->
+    <!-- Playground: optics live beside a Birch phone you can tap. Each tap types the step; /save writes it; optics execute replays it. -->
     <section class="play" id="playground" data-hour="1" aria-label="Playground">
       <div class="wrap">
-        <div class="play-frame">
-          <p class="play-tag label" aria-hidden="true"><span>Not a recording.</span> <em>Flip a switch.</em></p>
-          <div class="scene play-stage" role="img" aria-label="The Birch shop suite running on a phone. Each row of modules.csv lights up while Optics does that step, and the terminal prints the result of the run."></div>
-          <div class="play-bar">
-            <fieldset class="play-switches">
-              <legend>Change the app or the suite</legend>
-              <label class="play-switch"><input type="checkbox" name="newId" checked>The sign-in button has a new id</label>
-              <label class="play-switch"><input type="checkbox" name="noText">The text fallback for sign_in is deleted</label>
-              <label class="play-switch"><input type="checkbox" name="errorScreen">The app ends on &#8220;Session expired&#8221;</label>
-            </fieldset>
-            <div class="play-go">
-              <button class="btn btn-sun play-run" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>Run the suite</button>
-              <output class="play-result" aria-live="polite" hidden></output>
-            </div>
-          </div>
-        </div>
+        <div class="pg live"></div>
         <div class="play-cap">
-          <p>Each row of <code>modules.csv</code> is one step Optics does on the device. When an element&#8217;s id stops matching, Optics finds it by its text.</p>
+          <p>In <code>optics live</code> you type a step and it runs on the device at once. <code>/save</code> writes the steps that worked into your suite.</p>
           <button class="btn btn-ghost btn-sm film-open" type="button" aria-haspopup="dialog">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the 1-minute demo
           </button>
@@ -405,23 +390,35 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
       </div>
     </section>
 
-    <!-- The locator ladder, drawn as a ladder: the rungs are an ordered fallback. -->
+    <!-- The locator ladder, drawn as a ladder: the rungs are an ordered fallback. Ship a release and watch Optics climb it. -->
     <section data-hour="5" class="band ladder" id="ladder" aria-labelledby="ladder-h">
       <div class="wrap">
         <h2 class="h2" id="ladder-h">How Optics finds an element</h2>
         <div class="two">
-          <div>
-            <p class="body-text">Most frameworks give an element one locator and fail when a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first, so vision only costs you time when the UI tree can't help.</p>
-            <p class="body-text">Two more fallbacks sit alongside the ladder. List several values for the same element name and each is tried in turn. Enable a second driver or element source and it takes over when the first one fails.</p>
-          </div>
-          <ol class="rungs">
-            <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
-            <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
-            <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with EasyOCR, Tesseract or Google Vision.</span></div></li>
-            <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
-            <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
-          </ol>
+          <p class="body-text">Most frameworks give an element one locator and fail when a redesign changes it. Optics gives every element several identities and tries them in order, cheapest first, so vision only costs you time when the UI tree can't help.</p>
+          <p class="body-text">Two more fallbacks sit alongside the ladder. List several values for the same element name and each is tried in turn. Enable a second driver or element source and it takes over when the first one fails.</p>
         </div>
+        <div class="pg brk">
+          <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
+        <ol class="rungs">
+          <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
+          <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
+          <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with EasyOCR, Tesseract or Google Vision.</span></div></li>
+          <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
+          <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
+        </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- One suite, every screen: drag the device from a phone to a TV; the same modules.csv runs. -->
+    <section data-hour="6" class="band screens" id="devices" aria-labelledby="screens-h">
+      <div class="wrap">
+        <div class="head-row">
+          <h2 class="h2" id="screens-h">One suite, every screen</h2>
+          <p class="body-text">The same <code class="ic">modules.csv</code> runs on a phone, in a browser, on a TV and on a locked production device. Only the driver changes.</p>
+        </div>
+        <div class="pg scr"></div>
       </div>
     </section>
 
@@ -652,9 +649,8 @@ Total Test Cases: 2 | Passed: <span class="c-pass">2</span> | Failed: 0</code></
   </svg>
 
   <script src="app.js?v=5160aed22e" defer></script>
-  <script src="track.js?v=6ad24e64b5" defer></script>
-  <script src="scenes.js?v=3ec9937cca" defer></script>
-  <script src="scene-defs.js?v=5da036df6a" defer></script>
-  <script src="playground.js" defer></script>
+  <script src="track.js?v=a7621959d3" defer></script>
+  <script src="birch.js?v=b6031f31f4" defer></script>
+  <script src="playground.js?v=9098bb013d" defer></script>
 </body>
 </html>
