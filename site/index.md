@@ -13,10 +13,11 @@ Optics is open-source test automation for Android, iOS, web and TV. Write a test
 
 ## Playground
 
-The homepage has three playgrounds on a demo shop app, Birch. They show what Optics does. They do not run Optics.
+The homepage has three playgrounds and a simulator on a demo shop app, Birch. They show what Optics does. They do not run Optics.
 
 - **Tap it, Optics writes it.** A copy of `optics live` sits next to a phone. Type a keyword, or tap the phone to type the keyword for that element. Each step runs at once and shows how Optics found the element. `/save` writes the steps that passed into `modules.csv` and `elements.csv`, with the password kept out of the module. `optics execute` then replays the suite.
 - **Break the test.** Ship a new release of the app: rename the sign-in button's id, change its words, draw it as a picture, translate the app or delete the button. Each step of the fallback ladder shows if it found the button. A missing button or a "Session expired" screen is a real bug and fails the run. A button that Optics cannot find, but that still works, is a false failure; add its new text to `elements.csv` and run again.
+- **Release simulator.** Set the odds that each release renames an id, rewords a label, restyles the buttons, draws text into a picture, deletes a button, signs the shopper out or flashes a server error. Then ship 25, 50 or 100 releases in a row. The same releases run three ways: one value per element, every value, and every value with AI self-heal. A table counts green runs, false failures, healed steps, test edits, bugs caught and runs with a bug unseen. Turn off `error_definitions.csv` to see a sign-out bug go unseen. The results are a simulation, not measurements. The seed and the odds make a run, and the link with `?sim=` replays it.
 - **One suite, every screen.** Move the slider to run the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. Only the driver changes.
 
 ## Every test has two lives
