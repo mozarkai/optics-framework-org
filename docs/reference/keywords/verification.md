@@ -54,6 +54,7 @@ Home,Assert Presence,Trail Runner 2|Pace Knit,20,all
 Good to know:
 
 - The timeout parameter is called `timeout_str`, not `timeout`. `timeout=20` is passed as the text "timeout=20" and fails the step. Write `20` positionally or `timeout_str=20`.
+- Assert Presence passes when any element shows the text, for example a key or a label with the same text. To check the value of one element, such as a result or a total, use [Assert Text](#assert-text) on that element.
 - "Present" means the element is in the app's UI tree, even if it's scrolled off screen. On Android, the UI tree usually leaves out off-screen items. To include them, set `appium:settings: {allowInvisibleElements: true}` in your [config](https://optics-framework.org/docs/reference/config).
 - Elements are checked in groups: text and CSS first, then XPaths, then images. Each group gets the full timeout. With `rule=any`, a text group that isn't found fails the step before the XPaths are tried. Keep one kind of locator per assertion when you use `any`.
 - In a group, every element source checks every element in each round, about every half second. A match from any source counts. OCR and image matching run last, at most every 2 seconds, and only when the screen changed.

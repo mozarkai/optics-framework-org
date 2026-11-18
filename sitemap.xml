@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://optics-framework.org/</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/about</loc>
@@ -46,11 +46,11 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/get-started/quickstart</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/get-started/install</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/get-started/first-test</loc>
@@ -166,7 +166,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/desktop</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/production</loc>
@@ -246,7 +246,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/verification</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/reference/keywords/flow</loc>
@@ -286,7 +286,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/troubleshooting</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/faq</loc>

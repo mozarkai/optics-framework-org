@@ -21,7 +21,7 @@ PS> irm https://optics-framework.org/install.ps1 | iex
 **pip**
 
 ```shell
-$ pip install optics-framework
+$ pip install "optics-framework[mcp]"
 ```
 
 Open a new terminal window, then check that the `optics` command works:

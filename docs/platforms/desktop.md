@@ -26,7 +26,7 @@ Optics  ──WebDriver──>  Appium + appium-xa11y-driver  ──accessibilit
 
 ## Before you begin
 
-- [Optics installed](https://optics-framework.org/docs/get-started/install) with the Appium engine: `optics setup --install appium`.
+- [Optics installed](https://optics-framework.org/docs/get-started/install) with the Appium engine: `optics setup --install appium`. With pip, run `pip install "optics-framework[mcp,appium]"`.
 - A Host that runs macOS, Linux with X11 (Debian 13 is tested), or Windows (Windows Server 2022 is tested).
 - On macOS, access to System Settings to give two permissions one time.
 - On Windows, an administrator one time, if the Visual C++ runtime is not installed.
@@ -37,7 +37,7 @@ The setup script installs its own Node.js, Appium 3 and the driver. You do not n
 
 ### Set up the Host
 
-Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. It is safe to run the script again: it changes only what is missing.
+Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. To use a different port, add `--port <port>`, or `-Port <port>` on Windows. Then use the same port in `url` in `config.yaml`. It is safe to run the script again: it changes only what is missing.
 
 Download the script to a temporary folder, not to your project. Do not send it to `bash` through a pipe: the script copies its own file to make the service script `host.sh`.
 
@@ -98,7 +98,7 @@ $ curl -s http://127.0.0.1:4723/status
 {"value":{"ready":true,"message":"The server is ready to accept new connections", ...}}
 ```
 
-If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
+If you set `--port`, or `-Port` on Windows, use that port in the URL. If you get no answer, read the log of the service. [If it isn't working](#if-it-isnt-working) lists the usual causes.
 
 ### Make a project
 
@@ -110,7 +110,7 @@ Or make the sample project yourself:
 $ optics init notes --template desktop_editor
 ```
 
-The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. On Linux or Windows, change `platformName` and `app` in `notes/config.yaml` first. [Write config.yaml](#write-config-yaml) shows the values.
+The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
 
 ### Check and run
 
@@ -430,10 +430,12 @@ Add numbers,Press Element,${Seven}
 Add numbers,Press Element,${Plus}
 Add numbers,Press Element,5
 Add numbers,Press Element,${Equals}
-Add numbers,Assert Presence,12
+Add numbers,Assert Text,(//text_area)[1],12
 Add numbers,Force Terminate App,gnome-calculator
 Back to the editor,Launch App
 ```
+
+In gnome-calculator, the first `text_area` is the display. Assert Text checks the value of that element. Do not use `Assert Presence,12` for a result. It passes when any element shows `12`, for example a line in the history of the calculator. See [Assert Presence](https://optics-framework.org/docs/reference/keywords/verification#assert-presence).
 
 Keys, typing and mouse actions go only to the app of the session. Before each of these steps, the driver brings that app to the front. If a different window stays in front, for example a system alert, the step fails and sends nothing.
 
@@ -592,7 +594,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 
 ## If it isn't working
 
-- **No answer from `http://127.0.0.1:4723/status`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
+- **No answer from `http://127.0.0.1:4723/status`, or from the port that you set with `--port` or `-Port`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, give both permissions to the Node.js path that the setup script printed, then restart Appium.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.
@@ -603,6 +605,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 - **"DISPLAY ':1' is not a local X11 display".** On Linux, the driver needs a local X11 display. Remove the `--display` option and run the setup script again, so that it starts Xvfb.
 - **An old document opens on macOS.** The app restored its last session. Add `appArguments: ["-ApplePersistenceIgnoreState", "YES"]`.
 - **The element is not found on Linux, but the locator has `@id`.** Linux has no ids. Use `@name` or visible text.
+- **`Operation not permitted` for a file in `~/Documents` on macOS.** macOS privacy blocks the terminal. See [Operation not permitted on macOS](https://optics-framework.org/docs/help/troubleshooting#macos-operation-not-permitted).
 - **`optics doctor` warns about adb.** A desktop project does not need adb. The warning does not stop the run.
 
 ## See also

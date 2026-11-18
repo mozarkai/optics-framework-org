@@ -4,7 +4,7 @@ Optics is open-source test automation for Android, iOS, web, TV and desktop. Wri
 
 - Install (macOS and Linux): `curl -fsSL https://optics-framework.org/install | sh`
 - Install (Windows): `irm https://optics-framework.org/install.ps1 | iex`
-- Install (pip): `pip install optics-framework`
+- Install (pip): `pip install "optics-framework[mcp]"`
 - Licence: Apache 2.0. Needs Python 3.12 or newer.
 - Docs: https://optics-framework.org/docs/ (every page is also Markdown; index for agents: https://optics-framework.org/docs/llms.txt)
 - HTTP API (`optics serve`, runs locally): https://optics-framework.org/openapi.json
