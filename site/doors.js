@@ -259,7 +259,7 @@
 
     function take(d) {
       if (!d.result) {
-        if (steps.length && !steps[0].line.isConnected) steps = [], cut = 0;
+        if (steps.length && !steps[0].line.isConnected) steps = [], cut = 0, follow = true;
         var step = { n: steps.length + 1, cmd: d.cmd, kw: d.kw, args: d.args, named: d.named, secret: d.secret, module: d.module, tc: "Checkout", line: d.line, before: { rows: read(d.app) } };
         d.door = step;
         if (d.line) d.line.dataset.step = steps.length;

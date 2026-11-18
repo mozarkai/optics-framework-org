@@ -283,7 +283,7 @@
       form.defs.checked = cfg.defs;
       form.seed.value = cfg.seed;
       form.querySelectorAll('[name="releases"]').forEach(function (r) { r.checked = +r.value === cfg.releases; });
-      ship.textContent = "Ship " + cfg.releases + " releases";
+      ship.textContent = rootEl.classList.contains("running") ? "Skip to the end" : "Ship " + cfg.releases + " releases";
       rootEl.querySelectorAll(".sim-score [data-s]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.s === cfg.strategy); });
     }
     function read() {
@@ -489,7 +489,10 @@
     });
     detailEl.addEventListener("click", function (e) {
       var b = e.target.closest(".sim-nav");
-      if (b) choose(Math.max(0, Math.min(shown - 1, sel + +b.dataset.d)), false);
+      if (!b) return;
+      choose(Math.max(0, Math.min(shown - 1, sel + +b.dataset.d)), false);
+      var again = detailEl.querySelector('.sim-nav[data-d="' + b.dataset.d + '"]');
+      if (again) again.focus();
     });
 
     narrow.addEventListener("change", drawGrid);

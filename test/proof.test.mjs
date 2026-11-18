@@ -86,7 +86,7 @@ test("the homepage shows the committed PyPI, GitHub and release numbers with the
     assert.ok(section.includes(`href="${release.url}"`), `release ${release.tag} missing`);
     for (const change of release.added.slice(0, 3)) assert.ok(section.includes(change.pr), `${release.tag} change ${change.pr} missing`);
   }
-  for (const source of ["https://clickpy.clickhouse.com/dashboard/optics-framework", "https://github.com/mozarkai/optics-framework/stargazers", "https://github.com/mozarkai/optics-framework/releases"]) {
+  for (const source of ["https://clickpy.clickhouse.com/dashboard/optics-framework", "https://github.com/mozarkai/optics-framework", "https://github.com/mozarkai/optics-framework/releases"]) {
     assert.ok(section.includes(`href="${source}"`), `source ${source} not linked`);
   }
   assert.doesNotMatch(html, /<!-- proof -->/);
