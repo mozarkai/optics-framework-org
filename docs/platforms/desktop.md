@@ -44,7 +44,7 @@ The setup script installs its own Node.js, Appium 3 and the driver. You do not n
 :::steps
 ### Set up the Host
 
-Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. To use a different port, add `--port <port>`, or `-Port <port>` on Windows. Then use the same port in `url` in `config.yaml`. It is safe to run the script again: it changes only what is missing.
+Run the setup script on the Host. The script installs Appium and the driver, and starts Appium as a service on `127.0.0.1:4723`. To use a different port, add `--port <port>`, or `-Port <port>` on Windows. Then use the same port in `url` in `config.yaml`. If a different process holds the port, the script stops and names that process. It is safe to run the script again: it changes only what is missing.
 
 Download the script to a temporary folder, not to your project. Do not send it to `bash` through a pipe: the script copies its own file to make the service script `host.sh`.
 
@@ -592,6 +592,7 @@ Hosted macOS runners do not give the Accessibility permission. For macOS, use a 
 ## If it isn't working
 
 - **No answer from `http://127.0.0.1:4723/status`, or from the port that you set with `--port` or `-Port`.** Appium does not run. Read the log of the service, then restart it: `launchctl kickstart -k gui/$(id -u)/appium-xa11y` on macOS, `systemctl --user restart appium-xa11y` on Linux, or `Stop-ScheduledTask -TaskName appium-xa11y; Start-ScheduledTask -TaskName appium-xa11y` on Windows.
+- **"port <port> is in use by <process>" from the setup script, `host.sh run` or `host.ps1`.** A different process holds the Appium port, for example an Appium that you started yourself. Stop that process, or run the setup script again with `--port` or `-Port`. Then use that port in `url`.
 - **A message about the Accessibility or Screen Recording permission.** On macOS, the message names the app or Node.js that gets the permissions. It also gives the restart command. Give both permissions to it, then restart Appium. `/xa11y/status` shows the missing permissions.
 - **E0104: "A Mac session needs its app when it starts".** Set `app` or `appName` in the capabilities.
 - **"'<app>' did not start within 20000 ms" on macOS, or "'<app>' showed no window, and started no app of its own, within 20000 ms" on Windows.** The app id is wrong, or the app starts slowly. Check the id with [Find the app id](#find-the-app-id), or set `launchTimeout` to a larger value.

@@ -370,6 +370,10 @@ The driver tried to bring your app to the front, but a different window stays in
 
 Appium needs the Accessibility and Screen & System Audio Recording permissions. The setup script names the app or Node.js that gets them, and opens the panes of the missing permissions. Give the permissions to that app or Node.js, not to your terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y`. To see the missing permissions, run `curl -s http://127.0.0.1:4723/xa11y/status`. See [Give the permissions](/docs/platforms/desktop#give-the-permissions-macos-only).
 
+### The setup script stops with "port 4723 is in use" {#desktop-port-in-use}
+
+A different process holds the Appium port, for example an Appium that you started yourself. The setup script, `host.sh run` and `host.ps1` stop before they start Appium, and the message names that process. Stop that process, or run the setup script again with `--port <port>`, or `-Port <port>` on Windows. Then use that port in `url` in `config.yaml`.
+
 ### Go Back fails with E0105 on a desktop {#desktop-go-back}
 
 Go Back and Get App Version work only on phones. On a desktop, press the app's key combination with Press Keycode, for example `Press Keycode,cmd+[`. See [Keywords that differ on a desktop](/docs/platforms/desktop#keywords-that-differ-on-a-desktop).
