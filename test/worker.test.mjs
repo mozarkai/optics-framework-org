@@ -244,3 +244,14 @@ test("a page asked for in neither HTML nor Markdown answers 406", async () => {
   assert.equal((await get("/logo.svg", "image/png")).status, 200);
   assert.equal((await get("/no-such-page", "image/png")).status, 404);
 });
+
+test("a page asked for with a trailing slash redirects to the page", async () => {
+  for (const [path, to] of [["/about/", "/about"], ["/blog/introducing-optics-framework/?ref=x", "/blog/introducing-optics-framework?ref=x"], ["/docs/run/ci/", "/docs/run/ci"]]) {
+    const response = await get(path);
+    assert.equal(response.status, 301, path);
+    assert.equal(response.headers.get("location"), `https://optics-framework.org${to}`, path);
+  }
+  assert.equal((await get("/docs/run/")).status, 200);
+  assert.equal((await get("/no-such-page/")).status, 404);
+  assert.equal((await get("//evil.example/")).status, 404);
+});
