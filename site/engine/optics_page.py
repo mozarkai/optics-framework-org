@@ -12,13 +12,14 @@ from importlib.metadata import version
 import js
 from pyodide.ffi import can_run_sync, run_sync
 
-from optics_framework.common.events import EventSubscriber, get_event_manager
+from optics_framework.common.events import Event, EventSubscriber, get_event_manager
 from optics_framework.common.runner.test_runnner import TestRunner
 from optics_framework.helper.execute import DryRunRunner, ExecuteRunner, RunnerArgs
 
 PROJECT = "/home/pyodide/birch-shop"
 RUNNERS = {"dry_run": DryRunRunner, "execute": ExecuteRunner}
 skipped = 0.0
+paced = 0.0  # seconds the page spent showing steps at a human pace
 
 
 class Stopped(BaseException):
@@ -42,11 +43,16 @@ def sleep(seconds):
 
 
 def skipping(clock):
-    return lambda: clock() + skipped
+    # Pacing is for the viewer, so it is not part of any keyword's time (JUnit, step timings).
+    return lambda: clock() + skipped - paced
 
 
+real_clock = time.perf_counter
 time.sleep = sleep
 time.time, time.monotonic, time.perf_counter = skipping(time.time), skipping(time.monotonic), skipping(time.perf_counter)
+# Event stamps its own time with the time.time it imported, so give it the page's clock.
+Event.model_fields["timestamp"].default_factory = time.time
+Event.model_rebuild(force=True)
 execute_keyword = TestRunner._execute_keyword
 dry_run_keyword = TestRunner._dry_run_keyword
 
@@ -55,14 +61,23 @@ def announce(keyword_node) -> None:
     js.opticsPage.step(keyword_node.id, keyword_node.name, json.dumps(keyword_node.params))
 
 
+async def pause(shown):
+    global paced
+    start = real_clock()
+    try:
+        await shown
+    finally:
+        paced += real_clock() - start
+
+
 async def paced_keyword(self, keyword_node, *args, **kwargs):
     announce(keyword_node)
     stop_if_asked()
-    await js.opticsPage.before()
+    await pause(js.opticsPage.before())
     try:
         return await execute_keyword(self, keyword_node, *args, **kwargs)
     finally:
-        await js.opticsPage.after()
+        await pause(js.opticsPage.after())
 
 
 def announced_dry_run(self, keyword_node, *args, **kwargs):

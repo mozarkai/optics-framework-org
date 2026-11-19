@@ -61,8 +61,8 @@
     return '<svg viewBox="0 0 160 90" aria-hidden="true"><path d="M14 58c0-10 8-16 20-18l22-4 16-16c6-6 14-6 19 0l10 13c14 3 30 8 40 14 6 4 7 9 5 13H18c-3 0-4-1-4-2z" fill="' + color + '"/><path d="M12 64h138c2 0 3 2 2 5-2 6-6 8-12 8H24c-7 0-12-4-12-9z" fill="#fff" stroke="rgba(0,0,0,.08)"/><path d="M60 40l10 8M71 34l10 8M82 29l9 8" stroke="rgba(255,255,255,.75)" stroke-width="3.5" stroke-linecap="round"/></svg>';
   }
   var WORDS = {
-    en: { h: "Welcome back", sub: "Sign in to continue shopping", email: "Email", password: "Password", signin: "Sign in", forgot: "Forgot password?" },
-    de: { h: "Willkommen zurück", sub: "Melde dich an, um weiterzushoppen", email: "E-Mail", password: "Passwort", signin: "Anmelden", forgot: "Passwort vergessen?" },
+    en: { h: "Welcome back", sub: "Sign in to continue shopping", email: "Email", password: "Password", signin: "Sign in", forgot: "Forgot password?", err: "Enter your email and password." },
+    de: { h: "Willkommen zurück", sub: "Melde dich an, um weiterzushoppen", email: "E-Mail", password: "Passwort", signin: "Anmelden", forgot: "Passwort vergessen?", err: "Gib deine E-Mail und dein Passwort ein." },
   };
   var KEYS = ["abcdefg", "hijklmn", "opqrstu", "vwxyz _"];
 
@@ -77,6 +77,7 @@
         '<h5 class="bz-h" data-k="h" data-t>Welcome back</h5><p class="bz-sub" data-k="sub" data-t>Sign in to continue shopping</p>' +
         '<button class="bz-field" type="button" data-el="email"><small data-k="email">Email</small><span class="v"></span></button>' +
         '<button class="bz-field" type="button" data-el="password"><small data-k="password">Password</small><span class="v pw"></span></button>' +
+        '<p class="bz-err" data-k="err" data-t>Enter your email and password.</p>' +
         '<button class="bz-btn" type="button" data-el="signin"><span data-k="signin" data-t>Sign in</span></button>' +
         '<button class="bz-link" type="button" data-el="forgot" data-k="forgot" data-t>Forgot password?</button>' +
       "</section>" +
@@ -108,6 +109,7 @@
       product: 0,
       show: function (name) {
         if (A.screen !== name) A.toast(false);
+        A.fail(false);
         root.dataset.screen = name;
         A.screen = name;
         $$(".focus").forEach(function (f) { f.classList.remove("focus"); });
@@ -178,13 +180,19 @@
       },
       press: function (t) {
         var name = t.dataset.el;
-        if (name === "signin") A.show("home");
+        if (name === "signin") {
+          // As in the real app: both fields must be filled in. Any value signs in.
+          if (A.filled()) A.show("home");
+          else A.fail(true);
+        }
         else if (name === "card") A.open(+t.dataset.i);
         else if (name === "chip" || name === "size") A.pick(t);
         else if (name === "add") A.toast(true);
         else if (name === "back") A.show("home");
         else if (name in field) t.classList.add("focus");
       },
+      filled: function () { return !!(field.email.querySelector(".v").textContent.trim() && field.password.querySelector(".v").textContent); },
+      fail: function (on) { $(".bz-err").classList.toggle("on", on); },
       toastOn: false,
       toast: function (on) {
         clearTimeout(toastTimer);

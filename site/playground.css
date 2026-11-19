@@ -77,6 +77,8 @@
 .bz-btn.gone { visibility: hidden; }
 .bz-btn.pic::after { content: "png"; position: absolute; right: -4px; top: -8px; padding: 3px 5px; background: #1C1B19; color: #F3BE00; font: 500 8px/1 var(--mono); letter-spacing: .06em; }
 .bz-btn.pic span { font-family: Georgia, serif; font-style: italic; }
+.bz-err { display: none; margin-top: 10px; font-size: 11.5px; font-weight: 600; color: #B3361B; }
+.bz-err.on { display: block; }
 .bz-link { margin-top: 16px !important; text-align: center !important; font-size: 12px; font-weight: 650; color: #1F5B43 !important; }
 
 .bz-home { padding-top: 50px; }
