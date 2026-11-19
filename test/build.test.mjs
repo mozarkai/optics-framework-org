@@ -319,6 +319,7 @@ test("docs search index and agent index cover every page", () => {
   const index = JSON.parse(read("docs/search.json"));
   assert.equal(index.length, docsPages().length);
   for (const entry of index) assert.ok(entry.t && entry.x.length > 100, `search entry ${entry.u} is empty`);
+  for (const entry of index) assert.doesNotMatch(entry.x, /stroke-dasharray|\{fill:/, `search entry ${entry.u} holds diagram CSS`);
   const llms = read("docs/llms.txt");
   for (const page of docsPages()) {
     const md = `${ORIGIN}/${page.url}`.replace(/\/$/, "/index") + ".md";
