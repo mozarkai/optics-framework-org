@@ -199,6 +199,18 @@ function present(response, { url, wants, method }) {
   return wants === "none" && response.ok ? notAcceptable(method) : asHtml(response, url);
 }
 
+// Pages answers /about/ with a 404 although /about exists.
+async function withoutSlash({ url, get }) {
+  const path = url.pathname.replace(/\/+$/, "");
+  if (!path || path === url.pathname || path.startsWith("//")) return null;
+  const page = await get(path);
+  await page.body?.cancel();
+  if (!page.ok) return null;
+  const to = sameSite(url, path);
+  to.search = url.search;
+  return Response.redirect(to.href, 301);
+}
+
 export async function handle(request, upstream = fetch) {
   const { method } = request;
   if (method !== "GET" && method !== "HEAD") return upstream(request);
@@ -212,7 +224,7 @@ export async function handle(request, upstream = fetch) {
   const twin = await serveTwin(ctx);
   if (twin) return twin;
   const response = await upstream(request);
-  const missing = response.status === 404 && (await notFound(ctx));
+  const missing = response.status === 404 && ((await withoutSlash(ctx)) || (await notFound(ctx)));
   return missing || present(response, ctx);
 }
 
