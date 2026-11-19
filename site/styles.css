@@ -376,6 +376,7 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 /* ---------- blog: the list, built from content/blog.json ---------- */
 .page .wrap > .blog-feed { max-width: none; }
 .page .wrap > :is(.play-tabs, .pg, .wild) { max-width: none; }
+.page:has(> .wrap > .play-tabs:first-child) { padding-top: 8px; }
 .play-tabs { display: flex; gap: 28px; margin-bottom: clamp(40px, 5vw, 64px); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line-2); font: 500 var(--t-label)/1.4 var(--mono); letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
 .play-tabs a { padding: 12px 0; border-bottom: 2px solid transparent; color: var(--ink-2); text-decoration: none; }
 .play-tabs a:hover { color: var(--ink); }
