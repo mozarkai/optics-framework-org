@@ -27,13 +27,15 @@ const TOP =
 // Credentials and personal data an agent may paste by mistake. The Optics client scrubs too;
 // this pass covers any other caller.
 const SCRUB = [
-  [/\b(?:sk|pk|rk)-[A-Za-z0-9_-]{16,}/g, "[key]"],
+  [/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u200B-\u200F\u202A-\u202E\u2066-\u2069]/g, ""],
+  [/\b(?:sk|pk|rk)[-_](?:(?:live|test)_)?[A-Za-z0-9_-]{16,}/g, "[key]"],
+  [/\bxox[abposr]-[A-Za-z0-9-]{10,}/g, "[key]"],
   [/\b(?:ghp|gho|ghu|ghs|github_pat)_[A-Za-z0-9_]{20,}/g, "[key]"],
   [/\bAKIA[0-9A-Z]{16}\b/g, "[key]"],
   [/\bAIza[0-9A-Za-z_-]{35}\b/g, "[key]"],
-  [/\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/g, "[token]"],
-  [/\b(bearer|token|password|passwd|secret|api[_-]?key)(["'\s:=]+)[^\s"',;]+/gi, "$1$2[redacted]"],
-  [/[\w.+-]+@[\w-]+\.[\w.-]+/g, "[email]"],
+  [/(?<![\w-])eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/g, "[token]"],
+  [/\b(authorization|bearer|token|password|passwd|secret|api[_-]?key)(["'\s:=]+)(?:(?:bearer|basic)\s+)?[^\s"',;]+/gi, "$1$2[redacted]"],
+  [/(?<![\w.+-])[\w.+-]+@[\w-]+\.[\w.-]+/g, "[email]"],
   [/(\/\/[^/\s:@]+):[^/\s@]+@/g, "$1:[redacted]@"],
 ];
 
@@ -82,12 +84,20 @@ export async function receive(request, env, now = Date.now()) {
   const body = await request.text();
   const report = body.length <= MAX_BODY ? parseReport(body) : null;
   if (!report) return reply(400, { error: "The report does not match the expected fields." });
+  try {
+    return await store(report, env.DB, now, request.cf?.country ?? null);
+  } catch {
+    return reply(503, { error: "Feedback is not stored right now. Do not retry." });
+  }
+}
+
+async function store(report, db, now, country) {
   const today = day(now);
-  const place = await env.DB.prepare(TAKE_PLACE).bind(today, DAILY_CAP).first();
+  const place = await db.prepare(TAKE_PLACE).bind(today, DAILY_CAP).first();
   if (!place) return reply(429, { error: "Today's reports are full. Do not retry; carry on with your task." });
   const row = [now, today, report.kind, report.impact, report.task, report.description, report.tool, report.error,
-    report.suggestion, report.version, report.client, report.transport, report.platform, request.cf?.country ?? null];
-  const { meta } = await env.DB.prepare(INSERT).bind(...row).run();
+    report.suggestion, report.version, report.client, report.transport, report.platform, country];
+  const { meta } = await db.prepare(INSERT).bind(...row).run();
   return reply(201, { id: meta.last_row_id, received: true });
 }
 

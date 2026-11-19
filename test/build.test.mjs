@@ -477,6 +477,18 @@ test("no page loads an asset from another server", () => {
   }
 });
 
+// The Markdown twins publish every address in clear text, so the edge's email obfuscation
+// protects nothing and only turns sample addresses in code into "[email protected]".
+test("every page with an email address keeps it out of the edge's obfuscation", () => {
+  const files = (dir) => readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(`${dir}${e.name}/`) : e.name.endsWith(".html") ? [`${dir}${e.name}`] : []));
+  const pages = files("").filter((f) => /[\w.+-]+@[\w-]+\.[a-z]{2,}/.test(read(f)));
+  assert.ok(pages.length > 10);
+  for (const page of pages) {
+    const body = read(page).match(/<body[^>]*>([\s\S]*)<\/body>/)?.[1] ?? "";
+    assert.ok(body.startsWith("<!--email_off-->") && body.endsWith("<!--/email_off-->"), page);
+  }
+});
+
 test("every HTML page has a Markdown twin for agents", () => {
   const html = (dir) => readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) =>
     e.isDirectory() ? html(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : []);

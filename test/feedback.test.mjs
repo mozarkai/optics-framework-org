@@ -95,6 +95,21 @@ test("a report that is not what the Optics client sends is refused and not store
   assert.equal(response.status, 413);
 });
 
+test("bearer and basic credentials, Stripe and Slack keys, and hidden control characters never reach storage", async () => {
+  const description = "token: Bearer abcdef123456 then Authorization: Basic dXNlcjpwYXNz and sk_live_abcdefghijklmnop1234 and xoxb-12345-abcdefghij \u202Egnp.exe\u0000 done";
+  const { response, DB } = await post({ ...report, description });
+  assert.equal(response.status, 201);
+  assert.doesNotMatch(DB.feedback[0].description, /abcdef123456|dXNlcjpwYXNz|sk_live_|xoxb-|\u202E|\u0000/);
+  assert.match(DB.feedback[0].description, /done$/);
+});
+
+test("when the database fails, the agent is told not to retry instead of getting a crash", async () => {
+  const broken = { prepare: () => ({ bind: () => ({ first: async () => { throw new Error("D1 is over its write limit"); }, run: async () => { throw new Error("D1 is over its write limit"); } }) }) };
+  const { response } = await post(report, broken);
+  assert.equal(response.status, 503);
+  assert.match((await response.json()).error, /Do not retry/);
+});
+
 test("once the day's cap is reached, reports are refused and the agent is told not to retry", async () => {
   const today = new Date().toISOString().slice(0, 10);
   const DB = fakeDb(Array.from({ length: DAILY_CAP }, () => ({ day: today })));

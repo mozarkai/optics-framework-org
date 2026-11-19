@@ -8,6 +8,19 @@ const origin = pagesOrigin("out");
 const get = (path, accept, method = "GET", ua) =>
   handle(new Request(`https://optics-framework.org${path}`, { method, headers: { ...(accept && { accept }), ...(ua && { "user-agent": ua }) } }), origin);
 
+test("a path that looks like another host never makes the worker fetch from it", async () => {
+  for (const path of ["//raw.githubusercontent.com/o/r/main/README.md", "//evil.example/page", "/\\evil.example/x.md", "/.md"]) {
+    const asked = [];
+    const upstream = (request) => {
+      asked.push(new URL(request.url).host);
+      return new Response("# from elsewhere", { headers: { "content-type": "text/markdown" } });
+    };
+    const response = await handle(new Request(`https://optics-framework.org${path}`, { headers: { accept: "text/markdown" } }), upstream);
+    assert.deepEqual([...new Set(asked)], ["optics-framework.org"], path);
+    for (const link of (response.headers.get("link") ?? "").matchAll(/<([^>]+)>/g)) assert.equal(new URL(link[1], "https://optics-framework.org").host, "optics-framework.org", `${path}: ${link[1]}`);
+  }
+});
+
 test("negotiate picks markdown or JSON only when the client ranks it above HTML", () => {
   for (const accept of ["text/markdown", "text/markdown, text/html;q=0.9", "text/markdown, */*", "text/x-markdown", "TEXT/MARKDOWN; charset=utf-8"]) {
     assert.equal(negotiate(accept), "markdown", accept);

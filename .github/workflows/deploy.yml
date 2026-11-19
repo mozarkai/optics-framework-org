@@ -57,11 +57,6 @@ jobs:
         env:
           PAGES_BASE_PATH: ${{ steps.target.outputs.base_path }}
 
-      # `/install` is the URL people are told to curl; `/install.sh` is the same
-      # script under the name a browser will recognise. One source file, copied.
-      - name: Publish the installer at both paths
-        run: cp out/install.sh out/install
-
       - name: Publish to gh-pages
         run: |
           set -e
