@@ -80,6 +80,7 @@
     },
   };
 
+  var drawn = false;
   function show(name, how) {
     var t = document.querySelector(".toast");
     if (t) t.remove();
@@ -90,6 +91,9 @@
     root.innerHTML = SCREENS[name]();
     if (name === "home") paintPromo(root.querySelector(".promo"));
     window.scrollTo(0, 0);
+    var h = drawn && root.querySelector("h1, h2");
+    if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+    drawn = true;
   }
 
   // The offer is drawn, not written, so its words exist only as pixels.
