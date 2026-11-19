@@ -66,7 +66,7 @@ function sameOrigin(request) {
 
 const validEvent = (e) =>
   Array.isArray(e) && EVENTS.has(e[0]) && typeof e[1] === "string" && e[1].length <= 200 && (e[2] === null || Number.isFinite(e[2]));
-const validPage = ({ v, p, d }) => /^[a-z0-9]{1,16}$/.test(v) && typeof p === "string" && p.startsWith("/") && p.length <= 300 && DEVICES.has(d);
+const validPage = ({ v, p, d }) => typeof v === "string" && /^[a-z0-9]{1,16}$/.test(v) && typeof p === "string" && p.startsWith("/") && p.length <= 300 && DEVICES.has(d);
 const validEvents = (e) => Array.isArray(e) && e.length > 0 && e.length <= MAX_EVENTS && e.every(validEvent);
 
 function json(text) {

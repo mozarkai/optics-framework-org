@@ -59,7 +59,7 @@ const RULES = [
 
 // `verified` is Cloudflare's verified-bot category for the request, when it has one.
 export function classify(ua, verified) {
-  const text = (ua ?? "").trim();
+  const text = (ua ?? "").trim().slice(0, 512);
   for (const rule of RULES) {
     const found = rule(text, verified);
     if (found) return found;

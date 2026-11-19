@@ -101,6 +101,8 @@ test("/e rejects other sites and anything track.js would never send", async () =
     { ...batch, e: [["keylog", "x", null]] },
     { ...batch, e: [] },
     { ...batch, v: "<script>" },
+    { ...batch, v: undefined },
+    { ...batch, v: ["abc"] },
     { ...batch, d: "fridge" },
     { ...batch, e: [["view", "x".repeat(201), null]] },
     { ...batch, e: Array(26).fill(["view", "/", null]) },
@@ -126,6 +128,12 @@ test("every page loads track.js, fingerprinted", () => {
     const html = readFileSync(file, "utf8");
     if (!html.includes('http-equiv="refresh"')) assert.match(html, /src="[^"]*track\.js\?v=\w{10}"/, file);
   }
+});
+
+test("a huge User-Agent is sorted as fast as a normal one", () => {
+  const start = performance.now();
+  classify(`${"a".repeat(64_000)} scan`);
+  assert.ok(performance.now() - start < 50, `took ${Math.round(performance.now() - start)} ms`);
 });
 
 test("/e refuses a body larger than track.js ever sends", async () => {
