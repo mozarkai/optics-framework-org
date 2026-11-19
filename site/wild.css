@@ -8,7 +8,7 @@
 [data-theme="dark"] .wild { --tile: color-mix(in srgb, var(--hour) 92%, #fff); --stage: color-mix(in srgb, var(--hour) 84%, #fff); }
 
 .wild-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: dense; grid-auto-rows: auto; gap: 1.5px; border: 1.5px solid var(--ink); background: var(--ink); box-shadow: var(--shadow); }
-.wild-t { position: relative; display: grid; grid-template-rows: subgrid; grid-row: span 3; min-width: 0; background: var(--tile); }
+.wild-t { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; grid-row: span 3; min-width: 0; background: var(--tile); }
 .wild-hero { grid-column: span 2; grid-row: span 6; }
 .wild-cap { grid-row: 1; }
 .wild-stage { grid-row: 2; }

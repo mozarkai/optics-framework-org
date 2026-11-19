@@ -507,6 +507,9 @@ kbd { font-size: .8em; padding: .1em .45em; border: 1px solid var(--line-2); bor
 @media (max-width: 440px) {
   .nav .brand span { display: none; }
 }
+@media (max-width: 360px) {
+  .nav-actions .btn-sm { display: none; }
+}
 @media (pointer: coarse) and (max-width: 520px) {
   .foot-links { margin-left: -6px; }
 }
