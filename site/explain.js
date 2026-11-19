@@ -28,13 +28,19 @@
     return pipe(json, new CompressionStream("deflate-raw")).then(function (z) { return "s=" + b64(z); });
   }
 
+  // A suite this size takes seconds to explain; a link that unpacks to more is not one we wrote.
+  var MAX_LINK = 65536, MAX_SUITE = 262144;
   function decodeState(hash) {
     var m = /^#([su])=(.+)$/.exec(hash);
-    if (!m) return Promise.resolve(null);
+    if (!m || m[2].length > MAX_LINK) return Promise.resolve(null);
     return Promise.resolve().then(function () {
       var bytes = unb64(m[2]);
       return m[1] === "s" ? pipe(bytes, new DecompressionStream("deflate-raw")) : bytes;
-    }).then(function (b) { var o = JSON.parse(new TextDecoder().decode(b)); return { files: o.f.map(function (f) { return { path: f[0], text: f[1] }; }), active: o.a || 0, caret: o.c || 0 }; });
+    }).then(function (b) {
+      if (b.length > MAX_SUITE) return null;
+      var o = JSON.parse(new TextDecoder().decode(b));
+      return { files: o.f.map(function (f) { return { path: f[0], text: f[1] }; }), active: o.a || 0, caret: o.c || 0 };
+    });
   }
 
   var saveTimer;
@@ -83,11 +89,16 @@
     var slug = location.hash.slice(1);
     if (examples.some(function (e) { return e.slug === slug; })) return openExample(slug, false);
     decodeState(location.hash).then(function (s) {
-      if (!s || !s.files.length) return openExample(examples[0].slug, false);
+      if (!s || !s.files.length) return brokenLink();
       state.example = null;
       state.files = s.files;
       show(Math.min(s.active, s.files.length - 1), s.caret);
-    }).catch(function () { openExample(examples[0].slug, false); });
+    }).catch(brokenLink);
+  }
+
+  function brokenLink() {
+    openExample(examples[0].slug, false);
+    history.replaceState(null, "", "#" + examples[0].slug);
   }
 
   function analyse() {
