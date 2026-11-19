@@ -90,6 +90,10 @@
     if (!saved) { root.dataset.theme = e.matches ? "dark" : "light"; labelToggle(); }
   });
 
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll("video[autoplay]").forEach(function (v) { v.autoplay = false; v.pause(); });
+  }
+
   // ---- copy buttons --------------------------------------------------------
   // Blog articles reuse the docs code blocks, which carry their text on the button.
   document.querySelectorAll(document.body.classList.contains("docs") ? ".cmd .copy" : ".cmd .copy, .doc-code .copy").forEach(function (btn) {
