@@ -77,6 +77,7 @@ const base = process.env.PAGES_BASE_PATH ?? "";
 rmSync("out", { recursive: true, force: true });
 cpSync("site", "out", { recursive: true });
 cpSync("public", "out", { recursive: true });
+cpSync("out/install.sh", "out/install");
 
 for (const page of PAGES) {
   const head = `<link rel="alternate" type="text/markdown" href="${page.path}.md" title="${page.title}, as Markdown">`;
