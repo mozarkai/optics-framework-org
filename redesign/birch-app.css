@@ -32,6 +32,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .logo { display: flex; align-items: center; gap: 7px; font-weight: 760; font-size: 23px; letter-spacing: -.04em; color: var(--pine); }
 .logo i { width: 19px; height: 19px; border-radius: 50% 0; background: var(--leaf); rotate: -8deg; }
 h1, h2 { margin: 0; font-weight: 720; letter-spacing: -.03em; }
+:is(h1, h2)[tabindex="-1"]:focus { outline: none; }
 
 .login .logo { margin-top: 22px; }
 .login h1 { margin-top: 30px; font-size: 31px; }

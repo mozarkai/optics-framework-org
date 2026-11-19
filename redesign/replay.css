@@ -188,3 +188,7 @@
   .rp-ret, .rp-found, .rp-dur i, .rp-ln, .rp-tree { transition: none; scroll-behavior: auto; }
   .rp-scan.go, .rp-stamp { animation: none; }
 }
+@media (max-width: 360px) {
+  .rp-ctl { flex-wrap: wrap; }
+  .rp-relb { gap: 8px; padding: 0 8px; }
+}

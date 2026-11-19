@@ -97,7 +97,7 @@ Teams that already run Appium, Playwright or Selenium keep their drivers and dev
 
 `optics execute` prints a live tree of every test case, module and step. This is a real run on an Android emulator:
 
-<video src="https://optics-framework.org/media/blog/execute-run.mp4" poster="https://optics-framework.org/media/blog/execute-run-poster.webp" autoplay loop muted playsinline preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
+<video src="https://optics-framework.org/media/blog/execute-run.mp4" poster="https://optics-framework.org/media/blog/execute-run-poster.webp" autoplay loop muted playsinline controls preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
 
 *A real optics execute run on an Android emulator.*
 

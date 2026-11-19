@@ -19,7 +19,7 @@
   "url": "https://optics-framework.org/blog/introducing-optics-framework",
   "mainEntityOfPage": "https://optics-framework.org/blog/introducing-optics-framework",
   "datePublished": "2026-10-11",
-  "dateModified": "2026-10-20",
+  "dateModified": "2026-11-19",
   "image": "https://optics-framework.org/media/blog/introducing-optics.webp",
   "author": {
     "@type": "Person",
@@ -50,7 +50,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../styles.css?v=93b3fc54ba">
+  <link rel="stylesheet" href="../styles.css?v=10d15b4c73">
 </head>
 <body><!--email_off-->
   <a class="skip" href="#main">Skip to content</a>
@@ -135,7 +135,7 @@ sign_in,Sign in">Copy</button><pre><code><span class="c-dim">Element_Name,Elemen
 <p><em>The same test on a phone, a TV and a browser.</em></p>
 <h2 id="running-a-suite">Running a suite<a class="anchor" href="#running-a-suite" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">optics execute</code> prints a live tree of every test case, module and step. This is a real run on an Android emulator:</p>
-<video src="../media/blog/execute-run.mp4?v=2da78e5d87" poster="../media/blog/execute-run-poster.webp?v=d6279c5f98" autoplay loop muted playsinline preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
+<video src="../media/blog/execute-run.mp4?v=2da78e5d87" poster="../media/blog/execute-run-poster.webp?v=d6279c5f98" autoplay loop muted playsinline controls preload="none" aria-label="Screen recording of optics execute running a test suite on an Android emulator, with a live pass and fail tree in the terminal"></video>
 <p><em>A real optics execute run on an Android emulator.</em></p>
 <p>A run leaves behind a JUnit report for CI, screenshots with a box around every element it found, and an exit code of 1 when a test fails. You can list error messages such as <em>Session expired</em> in a definitions file, and Optics looks for them on the last screen to catch failures no step asserted. <a href="../blog/your-tests-passed-your-app-didnt">Your tests passed. Your app didn’t.</a> walks through that feature.</p>
 <p><code class="ic">optics dry_run</code> checks a suite without a device, and loops, conditions and data files run one flow with many inputs. To connect Optics to other tools, Invoke API calls your backend mid-test, <code class="ic">optics serve</code> exposes the keywords over REST, and <code class="ic">optics generate</code> converts a suite to pytest or Robot Framework code.</p>
@@ -186,7 +186,7 @@ optics execute my-optics-project</code></pre></figure>
     </symbol>
   </svg>
 
-  <script src="../app.js?v=a328cc636a" defer></script>
+  <script src="../app.js?v=aaa72e04a3" defer></script>
   <script src="../track.js?v=a7621959d3" defer></script>
 <!--/email_off--></body>
 </html>
