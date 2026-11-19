@@ -275,10 +275,13 @@ const htmlFiles = (dir) =>
     e.isDirectory() ? htmlFiles(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : [],
   );
 for (const file of htmlFiles("out")) {
-  const page = readFileSync(file, "utf8").replace(
-    /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?((?:runs\/)?[\w-]+\.(?:css|js)|media\/[^"?#]+)"/g,
-    (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
-  );
+  const page = readFileSync(file, "utf8")
+    .replace(
+      /(href|src|poster)="((?:\.\.\/)+|(?:\/[\w.-]+)*\/)?((?:runs\/)?[\w-]+\.(?:css|js)|media\/[^"?#]+)"/g,
+      (_, attr, prefix = "", asset) => `${attr}="${prefix}${asset}?v=${hash(asset)}"`,
+    )
+    .replace(/<body([^>]*)>/, "<body$1><!--email_off-->")
+    .replace("</body>", "<!--/email_off--></body>");
   writeFileSync(file, page);
 }
 console.log("built out/");
