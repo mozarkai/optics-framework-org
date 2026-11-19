@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engine implementations · Optics Framework docs</title>
+  <meta name="description" content="Learn how the drivers, element sources, vision models and LLM engines are built, how the factories load them, and how Optics chooses one.">
+  <meta name="ai-summary" content="Learn how the drivers, element sources, vision models and LLM engines are built, how the factories load them, and how Optics chooses one.">
+  <link rel="canonical" href="https://optics-framework.org/docs/contribute/engines">
+  <link rel="alternate" type="text/markdown" href="engines.md" title="This page as Markdown">
+  <meta property="og:title" content="Engine implementations · Optics Framework docs">
+  <meta property="og:description" content="Learn how the drivers, element sources, vision models and LLM engines are built, how the factories load them, and how Optics chooses one.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=5ba04c0dc3">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/"><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/contribute/" aria-current="true">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines" aria-current="page">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/contribute/">Contribute</a><span class="sep" aria-hidden="true">/</span><span>How Optics is built</span></nav>
+        <header class="doc-head">
+          <h1>Engine implementations</h1>
+          <p class="doc-summary">Learn how the drivers, element sources, vision models and LLM engines are built, how the factories load them, and how Optics chooses one.</p>
+          <div class="doc-meta">
+            
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="engines.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="engines.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>This page describes the engine implementations in the Optics Framework: drivers, element sources, vision models and LLM models. It covers the interfaces, the factories and how Optics chooses an engine.</p>
+<p>For the list of engines you can turn on, their names in config.yaml and the pip extra for each, see <a href="../../docs/reference/engines">Engines and extras</a>. For their settings, see <a href="../../docs/reference/config#engine-lists">Engine lists</a>.</p>
+<h2 id="interfaces-and-factories">Interfaces and factories<a class="anchor" href="#interfaces-and-factories" aria-label="Link to this section">#</a></h2>
+<p>Each kind of engine has one interface, one factory and one package. The factories are in <code class="ic">optics_framework/common/factories.py</code>. They extend <code class="ic">GenericFactory</code> from <code class="ic">optics_framework/common/base_factory.py</code>. <code class="ic">OpticsBuilder</code> (<code class="ic">optics_framework/common/optics_builder.py</code>) calls them.</p>
+<div class="table-wrap"><table><thead><tr><th>Kind</th><th>Interface</th><th>Factory</th><th>Package</th><th>Key in config.yaml</th></tr></thead><tbody><tr><td>Driver</td><td><code class="ic">DriverInterface</code> (<code class="ic">common/driver_interface.py</code>)</td><td><code class="ic">DeviceFactory</code></td><td><code class="ic">optics_framework.engines.drivers</code></td><td><code class="ic">driver_sources</code></td></tr><tr><td>Element source</td><td><code class="ic">ElementSourceInterface</code> (<code class="ic">common/elementsource_interface.py</code>)</td><td><code class="ic">ElementSourceFactory</code></td><td><code class="ic">optics_framework.engines.elementsources</code></td><td><code class="ic">elements_sources</code></td></tr><tr><td>Image detection</td><td><code class="ic">ImageInterface</code> (<code class="ic">common/image_interface.py</code>)</td><td><code class="ic">ImageFactory</code></td><td><code class="ic">optics_framework.engines.vision_models.image_models</code></td><td><code class="ic">image_detection</code></td></tr><tr><td>Text detection (OCR)</td><td><code class="ic">TextInterface</code> (<code class="ic">common/text_interface.py</code>)</td><td><code class="ic">TextFactory</code></td><td><code class="ic">optics_framework.engines.vision_models.ocr_models</code></td><td><code class="ic">text_detection</code></td></tr><tr><td>LLM</td><td><code class="ic">LLMInterface</code> (<code class="ic">common/llm_interface.py</code>)</td><td><code class="ic">LLMFactory</code></td><td><code class="ic">optics_framework.engines.llm_models</code></td><td><code class="ic">llm_models</code></td></tr></tbody></table></div>
+<p>Each factory returns an <code class="ic">InstanceFallback</code> that holds one instance per enabled entry, in config order.</p>
+<h3 id="what-an-engine-gets-from-configyaml">What an engine gets from config.yaml<a class="anchor" href="#what-an-engine-gets-from-configyaml" aria-label="Link to this section">#</a></h3>
+<p>Config.yaml validates each engine entry as a <code class="ic">DependencyConfig</code>: <code class="ic">enabled</code>, <code class="ic">url</code> and <code class="ic">capabilities</code>. Optics drops any other key. Put engine settings under <code class="ic">capabilities</code>.</p>
+<p><code class="ic">OpticsBuilder</code> adds some keys before it makes the engine:</p>
+<ul><li><code class="ic">image_detection</code> entries get <code class="ic">project_path</code>, <code class="ic">execution_output_path</code> and, when there are any, <code class="ic">templates</code>.</li><li><code class="ic">text_detection</code> entries get <code class="ic">execution_output_path</code>.</li></ul>
+<h2 id="drivers">Drivers<a class="anchor" href="#drivers" aria-label="Link to this section">#</a></h2>
+<p>A driver does the user actions on the application or device under test. Every driver implements <code class="ic">DriverInterface</code> and is in <code class="ic">optics_framework/engines/drivers/</code>.</p>
+<h3 id="appium-driver">Appium driver<a class="anchor" href="#appium-driver" aria-label="Link to this section">#</a></h3>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/drivers/appium.py</code> (class <code class="ic">Appium</code>)</p>
+<p>The Appium driver automates mobile apps on Android and iOS. It also drives TVs and desktop apps.</p>
+<h4 id="key-features">Key features<a class="anchor" href="#key-features" aria-label="Link to this section">#</a></h4>
+<ul><li>Native mobile app automation</li><li>Support for Android (UiAutomator2) and iOS (XCUITest)</li><li>Samsung Tizen TV and LG webOS TV, and macOS, Windows and Linux desktop apps (Xa11y)</li><li>Gesture support (swipe, scroll, tap)</li><li>Hardware key simulation</li><li>App lifecycle management</li></ul>
+<p>The differences between device families are data, not branches in the driver. <code class="ic">optics_framework/engines/drivers/appium_platforms.py</code> holds one <code class="ic">PlatformProfile</code> per family: its options class, its app id capability names and how it sends key codes. To add a TV, register a <code class="ic">PlatformProfile</code>. TV focus and web app helpers are in <code class="ic">appium_tv.py</code>.</p>
+<h4 id="configuration">Configuration<a class="anchor" href="#configuration" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: &quot;Android&quot;
+        deviceName: &quot;emulator-5554&quot;
+        appPackage: &quot;com.example.app&quot;
+        appActivity: &quot;.MainActivity&quot;">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> <span class="c-lit">"Android"</span>
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> <span class="c-lit">"emulator-5554"</span>
+        <span class="c-mod">appPackage</span><span class="c-dim">:</span> <span class="c-lit">"com.example.app"</span>
+        <span class="c-mod">appActivity</span><span class="c-dim">:</span> <span class="c-lit">".MainActivity"</span></code></pre></figure>
+<h4 id="key-methods">Key methods<a class="anchor" href="#key-methods" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">launch_app()</code> - Launch with package/activity</li><li><code class="ic">press_coordinates()</code> - Tap at absolute coordinates</li><li><code class="ic">press_element()</code> - Tap UI elements</li><li><code class="ic">swipe()</code> / <code class="ic">swipe_percentage(x%, y%, direction, length%)</code> - Swipe gestures (percentages as integers 0-100)</li><li><code class="ic">scroll()</code> - Scroll actions</li><li><code class="ic">enter_text()</code> - Text input</li><li><code class="ic">press_keycode()</code> - Hardware key codes</li><li><code class="ic">get_app_version()</code> - App version info (the <code class="ic">appVersion</code> capability)</li></ul>
+<h4 id="special-features">Special features<a class="anchor" href="#special-features" aria-label="Link to this section">#</a></h4>
+<ul><li>Mobile-specific keycodes (BACK, HOME, MENU, etc.)</li><li>Mobile type command support</li><li>UI helper integration for element interaction (<code class="ic">appium_UI_helper.py</code>)</li></ul>
+<h3 id="selenium-driver">Selenium driver<a class="anchor" href="#selenium-driver" aria-label="Link to this section">#</a></h3>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/drivers/selenium.py</code> (class <code class="ic">SeleniumDriver</code>)</p>
+<p>The Selenium driver automates web browsers through a Selenium server or Grid.</p>
+<h4 id="key-features-2">Key features<a class="anchor" href="#key-features-2" aria-label="Link to this section">#</a></h4>
+<ul><li>Chrome and Firefox. Another <code class="ic">browserName</code> raises an error.</li><li>Web element interaction</li><li>JavaScript execution</li><li>Element lookup in <code class="ic">selenium_locator.py</code>, shared with the Selenium element sources</li></ul>
+<h4 id="configuration-2">Configuration<a class="anchor" href="#configuration-2" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - selenium:
+      enabled: true
+      url: &quot;http://localhost:4444&quot;
+      capabilities:
+        browserName: &quot;chrome&quot;
+        browserURL: &quot;https://example.com&quot;">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4444"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browserName</span><span class="c-dim">:</span> <span class="c-lit">"chrome"</span>
+        <span class="c-mod">browserURL</span><span class="c-dim">:</span> <span class="c-lit">"https://example.com"</span></code></pre></figure>
+<ul><li><code class="ic">url</code> defaults to <code class="ic">http://localhost:4444/wd/hub</code>.</li><li><code class="ic">browserName</code> is required.</li><li><code class="ic">browserURL</code> is the page to open. It defaults to <code class="ic">about:blank</code>.</li><li><code class="ic">element_timeout_ms</code> is how long to wait for an element before acting on it. It defaults to 10000.</li><li>The driver sends every other capability to the server as it is.</li></ul>
+<h4 id="key-methods-2">Key methods<a class="anchor" href="#key-methods-2" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">launch_app()</code> - Navigate to URL</li><li><code class="ic">press_element()</code> - Click web elements</li><li><code class="ic">enter_text()</code> - Form input</li><li><code class="ic">execute_script()</code> - JavaScript execution</li><li><code class="ic">get_text_element()</code> - Extract text from elements</li></ul>
+<h3 id="playwright-driver">Playwright driver<a class="anchor" href="#playwright-driver" aria-label="Link to this section">#</a></h3>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/drivers/playwright.py</code> (class <code class="ic">Playwright</code>)</p>
+<p>The Playwright driver automates web browsers with no server to run.</p>
+<h4 id="key-features-3">Key features<a class="anchor" href="#key-features-3" aria-label="Link to this section">#</a></h4>
+<ul><li>Browser automation in Python, through Playwright</li><li>Auto-waiting for elements, up to <code class="ic">element_timeout_ms</code></li><li>Chromium, Firefox and WebKit</li><li>A remote browser in <code class="ic">url</code>, phone emulation (<code class="ic">device</code>) and a signed-in Chrome or Edge <code class="ic">profile</code> (<code class="ic">playwright_profiles.py</code>)</li></ul>
+<h4 id="configuration-3">Configuration<a class="anchor" href="#configuration-3" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - playwright:
+      enabled: true
+      capabilities:
+        browser: &quot;chromium&quot;
+        headless: false">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">playwright</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">browser</span><span class="c-dim">:</span> <span class="c-lit">"chromium"</span>
+        <span class="c-mod">headless</span><span class="c-dim">:</span> <span class="c-info">false</span></code></pre></figure>
+<p>The driver logs a warning for a capability it does not use. See <a href="../../docs/reference/config#playwright-capabilities">Playwright capabilities</a>.</p>
+<h3 id="how-the-web-drivers-work-inside">How the web drivers work inside<a class="anchor" href="#how-the-web-drivers-work-inside" aria-label="Link to this section">#</a></h3>
+<p>These rules keep Playwright and Selenium uniform. Change them in one place, not per keyword.</p>
+<h4 id="finding-an-element-on-a-web-page">Finding an element on a web page<a class="anchor" href="#finding-an-element-on-a-web-page" aria-label="Link to this section">#</a></h4>
+<ul><li><strong>Playwright.</strong> <code class="ic">PlaywrightFindElement</code> and <code class="ic">PlaywrightPageSource</code> both resolve a value through <code class="ic">candidates</code> and <code class="ic">find</code> in <code class="ic">engines/drivers/playwright_locator.py</code>. <code class="ic">PlaywrightFindElement</code> waits up to <code class="ic">Playwright.element_timeout_s</code>. A <code class="ic">PlaywrightPageSource</code> read first waits for the page to settle (<code class="ic">Playwright.wait_for_page_settled</code>). When <code class="ic">driver.page</code> changes during a lookup, <code class="ic">find</code> looks again.</li><li><strong>Selenium.</strong> Both sources use <code class="ic">find</code> and <code class="ic">check</code> in <code class="ic">engines/drivers/selenium_locator.py</code>. The factory injects the <code class="ic">SeleniumDriver</code> wrapper, not the WebDriver, so a source reaches the WebDriver through <code class="ic">SeleniumDriver.require_webdriver</code>. Only <code class="ic">SeleniumFindElement.locate</code> waits (<code class="ic">element_timeout_ms</code>).</li><li><strong>Both.</strong> Visibility uses <code class="ic">utils.VISIBLE_FLAGS_JS</code>, and the screen's elements come from the shared <code class="ic">WebDomInspector</code>.</li></ul>
+<h4 id="tabs-profiles-and-capabilities-playwright">Tabs, profiles and capabilities (Playwright)<a class="anchor" href="#tabs-profiles-and-capabilities-playwright" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">Playwright._follow_pages</code> keeps <code class="ic">driver.page</code> on the front tab. A tab or popup that opens takes over. A tab that closes hands back to the tab that opened it. <code class="ic">Go Back</code> in an opened tab with no history closes that tab.</li><li><code class="ic">capabilities.profile</code> copies a local Chrome or Edge profile's sign-in state into a temporary user data folder (<code class="ic">Playwright._open_persistent</code>). It drops <code class="ic">--use-mock-keychain</code> and <code class="ic">--password-store=basic</code>, so the browser decrypts the copy with the OS keychain. The copy is deleted on cleanup.</li><li>A capability key outside <code class="ic">Playwright._CAPABILITIES</code> is logged as ignored.</li></ul>
+<h4 id="remote-browsers-playwright">Remote browsers (Playwright)<a class="anchor" href="#remote-browsers-playwright" aria-label="Link to this section">#</a></h4>
+<ul><li>A <code class="ic">url</code> on the driver entry connects to a browser instead of launching one (<code class="ic">Playwright._open_remote</code>). It uses CDP by default, or the Playwright protocol with <code class="ic">protocol: playwright</code>. Grid options go in the URL's query string. Closing the browser releases the remote session.</li><li><code class="ic">capabilities.context: existing</code> adopts the tab that is already open. <code class="ic">capabilities.storage_state</code> gives a new context saved sign-ins. Callers of <code class="ic">optics serve</code> and MCP send the state object, not a file path.</li><li><code class="ic">$NAME</code> references in the <code class="ic">url</code> and in <code class="ic">capabilities.headers</code> are expanded once, by the driver, through <code class="ic">config_handler.expand_env</code>. <code class="ic">resolve_config_file</code> leaves these two fields alone (<code class="ic">_DRIVER_EXPANDED</code>) and only checks that their variables are set. The expanded value is never stored in a local variable, and <code class="ic">RemoteBrowser.mask</code> removes it, with the URL's path and query, from error text. <code class="ic">expose_api._make_dependency_entry</code> refuses these fields from <code class="ic">optics serve</code> and MCP callers with <code class="ic">E0501</code>.</li><li>Every synchronous Playwright call goes through <code class="ic">Playwright.run</code>, which <code class="ic">action_timeout_ms</code> bounds. <code class="ic">run_async</code> in <code class="ic">common/async_utils.py</code> needs a timeout, so element sources go through the driver's <code class="ic">run</code>.</li></ul>
+<h4 id="typing-into-a-field-by-its-caption">Typing into a field by its caption<a class="anchor" href="#typing-into-a-field-by-its-caption" aria-label="Link to this section">#</a></h4>
+<p><code class="ic">Enter Text</code> and <code class="ic">Clear Element Text</code> on a caption type into the field that the caption names, through <code class="ic">Playwright._field_for</code> and <code class="ic">Appium._field_for</code> (the logic is in <code class="ic">engines/drivers/appium_fields.py</code>). The field is:</p>
+<ol><li>The element itself, if it is a field.</li><li>Else the one field whose label or hint holds the caption text.</li><li>Else the only field in the caption's nearest container.</li></ol>
+<p>A text locator that matches more than one element logs <code class="ic">utils.warn_if_ambiguous</code> from one source per driver (<code class="ic">PlaywrightFindElement</code>, <code class="ic">AppiumPageSource</code>), because <code class="ic">_act_until_success</code> runs every source. Selenium has neither of these yet.</p>
+<h3 id="ble-driver">BLE driver<a class="anchor" href="#ble-driver" aria-label="Link to this section">#</a></h3>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/drivers/ble.py</code> (class <code class="ic">BLEDriver</code>), on the <a href="https://github.com/chinmayajha/airhand" rel="noopener">airhand</a> client</p>
+<p>The driver drives a device that has nothing installed: a phone, a tablet, a computer or a TV. An airhand dongle pairs with the device over Bluetooth as a keyboard, mouse and media remote. The airhand client sends it one command per line over USB serial.</p>
+<ul><li>Positions go to the dongle as fractions of <code class="ic">frame</code>, so devices need no calibration.</li><li>The dongle times taps, swipes and typing. The driver does not sleep between reports.</li><li>A lost reply is asked for again with <code class="ic">result &lt;id&gt;</code>. An action is never sent two times.</li><li><code class="ic">platform</code> selects the shortcuts: select-all, Back, the system search for <code class="ic">Launch App</code>, and a drag or the wheel for <code class="ic">Scroll</code>. It is <code class="ic">android</code>, <code class="ic">ios</code>, <code class="ic">macos</code>, <code class="ic">windows</code> or <code class="ic">linux</code>.</li><li><code class="ic">launch</code> lists how <code class="ic">Launch App</code> opens an app, in order: <code class="ic">search_key</code>, <code class="ic">launcher_key</code>, <code class="ic">drawer_search</code>, <code class="ic">drawer_tap</code> or <code class="ic">home_icon</code>. A method that the platform cannot do is refused when the config loads.</li><li>airhand errors map to Optics codes: a lost dongle or a device that stays disconnected for 10 s is <code class="ic">E0106</code> (the run stops; element fallback does not try again), other firmware is <code class="ic">E0501</code>, input the dongle cannot send is <code class="ic">E0403</code>, and any other airhand error is <code class="ic">E0401</code>.</li></ul>
+<p>Element methods are not supported. Elements come from <code class="ic">camera_screenshot</code> and the OCR and image strategies. See <a href="../../docs/reference/config#ble-and-camera">BLE and camera</a> for the capabilities.</p>
+<h2 id="element-sources">Element sources<a class="anchor" href="#element-sources" aria-label="Link to this section">#</a></h2>
+<p>An element source finds UI elements and reads the screen. Every element source implements <code class="ic">ElementSourceInterface</code> and is in <code class="ic">optics_framework/engines/elementsources/</code>.</p>
+<p>A source implements only the methods it can. The others raise <code class="ic">NotImplementedError</code>. The <a href="../../docs/contribute/strategies">strategies</a> read which methods are real: <code class="ic">locate()</code> gives the XPath and text strategies, <code class="ic">capture()</code> gives OCR and image matching, and <code class="ic">get_page_source()</code> gives page source and interactive elements.</p>
+<h3 id="screenshot-based-sources">Screenshot-based sources<a class="anchor" href="#screenshot-based-sources" aria-label="Link to this section">#</a></h3>
+<p>The Appium, Selenium and Playwright screenshot sources extend <code class="ic">EncodedScreenshotSource</code> (<code class="ic">optics_framework/common/elementsource_interface.py</code>). Each gives the encoded screenshot from its backend in <code class="ic">capture_screenshot_bytes()</code>, and the shared <code class="ic">capture()</code> decodes it into a NumPy array.</p>
+<h4 id="appiumscreenshot">AppiumScreenshot<a class="anchor" href="#appiumscreenshot" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/appium_screenshot.py</code></p>
+<p>Captures screenshots from Appium sessions.</p>
+<ul><li>Uses Appium's screenshot capability (base64 PNG, with a retry for truncated replies)</li><li>Returns NumPy arrays for image processing</li><li>Does not list interactive elements, locate elements or assert elements</li><li>On a TV that cannot take a screenshot through Appium, raises <code class="ic">E0303</code>. Use <code class="ic">camera_screenshot</code> there.</li></ul>
+<h4 id="seleniumscreenshot">SeleniumScreenshot<a class="anchor" href="#seleniumscreenshot" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/selenium_screenshot.py</code></p>
+<p>Captures screenshots from Selenium browser sessions.</p>
+<ul><li>Browser screenshot capture</li><li>Viewport screenshots</li><li>Base64 encoding support, with a retry for remote Grid nodes</li></ul>
+<h4 id="playwrightscreenshot">PlaywrightScreenshot<a class="anchor" href="#playwrightscreenshot" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/playwright_screenshot.py</code></p>
+<p>Captures screenshots from Playwright sessions.</p>
+<ul><li>PNG from <code class="ic">page.screenshot()</code>, with no decode step in <code class="ic">capture_screenshot_bytes()</code></li><li>The viewport only (<code class="ic">full_page=False</code>), at CSS pixel scale</li></ul>
+<h4 id="camerascreenshot">CameraScreenshot<a class="anchor" href="#camerascreenshot" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/camera_screenshot.py</code></p>
+<p>Captures screenshots from external cameras or capture cards.</p>
+<ul><li>External camera support (<code class="ic">camera_index</code>, <code class="ic">camera_width</code>, <code class="ic">camera_height</code>)</li><li>Video capture card support</li><li>Production monitoring use case</li><li>Endpoint is raw TCP (<code class="ic">ip:port</code>) or HTTP with bearer token (<code class="ic">http(s)://</code> url + <code class="ic">token</code>); env fallback via <code class="ic">WEBCAM_SCREENSHOT_URL</code> / <code class="ic">WEBCAM_SCREENSHOT_TOKEN</code> / <code class="ic">WEBCAM_SCREENSHOT_TCP_PORT</code> (see <a href="../../docs/reference/config#ble-and-camera">BLE and camera</a>)</li><li>Straightens the screen with <code class="ic">deskew_corners</code>, or finds it in the frame with <code class="ic">find_screen</code> (<code class="ic">brightness</code> or <code class="ic">frame</code>, in <code class="ic">screen_finder.py</code>). Set one, not both.</li><li>Sets <code class="ic">ACCEPTS_ANY_DRIVER = True</code>, so it works with any driver</li></ul>
+<h3 id="page-source-based-sources">Page source-based sources<a class="anchor" href="#page-source-based-sources" aria-label="Link to this section">#</a></h3>
+<h4 id="appiumpagesource">AppiumPageSource<a class="anchor" href="#appiumpagesource" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/appium_page_source.py</code></p>
+<p>Extracts and parses Appium page source XML.</p>
+<ul><li>XML-based element location</li><li>XPath support</li><li>Element hierarchy navigation</li><li>Interactive element detection</li></ul>
+<h4 id="appiumweb">AppiumWeb<a class="anchor" href="#appiumweb" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/appium_web.py</code></p>
+<p>Finds CSS and DOM XPath locators in the web page of the app in front. See <a href="../../docs/platforms/mobile-web">Mobile web</a>.</p>
+<ul><li>Android: Chrome and WebViews with debugging on; iOS: Safari, Safari sheets and inspectable WKWebViews</li><li>Returns the element centre in screen coordinates; the session stays native</li><li>Skipped on TVs, in iOS browser or <code class="ic">autoWebview</code> sessions, and for native locators</li><li>Sets <code class="ic">SUPPLEMENTS_SCREEN_ELEMENTS = True</code>: its web elements are merged into the native list of interactive elements</li></ul>
+<h4 id="seleniumpagesource">SeleniumPageSource<a class="anchor" href="#seleniumpagesource" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/selenium_page_source.py</code></p>
+<p>Reads the page HTML and finds elements through the WebDriver session.</p>
+<ul><li><code class="ic">css=</code> and bare CSS selectors, DOM XPath</li><li>Visible text: exact match first, then partial, then id, name and link text</li><li>Same lookup as <code class="ic">SeleniumFindElement</code> (<code class="ic">engines/drivers/selenium_locator.py</code>)</li><li>Screen elements with bounds and a verified <code class="ic">loc</code>, the same list as <code class="ic">PlaywrightPageSource</code></li></ul>
+<h4 id="playwrightpagesource">PlaywrightPageSource<a class="anchor" href="#playwrightpagesource" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/playwright_page_source.py</code></p>
+<p>Extracts and parses Playwright page source.</p>
+<ul><li>Reads the DOM</li><li>Element names from <code class="ic">name</code>, <code class="ic">placeholder</code>, <code class="ic">aria-label</code>, <code class="ic">title</code> and <code class="ic">alt</code></li><li>Element state detection, such as checked</li></ul>
+<p><code class="ic">WebDomInspector</code>, in the same file, is the shared DOM half of <code class="ic">PlaywrightPageSource</code>, <code class="ic">SeleniumPageSource</code> and <code class="ic">AppiumWeb</code>.</p>
+<h3 id="find-element-sources">Find element sources<a class="anchor" href="#find-element-sources" aria-label="Link to this section">#</a></h3>
+<h4 id="appiumfindelement">AppiumFindElement<a class="anchor" href="#appiumfindelement" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/appium_find_element.py</code></p>
+<p>Direct element location using Appium's find element methods.</p>
+<ul><li>Multiple locator strategies: XPath, CSS, class name, accessibility id and text</li><li>Element interaction</li><li>Element state checking</li><li>Returns the page source, but does not list interactive elements</li></ul>
+<h4 id="seleniumfindelement">SeleniumFindElement<a class="anchor" href="#seleniumfindelement" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/selenium_find_element.py</code></p>
+<p>Direct element location using Selenium's find element methods.</p>
+<ul><li><code class="ic">css=</code> and bare CSS selectors, DOM XPath, visible text</li><li>Waits up to the driver's <code class="ic">element_timeout_ms</code> for an element before acting on it</li><li><code class="ic">Assert Visibility</code> counts only elements on screen, not hidden or clipped ones</li></ul>
+<h4 id="playwrightfindelement">PlaywrightFindElement<a class="anchor" href="#playwrightfindelement" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/elementsources/playwright_find_element.py</code></p>
+<p>Direct element location using Playwright's locator API.</p>
+<ul><li>Auto-waiting for elements, up to the driver's element timeout</li><li>Multiple locator types: <code class="ic">xpath=</code>, <code class="ic">css=</code>, <code class="ic">text=</code>, <code class="ic">label=</code>, <code class="ic">placeholder=</code>, <code class="ic">alt=</code>, <code class="ic">title=</code>, <code class="ic">role=</code>, <code class="ic">id=</code>, <code class="ic">testid=</code> and the <code class="ic">data-test</code> attributes (<code class="ic">drivers/playwright_locator.py</code>)</li><li>Element state queries</li></ul>
+<h3 id="element-source-selection">Element source selection<a class="anchor" href="#element-source-selection" aria-label="Link to this section">#</a></h3>
+<p>The factory matches each element source with a driver automatically:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Element source declares required driver type
+REQUIRED_DRIVER_TYPE = &quot;appium&quot;
+
+# Factory automatically matches with Appium driver
+ElementSourceFactory.get_driver(config, driver_fallback)">Copy</button><pre><code><span class="c-dim"># Element source declares required driver type</span>
+REQUIRED_DRIVER_TYPE = <span class="c-lit">"appium"</span>
+
+<span class="c-dim"># Factory automatically matches with Appium driver</span>
+ElementSourceFactory.get_driver(config, driver_fallback)</code></pre></figure>
+<p><code class="ic">ElementSourceFactory._find_matching_driver</code> gives the source the first driver whose <code class="ic">NAME</code> equals its <code class="ic">REQUIRED_DRIVER_TYPE</code>. A source with <code class="ic">ACCEPTS_ANY_DRIVER = True</code> gets the first driver. A source with neither gets no driver. The factory passes the driver only if the source's <code class="ic">__init__</code> has a <code class="ic">driver</code> argument.</p>
+<h2 id="vision-models">Vision models<a class="anchor" href="#vision-models" aria-label="Link to this section">#</a></h2>
+<p>Vision models find images and text in a screenshot. They are in <code class="ic">optics_framework/engines/vision_models/</code>.</p>
+<h3 id="image-detection-models">Image detection models<a class="anchor" href="#image-detection-models" aria-label="Link to this section">#</a></h3>
+<h4 id="templatematch">TemplateMatch<a class="anchor" href="#templatematch" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/image_models/templatematch.py</code> (class <code class="ic">TemplateMatchingHelper</code>)</p>
+<p>OpenCV-based template matching with a scale sweep, plus a SIFT and FLANN fallback.</p>
+<h4 id="key-features-4">Key features<a class="anchor" href="#key-features-4" aria-label="Link to this section">#</a></h4>
+<ul><li>Coarse-to-fine <code class="ic">cv2.matchTemplate</code> with full-resolution coordinates</li><li>Scale sweep (<code class="ic">capabilities.scale_range</code>, default <code class="ic">[0.8, 1.25]</code>) for other screen sizes</li><li>Local contrast equalisation for the sweep</li><li>SIFT feature detection with FLANN matching as the last fallback (<code class="ic">capabilities.sift_nfeatures</code>, default 2000)</li><li>Confidence thresholding</li><li>Multiple match support (index-based)</li><li>Template loading from project directory</li></ul>
+<h4 id="configuration-4">Configuration<a class="anchor" href="#configuration-4" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="image_detection:
+  - templatematch:
+      enabled: true
+      capabilities:
+        scale_range: [0.8, 1.25]">Copy</button><pre><code><span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">scale_range</span><span class="c-dim">:</span> [0.8, 1.25]</code></pre></figure>
+<p>You do not write <code class="ic">project_path</code> or <code class="ic">execution_output_path</code> in config.yaml. <code class="ic">OpticsBuilder</code> adds them.</p>
+<h4 id="methods">Methods<a class="anchor" href="#methods" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">find_element()</code> - Locate template in image</li><li><code class="ic">element_exist()</code> - Check if template exists</li><li><code class="ic">assert_elements()</code> - Verify multiple templates</li></ul>
+<h4 id="algorithm">Algorithm<a class="anchor" href="#algorithm" aria-label="Link to this section">#</a></h4>
+<ol><li>Load template image from project directory</li><li>Convert input and template to grayscale</li><li>Correlate the template at its own size on a reduced copy of the frame, then measure each candidate at full resolution</li><li>If nothing clears the confidence level, equalise local contrast and repeat step 3 for each scale in <code class="ic">scale_range</code>; the best-scoring scale wins</li><li>If nothing clears it again, detect SIFT keypoints, match them with FLANN, filter by distance ratio and verify with a homography</li><li>Return the center coordinates and the bounding box in frame pixels</li></ol>
+<h4 id="remoteoir">RemoteOIR<a class="anchor" href="#remoteoir" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/image_models/remote_oir.py</code> (class <code class="ic">RemoteImageDetection</code>)</p>
+<p>Remote Object Image Recognition service integration.</p>
+<h4 id="key-features-5">Key features<a class="anchor" href="#key-features-5" aria-label="Link to this section">#</a></h4>
+<ul><li>Matching on a service that you run</li><li>API integration: posts the screenshot and the template, base64 encoded, to <code class="ic">&lt;url&gt;/detect-image</code></li><li><code class="ic">capabilities.method</code> names the matching method on the service</li></ul>
+<h4 id="configuration-5">Configuration<a class="anchor" href="#configuration-5" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="image_detection:
+  - remote_oir:
+      enabled: true
+      url: &quot;https://api.example.com/oir&quot;
+      capabilities:
+        timeout: 30
+        method: &quot;template_matching&quot;">Copy</button><pre><code><span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">remote_oir</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"https://api.example.com/oir"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">timeout</span><span class="c-dim">:</span> <span class="c-info">30</span>
+        <span class="c-mod">method</span><span class="c-dim">:</span> <span class="c-lit">"template_matching"</span></code></pre></figure>
+<p><code class="ic">url</code> defaults to <code class="ic">http://127.0.0.1:8080</code>. The engine sends no API key.</p>
+<h3 id="ocrtext-detection-models">OCR/text detection models<a class="anchor" href="#ocrtext-detection-models" aria-label="Link to this section">#</a></h3>
+<p>Every OCR engine extends <code class="ic">TextInterface</code> and implements only <code class="ic">detect_text()</code>. It returns the full text and a list of <code class="ic">(bbox, text, confidence)</code>. The shared <code class="ic">find_element()</code> matches the text the same way for every engine, and each engine remembers its last 4 reads of the same pixels.</p>
+<h4 id="applevision">AppleVision<a class="anchor" href="#applevision" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/apple_vision.py</code> (class <code class="ic">AppleVisionHelper</code>)</p>
+<p>OCR with the macOS Vision framework.</p>
+<ul><li>macOS only</li><li><code class="ic">capabilities.recognition_level</code>: <code class="ic">accurate</code> (default) or <code class="ic">fast</code>. Another value raises <code class="ic">E0501</code>.</li><li><code class="ic">capabilities.languages</code>: defaults to <code class="ic">["en-US"]</code></li></ul>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - apple_vision:
+      enabled: true
+      capabilities:
+        recognition_level: &quot;accurate&quot;
+        languages: [&quot;en-US&quot;]">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">apple_vision</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">recognition_level</span><span class="c-dim">:</span> <span class="c-lit">"accurate"</span>
+        <span class="c-mod">languages</span><span class="c-dim">:</span> [<span class="c-lit">"en-US"</span>]</code></pre></figure>
+<h4 id="rapidocr">RapidOCR<a class="anchor" href="#rapidocr" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/rapidocr.py</code> (class <code class="ic">RapidOCRHelper</code>)</p>
+<p>OCR with RapidOCR on onnxruntime, on the CPU.</p>
+<ul><li>Uses the models in the package, so it works offline</li><li>Takes no settings</li></ul>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - rapidocr:
+      enabled: true">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">rapidocr</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<h4 id="easyocr">EasyOCR<a class="anchor" href="#easyocr" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/easyocr.py</code> (class <code class="ic">EasyOCRHelper</code>)</p>
+<p>EasyOCR library integration for text detection.</p>
+<h4 id="key-features-6">Key features<a class="anchor" href="#key-features-6" aria-label="Link to this section">#</a></h4>
+<ul><li>Multi-language support in the library; from config.yaml, English only</li><li>Bounding box detection</li><li>Confidence scores</li></ul>
+<h4 id="configuration-6">Configuration<a class="anchor" href="#configuration-6" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - easyocr:
+      enabled: true">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>The engine reads a top-level <code class="ic">language</code> key (default <code class="ic">en</code>), but config.yaml drops keys other than <code class="ic">enabled</code>, <code class="ic">url</code> and <code class="ic">capabilities</code>. It does not read <code class="ic">languages</code> or <code class="ic">gpu</code>.</p>
+<h4 id="methods-2">Methods<a class="anchor" href="#methods-2" aria-label="Link to this section">#</a></h4>
+<ul><li><code class="ic">detect_text()</code> - Full text detection</li><li><code class="ic">find_element()</code> - Locate specific text (shared from <code class="ic">TextInterface</code>)</li></ul>
+<h4 id="googlevision">GoogleVision<a class="anchor" href="#googlevision" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/googlevision.py</code> (class <code class="ic">GoogleVisionHelper</code>). <code class="ic">google_vision.py</code> is a shim, so both <code class="ic">google_vision</code> and <code class="ic">googlevision</code> work as the name in config.yaml.</p>
+<p>Google Cloud Vision API integration.</p>
+<h4 id="key-features-7">Key features<a class="anchor" href="#key-features-7" aria-label="Link to this section">#</a></h4>
+<ul><li>Cloud-based OCR</li><li>Uses the Vision API <code class="ic">text_detection</code> call</li></ul>
+<h4 id="configuration-7">Configuration<a class="anchor" href="#configuration-7" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - google_vision:
+      enabled: true
+      capabilities:
+        credentials_path: &quot;/path/to/credentials.json&quot;">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">google_vision</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">credentials_path</span><span class="c-dim">:</span> <span class="c-lit">"/path/to/credentials.json"</span></code></pre></figure>
+<ul><li><code class="ic">capabilities.api_key</code>: a Vision API key</li><li><code class="ic">capabilities.credentials_path</code>: a service account key file</li><li>Neither: Application Default Credentials, for example <code class="ic">GOOGLE_APPLICATION_CREDENTIALS</code></li><li>Both: <code class="ic">E0501</code></li></ul>
+<h4 id="pytesseract">PyTesseract<a class="anchor" href="#pytesseract" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/pytesseract.py</code> (class <code class="ic">PytesseractHelper</code>)</p>
+<p>Tesseract OCR engine integration.</p>
+<h4 id="key-features-8">Key features<a class="anchor" href="#key-features-8" aria-label="Link to this section">#</a></h4>
+<ul><li>Open-source OCR</li><li>Needs the Tesseract program on your PATH</li><li>Converts the frame to grayscale and binarises it with Otsu's threshold before it reads</li><li>Fixed OCR and page segmentation modes: <code class="ic">--oem 3 --psm 6</code></li></ul>
+<h4 id="configuration-8">Configuration<a class="anchor" href="#configuration-8" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - pytesseract:
+      enabled: true">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">pytesseract</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span></code></pre></figure>
+<p>The engine reads no settings. It does not read <code class="ic">lang</code> or <code class="ic">config</code>.</p>
+<h4 id="remoteocr">RemoteOCR<a class="anchor" href="#remoteocr" aria-label="Link to this section">#</a></h4>
+<p><strong>Location:</strong> <code class="ic">optics_framework/engines/vision_models/ocr_models/remote_ocr.py</code> (class <code class="ic">RemoteOCR</code>)</p>
+<p>Remote OCR service integration.</p>
+<h4 id="key-features-9">Key features<a class="anchor" href="#key-features-9" aria-label="Link to this section">#</a></h4>
+<ul><li>OCR on a service that you run</li><li>API integration: posts the screenshot to <code class="ic">&lt;url&gt;/detect-text</code></li><li>Custom OCR engines: <code class="ic">capabilities.method</code> names the engine on the service</li></ul>
+<h4 id="configuration-9">Configuration<a class="anchor" href="#configuration-9" aria-label="Link to this section">#</a></h4>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="text_detection:
+  - remote_ocr:
+      enabled: true
+      url: &quot;https://api.example.com/ocr&quot;
+      capabilities:
+        timeout: 30
+        method: &quot;easyocr&quot;
+        language: &quot;en&quot;">Copy</button><pre><code><span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">remote_ocr</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"https://api.example.com/ocr"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">timeout</span><span class="c-dim">:</span> <span class="c-info">30</span>
+        <span class="c-mod">method</span><span class="c-dim">:</span> <span class="c-lit">"easyocr"</span>
+        <span class="c-mod">language</span><span class="c-dim">:</span> <span class="c-lit">"en"</span></code></pre></figure>
+<p>The engine sends no API key.</p>
+<h2 id="llm-models">LLM models<a class="anchor" href="#llm-models" aria-label="Link to this section">#</a></h2>
+<p>LLM engines power <a href="../../docs/elements/self-heal">AI self-heal</a> and the plain-English mode of <code class="ic">optics live</code>. They implement <code class="ic">LLMInterface</code> and are located in <code class="ic">optics_framework/engines/llm_models/</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Name in config</th><th>Location</th><th>Class</th></tr></thead><tbody><tr><td><code class="ic">gemini</code></td><td><code class="ic">engines/llm_models/gemini.py</code></td><td><code class="ic">GeminiLLM</code></td></tr><tr><td><code class="ic">openai</code></td><td><code class="ic">engines/llm_models/openai.py</code></td><td><code class="ic">OpenAILLM</code></td></tr><tr><td><code class="ic">anthropic</code></td><td><code class="ic">engines/llm_models/anthropic.py</code></td><td><code class="ic">AnthropicLLM</code></td></tr></tbody></table></div>
+<p><code class="ic">LLMInterface</code> asks for <code class="ic">generate(prompt, images=None, system=None, response_schema=None, ...)</code>: a text prompt, optional images and optional structured JSON output. <code class="ic">generate_json</code> builds on it. See <a href="../../docs/reference/config#llm-models">llm_models</a> for the settings.</p>
+<h2 id="engine-discovery-and-loading">Engine discovery and loading<a class="anchor" href="#engine-discovery-and-loading" aria-label="Link to this section">#</a></h2>
+<p>Engines are loaded by name, when the configuration asks for them:</p>
+<figure class="diagram" style="--w:1408px"><figcaption><span>How a factory loads an engine named in config.yaml</span></figcaption><div class="diagram-canvas" role="img" aria-label="How a factory loads an engine named in config.yaml" tabindex="0"><svg id="d-142722a9883d" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1408.28px; background-color: transparent;" viewBox="0 0 1408.28125 63.5" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#d-142722a9883d{font-family:var(--mono);font-size:13px;fill:var(--ink);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#d-142722a9883d .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#d-142722a9883d .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#d-142722a9883d .error-icon{fill:var(--panel);}#d-142722a9883d .error-text{fill:#5ffff9;stroke:#5ffff9;}#d-142722a9883d .edge-thickness-normal{stroke-width:1px;}#d-142722a9883d .edge-thickness-thick{stroke-width:3.5px;}#d-142722a9883d .edge-pattern-solid{stroke-dasharray:0;}#d-142722a9883d .edge-thickness-invisible{stroke-width:0;fill:none;}#d-142722a9883d .edge-pattern-dashed{stroke-dasharray:3;}#d-142722a9883d .edge-pattern-dotted{stroke-dasharray:2;}#d-142722a9883d .marker{fill:var(--ink-3);stroke:var(--ink-3);}#d-142722a9883d .marker.cross{stroke:var(--ink-3);}#d-142722a9883d svg{font-family:var(--mono);font-size:13px;}#d-142722a9883d p{margin:0;}#d-142722a9883d .label{font-family:var(--mono);color:var(--ink);}#d-142722a9883d .cluster-label text{fill:var(--ink);}#d-142722a9883d .cluster-label span{color:var(--ink);}#d-142722a9883d .cluster-label span p{background-color:transparent;}#d-142722a9883d .label text,#d-142722a9883d span{fill:var(--ink);color:var(--ink);}#d-142722a9883d .node rect,#d-142722a9883d .node circle,#d-142722a9883d .node ellipse,#d-142722a9883d .node polygon,#d-142722a9883d .node path{fill:var(--bg-2);stroke:var(--line-2);stroke-width:1px;}#d-142722a9883d .rough-node .label text,#d-142722a9883d .node .label text,#d-142722a9883d .image-shape .label,#d-142722a9883d .icon-shape .label{text-anchor:middle;}#d-142722a9883d .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#d-142722a9883d .rough-node .label,#d-142722a9883d .node .label,#d-142722a9883d .image-shape .label,#d-142722a9883d .icon-shape .label{text-align:center;}#d-142722a9883d .node.clickable{cursor:pointer;}#d-142722a9883d .root .anchor path{fill:var(--ink-3)!important;stroke-width:0;stroke:var(--ink-3);}#d-142722a9883d .arrowheadPath{fill:#5fffff;}#d-142722a9883d .edgePaths .path{stroke:var(--ink-3);stroke-width:1px;}#d-142722a9883d .flowchart-link{stroke:var(--ink-3);fill:none;}#d-142722a9883d .edgeLabel{background-color:var(--bg);text-align:center;}#d-142722a9883d .edgeLabel p{background-color:var(--bg);}#d-142722a9883d .edgeLabel rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-142722a9883d .labelBkg{background-color:rgba(160, 0, 0, 0.5);}#d-142722a9883d .cluster rect{fill:var(--panel);stroke:var(--line-2);stroke-width:1px;}#d-142722a9883d .cluster text{fill:var(--ink);}#d-142722a9883d .cluster span{color:var(--ink);}#d-142722a9883d .node .collapsed-indicator{fill:var(--line-2);stroke:none;opacity:0.6;}#d-142722a9883d .node .collapsed-separator{stroke:var(--line-2);stroke-width:0.75px;}#d-142722a9883d div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:var(--mono);font-size:12px;background:var(--panel);border:1px solid hsl(357.75, 60%, 21.3725490196%);border-radius:2px;pointer-events:none;z-index:100;}#d-142722a9883d .flowchartTitleText{text-anchor:middle;font-size:18px;fill:var(--ink);}#d-142722a9883d rect.text{fill:none;stroke-width:0;}#d-142722a9883d .icon-shape,#d-142722a9883d .image-shape{background-color:var(--bg);text-align:center;}#d-142722a9883d .icon-shape p,#d-142722a9883d .image-shape p{background-color:var(--bg);padding:2px;}#d-142722a9883d .icon-shape .label rect,#d-142722a9883d .image-shape .label rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-142722a9883d .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#d-142722a9883d .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#d-142722a9883d .node .neo-node{stroke:var(--line-2);}#d-142722a9883d [data-look="neo"].node rect,#d-142722a9883d [data-look="neo"].cluster rect,#d-142722a9883d [data-look="neo"].node polygon{stroke:url(#d-142722a9883d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-142722a9883d [data-look="neo"].swimlane.cluster rect{filter:none;}#d-142722a9883d [data-look="neo"].node path{stroke:url(#d-142722a9883d-gradient);stroke-width:1px;}#d-142722a9883d [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-142722a9883d [data-look="neo"].node .neo-line path{stroke:var(--line-2);filter:none;}#d-142722a9883d [data-look="neo"].node circle{stroke:url(#d-142722a9883d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-142722a9883d [data-look="neo"].node circle .state-start{fill:#000000;}#d-142722a9883d [data-look="neo"].icon-shape .icon{fill:url(#d-142722a9883d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-142722a9883d [data-look="neo"].icon-shape .icon-neo path{stroke:url(#d-142722a9883d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-142722a9883d :root{--mermaid-font-family:var(--mono);}</style><g><marker id="d-142722a9883d_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-142722a9883d_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="d-142722a9883d_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M118.797,31.75L122.797,31.75C126.797,31.75,134.797,31.75,142.13,31.75C149.464,31.75,156.13,31.75,159.464,31.75L162.797,31.75" id="d-142722a9883d-L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MTE4Ljc5Njg3NSwieSI6MzEuNzV9LHsieCI6MTQyLjc5Njg3NSwieSI6MzEuNzV9LHsieCI6MTY2Ljc5Njg3NSwieSI6MzEuNzV9XQ==" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/><path d="M340.203,31.75L344.203,31.75C348.203,31.75,356.203,31.75,363.536,31.75C370.87,31.75,377.536,31.75,380.87,31.75L384.203,31.75" id="d-142722a9883d-L_B_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6MzQwLjIwMzEyNSwieSI6MzEuNzV9LHsieCI6MzY0LjIwMzEyNSwieSI6MzEuNzV9LHsieCI6Mzg4LjIwMzEyNSwieSI6MzEuNzV9XQ==" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/><path d="M545.953,31.75L549.953,31.75C553.953,31.75,561.953,31.75,569.286,31.75C576.62,31.75,583.286,31.75,586.62,31.75L589.953,31.75" id="d-142722a9883d-L_C_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_D_0" data-points="W3sieCI6NTQ1Ljk1MzEyNSwieSI6MzEuNzV9LHsieCI6NTY5Ljk1MzEyNSwieSI6MzEuNzV9LHsieCI6NTkzLjk1MzEyNSwieSI6MzEuNzV9XQ==" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/><path d="M743.875,31.75L747.875,31.75C751.875,31.75,759.875,31.75,767.208,31.75C774.542,31.75,781.208,31.75,784.542,31.75L787.875,31.75" id="d-142722a9883d-L_D_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_E_0" data-points="W3sieCI6NzQzLjg3NSwieSI6MzEuNzV9LHsieCI6NzY3Ljg3NSwieSI6MzEuNzV9LHsieCI6NzkxLjg3NSwieSI6MzEuNzV9XQ==" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/><path d="M965.281,31.75L969.281,31.75C973.281,31.75,981.281,31.75,988.615,31.75C995.948,31.75,1002.615,31.75,1005.948,31.75L1009.281,31.75" id="d-142722a9883d-L_E_F_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_F_0" data-points="W3sieCI6OTY1LjI4MTI1LCJ5IjozMS43NX0seyJ4Ijo5ODkuMjgxMjUsInkiOjMxLjc1fSx7IngiOjEwMTMuMjgxMjUsInkiOjMxLjc1fV0=" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/><path d="M1131.906,31.75L1135.906,31.75C1139.906,31.75,1147.906,31.75,1155.24,31.75C1162.573,31.75,1169.24,31.75,1172.573,31.75L1175.906,31.75" id="d-142722a9883d-L_F_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_F_G_0" data-points="W3sieCI6MTEzMS45MDYyNSwieSI6MzEuNzV9LHsieCI6MTE1NS45MDYyNSwieSI6MzEuNzV9LHsieCI6MTE3OS45MDYyNSwieSI6MzEuNzV9XQ==" data-look="classic" marker-end="url(#d-142722a9883d_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_A_B_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_C_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_C_D_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_D_E_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_E_F_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_F_G_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g></g><g class="nodes"><g class="node default" id="d-142722a9883d-flowchart-A-0" data-look="classic" transform="translate(63.3984375, 31.75)"><rect class="basic label-container" style="" x="-55.3984375" y="-23.75" width="110.796875" height="47.5"/><g class="label" style="" transform="translate(-27.3984375, -9.75)"><rect/><foreignObject width="54.796875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Factory</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-B-1" data-look="classic" transform="translate(253.5, 31.75)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Read Config Key</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-C-3" data-look="classic" transform="translate(467.078125, 31.75)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Import Module</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-D-5" data-look="classic" transform="translate(668.9140625, 31.75)"><rect class="basic label-container" style="" x="-74.9609375" y="-23.75" width="149.921875" height="47.5"/><g class="label" style="" transform="translate(-46.9609375, -9.75)"><rect/><foreignObject width="93.921875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Load Classes</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-E-7" data-look="classic" transform="translate(878.578125, 31.75)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Check Interface</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-F-9" data-look="classic" transform="translate(1072.59375, 31.75)"><rect class="basic label-container" style="" x="-59.3125" y="-23.75" width="118.625" height="47.5"/><g class="label" style="" transform="translate(-31.3125, -9.75)"><rect/><foreignObject width="62.625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Register</p></span></div></foreignObject></g></g><g class="node default" id="d-142722a9883d-flowchart-G-11" data-look="classic" transform="translate(1290.09375, 31.75)"><rect class="basic label-container" style="" x="-110.1875" y="-23.75" width="220.375" height="47.5"/><g class="label" style="" transform="translate(-82.1875, -9.75)"><rect/><foreignObject width="164.375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Instantiate on Demand</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="d-142722a9883d-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="d-142722a9883d-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="d-142722a9883d-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--line-2)" stop-opacity="1"/><stop offset="100%" stop-color="hsl(358.125, 60%, 21.3725490196%)" stop-opacity="1"/></linearGradient></svg></div></figure>
+<h3 id="discovery-process">Discovery process<a class="anchor" href="#discovery-process" aria-label="Link to this section">#</a></h3>
+<ol><li>The factory reads the name of each enabled entry, for example <code class="ic">appium</code>.</li><li>It imports the module with the same name from its package (<code class="ic">engines/drivers/</code>, etc.): <code class="ic">optics_framework.engines.drivers.appium</code>. If the module does not exist, it raises <code class="ic">E0601</code>.</li><li>It inspects the module's classes and takes the first concrete class that implements the interface. If there is none, it raises <code class="ic">E0603</code>.</li><li>It registers the module path in the module registry.</li><li>It makes the instance. It passes <code class="ic">config</code> and the extra arguments (<code class="ic">event_sdk</code> for drivers, <code class="ic">driver</code> for element sources) only if <code class="ic">__init__</code> names them.</li></ol>
+<p><code class="ic">GenericFactory.register_package</code> can scan a whole package, but Optics does not call it. Only the engines you enable are imported, so a missing optional extra breaks only the engine that needs it.</p>
+<h3 id="configuration-based-selection">Configuration-based selection<a class="anchor" href="#configuration-based-selection" aria-label="Link to this section">#</a></h3>
+<p>The configuration selects the engines:</p>
+<figure class="code doc-code" data-lang="yaml"><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium: {...}      # First priority
+  - selenium: {...}     # Fallback">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span> {...}     <span class="c-dim"> # First priority</span>
+  - <span class="c-mod">selenium</span><span class="c-dim">:</span> {...}    <span class="c-dim"> # Fallback</span></code></pre></figure>
+<p>The factory creates an <code class="ic">InstanceFallback</code> wrapper that tries each in order. A call on the wrapper goes to each instance in turn, and returns the first result that does not raise. If all instances raise, the wrapper raises the last error. A result of <code class="ic">None</code> does not move to the next instance.</p>
+<h2 id="extension-guide">Extension guide<a class="anchor" href="#extension-guide" aria-label="Link to this section">#</a></h2>
+<h3 id="adding-a-new-driver">Adding a new driver<a class="anchor" href="#adding-a-new-driver" aria-label="Link to this section">#</a></h3>
+<ol><li><p>Create file in <code class="ic">optics_framework/engines/drivers/your_driver.py</code>. The file name is the name users write in config.yaml.</p></li><li><p>Implement <code class="ic">DriverInterface</code></p></li><li><p>Set class attributes:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="DEPENDENCY_TYPE = &quot;driver_sources&quot;
+NAME = &quot;your_driver&quot;">Copy</button><pre><code>DEPENDENCY_TYPE = <span class="c-lit">"driver_sources"</span>
+NAME = <span class="c-lit">"your_driver"</span></code></pre></figure></li><li><p>Factory automatically discovers it</p></li></ol>
+<p>Element sources find their driver by <code class="ic">NAME</code>, so keep it the same as the file name.</p>
+<h3 id="adding-a-new-element-source">Adding a new element source<a class="anchor" href="#adding-a-new-element-source" aria-label="Link to this section">#</a></h3>
+<ol><li><p>Create file in <code class="ic">optics_framework/engines/elementsources/your_source.py</code></p></li><li><p>Implement <code class="ic">ElementSourceInterface</code>. For a source that gets encoded screenshots from a backend, extend <code class="ic">EncodedScreenshotSource</code> and implement <code class="ic">capture_screenshot_bytes()</code>.</p></li><li><p>If driver-dependent, set:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="REQUIRED_DRIVER_TYPE = &quot;appium&quot;  # or &quot;selenium&quot;, &quot;playwright&quot;, etc.">Copy</button><pre><code>REQUIRED_DRIVER_TYPE = <span class="c-lit">"appium"</span>  <span class="c-dim"># or "selenium", "playwright", etc.</span></code></pre></figure>
+<p>For a source that works with any driver, set <code class="ic">ACCEPTS_ANY_DRIVER = True</code>.</p></li><li><p>Factory automatically matches with compatible driver</p></li></ol>
+<p>Raise <code class="ic">NotImplementedError</code> in the methods your source cannot do. The strategies then skip it for those methods.</p>
+<h3 id="adding-a-new-vision-model">Adding a new vision model<a class="anchor" href="#adding-a-new-vision-model" aria-label="Link to this section">#</a></h3>
+<ol><li>Create file in appropriate subdirectory:
+<ul><li><code class="ic">image_models/</code> for image detection</li><li><code class="ic">ocr_models/</code> for text detection</li></ul></li><li>Implement <code class="ic">ImageInterface</code> or <code class="ic">TextInterface</code>. A <code class="ic">TextInterface</code> needs only <code class="ic">detect_text()</code>. An <code class="ic">ImageInterface</code> needs <code class="ic">element_exist()</code>, <code class="ic">find_element()</code> and <code class="ic">assert_elements()</code>.</li><li>Factory automatically discovers it</li></ol>
+<h3 id="adding-a-new-llm-model">Adding a new LLM model<a class="anchor" href="#adding-a-new-llm-model" aria-label="Link to this section">#</a></h3>
+<ol><li>Create file in <code class="ic">optics_framework/engines/llm_models/your_model.py</code></li><li>Implement <code class="ic">LLMInterface</code></li><li>Factory automatically discovers it</li></ol>
+<h2 id="best-practices">Best practices<a class="anchor" href="#best-practices" aria-label="Link to this section">#</a></h2>
+<ol><li><strong>Error handling</strong>: Always handle driver initialization failures gracefully</li><li><strong>Resource cleanup</strong>: Implement proper cleanup in <code class="ic">terminate()</code> methods</li><li><strong>Configuration validation</strong>: Validate configuration in <code class="ic">__init__</code></li><li><strong>Logging</strong>: Use <code class="ic">internal_logger</code> for debug information</li><li><strong>Event tracking</strong>: Integrate with <code class="ic">EventSDK</code> for action tracking</li><li><strong>Fallback support</strong>: Design for graceful degradation</li></ol>
+<h2 id="performance-considerations">Performance considerations<a class="anchor" href="#performance-considerations" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Screenshot caching</strong>: Inside one keyword, each source's screenshot is captured once and shared. OCR engines remember their last reads of the same pixels.</li><li><strong>Connection pooling</strong>: Drivers should reuse connections when possible</li><li><strong>Lazy loading</strong>: Engines are loaded on demand, not at startup</li><li><strong>Sequential fallback</strong>: <code class="ic">InstanceFallback</code> tries the engines one at a time, in config order. They do not run in parallel.</li></ul>
+<h2 id="related-documentation">Related documentation<a class="anchor" href="#related-documentation" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/contribute/components">Components</a>: component architecture and factory system</li><li><a href="../../docs/contribute/components#factory-system">Factory system</a>: dynamic module discovery</li><li><a href="../../docs/contribute/strategies">Strategies</a>: strategy pattern and element location</li><li><a href="../../docs/contribute/execution">Execution</a>: test execution</li><li><a href="../../docs/contribute/extending">Extending</a>: creating custom engines</li><li><a href="../../docs/contribute/errors">Error handling</a>: error codes and handling</li><li><a href="../../docs/contribute/decisions">Architecture decisions</a>: factory pattern and engine design decisions</li><li><a href="../../docs/reference/engines">Engines and extras</a>: the engines you can turn on, and their pip extras</li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Engine%20implementations&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Fengines%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Engine%20implementations&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Fengines%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/contribute/components"><span>Previous</span>Components</a><a class="pager-next" href="../../docs/contribute/strategies"><span>Next</span>Strategies</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/contribute/engines.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#interfaces-and-factories">Interfaces and factories</a></li><li class="toc-l3"><a href="#what-an-engine-gets-from-configyaml">What an engine gets from config.yaml</a></li><li class="toc-l2"><a href="#drivers">Drivers</a></li><li class="toc-l3"><a href="#appium-driver">Appium driver</a></li><li class="toc-l3"><a href="#selenium-driver">Selenium driver</a></li><li class="toc-l3"><a href="#playwright-driver">Playwright driver</a></li><li class="toc-l3"><a href="#how-the-web-drivers-work-inside">How the web drivers work inside</a></li><li class="toc-l3"><a href="#ble-driver">BLE driver</a></li><li class="toc-l2"><a href="#element-sources">Element sources</a></li><li class="toc-l3"><a href="#screenshot-based-sources">Screenshot-based sources</a></li><li class="toc-l3"><a href="#page-source-based-sources">Page source-based sources</a></li><li class="toc-l3"><a href="#find-element-sources">Find element sources</a></li><li class="toc-l3"><a href="#element-source-selection">Element source selection</a></li><li class="toc-l2"><a href="#vision-models">Vision models</a></li><li class="toc-l3"><a href="#image-detection-models">Image detection models</a></li><li class="toc-l3"><a href="#ocrtext-detection-models">OCR/text detection models</a></li><li class="toc-l2"><a href="#llm-models">LLM models</a></li><li class="toc-l2"><a href="#engine-discovery-and-loading">Engine discovery and loading</a></li><li class="toc-l3"><a href="#discovery-process">Discovery process</a></li><li class="toc-l3"><a href="#configuration-based-selection">Configuration-based selection</a></li><li class="toc-l2"><a href="#extension-guide">Extension guide</a></li><li class="toc-l3"><a href="#adding-a-new-driver">Adding a new driver</a></li><li class="toc-l3"><a href="#adding-a-new-element-source">Adding a new element source</a></li><li class="toc-l3"><a href="#adding-a-new-vision-model">Adding a new vision model</a></li><li class="toc-l3"><a href="#adding-a-new-llm-model">Adding a new LLM model</a></li><li class="toc-l2"><a href="#best-practices">Best practices</a></li><li class="toc-l2"><a href="#performance-considerations">Performance considerations</a></li><li class="toc-l2"><a href="#related-documentation">Related documentation</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaa72e04a3" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=49b314c882" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+<!--/email_off--></body>
+</html>

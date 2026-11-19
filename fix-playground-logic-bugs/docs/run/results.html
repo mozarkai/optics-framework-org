@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read the results · Optics Framework docs</title>
+  <meta name="description" content="Find out what happened in a run from the JUnit report, the screenshots and the logs.">
+  <meta name="ai-summary" content="Find out what happened in a run from the JUnit report, the screenshots and the logs.">
+  <link rel="canonical" href="https://optics-framework.org/docs/run/results">
+  <link rel="alternate" type="text/markdown" href="results.md" title="This page as Markdown">
+  <meta property="og:title" content="Read the results · Optics Framework docs">
+  <meta property="og:description" content="Find out what happened in a run from the JUnit report, the screenshots and the logs.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=5ba04c0dc3">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/"><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab on" href="../../docs/run/" aria-current="true">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/contribute/">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section open" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results" aria-current="page">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/run/">Run and report</a></nav>
+        <header class="doc-head">
+          <h1>Read the results</h1>
+          <p class="doc-summary">Find out what happened in a run from the JUnit report, the screenshots and the logs.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Beginner, about 6 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="results.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="results.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Every run writes its results to <code class="ic">execution_output/</code> inside the project folder. The terminal tree tells you <em>what</em> failed. The files tell you <em>why</em>.</p>
+<h2 id="what-a-run-writes">What a run writes<a class="anchor" href="#what-a-run-writes" aria-label="Link to this section">#</a></h2>
+<figure class="code doc-code no-copy" data-lang="tree"><pre><code><span class="c-dim"></span><span class="c-mod">birch-tests/execution_output/</span>
+<span class="c-dim">├── </span>junit_output.xml<span class="c-dim">                              # pass/fail for every test, for CI</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-11-…-pre_press_element.jpg<span class="c-dim">  # the screen before each step</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-11-…-press_element_element_detection_result.jpg
+<span class="c-dim">├── </span>2026-10-09T14-02-14-…-failure_Shopper can sign in.jpg<span class="c-dim">   # the screen of a failed test case</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-14-…-failure_Shopper can sign in.xml<span class="c-dim">   # its UI tree</span>
+<span class="c-dim">├── </span>2026-10-09T14-02-15-…-end_of_run.jpg<span class="c-dim">         # the last screen</span>
+<span class="c-dim">├── </span>page_sources_log.xml<span class="c-dim">                          # the UI tree, captured during the run</span>
+<span class="c-dim">├── </span>failed_steps_elements.json<span class="c-dim">                    # the elements on screen when a step failed</span>
+<span class="c-dim">├── </span>internal_logs.log<span class="c-dim">                             # with file_log: true</span>
+<span class="c-dim">├── </span>execution_logs.log<span class="c-dim">                            # with file_log: true</span>
+<span class="c-dim">└── </span>logs.json<span class="c-dim">                                     # with json_log: true</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>File</th><th>When it's written</th><th>Use it to</th></tr></thead><tbody><tr><td><code class="ic">junit_output.xml</code></td><td>Every run</td><td>Show results in CI. Standard JUnit XML that GitHub Actions, GitLab, Jenkins and others read.</td></tr><tr><td><code class="ic">…pre_&lt;keyword&gt;.jpg</code></td><td>Before each step that finds an element, with <code class="ic">save_captures: true</code></td><td>See what was on screen when the step started.</td></tr><tr><td><code class="ic">…_detection_result.jpg</code></td><td>When Optics found an element by position, with <code class="ic">save_captures: true</code></td><td>See exactly what Optics found, boxed in green. When Optics cannot read the position of the element, it saves the screenshot with no box, and the step result does not change.</td></tr><tr><td><code class="ic">…_with_aoi.jpg</code></td><td>When a step uses an <a href="../../docs/elements/area-of-interest">area of interest</a>, with <code class="ic">save_captures: true</code></td><td>Check the area covers the right part of the screen. It's drawn in blue.</td></tr><tr><td><code class="ic">&lt;time&gt;-failure_&lt;test case&gt;.jpg</code> and <code class="ic">&lt;time&gt;-failure_&lt;test case&gt;.xml</code></td><td>When a test case fails. Web pages write <code class="ic">.html</code> in place of <code class="ic">.xml</code>.</td><td>See the screen and the UI tree where the test case ended.</td></tr><tr><td><code class="ic">&lt;time&gt;-end_of_run.jpg</code></td><td>At the end of the run, before Suite Teardown</td><td>See where the app was left.</td></tr><tr><td><code class="ic">page_sources_log.xml</code> or <code class="ic">.html</code></td><td>When the UI tree is read. Web pages go to <code class="ic">.html</code>.</td><td>Find the right XPath or text for an element.</td></tr><tr><td><code class="ic">failed_steps_elements.json</code></td><td>When a step fails, with <code class="ic">save_captures: true</code></td><td>See each element on the screen of the failed step, with its label and bounds.</td></tr><tr><td><code class="ic">internal_logs.log</code>, <code class="ic">execution_logs.log</code></td><td>With <code class="ic">file_log: true</code></td><td>Read every attempt Optics made, including which ways of finding an element failed.</td></tr><tr><td><code class="ic">logs.json</code></td><td>With <code class="ic">json_log: true</code></td><td>Feed results into your own dashboards.</td></tr><tr><td><code class="ic">detected_errors_&lt;id&gt;.json</code></td><td>When an <a href="../../docs/run/error-detection">error screen</a> was found</td><td>See which error definition matched.</td></tr></tbody></table></div>
+<figure class="scene-fig"><div class="scene" data-scene="results" role="img" aria-label="On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it."></div><figcaption>On the left, the screenshot saved before the step. On the right, the same screen with a green box around the element Optics found. The log says which way found it.</figcaption></figure>
+<h2 id="investigate-a-failure">Investigate a failure<a class="anchor" href="#investigate-a-failure" aria-label="Link to this section">#</a></h2>
+<ol><li><strong>Read the Failure details box</strong> in the terminal. It names the test case, the step and the reason. <code class="ic">last error:</code> gives the error of the last fallback value, and <code class="ic">(cause: …)</code> gives the root cause.</li><li><strong>Open <code class="ic">failed_steps_elements.json</code></strong> to see the elements on the screen when the step failed. On a web page, each element has a <code class="ic">loc</code> locator that you can copy into your elements file.</li><li><strong>Open the <code class="ic">failure_&lt;test case&gt;</code> screenshot.</strong> It shows where the test case ended. Then open the last <code class="ic">pre_…</code> screenshot before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an <code class="ic">Assert Presence</code> before it. If it shows a different screen, an earlier step went somewhere unexpected.</li><li><strong>Search the logs</strong> for the element's value. With <code class="ic">file_log: true</code>, <code class="ic">execution_logs.log</code> has a line for every attempt, such as <code class="ic">Trying … on 'Sign in' ... FAIL</code>.</li><li><strong>Reproduce it in <code class="ic">optics live</code>.</strong> Run the steps before the failure, then try the failing step with different values until one works. See <a href="../../docs/create/record">Record a test</a>.</li></ol>
+<h2 id="turn-on-more-logging">Turn on more logging<a class="anchor" href="#turn-on-more-logging" aria-label="Link to this section">#</a></h2>
+<p>Add these to <code class="ic">config.yaml</code>:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="file_log: true      # write internal_logs.log and execution_logs.log
+json_log: true      # write logs.json, a list of every run event
+log_level: DEBUG    # more detail in the terminal and log files">Copy</button><pre><code><span class="c-mod">file_log</span><span class="c-dim">:</span> <span class="c-info">true     </span><span class="c-dim"> # write internal_logs.log and execution_logs.log</span>
+<span class="c-mod">json_log</span><span class="c-dim">:</span> <span class="c-info">true     </span><span class="c-dim"> # write logs.json, a list of every run event</span>
+<span class="c-mod">log_level</span><span class="c-dim">:</span> DEBUG   <span class="c-dim"> # more detail in the terminal and log files</span></code></pre></figure>
+<p><code class="ic">log_level</code> takes <code class="ic">DEBUG</code>, <code class="ic">INFO</code> (the default), <code class="ic">WARNING</code> or <code class="ic">ERROR</code>. Use <code class="ic">WARNING</code> to keep the terminal quiet so the tree stands out.</p>
+<h2 id="read-the-junit-report">Read the JUnit report<a class="anchor" href="#read-the-junit-report" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">junit_output.xml</code> has one <code class="ic">&lt;testsuite&gt;</code> and one <code class="ic">&lt;testcase&gt;</code> for each test case. Suite Setup and Suite Teardown also have one. The suite <code class="ic">id</code> is the session id. The suite <code class="ic">name</code> and each <code class="ic">classname</code> are the <code class="ic">name</code> in config.yaml, or the name of the project folder when config.yaml has no <code class="ic">name</code>. <code class="ic">optics init</code> writes <code class="ic">name</code>, so the report keeps its name when you copy the project to a different folder:</p>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="name: birch-tests">Copy</button><pre><code><span class="c-mod">name</span><span class="c-dim">:</span> birch-tests</code></pre></figure>
+<figure class="code doc-code" data-lang="xml"><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;testsuite name=&quot;birch-tests&quot; id=&quot;b1cdc702-…&quot; tests=&quot;3&quot; failures=&quot;0&quot; errors=&quot;0&quot; skipped=&quot;0&quot; time=&quot;0.00&quot; …&gt;">Copy</button><pre><code><span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"birch-tests"</span> id=<span class="c-lit">"b1cdc702-…"</span> tests=<span class="c-lit">"3"</span> failures=<span class="c-lit">"0"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"0"</span> time=<span class="c-lit">"0.00"</span> …<span class="c-mod">&gt;</span></code></pre></figure>
+<p>Each <code class="ic">&lt;testcase&gt;</code> has <code class="ic">kind</code>, <code class="ic">timestamp</code> (when it started), <code class="ic">time</code> (how long it took, in seconds) and <code class="ic">status</code>. A failed test case also has a <code class="ic">&lt;failure&gt;</code>.</p>
+<p><code class="ic">kind</code> tells you the role of the test case: <code class="ic">suite_setup</code>, <code class="ic">setup</code>, <code class="ic">test</code>, <code class="ic">teardown</code> or <code class="ic">suite_teardown</code>. Use it to filter setup and teardown out of your test counts. A <code class="ic">&lt;failure&gt;</code> or <code class="ic">&lt;error&gt;</code> has a <code class="ic">code</code> attribute with the error code, such as <code class="ic">E0201</code>, when the failure has a code.</p>
+<p>Inside each test case, every module is a <code class="ic">&lt;kw type="setup"&gt;</code>, and each of its keywords is a <code class="ic">&lt;kw&gt;</code> inside it. Each <code class="ic">&lt;kw&gt;</code> has <code class="ic">status</code>, <code class="ic">starttime</code>, <code class="ic">endtime</code> and <code class="ic">elapsed</code>. A failed one also has a <code class="ic">message</code> and a <code class="ic">code</code>. CI tools that show nested steps display the same tree you saw in the terminal.</p>
+<figure class="code doc-code" data-lang="xml"><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;testcase name=&quot;Shopper can find a missing link&quot; classname=&quot;birch-tests&quot; kind=&quot;test&quot; time=&quot;3.79&quot; ... status=&quot;FAIL&quot;&gt;
+  &lt;kw name=&quot;Verify Missing Link&quot; type=&quot;setup&quot; status=&quot;FAIL&quot; ... code=&quot;E0201&quot;&gt;
+    &lt;kw name=&quot;Assert Presence&quot; status=&quot;FAIL&quot; ... code=&quot;E0201&quot; elapsed=&quot;3.01&quot;&gt;
+    ...
+    &lt;/kw&gt;
+    &lt;kw name=&quot;Validate Element&quot; status=&quot;NOT_RUN&quot;/&gt;
+  &lt;/kw&gt;
+  &lt;failure message=&quot;Keyword 'Assert Presence' failed after fallback attempts; ...&quot; type=&quot;Failure&quot; code=&quot;E0201&quot;&gt;...&lt;/failure&gt;
+&lt;/testcase&gt;">Copy</button><pre><code><span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Shopper can find a missing link"</span> classname=<span class="c-lit">"birch-tests"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"3.79"</span> ... status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Verify Missing Link"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"FAIL"</span> ... code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"FAIL"</span> ... code=<span class="c-lit">"E0201"</span> elapsed=<span class="c-lit">"3.01"</span><span class="c-mod">&gt;</span>
+    ...
+    <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Validate Element"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+  <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; ..."</span> type=<span class="c-lit">"Failure"</span> code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>...<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span></code></pre></figure>
+<p>A status is one of these:</p>
+<div class="table-wrap"><table><thead><tr><th>Status</th><th>Meaning</th></tr></thead><tbody><tr><td><code class="ic">PASS</code></td><td>The test case, module or keyword passed.</td></tr><tr><td><code class="ic">FAIL</code></td><td>A check or an action failed.</td></tr><tr><td><code class="ic">ERROR</code></td><td>The run could not do its work, for example because the driver session was lost or the run stopped.</td></tr><tr><td><code class="ic">NOT_RUN</code></td><td>A failure or a stop kept it from running.</td></tr></tbody></table></div>
+<p>After a failure, the steps that did not run are <code class="ic">NOT_RUN</code>. A test case that never started is <code class="ic">NOT_RUN</code> with a <code class="ic">&lt;skipped&gt;</code> element. A per-test setup or teardown has its own result, named <code class="ic">Setup (&lt;test case&gt;)</code> or <code class="ic">Teardown (&lt;test case&gt;)</code>. If a per-test setup fails, its test case does not run. The test case is <code class="ic">NOT_RUN</code>, and the <code class="ic">message</code> of its <code class="ic">&lt;skipped&gt;</code> starts with <code class="ic">Setup failed:</code>.</p>
+<p>If error screens were detected, the report has an extra failing test case called <code class="ic">on-screen-error-detection</code>. See <a href="../../docs/run/error-detection">Catch error screens</a>.</p>
+<h2 id="what-each-outcome-writes">What each outcome writes<a class="anchor" href="#what-each-outcome-writes" aria-label="Link to this section">#</a></h2>
+<p>Each outcome has an exit code and a result in <code class="ic">junit_output.xml</code>. Optics writes the report once, when the run ends, also when you stop the run with <kbd>Ctrl</kbd>+<kbd>C</kbd> or SIGTERM. A run that cannot start because of the project writes no report. Examples are a bad config and a test selection that is not valid.</p>
+<div class="table-wrap"><table><thead><tr><th>Outcome</th><th>Exit code</th><th><code class="ic">junit_output.xml</code></th></tr></thead><tbody><tr><td>Every test case passed</td><td><code class="ic">0</code></td><td>Every test case is <code class="ic">PASS</code>.</td></tr><tr><td>A test case failed</td><td><code class="ic">1</code></td><td>That test case is <code class="ic">FAIL</code> with a <code class="ic">&lt;failure&gt;</code>. The steps after the failed step are <code class="ic">NOT_RUN</code>.</td></tr><tr><td>An error screen matched</td><td><code class="ic">1</code></td><td>An extra <code class="ic">on-screen-error-detection</code> test case has one <code class="ic">&lt;failure&gt;</code> for each match.</td></tr><tr><td>Suite Setup failed</td><td><code class="ic">1</code></td><td>Suite Setup is <code class="ic">FAIL</code>. Each other test case, except Suite Teardown, is <code class="ic">NOT_RUN</code> with a <code class="ic">&lt;skipped&gt;</code> whose <code class="ic">message</code> starts with <code class="ic">Suite setup failed:</code>. Suite Teardown runs.</td></tr><tr><td>A per-test setup failed</td><td><code class="ic">1</code></td><td><code class="ic">Setup (&lt;test case&gt;)</code> is <code class="ic">FAIL</code>. Its test case is <code class="ic">NOT_RUN</code> with a <code class="ic">&lt;skipped&gt;</code> whose <code class="ic">message</code> starts with <code class="ic">Setup failed:</code>. Its teardown runs.</td></tr><tr><td>Config error, missing files or no driver enabled</td><td><code class="ic">1</code></td><td>Not written.</td></tr><tr><td>Test selection not valid</td><td><code class="ic">3</code></td><td>Not written.</td></tr><tr><td>The Appium or Selenium server cannot be reached, or no Android device is attached</td><td><code class="ic">1</code></td><td>Each test case is <code class="ic">ERROR</code> with an <code class="ic">&lt;error&gt;</code> that names the problem and has its code, such as <code class="ic">E0102</code>. Their steps are <code class="ic">NOT_RUN</code>.</td></tr><tr><td>Another error while the session starts, such as a credentials file that is not valid</td><td><code class="ic">1</code></td><td><code class="ic">&lt;testsuites/&gt;</code> with no test cases.</td></tr><tr><td>The driver session is lost during the run</td><td><code class="ic">1</code></td><td>The test case in progress and each later one is <code class="ic">ERROR</code> with an <code class="ic">&lt;error&gt;</code> that has <code class="ic">E0106</code>.</td></tr><tr><td>You press <kbd>Ctrl</kbd>+<kbd>C</kbd></td><td><code class="ic">130</code></td><td>Finished test cases keep their results. The one in progress is <code class="ic">ERROR</code> with <code class="ic">code="E0706"</code>. Its keyword in progress is <code class="ic">ERROR</code> with the same code, and its other steps are <code class="ic">NOT_RUN</code>. Later test cases and Suite Teardown do not run: each is a <code class="ic">&lt;testcase status="NOT_RUN"&gt;</code> with a <code class="ic">&lt;skipped&gt;</code>.</td></tr><tr><td>Optics receives SIGTERM</td><td><code class="ic">143</code></td><td>The same as <kbd>Ctrl</kbd>+<kbd>C</kbd>.</td></tr><tr><td>The process is killed with SIGKILL</td><td><code class="ic">137</code> in a shell, <code class="ic">-9</code> from Python <code class="ic">subprocess</code></td><td>Not written: the process ends at once.</td></tr></tbody></table></div>
+<p>A session is lost when the Appium server or the Selenium server stops, or drops the session, during a run. The terminal summary shows the affected test cases as failed.</p>
+<p>If two sessions in one process share an output folder, such as with the Python SDK or <code class="ic">optics serve</code>, the second report is <code class="ic">junit_output_&lt;session_id&gt;.xml</code>. <code class="ic">optics execute</code> and <code class="ic">optics dry_run</code> always write <code class="ic">junit_output.xml</code>.</p>
+<h3 id="sample-reports">Sample reports<a class="anchor" href="#sample-reports" aria-label="Link to this section">#</a></h3>
+<p>These are real reports from <code class="ic">optics execute</code> on a Playwright project named <code class="ic">checkout_suite</code>. Open one to see the exact XML of that outcome.</p>
+<details class="doc-details"><summary>Every test case passed (exit code 0)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>passed.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;d09e5f49-0fd8-4632-83d8-08e516f5d931&quot; tests=&quot;4&quot; failures=&quot;0&quot; errors=&quot;0&quot; skipped=&quot;0&quot; time=&quot;1.15&quot; timestamp=&quot;2026-11-09T18:22:45.541+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;dac8114c-f399-446e-9455-e8e3969945af&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;1.01&quot; timestamp=&quot;2026-11-09T18:22:45.541+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:45.542&quot; endtime=&quot;20261109 18:22:46.549&quot; elapsed=&quot;1.01&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:45.542&quot; endtime=&quot;20261109 18:22:46.549&quot; elapsed=&quot;1.01&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;e0aceac9-7f42-4f74-b65f-a2d019d781cf&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.07&quot; timestamp=&quot;2026-11-09T18:22:46.549+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:46.549&quot; endtime=&quot;20261109 18:22:46.616&quot; elapsed=&quot;0.07&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:46.550&quot; endtime=&quot;20261109 18:22:46.616&quot; elapsed=&quot;0.07&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; id=&quot;448c9914-08b7-4732-a30b-caa7b6d58a37&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:22:46.617+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:46.617&quot; endtime=&quot;20261109 18:22:46.656&quot; elapsed=&quot;0.04&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:46.617&quot; endtime=&quot;20261109 18:22:46.656&quot; elapsed=&quot;0.04&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; id=&quot;614769b3-6883-41d2-98c8-f755babc7905&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0.03&quot; timestamp=&quot;2026-11-09T18:22:47.224+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:47.225&quot; endtime=&quot;20261109 18:22:47.258&quot; elapsed=&quot;0.03&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:47.225&quot; endtime=&quot;20261109 18:22:47.258&quot; elapsed=&quot;0.03&quot;&gt;
+          &lt;log&gt;No events to send.&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"d09e5f49-0fd8-4632-83d8-08e516f5d931"</span> tests=<span class="c-lit">"4"</span> failures=<span class="c-lit">"0"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"0"</span> time=<span class="c-lit">"1.15"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:45.541+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"dac8114c-f399-446e-9455-e8e3969945af"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"1.01"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:45.541+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:45.542"</span> endtime=<span class="c-lit">"20261109 18:22:46.549"</span> elapsed=<span class="c-lit">"1.01"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:45.542"</span> endtime=<span class="c-lit">"20261109 18:22:46.549"</span> elapsed=<span class="c-lit">"1.01"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"e0aceac9-7f42-4f74-b65f-a2d019d781cf"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.07"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:46.549+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:46.549"</span> endtime=<span class="c-lit">"20261109 18:22:46.616"</span> elapsed=<span class="c-lit">"0.07"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:46.550"</span> endtime=<span class="c-lit">"20261109 18:22:46.616"</span> elapsed=<span class="c-lit">"0.07"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> id=<span class="c-lit">"448c9914-08b7-4732-a30b-caa7b6d58a37"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:46.617+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:46.617"</span> endtime=<span class="c-lit">"20261109 18:22:46.656"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:46.617"</span> endtime=<span class="c-lit">"20261109 18:22:46.656"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> id=<span class="c-lit">"614769b3-6883-41d2-98c8-f755babc7905"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0.03"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:47.224+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:47.225"</span> endtime=<span class="c-lit">"20261109 18:22:47.258"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:47.225"</span> endtime=<span class="c-lit">"20261109 18:22:47.258"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>No events to send.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>A test case failed (exit code 1)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>failed.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;3c053b88-48df-4b28-ab4b-fc44890db471&quot; tests=&quot;6&quot; failures=&quot;1&quot; errors=&quot;0&quot; skipped=&quot;0&quot; time=&quot;4.22&quot; timestamp=&quot;2026-11-09T18:22:48.815+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;a4ff9a93-0a9f-45b5-910d-6341946532b9&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;1.28&quot; timestamp=&quot;2026-11-09T18:22:48.815+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:48.815&quot; endtime=&quot;20261109 18:22:50.093&quot; elapsed=&quot;1.28&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:48.815&quot; endtime=&quot;20261109 18:22:50.092&quot; elapsed=&quot;1.28&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;017f66ac-0693-4320-8fbe-a023b0127231&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.08&quot; timestamp=&quot;2026-11-09T18:22:50.094+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.095&quot; endtime=&quot;20261109 18:22:50.173&quot; elapsed=&quot;0.08&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.095&quot; endtime=&quot;20261109 18:22:50.173&quot; elapsed=&quot;0.08&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; id=&quot;382ccfbe-3434-4cf5-aa0e-3cad55b1bc91&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:22:50.174+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.174&quot; endtime=&quot;20261109 18:22:50.212&quot; elapsed=&quot;0.04&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.174&quot; endtime=&quot;20261109 18:22:50.211&quot; elapsed=&quot;0.04&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC2 Missing Text)&quot; id=&quot;d5a26adf-8fc7-48e6-ae5f-a881ec3d0c61&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.10&quot; timestamp=&quot;2026-11-09T18:22:50.212+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.212&quot; endtime=&quot;20261109 18:22:50.307&quot; elapsed=&quot;0.09&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:50.212&quot; endtime=&quot;20261109 18:22:50.307&quot; elapsed=&quot;0.09&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC2 Missing Text&quot; id=&quot;c4837f0f-b1b8-4a9d-acee-484d563ebdc7&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;2.70&quot; timestamp=&quot;2026-11-09T18:22:50.308+05:30&quot; status=&quot;FAIL&quot;&gt;
+      &lt;kw name=&quot;Check Missing Text&quot; type=&quot;setup&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:50.308&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:22:52.957&quot; elapsed=&quot;2.65&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:50.309&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:22:52.320&quot; elapsed=&quot;2.01&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/log&gt;
+        &lt;/kw&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;failure message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; type=&quot;Failure&quot; code=&quot;E0201&quot;&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/failure&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; id=&quot;b12a2c29-1e21-48bb-a0e6-0aff9e3b507d&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0.02&quot; timestamp=&quot;2026-11-09T18:22:53.053+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:53.053&quot; endtime=&quot;20261109 18:22:53.077&quot; elapsed=&quot;0.02&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:53.054&quot; endtime=&quot;20261109 18:22:53.076&quot; elapsed=&quot;0.02&quot;&gt;
+          &lt;log&gt;No events to send.&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"3c053b88-48df-4b28-ab4b-fc44890db471"</span> tests=<span class="c-lit">"6"</span> failures=<span class="c-lit">"1"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"0"</span> time=<span class="c-lit">"4.22"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:48.815+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"a4ff9a93-0a9f-45b5-910d-6341946532b9"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"1.28"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:48.815+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:48.815"</span> endtime=<span class="c-lit">"20261109 18:22:50.093"</span> elapsed=<span class="c-lit">"1.28"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:48.815"</span> endtime=<span class="c-lit">"20261109 18:22:50.092"</span> elapsed=<span class="c-lit">"1.28"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"017f66ac-0693-4320-8fbe-a023b0127231"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.08"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:50.094+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.095"</span> endtime=<span class="c-lit">"20261109 18:22:50.173"</span> elapsed=<span class="c-lit">"0.08"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.095"</span> endtime=<span class="c-lit">"20261109 18:22:50.173"</span> elapsed=<span class="c-lit">"0.08"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> id=<span class="c-lit">"382ccfbe-3434-4cf5-aa0e-3cad55b1bc91"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:50.174+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.174"</span> endtime=<span class="c-lit">"20261109 18:22:50.212"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.174"</span> endtime=<span class="c-lit">"20261109 18:22:50.211"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC2 Missing Text)"</span> id=<span class="c-lit">"d5a26adf-8fc7-48e6-ae5f-a881ec3d0c61"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.10"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:50.212+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.212"</span> endtime=<span class="c-lit">"20261109 18:22:50.307"</span> elapsed=<span class="c-lit">"0.09"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:50.212"</span> endtime=<span class="c-lit">"20261109 18:22:50.307"</span> elapsed=<span class="c-lit">"0.09"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC2 Missing Text"</span> id=<span class="c-lit">"c4837f0f-b1b8-4a9d-acee-484d563ebdc7"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"2.70"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:50.308+05:30"</span> status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Missing Text"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:50.308"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:22:52.957"</span> elapsed=<span class="c-lit">"2.65"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:50.309"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:22:52.320"</span> elapsed=<span class="c-lit">"2.01"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> type=<span class="c-lit">"Failure"</span> code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> id=<span class="c-lit">"b12a2c29-1e21-48bb-a0e6-0aff9e3b507d"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0.02"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:53.053+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:53.053"</span> endtime=<span class="c-lit">"20261109 18:22:53.077"</span> elapsed=<span class="c-lit">"0.02"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:53.054"</span> endtime=<span class="c-lit">"20261109 18:22:53.076"</span> elapsed=<span class="c-lit">"0.02"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>No events to send.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>An error screen matched (exit code 1)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>on_screen_error.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;3918a7e9-9d91-4ca7-88f7-f3d728b87e12&quot; tests=&quot;5&quot; failures=&quot;1&quot; errors=&quot;0&quot; skipped=&quot;0&quot; time=&quot;0.89&quot; timestamp=&quot;2026-11-09T18:23:04.296+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;1ad8f44e-d3f8-425d-a72d-1f6657f2d90f&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;0.74&quot; timestamp=&quot;2026-11-09T18:23:04.296+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:04.296&quot; endtime=&quot;20261109 18:23:05.040&quot; elapsed=&quot;0.74&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:04.296&quot; endtime=&quot;20261109 18:23:05.039&quot; elapsed=&quot;0.74&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;7b71862a-84be-4785-b584-eb8253d27027&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.08&quot; timestamp=&quot;2026-11-09T18:23:05.041+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.041&quot; endtime=&quot;20261109 18:23:05.122&quot; elapsed=&quot;0.08&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.041&quot; endtime=&quot;20261109 18:23:05.122&quot; elapsed=&quot;0.08&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; id=&quot;6419e2fc-bff3-4fde-a9cd-bb21412168b3&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:23:05.122+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.122&quot; endtime=&quot;20261109 18:23:05.160&quot; elapsed=&quot;0.04&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.122&quot; endtime=&quot;20261109 18:23:05.160&quot; elapsed=&quot;0.04&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; id=&quot;e7529eef-0ef5-4897-83c9-e17ed61bc4c0&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0.03&quot; timestamp=&quot;2026-11-09T18:23:05.727+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.727&quot; endtime=&quot;20261109 18:23:05.757&quot; elapsed=&quot;0.03&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:05.728&quot; endtime=&quot;20261109 18:23:05.757&quot; elapsed=&quot;0.03&quot;&gt;
+          &lt;log&gt;No events to send.&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;on-screen-error-detection&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;FAIL&quot;&gt;
+      &lt;failure message=&quot;ERR_DEMO | high | documentation examples | Demo text on the final page&quot; type=&quot;OnScreenError&quot; code=&quot;ERR_DEMO&quot;&gt;ERR_DEMO | high | documentation examples | Demo text on the final page&lt;/failure&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"3918a7e9-9d91-4ca7-88f7-f3d728b87e12"</span> tests=<span class="c-lit">"5"</span> failures=<span class="c-lit">"1"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"0"</span> time=<span class="c-lit">"0.89"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:04.296+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"1ad8f44e-d3f8-425d-a72d-1f6657f2d90f"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"0.74"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:04.296+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:04.296"</span> endtime=<span class="c-lit">"20261109 18:23:05.040"</span> elapsed=<span class="c-lit">"0.74"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:04.296"</span> endtime=<span class="c-lit">"20261109 18:23:05.039"</span> elapsed=<span class="c-lit">"0.74"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"7b71862a-84be-4785-b584-eb8253d27027"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.08"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:05.041+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.041"</span> endtime=<span class="c-lit">"20261109 18:23:05.122"</span> elapsed=<span class="c-lit">"0.08"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.041"</span> endtime=<span class="c-lit">"20261109 18:23:05.122"</span> elapsed=<span class="c-lit">"0.08"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> id=<span class="c-lit">"6419e2fc-bff3-4fde-a9cd-bb21412168b3"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:05.122+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.122"</span> endtime=<span class="c-lit">"20261109 18:23:05.160"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.122"</span> endtime=<span class="c-lit">"20261109 18:23:05.160"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> id=<span class="c-lit">"e7529eef-0ef5-4897-83c9-e17ed61bc4c0"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0.03"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:05.727+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.727"</span> endtime=<span class="c-lit">"20261109 18:23:05.757"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:05.728"</span> endtime=<span class="c-lit">"20261109 18:23:05.757"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>No events to send.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"on-screen-error-detection"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"ERR_DEMO | high | documentation examples | Demo text on the final page"</span> type=<span class="c-lit">"OnScreenError"</span> code=<span class="c-lit">"ERR_DEMO"</span><span class="c-mod">&gt;</span>ERR_DEMO | high | documentation examples | Demo text on the final page<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>Suite Setup failed (exit code 1)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>suite_setup_failed.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;e5b0d587-646c-4a96-8cd7-07cd80af727f&quot; tests=&quot;4&quot; failures=&quot;1&quot; errors=&quot;0&quot; skipped=&quot;2&quot; time=&quot;3.75&quot; timestamp=&quot;2026-11-09T18:24:10.036+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;9377898b-02c8-4c45-99b2-3ac47f0ac0e7&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;3.71&quot; timestamp=&quot;2026-11-09T18:24:10.036+05:30&quot; status=&quot;FAIL&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:24:10.036&quot; endtime=&quot;20261109 18:24:11.046&quot; elapsed=&quot;1.01&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:24:10.036&quot; endtime=&quot;20261109 18:24:11.045&quot; elapsed=&quot;1.01&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;kw name=&quot;Check Missing Text&quot; type=&quot;setup&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:24:11.046&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:24:13.686&quot; elapsed=&quot;2.64&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:24:11.046&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:24:13.055&quot; elapsed=&quot;2.01&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/log&gt;
+        &lt;/kw&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;failure message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; type=&quot;Failure&quot; code=&quot;E0201&quot;&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/failure&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; id=&quot;41c54b4d-5049-47f8-b9b5-9091e0c654d3&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:24:14.317+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:24:14.318&quot; endtime=&quot;20261109 18:24:14.353&quot; elapsed=&quot;0.03&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:24:14.319&quot; endtime=&quot;20261109 18:24:14.352&quot; elapsed=&quot;0.03&quot;&gt;
+          &lt;log&gt;No events to send.&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"e5b0d587-646c-4a96-8cd7-07cd80af727f"</span> tests=<span class="c-lit">"4"</span> failures=<span class="c-lit">"1"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"2"</span> time=<span class="c-lit">"3.75"</span> timestamp=<span class="c-lit">"2026-11-09T18:24:10.036+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"9377898b-02c8-4c45-99b2-3ac47f0ac0e7"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"3.71"</span> timestamp=<span class="c-lit">"2026-11-09T18:24:10.036+05:30"</span> status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:24:10.036"</span> endtime=<span class="c-lit">"20261109 18:24:11.046"</span> elapsed=<span class="c-lit">"1.01"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:24:10.036"</span> endtime=<span class="c-lit">"20261109 18:24:11.045"</span> elapsed=<span class="c-lit">"1.01"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Missing Text"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:24:11.046"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:24:13.686"</span> elapsed=<span class="c-lit">"2.64"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:24:11.046"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:24:13.055"</span> elapsed=<span class="c-lit">"2.01"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> type=<span class="c-lit">"Failure"</span> code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> id=<span class="c-lit">"41c54b4d-5049-47f8-b9b5-9091e0c654d3"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:24:14.317+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:24:14.318"</span> endtime=<span class="c-lit">"20261109 18:24:14.353"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:24:14.319"</span> endtime=<span class="c-lit">"20261109 18:24:14.352"</span> elapsed=<span class="c-lit">"0.03"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>No events to send.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>A per-test setup failed (exit code 1)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>setup_failed.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;f7f3b305-9230-4bc8-99c3-101f9d4eda09&quot; tests=&quot;6&quot; failures=&quot;2&quot; errors=&quot;0&quot; skipped=&quot;2&quot; time=&quot;7.40&quot; timestamp=&quot;2026-11-09T18:22:54.592+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;a043b9e2-72ef-47f9-97a4-0226c8da1206&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;1.37&quot; timestamp=&quot;2026-11-09T18:22:54.592+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:54.592&quot; endtime=&quot;20261109 18:22:55.961&quot; elapsed=&quot;1.37&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:22:54.592&quot; endtime=&quot;20261109 18:22:55.960&quot; elapsed=&quot;1.37&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;10f860b3-6f6e-403d-94ea-c9ed9bac5fae&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;2.72&quot; timestamp=&quot;2026-11-09T18:22:55.962+05:30&quot; status=&quot;FAIL&quot;&gt;
+      &lt;kw name=&quot;Check Missing Text&quot; type=&quot;setup&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:55.962&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:22:58.624&quot; elapsed=&quot;2.66&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:55.962&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:22:57.982&quot; elapsed=&quot;2.02&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/log&gt;
+        &lt;/kw&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;failure message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; type=&quot;Failure&quot; code=&quot;E0201&quot;&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/failure&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC2 Notice Again)&quot; id=&quot;c4f41132-b9c1-4db6-95bf-47d3bead660e&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;3.27&quot; timestamp=&quot;2026-11-09T18:22:58.684+05:30&quot; status=&quot;FAIL&quot;&gt;
+      &lt;kw name=&quot;Check Missing Text&quot; type=&quot;setup&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:58.684&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:23:01.338&quot; elapsed=&quot;2.65&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;FAIL&quot; starttime=&quot;20261109 18:22:58.685&quot; message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; code=&quot;E0201&quot; endtime=&quot;20261109 18:23:00.696&quot; elapsed=&quot;2.01&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)&lt;/log&gt;
+          &lt;log&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/log&gt;
+        &lt;/kw&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;failure message=&quot;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot; type=&quot;Failure&quot; code=&quot;E0201&quot;&gt;Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&lt;/failure&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC2 Notice Again&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; id=&quot;4f218417-1ff0-4c4a-b50a-5e609c051584&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:23:02.537+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:02.538&quot; endtime=&quot;20261109 18:23:02.579&quot; elapsed=&quot;0.04&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:23:02.540&quot; endtime=&quot;20261109 18:23:02.579&quot; elapsed=&quot;0.04&quot;&gt;
+          &lt;log&gt;No events to send.&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"f7f3b305-9230-4bc8-99c3-101f9d4eda09"</span> tests=<span class="c-lit">"6"</span> failures=<span class="c-lit">"2"</span> errors=<span class="c-lit">"0"</span> skipped=<span class="c-lit">"2"</span> time=<span class="c-lit">"7.40"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:54.592+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"a043b9e2-72ef-47f9-97a4-0226c8da1206"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"1.37"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:54.592+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:54.592"</span> endtime=<span class="c-lit">"20261109 18:22:55.961"</span> elapsed=<span class="c-lit">"1.37"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:22:54.592"</span> endtime=<span class="c-lit">"20261109 18:22:55.960"</span> elapsed=<span class="c-lit">"1.37"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"10f860b3-6f6e-403d-94ea-c9ed9bac5fae"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"2.72"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:55.962+05:30"</span> status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Missing Text"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:55.962"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:22:58.624"</span> elapsed=<span class="c-lit">"2.66"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:55.962"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:22:57.982"</span> elapsed=<span class="c-lit">"2.02"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> type=<span class="c-lit">"Failure"</span> code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC2 Notice Again)"</span> id=<span class="c-lit">"c4f41132-b9c1-4db6-95bf-47d3bead660e"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"3.27"</span> timestamp=<span class="c-lit">"2026-11-09T18:22:58.684+05:30"</span> status=<span class="c-lit">"FAIL"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Missing Text"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:58.684"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:23:01.338"</span> elapsed=<span class="c-lit">"2.65"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"FAIL"</span> starttime=<span class="c-lit">"20261109 18:22:58.685"</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> code=<span class="c-lit">"E0201"</span> endtime=<span class="c-lit">"20261109 18:23:00.696"</span> elapsed=<span class="c-lit">"2.01"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;failure</span> message=<span class="c-lit">"Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span> type=<span class="c-lit">"Failure"</span> code=<span class="c-lit">"E0201"</span><span class="c-mod">&gt;</span>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.<span class="c-mod">&lt;/failure</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC2 Notice Again"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> id=<span class="c-lit">"4f218417-1ff0-4c4a-b50a-5e609c051584"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:23:02.537+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:02.538"</span> endtime=<span class="c-lit">"20261109 18:23:02.579"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:23:02.540"</span> endtime=<span class="c-lit">"20261109 18:23:02.579"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>No events to send.<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>You press Ctrl+C (exit code 130)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>interrupted.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;de88afd8-29b2-4865-a240-3b4c89d3cb34&quot; tests=&quot;8&quot; failures=&quot;0&quot; errors=&quot;1&quot; skipped=&quot;3&quot; time=&quot;14.16&quot; timestamp=&quot;2026-11-09T18:54:33.824+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;289bb7a1-3692-4819-a4d9-9c5f886eb277&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;2.06&quot; timestamp=&quot;2026-11-09T18:54:33.824+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:33.824&quot; endtime=&quot;20261109 18:54:35.878&quot; elapsed=&quot;2.05&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:33.824&quot; endtime=&quot;20261109 18:54:35.878&quot; elapsed=&quot;2.05&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;e30b3d6e-4029-4488-aa77-058122426cf9&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.11&quot; timestamp=&quot;2026-11-09T18:54:35.880+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:35.880&quot; endtime=&quot;20261109 18:54:35.989&quot; elapsed=&quot;0.11&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:35.880&quot; endtime=&quot;20261109 18:54:35.989&quot; elapsed=&quot;0.11&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; id=&quot;7670c575-12a6-423c-b308-dd8686fc5806&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0.05&quot; timestamp=&quot;2026-11-09T18:54:35.989+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:35.990&quot; endtime=&quot;20261109 18:54:36.043&quot; elapsed=&quot;0.05&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:35.990&quot; endtime=&quot;20261109 18:54:36.043&quot; elapsed=&quot;0.05&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC2 Slow)&quot; id=&quot;7a867031-579b-4f6e-b3d7-4fac6854988f&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.06&quot; timestamp=&quot;2026-11-09T18:54:36.044+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:36.044&quot; endtime=&quot;20261109 18:54:36.099&quot; elapsed=&quot;0.05&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:36.045&quot; endtime=&quot;20261109 18:54:36.099&quot; elapsed=&quot;0.05&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC2 Slow&quot; id=&quot;7eb5beb2-9c9f-4911-ae6a-9343440753a3&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;11.88&quot; timestamp=&quot;2026-11-09T18:54:36.100+05:30&quot; status=&quot;ERROR&quot;&gt;
+      &lt;kw name=&quot;Wait Long&quot; type=&quot;setup&quot; status=&quot;ERROR&quot; starttime=&quot;20261109 18:54:36.100&quot; code=&quot;E0706&quot;&gt;
+        &lt;kw name=&quot;Sleep&quot; status=&quot;ERROR&quot; starttime=&quot;20261109 18:54:36.100&quot; code=&quot;E0706&quot;/&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;error message=&quot;The run ended before this test case reported a result.&quot; type=&quot;Error&quot; code=&quot;E0706&quot;&gt;The run ended before this test case reported a result.&lt;/error&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC3 Never Started)&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC3 Never Started&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"de88afd8-29b2-4865-a240-3b4c89d3cb34"</span> tests=<span class="c-lit">"8"</span> failures=<span class="c-lit">"0"</span> errors=<span class="c-lit">"1"</span> skipped=<span class="c-lit">"3"</span> time=<span class="c-lit">"14.16"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:33.824+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"289bb7a1-3692-4819-a4d9-9c5f886eb277"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"2.06"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:33.824+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:33.824"</span> endtime=<span class="c-lit">"20261109 18:54:35.878"</span> elapsed=<span class="c-lit">"2.05"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:33.824"</span> endtime=<span class="c-lit">"20261109 18:54:35.878"</span> elapsed=<span class="c-lit">"2.05"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"e30b3d6e-4029-4488-aa77-058122426cf9"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.11"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:35.880+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:35.880"</span> endtime=<span class="c-lit">"20261109 18:54:35.989"</span> elapsed=<span class="c-lit">"0.11"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:35.880"</span> endtime=<span class="c-lit">"20261109 18:54:35.989"</span> elapsed=<span class="c-lit">"0.11"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> id=<span class="c-lit">"7670c575-12a6-423c-b308-dd8686fc5806"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0.05"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:35.989+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:35.990"</span> endtime=<span class="c-lit">"20261109 18:54:36.043"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:35.990"</span> endtime=<span class="c-lit">"20261109 18:54:36.043"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC2 Slow)"</span> id=<span class="c-lit">"7a867031-579b-4f6e-b3d7-4fac6854988f"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.06"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:36.044+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:36.044"</span> endtime=<span class="c-lit">"20261109 18:54:36.099"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:36.045"</span> endtime=<span class="c-lit">"20261109 18:54:36.099"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC2 Slow"</span> id=<span class="c-lit">"7eb5beb2-9c9f-4911-ae6a-9343440753a3"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"11.88"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:36.100+05:30"</span> status=<span class="c-lit">"ERROR"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Wait Long"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"ERROR"</span> starttime=<span class="c-lit">"20261109 18:54:36.100"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Sleep"</span> status=<span class="c-lit">"ERROR"</span> starttime=<span class="c-lit">"20261109 18:54:36.100"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">/&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;error</span> message=<span class="c-lit">"The run ended before this test case reported a result."</span> type=<span class="c-lit">"Error"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">&gt;</span>The run ended before this test case reported a result.<span class="c-mod">&lt;/error</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC3 Never Started)"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC3 Never Started"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<details class="doc-details"><summary>Optics receives SIGTERM (exit code 143)</summary><div class="details-body"><figure class="code doc-code has-title" data-lang="xml"><figcaption><span>stopped.xml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;testsuites&gt;
+  &lt;testsuite name=&quot;checkout_suite&quot; id=&quot;8808e426-b724-4fed-b564-48d51c8a4f46&quot; tests=&quot;8&quot; failures=&quot;0&quot; errors=&quot;1&quot; skipped=&quot;3&quot; time=&quot;14.17&quot; timestamp=&quot;2026-11-09T18:54:49.670+05:30&quot;&gt;
+    &lt;testcase name=&quot;Suite Setup&quot; id=&quot;b254c845-e903-44d6-8f4c-8d4531b62607&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_setup&quot; time=&quot;1.19&quot; timestamp=&quot;2026-11-09T18:54:49.670+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Open Example Page&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:49.670&quot; endtime=&quot;20261109 18:54:50.856&quot; elapsed=&quot;1.19&quot;&gt;
+        &lt;kw name=&quot;Launch App&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:49.671&quot; endtime=&quot;20261109 18:54:50.856&quot; elapsed=&quot;1.19&quot;/&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC1 Notice Shown)&quot; id=&quot;bd55f2d7-53d1-43fb-b98d-fa818b5e430b&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.06&quot; timestamp=&quot;2026-11-09T18:54:50.858+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.858&quot; endtime=&quot;20261109 18:54:50.921&quot; elapsed=&quot;0.06&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.858&quot; endtime=&quot;20261109 18:54:50.920&quot; elapsed=&quot;0.06&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC1 Notice Shown&quot; id=&quot;f1d76e49-eff3-47ca-b93d-7231c91badba&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0.04&quot; timestamp=&quot;2026-11-09T18:54:50.921+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.921&quot; endtime=&quot;20261109 18:54:50.959&quot; elapsed=&quot;0.04&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.922&quot; endtime=&quot;20261109 18:54:50.958&quot; elapsed=&quot;0.04&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC2 Slow)&quot; id=&quot;599d68be-13cb-40e5-9326-59c600e66b11&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0.05&quot; timestamp=&quot;2026-11-09T18:54:50.959+05:30&quot; status=&quot;PASS&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.960&quot; endtime=&quot;20261109 18:54:51.012&quot; elapsed=&quot;0.05&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;PASS&quot; starttime=&quot;20261109 18:54:50.960&quot; endtime=&quot;20261109 18:54:51.012&quot; elapsed=&quot;0.05&quot;&gt;
+          &lt;log&gt;Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s&lt;/log&gt;
+          &lt;log&gt;Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS&lt;/log&gt;
+          &lt;log&gt;Trying ScreenshotStrategy on 'screenshot' ... SUCCESS&lt;/log&gt;
+        &lt;/kw&gt;
+      &lt;/kw&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC2 Slow&quot; id=&quot;51e88ca5-4601-4778-869c-53739eb3299c&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;12.83&quot; timestamp=&quot;2026-11-09T18:54:51.013+05:30&quot; status=&quot;ERROR&quot;&gt;
+      &lt;kw name=&quot;Wait Long&quot; type=&quot;setup&quot; status=&quot;ERROR&quot; starttime=&quot;20261109 18:54:51.013&quot; code=&quot;E0706&quot;&gt;
+        &lt;kw name=&quot;Sleep&quot; status=&quot;ERROR&quot; starttime=&quot;20261109 18:54:51.013&quot; code=&quot;E0706&quot;/&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;error message=&quot;The run ended before this test case reported a result.&quot; type=&quot;Error&quot; code=&quot;E0706&quot;&gt;The run ended before this test case reported a result.&lt;/error&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Setup (TC3 Never Started)&quot; classname=&quot;checkout_suite&quot; kind=&quot;setup&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;TC3 Never Started&quot; classname=&quot;checkout_suite&quot; kind=&quot;test&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Check Notice&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Assert Presence&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+    &lt;testcase name=&quot;Suite Teardown&quot; classname=&quot;checkout_suite&quot; kind=&quot;suite_teardown&quot; time=&quot;0&quot; status=&quot;NOT_RUN&quot;&gt;
+      &lt;kw name=&quot;Close Browser&quot; type=&quot;setup&quot; status=&quot;NOT_RUN&quot;&gt;
+        &lt;kw name=&quot;Close And Terminate App&quot; status=&quot;NOT_RUN&quot;/&gt;
+      &lt;/kw&gt;
+      &lt;skipped message=&quot;The run ended before this test case started.&quot;/&gt;
+    &lt;/testcase&gt;
+  &lt;/testsuite&gt;
+&lt;/testsuites&gt;">Copy</button><pre><code>&lt;?xml version="1.0" ?&gt;
+<span class="c-mod">&lt;testsuites</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;testsuite</span> name=<span class="c-lit">"checkout_suite"</span> id=<span class="c-lit">"8808e426-b724-4fed-b564-48d51c8a4f46"</span> tests=<span class="c-lit">"8"</span> failures=<span class="c-lit">"0"</span> errors=<span class="c-lit">"1"</span> skipped=<span class="c-lit">"3"</span> time=<span class="c-lit">"14.17"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:49.670+05:30"</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Setup"</span> id=<span class="c-lit">"b254c845-e903-44d6-8f4c-8d4531b62607"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_setup"</span> time=<span class="c-lit">"1.19"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:49.670+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Open Example Page"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:49.670"</span> endtime=<span class="c-lit">"20261109 18:54:50.856"</span> elapsed=<span class="c-lit">"1.19"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Launch App"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:49.671"</span> endtime=<span class="c-lit">"20261109 18:54:50.856"</span> elapsed=<span class="c-lit">"1.19"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC1 Notice Shown)"</span> id=<span class="c-lit">"bd55f2d7-53d1-43fb-b98d-fa818b5e430b"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.06"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:50.858+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.858"</span> endtime=<span class="c-lit">"20261109 18:54:50.921"</span> elapsed=<span class="c-lit">"0.06"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.858"</span> endtime=<span class="c-lit">"20261109 18:54:50.920"</span> elapsed=<span class="c-lit">"0.06"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC1 Notice Shown"</span> id=<span class="c-lit">"f1d76e49-eff3-47ca-b93d-7231c91badba"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0.04"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:50.921+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.921"</span> endtime=<span class="c-lit">"20261109 18:54:50.959"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.922"</span> endtime=<span class="c-lit">"20261109 18:54:50.958"</span> elapsed=<span class="c-lit">"0.04"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC2 Slow)"</span> id=<span class="c-lit">"599d68be-13cb-40e5-9326-59c600e66b11"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0.05"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:50.959+05:30"</span> status=<span class="c-lit">"PASS"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.960"</span> endtime=<span class="c-lit">"20261109 18:54:51.012"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"PASS"</span> starttime=<span class="c-lit">"20261109 18:54:50.960"</span> endtime=<span class="c-lit">"20261109 18:54:51.012"</span> elapsed=<span class="c-lit">"0.05"</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+          <span class="c-mod">&lt;log</span><span class="c-mod">&gt;</span>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS<span class="c-mod">&lt;/log</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC2 Slow"</span> id=<span class="c-lit">"51e88ca5-4601-4778-869c-53739eb3299c"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"12.83"</span> timestamp=<span class="c-lit">"2026-11-09T18:54:51.013+05:30"</span> status=<span class="c-lit">"ERROR"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Wait Long"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"ERROR"</span> starttime=<span class="c-lit">"20261109 18:54:51.013"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Sleep"</span> status=<span class="c-lit">"ERROR"</span> starttime=<span class="c-lit">"20261109 18:54:51.013"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">/&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;error</span> message=<span class="c-lit">"The run ended before this test case reported a result."</span> type=<span class="c-lit">"Error"</span> code=<span class="c-lit">"E0706"</span><span class="c-mod">&gt;</span>The run ended before this test case reported a result.<span class="c-mod">&lt;/error</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Setup (TC3 Never Started)"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"setup"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"TC3 Never Started"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"test"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Check Notice"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Assert Presence"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+    <span class="c-mod">&lt;testcase</span> name=<span class="c-lit">"Suite Teardown"</span> classname=<span class="c-lit">"checkout_suite"</span> kind=<span class="c-lit">"suite_teardown"</span> time=<span class="c-lit">"0"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close Browser"</span> type=<span class="c-lit">"setup"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">&gt;</span>
+        <span class="c-mod">&lt;kw</span> name=<span class="c-lit">"Close And Terminate App"</span> status=<span class="c-lit">"NOT_RUN"</span><span class="c-mod">/&gt;</span>
+      <span class="c-mod">&lt;/kw</span><span class="c-mod">&gt;</span>
+      <span class="c-mod">&lt;skipped</span> message=<span class="c-lit">"The run ended before this test case started."</span><span class="c-mod">/&gt;</span>
+    <span class="c-mod">&lt;/testcase</span><span class="c-mod">&gt;</span>
+  <span class="c-mod">&lt;/testsuite</span><span class="c-mod">&gt;</span>
+<span class="c-mod">&lt;/testsuites</span><span class="c-mod">&gt;</span></code></pre></figure></div></details>
+<h2 id="keep-the-folder-tidy">Keep the folder tidy<a class="anchor" href="#keep-the-folder-tidy" aria-label="Link to this section">#</a></h2>
+<p>Screenshots from every run accumulate in <code class="ic">execution_output/</code>. Clear the folder before runs where you need clean results, such as in CI:</p>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="rm -rf birch-tests/execution_output
+optics execute birch-tests">Copy</button><pre><code><span class="prompt">$</span> <b>rm</b> <span class="c-info">-rf</span> birch-tests/execution_output
+<span class="prompt">$</span> <b>optics</b> execute birch-tests</code></pre></figure>
+<p>To write results somewhere else, set <code class="ic">execution_output_path</code> in <code class="ic">config.yaml</code>. A relative path is relative to the folder you run <code class="ic">optics</code> from, and the folder must exist.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/run/error-detection">Catch error screens</a></li><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Read%20the%20results&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fresults%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Read%20the%20results&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Frun%2Fresults%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/run/"><span>Previous</span>Overview</a><a class="pager-next" href="../../docs/run/error-detection"><span>Next</span>Error detection</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/run/results.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#what-a-run-writes">What a run writes</a></li><li class="toc-l2"><a href="#investigate-a-failure">Investigate a failure</a></li><li class="toc-l2"><a href="#turn-on-more-logging">Turn on more logging</a></li><li class="toc-l2"><a href="#read-the-junit-report">Read the JUnit report</a></li><li class="toc-l2"><a href="#what-each-outcome-writes">What each outcome writes</a></li><li class="toc-l3"><a href="#sample-reports">Sample reports</a></li><li class="toc-l2"><a href="#keep-the-folder-tidy">Keep the folder tidy</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaa72e04a3" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=49b314c882" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+<!--/email_off--></body>
+</html>

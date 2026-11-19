@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python library layer · Optics Framework docs</title>
+  <meta name="description" content="How the `Optics` class wraps sessions and the keyword classes so Python code and Robot Framework can call Optics directly.">
+  <meta name="ai-summary" content="How the `Optics` class wraps sessions and the keyword classes so Python code and Robot Framework can call Optics directly.">
+  <link rel="canonical" href="https://optics-framework.org/docs/contribute/library-layer">
+  <link rel="alternate" type="text/markdown" href="library-layer.md" title="This page as Markdown">
+  <meta property="og:title" content="Python library layer · Optics Framework docs">
+  <meta property="og:description" content="How the `Optics` class wraps sessions and the keyword classes so Python code and Robot Framework can call Optics directly.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=5ba04c0dc3">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/"><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab on" href="../../docs/contribute/" aria-current="true">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section open" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer" aria-current="page">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/contribute/">Contribute</a><span class="sep" aria-hidden="true">/</span><span>Entry points</span></nav>
+        <header class="doc-head">
+          <h1>Python library layer</h1>
+          <p class="doc-summary">How the `Optics` class wraps sessions and the keyword classes so Python code and Robot Framework can call Optics directly.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Advanced</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="library-layer.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="library-layer.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Optics has a Python library interface that gives code direct access to the framework. This page explains how the library is built, the usage patterns it supports, and how it uses the core framework. For a user's guide with a complete pytest example, see <a href="../../docs/create/python">Use Optics from Python</a> and <a href="../../docs/create/robot">Use Optics in Robot Framework</a>.</p>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The library layer provides:</p>
+<ol><li><strong>Programmatic interface</strong>: a direct Python API for test automation</li><li><strong>Robot Framework integration</strong>: the same class works as a Robot Framework library</li><li><strong>Session management</strong>: create and manage test sessions from code</li><li><strong>Keyword access</strong>: direct access to all framework keywords</li><li><strong>Configuration management</strong>: configuration from code or from files</li></ol>
+<h2 id="library-architecture">Library architecture<a class="anchor" href="#library-architecture" aria-label="Link to this section">#</a></h2>
+<figure class="diagram" style="--w:963px"><figcaption><span>What the Optics class wraps</span></figcaption><div class="diagram-canvas" role="img" aria-label="What the Optics class wraps" tabindex="0"><svg id="d-fa10918c604d" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 963.457px; background-color: transparent;" viewBox="0 0 963.45703125 636.5" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#d-fa10918c604d{font-family:var(--mono);font-size:13px;fill:var(--ink);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#d-fa10918c604d .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#d-fa10918c604d .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#d-fa10918c604d .error-icon{fill:var(--panel);}#d-fa10918c604d .error-text{fill:#5ffff9;stroke:#5ffff9;}#d-fa10918c604d .edge-thickness-normal{stroke-width:1px;}#d-fa10918c604d .edge-thickness-thick{stroke-width:3.5px;}#d-fa10918c604d .edge-pattern-solid{stroke-dasharray:0;}#d-fa10918c604d .edge-thickness-invisible{stroke-width:0;fill:none;}#d-fa10918c604d .edge-pattern-dashed{stroke-dasharray:3;}#d-fa10918c604d .edge-pattern-dotted{stroke-dasharray:2;}#d-fa10918c604d .marker{fill:var(--ink-3);stroke:var(--ink-3);}#d-fa10918c604d .marker.cross{stroke:var(--ink-3);}#d-fa10918c604d svg{font-family:var(--mono);font-size:13px;}#d-fa10918c604d p{margin:0;}#d-fa10918c604d .label{font-family:var(--mono);color:var(--ink);}#d-fa10918c604d .cluster-label text{fill:var(--ink);}#d-fa10918c604d .cluster-label span{color:var(--ink);}#d-fa10918c604d .cluster-label span p{background-color:transparent;}#d-fa10918c604d .label text,#d-fa10918c604d span{fill:var(--ink);color:var(--ink);}#d-fa10918c604d .node rect,#d-fa10918c604d .node circle,#d-fa10918c604d .node ellipse,#d-fa10918c604d .node polygon,#d-fa10918c604d .node path{fill:var(--bg-2);stroke:var(--line-2);stroke-width:1px;}#d-fa10918c604d .rough-node .label text,#d-fa10918c604d .node .label text,#d-fa10918c604d .image-shape .label,#d-fa10918c604d .icon-shape .label{text-anchor:middle;}#d-fa10918c604d .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#d-fa10918c604d .rough-node .label,#d-fa10918c604d .node .label,#d-fa10918c604d .image-shape .label,#d-fa10918c604d .icon-shape .label{text-align:center;}#d-fa10918c604d .node.clickable{cursor:pointer;}#d-fa10918c604d .root .anchor path{fill:var(--ink-3)!important;stroke-width:0;stroke:var(--ink-3);}#d-fa10918c604d .arrowheadPath{fill:#5fffff;}#d-fa10918c604d .edgePaths .path{stroke:var(--ink-3);stroke-width:1px;}#d-fa10918c604d .flowchart-link{stroke:var(--ink-3);fill:none;}#d-fa10918c604d .edgeLabel{background-color:var(--bg);text-align:center;}#d-fa10918c604d .edgeLabel p{background-color:var(--bg);}#d-fa10918c604d .edgeLabel rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-fa10918c604d .labelBkg{background-color:rgba(160, 0, 0, 0.5);}#d-fa10918c604d .cluster rect{fill:var(--panel);stroke:var(--line-2);stroke-width:1px;}#d-fa10918c604d .cluster text{fill:var(--ink);}#d-fa10918c604d .cluster span{color:var(--ink);}#d-fa10918c604d .node .collapsed-indicator{fill:var(--line-2);stroke:none;opacity:0.6;}#d-fa10918c604d .node .collapsed-separator{stroke:var(--line-2);stroke-width:0.75px;}#d-fa10918c604d div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:var(--mono);font-size:12px;background:var(--panel);border:1px solid hsl(357.75, 60%, 21.3725490196%);border-radius:2px;pointer-events:none;z-index:100;}#d-fa10918c604d .flowchartTitleText{text-anchor:middle;font-size:18px;fill:var(--ink);}#d-fa10918c604d rect.text{fill:none;stroke-width:0;}#d-fa10918c604d .icon-shape,#d-fa10918c604d .image-shape{background-color:var(--bg);text-align:center;}#d-fa10918c604d .icon-shape p,#d-fa10918c604d .image-shape p{background-color:var(--bg);padding:2px;}#d-fa10918c604d .icon-shape .label rect,#d-fa10918c604d .image-shape .label rect{opacity:0.5;background-color:var(--bg);fill:var(--bg);}#d-fa10918c604d .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#d-fa10918c604d .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#d-fa10918c604d .node .neo-node{stroke:var(--line-2);}#d-fa10918c604d [data-look="neo"].node rect,#d-fa10918c604d [data-look="neo"].cluster rect,#d-fa10918c604d [data-look="neo"].node polygon{stroke:url(#d-fa10918c604d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-fa10918c604d [data-look="neo"].swimlane.cluster rect{filter:none;}#d-fa10918c604d [data-look="neo"].node path{stroke:url(#d-fa10918c604d-gradient);stroke-width:1px;}#d-fa10918c604d [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-fa10918c604d [data-look="neo"].node .neo-line path{stroke:var(--line-2);filter:none;}#d-fa10918c604d [data-look="neo"].node circle{stroke:url(#d-fa10918c604d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-fa10918c604d [data-look="neo"].node circle .state-start{fill:#000000;}#d-fa10918c604d [data-look="neo"].icon-shape .icon{fill:url(#d-fa10918c604d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-fa10918c604d [data-look="neo"].icon-shape .icon-neo path{stroke:url(#d-fa10918c604d-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#d-fa10918c604d :root{--mermaid-font-family:var(--mono);}</style><g><marker id="d-fa10918c604d_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="d-fa10918c604d_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="d-fa10918c604d_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M632.914,55.5L632.914,59.5C632.914,63.5,632.914,71.5,632.914,78.833C632.914,86.167,632.914,92.833,632.914,96.167L632.914,99.5" id="d-fa10918c604d-L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6NjMyLjkxNDA2MjUsInkiOjU1LjV9LHsieCI6NjMyLjkxNDA2MjUsInkiOjc5LjV9LHsieCI6NjMyLjkxNDA2MjUsInkiOjEwMy41fV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M557.953,134.7L490.369,141.417C422.785,148.133,287.617,161.567,220.033,171.617C152.449,181.667,152.449,188.333,152.449,191.667L152.449,195" id="d-fa10918c604d-L_B_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6NTU3Ljk1MzEyNSwieSI6MTM0LjY5OTgzNjk5MDU0NDY0fSx7IngiOjE1Mi40NDkyMTg3NSwieSI6MTc1fSx7IngiOjE1Mi40NDkyMTg3NSwieSI6MTk5fV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M557.953,139.907L523.313,145.756C488.673,151.605,419.393,163.302,384.753,172.484C350.113,181.667,350.113,188.333,350.113,191.667L350.113,195" id="d-fa10918c604d-L_B_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_D_0" data-points="W3sieCI6NTU3Ljk1MzEyNSwieSI6MTM5LjkwNjkxMjU3OTI1MDUzfSx7IngiOjM1MC4xMTMyODEyNSwieSI6MTc1fSx7IngiOjM1MC4xMTMyODEyNSwieSI6MTk5fV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M588.622,151L581.162,155C573.702,159,558.783,167,551.323,174.333C543.863,181.667,543.863,188.333,543.863,191.667L543.863,195" id="d-fa10918c604d-L_B_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_E_0" data-points="W3sieCI6NTg4LjYyMTc4OTEwMzQwMzEsInkiOjE1MX0seyJ4Ijo1NDMuODYzMjgxMjUsInkiOjE3NX0seyJ4Ijo1NDMuODYzMjgxMjUsInkiOjE5OX1d" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M675.26,151L682.391,155C689.523,159,703.787,167,710.919,174.333C718.051,181.667,718.051,188.333,718.051,191.667L718.051,195" id="d-fa10918c604d-L_B_F_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_F_0" data-points="W3sieCI6Njc1LjI1OTU1MDg4MzUwNzgsInkiOjE1MX0seyJ4Ijo3MTguMDUwNzgxMjUsInkiOjE3NX0seyJ4Ijo3MTguMDUwNzgxMjUsInkiOjE5OX1d" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M707.875,141.482L737.298,147.069C766.72,152.655,825.565,163.827,854.988,172.747C884.41,181.667,884.41,188.333,884.41,191.667L884.41,195" id="d-fa10918c604d-L_B_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_G_0" data-points="W3sieCI6NzA3Ljg3NSwieSI6MTQxLjQ4MjM2NzIzOTc5OTMyfSx7IngiOjg4NC40MTAxNTYyNSwieSI6MTc1fSx7IngiOjg4NC40MTAxNTYyNSwieSI6MTk5fV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M152.449,246.5L152.449,250.5C152.449,254.5,152.449,262.5,152.449,269.833C152.449,277.167,152.449,283.833,152.449,287.167L152.449,290.5" id="d-fa10918c604d-L_C_H_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_H_0" data-points="W3sieCI6MTUyLjQ0OTIxODc1LCJ5IjoyNDYuNX0seyJ4IjoxNTIuNDQ5MjE4NzUsInkiOjI3MC41fSx7IngiOjE1Mi40NDkyMTg3NSwieSI6Mjk0LjV9XQ==" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M152.449,342L152.449,346C152.449,350,152.449,358,152.449,365.333C152.449,372.667,152.449,379.333,152.449,382.667L152.449,386" id="d-fa10918c604d-L_H_I_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_H_I_0" data-points="W3sieCI6MTUyLjQ0OTIxODc1LCJ5IjozNDJ9LHsieCI6MTUyLjQ0OTIxODc1LCJ5IjozNjZ9LHsieCI6MTUyLjQ0OTIxODc1LCJ5IjozOTB9XQ==" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M152.449,437.5L152.449,441.5C152.449,445.5,152.449,453.5,152.449,460.833C152.449,468.167,152.449,474.833,152.449,478.167L152.449,481.5" id="d-fa10918c604d-L_I_J_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_I_J_0" data-points="W3sieCI6MTUyLjQ0OTIxODc1LCJ5Ijo0MzcuNX0seyJ4IjoxNTIuNDQ5MjE4NzUsInkiOjQ2MS41fSx7IngiOjE1Mi40NDkyMTg3NSwieSI6NDg1LjV9XQ==" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M108.157,533L100.697,537C93.237,541,78.318,549,70.858,556.333C63.398,563.667,63.398,570.333,63.398,573.667L63.398,577" id="d-fa10918c604d-L_J_K_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_K_0" data-points="W3sieCI6MTA4LjE1Njk0NTM1MzQwMzEzLCJ5Ijo1MzN9LHsieCI6NjMuMzk4NDM3NSwieSI6NTU3fSx7IngiOjYzLjM5ODQzNzUsInkiOjU4MX1d" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M196.741,533L204.201,537C211.661,541,226.58,549,234.04,556.333C241.5,563.667,241.5,570.333,241.5,573.667L241.5,577" id="d-fa10918c604d-L_J_L_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_L_0" data-points="W3sieCI6MTk2Ljc0MTQ5MjE0NjU5Njg3LCJ5Ijo1MzN9LHsieCI6MjQxLjUsInkiOjU1N30seyJ4IjoyNDEuNSwieSI6NTgxfV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/><path d="M215.676,519.638L253.576,525.865C291.477,532.092,367.277,544.546,405.178,554.106C443.078,563.667,443.078,570.333,443.078,573.667L443.078,577" id="d-fa10918c604d-L_J_M_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_M_0" data-points="W3sieCI6MjE1LjY3NTc4MTI1LCJ5Ijo1MTkuNjM4MDUyNTc5OTM4NH0seyJ4Ijo0NDMuMDc4MTI1LCJ5Ijo1NTd9LHsieCI6NDQzLjA3ODEyNSwieSI6NTgxfV0=" data-look="classic" marker-end="url(#d-fa10918c604d_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_A_B_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_C_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_D_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_E_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_F_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_B_G_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_C_H_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_H_I_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_I_J_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_J_K_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_J_L_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g><g class="edgeLabel"><g class="label" data-id="L_J_M_0" transform="translate(0, 0)"><text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"/></text></g></g><g><rect class="background" style="stroke: none"/></g></g><g class="nodes"><g class="node default" id="d-fa10918c604d-flowchart-A-0" data-look="classic" transform="translate(632.9140625, 31.75)"><rect class="basic label-container" style="" x="-71.046875" y="-23.75" width="142.09375" height="47.5"/><g class="label" style="" transform="translate(-43.046875, -9.75)"><rect/><foreignObject width="86.09375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Python Code</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-B-1" data-look="classic" transform="translate(632.9140625, 127.25)"><rect class="basic label-container" style="" x="-74.9609375" y="-23.75" width="149.921875" height="47.5"/><g class="label" style="" transform="translate(-46.9609375, -9.75)"><rect/><foreignObject width="93.921875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Optics Class</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-C-3" data-look="classic" transform="translate(152.44921875, 222.75)"><rect class="basic label-container" style="" x="-82.7890625" y="-23.75" width="165.578125" height="47.5"/><g class="label" style="" transform="translate(-54.7890625, -9.75)"><rect/><foreignObject width="109.578125" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>SessionManager</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-D-5" data-look="classic" transform="translate(350.11328125, 222.75)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>ActionKeyword</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-E-7" data-look="classic" transform="translate(543.86328125, 222.75)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>AppManagement</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-F-9" data-look="classic" transform="translate(718.05078125, 222.75)"><rect class="basic label-container" style="" x="-59.3125" y="-23.75" width="118.625" height="47.5"/><g class="label" style="" transform="translate(-31.3125, -9.75)"><rect/><foreignObject width="62.625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Verifier</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-G-11" data-look="classic" transform="translate(884.41015625, 222.75)"><rect class="basic label-container" style="" x="-71.046875" y="-23.75" width="142.09375" height="47.5"/><g class="label" style="" transform="translate(-43.046875, -9.75)"><rect/><foreignObject width="86.09375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>FlowControl</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-H-13" data-look="classic" transform="translate(152.44921875, 318.25)"><rect class="basic label-container" style="" x="-55.3984375" y="-23.75" width="110.796875" height="47.5"/><g class="label" style="" transform="translate(-27.3984375, -9.75)"><rect/><foreignObject width="54.796875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Session</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-I-15" data-look="classic" transform="translate(152.44921875, 413.75)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>OpticsBuilder</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-J-17" data-look="classic" transform="translate(152.44921875, 509.25)"><rect class="basic label-container" style="" x="-63.2265625" y="-23.75" width="126.453125" height="47.5"/><g class="label" style="" transform="translate(-35.2265625, -9.75)"><rect/><foreignObject width="70.453125" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Factories</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-K-19" data-look="classic" transform="translate(63.3984375, 604.75)"><rect class="basic label-container" style="" x="-55.3984375" y="-23.75" width="110.796875" height="47.5"/><g class="label" style="" transform="translate(-27.3984375, -9.75)"><rect/><foreignObject width="54.796875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Drivers</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-L-21" data-look="classic" transform="translate(241.5, 604.75)"><rect class="basic label-container" style="" x="-86.703125" y="-23.75" width="173.40625" height="47.5"/><g class="label" style="" transform="translate(-58.703125, -9.75)"><rect/><foreignObject width="117.40625" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Element Sources</p></span></div></foreignObject></g></g><g class="node default" id="d-fa10918c604d-flowchart-M-23" data-look="classic" transform="translate(443.078125, 604.75)"><rect class="basic label-container" style="" x="-78.875" y="-23.75" width="157.75" height="47.5"/><g class="label" style="" transform="translate(-50.875, -9.75)"><rect/><foreignObject width="101.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Vision Models</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="d-fa10918c604d-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="d-fa10918c604d-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><linearGradient id="d-fa10918c604d-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--line-2)" stop-opacity="1"/><stop offset="100%" stop-color="hsl(358.125, 60%, 21.3725490196%)" stop-opacity="1"/></linearGradient></svg></div></figure>
+<p><strong>Location:</strong> <code class="ic">optics_framework/optics.py</code></p>
+<p><code class="ic">from optics_framework import Optics</code> works because the package re-exports the class. The re-export is lazy: plain <code class="ic">import optics_framework</code> and imports of its submodules do not load the API and vision stack.</p>
+<h2 id="optics-class">Optics class<a class="anchor" href="#optics-class" aria-label="Link to this section">#</a></h2>
+<p>The <code class="ic">Optics</code> class is the main entry point for the Python library. It gives one interface that works both as a standalone Python library and as a Robot Framework library.</p>
+<h3 id="class-structure">Class structure<a class="anchor" href="#class-structure" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="@library(scope=&quot;GLOBAL&quot;)
+class Optics:
+    &quot;&quot;&quot;
+    A lightweight interface to interact with the Optics Framework.
+    Provides direct access to app management, action, and verification keywords with a single setup
+    method.
+    Supports Robot Framework as a library when Robot Framework is installed.
+    &quot;&quot;&quot;
+
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        &quot;&quot;&quot;
+        Initialize the Optics instance. Call setup() to configure the driver and sources.
+        &quot;&quot;&quot;
+
+    @keyword(&quot;Setup&quot;)
+    def setup(
+        self,
+        config: Union[str, Dict[str, Any], None] = None,
+        driver_sources: Optional[List[Dict[str, Dict[str, Any]]]] = None,
+        elements_sources: Optional[List[Dict[str, Dict[str, Any]]]] = None,
+        image_detection: Optional[List[Dict[str, Dict[str, Any]]]] = None,
+        text_detection: Optional[List[Dict[str, Dict[str, Any]]]] = None,
+        execution_output_path_param: Optional[str] = None,
+    ) -&gt; None:
+        &quot;&quot;&quot;
+        Configure the Optics Framework with required driver and element source settings.
+        &quot;&quot;&quot;">Copy</button><pre><code>@library(scope=<span class="c-lit">"GLOBAL"</span>)
+<span class="c-info">class</span> Optics:
+    <span class="c-lit">""</span>"
+    A lightweight interface to interact <span class="c-info">with</span> the Optics Framework.
+    Provides direct access to app management, action, <span class="c-info">and</span> verification keywords <span class="c-info">with</span> a single setup
+    method.
+    Supports Robot Framework <span class="c-info">as</span> a library when Robot Framework is installed.
+    <span class="c-lit">""</span>"
+
+    <span class="c-info">def</span> __init__(self, config: Optional[Dict[str, Any]] = <span class="c-info">None</span>):
+        <span class="c-lit">""</span>"
+        Initialize the Optics instance. Call setup() to configure the driver <span class="c-info">and</span> sources.
+        <span class="c-lit">""</span>"
+
+    @keyword(<span class="c-lit">"Setup"</span>)
+    <span class="c-info">def</span> setup(
+        self,
+        config: Union[str, Dict[str, Any], <span class="c-info">None</span>] = <span class="c-info">None</span>,
+        driver_sources: Optional[List[Dict[str, Dict[str, Any]]]] = <span class="c-info">None</span>,
+        elements_sources: Optional[List[Dict[str, Dict[str, Any]]]] = <span class="c-info">None</span>,
+        image_detection: Optional[List[Dict[str, Dict[str, Any]]]] = <span class="c-info">None</span>,
+        text_detection: Optional[List[Dict[str, Dict[str, Any]]]] = <span class="c-info">None</span>,
+        execution_output_path_param: Optional[str] = <span class="c-info">None</span>,
+    ) -&gt; <span class="c-info">None</span>:
+        <span class="c-lit">""</span>"
+        Configure the Optics Framework <span class="c-info">with</span> required driver <span class="c-info">and</span> element source settings.
+        <span class="c-lit">""</span>"</code></pre></figure>
+<p>When Robot Framework is not installed, <code class="ic">@library</code> and <code class="ic">@keyword</code> are replaced by decorators that do nothing, so the class still imports.</p>
+<h3 id="initialization">Initialization<a class="anchor" href="#initialization" aria-label="Link to this section">#</a></h3>
+<p>You can create the <code class="ic">Optics</code> class with or without configuration.</p>
+<p><strong>With configuration:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+config = {
+    &quot;driver_sources&quot;: [{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+    &quot;elements_sources&quot;: [{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}]
+}
+
+optics = Optics(config=config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+config = {
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+    <span class="c-lit">"elements_sources"</span>: [{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}]
+}
+
+optics = Optics(config=config)</code></pre></figure>
+<p><strong>Without configuration (setup later):</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+optics = Optics()
+optics.setup(config=config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+optics = Optics()
+optics.setup(config=config)</code></pre></figure>
+<p><code class="ic">__init__</code> creates its own <code class="ic">SessionManager</code> and calls <code class="ic">setup(config)</code> when you give a config.</p>
+<h2 id="usage-patterns">Usage patterns<a class="anchor" href="#usage-patterns" aria-label="Link to this section">#</a></h2>
+<h3 id="standalone-python-script">Standalone Python script<a class="anchor" href="#standalone-python-script" aria-label="Link to this section">#</a></h3>
+<p>You can use the library in a standalone Python script:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+# Initialize and configure
+optics = Optics()
+optics.setup(config={
+    &quot;driver_sources&quot;: [{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+    &quot;elements_sources&quot;: [{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}]
+})
+
+# Use keywords
+optics.launch_app(app_identifier=&quot;com.example.app&quot;)
+optics.press_element(&quot;submit_button&quot;)
+optics.enter_text(&quot;username_field&quot;, &quot;testuser&quot;)
+optics.validate_element(&quot;welcome_message&quot;)
+
+# Cleanup
+optics.quit()">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+<span class="c-dim"># Initialize and configure</span>
+optics = Optics()
+optics.setup(config={
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+    <span class="c-lit">"elements_sources"</span>: [{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}]
+})
+
+<span class="c-dim"># Use keywords</span>
+optics.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+optics.press_element(<span class="c-lit">"submit_button"</span>)
+optics.enter_text(<span class="c-lit">"username_field"</span>, <span class="c-lit">"testuser"</span>)
+optics.validate_element(<span class="c-lit">"welcome_message"</span>)
+
+<span class="c-dim"># Cleanup</span>
+optics.quit()</code></pre></figure>
+<h3 id="robot-framework-library">Robot Framework library<a class="anchor" href="#robot-framework-library" aria-label="Link to this section">#</a></h3>
+<p>When Robot Framework is installed, the <code class="ic">Optics</code> class works as a Robot Framework library. <code class="ic">Setup</code> takes the contents of a config, so read the file first:</p>
+<figure class="code doc-code" data-lang="robotframework"><button class="copy" type="button" aria-label="Copy code" data-copy="*** Settings ***
+Library    OperatingSystem
+Library    optics_framework.optics.Optics
+
+*** Test Cases ***
+Example Test
+    ${config}=    Get File    ${CURDIR}/config.yaml
+    Setup    config=${config}
+    Launch App    com.example.app
+    Press Element    submit_button
+    Enter Text    username_field    testuser
+    Validate Element    welcome_message
+    Quit">Copy</button><pre><code>*** Settings ***
+Library    OperatingSystem
+Library    optics_framework.optics.Optics
+
+*** Test Cases ***
+Example Test
+    ${config}=    Get File    ${CURDIR}/config.yaml
+    Setup    config=${config}
+    Launch App    com.example.app
+    Press Element    submit_button
+    Enter Text    username_field    testuser
+    Validate Element    welcome_message
+    Quit</code></pre></figure>
+<p><code class="ic">Setup    driver_sources=[{"appium": {"enabled": True, "url": "http://localhost:4723"}}]</code> alone does not work: the separate source parameters need both <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code>, and Robot passes the value as a string. Use <code class="ic">config=</code> or <code class="ic">Setup From File</code>.</p>
+<h3 id="configuration-from-file">Configuration from file<a class="anchor" href="#configuration-from-file" aria-label="Link to this section">#</a></h3>
+<p>Load configuration from YAML or JSON files:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+# From YAML file
+optics = Optics()
+optics.setup_from_file(&quot;config.yaml&quot;)
+
+# Or inline YAML/JSON string
+yaml_config = &quot;&quot;&quot;
+driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+elements_sources:
+  - appium_find_element:
+      enabled: true
+&quot;&quot;&quot;
+optics.setup(config=yaml_config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+<span class="c-dim"># From YAML file</span>
+optics = Optics()
+optics.setup_from_file(<span class="c-lit">"config.yaml"</span>)
+
+<span class="c-dim"># Or inline YAML/JSON string</span>
+yaml_config = <span class="c-lit">""</span>"
+driver_sources:
+  - appium:
+      enabled: true
+      url: <span class="c-lit">"http://localhost:4723"</span>
+elements_sources:
+  - appium_find_element:
+      enabled: true
+<span class="c-lit">""</span>"
+optics.setup(config=yaml_config)</code></pre></figure>
+<p><code class="ic">setup_from_file</code> reads the file and passes the parsed dict to <code class="ic">setup</code>. A missing file raises <code class="ic">FileNotFoundError</code>; any other read or parse failure raises <code class="ic">ValueError</code>.</p>
+<h2 id="component-access">Component access<a class="anchor" href="#component-access" aria-label="Link to this section">#</a></h2>
+<p>The <code class="ic">Optics</code> class gives direct access to the keywords of the underlying components. Every keyword is a snake_case method.</p>
+<ul><li>Pass every value as a string. A number, such as <code class="ic">100</code>, raises <code class="ic">TypeError</code>.</li><li>Pass locators: text, an XPath or an image name. A name from an elements file is not looked up, and <code class="ic">${name}</code> is not replaced in these methods.</li><li>A list means "try these in order". To name several elements in one check, separate them with <code class="ic">|</code> in one string.</li></ul>
+<h3 id="action-keywords">Action keywords<a class="anchor" href="#action-keywords" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics = Optics(config=config)
+
+# Element interactions
+optics.press_element(&quot;button_id&quot;)
+optics.press_by_coordinates(&quot;100&quot;, &quot;200&quot;)
+optics.press_by_percentage(&quot;50&quot;, &quot;50&quot;)
+
+# Text input
+optics.enter_text(&quot;input_field&quot;, &quot;text&quot;)
+optics.enter_text_direct(&quot;text&quot;)
+
+# Gestures
+optics.swipe(&quot;100&quot;, &quot;200&quot;, &quot;up&quot;, &quot;50&quot;)
+optics.scroll(&quot;down&quot;)">Copy</button><pre><code>optics = Optics(config=config)
+
+<span class="c-dim"># Element interactions</span>
+optics.press_element(<span class="c-lit">"button_id"</span>)
+optics.press_by_coordinates(<span class="c-lit">"100"</span>, <span class="c-lit">"200"</span>)
+optics.press_by_percentage(<span class="c-lit">"50"</span>, <span class="c-lit">"50"</span>)
+
+<span class="c-dim"># Text input</span>
+optics.enter_text(<span class="c-lit">"input_field"</span>, <span class="c-lit">"text"</span>)
+optics.enter_text_direct(<span class="c-lit">"text"</span>)
+
+<span class="c-dim"># Gestures</span>
+optics.swipe(<span class="c-lit">"100"</span>, <span class="c-lit">"200"</span>, <span class="c-lit">"up"</span>, <span class="c-lit">"50"</span>)
+optics.scroll(<span class="c-lit">"down"</span>)</code></pre></figure>
+<p><code class="ic">swipe(coor_x, coor_y, direction="right", swipe_length="50")</code> starts at a point and moves in a direction. <code class="ic">scroll(direction="down")</code> takes only a direction.</p>
+<h3 id="app-management">App management<a class="anchor" href="#app-management" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# App lifecycle
+optics.launch_app(app_identifier=&quot;com.example.app&quot;)
+optics.launch_other_app(&quot;com.other.app&quot;)
+optics.close_and_terminate_app()
+optics.force_terminate_app(&quot;com.example.app&quot;)
+
+# App information
+version = optics.get_app_version()
+session_id = optics.get_driver_session_id()">Copy</button><pre><code><span class="c-dim"># App lifecycle</span>
+optics.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+optics.launch_other_app(<span class="c-lit">"com.other.app"</span>)
+optics.close_and_terminate_app()
+optics.force_terminate_app(<span class="c-lit">"com.example.app"</span>)
+
+<span class="c-dim"># App information</span>
+version = optics.get_app_version()
+session_id = optics.get_driver_session_id()</code></pre></figure>
+<h3 id="verification">Verification<a class="anchor" href="#verification" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Element validation
+optics.validate_element(&quot;element_id&quot;)
+optics.assert_presence(&quot;element1|element2&quot;, rule=&quot;all&quot;)
+
+# Screen validation
+optics.validate_screen(&quot;element1|element2&quot;)
+
+# Screenshots and page source
+screenshot = optics.capture_screenshot()
+page_source = optics.capture_pagesource()">Copy</button><pre><code><span class="c-dim"># Element validation</span>
+optics.validate_element(<span class="c-lit">"element_id"</span>)
+optics.assert_presence(<span class="c-lit">"element1|element2"</span>, rule=<span class="c-lit">"all"</span>)
+
+<span class="c-dim"># Screen validation</span>
+optics.validate_screen(<span class="c-lit">"element1|element2"</span>)
+
+<span class="c-dim"># Screenshots and page source</span>
+screenshot = optics.capture_screenshot()
+page_source = optics.capture_pagesource()</code></pre></figure>
+<p><code class="ic">capture_screenshot</code> returns a base64 PNG. <code class="ic">capture_pagesource</code> returns a dict with <code class="ic">page_source</code> and <code class="ic">timestamp</code>.</p>
+<h3 id="flow-control">Flow control<a class="anchor" href="#flow-control" aria-label="Link to this section">#</a></h3>
+<p>Flow-control methods work on variables and modules in the session. <code class="ic">condition</code> and <code class="ic">run_loop</code> run modules, which you add with <code class="ic">add_module</code>.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Conditional execution
+optics.condition(&quot;${variable} == 'value'&quot;, &quot;module_name&quot;)
+
+# Data operations
+data = optics.read_data(&quot;${data}&quot;, &quot;data.csv&quot;)
+result = optics.invoke_api(&quot;collection.api_name&quot;)
+
+# Loops
+optics.run_loop(&quot;module_name&quot;, &quot;5&quot;)
+
+# Evaluation
+value = optics.evaluate(&quot;${total}&quot;, &quot;${var1} + ${var2}&quot;)
+date = optics.date_evaluate(&quot;${tomorrow}&quot;, &quot;04/25/2025&quot;, &quot;+1 day&quot;)">Copy</button><pre><code><span class="c-dim"># Conditional execution</span>
+optics.condition(<span class="c-lit">"${variable} == 'value'"</span>, <span class="c-lit">"module_name"</span>)
+
+<span class="c-dim"># Data operations</span>
+data = optics.read_data(<span class="c-lit">"${data}"</span>, <span class="c-lit">"data.csv"</span>)
+result = optics.invoke_api(<span class="c-lit">"collection.api_name"</span>)
+
+<span class="c-dim"># Loops</span>
+optics.run_loop(<span class="c-lit">"module_name"</span>, <span class="c-lit">"5"</span>)
+
+<span class="c-dim"># Evaluation</span>
+value = optics.evaluate(<span class="c-lit">"${total}"</span>, <span class="c-lit">"${var1} + ${var2}"</span>)
+date = optics.date_evaluate(<span class="c-lit">"${tomorrow}"</span>, <span class="c-lit">"04/25/2025"</span>, <span class="c-lit">"+1 day"</span>)</code></pre></figure>
+<ul><li><code class="ic">condition(*args)</code> takes condition-target pairs and an optional else target. A condition is an expression or a module name.</li><li><code class="ic">read_data(element, source, query="")</code> stores the rows under <code class="ic">element</code>. The source is a <code class="ic">.csv</code> or <code class="ic">.json</code> file or a 2D list.</li><li><code class="ic">invoke_api(api)</code> calls an API from the definitions you load with <code class="ic">add_api</code>, by <code class="ic">collection.api_name</code>.</li><li><code class="ic">run_loop(target, *args)</code> runs a module a number of times, or once for each value of a variable.</li><li><code class="ic">evaluate(param1, param2)</code> stores the result of the expression <code class="ic">param2</code> under <code class="ic">param1</code>.</li><li><code class="ic">date_evaluate(param1, param2, param3, param4="%d %B")</code> stores the date <code class="ic">param2</code> moved by <code class="ic">param3</code>, in the format <code class="ic">param4</code>.</li></ul>
+<p>See the <a href="../../docs/reference/keywords/flow">flow control keywords</a> for every rule.</p>
+<h2 id="session-management">Session management<a class="anchor" href="#session-management" aria-label="Link to this section">#</a></h2>
+<h3 id="session-lifecycle">Session lifecycle<a class="anchor" href="#session-lifecycle" aria-label="Link to this section">#</a></h3>
+<p>The library manages sessions internally:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics = Optics()
+
+# Setup creates a session
+optics.setup(config=config)  # Session created automatically
+
+# All operations use the active session
+optics.press_element(&quot;button&quot;)
+
+# Quit terminates the session
+optics.quit()  # Session terminated and cleaned up">Copy</button><pre><code>optics = Optics()
+
+<span class="c-dim"># Setup creates a session</span>
+optics.setup(config=config)  <span class="c-dim"># Session created automatically</span>
+
+<span class="c-dim"># All operations use the active session</span>
+optics.press_element(<span class="c-lit">"button"</span>)
+
+<span class="c-dim"># Quit terminates the session</span>
+optics.quit()  <span class="c-dim"># Session terminated and cleaned up</span></code></pre></figure>
+<p><code class="ic">setup()</code> creates a session automatically, all operations use the active session, and <code class="ic">quit()</code> terminates the session and cleans it up.</p>
+<h3 id="multiple-sessions">Multiple sessions<a class="anchor" href="#multiple-sessions" aria-label="Link to this section">#</a></h3>
+<p>For advanced use, you can run more than one session:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+from optics_framework.common.session_manager import SessionManager
+
+# Create multiple Optics instances for different sessions
+optics1 = Optics(config=config1)
+optics2 = Optics(config=config2)
+
+# Each instance has its own session
+optics1.launch_app(app_identifier=&quot;app1&quot;)
+optics2.launch_app(app_identifier=&quot;app2&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+<span class="c-info">from</span> optics_framework.common.session_manager <span class="c-info">import</span> SessionManager
+
+<span class="c-dim"># Create multiple Optics instances for different sessions</span>
+optics1 = Optics(config=config1)
+optics2 = Optics(config=config2)
+
+<span class="c-dim"># Each instance has its own session</span>
+optics1.launch_app(app_identifier=<span class="c-lit">"app1"</span>)
+optics2.launch_app(app_identifier=<span class="c-lit">"app2"</span>)</code></pre></figure>
+<p>Each <code class="ic">Optics</code> instance has its own <code class="ic">SessionManager</code> and its own session.</p>
+<h2 id="configuration">Configuration<a class="anchor" href="#configuration" aria-label="Link to this section">#</a></h2>
+<h3 id="configuration-formats">Configuration formats<a class="anchor" href="#configuration-formats" aria-label="Link to this section">#</a></h3>
+<p>The library supports more than one configuration format. A config must have <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code>, both lists.</p>
+<p><strong>Dictionary:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="config = {
+    &quot;driver_sources&quot;: [{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+    &quot;elements_sources&quot;: [{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}],
+    &quot;text_detection&quot;: [{&quot;easyocr&quot;: {&quot;enabled&quot;: True}}],
+    &quot;image_detection&quot;: [{&quot;templatematch&quot;: {&quot;enabled&quot;: True}}],
+    &quot;project_path&quot;: &quot;/path/to/project&quot;
+}
+optics.setup(config=config)">Copy</button><pre><code>config = {
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+    <span class="c-lit">"elements_sources"</span>: [{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    <span class="c-lit">"text_detection"</span>: [{<span class="c-lit">"easyocr"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    <span class="c-lit">"image_detection"</span>: [{<span class="c-lit">"templatematch"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    <span class="c-lit">"project_path"</span>: <span class="c-lit">"/path/to/project"</span>
+}
+optics.setup(config=config)</code></pre></figure>
+<p>With <code class="ic">project_path</code>, setup searches that folder for image files (<code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code>, <code class="ic">.bmp</code>, <code class="ic">.tiff</code>, <code class="ic">.tif</code>) to use as templates.</p>
+<p><strong>YAML string:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="yaml_config = &quot;&quot;&quot;
+driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: &quot;Android&quot;
+elements_sources:
+  - appium_find_element:
+      enabled: true
+&quot;&quot;&quot;
+optics.setup(config=yaml_config)">Copy</button><pre><code>yaml_config = <span class="c-lit">""</span>"
+driver_sources:
+  - appium:
+      enabled: true
+      url: <span class="c-lit">"http://localhost:4723"</span>
+      capabilities:
+        platformName: <span class="c-lit">"Android"</span>
+elements_sources:
+  - appium_find_element:
+      enabled: true
+<span class="c-lit">""</span>"
+optics.setup(config=yaml_config)</code></pre></figure>
+<p><strong>JSON string:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="json_config = &quot;&quot;&quot;
+{
+  &quot;driver_sources&quot;: [{&quot;appium&quot;: {&quot;enabled&quot;: true, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+  &quot;elements_sources&quot;: [{&quot;appium_find_element&quot;: {&quot;enabled&quot;: true}}]
+}
+&quot;&quot;&quot;
+optics.setup(config=json_config)">Copy</button><pre><code>json_config = <span class="c-lit">""</span>"
+{
+  <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: true, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+  <span class="c-lit">"elements_sources"</span>: [{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: true}}]
+}
+<span class="c-lit">""</span>"
+optics.setup(config=json_config)</code></pre></figure>
+<p>A string that starts with <code class="ic">{</code> or <code class="ic">[</code> is parsed as JSON, and any other string as YAML. A string that does not parse raises <code class="ic">OpticsError</code> with <code class="ic">E0503</code>.</p>
+<p><strong>File path:</strong></p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.setup_from_file(&quot;config.yaml&quot;)">Copy</button><pre><code>optics.setup_from_file(<span class="c-lit">"config.yaml"</span>)</code></pre></figure>
+<h3 id="configuration-parameters">Configuration parameters<a class="anchor" href="#configuration-parameters" aria-label="Link to this section">#</a></h3>
+<p>You can also pass the configuration as separate parameters. This form is deprecated and logs a warning; use <code class="ic">config=</code> instead. It needs both <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code>.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.setup(
+    driver_sources=[{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+    elements_sources=[{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}],
+    text_detection=[{&quot;easyocr&quot;: {&quot;enabled&quot;: True}}],
+    image_detection=[{&quot;templatematch&quot;: {&quot;enabled&quot;: True}}],
+    execution_output_path_param=&quot;/path/to/output&quot;
+)">Copy</button><pre><code>optics.setup(
+    driver_sources=[{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+    elements_sources=[{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    text_detection=[{<span class="c-lit">"easyocr"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    image_detection=[{<span class="c-lit">"templatematch"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    execution_output_path_param=<span class="c-lit">"/path/to/output"</span>
+)</code></pre></figure>
+<h2 id="element-management">Element management<a class="anchor" href="#element-management" aria-label="Link to this section">#</a></h2>
+<h3 id="adding-elements">Adding elements<a class="anchor" href="#adding-elements" aria-label="Link to this section">#</a></h3>
+<p>You can add and read elements from code:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Add element
+optics.add_element(&quot;submit_button&quot;, &quot;//button[@id='submit']&quot;)
+
+# Get element value
+element_value = optics.get_element_value(&quot;submit_button&quot;)
+
+# Use element in keywords: pass the locator, not the name
+optics.press_element(&quot;//button[@id='submit']&quot;)">Copy</button><pre><code><span class="c-dim"># Add element</span>
+optics.add_element(<span class="c-lit">"submit_button"</span>, <span class="c-lit">"//button[@id='submit']"</span>)
+
+<span class="c-dim"># Get element value</span>
+element_value = optics.get_element_value(<span class="c-lit">"submit_button"</span>)
+
+<span class="c-dim"># Use element in keywords: pass the locator, not the name</span>
+optics.press_element(<span class="c-lit">"//button[@id='submit']"</span>)</code></pre></figure>
+<p><code class="ic">get_element_value</code> returns the list of values stored under the name. Action methods such as <code class="ic">press_element</code> do not look the name up, so pass the locator itself.</p>
+<h3 id="element-variables">Element variables<a class="anchor" href="#element-variables" aria-label="Link to this section">#</a></h3>
+<p>Flow-control methods and modules refer to elements with the <code class="ic">${variable}</code> syntax:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.add_element(&quot;button&quot;, &quot;//button[@id='submit']&quot;)
+
+# Resolve variable: ${button} resolves to the stored element value inside a module
+optics.add_module(&quot;Submit&quot;, [(&quot;Press Element&quot;, [&quot;${button}&quot;])])
+optics.run_loop(&quot;Submit&quot;, &quot;1&quot;)">Copy</button><pre><code>optics.add_element(<span class="c-lit">"button"</span>, <span class="c-lit">"//button[@id='submit']"</span>)
+
+<span class="c-dim"># Resolve variable: ${button} resolves to the stored element value inside a module</span>
+optics.add_module(<span class="c-lit">"Submit"</span>, [(<span class="c-lit">"Press Element"</span>, [<span class="c-lit">"${button}"</span>])])
+optics.run_loop(<span class="c-lit">"Submit"</span>, <span class="c-lit">"1"</span>)</code></pre></figure>
+<p>When the module runs, <code class="ic">${button}</code> resolves to the stored element value. <code class="ic">optics.press_element("${button}")</code> does not resolve it.</p>
+<h2 id="fallback-parameters">Fallback parameters<a class="anchor" href="#fallback-parameters" aria-label="Link to this section">#</a></h2>
+<p>The library supports fallback parameters for resilience:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Single fallback value
+optics.press_element([&quot;button1&quot;, &quot;button2&quot;, &quot;button3&quot;])
+
+# Multiple fallback parameters
+optics.press_element(
+    element=[&quot;btn1&quot;, &quot;btn2&quot;],
+    index=[&quot;0&quot;, &quot;1&quot;]
+)">Copy</button><pre><code><span class="c-dim"># Single fallback value</span>
+optics.press_element([<span class="c-lit">"button1"</span>, <span class="c-lit">"button2"</span>, <span class="c-lit">"button3"</span>])
+
+<span class="c-dim"># Multiple fallback parameters</span>
+optics.press_element(
+    element=[<span class="c-lit">"btn1"</span>, <span class="c-lit">"btn2"</span>],
+    index=[<span class="c-lit">"0"</span>, <span class="c-lit">"1"</span>]
+)</code></pre></figure>
+<p>The <code class="ic">@fallback_params</code> decorator finds the parameters typed <code class="ic">fallback_str</code> (<code class="ic">Union[str, List[str]]</code>) and tries their combinations in order, through <code class="ic">fallback.run</code> in <code class="ic">optics_framework/common/fallback.py</code>. It moves to the next combination only when the element is not found, and it stops after 20 combinations.</p>
+<h2 id="integration-with-core-framework">Integration with core framework<a class="anchor" href="#integration-with-core-framework" aria-label="Link to this section">#</a></h2>
+<h3 id="session-manager-integration">Session manager integration<a class="anchor" href="#session-manager-integration" aria-label="Link to this section">#</a></h3>
+<p>The library uses <code class="ic">SessionManager</code> internally:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Optics class creates and manages sessions
+optics = Optics()
+optics.setup(config)  # Creates session via SessionManager
+
+# Session is accessible
+session_id = optics.session_id
+session = optics.session_manager.get_session(session_id)">Copy</button><pre><code><span class="c-dim"># Optics class creates and manages sessions</span>
+optics = Optics()
+optics.setup(config)  <span class="c-dim"># Creates session via SessionManager</span>
+
+<span class="c-dim"># Session is accessible</span>
+session_id = optics.session_id
+session = optics.session_manager.get_session(session_id)</code></pre></figure>
+<p><code class="ic">setup()</code> creates the session through <code class="ic">SessionManager</code>, and the session is then accessible.</p>
+<h3 id="builder-integration">Builder integration<a class="anchor" href="#builder-integration" aria-label="Link to this section">#</a></h3>
+<p>The library uses <code class="ic">OpticsBuilder</code> to construct components:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Builder is created during setup
+optics.setup(config)
+
+# Components are built via OpticsBuilder
+# Access to built components:
+driver = optics.session_manager.get_session(optics.session_id).driver">Copy</button><pre><code><span class="c-dim"># Builder is created during setup</span>
+optics.setup(config)
+
+<span class="c-dim"># Components are built via OpticsBuilder</span>
+<span class="c-dim"># Access to built components:</span>
+driver = optics.session_manager.get_session(optics.session_id).driver</code></pre></figure>
+<p>The session builds its components through <code class="ic">OpticsBuilder</code> during setup. <code class="ic">setup()</code> then builds <code class="ic">ActionKeyword</code>, <code class="ic">AppManagement</code> and <code class="ic">Verifier</code> with <code class="ic">session.optics.build(...)</code>, creates <code class="ic">FlowControl</code> over the same keyword map, and registers all four in a <code class="ic">KeywordRegistry</code>.</p>
+<h3 id="api-class-integration">API class integration<a class="anchor" href="#api-class-integration" aria-label="Link to this section">#</a></h3>
+<p>The library hands each call to an API class:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Optics class wraps API classes
+optics.press_element(&quot;button&quot;)
+# Internally calls: optics.action_keyword.press_element(&quot;button&quot;)
+
+optics.validate_element(&quot;element&quot;)
+# Internally calls: optics.verifier.validate_element(&quot;element&quot;)">Copy</button><pre><code><span class="c-dim"># Optics class wraps API classes</span>
+optics.press_element(<span class="c-lit">"button"</span>)
+<span class="c-dim"># Internally calls: optics.action_keyword.press_element("button")</span>
+
+optics.validate_element(<span class="c-lit">"element"</span>)
+<span class="c-dim"># Internally calls: optics.verifier.validate_element("element")</span></code></pre></figure>
+<h2 id="error-handling">Error handling<a class="anchor" href="#error-handling" aria-label="Link to this section">#</a></h2>
+<p>The library uses the framework's error handling system:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.error import OpticsError, Code
+
+try:
+    optics.press_element(&quot;nonexistent_element&quot;)
+except OpticsError as e:
+    print(f&quot;Error code: {e.code}&quot;)
+    print(f&quot;Error message: {e.message}&quot;)
+    print(f&quot;Error details: {e.details}&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.error <span class="c-info">import</span> OpticsError, Code
+
+<span class="c-info">try</span>:
+    optics.press_element(<span class="c-lit">"nonexistent_element"</span>)
+<span class="c-info">except</span> OpticsError <span class="c-info">as</span> e:
+    print(f<span class="c-lit">"Error code: {e.code}"</span>)
+    print(f<span class="c-lit">"Error message: {e.message}"</span>)
+    print(f<span class="c-lit">"Error details: {e.details}"</span>)</code></pre></figure>
+<p>A keyword called before <code class="ic">setup()</code> raises <code class="ic">ValueError("Setup not complete. Call setup() first.")</code> (the <code class="ic">INVALID_SETUP</code> message), not an <code class="ic">OpticsError</code>. See <a href="../../docs/contribute/errors">Errors</a>.</p>
+<h2 id="robot-framework-integration">Robot Framework integration<a class="anchor" href="#robot-framework-integration" aria-label="Link to this section">#</a></h2>
+<h3 id="library-registration">Library registration<a class="anchor" href="#library-registration" aria-label="Link to this section">#</a></h3>
+<p>When Robot Framework is installed, the <code class="ic">Optics</code> class is registered as a library:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="@library(scope=&quot;GLOBAL&quot;)
+class Optics:
+    # Class implementation
+    ...">Copy</button><pre><code>@library(scope=<span class="c-lit">"GLOBAL"</span>)
+<span class="c-info">class</span> Optics:
+    <span class="c-dim"># Class implementation</span>
+    ...</code></pre></figure>
+<h3 id="keyword-discovery">Keyword discovery<a class="anchor" href="#keyword-discovery" aria-label="Link to this section">#</a></h3>
+<p>Robot Framework discovers the methods decorated with <code class="ic">@keyword</code>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="@keyword(&quot;Press Element&quot;)
+@fallback_params
+def press_element(
+    self,
+    element: fallback_str,
+    repeat: fallback_str = &quot;1&quot;,
+    ...
+) -&gt; None:
+    ...">Copy</button><pre><code>@keyword(<span class="c-lit">"Press Element"</span>)
+@fallback_params
+<span class="c-info">def</span> press_element(
+    self,
+    element: fallback_str,
+    repeat: fallback_str = <span class="c-lit">"1"</span>,
+    ...
+) -&gt; <span class="c-info">None</span>:
+    ...</code></pre></figure>
+<p>The <code class="ic">Optics</code> class also has keywords that the suite files do not have, such as <code class="ic">Setup</code>, <code class="ic">Setup From File</code>, <code class="ic">Add Element</code>, <code class="ic">Get Element Value</code>, <code class="ic">Add API</code>, <code class="ic">Add Testcase</code>, <code class="ic">Add Module</code>, <code class="ic">Add Error Definitions</code>, <code class="ic">Capture And Detect Errors</code> and <code class="ic">Quit</code>.</p>
+<h3 id="scope-management">Scope management<a class="anchor" href="#scope-management" aria-label="Link to this section">#</a></h3>
+<p>The library uses <code class="ic">GLOBAL</code> scope, so one instance is shared across all test cases:</p>
+<figure class="code doc-code" data-lang="robotframework"><button class="copy" type="button" aria-label="Copy code" data-copy="*** Settings ***
+Library    optics_framework.optics.Optics
+
+*** Test Cases ***
+Test 1
+    Setup From File    config.yaml
+    Press Element    button1
+
+Test 2
+    # Uses same Optics instance from Test 1
+    Press Element    button2">Copy</button><pre><code>*** Settings ***
+Library    optics_framework.optics.Optics
+
+*** Test Cases ***
+Test 1
+    Setup From File    config.yaml
+    Press Element    button1
+
+Test 2
+    # Uses same Optics instance from Test 1
+    Press Element    button2</code></pre></figure>
+<h2 id="best-practices">Best practices<a class="anchor" href="#best-practices" aria-label="Link to this section">#</a></h2>
+<h3 id="configuration-management">Configuration management<a class="anchor" href="#configuration-management" aria-label="Link to this section">#</a></h3>
+<ul><li>Use configuration files for complex setups</li><li>Keep sensitive data (URLs, credentials) in environment variables</li><li>Use project-specific configuration files</li></ul>
+<h3 id="session-lifecycle-2">Session lifecycle<a class="anchor" href="#session-lifecycle-2" aria-label="Link to this section">#</a></h3>
+<ul><li>Always call <code class="ic">quit()</code> when done to clean up resources</li><li>Use a context manager for automatic cleanup. <code class="ic">Optics</code> is one: <code class="ic">with Optics(config) as optics:</code> calls <code class="ic">quit()</code> at the end of the block. You can also write your own:</li></ul>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from contextlib import contextmanager
+
+@contextmanager
+def optics_session(config):
+    optics = Optics()
+    optics.setup(config=config)
+    try:
+        yield optics
+    finally:
+        optics.quit()
+
+with optics_session(config) as optics:
+    optics.press_element(&quot;button&quot;)">Copy</button><pre><code><span class="c-info">from</span> contextlib <span class="c-info">import</span> contextmanager
+
+@contextmanager
+<span class="c-info">def</span> optics_session(config):
+    optics = Optics()
+    optics.setup(config=config)
+    <span class="c-info">try</span>:
+        yield optics
+    <span class="c-info">finally</span>:
+        optics.quit()
+
+<span class="c-info">with</span> optics_session(config) <span class="c-info">as</span> optics:
+    optics.press_element(<span class="c-lit">"button"</span>)</code></pre></figure>
+<h3 id="error-handling-2">Error handling<a class="anchor" href="#error-handling-2" aria-label="Link to this section">#</a></h3>
+<ul><li>Wrap operations in <code class="ic">try</code>/<code class="ic">except</code> blocks</li><li>Handle <code class="ic">OpticsError</code> for framework errors</li><li>Check the session state before operations</li></ul>
+<h3 id="element-management-2">Element management<a class="anchor" href="#element-management-2" aria-label="Link to this section">#</a></h3>
+<ul><li>Store elements that you use often</li><li>Use descriptive element names</li><li>Use fallback parameters for resilience</li></ul>
+<h3 id="code-organization">Code organization<a class="anchor" href="#code-organization" aria-label="Link to this section">#</a></h3>
+<ul><li>Keep configuration apart from test logic</li><li>Use helper functions for common operations</li><li>Put keywords into logical groups</li></ul>
+<h2 id="performance-considerations">Performance considerations<a class="anchor" href="#performance-considerations" aria-label="Link to this section">#</a></h2>
+<h3 id="session-reuse">Session reuse<a class="anchor" href="#session-reuse" aria-label="Link to this section">#</a></h3>
+<ul><li>Reuse <code class="ic">Optics</code> instances across many operations</li><li>Do not create a new instance for each operation</li></ul>
+<h3 id="lazy-initialization">Lazy initialization<a class="anchor" href="#lazy-initialization" aria-label="Link to this section">#</a></h3>
+<ul><li><code class="ic">OpticsBuilder</code> creates each engine the first time something asks for it (<code class="ic">get_driver()</code>, <code class="ic">get_element_source()</code> and so on). In practice that is during <code class="ic">setup()</code>: the session asks for the driver, and the keyword classes ask for the element source, text detection and image detection when <code class="ic">setup()</code> builds them.</li><li>What waits for first use is the connection: the Appium driver opens its session only when <code class="ic">launch_app</code> starts the app. So <code class="ic">launch_app</code> can be slower than the calls after it.</li></ul>
+<h3 id="resource-cleanup">Resource cleanup<a class="anchor" href="#resource-cleanup" aria-label="Link to this section">#</a></h3>
+<ul><li>Always call <code class="ic">quit()</code> to release resources</li><li>Driver connections close on quit</li></ul>
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting" aria-label="Link to this section">#</a></h2>
+<h3 id="setup-not-complete">Setup not complete<a class="anchor" href="#setup-not-complete" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> <code class="ic">ValueError: Setup not complete. Call setup() first.</code> (<code class="ic">INVALID_SETUP</code>) when you call keywords.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Make sure you call <code class="ic">setup()</code> before you use keywords.</li><li>Make sure the configuration is valid.</li><li>Make sure at least one driver is enabled.</li></ol>
+<h3 id="element-not-found">Element not found<a class="anchor" href="#element-not-found" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Optics cannot find an element.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Make sure the element identifier is correct.</li><li>Make sure the element is visible on screen.</li><li>Use fallback parameters for more than one strategy.</li><li>Increase the timeout if needed.</li></ol>
+<h3 id="session-errors">Session errors<a class="anchor" href="#session-errors" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Session errors.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Make sure the session was created successfully.</li><li>Make sure the session was not terminated.</li><li>Make sure <code class="ic">quit()</code> was not called too early.</li></ol>
+<h3 id="robot-framework-integration-issues">Robot Framework integration issues<a class="anchor" href="#robot-framework-integration-issues" aria-label="Link to this section">#</a></h3>
+<p><strong>Problem:</strong> Keywords are not available in Robot Framework.</p>
+<p><strong>Solutions:</strong></p>
+<ol><li>Make sure Robot Framework is installed.</li><li>Make sure the library import path is correct.</li><li>Make sure the <code class="ic">@keyword</code> decorators are present.</li><li>Read the Robot Framework logs.</li></ol>
+<h2 id="related-pages">Related pages<a class="anchor" href="#related-pages" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/contribute/components#optics-class">Component architecture</a>: <code class="ic">Optics</code> class details</li><li><a href="../../docs/contribute/components#sessionmanager">Session management</a>: the session lifecycle</li><li><a href="../../docs/reference/config">config.yaml reference</a>: configuration</li><li><a href="../../docs/create/python">Use Optics from Python</a> and the <a href="../../docs/reference/keywords/">keyword reference</a>: Python API and keyword reference</li><li><a href="../../docs/reference/http-api">HTTP API reference</a>: REST API endpoints</li><li><a href="../../docs/contribute/strategies">Strategies</a>: self-healing strategies</li><li><a href="../../docs/contribute/errors">Errors</a>: error codes and handling</li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Python%20library%20layer&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Flibrary-layer%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Python%20library%20layer&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcontribute%2Flibrary-layer%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/contribute/api-layer"><span>Previous</span>REST API layer</a><a class="pager-next" href="../../docs/contribute/extending"><span>Next</span>Extend Optics</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/contribute/library-layer.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#overview">Overview</a></li><li class="toc-l2"><a href="#library-architecture">Library architecture</a></li><li class="toc-l2"><a href="#optics-class">Optics class</a></li><li class="toc-l3"><a href="#class-structure">Class structure</a></li><li class="toc-l3"><a href="#initialization">Initialization</a></li><li class="toc-l2"><a href="#usage-patterns">Usage patterns</a></li><li class="toc-l3"><a href="#standalone-python-script">Standalone Python script</a></li><li class="toc-l3"><a href="#robot-framework-library">Robot Framework library</a></li><li class="toc-l3"><a href="#configuration-from-file">Configuration from file</a></li><li class="toc-l2"><a href="#component-access">Component access</a></li><li class="toc-l3"><a href="#action-keywords">Action keywords</a></li><li class="toc-l3"><a href="#app-management">App management</a></li><li class="toc-l3"><a href="#verification">Verification</a></li><li class="toc-l3"><a href="#flow-control">Flow control</a></li><li class="toc-l2"><a href="#session-management">Session management</a></li><li class="toc-l3"><a href="#session-lifecycle">Session lifecycle</a></li><li class="toc-l3"><a href="#multiple-sessions">Multiple sessions</a></li><li class="toc-l2"><a href="#configuration">Configuration</a></li><li class="toc-l3"><a href="#configuration-formats">Configuration formats</a></li><li class="toc-l3"><a href="#configuration-parameters">Configuration parameters</a></li><li class="toc-l2"><a href="#element-management">Element management</a></li><li class="toc-l3"><a href="#adding-elements">Adding elements</a></li><li class="toc-l3"><a href="#element-variables">Element variables</a></li><li class="toc-l2"><a href="#fallback-parameters">Fallback parameters</a></li><li class="toc-l2"><a href="#integration-with-core-framework">Integration with core framework</a></li><li class="toc-l3"><a href="#session-manager-integration">Session manager integration</a></li><li class="toc-l3"><a href="#builder-integration">Builder integration</a></li><li class="toc-l3"><a href="#api-class-integration">API class integration</a></li><li class="toc-l2"><a href="#error-handling">Error handling</a></li><li class="toc-l2"><a href="#robot-framework-integration">Robot Framework integration</a></li><li class="toc-l3"><a href="#library-registration">Library registration</a></li><li class="toc-l3"><a href="#keyword-discovery">Keyword discovery</a></li><li class="toc-l3"><a href="#scope-management">Scope management</a></li><li class="toc-l2"><a href="#best-practices">Best practices</a></li><li class="toc-l3"><a href="#configuration-management">Configuration management</a></li><li class="toc-l3"><a href="#session-lifecycle-2">Session lifecycle</a></li><li class="toc-l3"><a href="#error-handling-2">Error handling</a></li><li class="toc-l3"><a href="#element-management-2">Element management</a></li><li class="toc-l3"><a href="#code-organization">Code organization</a></li><li class="toc-l2"><a href="#performance-considerations">Performance considerations</a></li><li class="toc-l3"><a href="#session-reuse">Session reuse</a></li><li class="toc-l3"><a href="#lazy-initialization">Lazy initialization</a></li><li class="toc-l3"><a href="#resource-cleanup">Resource cleanup</a></li><li class="toc-l2"><a href="#troubleshooting">Troubleshooting</a></li><li class="toc-l3"><a href="#setup-not-complete">Setup not complete</a></li><li class="toc-l3"><a href="#element-not-found">Element not found</a></li><li class="toc-l3"><a href="#session-errors">Session errors</a></li><li class="toc-l3"><a href="#robot-framework-integration-issues">Robot Framework integration issues</a></li><li class="toc-l2"><a href="#related-pages">Related pages</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap foot-row">
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="../../docs/">Docs</a>
+        <a href="../../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
+        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
+        <a href="../../about">About</a>
+        <a href="../../contact">Contact</a>
+        <a href="../../privacy">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaa72e04a3" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=49b314c882" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=c30acf91c5" defer></script>
+<!--/email_off--></body>
+</html>
