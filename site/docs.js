@@ -12,8 +12,10 @@
   var menu = document.querySelector(".menu-toggle");
   var sidebar = document.getElementById("sidebar");
   var scrim = document.querySelector(".scrim");
+  var narrow = matchMedia("(max-width: 920px)");
   function drawer(open) {
     sidebar.classList.toggle("open", open);
+    sidebar.inert = narrow.matches && !open;
     scrim.hidden = !open;
     menu.setAttribute("aria-expanded", open ? "true" : "false");
     menu.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
@@ -23,7 +25,9 @@
   scrim.addEventListener("click", function () { drawer(false); });
   sidebar.addEventListener("click", function (e) { if (e.target.closest("a")) drawer(false); });
   window.addEventListener("pageshow", function () { drawer(false); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sidebar.classList.contains("open")) drawer(false); });
+  narrow.addEventListener("change", function () { drawer(false); });
+  drawer(false);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sidebar.classList.contains("open")) { drawer(false); menu.focus(); } });
   // Keep the current page in view in the desktop sidebar.
   var current = sidebar.querySelector('[aria-current="page"]');
   if (current && current.offsetTop > sidebar.clientHeight * 0.6) current.scrollIntoView({ block: "center" });
@@ -256,7 +260,9 @@
   });
   function openAllTables() { longTables.forEach(function (t) { t.open(); }); }
   function openTableAt(hash) {
-    var target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
+    var id;
+    try { id = decodeURIComponent(hash.slice(1)); } catch (e) { return; }
+    var target = id && document.getElementById(id);
     var box = target && target.closest && target.closest(".long-table");
     if (box) longTables.forEach(function (t) { if (t.box === box) t.open(); });
   }
@@ -325,14 +331,15 @@
     for (var i = 0; i < terms.length && at < 0; i++) at = lower.indexOf(terms[i]);
     if (at < 0) return escHtml(text.slice(0, 140));
     var start = Math.max(0, at - 50);
-    var s = escHtml((start ? "…" : "") + text.slice(start, start + 160));
-    terms.forEach(function (t) { if (t.length > 1) s = s.replace(new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"), "<mark>$1</mark>"); });
-    return s;
+    var raw = (start ? "…" : "") + text.slice(start, start + 160);
+    var words = terms.filter(function (t) { return t.length > 1; }).map(function (t) { return t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); });
+    if (!words.length) return escHtml(raw);
+    return raw.split(new RegExp("(" + words.join("|") + ")", "i")).map(function (part, i) { return i % 2 ? "<mark>" + escHtml(part) + "</mark>" : escHtml(part); }).join("");
   }
   function run() {
     if (!index) return;
-    var q = input.value.trim().toLowerCase();
-    var terms = q.split(/\s+/).filter(Boolean);
+    var q = input.value.trim().toLowerCase().slice(0, 200);
+    var terms = q.split(/\s+/).filter(Boolean).slice(0, 8);
     var results;
     if (!terms.length) {
       results = ["get-started/quickstart", "get-started/install", "create/", "reference/keywords/", "reference/cli", "help/troubleshooting"]
