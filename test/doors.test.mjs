@@ -75,3 +75,11 @@ test("a miss shows the reply the release gave, with the step's own value", () =>
   }
   assert.match(D.mcp(miss).res[1], new RegExp(`tap "xpath=${XPATH.replace(/[[\]*@/]/g, "\\$&")}" -&gt; FAIL`));
 });
+
+test("a step with quotes, backslashes or markup shows in every door as text", () => {
+  const nasty = { ...step("press_element", ['Sold"out\\q'], false), tc: "<img src=x onerror=alert(1)>" };
+  for (const door of ["csv", "python", "robot", "http", "mcp"]) {
+    const shown = D[door](nasty);
+    for (const part of [shown.req, shown.res].flat()) assert.doesNotMatch(String(part), /<img/, door);
+  }
+});

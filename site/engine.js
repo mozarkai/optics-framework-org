@@ -236,7 +236,7 @@
 
   // ---------------------------------------------------------------- the run
   var log = $(".eng-log"), xmlPanes = $$(".eng-xml"), runBtns = $$(".eng-btn"), page = null, running = false;
-  var steps = {}, rows = {}, cases = [];
+  var steps = {}, rows = {}, cases = [], summed = false;
 
   function note(kind, text) {
     var active = log.querySelector(".e-kw.run .e-notes");
@@ -292,8 +292,10 @@
   }
   function time(elapsed) { return elapsed == null ? "" : '<span class="e-t">' + Number(elapsed).toFixed(2) + "s</span>"; }
   function summary() {
+    if (summed) return;
+    summed = true;
     var pass = cases.filter(function (c) { return c.status === "PASS"; }).length;
-    el(log, "div", "e-sum " + (pass === cases.length ? "ok" : "bad"), pass + " passed · " + (cases.length - pass) + " failed");
+    el(log, "div", "e-sum " + (cases.length && pass === cases.length ? "ok" : "bad"), pass + " passed · " + (cases.length - pass) + " failed");
   }
 
   window.opticsPage = {
@@ -329,7 +331,7 @@
     busy(true);
     track("engine-" + mode);
     gen = clock.begin();
-    steps = {}; rows = {}; cases = [];
+    steps = {}; rows = {}; cases = []; summed = false;
     log.innerHTML = '<div class="e-cmd"><span class="k-dim">~/birch-shop $</span> optics ' + mode + " .</div>";
     xmlPanes[1].textContent = "";
     var files = JSON.stringify({ "config.yaml": CONFIG, "checkout.yaml": edit.value });

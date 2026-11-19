@@ -40,7 +40,14 @@
     var many = values(step, step.args[0] || "").length > 1;
     return (many ? set.miss_list : set.miss)[step.kw];
   }
-  function deep(o, step) { return JSON.parse(fill(JSON.stringify(o), step)); }
+  function deep(o, step) {
+    if (typeof o === "string") return fill(o, step);
+    if (Array.isArray(o)) return o.map(function (x) { return deep(x, step); });
+    if (!o || typeof o !== "object") return o;
+    var out = {};
+    Object.keys(o).forEach(function (k) { out[k] = deep(o[k], step); });
+    return out;
+  }
   function failed(step) { return step.result && !step.result.ok; }
 
   function csv(step) {
@@ -82,7 +89,7 @@
     var line = "    " + span("k-kw", C.keywords[step.kw].robot) + kwArgs(step).map(function (a) {
       return "    " + span(/^\$\{/.test(a) ? "k-var" : "k-lit", a);
     }).join("");
-    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\n" + step.tc + "\n" + lists.join("") + line;
+    var req = (vars.length ? span("k-mod", "*** Variables ***") + "\n" + vars.join("\n") + "\n\n" : "") + span("k-mod", "*** Test Cases ***") + "\n" + esc(step.tc) + "\n" + lists.join("") + line;
     return { req: ["birch.robot", req], res: ["result", step.result ? verdict(step) : ""] };
   }
 
