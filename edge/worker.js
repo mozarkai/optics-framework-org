@@ -111,6 +111,13 @@ function addVary(headers, tokens) {
 // A page's answer depends on the User-Agent too, since AI crawlers get Markdown.
 const varyFor = (url) => (url.pathname.endsWith(".md") ? ["Accept"] : ["Accept", "User-Agent"]);
 
+// A path such as "//evil.example/x" names another host when resolved as a URL; a pathname never does.
+function sameSite(url, path) {
+  const out = new URL(url.origin);
+  out.pathname = path;
+  return out;
+}
+
 // A page's own Markdown twin is linked only when the page exists, so a 404 never points at one.
 function asHtml(response, url) {
   const out = new Response(response.body, response);
@@ -130,7 +137,7 @@ async function asMarkdown(response, { url, method, status = 200, canonical }) {
   headers.set("x-robots-tag", "noindex, follow");
   headers.set("x-markdown-tokens", String(Math.max(1, Math.ceil(body.length / 4))));
   headers.set("x-aeo-version", "1.0");
-  if (canonical) headers.set("link", `<${new URL(canonical, url).href}>; rel="canonical"`);
+  if (canonical) headers.set("link", `<${sameSite(url, canonical).href}>; rel="canonical"`);
   addVary(headers, varyFor(url));
   return new Response(method === "HEAD" ? null : body, { status, headers });
 }
@@ -200,7 +207,7 @@ export async function handle(request, upstream = fetch) {
     url,
     method,
     wants: negotiate(request.headers.get("accept"), { bot: isAiBot(request.headers.get("user-agent")) }),
-    get: (path) => upstream(new Request(new URL(path, url))),
+    get: (path) => upstream(new Request(sameSite(url, path))),
   };
   const twin = await serveTwin(ctx);
   if (twin) return twin;
