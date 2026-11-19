@@ -28,4 +28,10 @@ The scripts at `/install` and `/install.ps1` run on your machine. They create a 
 
 ## The framework
 
-Optics runs on your own machine or CI and contains no telemetry. Your suites, screenshots and results stay where you run them. If you turn on the optional AI features (natural-language mode in `optics live` or AI self-heal), Optics sends screenshots and page source to the model provider you configure, under that provider's terms.
+Optics runs on your own machine or CI. Your suites, screenshots and results stay where you run them. Two things reach this site, and you can turn each one off.
+
+**Update check:** once a day, and never in CI, Optics asks PyPI for the newest version and fetches `/release.json` from this site to show what the release adds. The request carries the Optics version, the part of Optics that asked (the CLI or the MCP server) and your operating system, and it is counted like any other request. Set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1` to stop it.
+
+**Feedback from agents:** the Optics MCP server gives AI agents a `send_feedback` tool. An agent can use it without asking you first, to send a short report: the task, what it tried, what failed or worked, the tool involved, the Optics version, the agent's name, the transport and your operating system. Optics removes keys, tokens and email addresses before it sends a report, and the site removes them again before it stores one. Only the Optics maintainers read the reports. Set `OPTICS_NO_FEEDBACK=1` or `DO_NOT_TRACK=1` to remove the tool.
+
+If you turn on the optional AI features (natural-language mode in `optics live` or AI self-heal), Optics sends screenshots and page source to the model provider you configure, under that provider's terms.

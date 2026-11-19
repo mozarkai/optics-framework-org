@@ -10,6 +10,10 @@
     Python 3.12+ is the one prerequisite: this script reports it plainly rather
     than provisioning a runtime behind your back.
 
+    Running it again upgrades. An Optics that is already installed (by this
+    script, uv tool, pipx or pip) is upgraded where it is, never joined by a
+    second copy. -Dir skips that search.
+
     Piping into iex passes no parameters, so every option is also an
     environment variable. To set one first:
 
@@ -49,6 +53,7 @@ try { & {
 $ErrorActionPreference = 'Stop'
 
 $Package = 'optics-framework'
+$DirSet = [bool] $Dir
 if (-not $Dir) { $Dir = Join-Path $HOME '.optics' }
 $Dir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Dir).TrimEnd('\', '/')
 if ($env:OPTICS_NO_MODIFY_PATH) { $NoModifyPath = $true }
@@ -134,6 +139,245 @@ Write-Host ''
 Write-Host 'Optics Framework installer'
 Write-Host ''
 
+# -------------------------------------------------------------- existing copy
+# Re-running the install command is how most people upgrade, so look for every
+# Optics already installed before creating anything.
+
+# One line each: version, prefix, pip present (1/0), and the extras whose
+# packages are all installed, so an upgrade keeps them. Run from a file: Windows
+# PowerShell 5.1 mangles quotes in arguments to native commands.
+$Probe = @'
+import importlib.metadata as m, importlib.util as u, re, sys
+d = m.distribution("optics-framework")
+need = {}
+for r in d.requires or ():
+    x = re.search(r"extra\s*==\s*.([\w.-]+)", r)
+    if x:
+        need.setdefault(x.group(1), []).append(re.split(r"[\s;\[<>=!~(]", r, maxsplit=1)[0])
+def have(n):
+    try:
+        m.distribution(n)
+        return True
+    except m.PackageNotFoundError:
+        return False
+print(d.version, sys.prefix, int(u.find_spec("pip") is not None), ",".join(e for e, ns in need.items() if all(map(have, ns))), sep="\n")
+'@
+
+function Get-ToolDir {
+    param([string] $Tool, [string[]] $Arguments)
+    if (-not (Get-Command $Tool -ErrorAction SilentlyContinue)) { return $null }
+    $run = Invoke-Native $Tool $Arguments
+    if ($run.Code -eq 0 -and $run.Output) { return $run.Output.TrimEnd('\', '/') }
+    return $null
+}
+
+$UvTools   = Get-ToolDir 'uv' @('tool', 'dir')
+$UvBin     = Get-ToolDir 'uv' @('tool', 'dir', '--bin')
+$PipxVenvs = Get-ToolDir 'pipx' @('environment', '--value', 'PIPX_LOCAL_VENVS')
+$PipxBin   = Get-ToolDir 'pipx' @('environment', '--value', 'PIPX_BIN_DIR')
+
+function Test-Under {
+    param([string] $Path, [string] $Folder)
+    $Folder -and $Path.TrimEnd('\').StartsWith($Folder.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)
+}
+
+# The Python behind an optics launcher. A launcher is an .exe with no shebang to
+# read, so the folder it sits in says which Python it belongs to.
+function Get-LauncherPython {
+    param([string] $Launcher)
+    $folder = Split-Path $Launcher
+    if ((Split-Path $Launcher -Leaf) -ieq 'optics.cmd') {
+        $candidates = @(Join-Path $folder '..\venv\Scripts\python.exe')
+    } else {
+        $candidates = @((Join-Path $folder 'python.exe'), (Join-Path $folder '..\python.exe'))
+    }
+    foreach ($tool in @(@($UvBin, $UvTools), @($PipxBin, $PipxVenvs))) {
+        if ($tool[0] -and $tool[1] -and $folder.TrimEnd('\') -ieq $tool[0]) {
+            $candidates += Join-Path $tool[1] 'optics-framework\Scripts\python.exe'
+        }
+    }
+    foreach ($candidate in $candidates) {
+        if (Test-Path $candidate) { return (Resolve-Path $candidate).Path }
+    }
+    # pip install --user puts launchers in %APPDATA%\Python\Python3XX\Scripts.
+    if ($folder -match '\\Python\\Python3(\d+)\\Scripts\\?$' -and (Get-Command py -ErrorAction SilentlyContinue)) {
+        $run = Invoke-Native 'py' @("-3.$($Matches[1])", '-c', 'import sys; print(sys.executable)')
+        if ($run.Code -eq 0 -and (Test-Path $run.Output)) { return $run.Output }
+    }
+    return $null
+}
+
+# installer, uv, pipx, project:<lockfile>, venv or pip.
+function Get-InstallKind {
+    param([string] $Prefix)
+    $parent = Split-Path $Prefix
+    if ((Split-Path $Prefix -Leaf) -ieq 'venv' -and (Test-Path (Join-Path $parent 'bin\optics.cmd'))) { return 'installer' }
+    if ((Test-Under $Prefix $UvTools) -or $Prefix -match '\\uv\\tools\\') { return 'uv' }
+    if ((Test-Under $Prefix $PipxVenvs) -or $Prefix -match '\\pipx\\venvs\\') { return 'pipx' }
+    if (Test-Path (Join-Path $Prefix 'pyvenv.cfg')) {
+        foreach ($lock in 'uv.lock', 'poetry.lock', 'pdm.lock', 'Pipfile.lock') {
+            if (Test-Path (Join-Path $parent $lock)) { return "project:$lock" }
+        }
+        return 'venv'
+    }
+    return 'pip'
+}
+
+# Every Optics, first on PATH first: launchers on PATH, then this script's
+# default install and tool environments whose bin folder is off PATH.
+function Find-OpticsInstall {
+    $launchers = @(Get-Command optics -All -CommandType Application -ErrorAction SilentlyContinue | ForEach-Object { $_.Source })
+    $launchers += $Shim
+    foreach ($tools in $UvTools, $PipxVenvs) {
+        if ($tools) { $launchers += Join-Path $tools 'optics-framework\Scripts\optics.exe' }
+    }
+    $probeFile = Join-Path ([IO.Path]::GetTempPath()) "optics-probe-$([guid]::NewGuid()).py"
+    Set-Content -Path $probeFile -Value $Probe -Encoding ASCII
+    $found = @()
+    try {
+        foreach ($launcher in $launchers) {
+            if (-not (Test-Path $launcher)) { continue }
+            $python = Get-LauncherPython $launcher
+            if (-not $python) { continue }
+            $run = Invoke-Native $python @($probeFile)
+            if ($run.Code -ne 0) { continue }
+            $lines = @($run.Output -split '\r?\n')
+            $prefix = $lines[1].TrimEnd('\')
+            if ($found | Where-Object { $_.Prefix -ieq $prefix }) { continue }
+            $found += [pscustomobject]@{
+                Kind = Get-InstallKind $prefix; Prefix = $prefix; Python = $python; Launcher = $launcher
+                Version = $lines[0]; Pip = $lines[2] -eq '1'; Extras = $(if ($lines.Count -gt 3) { $lines[3] } else { '' })
+            }
+        }
+    } finally {
+        Remove-Item -Force $probeFile -ErrorAction SilentlyContinue
+    }
+    $found
+}
+
+function Join-ExtraList {
+    param([string[]] $Part)
+    $names = @(($Part -join ',') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ } | Select-Object -Unique)
+    $names -join ','
+}
+
+function Get-Spec {
+    param([string] $Extras)
+    $spec = if ($Extras) { "$Package[$Extras]" } else { $Package }
+    if ($Version) { $spec = "$spec==$Version" }
+    $spec
+}
+
+function Get-InstallLabel {
+    param([string] $Kind)
+    switch -Wildcard ($Kind) {
+        'uv' { 'uv tool' }
+        'pipx' { 'pipx' }
+        'project:*' { 'project' }
+        'venv' { 'virtual environment' }
+        default { 'pip' }
+    }
+}
+
+function Get-RemovalCommand {
+    param($Copy)
+    switch -Wildcard ($Copy.Kind) {
+        'installer' { "& ([scriptblock]::Create((irm https://optics-framework.org/install.ps1))) -Uninstall -Dir `"$(Split-Path $Copy.Prefix)`"" }
+        'uv' { "uv tool uninstall $Package" }
+        'pipx' { "pipx uninstall $Package" }
+        'project:*' { "remove $Package from the project in $(Split-Path $Copy.Prefix)" }
+        default { "& `"$($Copy.Python)`" -m pip uninstall $Package" }
+    }
+}
+
+function Write-OtherInstall {
+    param([object[]] $Others)
+    foreach ($copy in $Others) {
+        Write-Host ''
+        Write-Host "  Optics $($copy.Version) is also installed in $($copy.Prefix). Remove one copy so they do not drift:" -ForegroundColor DarkGray
+        Write-Host "    $(Get-RemovalCommand $copy)"
+    }
+}
+
+function Invoke-Upgrade {
+    param([string] $Exe, [string[]] $Arguments)
+    if ($DryRun) { Write-Step "would run: $Exe $($Arguments -join ' ')"; return }
+    Write-Step "$Exe $($Arguments -join ' ')"
+    $run = Invoke-Native $Exe $Arguments
+    if ($run.Code -ne 0) { Write-FatalError "$Exe could not upgrade Optics." @('', $run.Output) }
+}
+
+function Get-ProjectCommand {
+    param([string] $Kind)
+    switch ($Kind) {
+        'project:uv.lock' { if ($Version) { "uv add $Package==$Version" } else { "uv sync --upgrade-package $Package" } }
+        'project:poetry.lock' { "poetry add $Package@$(if ($Version) { $Version } else { 'latest' })" }
+        'project:pdm.lock' { if ($Version) { "pdm add $Package==$Version" } else { "pdm update --unconstrained $Package" } }
+        default { if ($Version) { "pipenv install $Package==$Version" } else { "pipenv update $Package" } }
+    }
+}
+
+# A reinstall rather than `uv tool upgrade` or `pipx upgrade`, which keep the
+# version pinned at install time; the spec carries the extras already there.
+function Invoke-FoundUpgrade {
+    param($Copy, [string] $Spec)
+    switch -Wildcard ($Copy.Kind) {
+        'uv' {
+            if (-not (Get-Command uv -ErrorAction SilentlyContinue)) { Write-FatalError 'Optics is a uv tool, and uv is not on PATH.' }
+            $target = if ($Version) { $Spec } else { "$Spec@latest" }
+            Invoke-Upgrade 'uv' @('tool', 'install', $target)
+        }
+        'pipx' {
+            if (-not (Get-Command pipx -ErrorAction SilentlyContinue)) { Write-FatalError 'Optics is a pipx tool, and pipx is not on PATH.' }
+            Invoke-Upgrade 'pipx' @('install', '--force', $Spec)
+        }
+        default {
+            if ($Copy.Pip) {
+                Invoke-Upgrade $Copy.Python @('-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '--upgrade', $Spec)
+            } elseif (Get-Command uv -ErrorAction SilentlyContinue) {
+                Invoke-Upgrade 'uv' @('pip', 'install', '--quiet', '--python', $Copy.Python, '--upgrade', $Spec)
+            } else {
+                Write-FatalError "The environment in $($Copy.Prefix) has no pip, and uv is not on PATH." @('', 'Upgrade it with the tool that created it.')
+            }
+        }
+    }
+}
+
+$copies = @()
+if (-not $DirSet) { $copies = @(Find-OpticsInstall) }
+$found = if ($copies.Count) { $copies[0] } else { $null }
+$foundExtras = if ($found) { $found.Extras } else { '' }
+
+if ($found -and $found.Kind -eq 'installer') {
+    $Dir  = Split-Path $found.Prefix
+    $Venv = Join-Path $Dir 'venv'
+    $Bin  = Join-Path $Dir 'bin'
+    $Shim = Join-Path $Bin 'optics.cmd'
+    Write-Ok "Found Optics $($found.Version) in $Dir"
+} elseif ($found) {
+    Write-Ok "Found Optics $($found.Version) in $($found.Prefix) ($(Get-InstallLabel $found.Kind))"
+    if ($found.Kind -like 'project:*') {
+        Write-Host "Optics belongs to the project in $(Split-Path $found.Prefix), and its lockfile sets the version."
+        Write-Host 'Upgrade it from that folder with:'
+        Write-Host ''
+        Write-Host "  $(Get-ProjectCommand $found.Kind)"
+        Write-Host ''
+        return
+    }
+    if ($DryRun) { Write-Host 'Dry run - nothing will be changed.' }
+    Invoke-FoundUpgrade $found (Get-Spec (Join-ExtraList @($found.Extras, $Extra)))
+    if (-not $DryRun) {
+        $check = Invoke-Native $found.Launcher @('--version')
+        if ($check.Code -ne 0) { Write-FatalError 'Upgraded, but optics could not start.' @('', $check.Output) }
+        Write-Ok $check.Output
+    }
+    Write-OtherInstall @($copies | Select-Object -Skip 1)
+    Write-Host ''
+    Write-Host "Agent:   claude mcp add -s user optics -- `"$($found.Launcher)`" mcp"
+    Write-Host ''
+    return
+}
+
 # --------------------------------------------------------------------- python
 # Lowest supported version first, deliberately. Optics pulls opencv,
 # scikit-image and (via easyocr) torch; on a just-released Python those have no
@@ -192,8 +436,7 @@ if (-not $python) {
 }
 Write-Ok "Python $($python.Version)"
 
-$Spec = if ($Extra) { "$Package[mcp,$Extra]" } else { "$Package[mcp]" }
-if ($Version) { $Spec = "$Spec==$Version" }
+$Spec = Get-Spec (Join-ExtraList @('mcp', $foundExtras, $Extra))
 
 $VenvPython = Join-Path $Venv 'Scripts\python.exe'
 $VenvOptics = Join-Path $Venv 'Scripts\optics.exe'
@@ -201,10 +444,11 @@ $VenvOptics = Join-Path $Venv 'Scripts\optics.exe'
 if ($DryRun) {
     Write-Host ''
     Write-Host 'Dry run - nothing will be changed.'
-    Write-Step "create virtual environment at $Venv"
+    if (Test-Path $VenvPython) { Write-Step "reuse the virtual environment at $Venv" } else { Write-Step "create virtual environment at $Venv" }
     Write-Step "install $Spec into it"
     Write-Step "link the optics CLI into $Bin"
     if (-not $NoModifyPath) { Write-Step "add $Bin to your user PATH" }
+    Write-OtherInstall @($copies | Select-Object -Skip 1)
     Write-Host ''
     return
 }
@@ -276,6 +520,7 @@ if ($onPath) {
     Write-Host '  Open a new terminal for other programs to see it.' -ForegroundColor DarkGray
 }
 
+Write-OtherInstall @($copies | Select-Object -Skip 1)
 Write-Host ''
 Write-Host 'Next:    optics quickstart'
 Write-Host '         Builds a project, checks your setup, and runs your first test.' -ForegroundColor DarkGray

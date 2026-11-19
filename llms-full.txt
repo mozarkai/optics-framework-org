@@ -632,6 +632,8 @@ $ optics --version
 Optics Framework 1.11.5
 ```
 
+To upgrade, run the install command again. It finds the Optics you already have, from the installer, uv tool, pipx or pip, and upgrades it where it is, with the extras you installed.
+
 **Installer options**
 Pass options after `sh -s --`. On Windows, set the matching environment variable before running the installer.
 
@@ -639,7 +641,7 @@ Pass options after `sh -s --`. On Windows, set the matching environment variable
 |---|---|---|
 | `--version 1.11.5` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,rapidocr` | `OPTICS_EXTRA` | Install engines at the same time. |
-| `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`. |
+| `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`, without looking for an existing Optics. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |
 | `--dry-run` | | Print what would happen and change nothing. |
 | `--uninstall` | | Remove Optics and the PATH entry it added. |
@@ -14785,4 +14787,10 @@ The scripts at `/install` and `/install.ps1` run on your machine. They create a 
 
 ## The framework
 
-Optics runs on your own machine or CI and contains no telemetry. Your suites, screenshots and results stay where you run them. If you turn on the optional AI features (natural-language mode in `optics live` or AI self-heal), Optics sends screenshots and page source to the model provider you configure, under that provider's terms.
+Optics runs on your own machine or CI. Your suites, screenshots and results stay where you run them. Two things reach this site, and you can turn each one off.
+
+**Update check:** once a day, and never in CI, Optics asks PyPI for the newest version and fetches `/release.json` from this site to show what the release adds. The request carries the Optics version, the part of Optics that asked (the CLI or the MCP server) and your operating system, and it is counted like any other request. Set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1` to stop it.
+
+**Feedback from agents:** the Optics MCP server gives AI agents a `send_feedback` tool. An agent can use it without asking you first, to send a short report: the task, what it tried, what failed or worked, the tool involved, the Optics version, the agent's name, the transport and your operating system. Optics removes keys, tokens and email addresses before it sends a report, and the site removes them again before it stores one. Only the Optics maintainers read the reports. Set `OPTICS_NO_FEEDBACK=1` or `DO_NOT_TRACK=1` to remove the tool.
+
+If you turn on the optional AI features (natural-language mode in `optics live` or AI self-heal), Optics sends screenshots and page source to the model provider you configure, under that provider's terms.
