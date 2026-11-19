@@ -145,7 +145,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`, `${ORIGIN}/explain`];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/releases`, `${ORIGIN}/hard-targets`, `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`, `${ORIGIN}/explain`];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
@@ -333,7 +333,7 @@ test("llms-full.txt holds the text of the homepage, the text pages and every doc
   const pages = docsPages().filter((p) => !internal(p));
   assert.ok(internals.length > 0);
   for (const p of internals) assert.ok(!full.includes(`Source: ${ORIGIN}/${p.url}\n`), `llms-full.txt has /${p.url}`);
-  for (const url of ["", ...TRUST_PAGES, ...pages.map((p) => p.url)]) {
+  for (const url of ["", "hard-targets", ...TRUST_PAGES, ...pages.map((p) => p.url)]) {
     assert.ok(full.includes(`Source: ${ORIGIN}/${url}\n`), `llms-full.txt lacks /${url}`);
   }
   assert.doesNotMatch(full, /\]\((?!https?:|mailto:|#)[^)]+\)/, "llms-full.txt has a relative link");
@@ -345,7 +345,7 @@ test("the wild flows show real keywords, and each tile's lines come from the fil
     [...readFileSync("docs/reference/keywords/index.md", "utf8").matchAll(/^\| ([A-Z][\w ]+?) \| .+\| \[[^\]]+\]\(\/docs\/reference\/keywords\//gm)].map((m) => m[1]),
   );
   const unescape = (s) => s.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-  const tiles = [...read("index.html").matchAll(/<article class="wild-t[^"]*" data-scene="(\w+)">([\s\S]*?)<\/article>/g)];
+  const tiles = [...read("hard-targets.html").matchAll(/<article class="wild-t[^"]*" data-scene="(\w+)">([\s\S]*?)<\/article>/g)];
   assert.ok(tiles.length >= 7);
   for (const [, scene, body] of tiles) {
     const files = [...body.matchAll(/<figcaption>([^<]+)<\/figcaption><pre><code>([\s\S]*?)<\/code>/g)].map(([, name, code]) => ({ name, rows: unescape(code).split("\n") }));
@@ -488,6 +488,30 @@ test("every HTML page has a Markdown twin for agents", () => {
     assert.match(html, /<meta name="ai-summary" content="[^"]{20,}">/, `${page} has no ai-summary`);
   }
   assert.match(read("about.md"), /^# About Optics\n/);
+});
+
+test("every playground page opens on the same tab row, with its own tab current", () => {
+  const pages = ["playground", "run", "releases", "hard-targets", "explain"];
+  assert.match(read("index.html"), /<nav class="nav-links"[^>]*>[\s\S]*?href="playground">Playground<\/a>/);
+  for (const page of pages) {
+    const rows = [...read(`${page}.html`).matchAll(/<nav class="play-tabs"[^>]*>([\s\S]*?)<\/nav>/g)];
+    assert.equal(rows.length, 1, `${page} has ${rows.length} tab rows`);
+    const links = [...rows[0][1].matchAll(/<a href="([^"]+)"( aria-current="page")?>/g)];
+    assert.deepEqual(links.map(([, href]) => href), pages, page);
+    assert.deepEqual(links.filter(([, , current]) => current).map(([, href]) => href), [page]);
+  }
+});
+
+test("the homepage shows how each release of the real run ended", () => {
+  const html = read("index.html");
+  const run = loadRun("out/runs/birch-run.js");
+  for (const r of run.runs) {
+    const card = html.match(new RegExp(`<figure class="rc" data-exit="${r.exit}">[\\s\\S]*?<figcaption>([\\s\\S]*?)</figcaption>`))?.[1];
+    assert.ok(card, `no card for Birch ${r.release}`);
+    assert.ok(card.includes(`Birch ${r.release}`) && card.includes(`exit ${r.exit}`), r.release);
+    assert.ok(existsSync(`out/${r.end.split("?")[0]}`), r.end);
+    for (const e of r.errors) assert.ok(card.includes(e.match_string), `${r.release} hides ${e.match_string}`);
+  }
 });
 
 // The replay shows only what a run wrote, so everything it points at must be published.
