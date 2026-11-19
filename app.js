@@ -203,3 +203,8 @@
     chapters.forEach(function (b) { b.toggleAttribute("aria-current", b === now); });
   });
 })();
+
+(function () {
+  var tab = document.querySelector('.play-tabs [aria-current="page"]');
+  if (tab) tab.parentNode.scrollLeft = tab.offsetLeft - tab.parentNode.offsetLeft - 16;
+})();
