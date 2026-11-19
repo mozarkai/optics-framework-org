@@ -1,0 +1,17 @@
+      <h1>Ship a release</h1>
+      <p class="lede">Change the sign-in button and ship it. Optics climbs the ladder until it finds the button, or the test fails.</p>
+      <p class="vh" id="pg-brk-desc">A simulation of a new release of Birch, a demo shop app. It does not run Optics. Select the changes to make to the sign-in button, then select Ship. Each step of the ladder shows if it found the button. The result tells you if the test passes, fails on a real bug, or fails when the app still works.</p>
+      <div class="pg brk" role="group" aria-label="Playground: break the test" aria-describedby="pg-brk-desc">
+        <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
+      <ol class="rungs">
+        <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
+        <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
+        <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with Apple Vision, RapidOCR, EasyOCR, Tesseract or Google Vision.</span></div></li>
+        <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
+        <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
+      </ol>
+      </div>
+      <div class="pg sim" id="simulator"></div>
+      <script src="birch.js" defer></script>
+      <script src="playground.js" defer></script>
+      <script src="sim.js" defer></script>

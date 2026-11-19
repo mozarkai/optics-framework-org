@@ -7,7 +7,8 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
 import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
-import { loadRun, runBody, runMarkdown } from "./lib/run.mjs";
+import { loadRun, runBody, runCard, runMarkdown } from "./lib/run.mjs";
+import { playTabs } from "./lib/play.mjs";
 import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
@@ -90,7 +91,7 @@ const RUN_PAGE = {
   path: "run",
   title: "A real Optics run against Birch",
   description: "Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.",
-  body: runBody(readFileSync("pages/run.html", "utf8"), run, ORIGIN),
+  body: playTabs("run") + runBody(readFileSync("pages/run.html", "utf8"), run, ORIGIN),
   head: `<link rel="alternate" type="text/markdown" href="run.md" title="A real Optics run, as Markdown">\n  <link rel="stylesheet" href="replay.css">`,
 };
 writeFileSync("out/run.html", render(RUN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/run` }));
@@ -108,13 +109,40 @@ writeFileSync(
   render(
     {
       ...PLAYGROUND,
-      body: readFileSync(PLAYGROUND.src, "utf8").replace("{{engine}}", () => JSON.stringify(engine)),
+      body: playTabs("playground") + readFileSync(PLAYGROUND.src, "utf8").replace("{{engine}}", () => JSON.stringify(engine)),
       head: `<link rel="alternate" type="text/markdown" href="playground.md" title="${PLAYGROUND.title}, as Markdown">\n  <link rel="stylesheet" href="playground.css">\n  <link rel="stylesheet" href="engine.css">`,
     },
     { root: "", home: "./", canonical: `${ORIGIN}/playground` },
   ),
 );
 cpSync("pages/playground.md", "out/playground.md");
+
+// The playgrounds that left the homepage, each a tab beside the engine, the run and /explain.
+const PLAY_PAGES = [
+  {
+    src: "pages/releases.html",
+    path: "releases",
+    title: "Ship a release: break an Optics test, then ship a hundred",
+    description: "Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.",
+    styles: ["playground.css", "sim.css"],
+  },
+  {
+    src: "pages/hard-targets.html",
+    path: "hard-targets",
+    title: "Hard targets: locked phones, TVs, games and more with Optics",
+    description: "A locked phone through Bluetooth and a camera, a TV through its remote, a game through OCR: each hard flow, with the suite lines that drive it.",
+    styles: ["playground.css", "wild.css"],
+  },
+];
+for (const page of PLAY_PAGES) {
+  const head = [
+    `<link rel="alternate" type="text/markdown" href="${page.path}.md" title="${page.title}, as Markdown">`,
+    ...page.styles.map((f) => `<link rel="stylesheet" href="${f}">`),
+  ].join("\n  ");
+  const body = playTabs(page.path) + readFileSync(page.src, "utf8");
+  writeFileSync(`out/${page.path}.html`, render({ ...page, body, head }, { root: "", home: "./", canonical: `${ORIGIN}/${page.path}` }));
+  cpSync(page.src.replace(/\.html$/, ".md"), `out/${page.path}.md`);
+}
 
 // The blog lists articles, videos and posts, hosted here or elsewhere, from any author:
 // /blog, its Markdown twin, an RSS feed, and the latest four on the homepage
@@ -137,7 +165,7 @@ const explainExamples = loadExamples();
 const EXPLAIN_PAGE = {
   title: "Explain an Optics suite, row by row",
   description: "Edit an Optics test suite in CSV or YAML and see what each row does, how each element is found and what optics dry_run reports, live in your browser.",
-  body: explainBody(catalogue, explainExamples),
+  body: playTabs("explain") + explainBody(catalogue, explainExamples),
   head: `<link rel="stylesheet" href="explain.css">\n  <link rel="alternate" type="text/markdown" href="explain.md" title="Explain a suite, as Markdown">`,
 };
 writeFileSync("out/explain.html", render(EXPLAIN_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/explain` }));
@@ -168,6 +196,7 @@ fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
 const proof = loadProof();
 fill("out/index.html", "<!-- proof -->", proofBand(proof));
+fill("out/index.html", "<!-- run:card -->", `<div class="run-card">${runCard(run)}</div>`);
 const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   .split(/\n\n+/)
   .map((cue) => cue.match(/(\d+):(\d+):([\d.]+) --> [^\n]+\n(.+)/))
@@ -213,8 +242,9 @@ const docs = buildDocs({ lastModified });
 // file under about 500 KB.
 const fullText = (path, file) => `Source: ${ORIGIN}/${path}\n\n${readFileSync(file, "utf8").trim()}\n`;
 const llmsFull = [
-  `# Optics, full text\n\n> Every page of optics-framework.org in one file: the homepage, about and contact, every docs page in reading order except the Contribute section, then privacy. The docs index is ${ORIGIN}/docs/llms.txt and the blog articles are listed at ${ORIGIN}/blog.md.\n`,
+  `# Optics, full text\n\n> Every page of optics-framework.org in one file: the homepage, the hard targets, about and contact, every docs page in reading order except the Contribute section, then privacy. The docs index is ${ORIGIN}/docs/llms.txt and the blog articles are listed at ${ORIGIN}/blog.md.\n`,
   fullText("", "out/index.md"),
+  fullText("hard-targets", "out/hard-targets.md"),
   fullText("about", "out/about.md"),
   fullText("contact", "out/contact.md"),
   ...docs.markdown,
@@ -227,7 +257,7 @@ writeFileSync(
   "out/sitemap.xml",
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
-    ...[...PAGES, PLAYGROUND].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    ...[...PAGES, PLAYGROUND, ...PLAY_PAGES].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
