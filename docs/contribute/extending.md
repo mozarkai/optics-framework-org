@@ -1391,12 +1391,13 @@ try:
 except SpecificError as e:
     raise OpticsError(
         Code.EXXXX,  # Use appropriate error code
-        message=f"Descriptive error message: {e}",
-        details={"context": "additional_info"}
+        message="What went wrong, in plain words",
+        details={"context": "additional_info"},
+        cause=e,
     )
 ```
 
-`OpticsError` also accepts `cause=` for the original exception. See [Error codes](/docs/reference/errors) for the codes.
+Give the original exception as `cause=`, and keep its text out of `message`: the summary adds it. `hint=` gives the next step for this case. See [Errors](/docs/contribute/errors#write-the-message-of-a-layer), and [Error codes](/docs/reference/errors) for the codes.
 
 ### Logging
 

@@ -152,22 +152,38 @@ The decorator applies the default values before it makes the combinations. Thus 
 If all fallback attempts fail, Optics raises `FallbackExhausted`. This is an `OpticsError` with the code of the last failure. It keeps the last `KEPT_FAILURES = 5` failures:
 
 ```python
-lines = [f"{combo} -> {error}" for combo, error in failures]
-if omitted:
-    lines.insert(0, f"... {omitted} earlier attempts not shown")
-return f"All {self.tried} fallback combinations failed for {subject}{self.limit_note}:\n" + "\n".join(lines)
+def _describe(self, subject: str, failures: Sequence[tuple[Combo, OpticsError]]) -> str:
+    if self.tried == 1:
+        return self.last.summary
+    errors = [error for _, error in failures]
+    merged = ElementNotFound.merge(errors) if self.tried == len(failures) else None
+    if merged:
+        return merged + self.limit_note
+    omitted = self.tried - len(failures)
+    lines = [f"{_values(combo, self.varying)}: {error.summary}" for combo, error in failures]
+    if omitted:
+        lines.insert(0, f"({omitted} earlier tries not shown)")
+    return f"All {self.tried} tries of {subject} failed{self.limit_note}:\n" + "\n".join(lines)
 ```
 
 **Error message format:**
 
+When there were at most five tries and every value missed in the same plain way, the message is one sentence:
+
 ```text
-All 3 fallback combinations failed for press_element:
-('btn1', '1', '0', '0', '0') -> Code.E0201: ...
-('btn2', '1', '0', '0', '0') -> Code.E0201: ...
-('btn3', '1', '0', '0', '0') -> Code.E0201: ...
+E0201: None of 'btn1', 'btn2' and 'btn3' is on the screen.
 ```
 
-Each combination is a tuple of the values of all fallback parameters, in signature order. When Optics tried only one combination, the error is the message of that one failure.
+When the failures differ, each line gives the values that changed and the summary of that failure:
+
+```text
+E0201: All 3 tries of press_element failed:
+'btn1': 'btn1' is not on the screen.
+'btn2': 'btn2' is covered by another element on the page.
+'btn3': 'btn3' is not on the screen.
+```
+
+A line shows only the parameters with more than one value, here `element` and not `repeat`. When Optics tried only one combination, the message is the summary of that one failure. When it stopped at `MAX_ATTEMPTS`, the message adds ` (tried 20 of <total> combinations)`. The subject is the function name for the decorator, and `keyword '<Keyword Name>'` for the test runner, `FlowControl` and the REST API.
 
 #### Integration with API layer
 
@@ -644,7 +660,7 @@ self.driver = self.optics.get_driver() if enabled_driver_configs else None
 - Make sure that the session is not terminated.
 - Make sure that Optics created the session.
 
-**Driver not initialized:**
+**The driver is not ready (`E0101`):**
 
 - Make sure that at least one driver is enabled.
 - Make sure that the driver configuration is correct.
@@ -1410,7 +1426,7 @@ except ModuleNotFoundError as e:
     raise OpticsError(Code.E0601, message=f"Module '{name}' not found in package '{package}'") from e
 ```
 
-A config item that is not a dict raises `E0503`. The factory does not raise `X0604` ("Import related problem"), although that code exists. See [Errors](/docs/contribute/errors).
+A config item that is not a dict raises `E0503`. The factory does not raise `X0604` ("Could not import a module"), although that code exists. See [Errors](/docs/contribute/errors).
 
 #### Performance considerations
 
