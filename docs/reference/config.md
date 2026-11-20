@@ -696,7 +696,16 @@ popup_rules:
 
 Each `popup_rules.json` in the project is read after this key. A rule in a file replaces a rule with the same name here.
 
-A rule that is not valid stops the run before it starts. The log names the field, such as `popup_rules.0.action`, and the panel then shows `Cannot start: E0104` and `No driver enabled`, because Optics could not read config.yaml. Fix the rule, not the driver.
+A rule that is not valid stops the run before it starts. The panel shows `Cannot start: E0501` and names the rule and the field:
+
+```terminal
+╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
+│ popup_rules['Rate Us'].action.type: Input should be 'tap', 'back', 'alert',  │
+│ 'module' or 'none' (got 'swipe')                                             │
+│                                                                              │
+│ Fix it in birch/config.yaml, then re-run.                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## permissions
 
@@ -709,8 +718,8 @@ permissions:
   android.permission.READ_CONTACTS: allow
 ```
 
-- The value is `allow` or `deny`. Any other value stops the run before it starts, in the same way as a popup rule that is not valid.
-- The names are `camera`, `location`, `notifications`, `microphone`, `background_location`, `contacts`, `calendar`, `phone`, `call_log`, `sms`, `storage`, `photos`, `videos`, `audio`, `bluetooth`, `nearby_wifi`, `body_sensors` and `activity_recognition`, or a full `android.permission.*` name. An unknown name fails Launch App with E0501.
+- The value is `allow` or `deny`. Any other value stops the run before it starts with `Cannot start: E0501`, for example `permissions.camera: Input should be 'allow' or 'deny' (got 'yes_please')`.
+- The names are `camera`, `location`, `notifications`, `microphone`, `background_location`, `contacts`, `calendar`, `phone`, `call_log`, `sms`, `storage`, `photos`, `videos`, `audio`, `bluetooth`, `nearby_wifi`, `body_sensors` and `activity_recognition`, or a full `android.permission.*` name. An unknown name also stops the run before it starts with E0501, and the message lists the names.
 - The capabilities need `appPackage`. See [Grant permissions before launch](/docs/platforms/android#grant-permissions-before-launch).
 - On iOS, Optics logs a warning and applies nothing. See [Answer system alerts](/docs/platforms/ios#answer-system-alerts).
 
