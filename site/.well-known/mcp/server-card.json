@@ -166,6 +166,16 @@
         "idempotentHint": false,
         "openWorldHint": true
       }
+    },
+    {
+      "name": "send_feedback",
+      "description": "Tell the Optics maintainers what broke, was missing, confused you or worked well, when you are stuck or a task ends. Leave out personal data.",
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     }
   ]
 }

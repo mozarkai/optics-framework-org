@@ -610,6 +610,8 @@ graph TB
 def locate(self, element: str, aoi_x=None, aoi_y=None, aoi_width=None, aoi_height=None, index: int = 0) -> Generator[LocateResult, None, None]:
     self.require_screen()
     effective_element, text_only = utils.parse_text_only_prefix(element)
+    if not text_only:
+        effective_element = utils.resolve_locator(effective_element)
     element_type = utils.determine_element_type(element)
     internal_logger.info(f"Locating element: {element} of type: {element_type}...")
     use_aoi = self._validate_aoi(aoi_x, aoi_y, aoi_width, aoi_height)
@@ -625,6 +627,7 @@ def locate(self, element: str, aoi_x=None, aoi_y=None, aoi_width=None, aoi_heigh
             )
         except Exception as e:
             raise_if_session_dead(e)
+            # A missing OCR engine explains nothing when a native lookup also ran.
             if text_only or not _is_unconfigured_ocr(strategy):
                 last_error = e
             blind = e if _is_blind(e) else blind
@@ -634,12 +637,14 @@ def locate(self, element: str, aoi_x=None, aoi_y=None, aoi_width=None, aoi_heigh
             yield locate_result
     if not yielded:
         hint = self._ocr_not_tried_hint(element_type, text_only)
-        raise blind or OpticsError(Code.E0201, message=f"Element '{element}' not found.{hint}", cause=last_error)
+        raise blind or _not_found(element, effective_element, text_only, last_error, hint)
 ```
+
+`_not_found` returns an `ElementNotFound` (`E0201`). When the locator is an XPath that is not valid XPath 1.0 (`utils.xpath_problem`), its cause is a note that says so, and the message becomes `'<xpath>' is not on the screen, and it is not valid XPath 1.0: <problem>`. A `${name}` parameter adds `Cannot find <name>: ` before it. Else its cause is the last error, which shows only in the technical detail.
 
 - `require_screen()` raises `E0501` when no `elements_sources` entry is enabled.
 - A dead driver session stops the search at once (`raise_if_session_dead`).
-- When OCR has no engine and a native lookup also ran, the OCR error does not hide the native miss. The message then ends with "OCR was not tried: no text_detection engine is configured."
+- When OCR has no engine and a native lookup also ran, the OCR error does not hide the native miss. The hint is then `OCR_NOT_TRIED_MSG`: "OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it."
 - A camera that does not see the device screen (`E0305`) is raised in place of `E0201`.
 - `_try_strategy_locate` records each attempt with `execution_tracer.log_attempt`.
 
@@ -672,6 +677,7 @@ The next engine runs only when the one before it raises an error. An engine that
 - The rule must be `any` or `all`. Another value raises `E0205`.
 - If no strategy can take any of the elements, or `all` is set and some element has no strategy that can take it, the assertion raises `E0201` at once.
 - A strategy that raises an error leaves the poll for the rest of the assertion.
+- When the timeout runs out, `_assert_miss` raises `E0201` for the elements not found: `'a' is not on the screen.` for one element, `None of 'a', 'b' is on the screen.` for `any`, and `'a', 'b' are not on the screen.` for `all`. An XPath that is not valid XPath 1.0 is named first. When OCR was off, the hint is `OCR_NOT_TRIED_MSG`.
 - If the round's screenshot is almost the same as the last one they read, OCR and template matching skip that round.
 - For `assert_visibility`, `XPathStrategy` and `TextElementStrategy` take part only when the source implements `assert_elements_visible`.
 
@@ -797,6 +803,16 @@ if is_aoi_used:
 return strategy_manager.locate(element, index=index)
 ```
 
+**Popup rules:**
+
+When the session has popup rules, `_locate_and_act` runs the rules that check before every step (`begin_step`, then `before_step`) after it reads the AOI and before the first screenshot. The capture, the screenshot saving, the location and the actions (steps 1, 3, 4, 5 and 6) run in a `while True` loop. When nothing is found, `_popup_before_self_heal` checks the screen for a popup before AI self-heal:
+
+- A rule dismissed the popup: it raises `E0409`, and the loop takes a new screenshot and looks for the element again.
+- A rule stopped the step, or a popup has no rule: it raises `E0407`, `E0408` or `E0206`. A rule that runs a module the session does not have raises `E0601`.
+- No popup: AI self-heal gets its chance.
+
+When an `act` already ran and failed, the step does not look again after a dismissed popup, because a second try could repeat the action. Self-heal then starts from a new screenshot. See [Handle popups](/docs/advanced/popups) for the rules.
+
 **5. Result iteration** (`_act_until_success`):
 
 ```python
@@ -812,6 +828,7 @@ while True:
         break
     result_count += 1
     _save_annotated_for_result(result, screenshot_np, self.capture_output_dir, func_name)
+    act_ran = act_ran or not _is_covered(result.value, allow_covered)
     ret, error = self._act_on(result, act, element, func_name, allow_covered)
     if error is not None:
         last_exception = error
@@ -834,30 +851,34 @@ while True:
 if locate_error is not None and locate_error.code == Code.E0305:
     raise locate_error
 if result_count == 0:
+    self._popup_before_self_heal()
     if self._ai_self_heal(element, func_name, intent_args, screenshot_np, value):
         return None
-    raise OpticsError(
-        Code.E0201,
-        message=f"No valid strategies found for '{element}' in '{func_name}'",
-        cause=locate_error,
-    ) from locate_error
+    raise _not_located(element, locate_error)
+heal = partial(self._heal_after_popup_check, act_ran, element, func_name, intent_args, screenshot_np, value)
+return self._after_failed_acts(last_exception, unsupported, element, func_name, heal)
 ```
+
+`_not_located` keeps the error of the strategy layer when it already says why: an `ElementNotFound`, `E0205`, or a popup code (`E0206`, `E0407`, `E0408`). It wraps any other error in `ElementNotFound(element, cause=error)`.
 
 `_after_failed_acts` handles the case where results came back but every `act` failed:
 
 ```python
 if error is None:
-    raise OpticsError(Code.E0801, message=f"Unexpected failure: No results or exceptions for '{element}' in '{func_name}'")
+    raise OpticsError(Code.E0801, message=f"{_keyword_name(func_name)} ended with no result and no error for {element_label(element)}")
 if unsupported:
-    raise error
+    raise error  # each driver refused the action itself, so no other element or heal can do it
 if heal():
     return None
 raise OpticsError(
     Code.X0201,
-    message=f"All strategies failed for '{element}' in '{func_name}': {error}",
+    message=f"{element_label(element)} is on the screen, but {_keyword_name(func_name)} failed on it",
     cause=error,
+    hint="Make sure that no other element covers it and that it is enabled.",
 )
 ```
+
+`_keyword_name` turns `press_element` into `Press Element`. The summary of the `X0201` error adds the summary of the last `act` error after `: `.
 
 When every driver refused the action itself (`E0105`, keyword not supported on this platform), Optics raises that error. No other element and no self-heal can do it.
 
@@ -944,27 +965,30 @@ press_element(
 
 ### Error scenarios
 
-**1. No strategies available:**
+**1. No strategy finds the element:**
 
-```python
-# Error: E0201 - No valid strategies found
-# Occurs when no strategies can locate the element
+```text
+E0201: 'Bluetooth Pairing Wizard' is not on the screen.
+E0201: login_button is not on the screen. Looked for '//button[@id='login']'.
 ```
 
-**2. All strategies failed:**
+`ElementNotFound`, from `StrategyManager.locate` or `_not_located`. The second form is for a `${name}` parameter.
 
-```python
-# Error: X0201 - All strategies failed
-# Occurs when all strategies tried but all failed
-# Includes last exception as cause
+**2. Every action on a located element fails:**
+
+```text
+X0201: login_button is on the screen, but Press Element failed on it: <summary of the last error>
 ```
+
+The hint is "Make sure that no other element covers it and that it is enabled." The last `act` error is the cause.
 
 **3. Unexpected failure:**
 
-```python
-# Error: E0801 - Unexpected failure
-# Occurs in unexpected scenarios
+```text
+E0801: Press Element ended with no result and no error for login_button
 ```
+
+A guard for a state that the loop should not reach: results came back, but no error was kept.
 
 **4. Other errors that end the step:**
 
@@ -972,6 +996,8 @@ press_element(
 - `E0105`: every driver refused the action
 - `E0405` or `E0106`: the action ran without the expected result, or the session is gone
 - `E0205`: invalid AOI parameters
+- `E0206`, `E0407` or `E0408`: a popup with no rule, or a popup rule that stopped the step
+- `E0601`: a popup rule runs a module that the session does not have
 
 See [Error codes](/docs/reference/errors).
 
@@ -994,10 +1020,9 @@ See [Error codes](/docs/reference/errors).
 
 **Error messages:**
 
-- Include element name
-- Include function name
-- Include strategy that failed
-- Include original exception
+- Name the element: its `${name}` when a parameter gave it, and the locators that were tried
+- Name the keyword (`Press Element`) when the action failed
+- Leave the strategy and the original exception to the cause chain, `explain(error).detail` and the warning log
 
 ### Best practices
 

@@ -47,6 +47,8 @@ If config.yaml has a wrong value type, `optics execute` logs the problem, skips 
 | `exclude` | None | Skip these test cases. |
 | `ai_self_heal` | `false` | Lets an LLM try to recover when an element can't be found. See [ai_self_heal](#ai-self-heal). |
 | `strict_element_match` | `false` | Turns off fuzzy and partial text matching. See [strict_element_match](#strict-element-match). |
+| `popup_rules` | None | Rules for popups that block a step. See [popup_rules](#popup-rules). |
+| `permissions` | None | Android app permissions to grant or deny before the app opens. See [permissions](#permissions). |
 | `save_captures` | `true` | Whether Optics writes screenshots of steps and captures. See [save_captures](#save-captures). |
 | `halt_duration` | `0.1` | Seconds to wait after a keyword fails every fallback. It isn't a pause between steps. |
 | `event_attributes_json` | None | Path to a JSON file of event attributes, for example `./creds/event_attributes.json`. When it includes an `eventUrl`, events you label with `event_name` are sent there at the end of the session. See [Event attributes file](/docs/contribute/events#event-attributes-file) for the format. |
@@ -576,8 +578,8 @@ image_detection:
 | `frame` | Required | `{width, height}`: the size in pixels of the positions that keywords use. Use the camera frame size. Without a camera, use the screen size of the device. |
 | `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. |
 | `port` | None | A fixed serial port (`/dev/cu.usbmodem1101`, `COM5`) in place of `serial`. Set one of the two, not both. `optics serve` and `optics mcp` refuse it. |
-| `launch` | The default of the platform | The methods that `Launch App` tries, in sequence: `launcher_key`, `drawer_search`, `drawer_tap`, `search_key`, `home_icon`. See [Open apps](/docs/platforms/production#open-apps). |
-| `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. |
+| `launch` | The default of the platform | The methods that `Launch App` tries, in sequence: `launcher_key`, `drawer_search`, `drawer_tap`, `search_key`, `home_icon`, `drawer_list`. See [Open apps](/docs/platforms/production#open-apps). |
+| `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. With a camera, `drawer_search` finds the search box without it. |
 
 The driver refuses the settings of the driver before 1.11.5: `device_id`, `pixel_width`, `pixel_height`, `mickeys_width`, `mickeys_height`, `x_invert` and `y_invert`. See [Migrate from the v1 driver](/docs/platforms/production#migrate-from-the-v1-driver).
 
@@ -589,7 +591,7 @@ The driver refuses the settings of the driver before 1.11.5: `device_id`, `pixel
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | TCP only. Bytes in the length header of the frame server: `4` or `8`. |
 | `byte_order` | `little` | TCP only. The byte order of the length header: `little` or `big`. |
-| `find_screen` | None | `brightness` or `frame`: Optics finds the corners of the screen in the camera frame. See [Find the screen](/docs/platforms/production#find-the-screen). |
+| `find_screen` | None | `brightness`, `frame` or `pointer`: Optics finds the corners of the screen in the camera frame. `pointer` also finds a dark screen, and needs a `ble` driver on a platform other than `android`. See [Find the screen](/docs/platforms/production#find-the-screen). |
 | `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Set this or `find_screen`, not both. |
 | `out_width`, `out_height` | `1080`, `1920` | The size of the frame, at most `8192` on each side. Set the screen size of the device. If you set them without `find_screen` or `deskew_corners`, Optics scales each frame to this size. |
 | `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after Optics cuts out the screen. |
@@ -641,7 +643,7 @@ exclude:
 
 With `file_log: true` and no `execution_output_path`, Optics also writes a copy of both logs to `logs/` in the folder you ran `optics` from.
 
-Optics masks secrets as `****` in the console, the log files, the result tree and the Failure details:
+Optics masks secrets as `****` in the console, the log files, the result tree and the **Failures** box:
 
 - Values you write with the `@:` prefix, such as `@:s3cret`. After the step runs, Optics also masks the value without the prefix.
 - Values that `store_as` or `Read Data` saves under a secret name. A name is secret if it contains one of these words: `pass`, `password`, `passwd`, `passcode`, `pwd`, `pin`, `otp`, `secret`, `token`, `key`, `apikey`, `auth`, `authorization`, `bearer` or `credential`. `password1` and `myAPIToken` are secret names. Optics masks only values of 4 or more characters, also values with `@:`.
@@ -677,6 +679,40 @@ strict_element_match: true
 ```
 
 By default the page-source element sources (`appium_page_source`, `selenium_page_source`, `playwright_page_source`) accept close or partial text matches, so `Sign in` can match `Sign in with email`. OCR also finds text inside a longer word, so `Pay` can match `Payment`. Set `strict_element_match: true` to accept only exact matches, and complete words for OCR. See [How OCR matches text](/docs/elements/text-and-images#how-ocr-matches-text). Turn it on when similar labels make tests press the wrong element.
+
+## popup_rules
+
+A list of rules for popups that block a step, in the same format as `popup_rules.json`. See [Handle popups](/docs/advanced/popups).
+
+```yaml
+popup_rules:
+  - name: rate_prompt
+    detect:
+      text_contains: ["Enjoying Birch?"]
+    action:
+      type: tap
+      target: Not now
+```
+
+Each `popup_rules.json` in the project is read after this key. A rule in a file replaces a rule with the same name here.
+
+A rule that is not valid stops the run before it starts. The log names the field, such as `popup_rules.0.action`, and the panel then shows `Cannot start: E0104` and `No driver enabled`, because Optics could not read config.yaml. Fix the rule, not the driver.
+
+## permissions
+
+Grants or denies Android app permissions for the app under test, before the app opens. The app then shows no permission prompt.
+
+```yaml
+permissions:
+  camera: allow
+  location: deny
+  android.permission.READ_CONTACTS: allow
+```
+
+- The value is `allow` or `deny`. Any other value stops the run before it starts, in the same way as a popup rule that is not valid.
+- The names are `camera`, `location`, `notifications`, `microphone`, `background_location`, `contacts`, `calendar`, `phone`, `call_log`, `sms`, `storage`, `photos`, `videos`, `audio`, `bluetooth`, `nearby_wifi`, `body_sensors` and `activity_recognition`, or a full `android.permission.*` name. An unknown name fails Launch App with E0501.
+- The capabilities need `appPackage`. See [Grant permissions before launch](/docs/platforms/android#grant-permissions-before-launch).
+- On iOS, Optics logs a warning and applies nothing. See [Answer system alerts](/docs/platforms/ios#answer-system-alerts).
 
 ## save_captures
 

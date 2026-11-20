@@ -311,7 +311,7 @@
 
   function suggestion(name, catalogue) {
     var match = closeMatch(slug(name), Object.keys(catalogue.keywords));
-    return match ? " Did you mean '" + title(match) + "'? (run `optics list` to see all keywords)" : "";
+    return match ? " Did you mean '" + title(match) + "'?" : "";
   }
 
   // ---- YAML steps: data_reader._tokens and _parse_module_step ---------------------------
@@ -675,7 +675,7 @@
   function dryRunModule(p, mod, store) {
     if (!moduleDef(p, mod.name) && !(slug(mod.name) in p.catalogue.keywords)) {
       mod.status = "FAIL";
-      return new Failure("E0402", "Unknown keyword or module: '" + mod.name + "'" + (suggestion(mod.name, p.catalogue) ? "." + suggestion(mod.name, p.catalogue) : ""), mod.step.at);
+      return new Failure("E0402", "'" + mod.name + "' is not a keyword or a module." + suggestion(mod.name, p.catalogue), mod.step.at);
     }
     for (var i = 0; i < mod.keywords.length; i++) {
       var kw = mod.keywords[i];
@@ -697,7 +697,7 @@
     var raw = (method && method.raw) || [];
     var resolved = split.params.map(function (param, i) { return raw.indexOf(i) >= 0 ? param.v : resolveParam(param, store); });
     defineNames(method, split, store);
-    if (!method) throw new Failure("E0402", "Keyword not found: " + step.keyword + "." + suggestion(step.keyword, p.catalogue), step.at);
+    if (!method) throw new Failure("E0402", "'" + step.keyword + "' is not a keyword." + suggestion(step.keyword, p.catalogue), step.at);
     var unbound = root.OpticsExplain.checkParams(step.keyword, method, split.params);
     if (unbound) throw new Failure("E0403", unbound, step.at);
     return resolved;
@@ -731,7 +731,7 @@
     var name = wholeVarName(param.v);
     if (name === null) return param.v;
     var values = store.get(name);
-    if (!values || !values.length) throw new Failure("E0201", "Element not found: " + name, param.at);
+    if (!values || !values.length) throw new Failure("E0201", "${" + name + "} is not defined in the project's elements", param.at);
     return values[0];
   }
 

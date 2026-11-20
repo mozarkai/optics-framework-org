@@ -60,7 +60,7 @@ def execute(url, work):
     shutil.copytree(SUITE, work / "birch-tests")
     started = datetime.now(timezone.utc)
     proc = subprocess.run(
-        [str(OPTICS), "execute", "birch-tests"],
+        [str(OPTICS), "execute", "birch-tests", "--output", "tree"],
         cwd=work, env={**os.environ, "BIRCH_URL": url}, capture_output=True, text=True,
     )
     return proc, started

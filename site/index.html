@@ -442,9 +442,9 @@ Element_Name,Element_ID
       - <span class="c-dim">uses:</span> actions/setup-python@v7
         <span class="c-dim">with:</span>
           <span class="c-dim">python-version:</span> <span class="c-lit">"3.12"</span>
-      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.11.5"</span>
+      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]"</span>
       - <span class="c-dim">run:</span> python -m playwright install --with-deps chromium
-      - <span class="c-dim">run:</span> <b>optics execute birch-tests</b> --no-use-printer
+      - <span class="c-dim">run:</span> <b>optics execute birch-tests</b>
       - <span class="c-dim">if:</span> always()
         <span class="c-dim">uses:</span> mikepenz/action-junit-report@v6
         <span class="c-dim">with:</span>
@@ -579,7 +579,7 @@ Element_Name,Element_ID
                 <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then run my Optics suite in CI.</p>
               </div>
               <div class="ho-split">
-                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job with the Optics version pinned</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
                 <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>The secrets your suite reads, added to your CI settings</li></ul></div>
               </div>
             </div>

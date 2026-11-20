@@ -21,7 +21,7 @@ const ORIGIN = "https://optics-framework.org";
 const PAGES = [
   { src: "pages/about.html", path: "about", title: "About Optics", description: "What Optics is, how it works and how it is licensed." },
   { src: "pages/contact.html", path: "contact", title: "Contact the Optics team", description: "Where to report bugs, ask questions and disclose security issues." },
-  { src: "pages/privacy.html", path: "privacy", title: "Privacy at Optics", description: "What optics-framework.org, the install scripts and the framework collect: no cookies, no analytics, no telemetry." },
+  { src: "pages/privacy.html", path: "privacy", title: "Privacy at Optics", description: "What optics-framework.org, the install scripts and the framework collect: no cookies and nothing loaded from other servers." },
 ];
 
 // GitHub Pages answers every missing path with the root 404.html, at any depth, so its
@@ -107,7 +107,7 @@ const PLAYGROUND = {
   src: "pages/playground.html",
   path: "playground",
   title: "Optics playground: run the real engine in your browser",
-  description: "Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.",
+  description: "Edit a YAML suite and run it with optics-framework 1.11.5 on Python in WebAssembly, against a demo shop app in the page.",
 };
 const engine = await buildEngine();
 writeFileSync(

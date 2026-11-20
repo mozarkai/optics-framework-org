@@ -66,8 +66,7 @@ test("every Python call fits the method's signature", () => {
 
 test("a miss shows the reply the release gave, with the step's own value", () => {
   const miss = STEPS[3];
-  assert.match(D.python(miss).res[1], /All 2 fallback combinations failed for press_element/);
-  assert.match(D.python(miss).res[1], /No valid strategies found for 'Sign in' in 'press_element'/);
+  assert.match(D.python(miss).res[1], /E0201: None of .+ and 'Sign in' is on the screen\./);
   assert.match(D.http(miss).res[1], /404 Not Found/);
   for (const s of STEPS.filter((x) => !x.result.ok)) {
     const all = ["python", "http", "mcp", "robot"].map((d) => D[d](s).res[1]).join("\n");

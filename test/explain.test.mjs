@@ -14,7 +14,7 @@ for (const [name, real] of Object.entries(goldens)) {
   test(`the explainer predicts real optics dry_run on ${name}`, () => {
     const result = OpticsSuite.dryRun(OpticsSuite.load(loadProject(dirOf(name)), catalogue));
     if (real.cases) {
-      const predicted = result.cases.map((c) => ({ name: c.name, kind: c.kind, status: c.status, ...(c.failure ? { code: c.failure.code, message: `Code.${c.failure.code}: ${c.failure.message}` } : {}) }));
+      const predicted = result.cases.map((c) => ({ name: c.name, kind: c.kind, status: c.status, ...(c.failure ? { code: c.failure.code, message: c.failure.message } : {}) }));
       assert.deepEqual(predicted, real.cases);
     } else {
       assert.ok(result.abort, "dry_run stopped before running, so the explainer must too");
@@ -29,7 +29,7 @@ test("every example suite is in the goldens", () => {
 });
 
 test("the catalogue matches the keywords optics list prints", () => {
-  assert.equal(Object.keys(catalogue.keywords).length, 51);
+  assert.equal(Object.keys(catalogue.keywords).length, 52);
   assert.equal(catalogue.keywords.press_element.title, "Press Element");
 });
 

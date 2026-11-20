@@ -796,7 +796,7 @@
   ].concat(box('Total Test Cases: 3 | Passed: <span class="t-ok">3</span> | Failed: 0')), { h: 480, bottom: true });
 
   // optics dry_run checks every keyword and ${name} without touching a device. The tree,
-  // the failure box and the suggestion are what 1.11.5 prints for a mistyped keyword.
+  // the Failures box, the suggestion and the hint are what 1.11.5 prints for a mistyped keyword.
   function tr(prefix, name, time, status) { return function (d) { return treeRow(prefix, name, time, status, d.narrow ? 30 : 52); }; }
   function box(text, title) { return [[panel(text, title ? { title: title, tone: "bad" } : null), 300]]; }
   var LOGIN = "//*[@resource-id='com.birch.shop:id/login']";
@@ -808,7 +808,7 @@
     [tr("├── ", "Suite Setup", "0.00s", "PASS"), 120],
     [tr("│   └── ", "Launch Birch", "0.00s", "PASS"), 120],
     [tr("│       └── ", "Launch App", "0.00s", "PASS"), 200],
-    [tr("└── ", "Shopper can buy running shoes", "0.00s", "FAIL"), 120],
+    [tr("└── ", "Shopper can buy running shoes", "0.01s", "FAIL"), 120],
     [tr("    ├── ", "Sign In", "0.00s", "FAIL"), 120],
     [tr("    │   ├── ", "Enter Text (//*[@resource-id='com.birch.shop:id/email'], ava@birch.shop)", "0.00s", "PASS"), 120],
     [tr("    │   ├── ", "Enter Text (//*[@resource-id='com.birch.shop:id/password'], correct-horse)", "0.00s", "PASS"), 120],
@@ -822,7 +822,7 @@
     [tr("        └── ", "Assert Presence (Added to cart)", "0.00s", "NOT_RUN"), 400],
   ].concat(
     box('Total Test Cases: 2 | Passed: 1 | Failed: <span class="t-bad">1</span>'),
-    box("Shopper can buy running shoes → step 'Press Elemnt (" + LOGIN + ")' — Code.E0402: Keyword not found: Press Elemnt. Did you mean <span class=\"t-ok\">'Press Element'</span>? (run `optics list` to see all keywords)", "Failure details"),
+    box("Shopper can buy running shoes › Sign In › Press Elemnt (" + LOGIN + ")\n<span class=\"t-bad\">'Press Elemnt' is not a keyword. Did you mean 'Press Element'?</span>\n<span class=\"t-var\">Run 'optics list' to see the keywords.</span>", "Failures"),
     [[DRY_RUN_SAYS, 200],
     [D("# fix the typo in modules.csv, then check again"), 900],
     ["$", "optics dry_run birch-tests"]],

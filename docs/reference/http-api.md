@@ -47,6 +47,9 @@ The server does not read config.yaml or the test files of your project. Each ses
 | `POST` | `/v1/sessions/start` | Starts a session from a [SessionConfig](#sessionconfig) and launches the app. Returns `{"session_id", "driver_id", "status": "created"}`. |
 | `POST` | `/v1/sessions/{id}/action` | Runs one keyword from an [ExecuteRequest](#executerequest). Returns `{"execution_id", "status": "SUCCESS", "data"}`. |
 | `POST` | `/v1/sessions/{id}/templates` | Uploads an image template: `{"name", "image_base64"}`. The image can be raw base64 or a `data:` URL. Use the name as an element for the rest of the session. Returns `{"name", "status": "ok"}`. |
+| `PUT` | `/v1/sessions/{id}/popup_rules` | Replaces the session's popup rules: `{"popup_rules": [...]}`. Returns `{"popup_rules": <count>}`. See [Popups over HTTP](#popups-over-http). |
+| `PUT` | `/v1/sessions/{id}/modules` | Replaces the session's modules and adds elements: `{"modules_csv", "elements_csv"}`. Returns `{"modules": <count>, "elements": <count>}`. |
+| `PUT` | `/v1/sessions/{id}/appium_settings` | Changes Appium settings of the running session: `{"settings": {...}}`. Returns `{"settings": [<names>]}`. Appium sessions only. |
 | `POST` | `/v1/sessions/{id}/api` | Replaces the session's API definitions for `Invoke API`. Send `{"api": {"collections": ...}}`. Returns 204. |
 | `GET` | `/v1/sessions/{id}/screenshot` | The current screen. `data.result` is a base64 PNG without a `data:` prefix, or `""` if the capture failed. |
 | `GET` | `/v1/sessions/{id}/driver-id` | The driver's own session id in `data.result`. |
@@ -128,11 +131,67 @@ Then run `Invoke API` with `<collection>.<api>`, such as `auth.token`:
 {"mode": "keyword", "keyword": "Invoke API", "params": ["auth.token"]}
 ```
 
-`data` holds the response: `status_code`, `headers`, `body` and `elapsed_ms`. The values that `extract` names go into the session variables, where later keywords can use them and `GET /v1/sessions/{id}/variables` shows them:
+`data` holds the response: `status_code`, `headers`, `body` and `elapsed_ms`. The values that `extract` names go into the session variables, and `GET /v1/sessions/{id}/variables` shows them. `/action` does not replace `${name}` in `params`, so read the value and send it in the next request:
 
 ```json
 {"variables": {"access_token": ["eyJhbGci..."], "otp": ["482913"]}}
 ```
+
+### Popups over HTTP
+
+Popup rules work over HTTP as in a suite, on Appium sessions. See [Handle popups](/docs/advanced/popups). Send the rules in `popup_rules` when you start the session. A rule that runs a module needs the module, so send it as CSV text in `modules_csv`, with the elements it uses in `elements_csv`:
+
+```json
+{
+  "driver_sources": [{"appium": {"url": "http://127.0.0.1:4723", "capabilities": {"platformName": "Android", "automationName": "UiAutomator2", "appPackage": "com.birch.shop", "appActivity": ".MainActivity"}}}],
+  "elements_sources": ["appium_find_element", "appium_page_source", "appium_screenshot"],
+  "popup_rules": [{"name": "survey", "detect": {"text_contains": ["Tell us how we did"]}, "action": {"type": "module", "target": "Close Survey"}}],
+  "modules_csv": "module_name,module_step,param_1\nClose Survey,Press Element,${survey_skip}\n",
+  "elements_csv": "Element_Name,Element_ID\nsurvey_skip,Not now\n",
+  "permissions": {"notifications": "allow"}
+}
+```
+
+To change them during the session, send the new list. The next step uses it. An empty list turns popup handling off:
+
+```shell
+$ curl -s -X PUT "http://127.0.0.1:8000/v1/sessions/$SID/popup_rules" \
+>   -H "Content-Type: application/json" \
+>   -d '{"popup_rules": [{"name": "rate_prompt", "detect": {"text_contains": ["Enjoying Birch?"]}, "action": {"type": "tap", "target": "Not now"}}]}'
+{"popup_rules":1}
+```
+
+`PUT /v1/sessions/{id}/modules` replaces all modules of the session and adds the elements to those it has. Empty text removes the modules. Text that has no `module_name` and `module_step` columns, or a row without them, returns `400` with E0501 and changes nothing:
+
+```shell
+$ curl -s -X PUT "http://127.0.0.1:8000/v1/sessions/$SID/modules" \
+>   -H "Content-Type: application/json" \
+>   -d '{"modules_csv": "module_name,module_step,param_1\nClose Survey,Press Element,${survey_skip}\n", "elements_csv": "Element_Name,Element_ID\nsurvey_skip,Not now\n"}'
+{"modules":1,"elements":1}
+```
+
+A rule that is not valid returns `400` with E0501, and the old rules stay:
+
+```json
+{"detail": {"type": "optics:config", "code": "E0501", "status": 400, "message": "popup_rules: rule 1 is invalid (: Value error, retry_step needs an action that dismisses the popup): 1 validation error for PopupRule", "hint": "Correct config.yaml, or add the missing file.", "details": null, "meta": null, "cause": null}}
+```
+
+A popup with no rule fails the step with `409` and E0206:
+
+```json
+{"detail": {"type": "optics:element", "code": "E0206", "status": 409, "message": "A popup with no rule is on screen: 'Enjoying Birch? Rate us in the store. Not now Rate'", "hint": "Add a rule for this popup to popup_rules.json, or close it before this step.", "details": null, "meta": null, "cause": null}}
+```
+
+`PUT /v1/sessions/{id}/appium_settings` changes [Appium settings](https://appium.io/docs/en/latest/guides/settings/) while the session runs, such as `autoClickAlertSelector` on iOS. See [Answer system alerts](/docs/platforms/ios#answer-system-alerts). A session with another driver returns `400`. When the device refuses a setting, the server returns `500`.
+
+```shell
+$ curl -s -X PUT "http://127.0.0.1:8000/v1/sessions/$SID/appium_settings" \
+>   -H "Content-Type: application/json" \
+>   -d '{"settings": {"waitForIdleTimeout": 100}}'
+{"settings":["waitForIdleTimeout"]}
+```
+
+Each request to `/action` starts a new popup run, so `max_per_run` counts within one request. Sessions save no screenshots or page sources for popups.
 
 ### Keyword list
 
@@ -160,6 +219,10 @@ The body of `POST /v1/sessions/start`. Every field is optional, but a session ne
 | `llm_provider` | string | The self-heal engine: `gemini`, `openai` or `anthropic`. Defaults to `OPTICS_LLM_PROVIDER`, else `gemini`. |
 | `llm_model` | string | The self-heal model. Defaults to `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini. `openai` and `anthropic` need one. |
 | `strict_element_match` | boolean | Accepts only exact text matches. |
+| `popup_rules` | list | Rules for popups that block a step. See [Popups over HTTP](#popups-over-http). |
+| `modules_csv` | string | Modules as CSV text, with the `module_name` and `module_step` columns, for a popup rule that runs a module. |
+| `elements_csv` | string | Elements as CSV text, with the `Element_Name` and `Element_ID` columns, that the modules use. |
+| `permissions` | object | Android permissions to set as the session starts, such as `{"camera": "allow"}`. See [permissions](/docs/reference/config#permissions). |
 | `appium_url`, `appium_config` | | Deprecated. Use `driver_sources`. |
 
 Engine names are the same as in [config.yaml](/docs/reference/config#engine-lists). LLM credentials never go in the request, and neither does the server the `openai` engine calls. Set them in the server's environment (`OPENAI_BASE_URL` for the server). A session cannot set `api_key_env` or the `anthropic` `platform`, so each engine reads its default variables, such as `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, and Claude runs on the Claude API. See [Environment variables](/docs/reference/cli#environment-variables).
@@ -192,7 +255,7 @@ The body of `POST /v1/sessions/{id}/action`.
 | `template_images` | object | `{"name": "<base64>"}` images available to this request only. A value can be raw base64 or a `data:image/png;base64,...` URL. See [Image templates](#image-templates). |
 | `test_case` | string | Not used. |
 
-The session has no elements file, so pass locators directly, or define variables first with keywords such as `Evaluate`.
+`/action` does not replace `${name}` in `params`, also when `elements_csv` or `Evaluate` defined `name`. Pass locators directly. `${name}` works in the steps of a module that the session runs, such as one from `modules_csv`.
 
 ## Responses
 
@@ -220,26 +283,23 @@ Unlike `optics execute`, the HTTP API returns keyword results, so `Get Text`, `A
 | `400` | The request asks the server to read its own environment or files. See below. | A coded error with `E0501`. |
 | `404` | The session doesn't exist. | `{"detail": "Session not found"}` |
 | `404` | The keyword doesn't exist. | A coded error with `E0402`. |
-| `4xx`/`5xx` | A keyword failed with an Optics error. The status comes from the code, for example `404` for `E0201`. | `{"detail": {"type", "code", "status", "message", "details", "meta", "cause"}}` |
+| `4xx`/`5xx` | A keyword failed with an Optics error. The status comes from the code, for example `404` for `E0201`. | `{"detail": {"type", "code", "status", "message", "hint", "details", "meta", "cause"}}` |
 | `500` | A keyword failed with an error that has no Optics code. | `{"detail": "Execution failed: <message>"}` |
 | `500` | The session couldn't start. | `{"detail": "Session creation failed: ..."}` or a coded error. |
 
 A keyword that does not find its element returns `404`:
 
 ```json
-{"detail": {"type": "optics:element", "code": "E0201", "status": 404, "message": "No valid strategies found for 'css=#nope' in 'press_element'", "details": null, "meta": null, "cause": "E0201: Element 'css=#nope' not found."}}
+{"detail": {"type": "optics:element", "code": "E0201", "status": 404, "message": "'css=#nope' is not on the screen.", "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.", "details": null, "meta": null, "cause": null}}
 ```
 
+- `hint` says what to do next.
 - `cause` is the error that caused this one, or `null`.
-- When you send several values for one parameter, Optics tries the next value only when the element is not found. It tries a maximum of 20 combinations. When each try fails, the message is `All <n> fallback combinations failed for keyword '<keyword>':` and lists the last five tries. The code and status are those of the last try.
+- When you send several values for one parameter, Optics tries the next value only when the element is not found. It tries a maximum of 20 combinations. When no value is found, the message names them all, for example `None of 'css=#nope' and 'css=#nope2' is on the screen.`
 - `Read Data` with a file or an `ENV:` path returns `400` with `E0501`.
 - The `code` field holds the code alone, such as `E0402`. See [Error codes](/docs/reference/errors).
 - `DELETE /stop` on an unknown session returns 500 with `Session termination failed: 404: Session not found`.
 - If closing the app fails during `DELETE /stop`, the session isn't removed. Call it again.
-
-:::mistake[The code reads `Code.E0201` on Python 3.11 and later]
-The server writes the `code` field and the code in `cause` with the enum class name in front: `"code": "Code.E0201"`, `"cause": "Code.E0201: Element 'css=#nope' not found."`. Until the fix ships, remove a leading `Code.` before you compare the code, for example `code.removeprefix("Code.")` in Python.
-:::
 
 ## Streams
 

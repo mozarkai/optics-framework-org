@@ -135,7 +135,7 @@ Optics is free. Your model provider bills its usage at its own rates. A local mo
 
 ### Will self-heal hide real bugs?
 
-It can. A healed step passes, and the run's summary doesn't say it healed. Turn on `file_log: true` and search the logs for `AI self-heal` after each run, then update the element so the step passes without help. See [Find out what healed](/docs/elements/self-heal#find-out-what-healed).
+It can. A healed step passes, and the tree in the terminal shows it as passed. The JUnit report marks the step with `healed="true"` and lists the steps that the model did. Read it after each run, then update the element so the step passes without help. See [Find out what healed](/docs/elements/self-heal#find-out-what-healed).
 
 ## Elements
 

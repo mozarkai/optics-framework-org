@@ -157,12 +157,13 @@ window.OPTICS_DOORS = {
      "body": {
       "detail": {
        "type": "optics:element",
-       "code": "Code.E0201",
+       "code": "E0201",
        "status": 404,
-       "message": "No valid strategies found for '{target}' in 'press_element'",
+       "message": "'{target}' is not on the screen.",
+       "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
        "details": null,
        "meta": null,
-       "cause": "Code.E0201: Element '{target}' not found."
+       "cause": null
       }
      }
     },
@@ -171,12 +172,13 @@ window.OPTICS_DOORS = {
      "body": {
       "detail": {
        "type": "optics:element",
-       "code": "Code.E0201",
+       "code": "E0201",
        "status": 404,
-       "message": "No valid strategies found for '{target}' in 'enter_text'",
+       "message": "'{target}' is not on the screen.",
+       "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
        "details": null,
        "meta": null,
-       "cause": "Code.E0201: Element '{target}' not found."
+       "cause": null
       }
      }
     },
@@ -185,9 +187,10 @@ window.OPTICS_DOORS = {
      "body": {
       "detail": {
        "type": "optics:element",
-       "code": "Code.E0201",
+       "code": "E0201",
        "status": 404,
-       "message": "['{target}'] not found based on rule 'any'.",
+       "message": "'{target}' is not on the screen.",
+       "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
        "details": null,
        "meta": null,
        "cause": null
@@ -201,9 +204,10 @@ window.OPTICS_DOORS = {
      "body": {
       "detail": {
        "type": "optics:element",
-       "code": "Code.E0201",
+       "code": "E0201",
        "status": 404,
-       "message": "All 2 fallback combinations failed for keyword 'Press Element':\n('{first}',) -> Code.E0201: No valid strategies found for '{first}' in 'press_element' (cause: Code.E0201: Element '{first}' not found.)\n('{last}',) -> Code.E0201: No valid strategies found for '{last}' in 'press_element' (cause: Code.E0201: Element '{last}' not found.)",
+       "message": "None of '{first}' and '{last}' is on the screen.",
+       "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
        "details": null,
        "meta": null,
        "cause": null
@@ -215,9 +219,10 @@ window.OPTICS_DOORS = {
      "body": {
       "detail": {
        "type": "optics:element",
-       "code": "Code.E0201",
+       "code": "E0201",
        "status": 404,
-       "message": "All 2 fallback combinations failed for keyword 'Enter Text':\n('{first}', '{text}') -> Code.E0201: No valid strategies found for '{first}' in 'enter_text' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '{text}') -> Code.E0201: No valid strategies found for '{last}' in 'enter_text' (cause: Code.E0201: Element '{last}' not found.)",
+       "message": "None of '{first}' and '{last}' is on the screen.",
+       "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
        "details": null,
        "meta": null,
        "cause": null
@@ -235,13 +240,13 @@ window.OPTICS_DOORS = {
    "go_back": null
   },
   "miss": {
-   "press_element": "FallbackExhausted: Code.E0201: No valid strategies found for '{target}' in 'press_element' (cause: Code.E0201: Element '{target}' not found.)",
-   "enter_text": "FallbackExhausted: Code.E0201: No valid strategies found for '{target}' in 'enter_text' (cause: Code.E0201: Element '{target}' not found.)",
-   "assert_presence": "FallbackExhausted: Code.E0201: ['{target}'] not found based on rule 'any'."
+   "press_element": "FallbackExhausted: E0201: '{target}' is not on the screen.",
+   "enter_text": "FallbackExhausted: E0201: '{target}' is not on the screen.",
+   "assert_presence": "FallbackExhausted: E0201: '{target}' is not on the screen."
   },
   "miss_list": {
-   "press_element": "FallbackExhausted: Code.E0201: All 2 fallback combinations failed for press_element:\n('{first}', '1', '0', '0', '0') -> Code.E0201: No valid strategies found for '{first}' in 'press_element' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '1', '0', '0', '0') -> Code.E0201: No valid strategies found for '{last}' in 'press_element' (cause: Code.E0201: Element '{last}' not found.)",
-   "enter_text": "FallbackExhausted: Code.E0201: All 2 fallback combinations failed for enter_text:\n('{first}', '{text}') -> Code.E0201: No valid strategies found for '{first}' in 'enter_text' (cause: Code.E0201: Element '{first}' not found.)\n('{last}', '{text}') -> Code.E0201: No valid strategies found for '{last}' in 'enter_text' (cause: Code.E0201: Element '{last}' not found.)"
+   "press_element": "FallbackExhausted: E0201: None of '{first}' and '{last}' is on the screen.",
+   "enter_text": "FallbackExhausted: E0201: None of '{first}' and '{last}' is on the screen."
   }
  },
  "mcp": {
@@ -367,6 +372,23 @@ window.OPTICS_DOORS = {
     ],
     "required": [
      "keyword"
+    ]
+   },
+   "send_feedback": {
+    "params": [
+     "description",
+     "error",
+     "impact",
+     "kind",
+     "suggestion",
+     "task",
+     "tool"
+    ],
+    "required": [
+     "description",
+     "impact",
+     "kind",
+     "task"
     ]
    }
   },

@@ -103,7 +103,7 @@ This check uses a browser on this machine. It needs no device.
 
 2. Call `start_session` with `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`. The reply gives the session id and the screen as rows, such as `e7 a "Learn more" [tap]`.
 3. Call `check` with `present` set to the quoted text of one row from that reply. The reply must start with `check -> passed`.
-4. Call `terminate_session`. The reply ends with the address of the steps, in the form `Its <n> recorded steps are at optics://session/<id>/steps.`
+4. Call `terminate_session`. The first line of the reply gives the address of the steps, in the form `Its <n> recorded steps are at optics://session/<id>/steps.`
 
 The server can write an `execution_output` folder in the folder where your client started it. Do not commit that folder.
 
@@ -138,7 +138,7 @@ Do the section below that matches the task the person gave you. If the task was 
 ### Run the suite in CI
 
 1. Find the suite: a folder with `config.yaml` and test cases. If there is none, do "Test a web app" first.
-2. Write the CI job from [Run tests in CI](https://optics-framework.org/docs/run/ci.md), for example `.github/workflows/optics.yml`. Pin the version that `OPTICS --version` prints. For a web suite, set `headless: true`.
+2. Write the CI job from [Run tests in CI](https://optics-framework.org/docs/run/ci.md), for example `.github/workflows/optics.yml`. Keep the install line without a version, as on that page. For a web suite, set `headless: true`.
 3. List every environment variable that the suite reads with `ENV:`. Ask the person to add each one as a secret in the CI settings.
 4. Run `OPTICS dry_run <folder>` before you finish. Do not push the workflow unless the person asks.
 
@@ -150,7 +150,7 @@ If your client reads Agent Skills, save [SKILL.md](https://optics-framework.org/
 
 Tell the person, in a few lines:
 
-- the Optics version and the path of `OPTICS`,
+- the Optics version and the path of `OPTICS`, and the newer release if a reply said `Tell the user once`,
 - where you registered the MCP server,
 - the files you wrote or changed,
 - the command that runs the suite,
