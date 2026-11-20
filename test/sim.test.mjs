@@ -93,3 +93,18 @@ test("a shared link restores the settings, and a bad one gives the defaults", ()
   same(S.decode(S.encode(cfg)), cfg);
   same(S.decode("<script>.9999.x.7.1-2"), S.defaults());
 });
+
+test("every run counts once: green, false failure or bug caught add up to the runs", () => {
+  for (const seed of SEEDS) for (const s of S.STRATEGIES) {
+    const t = S.tally(S.simulate(loud(seed)).releases, s);
+    const caughtRuns = runs(loud(seed), s).filter((r) => r.verdict === "bug").length;
+    assert.equal(t.green + t.false + caughtRuns, t.runs, `${seed} ${s}`);
+  }
+});
+
+test("a run that passes with a bug unseen is still a green run", () => {
+  const cfg = { ...S.defaults(), odds: { id: 0, word: 0, style: 0, pic: 0, gone: 0, out: 0, blip: 100 } };
+  const t = S.tally(S.simulate(cfg).releases, "ai");
+  assert.equal(t.green, t.runs);
+  assert.equal(t.unseen, t.runs);
+});

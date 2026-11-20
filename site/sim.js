@@ -177,7 +177,8 @@
       var x = r.runs[strategy];
       t.runs++;
       if (x.verdict === "false") t.false++;
-      if (/^(pass|fallback|healed)$/.test(x.verdict)) t.green++;
+      // A run that exits 0 is green, even when a bug slipped past it (verdict "missed").
+      if (/^(pass|fallback|healed|missed)$/.test(x.verdict)) t.green++;
       t.healed += x.steps.filter(function (s) { return s.st === "healed"; }).length;
       t.edits += x.fixes.length;
       t.caught += x.caught.length;
