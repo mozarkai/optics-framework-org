@@ -72,7 +72,7 @@ Every element can have several identities, tried cheapest first:
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
 
-Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/releases
+Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/ship
 
 ## One suite, every screen
 
@@ -119,29 +119,11 @@ jobs:
 
 ## Built in the open
 
-- 9,347 downloads from PyPI by pip, uv and requests, 18 Apr 2025 to 17 Nov 2026, out of 75,053 downloads in all (the rest are mirrors, browsers and unnamed clients). Source: PyPI public download logs via ClickPy, https://clickpy.clickhouse.com/dashboard/optics-framework.
-- 100 stars and 30 forks on GitHub, read 18 Nov 2026. Source: https://github.com/mozarkai/optics-framework.
-- 12 releases in the 90 days to 18 Nov 2026. Source: https://github.com/mozarkai/optics-framework/releases.
+- 9,411 downloads from PyPI by pip, uv and requests, 18 Apr 2025 to 19 Nov 2026, out of 75,218 downloads in all (the rest are mirrors, browsers and unnamed clients). Source: PyPI public download logs via ClickPy, https://clickpy.clickhouse.com/dashboard/optics-framework.
+- 100 stars and 31 forks on GitHub, read 20 Nov 2026. Source: https://github.com/mozarkai/optics-framework.
+- 12 releases in the 90 days to 20 Nov 2026. Source: https://github.com/mozarkai/optics-framework/releases.
 
-What the last three releases added:
-
-- [1.11.4](https://github.com/mozarkai/optics-framework/releases/tag/1.11.4), 17 Nov 2026:
-  - Name the report after the project name kept in config.yaml (https://github.com/mozarkai/optics-framework/pull/719)
-  - Cut agent turns and tokens, and fix what the runs found (https://github.com/mozarkai/optics-framework/pull/720)
-  - Drive desktop apps through the Xa11y driver (https://github.com/mozarkai/optics-framework/pull/714)
-- [1.11.3](https://github.com/mozarkai/optics-framework/releases/tag/1.11.3), 10 Nov 2026, 9 fixes:
-  - Keep small models on the target name (https://github.com/mozarkai/optics-framework/pull/704)
-  - Accept API keys in config.yaml (https://github.com/mozarkai/optics-framework/pull/706)
-  - Mark setup and teardown in the report and stop tests a failed setup guards (https://github.com/mozarkai/optics-framework/pull/712)
-- [1.11.2](https://github.com/mozarkai/optics-framework/releases/tag/1.11.2), 6 Nov 2026, 8 fixes:
-  - Drive MCP and live NL mode by refs from one screen snapshot (https://github.com/mozarkai/optics-framework/pull/673)
-  - Remote browsers over CDP/Playwright protocol, configurable timeouts and phone emulation (https://github.com/mozarkai/optics-framework/pull/629)
-  - Drive mobile web pages through the webview context (CSS / DOM XPath) (https://github.com/mozarkai/optics-framework/pull/631)
-  - Start a new context signed in from a storage_state file (https://github.com/mozarkai/optics-framework/pull/656)
-  - Resolve environment variables and relative paths in config files (https://github.com/mozarkai/optics-framework/pull/688)
-  - Fetch screenshots over HTTP with a bearer token (https://github.com/mozarkai/optics-framework/pull/658)
-  - Run optics execute cleanly inside an environment (https://github.com/mozarkai/optics-framework/pull/690)
-  - Press, type and clear on TV web apps with D-pad focus (https://github.com/mozarkai/optics-framework/pull/693)
+The latest release is [1.11.4](https://github.com/mozarkai/optics-framework/releases/tag/1.11.4), 17 Nov 2026: Desktop apps: test macOS, Windows and Linux apps with the same CSV suites. Every release and what it added: https://optics-framework.org/releases
 
 ## Get started
 
