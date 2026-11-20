@@ -1,15 +1,15 @@
 {
   "pypi": {
-    "retrieved": "2026-11-18",
+    "retrieved": "2026-11-20",
     "from": "2025-04-18",
-    "to": "2026-11-17",
+    "to": "2026-11-19",
     "installers": {
-      "bandersnatch": 36843,
-      "unknown": 18075,
-      "Browser": 10641,
-      "requests": 5338,
-      "pip": 3707,
-      "uv": 302,
+      "bandersnatch": 36883,
+      "unknown": 18114,
+      "Browser": 10663,
+      "requests": 5342,
+      "pip": 3737,
+      "uv": 332,
       "Nexus": 82,
       "devpi": 63,
       "Artifactory": 2
@@ -93,14 +93,14 @@
       ],
       [
         "2026-11",
-        250
+        314
       ]
     ]
   },
   "github": {
-    "retrieved": "2026-11-18",
+    "retrieved": "2026-11-20",
     "stars": 100,
-    "forks": 30,
+    "forks": 31,
     "releases": [
       {
         "tag": "1.11.4",

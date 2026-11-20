@@ -7,6 +7,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
 import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
+import { releasesBody, releasesMarkdown } from "./lib/releases.mjs";
 import { loadRun, runBody, runCard, runMarkdown } from "./lib/run.mjs";
 import { playTabs } from "./lib/play.mjs";
 import { buildEngine } from "./lib/engine.mjs";
@@ -196,7 +197,18 @@ const fill = (file, marker, text) => {
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
 const proof = loadProof();
-fill("out/index.html", "<!-- proof -->", proofBand(proof));
+const headlines = JSON.parse(readFileSync("site/release.json", "utf8")).releases;
+fill("out/index.html", "<!-- proof -->", proofBand(proof, headlines));
+// The release history. Old links to the simulator, which used to live here, carry ?sim= or #simulator.
+const RELEASES_PAGE = {
+  path: "releases",
+  title: "Optics releases: what each version added",
+  description: "Every published release of optics-framework, newest first, with the features each one added and how many fixes it shipped.",
+  body: releasesBody(proof, headlines, ORIGIN),
+  head: `<link rel="alternate" type="text/markdown" href="releases.md" title="Optics releases, as Markdown">\n  <link rel="stylesheet" href="proof.css">\n  <script>if (/[?&]sim=/.test(location.search) || location.hash === "#simulator") location.replace("ship" + location.search + location.hash);</script>`,
+};
+writeFileSync("out/releases.html", render(RELEASES_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/releases` }));
+writeFileSync("out/releases.md", releasesMarkdown(proof, headlines));
 fill("out/index.html", "<!-- run:card -->", `<div class="run-card">${runCard(run)}</div>`);
 const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   .split(/\n\n+/)
@@ -209,7 +221,7 @@ const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   });
 fill("out/index.html", "<!-- film:chapters -->", `<ol aria-label="Chapters">${filmChapters.join("")}</ol>`);
 
-fill("out/index.md", "<!-- proof -->", proofMarkdown(proof));
+fill("out/index.md", "<!-- proof -->", proofMarkdown(proof, headlines, ORIGIN));
 fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
 fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
 
@@ -263,6 +275,7 @@ writeFileSync(
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
     { loc: `${ORIGIN}/explain`, lastmod: lastModified("pages/explain.html") },
+    { loc: `${ORIGIN}/releases`, lastmod: proof.github.releases[0].date },
     ...docs.entries,
   ]),
 );
