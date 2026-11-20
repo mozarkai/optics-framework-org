@@ -98,6 +98,17 @@ test("every page links the trust pages from its footer", () => {
   }
 });
 
+test("every page shares one footer that names the latest release and links the release history", () => {
+  const latest = JSON.parse(readFileSync("content/proof.json", "utf8")).github.releases[0].tag;
+  const pages = ["index.html", "404.html", "blog.html", "releases.html", "ship.html", "docs/index.html", "docs/guides/index.html", ...TRUST_PAGES.map((p) => `${p}.html`)];
+  const sitemap = (html) => html.match(/<footer class="foot"[\s\S]*<\/footer>/)[0].replace(/(href|aria-label)="[^"]*"/g, "");
+  for (const page of pages) {
+    const footer = read(page).match(/<footer class="foot"[\s\S]*<\/footer>/)[0];
+    assert.match(footer, new RegExp(`<a class="foot-rel" href="[^"]*releases">[\\s\\S]*?${latest.replaceAll(".", "\\.")}`), `${page} footer does not name ${latest}`);
+    assert.equal(sitemap(read(page)).replace(/\s*<div class="wrap foot-night">[\s\S]*?<\/div>/, ""), sitemap(read("about.html")), `${page} footer differs from the others`);
+  }
+});
+
 test("relative links on every page resolve to a built file", () => {
   for (const page of readdirSync("out").filter((f) => f.endsWith(".html") && f !== "404.html")) {
     for (const [, url] of read(page).matchAll(/(?:href|src|poster)="([^"#]+)"/g)) {

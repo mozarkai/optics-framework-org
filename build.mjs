@@ -10,6 +10,7 @@ import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
 import { releasesBody, releasesMarkdown } from "./lib/releases.mjs";
 import { loadRun, runBody, runCard, runMarkdown } from "./lib/run.mjs";
 import { playTabs } from "./lib/play.mjs";
+import { siteFooter } from "./lib/footer.mjs";
 import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
@@ -36,6 +37,7 @@ function render(page, { root, home, canonical }) {
     head: page.head ?? "",
     root,
     home,
+    footer: footer(root, home),
   };
   return layout
     .replace("{{body}}", () => (page.body ?? readFileSync(page.src, "utf8")).trimEnd())
@@ -74,6 +76,8 @@ function pageMarkdown(html) {
 }
 
 const base = process.env.PAGES_BASE_PATH ?? "";
+const proof = loadProof();
+const footer = (root, home, night) => siteFooter({ root, home, night, latest: proof.github.releases[0] });
 
 rmSync("out", { recursive: true, force: true });
 cpSync("site", "out", { recursive: true });
@@ -196,7 +200,6 @@ const fill = (file, marker, text) => {
 };
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
-const proof = loadProof();
 const headlines = JSON.parse(readFileSync("site/release.json", "utf8")).releases;
 fill("out/index.html", "<!-- proof -->", proofBand(proof, headlines));
 // The release history. Old links to the simulator, which used to live here, carry ?sim= or #simulator.
@@ -209,6 +212,7 @@ const RELEASES_PAGE = {
 };
 writeFileSync("out/releases.html", render(RELEASES_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/releases` }));
 writeFileSync("out/releases.md", releasesMarkdown(proof, headlines));
+fill("out/index.html", "<!-- footer -->", footer("", "", true));
 fill("out/index.html", "<!-- run:card -->", `<div class="run-card">${runCard(run)}</div>`);
 const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   .split(/\n\n+/)
@@ -248,7 +252,7 @@ writeFileSync(
 );
 
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
-const docs = buildDocs({ lastModified });
+const docs = buildDocs({ lastModified, footer });
 
 // Every page in one file for agents: the homepage, about and contact, the docs in reading
 // order (without the Contribute section), then privacy. The articles stay out to keep the
