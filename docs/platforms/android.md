@@ -233,6 +233,36 @@ To press Back, use the Go Back keyword.
 
 Android's [KeyEvent list](https://developer.android.com/reference/android/view/KeyEvent) has every number. To press Enter after typing, you can also write `Enter Text Using Keyboard,<enter>`. See [Press Keycode](https://optics-framework.org/docs/reference/keywords/actions#press-keycode) for details.
 
+## Grant permissions before launch
+
+A permission prompt can cover the first screen of the app. Set `permissions` in config.yaml, and Optics grants or denies each permission before the app opens:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - appium:
+      enabled: true
+      url: http://127.0.0.1:4723
+      capabilities:
+        platformName: Android
+        automationName: UiAutomator2
+        appPackage: com.birch.shop
+        appActivity: .MainActivity
+permissions:
+  camera: allow
+  notifications: allow
+  location: deny
+```
+
+- Optics starts the session with the app closed, sets the permissions with Appium's `mobile: changePermissions`, then opens `appActivity`. The app shows no prompt for these permissions.
+- The capabilities need `appPackage`. Without it, Optics logs a warning and sets nothing.
+- With `autoLaunch: false`, Optics sets the permissions as the session starts, and you open the app yourself. With `autoWebview: true` or a `browserName`, the app opens as the session starts, and Optics sets the permissions after that.
+- `location` sets both the fine and the coarse location permission. See [permissions](https://optics-framework.org/docs/reference/config#permissions) for every name. A full name such as `android.permission.READ_CONTACTS` also works.
+- An unknown name fails Launch App with E0501. When Appium cannot set one permission, Optics logs a warning and sets the others.
+
+For other popups, such as an offer or a rating request, write a popup rule. See [Handle popups](https://optics-framework.org/docs/advanced/popups).
+
 ## Tips
 
 - **Steps do not wait for an idle screen.** UiAutomator2 waits up to 10 seconds for the app to stop changing before each command. Optics sets this limit to 1 second. To change it, set `waitForIdleTimeout` in milliseconds under `appium:settings`. `0` turns the wait off.
@@ -258,6 +288,7 @@ Android's [KeyEvent list](https://developer.android.com/reference/android/view/K
 - [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web)
 - [Test TV apps](https://optics-framework.org/docs/platforms/tv)
 - [Define elements](https://optics-framework.org/docs/elements/define)
+- [Handle popups](https://optics-framework.org/docs/advanced/popups)
 - [Run tests in CI](https://optics-framework.org/docs/run/ci)
 - [config.yaml reference](https://optics-framework.org/docs/reference/config)
 - [CLI reference](https://optics-framework.org/docs/reference/cli)

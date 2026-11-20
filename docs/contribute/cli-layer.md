@@ -110,14 +110,14 @@ Without a template, `create_project` writes a starter project instead of copying
 **Usage:**
 
 ```bash
-optics execute ./my_project --runner test_runner --use-printer
+optics execute ./my_project --runner test_runner --output tree
 ```
 
 **Arguments:**
 
 - `folder_path` (required): Path to the project folder.
 - `--runner` (optional): Test runner to use (default: `test_runner`).
-- `--use-printer` / `--no-use-printer`: Enable or disable the live result printer. The printer is on by default.
+- `--output` (optional): `auto` (default) is the live tree on a terminal and plain lines otherwise; `tree`, `plain`, `jsonl` or `none` pick one. Plain and JSONL send logs to stderr. `--use-printer` is `--output tree` and `--no-use-printer` is `--output none`.
 - `--include` / `--exclude` (optional): Select test cases by name (case-insensitive, `*`/`?` wildcards). Either flag replaces the `include`/`exclude` lists from `config.yaml` for the run. Matching lives in `optics_framework/helper/case_selection.py`, and unknown names abort with exit code 3 before a session is created.
 
 **Flow:**
@@ -165,7 +165,7 @@ optics dry_run ./my_project --runner test_runner
 
 - `folder_path` (required): Path to the project folder.
 - `--runner` (optional): Test runner to use.
-- `--use-printer` / `--no-use-printer`: Enable or disable the result printer.
+- `--output` (optional): Same choices as `optics execute`.
 - `--include` / `--exclude` (optional): Same test case selection as `optics execute`.
 
 **Behavior:** Similar to `ExecuteCommand`, but it validates test cases without performing actual actions. Use it for syntax checking and validation. It checks the keywords, their parameters and the names they use. It does not check locators, the app or the device, and it never runs the driver preflight.

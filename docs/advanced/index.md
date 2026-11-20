@@ -19,4 +19,4 @@ Most suites never need the features in this section. A list of modules with good
 - [Use Optics from Python](https://optics-framework.org/docs/create/python): Call keywords from your own scripts.
 
 **How logic runs in a suite:**
-Flow-control keywords run other modules. Steps inside those modules work slightly differently from top-level steps: they use only the first value of each element, and they don't accept `name=value` parameters. Keep modules that run inside loops and conditions simple, and give their elements a reliable first value.
+Flow-control keywords run other modules. Steps inside those modules run like top-level steps, with fallbacks and `name=value` parameters, but they don't appear separately in the run tree.

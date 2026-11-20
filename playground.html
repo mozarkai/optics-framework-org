@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Optics playground: run the real engine in your browser</title>
-  <meta name="description" content="Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.">
-  <meta name="ai-summary" content="Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.">
+  <meta name="description" content="Edit a YAML suite and run it with optics-framework 1.11.5 on Python in WebAssembly, against a demo shop app in the page.">
+  <meta name="ai-summary" content="Edit a YAML suite and run it with optics-framework 1.11.5 on Python in WebAssembly, against a demo shop app in the page.">
   <link rel="canonical" href="https://optics-framework.org/playground">
   <link rel="alternate" type="text/markdown" href="playground.md" title="Optics playground: run the real engine in your browser, as Markdown">
   <link rel="stylesheet" href="playground.css?v=57a201b36b">
   <link rel="stylesheet" href="engine.css?v=d8951bfa04">
   <meta property="og:title" content="Optics playground: run the real engine in your browser">
-  <meta property="og:description" content="Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.">
+  <meta property="og:description" content="Edit a YAML suite and run it with optics-framework 1.11.5 on Python in WebAssembly, against a demo shop app in the page.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="website">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
@@ -61,7 +61,7 @@
         <header class="eng-head">
           <p class="label">Playground</p>
           <h1 class="eng-h" id="eng-h">Run Optics in your browser.</h1>
-          <p class="eng-lede">This page runs the <a href="https://pypi.org/project/optics-framework/1.11.4/">optics-framework 1.11.4</a> wheel from PyPI on Python, compiled to WebAssembly. Edit the suite, then run it on Birch.</p>
+          <p class="eng-lede">This page runs the <a href="https://pypi.org/project/optics-framework/1.11.5/">optics-framework 1.11.5</a> wheel from PyPI on Python, compiled to WebAssembly. Edit the suite, then run it on Birch.</p>
         </header>
 
         <div class="eng-lab" data-state="off">
@@ -121,7 +121,7 @@
         <div class="eng-facts">
           <h2 class="eng-h2">What runs here</h2>
           <dl>
-            <div><dt>Optics</dt><dd>The optics-framework 1.11.4 wheel from PyPI, unchanged: suite loading, <code>dry_run</code>, keywords, element fallbacks, events and the JUnit report.</dd></div>
+            <div><dt>Optics</dt><dd>The optics-framework 1.11.5 wheel from PyPI, unchanged: suite loading, <code>dry_run</code>, keywords, element fallbacks, events and the JUnit report.</dd></div>
             <div><dt>Python</dt><dd>CPython 3.14 in WebAssembly, from <a href="https://pyodide.org/">Pyodide</a> 314.0.8, with numpy, pandas, lxml, pydantic and the other libraries Optics imports. This site serves every file.</dd></div>
             <div><dt>Driver</dt><dd>On your machine, Optics drives apps through Appium, Playwright or Selenium. Here, a small driver written for this page drives Birch, and an element source reads Birch as an Android-style UI tree.</dd></div>
             <div><dt>Left out</dt><dd>Image and OCR matching (OpenCV), screenshot comparison (scikit-image) and the pytest runner. Text matching uses difflib, not python-Levenshtein, so a near match can score differently.</dd></div>
@@ -129,7 +129,7 @@
           </dl>
         </div>
       </section>
-      <script type="application/json" id="engine-manifest">{"core":"engine/pyodide-314.0.8/","coreSize":13530536,"wheels":[{"file":"annotated_types-0.7.0-py3-none-any.whl","size":11963},{"file":"beautifulsoup4-4.14.3-py3-none-any.whl","size":107721},{"file":"certifi-2026.4.22-py3-none-any.whl","size":135707},{"file":"charset_normalizer-3.4.7-py3-none-any.whl","size":61958},{"file":"idna-3.11-py3-none-any.whl","size":71008},{"file":"lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2145850},{"file":"numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2960568},{"file":"packaging-26.1-py3-none-any.whl","size":95852},{"file":"pandas-3.0.2-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":4177749},{"file":"pydantic-2.12.5-py3-none-any.whl","size":463578},{"file":"pydantic_core-2.41.5-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":1310164},{"file":"pygments-2.20.0-py3-none-any.whl","size":1231151},{"file":"python_dateutil-2.9.0.post0-py2.py3-none-any.whl","size":229892},{"file":"pytz-2026.1.post1-py2.py3-none-any.whl","size":510489},{"file":"pyyaml-6.0.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":112901},{"file":"requests-2.33.1-py3-none-any.whl","size":64947},{"file":"rich-14.3.3-py3-none-any.whl","size":310459},{"file":"six-1.17.0-py2.py3-none-any.whl","size":11050},{"file":"soupsieve-2.8.3-py3-none-any.whl","size":37015},{"file":"typing_extensions-4.15.0-py3-none-any.whl","size":44613},{"file":"typing_inspection-0.4.2-py3-none-any.whl","size":14610},{"file":"urllib3-2.6.3-py3-none-any.whl","size":131580},{"file":"fuzzywuzzy-0.18.0-py2.py3-none-any.whl","size":18272},{"file":"jsonpath_ng-1.7.0-py2-none-any.whl","size":30106},{"file":"ply-3.11-py2.py3-none-any.whl","size":49567},{"file":"python_json_logger-3.3.0-py3-none-any.whl","size":15163},{"file":"optics_framework-1.11.4-py3-none-any.whl","size":744643}],"python":[{"path":"cv2/__init__.py","v":"216ce61146"},{"path":"optics_framework/engines/drivers/birch.py","v":"6d8d89889f"},{"path":"optics_framework/engines/elementsources/birch_page_source.py","v":"506f64bd65"},{"path":"optics_page.py","v":"6c8447bb4f"},{"path":"pytest/__init__.py","v":"45ac3c9fde"},{"path":"skimage/__init__.py","v":"9783b10e25"},{"path":"skimage/metrics.py","v":"67b20102d7"}],"optics":"optics_framework-1.11.4-py3-none-any.whl"}</script>
+      <script type="application/json" id="engine-manifest">{"core":"engine/pyodide-314.0.8/","coreSize":13530536,"wheels":[{"file":"annotated_types-0.7.0-py3-none-any.whl","size":11963},{"file":"beautifulsoup4-4.14.3-py3-none-any.whl","size":107721},{"file":"certifi-2026.4.22-py3-none-any.whl","size":135707},{"file":"charset_normalizer-3.4.7-py3-none-any.whl","size":61958},{"file":"idna-3.11-py3-none-any.whl","size":71008},{"file":"lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2145850},{"file":"numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2960568},{"file":"packaging-26.1-py3-none-any.whl","size":95852},{"file":"pandas-3.0.2-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":4177749},{"file":"pydantic-2.12.5-py3-none-any.whl","size":463578},{"file":"pydantic_core-2.41.5-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":1310164},{"file":"pygments-2.20.0-py3-none-any.whl","size":1231151},{"file":"python_dateutil-2.9.0.post0-py2.py3-none-any.whl","size":229892},{"file":"pytz-2026.1.post1-py2.py3-none-any.whl","size":510489},{"file":"pyyaml-6.0.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":112901},{"file":"requests-2.33.1-py3-none-any.whl","size":64947},{"file":"rich-14.3.3-py3-none-any.whl","size":310459},{"file":"six-1.17.0-py2.py3-none-any.whl","size":11050},{"file":"soupsieve-2.8.3-py3-none-any.whl","size":37015},{"file":"typing_extensions-4.15.0-py3-none-any.whl","size":44613},{"file":"typing_inspection-0.4.2-py3-none-any.whl","size":14610},{"file":"urllib3-2.6.3-py3-none-any.whl","size":131580},{"file":"fuzzywuzzy-0.18.0-py2.py3-none-any.whl","size":18272},{"file":"jsonpath_ng-1.7.0-py2-none-any.whl","size":30106},{"file":"ply-3.11-py2.py3-none-any.whl","size":49567},{"file":"python_json_logger-3.3.0-py3-none-any.whl","size":15163},{"file":"optics_framework-1.11.5-py3-none-any.whl","size":808040}],"python":[{"path":"cv2/__init__.py","v":"216ce61146"},{"path":"optics_framework/engines/drivers/birch.py","v":"6d8d89889f"},{"path":"optics_framework/engines/elementsources/birch_page_source.py","v":"506f64bd65"},{"path":"optics_page.py","v":"6c8447bb4f"},{"path":"pytest/__init__.py","v":"45ac3c9fde"},{"path":"skimage/__init__.py","v":"9783b10e25"},{"path":"skimage/metrics.py","v":"67b20102d7"}],"optics":"optics_framework-1.11.5-py3-none-any.whl"}</script>
       <script src="birch.js?v=239c605768" defer></script>
       <script src="engine.js?v=ae979c8a67" defer></script>
     </div>
@@ -143,7 +143,7 @@
             <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
             <span>Optics</span>
           </a>
-          <a class="foot-rel" href="releases"><b>1.11.4</b><span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></a>
+          <a class="foot-rel" href="releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
         </div>
         <nav class="foot-col" aria-label="Product">
           <h2 class="label">Product</h2>

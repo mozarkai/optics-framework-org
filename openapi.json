@@ -200,6 +200,171 @@
         }
       }
     },
+    "/v1/sessions/{session_id}/modules": {
+      "put": {
+        "summary": "Replace Session Modules",
+        "description": "Replace the modules the session can run, and add the elements they name. A popup rule that runs a module\nreads them on every check, so the next step already uses them. Empty text removes the modules.",
+        "operationId": "replace_session_modules_v1_sessions__session_id__modules_put",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionModulesUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Modules or elements that cannot be read (E0501)"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/popup_rules": {
+      "put": {
+        "summary": "Replace Popup Rules",
+        "description": "Replace the session's popup rules. The popup guard reads them on every check,\nso the next step already uses the new list. An empty list turns popup handling off.",
+        "operationId": "replace_popup_rules_v1_sessions__session_id__popup_rules_put",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PopupRulesUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "A rule list that cannot be read (E0501)"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/appium_settings": {
+      "put": {
+        "summary": "Update Appium Settings",
+        "description": "Change Appium settings of the running session, for example the iOS\n``autoClickAlertSelector`` that answers system alerts as they appear.",
+        "operationId": "update_appium_settings_v1_sessions__session_id__appium_settings_put",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppiumSettingsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "The session's driver cannot change Appium settings"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "500": {
+            "description": "The device refused the settings"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sessions/{session_id}/api": {
       "post": {
         "summary": "Add Session Api",
@@ -708,6 +873,21 @@
   },
   "components": {
     "schemas": {
+      "AppiumSettingsUpdate": {
+        "properties": {
+          "settings": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Settings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "settings"
+        ],
+        "title": "AppiumSettingsUpdate",
+        "description": "Request model for changing Appium settings of a running session."
+      },
       "ExecuteRequest": {
         "properties": {
           "mode": {
@@ -899,6 +1079,22 @@
         ],
         "title": "KeywordParameter"
       },
+      "PopupRulesUpdate": {
+        "properties": {
+          "popup_rules": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Popup Rules",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "PopupRulesUpdate",
+        "description": "Request model for replacing a running session's popup rules."
+      },
       "SessionConfig": {
         "properties": {
           "driver_sources": {
@@ -1043,6 +1239,37 @@
             ],
             "title": "Strict Element Match"
           },
+          "popup_rules": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Popup Rules",
+            "default": []
+          },
+          "modules_csv": {
+            "type": "string",
+            "title": "Modules Csv",
+            "default": ""
+          },
+          "elements_csv": {
+            "type": "string",
+            "title": "Elements Csv",
+            "default": ""
+          },
+          "permissions": {
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "allow",
+                "deny"
+              ]
+            },
+            "type": "object",
+            "title": "Permissions",
+            "default": {}
+          },
           "api_data": {
             "anyOf": [
               {
@@ -1059,6 +1286,23 @@
         "type": "object",
         "title": "SessionConfig",
         "description": "Configuration for starting a new Optics session.\n\nThis model accepts two formats for source lists:\n- Deprecated simple format: list of strings, e.g. [\"appium\", \"selenium\"]\n- New detailed format: list of dicts, e.g. [{\"appium\": {\"enabled\": True, \"url\": \"...\", \"capabilities\": {...}}}]\n\nUse `normalize_sources()` to convert entries into a consistent list of\n{name: DependencyConfig} mappings used by the server internals.\n\n``ai_self_heal`` / ``llm_provider`` / ``llm_model`` are optional per-session\nself-heal overrides, kept as flat scalars (not a nested llm_models block) so no LLM\ncredentials ride the request body. See ``_resolve_self_heal_settings`` for their\nper-field precedence over the service-level env-var defaults."
+      },
+      "SessionModulesUpdate": {
+        "properties": {
+          "modules_csv": {
+            "type": "string",
+            "title": "Modules Csv",
+            "default": ""
+          },
+          "elements_csv": {
+            "type": "string",
+            "title": "Elements Csv",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "SessionModulesUpdate",
+        "description": "Request model for replacing the modules a running session can run, such as the one a popup rule runs."
       },
       "SessionResponse": {
         "properties": {

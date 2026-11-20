@@ -108,9 +108,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install "optics-framework[playwright]==1.11.5"
+      - run: pip install "optics-framework[playwright]"
       - run: python -m playwright install --with-deps chromium
-      - run: optics execute birch-tests --no-use-printer
+      - run: optics execute birch-tests
       - if: always()
         uses: mikepenz/action-junit-report@v6
         with:
@@ -121,9 +121,9 @@ jobs:
 
 - 9,411 downloads from PyPI by pip, uv and requests, 18 Apr 2025 to 19 Nov 2026, out of 75,218 downloads in all (the rest are mirrors, browsers and unnamed clients). Source: PyPI public download logs via ClickPy, https://clickpy.clickhouse.com/dashboard/optics-framework.
 - 100 stars and 31 forks on GitHub, read 20 Nov 2026. Source: https://github.com/mozarkai/optics-framework.
-- 12 releases in the 90 days to 20 Nov 2026. Source: https://github.com/mozarkai/optics-framework/releases.
+- 13 releases in the 90 days to 20 Nov 2026. Source: https://github.com/mozarkai/optics-framework/releases.
 
-The latest release is [1.11.4](https://github.com/mozarkai/optics-framework/releases/tag/1.11.4), 17 Nov 2026: Desktop apps: test macOS, Windows and Linux apps with the same CSV suites. Every release and what it added: https://optics-framework.org/releases
+The latest release is [1.11.5](https://github.com/mozarkai/optics-framework/releases/tag/1.11.5), 20 Nov 2026: Popups: write rules that close the popups that block a step. Every release and what it added: https://optics-framework.org/releases
 
 ## Get started
 

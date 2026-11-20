@@ -1,6 +1,6 @@
 # Project files
 
-> The file formats Optics reads: test cases, modules, elements, error definitions and API definitions.
+> The file formats Optics reads: test cases, modules, elements, error definitions, popup rules and API definitions.
 
 An Optics project is a folder of CSV or YAML files plus a config.yaml. This page lists every file format Optics reads, the exact columns and keys, and what a run writes back.
 
@@ -16,7 +16,8 @@ birch-tests/
 ├── test_cases/test_cases.csv
 ├── modules/modules.csv
 ├── test_data/elements.csv
-└── test_data/error_definitions.csv    # optional
+├── test_data/error_definitions.csv    # optional
+└── test_data/popup_rules.json         # optional
 ```
 
 | File type | CSV: the header row must contain | YAML: top-level key |
@@ -29,6 +30,8 @@ birch-tests/
 | Config | Not applicable | `driver_sources` and `elements_sources` |
 
 A project needs at least one test cases file and one modules file. Elements, error definitions and API files are optional. You can split each type across several files.
+
+Popup rules are the exception: Optics finds them by file name. Every file named `popup_rules.json` is a popup rules file. See [Popup rules](#popup-rules).
 
 CSV column names match in any case, and Optics ignores spaces around them. `element_name` works as well as `Element_Name`.
 
@@ -210,7 +213,7 @@ Elements:
 - Empty cells are ignored. Columns that don't start with `Element_ID`, such as `Element_Text`, are ignored.
 - A file with `Element_Name` and another `Element_` column, but no `Element_ID`, stops the run before a session starts. An example is `Element_Name,Element_Locator`. The `Cannot start: E0503` panel names the file. A [Read Data](https://optics-framework.org/docs/reference/keywords/flow#read-data) file with an `element_name` column and no other `element_` column is not an elements file, so it still loads.
 - A second row with the same name adds more fallback values.
-- When a step uses `${name}`, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside `Run Loop`, `Condition` and `Execute Module` use only the first value.
+- When a step uses `${name}`, Optics tries each value in turn until the step passes, up to 20 attempts. It moves on only when the element isn't found. Steps inside `Run Loop`, `Condition` and `Execute Module` do the same.
 - Variables that a step creates while running, such as the target of `Evaluate`, `Read Data` or `store_as`, need no row. Do not add a placeholder row for them.
 
 Optics decides what kind of locator a value is from its form:
@@ -248,6 +251,43 @@ BIRCH_003,Out of stock,Product page shows out of stock,medium
 | `severity` | No | Free text, for example `critical`, `high` or `medium`. |
 
 There is no YAML form. A match adds a failing test case to `junit_output.xml` and gives exit code `1`. See [Catch error screens](https://optics-framework.org/docs/run/error-detection).
+
+## Popup rules
+
+A JSON file named `popup_rules.json` holds a list of rules for popups that can block a step. Each rule says what the popup looks like and what to do about it.
+
+`test_data/popup_rules.json`:
+
+```json
+[
+  {
+    "name": "rate_prompt",
+    "detect": {"text_contains": ["Enjoying Birch?"]},
+    "action": {"type": "tap", "target": "Not now"}
+  },
+  {
+    "name": "delete_account",
+    "detect": {"text_contains": ["Delete your account?"]},
+    "sensitive": true
+  }
+]
+```
+
+| Key | Default | What it holds |
+|---|---|---|
+| `name` | Required | A unique name. |
+| `detect` | Required | One or more of `text_contains` (a list of strings), `resource_id` and `xpath`. Every key you give must match. |
+| `action` | `{"type": "none"}` | `type` is `tap`, `back`, `alert`, `module` or `none`. `tap`, `alert` and `module` need a `target`. `tap` also takes a `fallback` target. |
+| `then` | `retry_step` | `retry_step`, `fail_step` or `stop_run`. `retry_step` needs an action other than `none`. |
+| `check` | `on_failure` | `on_failure` or `before_every_step`. |
+| `sensitive` | `false` | `true` presses nothing and ends the run. |
+| `max_per_step`, `max_per_run` | `2`, `5` | How often the rule can act in one step and in one run. |
+
+- Optics reads every `popup_rules.json` in the project, in path order, after the `popup_rules` key of config.yaml. A rule replaces an earlier rule with the same name.
+- Rules are tried in list order. The first rule that matches wins.
+- A file that is not valid JSON, or a rule that is not valid, stops `optics execute` and `optics dry_run` before they start, with `Cannot start: E0501`.
+
+See [Handle popups](https://optics-framework.org/docs/advanced/popups).
 
 ## API definitions
 
@@ -402,6 +442,7 @@ birch-tests/execution_output/
 ├── ...-end_of_run.jpg
 ├── page_sources_log.xml
 ├── failed_steps_elements.json                     # when a step fails
+├── popup_<run>_<n>_before.png                     # when a popup rule acts
 └── detected_errors_<session_id>.json              # only when error definitions match
 ```
 
@@ -421,6 +462,8 @@ birch-tests/execution_output/
 | `page_sources_log.xml` | Appium page source reads and the end of the run | Each UI tree, with a timestamp. |
 | `page_sources_log.html` | Web page source reads and the end of the run | Each page's HTML, with a timestamp. |
 | `failed_steps_elements.json` | A step failed, with `save_captures: true` | For each failed step: the test case, the step and the elements on the screen, with secrets masked. Use it to fix the locator. |
+| `popup_<run>_<n>_before.png`, `_after.png` | A popup rule acted, or a popup with no rule stopped a step, with `save_captures: true` | The screen before and after the rule's action. See [Handle popups](https://optics-framework.org/docs/advanced/popups#evidence-and-events). |
+| `popup_<run>_<n>_source.xml` | A popup stopped a step or the run, with `save_captures: true` | The page source when the popup stopped it. |
 | `interactable_elements.json` | `Get Interactive Elements`, `Get Screen Elements` | The latest list of elements on screen. |
 | `api_details.log`, `api_details.har` | `Invoke API` | Each request and response. |
 | `detected_errors_<session_id>.json` | Error definitions matched at the end of the run | The codes, matched text, descriptions and severities. |

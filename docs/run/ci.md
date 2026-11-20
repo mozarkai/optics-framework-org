@@ -33,11 +33,11 @@ jobs:
 
       - name: Install Optics and the browser
         run: |
-          pip install "optics-framework[playwright]==1.11.5"
+          pip install "optics-framework[playwright]"
           python -m playwright install --with-deps chromium
 
       - name: Run the suite
-        run: optics execute birch-tests --no-use-printer
+        run: optics execute birch-tests
 
       - name: Publish results
         if: always()
@@ -60,9 +60,9 @@ jobs:
 optics-web:
   image: python:3.12-bookworm
   script:
-    - pip install "optics-framework[playwright]==1.11.5"
+    - pip install "optics-framework[playwright]"
     - python -m playwright install --with-deps chromium
-    - optics execute birch-tests --no-use-printer
+    - optics execute birch-tests
   artifacts:
     when: always
     paths:
@@ -124,7 +124,7 @@ jobs:
 
       - name: Install Optics and Appium
         run: |
-          pip install "optics-framework[appium]==1.11.5"
+          pip install "optics-framework[appium]"
           npm install -g appium
           appium driver install uiautomator2
 
@@ -137,7 +137,7 @@ jobs:
             adb install app/build/outputs/apk/debug/app-debug.apk
             appium > appium.log 2>&1 &
             sleep 5
-            optics execute birch-tests --no-use-printer
+            optics execute birch-tests
 
       - name: Publish results
         if: always()
@@ -147,6 +147,25 @@ jobs:
 ```
 
 Make sure `deviceName` in `config.yaml` matches the emulator (`emulator-5554` for the first one), and that `appPackage` and `appActivity` match the app you install.
+
+## Read the CI log
+
+A CI log is not a terminal, so `optics execute` and `optics dry_run` print one line for each test case, module and keyword, in place of the live tree. The lines go to stdout and the logs go to stderr. A failed keyword gives its reason and error code:
+
+```text
+16:52:17 RUNNING  test case "Shopper can find a shoe"
+16:52:17 RUNNING    module "Find A Shoe"
+16:52:17 RUNNING      keyword "Assert Presence"
+16:52:47 FAIL         keyword "Assert Presence" (30.0s): 'Free returns' is not on the screen. [E0201]
+16:52:47 FAIL       module "Find A Shoe" (30.7s) [E0201]
+16:52:47 FAIL     test case "Shopper can find a shoe" (30.7s) [E0201]
+```
+
+The lines show no totals. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error shows only in that line, so publish `junit_output.xml` as the examples on this page do.
+
+For a tool that reads the run, add `--output jsonl` to get one JSON event on each line. Do not add `--no-use-printer`. It shows no progress, only the logs. See [Choose the output](https://optics-framework.org/docs/reference/cli#choose-the-output).
+
+Optics does not check for updates when the `CI` variable is set, so the log has no update notice.
 
 ## Decide pass or fail
 
@@ -166,7 +185,7 @@ An error screen adds a failing `on-screen-error-detection` test case to the repo
 
 ## Make CI runs reliable
 
-- **Pin the Optics version** (`optics-framework==1.11.5`), so a new release doesn't change behavior in the middle of a sprint. Upgrade on purpose, in its own pull request.
+- **Install the latest Optics.** The install lines on this page name no version, so a workflow you copy keeps up with each release. Read the [release notes](https://optics-framework.org/releases) when a run starts to behave differently.
 - **Run `optics dry_run` first** in a fast job. It catches typos in seconds, before you pay for an emulator.
 - **Split a long suite** into parallel jobs with `--include` and `--exclude`, for example `optics execute birch-tests --include "checkout*"` in one job. See [Pick test cases](https://optics-framework.org/docs/reference/cli#pick-test-cases).
 - **Start from a clean output folder.** CI checkouts usually are. On reused machines, delete `execution_output/` before the run.

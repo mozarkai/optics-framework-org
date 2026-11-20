@@ -49,7 +49,7 @@ Test Suite
 
 - The rest of that test case is skipped, and its unrun steps show as `NOT_RUN`.
 - The next test case runs as normal. One broken flow doesn't hide problems elsewhere.
-- A **Failure details** box after the tree names each failed step and why it failed.
+- A **Failures** box after the tree names each failed step and why it failed.
 
 ### Exit codes
 
@@ -83,7 +83,7 @@ $ optics execute birch-tests --include "shopper can*" --exclude "Shopper can che
 
 | Option | What it does |
 |---|---|
-| `--no-use-printer` | Print plain log output instead of the live tree. Useful when a CI log viewer garbles the tree. |
+| `--output plain` | Print one line per step instead of the live tree. This is the default when the output is not a terminal, as in CI. `--output jsonl` prints one JSON event per line, and `--output none` prints no progress. |
 | `--include NAME ...` | Run only these test cases. |
 | `--exclude NAME ...` | Skip these test cases. |
 | `--runner pytest` | Run the suite through pytest instead of Optics' own runner. Most projects don't need this. |
