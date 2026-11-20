@@ -6,17 +6,17 @@
   <title>Optics popups playground: rules that close the popups that block a step</title>
   <meta name="description" content="Throw cookie banners, permission prompts, a session timeout and a clingy spin wheel at a demo shop app, then watch the real Optics popup guard close each one with a rule.">
   <meta name="ai-summary" content="Throw cookie banners, permission prompts, a session timeout and a clingy spin wheel at a demo shop app, then watch the real Optics popup guard close each one with a rule.">
-  <link rel="canonical" href="https://optics-framework.org/popups">
+  <link rel="canonical" href="https://optics-framework.org/playground/popups">
   <link rel="alternate" type="text/markdown" href="popups.md" title="Optics popups playground: rules that close the popups that block a step, as Markdown">
-  <link rel="stylesheet" href="playground.css?v=57a201b36b">
-  <link rel="stylesheet" href="engine.css?v=d8951bfa04">
-  <link rel="stylesheet" href="popups.css?v=304de1f2a2">
+  <link rel="stylesheet" href="../playground.css?v=57a201b36b">
+  <link rel="stylesheet" href="../engine.css?v=d8951bfa04">
+  <link rel="stylesheet" href="../popups.css?v=304de1f2a2">
   <meta property="og:title" content="Optics popups playground: rules that close the popups that block a step">
   <meta property="og:description" content="Throw cookie banners, permission prompts, a session timeout and a clingy spin wheel at a demo shop app, then watch the real Optics popup guard close each one with a rule.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
   <meta property="og:type" content="website">
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <script>
     // Set the theme before first paint so there is no flash.
     (function () {
@@ -26,23 +26,23 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=019a04646d">
+  <link rel="stylesheet" href="../styles.css?v=019a04646d">
 </head>
 <body><!--email_off-->
   <a class="skip" href="#main">Skip to content</a>
 
   <header class="nav">
     <div class="wrap nav-row">
-      <a class="brand" href="./" aria-label="Optics home">
+      <a class="brand" href="../" aria-label="Optics home">
         <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
         <span>Optics</span>
       </a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="./#create">Create</a>
-        <a href="./#run">Run</a>
-        <a href="playground">Playground</a>
-        <a href="docs/">Docs</a>
-        <a href="blog">Blog</a>
+        <a href="../#create">Create</a>
+        <a href="../#run">Run</a>
+        <a href="../playground">Playground</a>
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
         <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
       </nav>
       <div class="nav-actions">
@@ -50,14 +50,14 @@
           <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
           <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
         </button>
-        <a class="btn btn-solid btn-sm" href="./#install">Install</a>
+        <a class="btn btn-solid btn-sm" href="../#install">Install</a>
       </div>
     </div>
   </header>
 
   <main id="main" class="page">
     <div class="wrap">
-<nav class="play-tabs" aria-label="Playground"><a href="playground">Browser</a><a href="popups" aria-current="page">Popups</a><a href="run">Real run</a><a href="ship">Ship a release</a><a href="hard-targets">Hard targets</a><a href="explain">Explain a suite</a></nav>
+<nav class="play-tabs" aria-label="Playground"><a href="../playground">Browser</a><a href="popups" aria-current="page">Popups</a><a href="run">Real run</a><a href="ship">Ship a release</a><a href="hard-targets">Hard targets</a><a href="explain">Explain a suite</a></nav>
       <section class="eng pp" aria-labelledby="eng-h">
         <header class="eng-head">
           <p class="label">Playground</p>
@@ -131,14 +131,14 @@
             <div><dt>The popups</dt><dd>This page draws them. It gives each one the UI tree a real Android app gives: an AlertDialog under <code>android:id/parentPanel</code>, a sheet under <code>design_bottom_sheet</code>, a permission prompt from the permission controller.</dd></div>
             <div><dt>Reading them</dt><dd>On a device, the Appium driver reads popups. Here, the Birch driver hands its page source to the same Appium screen reader, so the guard sees what it would see on a phone.</dd></div>
             <div><dt>Pace</dt><dd>The page waits after each step so you can watch the phone. In a browser without JSPI, the page cannot change while Python runs, so the phone shows the taps of a step after the step. A popup that Optics closes and then sees again in the same step can stay hidden.</dd></div>
-            <div><dt>Rules</dt><dd>Each rule is one line of <code>popup_rules.json</code>. Read <a href="docs/advanced/popups">Handle popups</a> to write your own.</dd></div>
+            <div><dt>Rules</dt><dd>Each rule is one line of <code>popup_rules.json</code>. Read <a href="../docs/advanced/popups">Handle popups</a> to write your own.</dd></div>
           </dl>
         </div>
       </section>
       <script type="application/json" id="engine-manifest">{"core":"engine/pyodide-314.0.8/","coreSize":13530536,"wheels":[{"file":"annotated_types-0.7.0-py3-none-any.whl","size":11963},{"file":"beautifulsoup4-4.14.3-py3-none-any.whl","size":107721},{"file":"certifi-2026.4.22-py3-none-any.whl","size":135707},{"file":"charset_normalizer-3.4.7-py3-none-any.whl","size":61958},{"file":"idna-3.11-py3-none-any.whl","size":71008},{"file":"lxml-6.1.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2145850},{"file":"numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":2960568},{"file":"packaging-26.1-py3-none-any.whl","size":95852},{"file":"pandas-3.0.2-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":4177749},{"file":"pydantic-2.12.5-py3-none-any.whl","size":463578},{"file":"pydantic_core-2.41.5-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":1310164},{"file":"pygments-2.20.0-py3-none-any.whl","size":1231151},{"file":"python_dateutil-2.9.0.post0-py2.py3-none-any.whl","size":229892},{"file":"pytz-2026.1.post1-py2.py3-none-any.whl","size":510489},{"file":"pyyaml-6.0.3-cp314-cp314-pyemscripten_2026_0_wasm32.whl","size":112901},{"file":"requests-2.33.1-py3-none-any.whl","size":64947},{"file":"rich-14.3.3-py3-none-any.whl","size":310459},{"file":"six-1.17.0-py2.py3-none-any.whl","size":11050},{"file":"soupsieve-2.8.3-py3-none-any.whl","size":37015},{"file":"typing_extensions-4.15.0-py3-none-any.whl","size":44613},{"file":"typing_inspection-0.4.2-py3-none-any.whl","size":14610},{"file":"urllib3-2.6.3-py3-none-any.whl","size":131580},{"file":"fuzzywuzzy-0.18.0-py2.py3-none-any.whl","size":18272},{"file":"jsonpath_ng-1.7.0-py2-none-any.whl","size":30106},{"file":"ply-3.11-py2.py3-none-any.whl","size":49567},{"file":"python_json_logger-3.3.0-py3-none-any.whl","size":15163},{"file":"optics_framework-1.11.5-py3-none-any.whl","size":808040}],"python":[{"path":"cv2/__init__.py","v":"216ce61146"},{"path":"optics_framework/engines/drivers/birch.py","v":"7cadebbee2"},{"path":"optics_framework/engines/elementsources/birch_page_source.py","v":"56eb46138e"},{"path":"optics_page.py","v":"17fbd7f8d9"},{"path":"pytest/__init__.py","v":"45ac3c9fde"},{"path":"skimage/__init__.py","v":"9783b10e25"},{"path":"skimage/metrics.py","v":"67b20102d7"}],"optics":"optics_framework-1.11.5-py3-none-any.whl"}</script>
-      <script src="birch.js?v=239c605768" defer></script>
-      <script src="popups.js?v=842f63b3b4" defer></script>
-      <script src="engine.js?v=a38094ac67" defer></script>
+      <script src="../birch.js?v=239c605768" defer></script>
+      <script src="../popups.js?v=842f63b3b4" defer></script>
+      <script src="../engine.js?v=01dce3e2f7" defer></script>
     </div>
   </main>
 
@@ -146,32 +146,32 @@
     <div class="wrap">
       <div class="foot-cols">
         <div class="foot-lead">
-          <a class="brand" href="./" aria-label="Optics home">
+          <a class="brand" href="../" aria-label="Optics home">
             <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
             <span>Optics</span>
           </a>
-          <a class="foot-rel" href="releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
+          <a class="foot-rel" href="../releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
         </div>
         <nav class="foot-col" aria-label="Product">
           <h2 class="label">Product</h2>
-          <ul><li><a href="./#install">Install</a></li><li><a href="playground">Playground</a></li><li><a href="releases">Releases</a></li><li><a href="birch/">Birch demo app</a></li></ul>
+          <ul><li><a href="../#install">Install</a></li><li><a href="../playground">Playground</a></li><li><a href="../releases">Releases</a></li><li><a href="../birch/">Birch demo app</a></li></ul>
         </nav>
         <nav class="foot-col" aria-label="Docs">
           <h2 class="label">Docs</h2>
-          <ul><li><a href="docs/get-started/">Get started</a></li><li><a href="docs/guides/">Guides</a></li><li><a href="docs/reference/keywords/">Keyword reference</a></li><li><a href="docs/contribute/">Contribute</a></li></ul>
+          <ul><li><a href="../docs/get-started/">Get started</a></li><li><a href="../docs/guides/">Guides</a></li><li><a href="../docs/reference/keywords/">Keyword reference</a></li><li><a href="../docs/contribute/">Contribute</a></li></ul>
         </nav>
         <nav class="foot-col" aria-label="Project">
           <h2 class="label">Project</h2>
-          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="blog">Blog</a></li><li><a href="feed.xml">RSS feed</a></li></ul>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="../blog">Blog</a></li><li><a href="../feed.xml">RSS feed</a></li></ul>
         </nav>
         <nav class="foot-col" aria-label="For agents">
           <h2 class="label">For agents</h2>
-          <ul><li><a href="llms.txt">llms.txt</a></li><li><a href="agents.md">Agent setup</a></li><li><a href=".well-known/mcp/server-card.json">MCP server card</a></li><li><a href="openapi.json">OpenAPI</a></li></ul>
+          <ul><li><a href="../llms.txt">llms.txt</a></li><li><a href="../agents.md">Agent setup</a></li><li><a href="../.well-known/mcp/server-card.json">MCP server card</a></li><li><a href="../openapi.json">OpenAPI</a></li></ul>
         </nav>
       </div>
       <div class="foot-base label">
         <p>Open source under the Apache 2.0 licence</p>
-        <p class="foot-trust"><a href="about">About</a><a href="contact">Contact</a><a href="privacy">Privacy</a></p>
+        <p class="foot-trust"><a href="../about">About</a><a href="../contact">Contact</a><a href="../privacy">Privacy</a></p>
       </div>
     </div>
   </footer>
@@ -188,7 +188,7 @@
     </symbol>
   </svg>
 
-  <script src="app.js?v=aaa72e04a3" defer></script>
-  <script src="track.js?v=a7621959d3" defer></script>
+  <script src="../app.js?v=aaa72e04a3" defer></script>
+  <script src="../track.js?v=a7621959d3" defer></script>
 <!--/email_off--></body>
 </html>

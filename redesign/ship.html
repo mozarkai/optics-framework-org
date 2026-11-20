@@ -6,10 +6,11 @@
   <title>Ship a release: break an Optics test, then ship a hundred</title>
   <meta name="description" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
   <meta name="ai-summary" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
-  <link rel="canonical" href="https://optics-framework.org/ship">
+  <link rel="canonical" href="https://optics-framework.org/playground/ship">
   <link rel="alternate" type="text/markdown" href="ship.md" title="Ship a release: break an Optics test, then ship a hundred, as Markdown">
-  <link rel="stylesheet" href="playground.css?v=57a201b36b">
-  <link rel="stylesheet" href="sim.css?v=aad2d11780">
+  <meta name="robots" content="noindex">
+  <script>location.replace("playground/ship" + location.search + location.hash);</script>
+  <noscript><meta http-equiv="refresh" content="0; url=playground/ship"></noscript>
   <meta property="og:title" content="Ship a release: break an Optics test, then ship a hundred">
   <meta property="og:description" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
@@ -56,24 +57,8 @@
 
   <main id="main" class="page">
     <div class="wrap">
-<nav class="play-tabs" aria-label="Playground"><a href="playground">Browser</a><a href="popups">Popups</a><a href="run">Real run</a><a href="ship" aria-current="page">Ship a release</a><a href="hard-targets">Hard targets</a><a href="explain">Explain a suite</a></nav>
-      <h1>Ship a release</h1>
-      <p class="lede">Change the sign-in button and ship it. Optics climbs the ladder until it finds the button, or the test fails.</p>
-      <p class="vh" id="pg-brk-desc">A simulation of a new release of Birch, a demo shop app. It does not run Optics. Select the changes to make to the sign-in button, then select Ship. Each step of the ladder shows if it found the button. The result tells you if the test passes, fails on a real bug, or fails when the app still works.</p>
-      <div class="pg brk" role="group" aria-label="Playground: break the test" aria-describedby="pg-brk-desc">
-        <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
-      <ol class="rungs">
-        <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
-        <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
-        <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with Apple Vision, RapidOCR, EasyOCR, Tesseract or Google Vision.</span></div></li>
-        <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
-        <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
-      </ol>
-      </div>
-      <div class="pg sim" id="simulator"></div>
-      <script src="birch.js?v=239c605768" defer></script>
-      <script src="playground.js?v=a8b5994904" defer></script>
-      <script src="sim.js?v=e2abe9b155" defer></script>
+      <h1 class="h2">Ship a release: break an Optics test, then ship a hundred</h1>
+      <p class="lede">This page moved to <a href="playground/ship">optics-framework.org/playground/ship</a>.</p>
     </div>
   </main>
 

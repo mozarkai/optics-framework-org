@@ -18,7 +18,7 @@ Nothing changes until you write a rule. A step that finds its element reads noth
 Popup rules work on Android and iOS apps through Appium. Playwright, Selenium and the other drivers see no popups. On those drivers, use [Detect And Press](https://optics-framework.org/docs/reference/keywords/actions#detect-and-press) for a popup that shows only sometimes.
 
 **Try it in your browser:**
-The [popups playground](https://optics-framework.org/popups) runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.
+The [popups playground](https://optics-framework.org/playground/popups) runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.
 
 ## Write your first rule
 

@@ -6,9 +6,11 @@
   <title>A real Optics run against Birch</title>
   <meta name="description" content="Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.">
   <meta name="ai-summary" content="Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.">
-  <link rel="canonical" href="https://optics-framework.org/run">
-  <link rel="alternate" type="text/markdown" href="run.md" title="A real Optics run, as Markdown">
-  <link rel="stylesheet" href="replay.css?v=758933114e">
+  <link rel="canonical" href="https://optics-framework.org/playground/run">
+  <link rel="alternate" type="text/markdown" href="run.md" title="A real Optics run against Birch, as Markdown">
+  <meta name="robots" content="noindex">
+  <script>location.replace("playground/run" + location.search + location.hash);</script>
+  <noscript><meta http-equiv="refresh" content="0; url=playground/run"></noscript>
   <meta property="og:title" content="A real Optics run against Birch">
   <meta property="og:description" content="Optics ran the Birch suite against two releases of the Birch web app. Step through what it saw, how it found each element, how long each step took and why one run failed, then run it yourself.">
   <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
@@ -55,113 +57,8 @@
 
   <main id="main" class="page">
     <div class="wrap">
-<nav class="play-tabs" aria-label="Playground"><a href="playground">Browser</a><a href="popups">Popups</a><a href="run" aria-current="page">Real run</a><a href="ship">Ship a release</a><a href="hard-targets">Hard targets</a><a href="explain">Explain a suite</a></nav>
-      <h1 class="h2">A real run</h1>
-      <p class="lede">Birch is a real web app. On 20 November 2026, Optics 1.11.5 ran the Birch suite against two releases of it. Every step passed both times. Only release 2.1 passed the run.</p>
-
-      <div class="pg rp" data-replay>
-        <noscript><p class="rp-noscript body-text">The replay needs JavaScript. The files of the run are listed below.</p></noscript>
-      </div>
-
-      <h2 class="h3">Run it yourself</h2>
-      <ol class="run-steps">
-        <li>
-          <p class="body-text">Install Optics 1.11.5 with Playwright and EasyOCR.</p>
-          <div class="cmd" data-copy="pip install optics-framework==1.11.5 &amp;&amp; optics setup --install playwright easyocr">
-            <code><span class="prompt">$</span> pip install optics-framework==1.11.5 &amp;&amp; optics setup --install playwright easyocr</code>
-            <button class="copy" type="button" aria-label="Copy install command">Copy</button>
-          </div>
-        </li>
-        <li>
-          <p class="body-text">Download the suite. It is six files.</p>
-          <div class="cmd" data-copy="for f in config.yaml test_cases/test_cases.csv modules/modules.csv test_data/elements.csv test_data/error_definitions.csv test_data/cart.png; do curl -fsSL --create-dirs -o &quot;birch-tests/$f&quot; &quot;https://optics-framework.org/birch-tests/$f&quot;; done">
-            <code><span class="prompt">$</span> for f in config.yaml test_cases/test_cases.csv modules/modules.csv test_data/elements.csv test_data/error_definitions.csv test_data/cart.png; do curl -fsSL --create-dirs -o &quot;birch-tests/$f&quot; &quot;https://optics-framework.org/birch-tests/$f&quot;; done</code>
-            <button class="copy" type="button" aria-label="Copy download command">Copy</button>
-          </div>
-        </li>
-        <li>
-          <p class="body-text">Run it against Birch on this site. Release 2.1 exits with 0. Release 2.2 exits with 1.</p>
-          <div class="cmd" data-copy="BIRCH_URL=https://optics-framework.org/birch/ optics execute birch-tests">
-            <code><span class="prompt">$</span> BIRCH_URL=https://optics-framework.org/birch/ optics execute birch-tests</code>
-            <button class="copy" type="button" aria-label="Copy the run command for release 2.1">Copy</button>
-          </div>
-          <div class="cmd" data-copy="BIRCH_URL='https://optics-framework.org/birch/?release=2.2' optics execute birch-tests">
-            <code><span class="prompt">$</span> BIRCH_URL='https://optics-framework.org/birch/?release=2.2' optics execute birch-tests</code>
-            <button class="copy" type="button" aria-label="Copy the run command for release 2.2">Copy</button>
-          </div>
-        </li>
-      </ol>
-      <p class="body-text">The run above used a copy of Birch served on <code class="ic">127.0.0.1:4180</code>, from the same files as <a href="birch/">optics-framework.org/birch/</a>. Your timings will differ. We ran each release three times on macOS, and the steps, the boxes and the exit codes did not change.</p>
-
-      <h2 class="h3">The suite</h2>
-      <p class="body-text">The suite finds elements in four ways. XPath finds the two fields. Text finds the buttons and the search field. OCR reads “Free returns”, which Birch draws on a canvas. Image matching finds the cart button from <code class="ic">cart.png</code>. The last test case presses Check out and asserts nothing.</p>
-      <div class="run-files">
-        <figure class="code"><figcaption><a href="birch-tests/config.yaml">config.yaml</a></figcaption><pre><code>driver_sources:
-  - playwright:
-      enabled: true
-      capabilities:
-        browser: chromium
-        headless: true
-        device: &quot;Pixel 7&quot;
-elements_sources:
-  - playwright_find_element: {enabled: true}
-  - playwright_page_source: {enabled: true}
-  - playwright_screenshot: {enabled: true}
-text_detection:
-  - easyocr: {enabled: true}
-image_detection:
-  - templatematch: {enabled: true}
-file_log: true
-json_log: true</code></pre></figure>
-        <figure class="code"><figcaption><a href="birch-tests/test_cases/test_cases.csv">test_cases/test_cases.csv</a></figcaption><pre><code>test_case,test_step
-Suite Setup,Open Birch
-Shopper can sign in,Sign In
-Shopper can find a shoe,Find A Shoe
-Shopper can add it to the cart,Add To Cart
-Shopper can check out,Check Out</code></pre></figure>
-        <figure class="code"><figcaption><a href="birch-tests/modules/modules.csv">modules/modules.csv</a></figcaption><pre><code>module_name,module_step,param_1,param_2
-Open Birch,Read Data,${birch_url},ENV:BIRCH_URL
-Open Birch,Launch App,${birch_url}
-Sign In,Enter Text,${email_field},ava@birch.shop
-Sign In,Enter Text,${password_field},birch-demo
-Sign In,Press Element,Sign in
-Sign In,Assert Presence,Picked for you
-Find A Shoe,Assert Presence,Free returns
-Find A Shoe,Enter Text,${search_field},trail
-Find A Shoe,Press Element,Trail Runner 2
-Add To Cart,Press Element,10
-Add To Cart,Press Element,Add to cart
-Add To Cart,Assert Presence,Added to cart
-Check Out,Press Element,${cart_button}
-Check Out,Press Element,Check out</code></pre></figure>
-        <figure class="code"><figcaption><a href="birch-tests/test_data/elements.csv">test_data/elements.csv</a></figcaption><pre><code>Element_Name,Element_ID
-email_field,//input[@id='email']
-password_field,//input[@id='password']
-search_field,css=#search
-cart_button,cart.png</code></pre></figure>
-        <figure class="code"><figcaption><a href="birch-tests/test_data/error_definitions.csv">test_data/error_definitions.csv</a></figcaption><pre><code>error_code,match_string,description,severity
-ERR_SESSION,Session expired,The shopper was signed out,high
-ERR_SERVER,Something went wrong,The server returned an error page,high</code></pre></figure>
-        <figure class="code run-tpl"><figcaption><a href="birch-tests/test_data/cart.png">test_data/cart.png</a></figcaption><img src="birch-tests/test_data/cart.png" alt="The cart icon that the suite finds by image" width="28" height="26"></figure>
-      </div>
-
-      <h2 class="h3">What is real</h2>
-      <ul class="run-real">
-        <li><b>The app.</b> Birch is the page at <a href="birch/">birch/</a>. Release 2.2 is the same page with <code class="ic">?release=2.2</code>.</li>
-        <li><b>The screenshots.</b> Each one is a JPEG that Optics wrote, converted to WebP. Nothing else changed. The yellow corners mark the green box that Optics drew.</li>
-        <li><b>The numbers.</b> Statuses, timings and log lines come from <code class="ic">logs.json</code>. The tree is the terminal output.</li>
-        <li><b>The pace.</b> The replay slows each step down so that you can read it. Real speed plays the steps at the timings of the run.</li>
-        <li><b>The script.</b> <a href="https://github.com/mozarkai/optics-framework-org/blob/main/scripts/birch-run.py">scripts/birch-run.py</a> runs the suite and writes this page’s data.</li>
-      </ul>
-
-      <h2 class="h3">Every file the run wrote</h2>
-      <div class="run-out">
-        <div><h3 class="label">Birch 2.1 · exit 0</h3><ul><li><a href="runs/birch-2.1/execution_logs.log">execution_logs.log</a><span>2.6 KB</span></li><li><a href="runs/birch-2.1/internal_logs.log">internal_logs.log</a><span>1.5 KB</span></li><li><a href="runs/birch-2.1/junit_output.xml">junit_output.xml</a><span>6.0 KB</span></li><li><a href="runs/birch-2.1/logs.json">logs.json</a><span>25.5 KB</span></li><li><a href="runs/birch-2.1/terminal.txt">terminal.txt</a><span>4.8 KB</span></li></ul></div>
-        <div><h3 class="label">Birch 2.2 · exit 1</h3><ul><li><a href="runs/birch-2.2/detected_errors.json">detected_errors.json</a><span>309 B</span></li><li><a href="runs/birch-2.2/execution_logs.log">execution_logs.log</a><span>2.8 KB</span></li><li><a href="runs/birch-2.2/internal_logs.log">internal_logs.log</a><span>1.5 KB</span></li><li><a href="runs/birch-2.2/junit_output.xml">junit_output.xml</a><span>6.3 KB</span></li><li><a href="runs/birch-2.2/logs.json">logs.json</a><span>25.6 KB</span></li><li><a href="runs/birch-2.2/terminal.txt">terminal.txt</a><span>4.8 KB</span></li></ul></div>
-      </div>
-
-      <script src="runs/birch-run.js?v=4bc968b183" defer></script>
-      <script src="replay.js?v=e79d7338b8" defer></script>
+      <h1 class="h2">A real Optics run against Birch</h1>
+      <p class="lede">This page moved to <a href="playground/run">optics-framework.org/playground/run</a>.</p>
     </div>
   </main>
 

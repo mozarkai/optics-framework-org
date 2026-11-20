@@ -47,12 +47,12 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 
 - [Optics homepage as Markdown](https://optics-framework.org/index.md): the landing page in plain text.
 - [Setup steps for agents](https://optics-framework.org/agents.md): install Optics, connect the MCP server and check it, then do the task. Asks the person only for a device, credentials, a `sudo` command or a restart.
-- [A real run](https://optics-framework.org/run.md): Optics running the Birch suite against two releases of the real Birch web app, with every step, timing, strategy, terminal tree and output file, and the commands to run it yourself.
-- [Popups](https://optics-framework.org/popups.md): eleven popups thrown at a three-test suite, the `popup_rules.json` that answers them, and what the real Optics popup guard does with each: dismiss, run a module, stop at a limit, fail on an unknown popup or end the run on a sensitive one.
-- [Ship a release](https://optics-framework.org/ship.md): two simulations of how the locator ladder behaves when an app changes: one release you make by hand, then 25 to 100 random releases with one value per element, every value, or every value with AI self-heal.
+- [A real run](https://optics-framework.org/playground/run.md): Optics running the Birch suite against two releases of the real Birch web app, with every step, timing, strategy, terminal tree and output file, and the commands to run it yourself.
+- [Popups](https://optics-framework.org/playground/popups.md): eleven popups thrown at a three-test suite, the `popup_rules.json` that answers them, and what the real Optics popup guard does with each: dismiss, run a module, stop at a limit, fail on an unknown popup or end the run on a sensitive one.
+- [Ship a release](https://optics-framework.org/playground/ship.md): two simulations of how the locator ladder behaves when an app changes: one release you make by hand, then 25 to 100 random releases with one value per element, every value, or every value with AI self-heal.
 - [Releases](https://optics-framework.org/releases.md): every published release, newest first, with the features it added and its fix count.
-- [Hard targets](https://optics-framework.org/hard-targets.md): a locked phone, a TV, a game, an icon, popups, conditions, loops, crashes and repeated text, each with the suite lines that drive it.
-- [Explain a suite](https://optics-framework.org/explain.md): an interactive page that explains a suite row by row and predicts `optics dry_run`. The Markdown twin holds the example suites.
+- [Hard targets](https://optics-framework.org/playground/hard-targets.md): a locked phone, a TV, a game, an icon, popups, conditions, loops, crashes and repeated text, each with the suite lines that drive it.
+- [Explain a suite](https://optics-framework.org/playground/explain.md): an interactive page that explains a suite row by row and predicts `optics dry_run`. The Markdown twin holds the example suites.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
