@@ -72,7 +72,7 @@ Every element can have several identities, tried cheapest first:
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
 
-Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/releases
+Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/ship
 
 ## One suite, every screen
 

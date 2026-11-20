@@ -121,8 +121,8 @@ cpSync("pages/playground.md", "out/playground.md");
 // The playgrounds that left the homepage, each a tab beside the engine, the run and /explain.
 const PLAY_PAGES = [
   {
-    src: "pages/releases.html",
-    path: "releases",
+    src: "pages/ship.html",
+    path: "ship",
     title: "Ship a release: break an Optics test, then ship a hundred",
     description: "Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.",
     styles: ["playground.css", "sim.css"],
