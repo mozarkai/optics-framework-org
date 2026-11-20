@@ -58,7 +58,7 @@ Add To Cart,Enter Text,${search_bar},trail runner
 Add To Cart,Press Element,Add to cart
 ```
 
-[Explain a suite](https://optics-framework.org/explain) reads one row by row and shows what `optics dry_run` would report.
+[Explain a suite](https://optics-framework.org/playground/explain) reads one row by row and shows what `optics dry_run` would report.
 
 ## Run a suite
 
@@ -68,7 +68,7 @@ Add To Cart,Press Element,Add to cart
 - Screenshots of the screen before each step that finds an element, and the same screen with a box around what Optics found.
 - Detected errors: crash dialogs and messages matched from `error_definitions.csv` on the last screen add a failure to the JUnit report, even without an assertion.
 
-Birch, the demo shop in these examples, is a real web app at https://optics-framework.org/birch/. A real run of the Birch suite against two releases of it, with every file Optics wrote and the commands to run it yourself, is at https://optics-framework.org/run. Release 2.2 passes every step and fails the run, because the last screen shows "Session expired".
+Birch, the demo shop in these examples, is a real web app at https://optics-framework.org/birch/. A real run of the Birch suite against two releases of it, with every file Optics wrote and the commands to run it yourself, is at https://optics-framework.org/playground/run. Release 2.2 passes every step and fails the run, because the last screen shows "Session expired".
 
 ## How Optics finds an element
 
@@ -80,7 +80,7 @@ Every element can have several identities, tried cheapest first:
 4. **Image:** matches a reference picture of the element on screen.
 5. **AI self-heal (optional):** an LLM reads the screen and recovers with the same keywords.
 
-Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/ship
+Change the sign-in button of a demo shop app and watch Optics climb the ladder, then simulate a hundred releases: https://optics-framework.org/playground/ship
 
 ## One suite, every screen
 
@@ -92,7 +92,7 @@ The same `modules.csv` runs on a phone, in a browser, on a TV and on a locked pr
 - **TV:** `appium` with TizenTV. Press Element presses the arrow keys until the element has focus, then ENTER.
 - **Production device:** `ble` with `camera_screenshot`. Press Element moves a Bluetooth mouse and clicks.
 
-Locked phones, TVs, games and other hard targets, each with the suite lines that drive it: https://optics-framework.org/hard-targets
+Locked phones, TVs, games and other hard targets, each with the suite lines that drive it: https://optics-framework.org/playground/hard-targets
 
 ## Where suites run
 
@@ -166,7 +166,7 @@ All posts and videos: https://optics-framework.org/blog
 
 ---
 
-Source: https://optics-framework.org/hard-targets
+Source: https://optics-framework.org/playground/hard-targets
 
 # No flow too wild
 
@@ -182,7 +182,7 @@ A locked phone through Bluetooth and a camera. A TV through its remote. A game t
 - **A crash that no step checks:** error detection reads the last screen and fails the run on "has stopped". `ERR_CRASH,has stopped,The app crashed with a system dialog,critical`. Guide: https://optics-framework.org/docs/run/error-detection
 - **The same words twice:** an area of interest keeps the match in one part of the screen. `Add To Cart,Press Element,Add to cart,aoi_y=75,aoi_height=25`. Guide: https://optics-framework.org/docs/elements/area-of-interest
 
-Each target plays as a scene at https://optics-framework.org/hard-targets beside the suite lines that drive it.
+Each target plays as a scene at https://optics-framework.org/playground/hard-targets beside the suite lines that drive it.
 
 ---
 
@@ -7811,6 +7811,9 @@ Nothing changes until you write a rule. A step that finds its element reads noth
 
 **Appium only:**
 Popup rules work on Android and iOS apps through Appium. Playwright, Selenium and the other drivers see no popups. On those drivers, use [Detect And Press](https://optics-framework.org/docs/reference/keywords/actions#detect-and-press) for a popup that shows only sometimes.
+
+**Try it in your browser:**
+The [popups playground](https://optics-framework.org/playground/popups) runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.
 
 ## Write your first rule
 

@@ -13,7 +13,9 @@ import js
 from pyodide.ffi import can_run_sync, run_sync
 
 from optics_framework.common.events import Event, EventSubscriber, get_event_manager
+from optics_framework.common.popup_guard import PopupGuard
 from optics_framework.common.runner.test_runnner import TestRunner
+from optics_framework.engines.drivers import birch
 from optics_framework.helper.execute import DryRunRunner, ExecuteRunner, RunnerArgs
 
 PROJECT = "/home/pyodide/birch-shop"
@@ -53,6 +55,8 @@ time.time, time.monotonic, time.perf_counter = skipping(time.time), skipping(tim
 # Event stamps its own time with the time.time it imported, so give it the page's clock.
 Event.model_fields["timestamp"].default_factory = time.time
 Event.model_rebuild(force=True)
+# The guard bound the real clock as its defaults when it was imported.
+PopupGuard.__init__.__defaults__ = (time.sleep, time.monotonic)
 execute_keyword = TestRunner._execute_keyword
 dry_run_keyword = TestRunner._dry_run_keyword
 
@@ -85,6 +89,16 @@ def announced_dry_run(self, keyword_node, *args, **kwargs):
     return dry_run_keyword(self, keyword_node, *args, **kwargs)
 
 
+def shown_screen() -> str:
+    # The guard reads, taps and reads again inside one step, so show the phone catching up before each read.
+    show = getattr(js.opticsPage, "shown", None)
+    if show and can_run_sync():
+        run_sync(pause(show()))
+    return read_screen()
+
+
+read_screen = birch.read_screen
+birch.read_screen = shown_screen
 TestRunner._execute_keyword = paced_keyword
 TestRunner._dry_run_keyword = announced_dry_run
 

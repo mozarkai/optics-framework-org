@@ -4,10 +4,15 @@ from typing import Any, Optional
 import js
 
 from optics_framework.common.driver_interface import DriverInterface
+from optics_framework.engines.drivers.appium_popup import AppiumScreen
 
 
 def device():
     return js.opticsBirch
+
+
+def read_screen() -> str:
+    return str(device().source())
 
 
 class BirchElement:
@@ -99,6 +104,10 @@ class Birch(DriverInterface):
 
     def go_back(self, event_name=None):
         device().back()
+
+    def popup_screen(self, source: Optional[str]) -> AppiumScreen:
+        """Birch's page source is Android-shaped, so the popup guard reads it as Appium's."""
+        return AppiumScreen(source)
 
     def get_window_size(self) -> dict:
         return {"width": int(device().width), "height": int(device().height)}

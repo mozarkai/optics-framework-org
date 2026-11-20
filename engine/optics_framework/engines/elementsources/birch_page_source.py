@@ -8,6 +8,7 @@ from lxml import etree  # type: ignore
 from optics_framework.common import utils
 from optics_framework.common.elementsource_interface import ElementSourceInterface
 from optics_framework.common.error import Code, OpticsError
+from optics_framework.engines.drivers import birch
 from optics_framework.engines.drivers.birch import BirchElement, device
 
 TEXT_ATTRIBUTES = ("text", "content-desc", "resource-id")
@@ -35,13 +36,13 @@ class BirchPageSource(ElementSourceInterface):
             return False
 
     def _tree(self):
-        return etree.fromstring(str(device().source()).encode("utf-8"))
+        return etree.fromstring(birch.read_screen().encode("utf-8"))
 
     def capture(self):
         raise NotImplementedError("The Birch page source has no screenshots.")
 
     def get_page_source(self):
-        return str(device().source()), str(utils.get_timestamp())
+        return birch.read_screen(), str(utils.get_timestamp())
 
     def _matches(self, element: str) -> list:
         kind = utils.determine_element_type(element)

@@ -1,7 +1,7 @@
 // /explain: edit a suite, see each row explained and the predicted optics dry_run, live.
 (function () {
   "use strict";
-  var S = window.OpticsSuite, X = window.OpticsExplain, root = document.querySelector(".xp");
+  var S = window.OpticsSuite, X = window.OpticsExplain, root = document.querySelector(".xp"), site = new URL(".", document.currentScript.src);
   if (!S || !X || !root) return;
   var data = JSON.parse(document.getElementById("xp-data").textContent);
   var cat = data.catalogue, examples = data.examples;
@@ -12,8 +12,9 @@
   };
   var state = { files: [], active: 0, example: null }, model, run, notes, lineH = 22;
   var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var docs = function (path) { return esc(new URL(path, site).href); };
   var prose = function (s) {
-    return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\[([^\]]+)\]\(\/?([^)]+)\)/g, '<a href="$2">$1</a>');
+    return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\[([^\]]+)\]\(\/?([^)]+)\)/g, function (_, text, path) { return '<a href="' + docs(path) + '">' + text + "</a>"; });
   };
   var reduce = matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -292,7 +293,7 @@
     var list = notes.filter(function (n) { return n.level !== "info"; });
     ui.notes.hidden = !list.length;
     ui.notes.querySelector("ul").innerHTML = list.map(function (n) {
-      return '<li class="n-' + n.level + '">' + loc(n.at) + "<span>" + esc(n.text) + '</span> <a href="' + esc(n.docs) + '">Docs</a></li>';
+      return '<li class="n-' + n.level + '">' + loc(n.at) + "<span>" + esc(n.text) + '</span> <a href="' + docs(n.docs) + '">Docs</a></li>';
     }).join("");
   }
 
@@ -327,7 +328,7 @@
 
   function rowNotes(row) {
     var list = notes.filter(function (n) { return n.at && within(n.at, row); });
-    return list.length ? '<ul class="xp-rnotes">' + list.map(function (n) { return '<li class="n-' + n.level + '">' + esc(n.text) + ' <a href="' + esc(n.docs) + '">Docs</a></li>'; }).join("") + "</ul>" : "";
+    return list.length ? '<ul class="xp-rnotes">' + list.map(function (n) { return '<li class="n-' + n.level + '">' + esc(n.text) + ' <a href="' + docs(n.docs) + '">Docs</a></li>'; }).join("") + "</ul>" : "";
   }
 
   function explainStep(rec) {
@@ -380,10 +381,10 @@
   }
 
   function keywordBox(step, kw) {
-    if (kw) return "<p>" + prose(kw.summary) + ' <a href="' + esc(kw.url) + '">Docs</a></p>';
+    if (kw) return "<p>" + prose(kw.summary) + ' <a href="' + docs(kw.url) + '">Docs</a></p>';
     if (model.modules.has(step.keyword)) return "<p>" + esc(step.keyword) + " is a module, not a keyword. Write <code>Execute Module," + esc(step.keyword) + "</code> to run it from here.</p>";
     var hint = S.suggestion(step.keyword, cat);
-    return "<p>Optics has no keyword with this name." + (hint ? " The closest is " + esc(hint.split("'")[1]) + "." : "") + ' <a href="docs/reference/keywords/">All keywords</a></p>';
+    return "<p>Optics has no keyword with this name." + (hint ? " The closest is " + esc(hint.split("'")[1]) + "." : "") + ' <a href="' + docs("docs/reference/keywords/") + '">All keywords</a></p>';
   }
 
   function paramBox(b, kw, i, bound) {
@@ -565,7 +566,7 @@
     return head("Error definition", esc(e.code), e.severity ? chip(e.severity, "s-lit") : "") + '<div class="xp-body">' +
       "<p>" + (teardown ? "Before Suite Teardown" : "After the last test case") + ", Optics reads the text in the UI tree of the screen once. If it contains " + chip(e.match, "s-lit") + " or " + chip(e.code, "s-lit") + ", in any case, the run gets a failed test case " + chip("on-screen-error-detection", "s-mod") + " and exits with code 1.</p>" +
       (e.description ? "<p>The report says: " + esc(e.description) + (/[.!?]$/.test(e.description) ? "" : ".") + "</p>" : "") +
-      "<p>optics dry_run, optics live, the HTTP API and MCP don't run this check. " + '<a href="' + X.DOCS.errors + '">Docs</a></p></div>';
+      "<p>optics dry_run, optics live, the HTTP API and MCP don't run this check. " + '<a href="' + docs(X.DOCS.errors) + '">Docs</a></p></div>';
   }
 
   function explainApi(rec) {
