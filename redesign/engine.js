@@ -9,7 +9,7 @@
   function mb(bytes) { return (bytes / 1e6).toFixed(1) + " MB"; }
   function track(name) { document.dispatchEvent(new CustomEvent("optics:play", { detail: name })); }
 
-  var CONFIG = P.config || "driver_sources:\n  - birch:\n      enabled: true\nelements_sources:\n  - birch_page_source:\n      enabled: true\nexecution_output_path: ./output\n";
+  var CONFIG = "driver_sources:\n  - birch:\n      enabled: true\nelements_sources:\n  - birch_page_source:\n      enabled: true\nexecution_output_path: ./output\n";
   var SUITE = [
     "Test Cases:",
     "  - Shopper can add trail runners:",
