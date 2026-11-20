@@ -70,6 +70,7 @@
             <div><dt>Optics</dt><dd>The optics-framework 1.11.5 wheel from PyPI, unchanged: the popup guard, <code>popup_rules.json</code>, the retry, the limits, the popup events and the error codes.</dd></div>
             <div><dt>The popups</dt><dd>This page draws them. It gives each one the UI tree a real Android app gives: an AlertDialog under <code>android:id/parentPanel</code>, a sheet under <code>design_bottom_sheet</code>, a permission prompt from the permission controller.</dd></div>
             <div><dt>Reading them</dt><dd>On a device, the Appium driver reads popups. Here, the Birch driver hands its page source to the same Appium screen reader, so the guard sees what it would see on a phone.</dd></div>
+            <div><dt>Pace</dt><dd>The page waits after each step so you can watch the phone. In a browser without JSPI, the page cannot change while Python runs, so the phone shows the taps of a step after the step. A popup that Optics closes and then sees again in the same step can stay hidden.</dd></div>
             <div><dt>Rules</dt><dd>Each rule is one line of <code>popup_rules.json</code>. Read <a href="docs/advanced/popups">Handle popups</a> to write your own.</dd></div>
           </dl>
         </div>

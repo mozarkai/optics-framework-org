@@ -69,7 +69,7 @@
       rule: { name: "spin_to_win", detect: { text_contains: ["Spin to win"] }, action: { type: "tap", target: "No thanks" }, max_per_step: 2 } },
     { id: "chat", name: "Chat bubble", slot: "size", look: "bubble", text: dlg("Chat with Birch", "Hi! Need a hand?", ["Minimise"]),
       rule: { name: "chat_bubble", check: "before_every_step", detect: { text_contains: ["Chat with Birch"] }, action: { type: "tap", target: "Minimise" } } },
-    { id: "club", name: "Birch Club", slot: "size", look: "club", text: dlg("Join Birch Club", "Free shipping on every order.", ["Join for $5/mo", "No thanks"]),
+    { id: "club", name: "Birch Club", slot: "card", look: "club", text: dlg("Join Birch Club", "Free shipping on every order.", ["Join for $5/mo", "No thanks"]),
       rule: { name: "birch_club", detect: { text_contains: ["Birch Club"] }, action: { type: "tap", target: "No thanks" } } },
   ];
   POPUPS.forEach(function (p) { p.title = p.text.title; p.msg = p.text.msg; p.buttons = p.text.buttons; });
@@ -236,6 +236,7 @@
     layer: function (io) {
       var dev = io.dev, A = dev.app, scr = dev.scr;
       var host = node(scr, "div", "pp-layer");
+      host.inert = true;
       var stack = [], fired = {}, back = [], chat = null;
 
       function show(p) {

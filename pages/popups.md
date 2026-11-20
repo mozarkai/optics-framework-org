@@ -16,7 +16,7 @@ The popups playground at https://optics-framework.org/popups throws eleven popup
 | What's new | On the shoe | `back` | The back action |
 | Spin to win | On the shoe | Tap `No thanks`, `max_per_step: 2` | It comes back each time, so the step fails with E0407 |
 | Chat bubble | After size 10 | Tap `Minimise`, `check: before_every_step` | A bubble that covers `Add to cart` |
-| Birch Club | After size 10 | Tap `No thanks` | With its rule off, the step fails with E0206 |
+| Birch Club | On the shoe | Tap `No thanks` | With its rule off, the step fails with E0206 |
 
 ## The scenarios
 
@@ -85,6 +85,7 @@ Elements:
 
 - **Optics:** the optics-framework 1.11.5 wheel from PyPI, unchanged: the popup guard, `popup_rules.json`, the retry, the limits, the popup events and the error codes.
 - **The popups:** the page draws them. It gives each one the UI tree a real Android app gives: an AlertDialog under `android:id/parentPanel`, a sheet under `design_bottom_sheet`, a permission prompt from the permission controller.
+- **Pace:** the page waits after each step so you can watch the phone. In a browser without JSPI, the page cannot change while Python runs, so the phone shows the taps of a step after the step. A popup that Optics closes and then sees again in the same step can stay hidden.
 - **Reading them:** on a device, the Appium driver reads popups. In the page, the Birch driver hands its page source to the same Appium screen reader, so the guard sees what it would see on a phone.
 
 To write rules for your own app, read Handle popups (https://optics-framework.org/docs/advanced/popups).
