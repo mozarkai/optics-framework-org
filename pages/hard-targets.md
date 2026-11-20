@@ -12,4 +12,4 @@ A locked phone through Bluetooth and a camera. A TV through its remote. A game t
 - **A crash that no step checks:** error detection reads the last screen and fails the run on "has stopped". `ERR_CRASH,has stopped,The app crashed with a system dialog,critical`. Guide: https://optics-framework.org/docs/run/error-detection
 - **The same words twice:** an area of interest keeps the match in one part of the screen. `Add To Cart,Press Element,Add to cart,aoi_y=75,aoi_height=25`. Guide: https://optics-framework.org/docs/elements/area-of-interest
 
-Each target plays as a scene at https://optics-framework.org/hard-targets beside the suite lines that drive it.
+Each target plays as a scene at https://optics-framework.org/playground/hard-targets beside the suite lines that drive it.

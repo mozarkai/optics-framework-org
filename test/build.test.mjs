@@ -13,6 +13,9 @@ const ORIGIN = "https://optics-framework.org";
 const TRUST_PAGES = ["about", "contact", "privacy"];
 
 const read = (f) => readFileSync(`out/${f}`, "utf8");
+const htmlPages = (dir = "") =>
+  readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? htmlPages(`${dir}${e.name}/`) : e.name.endsWith(".html") ? [`${dir}${e.name}`] : []));
+const MOVED = ["run", "ship", "hard-targets", "explain"];
 
 // Every docs page in nav order, with its URL path and its built file.
 const docsPages = () => {
@@ -100,7 +103,7 @@ test("every page links the trust pages from its footer", () => {
 
 test("every page shares one footer that names the latest release and links the release history", () => {
   const latest = JSON.parse(readFileSync("content/proof.json", "utf8")).github.releases[0].tag;
-  const pages = ["index.html", "404.html", "blog.html", "releases.html", "ship.html", "docs/index.html", "docs/guides/index.html", ...TRUST_PAGES.map((p) => `${p}.html`)];
+  const pages = ["index.html", "404.html", "blog.html", "releases.html", "playground/ship.html", "docs/index.html", "docs/guides/index.html", ...TRUST_PAGES.map((p) => `${p}.html`)];
   const sitemap = (html) => html.match(/<footer class="foot"[\s\S]*<\/footer>/)[0].replace(/(href|aria-label)="[^"]*"/g, "");
   for (const page of pages) {
     const footer = read(page).match(/<footer class="foot"[\s\S]*<\/footer>/)[0];
@@ -110,10 +113,10 @@ test("every page shares one footer that names the latest release and links the r
 });
 
 test("relative links on every page resolve to a built file", () => {
-  for (const page of readdirSync("out").filter((f) => f.endsWith(".html") && f !== "404.html")) {
+  for (const page of htmlPages().filter((f) => f !== "404.html")) {
     for (const [, url] of read(page).matchAll(/(?:href|src|poster)="([^"#]+)"/g)) {
-      if (/^(https?:|mailto:|\/)/.test(url) || url === "./") continue;
-      const path = url.split("?")[0];
+      if (/^(https?:|mailto:|\/)/.test(url)) continue;
+      const path = decodeURIComponent(new URL(url, `https://x/${page}`).pathname.slice(1)).replace(/(^|\/)$/, "$1index.html");
       assert.ok(existsSync(`out/${path}`) || existsSync(`out/${path}.html`), `${page} links missing ${url}`);
     }
   }
@@ -156,7 +159,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/popups`, `${ORIGIN}/ship`, `${ORIGIN}/hard-targets`, `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`, `${ORIGIN}/explain`, `${ORIGIN}/releases`];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, ...["popups", "ship", "hard-targets"].map((p) => `${ORIGIN}/playground/${p}`), `${ORIGIN}/blog`, ...articles, `${ORIGIN}/playground/run`, `${ORIGIN}/playground/explain`, `${ORIGIN}/releases`];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
@@ -345,7 +348,7 @@ test("llms-full.txt holds the text of the homepage, the text pages and every doc
   const pages = docsPages().filter((p) => !internal(p));
   assert.ok(internals.length > 0);
   for (const p of internals) assert.ok(!full.includes(`Source: ${ORIGIN}/${p.url}\n`), `llms-full.txt has /${p.url}`);
-  for (const url of ["", "hard-targets", ...TRUST_PAGES, ...pages.map((p) => p.url)]) {
+  for (const url of ["", "playground/hard-targets", ...TRUST_PAGES, ...pages.map((p) => p.url)]) {
     assert.ok(full.includes(`Source: ${ORIGIN}/${url}\n`), `llms-full.txt lacks /${url}`);
   }
   assert.doesNotMatch(full, /\]\((?!https?:|mailto:|#)[^)]+\)/, "llms-full.txt has a relative link");
@@ -357,7 +360,7 @@ test("the wild flows show real keywords, and each tile's lines come from the fil
     [...readFileSync("docs/reference/keywords/index.md", "utf8").matchAll(/^\| ([A-Z][\w ]+?) \| .+\| \[[^\]]+\]\(\/docs\/reference\/keywords\//gm)].map((m) => m[1]),
   );
   const unescape = (s) => s.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-  const tiles = [...read("hard-targets.html").matchAll(/<article class="wild-t[^"]*" data-scene="(\w+)">([\s\S]*?)<\/article>/g)];
+  const tiles = [...read("playground/hard-targets.html").matchAll(/<article class="wild-t[^"]*" data-scene="(\w+)">([\s\S]*?)<\/article>/g)];
   assert.ok(tiles.length >= 7);
   for (const [, scene, body] of tiles) {
     const files = [...body.matchAll(/<figcaption>([^<]+)<\/figcaption><pre><code>([\s\S]*?)<\/code>/g)].map(([, name, code]) => ({ name, rows: unescape(code).split("\n") }));
@@ -492,8 +495,7 @@ test("no page loads an asset from another server", () => {
 // The Markdown twins publish every address in clear text, so the edge's email obfuscation
 // protects nothing and only turns sample addresses in code into "[email protected]".
 test("every page with an email address keeps it out of the edge's obfuscation", () => {
-  const files = (dir) => readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(`${dir}${e.name}/`) : e.name.endsWith(".html") ? [`${dir}${e.name}`] : []));
-  const pages = files("").filter((f) => /[\w.+-]+@[\w-]+\.[a-z]{2,}/.test(read(f)));
+  const pages = htmlPages().filter((f) => /[\w.+-]+@[\w-]+\.[a-z]{2,}/.test(read(f)));
   assert.ok(pages.length > 10);
   for (const page of pages) {
     const body = read(page).match(/<body[^>]*>([\s\S]*)<\/body>/)?.[1] ?? "";
@@ -502,11 +504,9 @@ test("every page with an email address keeps it out of the edge's obfuscation", 
 });
 
 test("every HTML page has a Markdown twin for agents", () => {
-  const html = (dir) => readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) =>
-    e.isDirectory() ? html(`${dir}/${e.name}`) : e.name.endsWith(".html") ? [`${dir}/${e.name}`] : []);
-  for (const page of html(".")) {
-    assert.ok(existsSync(page.replace(/^\./, "out").replace(/\.html$/, ".md")), `${page} has no .md twin`);
-    if (["./404.html", "./blog/index.html"].includes(page)) continue;
+  for (const page of htmlPages()) {
+    assert.ok(existsSync(`out/${page.replace(/\.html$/, ".md")}`), `${page} has no .md twin`);
+    if (["404.html", "blog/index.html", "playground/index.html"].includes(page)) continue;
     const html = read(page);
     assert.match(html, /<link rel="alternate" type="text\/markdown" href="[^"]+\.md"/, `${page} does not link its twin`);
     assert.match(html, /<meta name="ai-summary" content="[^"]{20,}">/, `${page} has no ai-summary`);
@@ -517,12 +517,24 @@ test("every HTML page has a Markdown twin for agents", () => {
 test("every playground page opens on the same tab row, with its own tab current", () => {
   const pages = ["playground", "popups", "run", "ship", "hard-targets", "explain"];
   assert.match(read("index.html"), /<nav class="nav-links"[^>]*>[\s\S]*?href="playground">Playground<\/a>/);
+  const at = (page) => (page === "playground" ? "playground" : `playground/${page}`);
   for (const page of pages) {
-    const rows = [...read(`${page}.html`).matchAll(/<nav class="play-tabs"[^>]*>([\s\S]*?)<\/nav>/g)];
+    const file = `${at(page)}.html`;
+    const rows = [...read(file).matchAll(/<nav class="play-tabs"[^>]*>([\s\S]*?)<\/nav>/g)];
     assert.equal(rows.length, 1, `${page} has ${rows.length} tab rows`);
-    const links = [...rows[0][1].matchAll(/<a href="([^"]+)"( aria-current="page")?>/g)];
-    assert.deepEqual(links.map(([, href]) => href), pages, page);
-    assert.deepEqual(links.filter(([, , current]) => current).map(([, href]) => href), [page]);
+    const links = [...rows[0][1].matchAll(/<a href="([^"]+)"( aria-current="page")?>/g)].map(([, href, current]) => [new URL(href, `https://x/${file}`).pathname, current]);
+    assert.deepEqual(links.map(([path]) => path), pages.map((p) => `/${at(p)}`), page);
+    assert.deepEqual(links.filter(([, current]) => current).map(([path]) => path), [`/${at(page)}`]);
+  }
+});
+
+test("each old playground address forwards to its page under /playground, keeping the query and the fragment", () => {
+  for (const page of MOVED) {
+    const html = read(`${page}.html`);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${ORIGIN}/playground/${page}">`), page);
+    assert.match(html, /<meta name="robots" content="noindex">/, page);
+    assert.ok(html.includes(`location.replace("playground/${page}" + location.search + location.hash)`), page);
+    assert.match(read(`${page}.md`), new RegExp(`${ORIGIN}/playground/${page}\\.md`), page);
   }
 });
 

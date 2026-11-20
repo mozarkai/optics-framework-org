@@ -23,7 +23,7 @@ Popup rules work on Android and iOS apps through Appium. Playwright, Selenium an
 :::
 
 :::tip[Try it in your browser]
-The [popups playground](/popups) runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.
+The [popups playground](/playground/popups) runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.
 :::
 
 ## Write your first rule

@@ -1,6 +1,6 @@
 # Popups, swatted
 
-The popups playground at https://optics-framework.org/popups throws eleven popups at a three-test suite on Birch, a demo shop app drawn in the page. The optics-framework 1.11.5 wheel from PyPI runs on Python in WebAssembly. When a popup blocks a step, its popup guard reads the screen, runs the matching rule and tries the step again. You turn each popup and each rule on or off, then run the suite.
+The popups playground at https://optics-framework.org/playground/popups throws eleven popups at a three-test suite on Birch, a demo shop app drawn in the page. The optics-framework 1.11.5 wheel from PyPI runs on Python in WebAssembly. When a popup blocks a step, its popup guard reads the screen, runs the matching rule and tries the step again. You turn each popup and each rule on or off, then run the suite.
 
 ## The popups
 

@@ -94,7 +94,7 @@
     })();
   </script>
   <script>
-    if (/[?&]sim=/.test(location.search)) location.replace("ship" + location.search + "#simulator");
+    if (/[?&]sim=/.test(location.search)) location.replace("playground/ship" + location.search + "#simulator");
   </script>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="playground.css">
@@ -313,7 +313,7 @@
               <div><dt>Modules</dt><dd>The steps, one keyword each, reused by every test case that names them.</dd></div>
               <div><dt>Elements</dt><dd>Every name mapped to the ways to find it on screen. The only place a locator lives, so a redesign is an edit here and not in every test.</dd></div>
             </dl>
-            <p class="body-text"><a class="learn-link" href="explain">Explain a suite</a> reads one row by row and shows what <code class="ic">optics dry_run</code> would report.</p>
+            <p class="body-text"><a class="learn-link" href="playground/explain">Explain a suite</a> reads one row by row and shows what <code class="ic">optics dry_run</code> would report.</p>
           </div>
           <div class="formats">
             <div class="os fmt" role="tablist" aria-label="File format">
@@ -381,7 +381,7 @@ Element_Name,Element_ID
           </dl>
         </div>
         <!-- run:card -->
-        <p class="band-more"><a class="btn btn-ghost btn-sm" href="run">Step through the run</a></p>
+        <p class="band-more"><a class="btn btn-ghost btn-sm" href="playground/run">Step through the run</a></p>
       </div>
     </section>
 
@@ -400,7 +400,7 @@ Element_Name,Element_ID
           <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
           <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
         </ol>
-        <p class="band-more"><a class="btn btn-ghost btn-sm" href="ship">Try to break it</a></p>
+        <p class="band-more"><a class="btn btn-ghost btn-sm" href="playground/ship">Try to break it</a></p>
       </div>
     </section>
 
@@ -413,7 +413,7 @@ Element_Name,Element_ID
         </div>
         <div class="pg scr" role="group" aria-label="Playground: one suite, every screen" aria-describedby="pg-scr-desc"></div>
         <p class="vh" id="pg-scr-desc">A simulation that runs the same five-step suite on Android, iOS, the web, a TV and a production device driven over Bluetooth. It does not run Optics. Use the Device slider to pick a device. The suite plays again and again on that device, and the text next to it names the driver and tells how Press Element works there.</p>
-        <p class="band-more"><a class="btn btn-ghost btn-sm" href="hard-targets">Locked phones, TVs, games and more</a></p>
+        <p class="band-more"><a class="btn btn-ghost btn-sm" href="playground/hard-targets">Locked phones, TVs, games and more</a></p>
       </div>
     </section>
 

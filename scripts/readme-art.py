@@ -37,7 +37,7 @@ def live(page):
 
 
 def explain(page):
-    page.goto(BASE + "explain")
+    page.goto(BASE + "playground/explain")
     root = page.locator(".xp-bench")
     editor = root.locator("textarea").first
     steps = [(300, lambda: editor.click(position={"x": 40, "y": 30}))]
@@ -46,7 +46,7 @@ def explain(page):
 
 
 def run(page):
-    page.goto(BASE + "run")
+    page.goto(BASE + "playground/run")
     root = page.locator("[data-replay]").first
     root.locator(".rp-play").wait_for()
     return root, [(300, lambda: root.locator("[aria-pressed]").last.click())], 32000

@@ -1,6 +1,6 @@
 // /playground: the real optics-framework wheel on Pyodide, loaded on request, driving Birch in the page.
 (function () {
-  var B = window.BIRCH, lab = document.querySelector(".eng-lab"), P = window.OPTICS_LAB || {};
+  var B = window.BIRCH, lab = document.querySelector(".eng-lab"), P = window.OPTICS_LAB || {}, assets = new URL(".", document.currentScript.src);
   if (!B || !lab) return;
   var M = JSON.parse(document.getElementById("engine-manifest").textContent);
   var esc = B.esc, el = B.el;
@@ -426,19 +426,19 @@
       bar.style.width = Math.min(100, got / total * 100) + "%";
       load.querySelector("span").textContent = mb(got) + " of " + mb(total);
     });
-    var base = new URL(M.core, location.href).href, py;
+    var base = new URL(M.core, assets).href, py;
     log.innerHTML = "";
     var importing;
     import(base + "pyodide.mjs").then(function (mod) {
       return mod.loadPyodide({ indexURL: base, stdout: function () {}, stderr: function () {} });
     }).then(function (p) {
       py = p;
-      return py.loadPackage(M.wheels.map(function (w) { return new URL("engine/wheels/" + w.file, location.href).href; }), { messageCallback: function () {} });
+      return py.loadPackage(M.wheels.map(function (w) { return new URL("engine/wheels/" + w.file, assets).href; }), { messageCallback: function () {} });
     }).then(function () {
       window.fetch = realFetch;
       var site = py.runPython("import site; site.getsitepackages()[0]");
       return Promise.all(M.python.map(function (f) {
-        return realFetch("engine/" + f.path + "?v=" + f.v).then(function (r) { if (!r.ok) throw new Error(f.path + " answered " + r.status); return r.text(); }).then(function (text) {
+        return realFetch(new URL("engine/" + f.path + "?v=" + f.v, assets)).then(function (r) { if (!r.ok) throw new Error(f.path + " answered " + r.status); return r.text(); }).then(function (text) {
           var dest = site + "/" + f.path;
           py.FS.mkdirTree(dest.slice(0, dest.lastIndexOf("/")));
           py.FS.writeFile(dest, text);
