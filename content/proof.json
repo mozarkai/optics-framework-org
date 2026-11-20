@@ -103,6 +103,59 @@
     "forks": 31,
     "releases": [
       {
+        "tag": "1.11.5",
+        "date": "2026-11-20",
+        "url": "https://github.com/mozarkai/optics-framework/releases/tag/1.11.5",
+        "added": [
+          {
+            "scope": "doctor",
+            "text": "Add a Desktop section",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/728"
+          },
+          {
+            "scope": "ble",
+            "text": "Drive devices over Bluetooth through the airhand dongle",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/726"
+          },
+          {
+            "scope": "ocr",
+            "text": "Add RapidOCR and Apple Vision, one capture and one OCR pass per lookup",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/735"
+          },
+          {
+            "scope": "runner",
+            "text": "Record AI self-heals of a batch run in its events and junit_output.xml",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/742"
+          },
+          {
+            "scope": "",
+            "text": "Update notice, optics upgrade and an MCP send_feedback tool",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/739"
+          },
+          {
+            "scope": "execute",
+            "text": "Show progress as plain or JSON lines when stdout is not a terminal",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/748"
+          },
+          {
+            "scope": "ble",
+            "text": "Hold webcam focus, find dark screens by the pointer, open apps on any launcher",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/751"
+          },
+          {
+            "scope": "popup",
+            "text": "Handle popups that block a step, with rules, evidence and permissions at launch",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/721"
+          },
+          {
+            "scope": "",
+            "text": "Popup module action",
+            "pr": "https://github.com/mozarkai/optics-framework/pull/756"
+          }
+        ],
+        "fixes": 8
+      },
+      {
         "tag": "1.11.4",
         "date": "2026-11-17",
         "url": "https://github.com/mozarkai/optics-framework/releases/tag/1.11.4",
