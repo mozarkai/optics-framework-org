@@ -37,7 +37,7 @@ test("collecting reads PyPI by installer and month, and keeps only published rel
       if (body.includes("GROUP BY installer")) return { data: [["bandersnatch", "40"], ["", "7"], ["pip", "3"]] };
       return { data: [["2026-10", "2"], ["2026-11", "1"]] };
     }
-    if (url.endsWith("/releases?per_page=30")) {
+    if (url.endsWith("/releases?per_page=100")) {
       const release = (tag, extra = {}) => ({ tag_name: tag, published_at: "2026-11-17T06:42:21Z", html_url: `https://github.com/o/r/releases/tag/${tag}`, body: "* feat(mcp): cut tokens by @a in https://github.com/o/r/pull/1", ...extra });
       return [release("1.12.0", { draft: true }), release("1.12.0rc1", { prerelease: true }), release("v1.11.4", { body: null })];
     }
@@ -82,10 +82,9 @@ test("the homepage shows the committed PyPI, GitHub and release numbers with the
   assert.ok(section.includes(grouped(all)), `all downloads ${all} missing`);
   assert.ok(section.includes(`>${grouped(github.stars)}<`), "stars missing");
   for (const date of [pypi.to, pypi.retrieved, github.retrieved]) assert.ok(section.includes(`datetime="${date}"`), `date ${date} missing`);
-  for (const release of github.releases.slice(0, 3)) {
-    assert.ok(section.includes(`href="${release.url}"`), `release ${release.tag} missing`);
-    for (const change of release.added.slice(0, 3)) assert.ok(section.includes(change.pr), `${release.tag} change ${change.pr} missing`);
-  }
+  assert.ok(section.includes(`href="${github.releases[0].url}"`), "latest release missing");
+  assert.ok(!section.includes(`href="${github.releases[1].url}"`), "older releases belong on /releases");
+  assert.match(section, /<a [^>]*href="releases"[^>]*>All releases<\/a>/);
   for (const source of ["https://clickpy.clickhouse.com/dashboard/optics-framework", "https://github.com/mozarkai/optics-framework", "https://github.com/mozarkai/optics-framework/releases"]) {
     assert.ok(section.includes(`href="${source}"`), `source ${source} not linked`);
   }
@@ -97,5 +96,22 @@ test("index.md carries the same numbers for agents", () => {
   const md = read("index.md");
   assert.match(md, new RegExp(`${grouped(github.stars)} stars`));
   assert.ok(md.includes(github.releases[0].url));
+  assert.ok(md.includes("https://optics-framework.org/releases"));
   assert.doesNotMatch(md, /<!-- proof -->/);
+});
+
+test("/releases lists every release newest first, each with its notes, in HTML and Markdown", () => {
+  const { github } = proof();
+  const html = read("releases.html");
+  const md = read("releases.md");
+  const tags = [...html.matchAll(/<a class="rel-tag" href="([^"]+)">([^<]+)<\/a>/g)];
+  assert.deepEqual(tags.map(([, , tag]) => tag), github.releases.map((r) => r.tag));
+  assert.deepEqual(tags.map(([url]) => url.match(/href="([^"]+)"/)[1]), github.releases.map((r) => r.url));
+  for (const r of github.releases) {
+    for (const c of r.added) {
+      assert.ok(html.includes(`href="${c.pr}"`), `${r.tag} change ${c.pr} missing`);
+      assert.ok(md.includes(c.pr), `${r.tag} change ${c.pr} missing from the twin`);
+    }
+    assert.ok(md.includes(`[${r.tag}](${r.url})`), `${r.tag} missing from the twin`);
+  }
 });

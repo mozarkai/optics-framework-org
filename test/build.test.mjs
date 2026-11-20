@@ -98,6 +98,17 @@ test("every page links the trust pages from its footer", () => {
   }
 });
 
+test("every page shares one footer that names the latest release and links the release history", () => {
+  const latest = JSON.parse(readFileSync("content/proof.json", "utf8")).github.releases[0].tag;
+  const pages = ["index.html", "404.html", "blog.html", "releases.html", "ship.html", "docs/index.html", "docs/guides/index.html", ...TRUST_PAGES.map((p) => `${p}.html`)];
+  const sitemap = (html) => html.match(/<footer class="foot"[\s\S]*<\/footer>/)[0].replace(/(href|aria-label)="[^"]*"/g, "");
+  for (const page of pages) {
+    const footer = read(page).match(/<footer class="foot"[\s\S]*<\/footer>/)[0];
+    assert.match(footer, new RegExp(`<a class="foot-rel" href="[^"]*releases">[\\s\\S]*?${latest.replaceAll(".", "\\.")}`), `${page} footer does not name ${latest}`);
+    assert.equal(sitemap(read(page)).replace(/\s*<div class="wrap foot-night">[\s\S]*?<\/div>/, ""), sitemap(read("about.html")), `${page} footer differs from the others`);
+  }
+});
+
 test("relative links on every page resolve to a built file", () => {
   for (const page of readdirSync("out").filter((f) => f.endsWith(".html") && f !== "404.html")) {
     for (const [, url] of read(page).matchAll(/(?:href|src|poster)="([^"#]+)"/g)) {
@@ -145,7 +156,7 @@ test("sitemap.xml lists every indexable page with a lastmod date", () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const locs = urls.map(([, loc]) => loc);
   const articles = loadBlog().items.filter((i) => i.slug).map((i) => itemUrl(i, ORIGIN));
-  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/releases`, `${ORIGIN}/hard-targets`, `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`, `${ORIGIN}/explain`];
+  const head = [`${ORIGIN}/`, ...TRUST_PAGES.map((p) => `${ORIGIN}/${p}`), `${ORIGIN}/playground`, `${ORIGIN}/ship`, `${ORIGIN}/hard-targets`, `${ORIGIN}/blog`, ...articles, `${ORIGIN}/run`, `${ORIGIN}/explain`, `${ORIGIN}/releases`];
   assert.deepEqual(locs.slice(0, head.length), head);
   assert.deepEqual(locs.slice(head.length), docsPages().map((p) => `${ORIGIN}/${p.url}`));
   for (const [, loc, lastmod] of urls) {
@@ -504,7 +515,7 @@ test("every HTML page has a Markdown twin for agents", () => {
 });
 
 test("every playground page opens on the same tab row, with its own tab current", () => {
-  const pages = ["playground", "run", "releases", "hard-targets", "explain"];
+  const pages = ["playground", "run", "ship", "hard-targets", "explain"];
   assert.match(read("index.html"), /<nav class="nav-links"[^>]*>[\s\S]*?href="playground">Playground<\/a>/);
   for (const page of pages) {
     const rows = [...read(`${page}.html`).matchAll(/<nav class="play-tabs"[^>]*>([\s\S]*?)<\/nav>/g)];

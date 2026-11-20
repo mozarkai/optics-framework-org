@@ -94,7 +94,7 @@
     })();
   </script>
   <script>
-    if (/[?&]sim=/.test(location.search)) location.replace("releases" + location.search + "#simulator");
+    if (/[?&]sim=/.test(location.search)) location.replace("ship" + location.search + "#simulator");
   </script>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="playground.css">
@@ -385,7 +385,7 @@ Element_Name,Element_ID
       </div>
     </section>
 
-    <!-- The locator ladder: the rungs are an ordered fallback. The playground to break it lives on /releases. -->
+    <!-- The locator ladder: the rungs are an ordered fallback. The playground to break it lives on /ship. -->
     <section data-hour="5" class="band ladder" id="ladder" aria-labelledby="ladder-h">
       <div class="wrap">
         <h2 class="h2" id="ladder-h">How Optics finds an element</h2>
@@ -400,7 +400,7 @@ Element_Name,Element_ID
           <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
           <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
         </ol>
-        <p class="band-more"><a class="btn btn-ghost btn-sm" href="releases">Try to break it</a></p>
+        <p class="band-more"><a class="btn btn-ghost btn-sm" href="ship">Try to break it</a></p>
       </div>
     </section>
 
@@ -636,28 +636,7 @@ Element_Name,Element_ID
     <form method="dialog"><button class="film-close" type="submit" aria-label="Close the demo">Close</button></form>
   </dialog>
 
-  <footer class="foot" data-hour="9">
-    <div class="wrap foot-night">
-      <p class="foot-line" aria-hidden="true">Run it <span>forever.</span></p>
-    </div>
-    <div class="wrap foot-row">
-      <a class="brand" href="#top" aria-label="Back to top">
-        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
-        <span>Optics</span>
-      </a>
-      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
-      <nav class="foot-links" aria-label="Footer">
-        <a href="docs/">Docs</a>
-        <a href="blog">Blog</a>
-        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
-        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
-        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
-        <a href="about">About</a>
-        <a href="contact">Contact</a>
-        <a href="privacy">Privacy</a>
-      </nav>
-    </div>
-  </footer>
+  <!-- footer -->
 
   <!-- Shared logo symbol -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">

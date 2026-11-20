@@ -7,8 +7,10 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { buildDocs } from "./lib/docs.mjs";
 import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
+import { releasesBody, releasesMarkdown } from "./lib/releases.mjs";
 import { loadRun, runBody, runCard, runMarkdown } from "./lib/run.mjs";
 import { playTabs } from "./lib/play.mjs";
+import { siteFooter } from "./lib/footer.mjs";
 import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
@@ -35,6 +37,7 @@ function render(page, { root, home, canonical }) {
     head: page.head ?? "",
     root,
     home,
+    footer: footer(root, home),
   };
   return layout
     .replace("{{body}}", () => (page.body ?? readFileSync(page.src, "utf8")).trimEnd())
@@ -73,6 +76,8 @@ function pageMarkdown(html) {
 }
 
 const base = process.env.PAGES_BASE_PATH ?? "";
+const proof = loadProof();
+const footer = (root, home, night) => siteFooter({ root, home, night, latest: proof.github.releases[0] });
 
 rmSync("out", { recursive: true, force: true });
 cpSync("site", "out", { recursive: true });
@@ -121,8 +126,8 @@ cpSync("pages/playground.md", "out/playground.md");
 // The playgrounds that left the homepage, each a tab beside the engine, the run and /explain.
 const PLAY_PAGES = [
   {
-    src: "pages/releases.html",
-    path: "releases",
+    src: "pages/ship.html",
+    path: "ship",
     title: "Ship a release: break an Optics test, then ship a hundred",
     description: "Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.",
     styles: ["playground.css", "sim.css"],
@@ -195,8 +200,19 @@ const fill = (file, marker, text) => {
 };
 fill("out/index.html", "<!-- blog:latest -->", blogBand(blog));
 fill("out/index.md", "<!-- blog:latest -->", blogMarkdownBand(blog, ORIGIN));
-const proof = loadProof();
-fill("out/index.html", "<!-- proof -->", proofBand(proof));
+const headlines = JSON.parse(readFileSync("site/release.json", "utf8")).releases;
+fill("out/index.html", "<!-- proof -->", proofBand(proof, headlines));
+// The release history. Old links to the simulator, which used to live here, carry ?sim= or #simulator.
+const RELEASES_PAGE = {
+  path: "releases",
+  title: "Optics releases: what each version added",
+  description: "Every published release of optics-framework, newest first, with the features each one added and how many fixes it shipped.",
+  body: releasesBody(proof, headlines, ORIGIN),
+  head: `<link rel="alternate" type="text/markdown" href="releases.md" title="Optics releases, as Markdown">\n  <link rel="stylesheet" href="proof.css">\n  <script>if (/[?&]sim=/.test(location.search) || location.hash === "#simulator") location.replace("ship" + location.search + location.hash);</script>`,
+};
+writeFileSync("out/releases.html", render(RELEASES_PAGE, { root: "", home: "./", canonical: `${ORIGIN}/releases` }));
+writeFileSync("out/releases.md", releasesMarkdown(proof, headlines));
+fill("out/index.html", "<!-- footer -->", footer("", "", true));
 fill("out/index.html", "<!-- run:card -->", `<div class="run-card">${runCard(run)}</div>`);
 const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   .split(/\n\n+/)
@@ -209,7 +225,7 @@ const filmChapters = readFileSync("site/media/optics-film-chapters.vtt", "utf8")
   });
 fill("out/index.html", "<!-- film:chapters -->", `<ol aria-label="Chapters">${filmChapters.join("")}</ol>`);
 
-fill("out/index.md", "<!-- proof -->", proofMarkdown(proof));
+fill("out/index.md", "<!-- proof -->", proofMarkdown(proof, headlines, ORIGIN));
 fill("out/llms.txt", "<!-- blog:articles -->", blogLlmsLines(blog, ORIGIN));
 fill("out/ai.txt", "{{lastmod}}", lastModified("site/ai.txt"));
 
@@ -236,7 +252,7 @@ writeFileSync(
 );
 
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
-const docs = buildDocs({ lastModified });
+const docs = buildDocs({ lastModified, footer });
 
 // Every page in one file for agents: the homepage, about and contact, the docs in reading
 // order (without the Contribute section), then privacy. The articles stay out to keep the
@@ -263,6 +279,7 @@ writeFileSync(
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
     { loc: `${ORIGIN}/explain`, lastmod: lastModified("pages/explain.html") },
+    { loc: `${ORIGIN}/releases`, lastmod: proof.github.releases[0].date },
     ...docs.entries,
   ]),
 );

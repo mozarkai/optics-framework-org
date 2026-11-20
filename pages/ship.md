@@ -1,6 +1,6 @@
 # Ship a release
 
-Two simulations of Birch, a demo shop app, at https://optics-framework.org/releases. Neither runs Optics. They show how its locator ladder behaves when the app changes.
+Two simulations of Birch, a demo shop app, at https://optics-framework.org/ship. Neither runs Optics. They show how its locator ladder behaves when the app changes.
 
 ## Break the test
 
