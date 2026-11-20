@@ -155,7 +155,7 @@
 <p><strong>Location:</strong> <code class="ic">optics_framework/common/execution.py</code></p>
 <p>Executes a single keyword with parameters.</p>
 <h4 id="keyword-flow">Keyword flow<a class="anchor" href="#keyword-flow" aria-label="Link to this section">#</a></h4>
-<ol><li>Looks the keyword up in <code class="ic">runner.keyword_map</code> by its slug (<code class="ic">"_".join(keyword.split()).lower()</code>). If it is missing, it publishes a <code class="ic">FAIL</code> event and raises <code class="ic">E0402</code>.</li><li>Deserializes the parameters with <code class="ic">_deserialize_params()</code>: a parameter whose type in the method signature is a list and whose value is a JSON list becomes a Python list.</li><li>Executes keyword with parameters, in a thread (<code class="ic">asyncio.to_thread</code>) while it holds <code class="ic">session.keyword_lock</code>, so keywords in one session do not overlap.</li><li>On an exception, publishes a <code class="ic">FAIL</code> event. An <code class="ic">OpticsError</code> is raised again; any other exception becomes <code class="ic">E0401</code>.</li><li>Publishes a <code class="ic">PASS</code> event and returns keyword result.</li></ol>
+<ol><li>Looks the keyword up in <code class="ic">runner.keyword_map</code> by its slug (<code class="ic">"_".join(keyword.split()).lower()</code>). If it is missing, it publishes a <code class="ic">FAIL</code> event and raises <code class="ic">E0402</code>.</li><li>Deserializes the parameters with <code class="ic">_deserialize_params()</code>: a parameter whose type in the method signature is a list and whose value is a JSON list becomes a Python list.</li><li>Executes keyword with parameters, in a thread (<code class="ic">asyncio.to_thread</code>) while it holds <code class="ic">session.keyword_lock</code>, so keywords in one session do not overlap.</li><li>On an exception, publishes a <code class="ic">FAIL</code> event. Its message is <code class="ic">Keyword execution failed: &lt;summary&gt;</code>, its <code class="ic">code</code> is the code of the outermost <code class="ic">OpticsError</code> (<code class="ic">None</code> for any other exception), and its <code class="ic">extra</code> holds the <code class="ic">hint</code>. An <code class="ic">OpticsError</code> is raised again; any other exception becomes <code class="ic">E0401</code>.</li><li>Publishes a <code class="ic">PASS</code> event and returns keyword result.</li></ol>
 <p><code class="ic">KeywordExecutor</code> does not try fallback values. If the keyword used AI self-heal, the return value is a dictionary with <code class="ic">result</code>, <code class="ic">healed</code>, <code class="ic">heal_summary</code> and <code class="ic">suggested_steps</code>, and the event's <code class="ic">extra</code> carries <code class="ic">healed</code> and <code class="ic">heal_summary</code>.</p>
 <h3 id="runnerfactory">RunnerFactory<a class="anchor" href="#runnerfactory" aria-label="Link to this section">#</a></h3>
 <p><strong>Location:</strong> <code class="ic">optics_framework/common/execution.py</code></p>
@@ -307,7 +307,7 @@
     <span class="c-dim"># 4. Return module result</span>
     module_node.state = State.COMPLETED_PASSED
     <span class="c-info">return</span> <span class="c-info">True</span></code></pre></figure>
-<p>Flow control keywords (<code class="ic">Run Loop</code>, <code class="ic">Condition</code>, <code class="ic">Execute Module</code>) run other modules from inside a keyword call. They do not change the linked list.</p>
+<p>Flow control keywords (<code class="ic">Run Loop</code>, <code class="ic">Condition</code>, <code class="ic">Execute Module</code>) run other modules from inside a keyword call. They do not change the linked list. <code class="ic">FlowControl._execute_keyword_method</code> runs each step of such a module as the runner runs a suite step: <code class="ic">step_candidates()</code> gives every value of a whole <code class="ic">${name}</code> parameter, <code class="ic">step_arguments()</code> splits <code class="ic">name=value</code> parameters by the keyword's signature, <code class="ic">bind_params()</code> refuses parameters the keyword cannot take with <code class="ic">E0403</code>, and <code class="ic">fallback.run()</code> tries the values in turn. A step that fails raises <code class="ic">StepFailed</code> (<code class="ic">E0401</code>). Its message is the path to the step and the reason, such as <code class="ic">Inner › Innermost › Press Element: login_button is not on the screen. Looked for '//button[@id='login']'.</code></p>
 <p><strong>Example module execution:</strong></p>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Module: &quot;Enter Credentials&quot;
 # Keywords:
@@ -759,11 +759,11 @@ method = registry.get_method(<span class="c-lit">"custom_action"</span>)</code><
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="method = registry.get_method(&quot;nonexistent_keyword&quot;)
 if method is None:
     raise keyword_not_found(&quot;nonexistent_keyword&quot;, registry.keyword_map)
-    # OpticsError(Code.E0402, message=&quot;Keyword not found: nonexistent_keyword. Did you mean '...'? ...&quot;)">Copy</button><pre><code>method = registry.get_method(<span class="c-lit">"nonexistent_keyword"</span>)
+    # OpticsError(Code.E0402, message=&quot;'nonexistent_keyword' is not a keyword.&quot;)">Copy</button><pre><code>method = registry.get_method(<span class="c-lit">"nonexistent_keyword"</span>)
 <span class="c-info">if</span> method is <span class="c-info">None</span>:
     raise keyword_not_found(<span class="c-lit">"nonexistent_keyword"</span>, registry.keyword_map)
-    <span class="c-dim"># OpticsError(Code.E0402, message="Keyword not found: nonexistent_keyword. Did you mean '...'? ...")</span></code></pre></figure>
-<p><code class="ic">keyword_not_found()</code> and <code class="ic">suggest_keyword()</code> are in the same module. The hint names the closest keyword (by <code class="ic">difflib</code>, cutoff 0.6) and tells the user to run <code class="ic">optics list</code>.</p>
+    <span class="c-dim"># OpticsError(Code.E0402, message="'nonexistent_keyword' is not a keyword.")</span></code></pre></figure>
+<p><code class="ic">keyword_not_found()</code> and <code class="ic">suggest_keyword()</code> are in the same module. <code class="ic">suggest_keyword()</code> adds <code class="ic"> Did you mean '&lt;Keyword&gt;'?</code> with the closest keyword (by <code class="ic">difflib</code>, cutoff 0.6), for example <code class="ic">'Pres Element' is not a keyword. Did you mean 'Press Element'?</code>. The registry hint of <code class="ic">E0402</code> tells the user to run <code class="ic">optics list</code>.</p>
 <p><strong>Duplicate registration:</strong></p>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# Warning logged, but registration continues
 # Last registered method wins
@@ -1138,9 +1138,10 @@ for i in range(min_length):
     &quot;&quot;&quot;Try each value until one succeeds.&quot;&quot;&quot;
     values = self.get_element(name)
     if not values:
-        raise OpticsError(Code.E0201, f&quot;Element not found: {name}&quot;)
+        raise undefined_element(name)
     attempts = 0
     cap = max_attempts if (max_attempts is not None) else len(values)
+    last_exc: Optional[Exception] = None
     for v in values:
         if attempts &gt;= cap:
             break
@@ -1148,10 +1149,12 @@ for i in range(min_length):
         try:
             return resolver(v)
         except Exception as e:
+            last_exc = e
             if on_error:
                 on_error(e, v)
             continue
-    raise OpticsError(Code.X0201, f&quot;Element '{name}' not found after attempting {attempts} value(s); last error: ...&quot;)">Copy</button><pre><code><span class="c-info">def</span> resolve_with_fallback(
+    last = f&quot;: {plain(last_exc)}&quot; if last_exc is not None else &quot;&quot;
+    raise OpticsError(Code.X0201, f&quot;None of the {attempts} values of {name} worked{last}&quot;, cause=last_exc)">Copy</button><pre><code><span class="c-info">def</span> resolve_with_fallback(
     self,
     name: str,
     resolver: Callable[[str], Any],
@@ -1161,9 +1164,10 @@ for i in range(min_length):
     <span class="c-lit">""</span><span class="c-lit">"Try each value until one succeeds."</span><span class="c-lit">""</span>
     values = self.get_element(name)
     <span class="c-info">if</span> <span class="c-info">not</span> values:
-        raise OpticsError(Code.E0201, f<span class="c-lit">"Element not found: {name}"</span>)
+        raise undefined_element(name)
     attempts = 0
     cap = max_attempts <span class="c-info">if</span> (max_attempts is <span class="c-info">not</span> <span class="c-info">None</span>) <span class="c-info">else</span> len(values)
+    last_exc: Optional[Exception] = <span class="c-info">None</span>
     <span class="c-info">for</span> v <span class="c-info">in</span> values:
         <span class="c-info">if</span> attempts &gt;= cap:
             break
@@ -1171,11 +1175,13 @@ for i in range(min_length):
         <span class="c-info">try</span>:
             <span class="c-info">return</span> resolver(v)
         <span class="c-info">except</span> Exception <span class="c-info">as</span> e:
+            last_exc = e
             <span class="c-info">if</span> on_error:
                 on_error(e, v)
             continue
-    raise OpticsError(Code.X0201, f<span class="c-lit">"Element '{name}' not found after attempting {attempts} value(s); last error: ..."</span>)</code></pre></figure>
-<p>An exception in <code class="ic">on_error</code> is logged at debug level and does not stop the loop.</p>
+    last = f<span class="c-lit">": {plain(last_exc)}"</span> <span class="c-info">if</span> last_exc is <span class="c-info">not</span> <span class="c-info">None</span> <span class="c-info">else</span> <span class="c-lit">""</span>
+    raise OpticsError(Code.X0201, f<span class="c-lit">"None of the {attempts} values of {name} worked{last}"</span>, cause=last_exc)</code></pre></figure>
+<p>An exception in <code class="ic">on_error</code> is logged at debug level and does not stop the loop. A name with no values raises <code class="ic">${name} is not defined in the project's elements</code> (<code class="ic">E0201</code>).</p>
 <p><strong>Usage:</strong></p>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="element = session.elements.resolve_with_fallback(
     &quot;submit_button&quot;,
@@ -1196,6 +1202,8 @@ for i in range(min_length):
 <p>Hierarchical result display in the terminal (with Rich), with a progress bar and the failure details:</p>
 <ul><li>Test case results</li><li>Module results</li><li>Keyword results</li><li>Nested structure</li></ul>
 <p><code class="ic">TreeResultPrinter.get_instance()</code> returns one shared instance.</p>
+<p>Below the tree and the summary, a <strong>Failures</strong> panel shows each failed step: where it is (<code class="ic">&lt;test case&gt; › &lt;module&gt; › &lt;keyword&gt;</code>), the reason in red and the hint in yellow. The runner fills <code class="ic">reason</code> and <code class="ic">hint</code> of the result from <code class="ic">explain(error)</code>.</p>
+<p>With <code class="ic">--output plain</code> or <code class="ic">--output jsonl</code>, <code class="ic">EventStreamPrinter</code> (<code class="ic">event_stream.py</code>) writes one line for each event instead. A <code class="ic">jsonl</code> line is the event as JSON. A failed <code class="ic">plain</code> line ends with <code class="ic">: &lt;reason&gt; [&lt;code&gt;]</code>, and a module or test case that failed for the reason of its step shows only <code class="ic"> [&lt;code&gt;]</code>.</p>
 <h4 id="nullresultprinter">NullResultPrinter<a class="anchor" href="#nullresultprinter" aria-label="Link to this section">#</a></h4>
 <p>No-op printer for programmatic use. It still keeps <code class="ic">test_state</code>.</p>
 <h3 id="result-structure">Result structure<a class="anchor" href="#result-structure" aria-label="Link to this section">#</a></h3>
@@ -1210,7 +1218,8 @@ class ModuleResult(BaseModel):
     name: str
     elapsed: str
     status: str
-    reason: str
+    reason: str = &quot;&quot;
+    hint: str = &quot;&quot;
     keywords: List[KeywordResult]
 
 class KeywordResult(BaseModel):
@@ -1220,6 +1229,7 @@ class KeywordResult(BaseModel):
     elapsed: str
     status: str
     reason: str
+    hint: str = &quot;&quot;
     stored: dict[str, str]">Copy</button><pre><code><span class="c-info">class</span> TestCaseResult(BaseModel):
     id: str
     name: str
@@ -1231,7 +1241,8 @@ class KeywordResult(BaseModel):
     name: str
     elapsed: str
     status: str
-    reason: str
+    reason: str = <span class="c-lit">""</span>
+    hint: str = <span class="c-lit">""</span>
     keywords: List[KeywordResult]
 
 <span class="c-info">class</span> KeywordResult(BaseModel):
@@ -1241,6 +1252,7 @@ class KeywordResult(BaseModel):
     elapsed: str
     status: str
     reason: str
+    hint: str = <span class="c-lit">""</span>
     stored: dict[str, str]</code></pre></figure>
 <p><code class="ic">elapsed</code> is a string such as <code class="ic">"1.25s"</code>. <code class="ic">status</code> is <code class="ic">"NOT_RUN"</code>, <code class="ic">"RUNNING"</code>, <code class="ic">"PASS"</code>, <code class="ic">"FAIL"</code> or <code class="ic">"SKIPPED"</code>. <code class="ic">resolved_name</code> is the keyword with its resolved parameters, and <code class="ic">stored</code> is what <code class="ic">store_as</code> kept; both have secrets masked.</p>
 <h2 id="session-lifecycle-during-execution">Session lifecycle during execution<a class="anchor" href="#session-lifecycle-during-execution" aria-label="Link to this section">#</a></h2>
@@ -1476,9 +1488,10 @@ execution_tracer.log_attempt(strategy, element, <span class="c-lit">"success"</s
 <h3 id="log-format">Log format<a class="anchor" href="#log-format" aria-label="Link to this section">#</a></h3>
 <p>Tracer logs are formatted as structured messages:</p>
 <p><strong>Success:</strong></p>
-<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying XPathStrategy on 'submit_button' ... SUCCESS, duration: 0.15s">Copy</button><pre><code>Trying XPathStrategy on 'submit_button' ... SUCCESS, duration: 0.15s</code></pre></figure>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying XPathStrategy on '//button[@id=&quot;submit&quot;]' ... SUCCESS, duration: 0.15s">Copy</button><pre><code>Trying XPathStrategy on '//button[@id="submit"]' ... SUCCESS, duration: 0.15s</code></pre></figure>
 <p><strong>Failure:</strong></p>
-<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying TextDetectionStrategy on 'submit_button' ... FAIL (error: Element not found), duration: 2.50s">Copy</button><pre><code>Trying TextDetectionStrategy on 'submit_button' ... <span class="c-fail">FAIL</span> (error: Element not found), duration: 2.50s</code></pre></figure>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying TextElementStrategy on 'Submit' ... FAIL (error: E0201: 'Submit' is not on the screen.)">Copy</button><pre><code>Trying TextElementStrategy on 'Submit' ... <span class="c-fail">FAIL</span> (error: E0201: 'Submit' is not on the screen.)</code></pre></figure>
+<p>The error is <code class="ic">str(e)</code> of the exception that the strategy raised, so its text depends on the element source. The text above is what the Appium find-element source raises for a missing text. A strategy that returns no match without an error (OCR, for example) writes no line.</p>
 <p><code class="ic">StrategyManager</code> passes no duration today, so its lines end after the status or the error.</p>
 <p><strong>Format components:</strong></p>
 <ul><li>Strategy class name</li><li>Element identifier</li><li>Status (SUCCESS/FAIL)</li><li>Duration (if provided)</li><li>Error message (if failed)</li></ul>
@@ -1542,13 +1555,11 @@ execution_logger.info(log_line)</code></pre></figure>
 <ul><li>Understand element location failures</li><li>Debug strategy selection issues</li><li>Identify configuration problems</li><li>Track down performance issues</li></ul>
 <h3 id="example-output">Example output<a class="anchor" href="#example-output" aria-label="Link to this section">#</a></h3>
 <p><strong>Complete execution trace:</strong></p>
-<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying XPathStrategy on 'submit_button' ... FAIL (error: Element not found)
-Trying TextElementStrategy on 'submit_button' ... FAIL (error: Element not found)
-Trying TextDetectionStrategy on 'submit_button' ... SUCCESS">Copy</button><pre><code>Trying XPathStrategy on 'submit_button' ... <span class="c-fail">FAIL</span> (error: Element not found)
-Trying TextElementStrategy on 'submit_button' ... <span class="c-fail">FAIL</span> (error: Element not found)
-Trying TextDetectionStrategy on 'submit_button' ... SUCCESS</code></pre></figure>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Trying TextElementStrategy on 'Submit' ... FAIL (error: E0201: 'Submit' is not on the screen.)
+Trying TextDetectionStrategy on 'Submit' ... SUCCESS">Copy</button><pre><code>Trying TextElementStrategy on 'Submit' ... <span class="c-fail">FAIL</span> (error: E0201: 'Submit' is not on the screen.)
+Trying TextDetectionStrategy on 'Submit' ... SUCCESS</code></pre></figure>
 <p><strong>Analysis:</strong></p>
-<ul><li>XPath failed - element not in DOM</li><li>TextElement failed - element not accessible</li><li>TextDetection succeeded - found via OCR</li></ul>
+<ul><li>TextElement failed: the UI tree has no element with the text <code class="ic">Submit</code></li><li>TextDetection succeeded: OCR found the text on the screenshot</li></ul>
 <p>The log line times show how long each attempt took.</p>
 <h3 id="tracer-best-practices">Tracer best practices<a class="anchor" href="#tracer-best-practices" aria-label="Link to this section">#</a></h3>
 <ol><li><strong>Always log</strong>: Log both success and failure</li><li><strong>Include duration</strong>: Measure and log execution time when you can</li><li><strong>Capture errors</strong>: Include error messages for failures</li><li><strong>Use consistently</strong>: Route every strategy attempt through the tracer</li><li><strong>Review logs</strong>: Regularly review tracer logs for insights</li></ol>

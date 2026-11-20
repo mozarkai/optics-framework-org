@@ -2035,8 +2035,9 @@ try:
 except SpecificError as e:
     raise OpticsError(
         Code.EXXXX,  # Use appropriate error code
-        message=f&quot;Descriptive error message: {e}&quot;,
-        details={&quot;context&quot;: &quot;additional_info&quot;}
+        message=&quot;What went wrong, in plain words&quot;,
+        details={&quot;context&quot;: &quot;additional_info&quot;},
+        cause=e,
     )">Copy</button><pre><code><span class="c-info">from</span> optics_framework.common.error <span class="c-info">import</span> OpticsError, Code
 
 <span class="c-info">try</span>:
@@ -2045,10 +2046,11 @@ except SpecificError as e:
 <span class="c-info">except</span> SpecificError <span class="c-info">as</span> e:
     raise OpticsError(
         Code.EXXXX,  <span class="c-dim"># Use appropriate error code</span>
-        message=f<span class="c-lit">"Descriptive error message: {e}"</span>,
-        details={<span class="c-lit">"context"</span>: <span class="c-lit">"additional_info"</span>}
+        message=<span class="c-lit">"What went wrong, in plain words"</span>,
+        details={<span class="c-lit">"context"</span>: <span class="c-lit">"additional_info"</span>},
+        cause=e,
     )</code></pre></figure>
-<p><code class="ic">OpticsError</code> also accepts <code class="ic">cause=</code> for the original exception. See <a href="../../docs/reference/errors">Error codes</a> for the codes.</p>
+<p>Give the original exception as <code class="ic">cause=</code>, and keep its text out of <code class="ic">message</code>: the summary adds it. <code class="ic">hint=</code> gives the next step for this case. See <a href="../../docs/contribute/errors#write-the-message-of-a-layer">Errors</a>, and <a href="../../docs/reference/errors">Error codes</a> for the codes.</p>
 <h3 id="logging">Logging<a class="anchor" href="#logging" aria-label="Link to this section">#</a></h3>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework.common.logging_config import internal_logger, execution_logger
 

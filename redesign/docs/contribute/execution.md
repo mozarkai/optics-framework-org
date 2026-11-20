@@ -182,7 +182,7 @@ Executes a single keyword with parameters.
 1. Looks the keyword up in `runner.keyword_map` by its slug (`"_".join(keyword.split()).lower()`). If it is missing, it publishes a `FAIL` event and raises `E0402`.
 2. Deserializes the parameters with `_deserialize_params()`: a parameter whose type in the method signature is a list and whose value is a JSON list becomes a Python list.
 3. Executes keyword with parameters, in a thread (`asyncio.to_thread`) while it holds `session.keyword_lock`, so keywords in one session do not overlap.
-4. On an exception, publishes a `FAIL` event. An `OpticsError` is raised again; any other exception becomes `E0401`.
+4. On an exception, publishes a `FAIL` event. Its message is `Keyword execution failed: <summary>`, its `code` is the code of the outermost `OpticsError` (`None` for any other exception), and its `extra` holds the `hint`. An `OpticsError` is raised again; any other exception becomes `E0401`.
 5. Publishes a `PASS` event and returns keyword result.
 
 `KeywordExecutor` does not try fallback values. If the keyword used AI self-heal, the return value is a dictionary with `result`, `healed`, `heal_summary` and `suggested_steps`, and the event's `extra` carries `healed` and `heal_summary`.
@@ -321,7 +321,7 @@ async def _process_module(self, module_node: ModuleNode, test_case_result: TestC
     return True
 ```
 
-Flow control keywords (`Run Loop`, `Condition`, `Execute Module`) run other modules from inside a keyword call. They do not change the linked list.
+Flow control keywords (`Run Loop`, `Condition`, `Execute Module`) run other modules from inside a keyword call. They do not change the linked list. `FlowControl._execute_keyword_method` runs each step of such a module as the runner runs a suite step: `step_candidates()` gives every value of a whole `${name}` parameter, `step_arguments()` splits `name=value` parameters by the keyword's signature, `bind_params()` refuses parameters the keyword cannot take with `E0403`, and `fallback.run()` tries the values in turn. A step that fails raises `StepFailed` (`E0401`). Its message is the path to the step and the reason, such as `Inner › Innermost › Press Element: login_button is not on the screen. Looked for '//button[@id='login']'.`
 
 **Example module execution:**
 
@@ -802,10 +802,10 @@ method = registry.get_method("custom_action")
 method = registry.get_method("nonexistent_keyword")
 if method is None:
     raise keyword_not_found("nonexistent_keyword", registry.keyword_map)
-    # OpticsError(Code.E0402, message="Keyword not found: nonexistent_keyword. Did you mean '...'? ...")
+    # OpticsError(Code.E0402, message="'nonexistent_keyword' is not a keyword.")
 ```
 
-`keyword_not_found()` and `suggest_keyword()` are in the same module. The hint names the closest keyword (by `difflib`, cutoff 0.6) and tells the user to run `optics list`.
+`keyword_not_found()` and `suggest_keyword()` are in the same module. `suggest_keyword()` adds ` Did you mean '<Keyword>'?` with the closest keyword (by `difflib`, cutoff 0.6), for example `'Pres Element' is not a keyword. Did you mean 'Press Element'?`. The registry hint of `E0402` tells the user to run `optics list`.
 
 **Duplicate registration:**
 
@@ -1318,9 +1318,10 @@ def resolve_with_fallback(
     """Try each value until one succeeds."""
     values = self.get_element(name)
     if not values:
-        raise OpticsError(Code.E0201, f"Element not found: {name}")
+        raise undefined_element(name)
     attempts = 0
     cap = max_attempts if (max_attempts is not None) else len(values)
+    last_exc: Optional[Exception] = None
     for v in values:
         if attempts >= cap:
             break
@@ -1328,13 +1329,15 @@ def resolve_with_fallback(
         try:
             return resolver(v)
         except Exception as e:
+            last_exc = e
             if on_error:
                 on_error(e, v)
             continue
-    raise OpticsError(Code.X0201, f"Element '{name}' not found after attempting {attempts} value(s); last error: ...")
+    last = f": {plain(last_exc)}" if last_exc is not None else ""
+    raise OpticsError(Code.X0201, f"None of the {attempts} values of {name} worked{last}", cause=last_exc)
 ```
 
-An exception in `on_error` is logged at debug level and does not stop the loop.
+An exception in `on_error` is logged at debug level and does not stop the loop. A name with no values raises `${name} is not defined in the project's elements` (`E0201`).
 
 **Usage:**
 
@@ -1366,6 +1369,10 @@ Hierarchical result display in the terminal (with Rich), with a progress bar and
 
 `TreeResultPrinter.get_instance()` returns one shared instance.
 
+Below the tree and the summary, a **Failures** panel shows each failed step: where it is (`<test case> › <module> › <keyword>`), the reason in red and the hint in yellow. The runner fills `reason` and `hint` of the result from `explain(error)`.
+
+With `--output plain` or `--output jsonl`, `EventStreamPrinter` (`event_stream.py`) writes one line for each event instead. A `jsonl` line is the event as JSON. A failed `plain` line ends with `: <reason> [<code>]`, and a module or test case that failed for the reason of its step shows only ` [<code>]`.
+
 #### NullResultPrinter
 
 No-op printer for programmatic use. It still keeps `test_state`.
@@ -1384,7 +1391,8 @@ class ModuleResult(BaseModel):
     name: str
     elapsed: str
     status: str
-    reason: str
+    reason: str = ""
+    hint: str = ""
     keywords: List[KeywordResult]
 
 class KeywordResult(BaseModel):
@@ -1394,6 +1402,7 @@ class KeywordResult(BaseModel):
     elapsed: str
     status: str
     reason: str
+    hint: str = ""
     stored: dict[str, str]
 ```
 
@@ -1765,14 +1774,16 @@ Tracer logs are formatted as structured messages:
 **Success:**
 
 ```text
-Trying XPathStrategy on 'submit_button' ... SUCCESS, duration: 0.15s
+Trying XPathStrategy on '//button[@id="submit"]' ... SUCCESS, duration: 0.15s
 ```
 
 **Failure:**
 
 ```text
-Trying TextDetectionStrategy on 'submit_button' ... FAIL (error: Element not found), duration: 2.50s
+Trying TextElementStrategy on 'Submit' ... FAIL (error: E0201: 'Submit' is not on the screen.)
 ```
+
+The error is `str(e)` of the exception that the strategy raised, so its text depends on the element source. The text above is what the Appium find-element source raises for a missing text. A strategy that returns no match without an error (OCR, for example) writes no line.
 
 `StrategyManager` passes no duration today, so its lines end after the status or the error.
 
@@ -1882,16 +1893,14 @@ See [Logging](https://optics-framework.org/docs/contribute/logging).
 **Complete execution trace:**
 
 ```text
-Trying XPathStrategy on 'submit_button' ... FAIL (error: Element not found)
-Trying TextElementStrategy on 'submit_button' ... FAIL (error: Element not found)
-Trying TextDetectionStrategy on 'submit_button' ... SUCCESS
+Trying TextElementStrategy on 'Submit' ... FAIL (error: E0201: 'Submit' is not on the screen.)
+Trying TextDetectionStrategy on 'Submit' ... SUCCESS
 ```
 
 **Analysis:**
 
-- XPath failed - element not in DOM
-- TextElement failed - element not accessible
-- TextDetection succeeded - found via OCR
+- TextElement failed: the UI tree has no element with the text `Submit`
+- TextDetection succeeded: OCR found the text on the screenshot
 
 The log line times show how long each attempt took.
 

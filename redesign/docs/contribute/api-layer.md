@@ -309,7 +309,7 @@ async def run_async[R](candidates: Sequence[Sequence[Any]], call: Callable[[Comb
     raise ladder.exhausted()
 ```
 
-`_Ladder` iterates `islice(product(*candidates), MAX_ATTEMPTS)`. `ladder.failed()` keeps the last five element-not-found failures and re-raises any other error. When every combination fails, `ladder.exhausted()` returns a `FallbackExhausted` error: `All <n> fallback combinations failed for keyword '<keyword>'`, with the code and status of the last failure.
+`_Ladder` iterates `islice(product(*candidates), MAX_ATTEMPTS)`. `ladder.failed()` keeps the last five element-not-found failures and re-raises any other error. When every combination fails, `ladder.exhausted()` returns a `FallbackExhausted` error with the code and status of the last failure. Its message is one sentence when there were at most five tries and every value missed in the same way, such as `None of '//button[@id='login']', 'Sign in' and 'css=#nope' is on the screen.`, and else `All <n> tries of keyword '<keyword>' failed:` with one line for each failure. See [Components](https://optics-framework.org/docs/contribute/components#error-aggregation).
 
 ## Server-sent events (SSE)
 
@@ -487,33 +487,32 @@ except OpticsError as e:
     raise HTTPException(status_code=e.status_code, detail=e.to_payload(include_status=True)) from e
 ```
 
-Any other exception becomes a 500 with a plain string `detail`, such as `Execution failed: <message>`. Before it raises, the action endpoint puts a `FAIL` event on the session's event queue.
+Any other exception becomes a 500 with a plain string `detail`, such as `Execution failed: <first line of the message>`. Before it raises, the action endpoint puts a `FAIL` event on the session's event queue. Its message is `<keyword>: <summary>`.
 
 ### Error response structure
 
 ```json
 {
   "detail": {
-    "type": "optics:driver",
-    "code": "E0101",
-    "status": 500,
-    "message": "Driver not initialized",
-    "details": {
-      "driver": "appium",
-      "session_id": "abc123"
-    },
+    "type": "optics:element",
+    "code": "E0201",
+    "status": 404,
+    "message": "None of 'btn1', 'btn2' and 'btn3' is on the screen.",
+    "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
+    "details": null,
     "meta": null,
     "cause": null
   }
 }
 ```
 
-`type` is `optics:` plus the error category. `cause` is the text of the error that caused this one, or `null`.
+`type` is `optics:` plus the error category. `message` is the error's `summary`: what went wrong, in plain words, without the code. `hint` is the next step, or `null`. `cause` is the root cause when `message` does not already say it, or `null`.
 
 ### Common error codes
 
 - **404**: Session not found, keyword not found (`E0402`), element not found (`E0201`)
 - **400**: Invalid parameters (`E0403`), configuration error, a request that asks the server to read its own files or environment (`E0501`)
+- **409**: A popup stopped the step (`E0206`, `E0407`, `E0408`)
 - **421**: The `Host` header is not allowed (see [Host check](#host-check))
 - **500**: Driver error, execution error
 - **503**: The camera does not see the device screen (`E0305`)

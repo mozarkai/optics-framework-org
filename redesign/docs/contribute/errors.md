@@ -55,31 +55,30 @@ The two digits after the prefix give the category. Each one is a value of the `C
 ### Examples
 
 ```text
-E0101 - Driver not initialized (Error, Driver category)
-W0104 - Driver config incomplete (Warning, Driver category)
-X0201 - Element not found after all fallbacks (Exception, Element category)
+E0101 - The driver is not ready (Error, Driver category)
+W0104 - The driver configuration is incomplete (Warning, Driver category)
+X0201 - The element was not found with any of its locators (Exception, Element category)
 E0402 - Keyword not found (Error, Keyword category)
 ```
 
 ## Error registry
 
-The error registry (`ERROR_REGISTRY`) holds the specification of each code:
+The error registry (`ERROR_REGISTRY`) holds the specification of each code. The source is one tuple per code, `(code, category, status, default message, hint)`:
 
 ```python
-ERROR_REGISTRY = {
-    "E0101": ErrorSpec(
-        code=Code.E0101,
-        default_message="Driver not initialized",
-        category=Category.DRIVER,
-        default_status=500,
-    ),
-    "E0201": ErrorSpec(
-        code=Code.E0201,
-        default_message="Element not found",
-        category=Category.ELEMENT,
-        default_status=404,
-    ),
-    # ... more error codes
+_NOT_FOUND_HINT = "Make sure that the screen shows the element when this step starts, or correct its locator."
+
+_SPECS = (
+    (Code.E0101, Category.DRIVER, 500, "The driver is not ready",
+     "Start a new session. If this error occurs again, examine the driver entry in config.yaml."),
+    # ...
+    (Code.E0201, Category.ELEMENT, 404, "The element is not on the screen", _NOT_FOUND_HINT),
+    # ...
+)
+
+ERROR_REGISTRY: Dict[str, ErrorSpec] = {
+    code: ErrorSpec(code=code, category=category, default_status=status, default_message=message, hint=hint)
+    for code, category, status, message, hint in _SPECS
 }
 ```
 
@@ -88,9 +87,10 @@ ERROR_REGISTRY = {
 `ErrorSpec` is a frozen pydantic model. Each specification has these fields:
 
 - **code**: the `Code` enum value.
-- **default_message**: the message when the caller gives none.
+- **default_message**: the message when the caller gives none. It is one plain sentence without the code.
 - **category**: the error category (`Category.DRIVER`, `Category.ELEMENT` and so on).
 - **default_status**: the HTTP status code for API responses. The default is `500`.
+- **hint**: the next step a person can take for this code, or `None`.
 - **meta**: optional metadata.
 
 ## OpticsError exception
@@ -98,7 +98,7 @@ ERROR_REGISTRY = {
 `OpticsError` is the primary exception type in the framework. Its constructor is:
 
 ```python
-OpticsError(code: str | Code, message: str | None = None, details: Any = None, cause: BaseException | None = None, meta: dict | None = None)
+OpticsError(code: str | Code, message: str | None = None, details: Any = None, cause: BaseException | None = None, meta: dict | None = None, hint: str | None = None)
 ```
 
 ### Creating OpticsError
@@ -110,16 +110,18 @@ from optics_framework.common.error import OpticsError, Code
 raise OpticsError(Code.E0101, message="Custom message", details={"driver": "appium"})
 
 # Using string code
-raise OpticsError("E0101", message="Driver initialization failed")
+raise OpticsError("E0101", message="Could not start the driver")
 
-# With details
+# With a cause and a hint for this case
 raise OpticsError(
-    Code.E0201,
-    message="Element not found",
-    details={"element": "submit_button", "strategies_tried": ["xpath", "ocr"]},
-    cause=original_exception
+    Code.E0102,
+    message="Could not connect to the driver",
+    cause=original_exception,
+    hint="Start the Appium server, then run again.",
 )
 ```
+
+For an element that is not on the screen, raise `ElementNotFound(locator, code=Code.E0201, cause=None, hint=None)`. It writes the message from the locator and from the element name in the project (see [Element not found](#element-not-found)).
 
 The module also has two helpers. `from_code(code, message=None, details=None)` returns an `OpticsError`, and `raise_code(code, message=None, details=None)` raises one.
 
@@ -128,12 +130,66 @@ The module also has two helpers. `from_code(code, message=None, details=None)` r
 - **code**: the `Code` enum value. A string code becomes its `Code` member.
 - **category**: the error category.
 - **status_code**: the HTTP status code.
-- **message**: the human-readable message. It is the `default_message` of the code when you do not give one.
+- **message**: what this layer says, as a plain sentence. It is the `default_message` of the code when you do not give one.
+- **own_hint**: the `hint` that you gave to the constructor, or `None`.
 - **details**: additional error context. It is `None` when you do not give it.
 - **meta**: optional metadata. It is the `meta` of the spec when you do not give it.
 - **cause**: the original exception, if there is one. `OpticsError` keeps it as `__cause__`, not as a `cause` attribute.
 
-`cause_text` gives the root of the cause chain as one line of at most 300 characters. It is `None` when the message already contains that text. `str(error)` is `E0101: <message>`, with ` (cause: <cause_text>)` at the end when there is a cause.
+These properties are calculated from the chain of causes:
+
+- **summary**: `message`, then the summary of the cause after `: `. It drops the cause when `message` already contains it, and it uses only the cause when the cause contains `message`. It has no codes. A subclass with `show_cause = False` (such as `ElementNotFound` and `FallbackExhausted`) shows only its own message.
+- **hint**: the own hints in the chain, innermost first, joined. When no layer gave one, it is the registry hint of the innermost code that has one.
+- **cause_text**: the root of the chain as one line, such as `ConnectionError: Connection refused`. It is `None` when there is no cause, when `show_cause` is false, or when the summary already says it.
+
+`str(error)` is `<code>: <summary>`:
+
+```python
+>>> e = OpticsError(Code.E0102, message="Could not connect to the driver", cause=ConnectionError("Connection refused"))
+>>> str(e)
+'E0102: Could not connect to the driver: Connection refused'
+>>> e.hint
+"Make sure that the device and its driver server are on and that you can reach them. Run 'optics doctor' to examine the setup."
+```
+
+### Explain an error
+
+The test runner, its result printers and JUnit report, and `optics serve` read a failure through the same functions:
+
+- `plain(error)`: the summary of an `OpticsError`, or the first line of any other exception's message, cut at 300 characters. For an Apple NSError it uses the `NSLocalizedDescription` value, and it removes a leading `Message: `.
+- `explain(error)`: an `Explanation` with `summary`, `hint`, `code` (the outermost Optics code) and `detail`. `detail` has one line for each layer of the chain that adds text, for the debug log:
+
+```python
+>>> w = OpticsError(Code.E0401, message="Could not open com.example.app", cause=e)
+>>> str(w)
+'E0401: Could not open com.example.app: Could not connect to the driver: Connection refused'
+>>> explain(w).detail
+('E0401: Could not open com.example.app', 'E0102: Could not connect to the driver', 'ConnectionError: Connection refused')
+```
+
+`TestRunner` writes `detail` to the execution log at debug level as `Failure detail for <keyword>: <line> <- <line>`.
+
+### Write the message of a layer
+
+A layer that wraps another error says only what it adds, and gives the error as `cause`. Do not put the cause in the message. The summary adds it, and the code then shows only once:
+
+```python
+# Good: 'E0401: Could not open com.example.app: Could not connect to the driver: Connection refused'
+raise OpticsError(Code.E0401, message="Could not open com.example.app", cause=e)
+
+# Bad: 'E0401: Launch failed: E0102: Could not connect to the driver: Connection refused'
+raise OpticsError(Code.E0401, message=f"Launch failed: {e}", cause=e)
+```
+
+### Element not found
+
+`ElementNotFound` (code `E0201` by default) writes its own message:
+
+- `'<locator>' is not on the screen.` when the step gave the locator itself.
+- `<name> is not on the screen. Looked for '<locator>'.` when a `${name}` parameter gave it. `element_label()` reads the name from `test_context.element_names`.
+- The reason itself when an `OpticsError` in the cause chain gives a specific reason, such as an XPath that is not valid XPath 1.0 or a web element that another element covers. `Cannot find <name>: ` comes before it when a `${name}` parameter gave the locator, or when the reason does not name the locator.
+
+`ElementNotFound.merge(errors)` joins plain misses of the same element into one sentence, such as `login_button is not on the screen. Looked for '//button[@id='login']' and 'Sign in'.` `undefined_element(name)` is the `E0201` error for a `${name}` that the project does not define: `${login_button} is not defined in the project's elements`, with the hint `Add login_button to an elements file, or correct the name.`
 
 ### Log an error
 
@@ -141,15 +197,15 @@ The module also has two helpers. `from_code(code, message=None, details=None)` r
 
 ```python
 error = OpticsError(Code.E0101, message="Driver failed")
-error.log()  # Prints formatted error with rich formatting
-error.log(use_rich=False)  # Uses standard logging
+error.log()  # Prints a Rich panel
+error.log(use_rich=False)  # Writes one line to internal_logger
 ```
 
-With `use_rich=True` (the default), `log()` prints a Rich panel to the console. With `use_rich=False`, it writes one line to a logger. The default logger is `internal_logger`. See [Error logging](#error-logging) for the format.
+`use_rich` is `None` by default. Then `log()` prints a Rich panel to the console, unless you give `logger`, `level` or `extra`. With one of these, or with `use_rich=False`, it writes one line to a logger. The default logger is `internal_logger`. See [Error logging](#error-logging) for the format.
 
 ## Error categories
 
-The tables give the `default_message` and `default_status` of each code in `ERROR_REGISTRY`.
+The tables give the `default_message` and `default_status` of each code in `ERROR_REGISTRY`. [Error codes](https://optics-framework.org/docs/reference/errors) gives the hint of each code.
 
 ### Driver errors (01xx)
 
@@ -157,13 +213,13 @@ Driver-related errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0101** | Driver not initialized | 500 |
-| **E0102** | Failed to start session | 500 |
-| **E0103** | Failed to end session | 500 |
-| **E0104** | Driver config incomplete | 400 |
-| **E0105** | Keyword not supported on this device platform | 400 |
-| **E0106** | Driver session is no longer active | 500 |
-| **W0104** | Driver config incomplete (warning) | 200 |
+| **E0101** | The driver is not ready | 500 |
+| **E0102** | Could not start the session | 500 |
+| **E0103** | Could not end the session | 500 |
+| **E0104** | The driver configuration is incomplete | 400 |
+| **E0105** | This keyword does not work on this platform | 400 |
+| **E0106** | The driver session ended | 500 |
+| **W0104** | The driver configuration is incomplete | 200 |
 
 **Example:**
 
@@ -178,22 +234,23 @@ Element location errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0201** | Element not found | 404 |
-| **X0201** | Element not found after all fallbacks | 500 |
-| **E0202** | Unsupported operation for element source | 400 |
-| **W0203** | Element format mismatch | 200 |
-| **E0204** | Timeout locating element | 504 |
-| **E0205** | Invalid element type | 400 |
+| **E0201** | The element is not on the screen | 404 |
+| **X0201** | The element was not found with any of its locators | 500 |
+| **E0202** | The element source cannot do this | 400 |
+| **W0203** | The element has an unexpected format | 200 |
+| **E0204** | Timed out while looking for the element | 504 |
+| **E0205** | The element locator is not valid | 400 |
+| **E0206** | Unknown popup on screen | 409 |
 
-**Example:**
+`E0206` means that a popup with no rule covers the screen. It is an `E02` code, so keyword fallback still tries the next value of a `${name}`. See [Handle popups](https://optics-framework.org/docs/advanced/popups).
+
+**Example** (from `appium_find_element.py`):
 
 ```python
-if not element:
-    raise OpticsError(
-        Code.E0201,
-        message=f"Element '{element_id}' not found",
-        details={"strategies": ["xpath", "ocr", "image"]}
-    )
+try:
+    found_element = self._find_nth(driver, by, value, position)
+except NoSuchElementException as e:
+    raise ElementNotFound(element, cause=e) from e
 ```
 
 ### Screenshot errors (03xx)
@@ -202,19 +259,23 @@ Screenshot-related errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0301** | Screenshot disabled | 400 |
-| **W0302** | Fallback to next camera supported driver | 200 |
-| **E0303** | Screenshot empty/black | 500 |
-| **E0304** | Image too large to decode or not a valid image | 422 |
+| **E0301** | Screenshots are off | 400 |
+| **W0302** | Using the next camera driver | 200 |
+| **E0303** | The screenshot is empty or black | 500 |
+| **E0304** | The image is too large or is not a valid image | 422 |
 | **E0305** | The camera does not see the device screen | 503 |
 
 `E0305` means that the camera moved, the screen is out of view, or the screen is off.
 
-**Example:**
+**Example** (from `ScreenshotStrategy.capture` in `strategies.py`):
 
 ```python
-if screenshot is None or is_black_screen(screenshot):
-    raise OpticsError(Code.E0303, message="Screenshot is empty or black")
+if screenshot is not None and not utils.is_black_screen(screenshot):
+    return screenshot
+# ...
+raise OpticsError(
+    Code.E0303, message="The screenshot is black"
+)
 ```
 
 ### Keyword errors (04xx)
@@ -223,28 +284,39 @@ Keyword execution errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0401** | Action failed | 500 |
-| **X0401** | Action failed with exception | 500 |
+| **E0401** | The action failed | 500 |
+| **X0401** | The action failed | 500 |
 | **E0402** | Keyword not found | 404 |
-| **E0403** | Invalid keyword parameters | 400 |
-| **W0404** | Keyword deprecated | 200 |
+| **E0403** | The keyword parameters are not valid | 400 |
+| **W0404** | This keyword is deprecated | 200 |
 | **E0405** | Action ran, but the screen does not show its result | 500 |
 | **E0406** | Expression or filter refused: unsafe or too costly | 400 |
+| **E0407** | Popup keeps coming back | 409 |
+| **E0408** | Popup stopped the step | 409 |
+| **E0409** | Popup dismissed, the step looks for its element again | 409 |
 
 No fallback retries an action that fails with `E0405`.
 
 Optics refuses an expression or a filter with `E0406` when it uses something other than literals, names, indexing, arithmetic, comparisons, `and`/`or`/`not` and `if`/`else`, or when it costs too much. Conditions also allow `len`, `str`, `int`, `float` and `bool` calls.
 
-**Example:**
+`PopupGuard` (`optics_framework/common/popup_guard.py`) raises the popup codes:
+
+- `E0407`: a rule matched more than its `max_per_step` or `max_per_run` times.
+- `E0408`: the popup stayed after the rule's action, or the rule ended the step or the run (`sensitive`, action `none`, or `then` set to `fail_step` or `stop_run`).
+- `E0409`: a rule dismissed the popup. `_locate_and_act` catches it and looks for the element again, so it never leaves the keyword.
+
+A rule whose `module` action names a module that the session does not have ends the step with `E0601`. Each error from the guard has `details={"stop_run": <bool>}`.
+
+Keyword fallback does not go to the next value after `E0407` or `E0408`.
+
+**Example** (from `keyword_register.py`):
 
 ```python
-if keyword not in registry:
-    raise OpticsError(
-        Code.E0402,
-        message=f"Keyword '{keyword}' not found",
-        details={"available_keywords": list(registry.keys())}
-    )
+def keyword_not_found(name: str, slugs: Iterable[str]) -> OpticsError:
+    return OpticsError(Code.E0402, message=f"'{name}' is not a keyword.{suggest_keyword(name, slugs)}")
 ```
+
+The message is, for example, `'Pres Element' is not a keyword. Did you mean 'Press Element'?`. The registry hint adds `Run 'optics list' to see the keywords.`
 
 ### Config errors (05xx)
 
@@ -252,10 +324,10 @@ Configuration and file errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0501** | Missing required files | 400 |
-| **X0502** | File read exception | 500 |
-| **E0503** | Config parser error (important param) | 400 |
-| **W0503** | Config parser warning (can be ignored) | 200 |
+| **E0501** | A required setting or file is missing | 400 |
+| **X0502** | Could not read a file | 500 |
+| **E0503** | A setting has a value that is not valid | 400 |
+| **W0503** | A setting has a value that is not valid; it is ignored | 200 |
 
 **Example:**
 
@@ -275,9 +347,9 @@ Module and factory errors:
 | Code | Default message | Status |
 |---|---|---|
 | **E0601** | Module not found | 404 |
-| **W0602** | No valid instances, ignoring it | 200 |
-| **E0603** | Factory init failed | 500 |
-| **X0604** | Import related problem | 500 |
+| **W0602** | No valid instance; it is ignored | 200 |
+| **E0603** | Could not create an engine | 500 |
+| **X0604** | Could not import a module | 500 |
 
 **Example:**
 
@@ -298,11 +370,11 @@ Test case execution errors:
 
 | Code | Default message | Status |
 |---|---|---|
-| **E0701** | Execution failed | 500 |
+| **E0701** | The run failed | 500 |
 | **E0702** | Test case not found | 404 |
-| **E0703** | Parameter resolution failed | 400 |
-| **E0704** | Test case timeout | 504 |
-| **W0705** | Test case skipped | 200 |
+| **E0703** | Could not resolve a parameter | 400 |
+| **E0704** | The test case timed out | 504 |
+| **W0705** | The test case was skipped | 200 |
 | **E0706** | Run stopped before the test case finished | 500 |
 
 Optics raises `E0706` when Ctrl-C or SIGTERM stops the run.
@@ -325,7 +397,7 @@ General framework errors:
 | Code | Default message | Status |
 |---|---|---|
 | **E0801** | Unexpected error | 500 |
-| **E0802** | Unhandled exception | 500 |
+| **E0802** | Unhandled error | 500 |
 
 **Example:**
 
@@ -387,13 +459,13 @@ except OpticsError as e:
     # Add context
     raise OpticsError(
         e.code,
-        message=f"Failed to locate element in {strategy.__class__.__name__}",
+        message=f"{strategy.__class__.__name__} could not look for it",
         details={**(e.details or {}), "strategy": strategy.__class__.__name__},
         cause=e
     )
 ```
 
-`details` is `None` when the first error has no details. A line such as `details={**e.details, "strategy": strategy.__class__.__name__},` then fails with `TypeError`. Use `e.details or {}` before you unpack it.
+The summary is then `<strategy> could not look for it: <summary of e>`. `details` is `None` when the first error has no details. A line such as `details={**e.details, "strategy": strategy.__class__.__name__},` then fails with `TypeError`. Use `e.details or {}` before you unpack it.
 
 ## Error recovery mechanisms
 
@@ -404,7 +476,7 @@ When a strategy fails to locate an element, `StrategyManager.locate` tries the n
 - A dead session (`E0106`, or a driver error that shows the session is gone) stops the loop at once. `raise_if_session_dead` in `session_liveness.py` raises it.
 - `E0305` (the camera does not see the screen) is kept. When no strategy finds the element, Optics raises the `E0305` error, because no other strategy can see the screen either.
 
-When no strategy finds the element, `locate` raises `E0201` with the last error as its cause.
+When no strategy finds the element, `locate` raises an `ElementNotFound` (`E0201`). Its cause is a note that the XPath is not valid XPath 1.0, when that is true, or else the last error. When OCR has no engine and a native lookup also ran, the OCR error is not kept, and the hint says that OCR was off.
 
 This is the shape of the loop:
 
@@ -416,8 +488,9 @@ for strategy in strategies:
     except Exception as e:
         raise_if_session_dead(e)
         last_error = e
+        blind = e if _is_blind(e) else blind
         continue  # Try next strategy
-raise OpticsError(Code.E0201, message=f"Element '{element}' not found.", cause=last_error)
+raise blind or _not_found(element, effective_element, text_only, last_error, hint)
 ```
 
 Earlier versions of these docs showed this loop continuing only on `if e.code == Code.E0201:  # Element not found` and had `raise  # Re-raise other errors` for all other errors. Current code does not do that.
@@ -480,7 +553,15 @@ except OpticsError as e:
 
 ### 5. Keyword fallback
 
-When a step gives more than one value for a parameter, `optics_framework/common/fallback.py` runs the keyword once for each combination of values. It tries at most 20 combinations (`MAX_ATTEMPTS`). It moves to the next combination only for element-not-found errors: an `E02` code or `X0201` (`advances()`). Any other error stops the keyword at once. When every combination fails, Optics raises `FallbackExhausted`, an `OpticsError` with the code of the last failure. Its message lists the last five failures (`KEPT_FAILURES`).
+When a step gives more than one value for a parameter, `optics_framework/common/fallback.py` runs the keyword once for each combination of values. It tries at most 20 combinations (`MAX_ATTEMPTS`). It moves to the next combination only for element-not-found errors: an `E02` code or `X0201` (`advances()`). Any other error stops the keyword at once. `E0206` (unknown popup) is an `E02` code, so it moves to the next combination too. `E0407` and `E0408` stop the keyword.
+
+When every combination fails, Optics raises `FallbackExhausted`, an `OpticsError` with the code of the last failure. Its message is one of these:
+
+- After one try, the summary of that failure.
+- When there were at most five tries (`KEPT_FAILURES`) and each failure is a plain `ElementNotFound`, one sentence for all the values, such as `None of 'btn1', 'btn2' and 'btn3' is on the screen.`
+- Else `All <n> tries of <subject> failed:`, then one line for each of the last five failures (`KEPT_FAILURES`). Each line gives only the values that change from one combination to the next.
+
+When there are more than 20 combinations, the message adds ` (tried 20 of <total> combinations)`. See [Components](https://optics-framework.org/docs/contribute/components#error-aggregation) for examples.
 
 ## Error handling in API layer
 
@@ -508,21 +589,19 @@ FastAPI puts the payload under `detail`:
 ```json
 {
   "detail": {
-    "type": "optics:driver",
-    "code": "E0101",
-    "status": 500,
-    "message": "Driver not initialized",
-    "details": {
-      "driver": "appium",
-      "session_id": "abc123"
-    },
+    "type": "optics:element",
+    "code": "E0201",
+    "status": 404,
+    "message": "None of 'btn1', 'btn2' and 'btn3' is on the screen.",
+    "hint": "Make sure that the screen shows the element when this step starts, or correct its locator.",
+    "details": null,
     "meta": null,
     "cause": null
   }
 }
 ```
 
-`type` is `optics:<category>`. `cause` is the `cause_text` of the error, or `null`. For every status the API can return, see [HTTP API errors](https://optics-framework.org/docs/reference/http-api#errors).
+`type` is `optics:<category>`. `message` is the `summary` of the error, without the code. `hint` is the `hint` property, or `null`. `cause` is the `cause_text` of the error, or `null`. For every status the API can return, see [HTTP API errors](https://optics-framework.org/docs/reference/http-api#errors).
 
 ## Error handling best practices
 
@@ -532,10 +611,10 @@ Use a code from the category of the error:
 
 ```python
 # Good
-raise OpticsError(Code.E0201, message="Element not found")
+raise ElementNotFound(element)
 
 # Bad - wrong category
-raise OpticsError(Code.E0101, message="Element not found")  # Should be E0201
+raise OpticsError(Code.E0101, message=f"'{element}' is not on the screen.")  # Should be E0201
 ```
 
 The code also controls recovery. Keyword fallback moves to the next value only for `E02` codes and `X0201`.
@@ -547,7 +626,7 @@ Give information that helps to find the cause:
 ```python
 raise OpticsError(
     Code.E0201,
-    message="Element not found",
+    message=f"'{element_id}' is not on the screen.",
     details={
         "element": element_id,
         "strategies_tried": ["xpath", "ocr"],
@@ -566,10 +645,12 @@ try:
 except ConnectionError as e:
     raise OpticsError(
         Code.E0102,
-        message="Failed to connect to driver",
+        message="Could not connect to the driver",
         cause=e
     )
 ```
+
+Do not copy the text of `e` into `message`. See [Write the message of a layer](#write-the-message-of-a-layer).
 
 ### 4. Use warnings for non-critical issues
 
@@ -608,35 +689,34 @@ except OpticsError as e:
 
 ### Structured logging
 
-`OpticsError.log(logger=None, level=None, extra=None, use_rich=True)` connects to the logging system:
+`OpticsError.log(logger=None, level=None, extra=None, use_rich=None)` connects to the logging system:
 
 ```python
 error = OpticsError(Code.E0101, message="Driver failed")
-error.log()  # Logs with rich formatting
-error.log(level=logging.WARNING, use_rich=False)  # Custom log level
-error.log(extra={"session_id": session_id}, use_rich=False)  # Additional context
+error.log()  # Prints a Rich panel
+error.log(level=logging.WARNING)  # Custom log level
+error.log(extra={"session_id": session_id})  # Additional context
 ```
 
-`logger`, `level` and `extra` have an effect only with `use_rich=False`. Calls such as `error.log(level=logging.WARNING)` and `error.log(extra={"session_id": session_id})` print the Rich panel and ignore those arguments.
+When `use_rich` is `None`, `log()` writes to a logger if you give `logger`, `level` or `extra`, and prints the panel if you give none of them. `use_rich=True` or `use_rich=False` forces one of the two.
 
-With `use_rich=False`:
+When it writes to a logger:
 
 - The default level is `logging.ERROR` for an `E` or `X` code and `logging.WARNING` for a `W` code.
-- The line is `[E0101] <message> (category: <category>, status: <status>)`, with ` caused by: <cause_text>` at the end when there is a cause.
+- The line is `[<code>] <summary>`, such as `[E0102] Could not start the Appium session: Connection refused`.
 - The record `extra` holds `code`, `category`, `status`, `details` and `meta`, plus the keys you give in `extra`.
 
 ### Error log format
 
-With `use_rich=True`, `log()` prints a Rich panel. The border is red for an `E` or `X` code and yellow for a `W` code. The title is the code and the payload `type`:
+The panel has the code as its title. The border is red for an `E` or `X` code and yellow for a `W` code. The body is the summary in bold, then the hint, then `details` in dim text when there are details:
 
 ```text
-──────────── ❌ E0101 (optics:driver) ────────────
-Driver not initialized
-Caused by: <cause_text>
-[dim]Details:[/dim] {'driver': 'appium', 'session_id': 'abc123'}
+╭─ E0102 ──────────────────────────────────────────────────────────────────────╮
+│ Could not start the Appium session: Connection refused                       │
+│ Make sure that the device and its driver server are on and that you can      │
+│ reach them. Run 'optics doctor' to examine the setup.                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
-
-The panel shows the `Caused by:`, `Details:` and `Meta:` lines only when they have a value. The `[dim]` tags print as text, because the panel body is a Rich `Text`, which does not read markup.
 
 ## Debugging errors
 
@@ -682,6 +762,7 @@ spec = ERROR_REGISTRY.get("E0101")
 print(f"Message: {spec.default_message}")
 print(f"Category: {spec.category}")
 print(f"Status: {spec.default_status}")
+print(f"Hint: {spec.hint}")
 ```
 
 ## Extending error handling
@@ -693,7 +774,7 @@ print(f"Status: {spec.default_status}")
 To add a new code:
 
 1. Add a member to `Code` in `optics_framework/common/error.py`.
-2. Add its `ErrorSpec` to `ERROR_REGISTRY`.
+2. Add its `(code, category, status, message, hint)` tuple to `_SPECS`. Write the message as one plain sentence, and the hint as the next step a person can take, or `None`.
 3. Add the code to [Error codes](https://optics-framework.org/docs/reference/errors).
 
 To change the default message or status of an existing code at runtime, use `register_error`:
@@ -721,7 +802,7 @@ class CustomOpticsError(OpticsError):
         self.custom_field = custom_field
 ```
 
-Give the code as a keyword argument, for example `CustomOpticsError("value", code=Code.E0401)`. `FallbackExhausted` in `fallback.py` is a subclass of this kind.
+Give the code as a keyword argument, for example `CustomOpticsError("value", code=Code.E0401)`. `ElementNotFound` (`error.py`), `FallbackExhausted` (`fallback.py`) and `StepFailed` (`api/flow_control.py`) are subclasses of this kind. Each sets `show_cause = False` and writes a message that already says what its cause adds.
 
 ## Related documentation
 
