@@ -20,7 +20,7 @@ Checkout Flow,Condition,${coupon} == 'none',Pay Full Price,Apply Coupon
 - **Dry runs know these variables.** `optics dry_run` counts a name that Read Data, Evaluate, Date Evaluate or `store_as` writes as defined.
 - **Values are text.** Every variable holds text. In Condition, a value that reads as a number compares with a number as a number: `${count} > 3`. Compare text with quoted literals: `${status} == 'ready'`. See [Compare numbers](#compare-numbers).
 - **Lists use pipes.** Separate values with `|`: `Trail Runner 2|Pace Knit`.
-- **Steps inside a target are stricter.** In a module run by Execute Module, Run Loop or Condition, write every parameter positionally, because `name=value` isn't recognized there. Only [`store_as=name`](/docs/reference/keywords/#store-as) works. `${name}` uses only the first value, with no fallback to the next one. Any error inside is reported as error E0401.
+- **Steps inside a target run like other steps.** In a module run by Execute Module, Run Loop or Condition, `name=value` works, and `${name}` tries each value in turn until the element is found. Any error inside is reported as error E0401.
 
 Flow control keywords aren't available as MCP tools. They work in CSV and YAML suites, `optics live`, `optics serve` and [Python](/docs/create/python).
 
@@ -47,7 +47,7 @@ Checkout Flow,Execute Module,Add To Cart
 
 Good to know:
 
-- Use Execute Module whenever one module calls another. A row whose keyword cell is a module name fails with "Keyword not found".
+- Use Execute Module whenever one module calls another. A row whose keyword cell is a module name fails with `'<name>' is not a keyword.`
 - A module can't run itself.
 - Python doesn't have Execute Module. Call your own Python functions instead.
 
@@ -401,10 +401,9 @@ ben@birch.example,pw-ben,basic
 How it works:
 
 - Run Loop runs `Sign In As` twice. It sets `email` and `password` to the next pair of values each time.
-- Steps in `Sign In As` are positional, because it runs inside Run Loop. `Assert Presence,Welcome,20` is correct there. `timeout_str=20` wouldn't be.
 - Read Data writes `${tier}`. Its query replaces `${email}` with the current email in quotes.
 - Condition compares `${tier}` with the quoted literal `'gold'`. For Ben the condition is false, so nothing runs and the step passes.
-- Inside the loop, `${email_field}` uses only its first value, the XPath. The `Email` fallback is used only by steps outside a loop.
+- Inside the loop, `${email_field}` tries the XPath first and then the `Email` fallback, as a step outside a loop does.
 
 ## See also
 

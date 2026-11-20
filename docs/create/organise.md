@@ -49,7 +49,7 @@ Buy Trail Runners,Press Element,Trail Runner 2
 Buy Trail Runners,Press Element,Add to cart
 ```
 
-Listing a module's name as a step on its own doesn't work; you need `Execute Module`. Steps inside a module called this way use only the first value of each element, so give important elements a value that's reliable on its own. [Conditions and loops](/docs/advanced/conditions) explains the details.
+Listing a module's name as a step on its own doesn't work; you need `Execute Module`. [Conditions and loops](/docs/advanced/conditions) explains the details.
 
 ## Split a suite across files
 

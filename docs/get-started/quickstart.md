@@ -94,20 +94,22 @@ Description,text=Welcome to Example
 Run the test again. This time it fails:
 
 ```terminal
-├── TC1 Verify Landing                                   |     10.74s |    FAIL
-│   └── Verify Example Page                              |     10.74s |    FAIL
-│       └── Validate Element (text=Welcome to Example)   |     10.01s |    FAIL
+├── TC1 Verify Landing                                   |     11.41s |    FAIL
+│   └── Verify Example Page                              |     10.81s |    FAIL
+│       └── Validate Element (text=Welcome to Example)   |     10.03s |    FAIL
 ...
 │ Total Test Cases: 3 | Passed: 2 | Failed: 1                                  │
-╭────────────────────────────── Failure details ───────────────────────────────╮
-│ TC1 Verify Landing → step 'Validate Element (text=Welcome to Example)' —     │
-│ Keyword 'Validate Element' failed after fallback attempts; last error:       │
-│ E0201: ['text=Welcome to Example'] not found based on rule 'all'. OCR        │
-│ was not tried: no text_detection engine is configured.                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭────────────────────────────────── Failures ──────────────────────────────────╮
+│ TC1 Verify Landing › Verify Example Page › Validate Element (text=Welcome to │
+│ Example)                                                                     │
+│ Description is not on the screen. Looked for 'text=Welcome to Example'.      │
+│ OCR is off, so text that shows only in images was not searched. Add a        │
+│ text_detection engine to config.yaml to search it.                           │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The tree shows where the run stopped: the test case `TC1 Verify Landing`, its module `Verify Example Page`, and the step `Validate Element`. **Failure details** gives the step, the value it looked for and the last error. Optics waited for the text, and the page did not show it. The OCR note tells you that Optics did not also read the screenshot, because no [OCR engine](/docs/elements/text-and-images#turn-on-ocr) is configured.
+The tree shows where the run stopped: the test case `TC1 Verify Landing`, its module `Verify Example Page`, and the step `Validate Element`. **Failures** names the step, the element and the value that Optics looked for. Optics waited for the text, and the page did not show it. The last line is a hint: Optics did not also read the screenshot, because no [OCR engine](/docs/elements/text-and-images#turn-on-ocr) is configured.
 
 Change the `Description` row back to its original text. Run the test again, and every step passes.
 :::

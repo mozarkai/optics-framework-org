@@ -50,7 +50,7 @@ text_detection:
 
 Nothing changes in your tests. Any text value, such as `Press Element,Trail Runner 2`, is tried in the UI tree first and with OCR second. To skip the UI tree and use OCR straight away, write `text_only:Trail Runner 2`.
 
-Without an OCR engine, a text miss ends with "OCR was not tried: no text_detection engine is configured."
+Without an OCR engine, the hint of a text miss says "OCR is off, so text that shows only in images was not searched."
 :::
 
 ### How OCR matches text

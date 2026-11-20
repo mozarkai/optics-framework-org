@@ -105,10 +105,8 @@ The query picks rows with a filter (`role == 'admin'`) and columns with `select=
 
 ## Rules inside a loop
 
-Steps inside a looped module run a little differently from top-level steps:
+Steps inside a looped module take fallbacks and `name=value` parameters, like top-level steps. Two things are different:
 
-- **Only the first value of each element is used.** Fallbacks don't apply, so give looped elements a reliable first value.
-- **`name=value` parameters aren't available.** Pass values in order instead.
 - **The module's steps don't appear separately** in the run tree or the JUnit report. A failure names the step that failed in its message.
 - **After the loop, the variable keeps its last value.**
 

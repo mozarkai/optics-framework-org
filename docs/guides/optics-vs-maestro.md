@@ -76,7 +76,7 @@ Optics has four ways to create a test, and each writes the same files:
 - [Describe it](/docs/create/describe) in plain English, and an AI model drives the app.
 - [Delegate it](/docs/create/agent) to your AI agent through `optics mcp`.
 
-The `optics mcp` server gives the agent eleven tools to look, tap, type, scroll and check. One of them, `run_keyword`, runs every other keyword. Each action returns what changed on screen. After the run, the agent reads the recorded steps as a ready suite for `optics execute`. See the [MCP server reference](/docs/reference/mcp).
+The `optics mcp` server gives the agent twelve tools to look, tap, type, scroll and check. One of them, `run_keyword`, runs every other keyword. Each action returns what changed on screen. After the run, the agent reads the recorded steps as a ready suite for `optics execute`. See the [MCP server reference](/docs/reference/mcp).
 
 Maestro has [Maestro Studio](https://docs.maestro.dev/maestro-studio), a desktop app for building and debugging flows visually. Its [MCP server](https://docs.maestro.dev/get-started/maestro-mcp) ships inside the CLI. It lets the agent inspect the screen, take screenshots, run inline YAML and submit runs to Maestro Cloud, and it includes Maestro Viewer, a web view of the device.
 

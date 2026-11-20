@@ -48,7 +48,7 @@
       "title": "Advanced",
       "groups": [
         { "title": null, "pages": ["advanced/index"] },
-        { "title": "Logic and data", "pages": ["advanced/variables", "advanced/data-driven", "advanced/conditions", "advanced/api-calls"] },
+        { "title": "Logic and data", "pages": ["advanced/variables", "advanced/data-driven", "advanced/conditions", "advanced/popups", "advanced/api-calls"] },
         { "title": "Integrate", "pages": ["advanced/http-api", "advanced/generate"] }
       ]
     },
