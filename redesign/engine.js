@@ -1,6 +1,6 @@
 // /playground: the real optics-framework wheel on Pyodide, loaded on request, driving Birch in the page.
 (function () {
-  var B = window.BIRCH, lab = document.querySelector(".eng-lab");
+  var B = window.BIRCH, lab = document.querySelector(".eng-lab"), P = window.OPTICS_LAB || {};
   if (!B || !lab) return;
   var M = JSON.parse(document.getElementById("engine-manifest").textContent);
   var esc = B.esc, el = B.el;
@@ -9,7 +9,7 @@
   function mb(bytes) { return (bytes / 1e6).toFixed(1) + " MB"; }
   function track(name) { document.dispatchEvent(new CustomEvent("optics:play", { detail: name })); }
 
-  var CONFIG = "driver_sources:\n  - birch:\n      enabled: true\nelements_sources:\n  - birch_page_source:\n      enabled: true\nexecution_output_path: ./output\n";
+  var CONFIG = P.config || "driver_sources:\n  - birch:\n      enabled: true\nelements_sources:\n  - birch_page_source:\n      enabled: true\nexecution_output_path: ./output\n";
   var SUITE = [
     "Test Cases:",
     "  - Shopper can add trail runners:",
@@ -48,7 +48,7 @@
 
   // ---------------------------------------------------------------- the editor
   var edit = $(".eng-edit"), paintEl = $(".eng-paint");
-  paintEl.tabIndex = -1;
+  if (paintEl) paintEl.tabIndex = -1;
   function paintLine(line) {
     var s = esc(line);
     if (/^\s*#/.test(line)) return '<span class="k-dim">' + s + "</span>";
@@ -74,22 +74,23 @@
     paintEl.scrollTop = edit.scrollTop;
     paintEl.scrollLeft = edit.scrollLeft;
   }
-  edit.value = SUITE;
-  edit.addEventListener("input", function () { repaint(); pressTry(null); });
-  edit.addEventListener("scroll", function () { paintEl.scrollTop = edit.scrollTop; paintEl.scrollLeft = edit.scrollLeft; });
-  repaint();
   $(".eng-config").innerHTML = CONFIG.split("\n").map(paintLine).join("\n");
-
   function pressTry(name) { $$(".eng-try button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.try === name)); }); }
-  $(".eng-try").addEventListener("click", function (e) {
-    var b = e.target.closest("button");
-    if (!b || running) return;
-    var t = TRIES[b.dataset.try];
-    edit.value = t.edits.reduce(function (s, r) { return s.replace(r[0], r[1]); }, SUITE);
+  if (edit) {
+    edit.value = SUITE;
+    edit.addEventListener("input", function () { repaint(); pressTry(null); });
+    edit.addEventListener("scroll", function () { paintEl.scrollTop = edit.scrollTop; paintEl.scrollLeft = edit.scrollLeft; });
     repaint();
-    pressTry(b.dataset.try);
-    if (page) run(t.mode);
-  });
+    $(".eng-try").addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b || running) return;
+      var t = TRIES[b.dataset.try];
+      edit.value = t.edits.reduce(function (s, r) { return s.replace(r[0], r[1]); }, SUITE);
+      repaint();
+      pressTry(b.dataset.try);
+      if (page) run(t.mode);
+    });
+  }
 
   $$(".eng-tabs").forEach(function (list) {
     var tabs = $$('[role="tab"]', list);
@@ -119,6 +120,8 @@
   B.fit(stage, world, 290, 580, function () { return innerWidth < 900 ? 470 : 580; });
   clock.watch(lab);
   function wait(ms) { return clock.wait(ms, gen); }
+  var layer = P.layer && P.layer({ dev: dev, wait: wait, effect: function (show, apply) { effect(show, apply); } });
+  function did(kind, target) { if (layer) layer.did(kind, target); }
 
   var RID = { email: "email", password: "password", signin: "login", forgot: "forgot_password", search: "search", chip: "category", card: "product", back: "back", size: "size", add: "add_to_cart", toast: "toast" };
   var GROUPS = { "bz-top": "toolbar", "bz-chips": "categories", "bz-grid": "products", "bz-sizes": "sizes", "bz-pinfo": "details" };
@@ -141,6 +144,7 @@
     return Array.prototype.some.call(n.childNodes, function (c) { return c.nodeType === 3 && c.textContent.trim(); });
   }
   function role(n) {
+    if (n.dataset.tag) return { tag: n.dataset.tag, text: n.dataset.text || (n.dataset.leaf ? n.textContent.trim() : ""), id: n.dataset.rid, desc: n.dataset.desc, click: !!n.dataset.click, leaf: !!n.dataset.leaf };
     var name = n.dataset.el, cls = Array.prototype.find.call(n.classList, function (c) { return c in GROUPS; });
     if (name in FIELDS) return { tag: "android.widget.EditText", text: fieldText(n), click: true, leaf: true };
     if (name === "back") return { tag: "android.widget.ImageButton", desc: n.getAttribute("aria-label"), click: true, leaf: true };
@@ -156,9 +160,9 @@
     var r = role(n);
     if (!r) return Array.prototype.map.call(n.children, function (c) { return xml(c, depth); }).join("");
     var id = idOf(n), b = X.box(n), pad = "  ".repeat(depth);
-    var rid = r.rid || RID[n.dataset.el];
+    var rid = r.rid || RID[n.dataset.el], full = r.id || (rid ? "com.birch.shop:id/" + rid : "");
     boxes[id] = { x: b.x, y: b.y, w: b.w, h: b.h, click: !!r.click };
-    var open = pad + "<" + r.tag + attr("node-id", id) + attr("class", r.tag) + attr("text", r.text || "") + attr("resource-id", rid ? "com.birch.shop:id/" + rid : "") +
+    var open = pad + "<" + r.tag + attr("node-id", id) + attr("class", r.tag) + attr("text", r.text || "") + attr("resource-id", full) + attr("package", n.dataset.pkg) +
       attr("content-desc", r.desc || "") + attr("clickable", String(!!r.click)) + attr("enabled", "true") + attr("selected", String(!!r.on)) +
       attr("bounds", "[" + Math.round(b.x) + "," + Math.round(b.y) + "][" + Math.round(b.x + b.w) + "," + Math.round(b.y + b.h) + "]");
     var kids = r.leaf ? "" : Array.prototype.map.call(n.children, function (c) { return xml(c, depth + 1); }).join("");
@@ -168,12 +172,19 @@
     settle();
     byId = {};
     boxes = {};
-    var W = dev.scr.offsetWidth, H = dev.scr.offsetHeight;
+    var W = dev.scr.offsetWidth, H = dev.scr.offsetHeight, size = attr("bounds", "[0,0][" + W + "," + H + "]");
+    var top = layer ? layer.screen() : { modal: null, over: [] };
+    // A dialog takes the focus, so the tree holds its window alone, as UiAutomator2 dumps it.
+    if (top.modal) {
+      lastSource = '<?xml version="1.0" encoding="UTF-8"?>\n<hierarchy rotation="0">\n  <android.widget.FrameLayout' + attr("package", top.modal.dataset.pkg || "com.birch.shop") + size + ">\n" +
+        xml(top.modal, 2) + "  </android.widget.FrameLayout>\n</hierarchy>\n";
+      return lastSource;
+    }
     var parts = [$(".bz-" + A.screen, A.root)];
     if (A.toastOn) parts.push($(".bz-toast", A.root));
-    var body = parts.map(function (n) { return xml(n, 3); }).join("");
-    lastSource = '<?xml version="1.0" encoding="UTF-8"?>\n<hierarchy rotation="0">\n  <android.widget.FrameLayout' + attr("package", "com.birch.shop") + attr("bounds", "[0,0][" + W + "," + H + "]") + ">\n" +
-      '    <android.view.ViewGroup resource-id="com.birch.shop:id/' + A.screen + '_screen"' + attr("bounds", "[0,0][" + W + "," + H + "]") + ">\n" + body +
+    var body = parts.concat(top.over).map(function (n) { return xml(n, 3); }).join("");
+    lastSource = '<?xml version="1.0" encoding="UTF-8"?>\n<hierarchy rotation="0">\n  <android.widget.FrameLayout' + attr("package", "com.birch.shop") + size + ">\n" +
+      '    <android.view.ViewGroup resource-id="com.birch.shop:id/' + A.screen + '_screen"' + size + ">\n" + body +
       "    </android.view.ViewGroup>\n  </android.widget.FrameLayout>\n</hierarchy>\n";
     return lastSource;
   }
@@ -195,7 +206,7 @@
     get width() { return dev.scr.offsetWidth; },
     get height() { return dev.scr.offsetHeight; },
     source: source,
-    launch: function () { effect(function () { return wait(120); }, function () { X.clear(); A.reset("login"); }); },
+    launch: function () { effect(function () { return wait(120); }, function () { X.clear(); A.reset("login"); did("launch"); }); },
     found: function (id, element, kind) {
       var t = byId[id];
       effect(function () { X.lock(t, kind + " · " + short(element), "find"); return wait(420); });
@@ -206,7 +217,12 @@
     tap: function (id) {
       // A press on a label lands on the control that holds it, as a touch does.
       var t = byId[id], target = t.closest("[data-el]") || t;
-      effect(function () { X.lock(t, "Press", "yes"); X.tap(t); return wait(260); }, function () { X.unlock(); A.press(target); });
+      effect(function () { X.lock(t, "Press", "yes"); X.tap(t); return wait(260); }, function () {
+        X.unlock();
+        if (layer && layer.press(t)) return;
+        A.press(target);
+        did("press", target);
+      });
     },
     tapAt: function (x, y) {
       var hit = Object.keys(boxes).filter(function (id) {
@@ -230,7 +246,7 @@
       return !t ? "" : FIELDS[t.dataset.el] ? fieldText(t) : t.textContent.trim();
     },
     selected: function (id) { return !!byId[id] && byId[id].classList.contains("on"); },
-    back: function () { effect(function () { return wait(200); }, function () { if (A.screen === "product") A.show("home"); }); },
+    back: function () { effect(function () { return wait(200); }, function () { if (layer && layer.back()) return; if (A.screen === "product") A.show("home"); }); },
     close: function () { effect(function () { return wait(120); }, function () { X.clear(); A.reset("login"); }); },
   };
 
@@ -270,10 +286,20 @@
       k.head.innerHTML = glyph(e.status) + label(e.entity_id, e.name) + time(e.elapsed);
       (e.logs || []).filter(function (l) { return l !== e.message; }).forEach(function (l) { el(k.notes, "div", "e-note", esc(l)); });
       if (e.message && e.status !== "RUNNING") el(k.notes, "div", "e-note why", (e.code ? "<b>" + esc(e.code) + "</b> " : "") + esc(e.message.replace(/^Code\.E\d+: /, "")));
+    } else if (e.entity_type === "popup") {
+      popupRow(e);
     } else if (e.entity_type === "execution" && e.status !== "RUNNING") {
       summary(e);
     }
     log.scrollTop = log.scrollHeight;
+  }
+  function popupRow(e) {
+    var p = e.args || {}, k = rows[e.entity_id];
+    if (p.verdict === "none" || !k) return;
+    var what = [p.action, p.dismissed_in_ms != null ? p.dismissed_in_ms + " ms" : ""].filter(Boolean).join(" · ");
+    el(k.notes, "div", "e-note pop " + (p.verdict === "handled" ? "ok" : "bad"),
+      '<span class="k-mod">popup</span> ' + esc(p.rule ? '"' + p.rule + '"' : "no rule") + " <b>" + esc(p.verdict) + "</b>" + (what ? " · " + esc(what) : "") + (p.code ? " <b>" + esc(p.code) + "</b>" : ""));
+    if (layer && layer.event) layer.event(p);
   }
   function keywordRow(id, parentId, name) {
     if (rows[id]) return;
@@ -294,13 +320,15 @@
   function summary() {
     if (summed) return;
     summed = true;
-    var pass = cases.filter(function (c) { return c.status === "PASS"; }).length;
-    el(log, "div", "e-sum " + (cases.length && pass === cases.length ? "ok" : "bad"), pass + " passed · " + (cases.length - pass) + " failed");
+    function count(status) { return cases.filter(function (c) { return c.status === status; }).length; }
+    var pass = count("PASS"), notRun = count("NOT_RUN") + count("SKIPPED");
+    el(log, "div", "e-sum " + (cases.length && pass === cases.length ? "ok" : "bad"), pass + " passed · " + (cases.length - pass - notRun) + " failed" + (notRun ? " · " + notRun + " not run" : ""));
   }
 
   window.opticsPage = {
     step: function (id, name, params) { steps[id] = { name: name, params: JSON.parse(params) }; },
     before: function () { return wait(140); },
+    shown: function () { return play(); },
     after: function () {
       return play().then(function () {
         xmlPanes[0].textContent = lastSource;
@@ -318,7 +346,7 @@
     var focused = lab.contains(document.activeElement) && document.activeElement;
     runBtns.forEach(function (b) { b.disabled = on; });
     $$(".eng-try button").forEach(function (b) { b.disabled = on; });
-    edit.readOnly = on;
+    if (edit) edit.readOnly = on;
     stopBtn.hidden = !on;
     stopBtn.disabled = false;
     window.opticsPage.stopped = false;
@@ -334,7 +362,8 @@
     steps = {}; rows = {}; cases = []; summed = false;
     log.innerHTML = '<div class="e-cmd"><span class="k-dim">~/birch-shop $</span> optics ' + mode + " .</div>";
     xmlPanes[1].textContent = "";
-    var files = JSON.stringify({ "config.yaml": CONFIG, "checkout.yaml": edit.value });
+    if (layer) layer.reset();
+    var files = JSON.stringify(P.files ? P.files() : { "config.yaml": CONFIG, "checkout.yaml": edit.value });
     Promise.resolve(page.run(mode, files)).then(function (raw) {
       var out = JSON.parse(raw);
       if (out.stopped) el(log, "div", "e-sum bad", "Stopped");
