@@ -1,5 +1,0 @@
-Element_Name,Element_ID
-email_field,//input[@id='email']
-password_field,//input[@id='password']
-search_field,css=#search
-cart_button,cart.png
