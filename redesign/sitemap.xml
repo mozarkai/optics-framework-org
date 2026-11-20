@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://optics-framework.org/</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/about</loc>
@@ -21,8 +21,8 @@
     <lastmod>2026-11-19</lastmod>
   </url>
   <url>
-    <loc>https://optics-framework.org/releases</loc>
-    <lastmod>2026-11-19</lastmod>
+    <loc>https://optics-framework.org/ship</loc>
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/hard-targets</loc>
@@ -55,6 +55,10 @@
   <url>
     <loc>https://optics-framework.org/explain</loc>
     <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://optics-framework.org/releases</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/</loc>

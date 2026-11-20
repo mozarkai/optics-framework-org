@@ -23,7 +23,7 @@
       document.documentElement.dataset.theme = t;
     })();
   </script>
-  <link rel="stylesheet" href="../../styles.css?v=5ba04c0dc3">
+  <link rel="stylesheet" href="../../styles.css?v=019a04646d">
   <link rel="stylesheet" href="../../docs.css?v=56de380154">
   <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
 </head>
@@ -741,22 +741,36 @@ with optics_session(config) as optics:
   </div>
 
   <footer class="foot" data-hour="9">
-    <div class="wrap foot-row">
-      <a class="brand" href="../../" aria-label="Optics home">
-        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
-        <span>Optics</span>
-      </a>
-      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
-      <nav class="foot-links" aria-label="Footer">
-        <a href="../../docs/">Docs</a>
-        <a href="../../blog">Blog</a>
-        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
-        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
-        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
-        <a href="../../about">About</a>
-        <a href="../../contact">Contact</a>
-        <a href="../../privacy">Privacy</a>
-      </nav>
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="../../" aria-label="Optics home">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="../../releases"><b>1.11.4</b><span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="../../#install">Install</a></li><li><a href="../../playground">Playground</a></li><li><a href="../../releases">Releases</a></li><li><a href="../../birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="../../docs/get-started/">Get started</a></li><li><a href="../../docs/guides/">Guides</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li><li><a href="../../docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="../../blog">Blog</a></li><li><a href="../../feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="../../llms.txt">llms.txt</a></li><li><a href="../../agents.md">Agent setup</a></li><li><a href="../../.well-known/mcp/server-card.json">MCP server card</a></li><li><a href="../../openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="../../about">About</a><a href="../../contact">Contact</a><a href="../../privacy">Privacy</a></p>
+      </div>
     </div>
   </footer>
 

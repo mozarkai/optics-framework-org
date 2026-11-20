@@ -94,11 +94,11 @@
     })();
   </script>
   <script>
-    if (/[?&]sim=/.test(location.search)) location.replace("releases" + location.search + "#simulator");
+    if (/[?&]sim=/.test(location.search)) location.replace("ship" + location.search + "#simulator");
   </script>
-  <link rel="stylesheet" href="styles.css?v=5ba04c0dc3">
+  <link rel="stylesheet" href="styles.css?v=019a04646d">
   <link rel="stylesheet" href="playground.css?v=daa7d4382f">
-  <link rel="stylesheet" href="proof.css?v=dd74c7ac92">
+  <link rel="stylesheet" href="proof.css?v=c9003286f0">
   <link rel="stylesheet" href="handoff.css?v=c72228e7c4">
   <link rel="stylesheet" href="doors.css?v=9303ab8a42">
 </head>
@@ -385,7 +385,7 @@ Element_Name,Element_ID
       </div>
     </section>
 
-    <!-- The locator ladder: the rungs are an ordered fallback. The playground to break it lives on /releases. -->
+    <!-- The locator ladder: the rungs are an ordered fallback. The playground to break it lives on /ship. -->
     <section data-hour="5" class="band ladder" id="ladder" aria-labelledby="ladder-h">
       <div class="wrap">
         <h2 class="h2" id="ladder-h">How Optics finds an element</h2>
@@ -400,7 +400,7 @@ Element_Name,Element_ID
           <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
           <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
         </ol>
-        <p class="band-more"><a class="btn btn-ghost btn-sm" href="releases">Try to break it</a></p>
+        <p class="band-more"><a class="btn btn-ghost btn-sm" href="ship">Try to break it</a></p>
       </div>
     </section>
 
@@ -476,57 +476,44 @@ Element_Name,Element_ID
         </div>
         <div class="figs">
           <figure class="fig fig-wide">
-            <p class="fig-n">9,347</p>
+            <p class="fig-n">9,411</p>
             <figcaption>
               <p class="fig-what">downloads from PyPI by pip, uv and requests, since <time datetime="2025-04-18">18 Apr 2025</time></p>
-              <p class="fig-note">75,053 downloads in all. Mirrors, browsers and clients with no name make up the other 88%.</p>
+              <p class="fig-note">75,218 downloads in all. Mirrors, browsers and clients with no name make up the other 87%.</p>
             </figcaption>
             <div class="bars-wrap">
-              <ol class="bars" aria-label="Downloads from PyPI by pip, uv and requests per month"><li class="part" style="--v:0.055" data-n="47"><span class="vh">Apr 2025 from 18 Apr: 47</span></li><li style="--v:0.041" data-n="35"><span class="vh">May 2025: 35</span></li><li style="--v:0.068" data-n="58"><span class="vh">Jun 2025: 58</span></li><li style="--v:0.888" data-n="763"><span class="vh">Jul 2025: 763</span></li><li style="--v:0.995" data-n="855"><span class="vh">Aug 2025: 855</span></li><li style="--v:0.891" data-n="765"><span class="vh">Sept 2025: 765</span></li><li style="--v:0.634" data-n="545"><span class="vh">Oct 2025: 545</span></li><li style="--v:0.447" data-n="384"><span class="vh">Nov 2025: 384</span></li><li style="--v:0.427" data-n="367"><span class="vh">Dec 2025: 367</span></li><li style="--v:0.705" data-n="606"><span class="vh">Jan 2026: 606</span></li><li style="--v:0.439" data-n="377"><span class="vh">Feb 2026: 377</span></li><li style="--v:0.659" data-n="566"><span class="vh">Mar 2026: 566</span></li><li style="--v:0.750" data-n="644"><span class="vh">Apr 2026: 644</span></li><li style="--v:0.796" data-n="684"><span class="vh">May 2026: 684</span></li><li style="--v:0.608" data-n="522"><span class="vh">Jun 2026: 522</span></li><li style="--v:0.418" data-n="359"><span class="vh">Jul 2026: 359</span></li><li style="--v:1.000" data-n="859"><span class="vh">Aug 2026: 859</span></li><li style="--v:0.321" data-n="276"><span class="vh">Sept 2026: 276</span></li><li style="--v:0.448" data-n="385"><span class="vh">Oct 2026: 385</span></li><li class="part" style="--v:0.291" data-n="250"><span class="vh">Nov 2026 to 17 Nov: 250</span></li></ol>
+              <ol class="bars" aria-label="Downloads from PyPI by pip, uv and requests per month"><li class="part" style="--v:0.055" data-n="47"><span class="vh">Apr 2025 from 18 Apr: 47</span></li><li style="--v:0.041" data-n="35"><span class="vh">May 2025: 35</span></li><li style="--v:0.068" data-n="58"><span class="vh">Jun 2025: 58</span></li><li style="--v:0.888" data-n="763"><span class="vh">Jul 2025: 763</span></li><li style="--v:0.995" data-n="855"><span class="vh">Aug 2025: 855</span></li><li style="--v:0.891" data-n="765"><span class="vh">Sept 2025: 765</span></li><li style="--v:0.634" data-n="545"><span class="vh">Oct 2025: 545</span></li><li style="--v:0.447" data-n="384"><span class="vh">Nov 2025: 384</span></li><li style="--v:0.427" data-n="367"><span class="vh">Dec 2025: 367</span></li><li style="--v:0.705" data-n="606"><span class="vh">Jan 2026: 606</span></li><li style="--v:0.439" data-n="377"><span class="vh">Feb 2026: 377</span></li><li style="--v:0.659" data-n="566"><span class="vh">Mar 2026: 566</span></li><li style="--v:0.750" data-n="644"><span class="vh">Apr 2026: 644</span></li><li style="--v:0.796" data-n="684"><span class="vh">May 2026: 684</span></li><li style="--v:0.608" data-n="522"><span class="vh">Jun 2026: 522</span></li><li style="--v:0.418" data-n="359"><span class="vh">Jul 2026: 359</span></li><li style="--v:1.000" data-n="859"><span class="vh">Aug 2026: 859</span></li><li style="--v:0.321" data-n="276"><span class="vh">Sept 2026: 276</span></li><li style="--v:0.448" data-n="385"><span class="vh">Oct 2026: 385</span></li><li class="part" style="--v:0.366" data-n="314"><span class="vh">Nov 2026 to 19 Nov: 314</span></li></ol>
               <p class="bars-axis label" aria-hidden="true"><span>Apr 2025</span><span>Peak 859 a month</span><span>Nov 2026</span></p>
             </div>
-            <p class="fig-src label"><a href="https://clickpy.clickhouse.com/dashboard/optics-framework">PyPI download logs</a><span>to <time datetime="2026-11-17">17 Nov 2026</time></span></p>
+            <p class="fig-src label"><a href="https://clickpy.clickhouse.com/dashboard/optics-framework">PyPI download logs</a><span>to <time datetime="2026-11-19">19 Nov 2026</time></span></p>
           </figure>
           <figure class="fig">
             <p class="fig-n">100</p>
-            <figcaption><p class="fig-what">stars on GitHub, and 30 forks</p></figcaption>
-            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework">GitHub</a><span>read <time datetime="2026-11-18">18 Nov 2026</time></span></p>
+            <figcaption><p class="fig-what">stars on GitHub, and 31 forks</p></figcaption>
+            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework">GitHub</a><span>read <time datetime="2026-11-20">20 Nov 2026</time></span></p>
           </figure>
           <figure class="fig">
             <p class="fig-n">12</p>
-            <figcaption><p class="fig-what">releases in the 90 days to <time datetime="2026-11-18">18 Nov 2026</time>. The latest is <a href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a>.</p></figcaption>
-            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a><span>read <time datetime="2026-11-18">18 Nov 2026</time></span></p>
+            <figcaption><p class="fig-what">releases in the 90 days to <time datetime="2026-11-20">20 Nov 2026</time></p></figcaption>
+            <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a><span>read <time datetime="2026-11-20">20 Nov 2026</time></span></p>
           </figure>
         </div>
-        <h3 class="h3 rel-h">What the last three releases added</h3>
-        <ol class="rels">
-            <li class="rel">
-              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a> <span class="label"><time datetime="2026-11-17">17 Nov 2026</time></span></p>
-              <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/719">Name the report after the project name kept in config.yaml</a></li><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/720">Cut agent turns and tokens, and fix what the runs found</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/714">Drive desktop apps through the Xa11y driver</a></li></ul>
-              
-            </li>
-            <li class="rel">
-              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.3">1.11.3</a> <span class="label"><time datetime="2026-11-10">10 Nov 2026</time></span></p>
-              <ul class="rel-added"><li><span class="rel-scope">self-heal</span><a href="https://github.com/mozarkai/optics-framework/pull/704">Keep small models on the target name</a></li><li><span class="rel-scope">config</span><a href="https://github.com/mozarkai/optics-framework/pull/706">Accept API keys in config.yaml</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/712">Mark setup and teardown in the report and stop tests a failed setup guards</a></li></ul>
-              <p class="rel-fixes">9 fixes</p>
-            </li>
-            <li class="rel">
-              <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.2">1.11.2</a> <span class="label"><time datetime="2026-11-06">6 Nov 2026</time></span></p>
-              <ul class="rel-added"><li><span class="rel-scope">agent</span><a href="https://github.com/mozarkai/optics-framework/pull/673">Drive MCP and live NL mode by refs from one screen snapshot</a></li><li><span class="rel-scope">playwright</span><a href="https://github.com/mozarkai/optics-framework/pull/629">Remote browsers over CDP/Playwright protocol, configurable timeouts and phone emulation</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/631">Drive mobile web pages through the webview context (CSS / DOM XPath)</a></li><li class="rel-more">and 5 more</li></ul>
-              <p class="rel-fixes">8 fixes</p>
-            </li>
-        </ol>
+        <div class="rel-now">
+          <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a> <span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></p>
+          <p class="rel-lead">Desktop apps: test macOS, Windows and Linux apps with the same CSV suites.</p>
+          <a class="btn btn-ghost btn-sm" href="releases">All releases</a>
+        </div>
         <details class="sources">
           <summary class="label">Sources and method</summary>
           <div class="sources-body">
-            <div class="mix" role="img" aria-label="pip, uv and requests 12%, Mirrors 49%, Browsers 14%, No name 24% of 75,053 PyPI downloads">
-              <i class="mix-installers" style="flex-grow:9347"></i><i class="mix-mirrors" style="flex-grow:36990"></i><i class="mix-browsers" style="flex-grow:10641"></i><i class="mix-unnamed" style="flex-grow:18075"></i>
+            <div class="mix" role="img" aria-label="pip, uv and requests 13%, Mirrors 49%, Browsers 14%, No name 24% of 75,218 PyPI downloads">
+              <i class="mix-installers" style="flex-grow:9411"></i><i class="mix-mirrors" style="flex-grow:37030"></i><i class="mix-browsers" style="flex-grow:10663"></i><i class="mix-unnamed" style="flex-grow:18114"></i>
             </div>
             <ul class="mix-key label">
-              <li><i class="mix-installers"></i>pip, uv and requests 9,347 <span>12%</span></li>
-              <li><i class="mix-mirrors"></i>Mirrors 36,990 <span>49%</span></li>
-              <li><i class="mix-browsers"></i>Browsers 10,641 <span>14%</span></li>
-              <li><i class="mix-unnamed"></i>No name 18,075 <span>24%</span></li>
+              <li><i class="mix-installers"></i>pip, uv and requests 9,411 <span>13%</span></li>
+              <li><i class="mix-mirrors"></i>Mirrors 37,030 <span>49%</span></li>
+              <li><i class="mix-browsers"></i>Browsers 10,663 <span>14%</span></li>
+              <li><i class="mix-unnamed"></i>No name 18,114 <span>24%</span></li>
             </ul>
             <dl class="method">
               <div><dt>Downloads</dt><dd>Daily download counts for the <a href="https://pypi.org/project/optics-framework/">optics-framework</a> package from PyPI's <a href="https://docs.pypi.org/api/bigquery/">public download logs</a>, read through <a href="https://clickpy.clickhouse.com/dashboard/optics-framework">ClickPy</a>. We count downloads by pip, uv, poetry, pdm, pipenv, pipx and requests, the tools that fetch a package to use it. We leave out mirrors (bandersnatch, Nexus, devpi, Artifactory), browsers and clients that send no name. One person can download many times, for example in CI, so downloads are not people.</dd></div>
@@ -757,22 +744,36 @@ Element_Name,Element_ID
     <div class="wrap foot-night">
       <p class="foot-line" aria-hidden="true">Run it <span>forever.</span></p>
     </div>
-    <div class="wrap foot-row">
-      <a class="brand" href="#top" aria-label="Back to top">
-        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
-        <span>Optics</span>
-      </a>
-      <p class="foot-note">Open source under the Apache 2.0 licence.</p>
-      <nav class="foot-links" aria-label="Footer">
-        <a href="docs/">Docs</a>
-        <a href="blog">Blog</a>
-        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
-        <a href="https://pypi.org/project/optics-framework/">PyPI</a>
-        <a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a>
-        <a href="about">About</a>
-        <a href="contact">Contact</a>
-        <a href="privacy">Privacy</a>
-      </nav>
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="#top" aria-label="Back to top">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="releases"><b>1.11.4</b><span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="#install">Install</a></li><li><a href="playground">Playground</a></li><li><a href="releases">Releases</a></li><li><a href="birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="docs/get-started/">Get started</a></li><li><a href="docs/guides/">Guides</a></li><li><a href="docs/reference/keywords/">Keyword reference</a></li><li><a href="docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="blog">Blog</a></li><li><a href="feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="llms.txt">llms.txt</a></li><li><a href="agents.md">Agent setup</a></li><li><a href=".well-known/mcp/server-card.json">MCP server card</a></li><li><a href="openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="about">About</a><a href="contact">Contact</a><a href="privacy">Privacy</a></p>
+      </div>
     </div>
   </footer>
 
