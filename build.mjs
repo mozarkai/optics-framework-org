@@ -122,6 +122,24 @@ writeFileSync(
   ),
 );
 cpSync("pages/playground.md", "out/playground.md");
+const POPUPS_PAGE = {
+  src: "pages/popups.html",
+  path: "popups",
+  title: "Optics popups playground: rules that close the popups that block a step",
+  description: "Throw cookie banners, permission prompts, a session timeout and a clingy spin wheel at a demo shop app, then watch the real Optics popup guard close each one with a rule.",
+};
+writeFileSync(
+  "out/popups.html",
+  render(
+    {
+      ...POPUPS_PAGE,
+      body: playTabs("popups") + readFileSync(POPUPS_PAGE.src, "utf8").replace("{{engine}}", () => JSON.stringify(engine)),
+      head: `<link rel="alternate" type="text/markdown" href="popups.md" title="${POPUPS_PAGE.title}, as Markdown">\n  <link rel="stylesheet" href="playground.css">\n  <link rel="stylesheet" href="engine.css">\n  <link rel="stylesheet" href="popups.css">`,
+    },
+    { root: "", home: "./", canonical: `${ORIGIN}/popups` },
+  ),
+);
+cpSync("pages/popups.md", "out/popups.md");
 
 // The playgrounds that left the homepage, each a tab beside the engine, the run and /explain.
 const PLAY_PAGES = [
@@ -274,7 +292,7 @@ writeFileSync(
   "out/sitemap.xml",
   sitemap([
     { loc: `${ORIGIN}/`, lastmod: lastModified("site/index.html") },
-    ...[...PAGES, PLAYGROUND, ...PLAY_PAGES].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
+    ...[...PAGES, PLAYGROUND, POPUPS_PAGE, ...PLAY_PAGES].map((page) => ({ loc: `${ORIGIN}/${page.path}`, lastmod: lastModified(page.src) })),
     { loc: `${ORIGIN}/blog`, lastmod: lastModified("content/blog.json") },
     ...articles.map((item) => ({ loc: `${ORIGIN}/blog/${item.slug}`, lastmod: lastModified(articleSrc(item)) })),
     { loc: `${ORIGIN}/run`, lastmod: lastModified("site/runs/birch-run.js") },
