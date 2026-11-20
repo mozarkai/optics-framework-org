@@ -1,10 +1,10 @@
 # Run Optics in your browser
 
-The playground at https://optics-framework.org/playground runs the optics-framework 1.11.4 wheel from PyPI on Python, compiled to WebAssembly. You edit a YAML suite, then run `dry_run` or `execute` on Birch, a demo shop app drawn in the page.
+The playground at https://optics-framework.org/playground runs the optics-framework 1.11.5 wheel from PyPI on Python, compiled to WebAssembly. You edit a YAML suite, then run `dry_run` or `execute` on Birch, a demo shop app drawn in the page.
 
 ## What runs there
 
-- **Optics:** the optics-framework 1.11.4 wheel from PyPI, unchanged: suite loading, `dry_run`, keywords, element fallbacks, events and the JUnit report.
+- **Optics:** the optics-framework 1.11.5 wheel from PyPI, unchanged: suite loading, `dry_run`, keywords, element fallbacks, events and the JUnit report.
 - **Python:** CPython 3.14 in WebAssembly, from Pyodide 314.0.8, with numpy, pandas, lxml, pydantic and the other libraries Optics imports. The site serves every file.
 - **Driver:** on your machine, Optics drives apps through Appium, Playwright or Selenium. In the page, a small driver written for the page drives Birch, and an element source reads Birch as an Android-style UI tree.
 - **Left out:** image and OCR matching (OpenCV), screenshot comparison (scikit-image) and the pytest runner. Text matching uses difflib, not python-Levenshtein, so a near match can score differently.

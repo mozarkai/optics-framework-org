@@ -258,7 +258,7 @@
     var failed = run.cases.filter(function (c) { return c.status === "FAIL"; });
     ui.run.innerHTML = '<ol class="xp-tree">' + lines.join("") + "</ol>" +
       '<p class="xp-total">Total Test Cases: ' + run.cases.length + " | Passed: " + (run.cases.length - failed.length) + " | Failed: " + failed.length + "</p>" +
-      (failed.length ? '<div class="xp-fails"><p class="xp-fails-h">Failure details</p>' + failed.map(failureLine).join("") + "</div>" : "");
+      (failed.length ? '<div class="xp-fails"><p class="xp-fails-h">Failures</p>' + failed.map(failureLine).join("") + "</div>" : "");
   }
 
   function treeCase(c, last, lines) {

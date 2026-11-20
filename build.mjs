@@ -107,7 +107,7 @@ const PLAYGROUND = {
   src: "pages/playground.html",
   path: "playground",
   title: "Optics playground: run the real engine in your browser",
-  description: "Edit a YAML suite and run it with optics-framework 1.11.4 on Python in WebAssembly, against a demo shop app in the page.",
+  description: "Edit a YAML suite and run it with optics-framework 1.11.5 on Python in WebAssembly, against a demo shop app in the page.",
 };
 const engine = await buildEngine();
 writeFileSync(
