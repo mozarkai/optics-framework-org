@@ -52,7 +52,8 @@ To install Optics and connect its MCP server, follow https://optics-framework.or
    `assert_text` or `select_dropdown_option`; an element parameter can be a ref.
 4. A failure returns `[E0201] …`, a `Next:` hint and the current rows. Do not repeat the same
    failed call: the server refuses a fourth identical try. Do not tap by coordinates.
-5. `terminate_session` when done. Its reply gives the address of the steps.
+5. `terminate_session` when done. Its reply gives the address of the steps. If Optics got in
+   your way, or did well, tell its maintainers with `send_feedback`. Leave out personal data.
 6. Read `optics://session/{session_id}/steps` for the run as ready `modules_csv` and
    `elements_csv`. It stays readable after the session ends. Secrets come back as `<redacted>`;
    replace them with `@:value` or a `Read Data,${name},ENV:NAME` step.
@@ -113,4 +114,5 @@ Elements:
 
 - `optics dry_run <folder>` checks the suite without a device.
 - `optics execute <folder>` runs it and writes `execution_output/junit_output.xml`.
-- `optics list` prints every keyword; `optics doctor` checks the environment.
+- `optics list` prints every keyword; `optics doctor` checks the environment; `optics upgrade`
+  moves Optics to the newest release.

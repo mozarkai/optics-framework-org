@@ -58,6 +58,7 @@
 - [Variables](https://optics-framework.org/docs/advanced/variables.md): Store values, compute new ones during a run, and use them in later steps.
 - [Run a flow with different data](https://optics-framework.org/docs/advanced/data-driven.md): Repeat one module for every value in a list, such as each user, search term or product.
 - [Conditions and loops](https://optics-framework.org/docs/advanced/conditions.md): Run different modules depending on what's on screen or in a variable, and handle optional screens such as popups.
+- [Handle popups](https://optics-framework.org/docs/advanced/popups.md): Write rules that close the popups that block a step, and stop the run on popups you did not plan for.
 - [Call APIs in a test](https://optics-framework.org/docs/advanced/api-calls.md): Call an HTTP API in the middle of a test, check the response, and use values from it in later steps.
 - [Run keywords over HTTP](https://optics-framework.org/docs/advanced/http-api.md): Start a local Optics server and drive a device or browser from your own service, one keyword per request.
 - [Generate pytest or Robot code](https://optics-framework.org/docs/advanced/generate.md): Turn a CSV or YAML suite into a pytest or Robot Framework file you can extend with code.
@@ -82,7 +83,7 @@
 - [Flow control keywords](https://optics-framework.org/docs/reference/keywords/flow.md): Learn how to reuse modules, loop, branch, load data, compute values and call APIs in a suite.
 - [CLI](https://optics-framework.org/docs/reference/cli.md): Look up every `optics` command, its flags, what it writes and the exit codes it returns.
 - [config.yaml](https://optics-framework.org/docs/reference/config.md): Every setting in a project's config.yaml.
-- [Project files](https://optics-framework.org/docs/reference/files.md): The file formats Optics reads: test cases, modules, elements, error definitions and API definitions.
+- [Project files](https://optics-framework.org/docs/reference/files.md): The file formats Optics reads: test cases, modules, elements, error definitions, popup rules and API definitions.
 - [Engines and extras](https://optics-framework.org/docs/reference/engines.md): Learn which drivers, element sources, OCR, image matching and LLM engines Optics supports, and which pip extra installs each one.
 - [MCP server reference](https://optics-framework.org/docs/reference/mcp.md): Tools and resources that `optics mcp` gives your AI agent.
 - [HTTP API reference](https://optics-framework.org/docs/reference/http-api.md): Learn the endpoints `optics serve` exposes for starting sessions, running keywords and streaming results.

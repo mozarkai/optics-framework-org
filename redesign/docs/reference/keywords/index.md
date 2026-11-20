@@ -50,9 +50,6 @@ Leaving a cell empty doesn't skip a parameter. Empty cells are dropped, so the n
 
 A value like `css=#cart` stays positional, because `css` is not a parameter name. When a keyword's first parameter is `element`, its first `text=`, `css=` or `xpath=` value is the element, unless you also write `element=`. For example, `Enter Text,text=Name,Ava` types `Ava` into the field `text=Name`. Values that start with `/`, `//` or `(` are never treated as named, and `==`, `!=`, `<=` and `>=` don't count as `=`.
 
-**Note:**
-Steps inside a module that runs through [Execute Module, Run Loop or Condition](https://optics-framework.org/docs/reference/keywords/flow) don't support `name=value`, except `store_as=`. Write every parameter positionally there.
-
 ### Every value is a string
 
 Each keyword receives its parameters as text and converts them itself. Timeouts, counts, `index`, `repeat`, lengths and swipe percentages must be whole numbers. A decimal such as `2.5` fails the step. The exceptions are the `aoi_*` values and the `timeout` of Assert Text and Select Dropdown Option. Timeouts are always in seconds.
@@ -220,6 +217,7 @@ Over [`optics serve`](https://optics-framework.org/docs/reference/cli), MCP and 
 | Execute Script | Run a driver command or browser JavaScript | [Execute Script](https://optics-framework.org/docs/reference/keywords/actions#execute-script) |
 | Get Text | Read an element's text | [Get Text](https://optics-framework.org/docs/reference/keywords/actions#get-text) |
 | Sleep | Wait a number of seconds | [Sleep](https://optics-framework.org/docs/reference/keywords/actions#sleep) |
+| Start Popup Run | Set the popup counts and events to zero | [Start Popup Run](https://optics-framework.org/docs/reference/keywords/actions#start-popup-run) |
 | Press Checkbox | Deprecated: use Press Element | [Press Checkbox](https://optics-framework.org/docs/reference/keywords/actions#press-checkbox) |
 | Press Radio Button | Deprecated: use Press Element | [Press Radio Button](https://optics-framework.org/docs/reference/keywords/actions#press-radio-button) |
 | Swipe Seekbar To Right Android | Deprecated: use Swipe From Element | [Swipe Seekbar To Right Android](https://optics-framework.org/docs/reference/keywords/actions#swipe-seekbar-to-right-android) |
@@ -260,7 +258,7 @@ Press Checkbox and Press Radio Button still work but log a warning. Use [Press E
 
 - **CSV and YAML suites, `optics live` and `optics serve`** have every keyword on this page.
 - **The MCP server** gives a small set of core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](https://optics-framework.org/docs/reference/mcp).
-- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See [Write tests in Python](https://optics-framework.org/docs/create/python).
+- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup, Start Popup Run and the three deprecated ones. Some parameters differ. See [Write tests in Python](https://optics-framework.org/docs/create/python).
 - **`optics generate`** skips flow-control keywords and a few others when it converts a suite to code.
 
 ## Python and Robot Framework only
@@ -279,4 +277,7 @@ These keywords exist only in the [Python library](https://optics-framework.org/d
 | Add Testcase | Set the session's test cases |
 | Add Error Definitions | Add on-screen error definitions |
 | Capture And Detect Errors | Check the current screen for defined errors and return any matches |
+| Add Popup Rules | Add [popup rules](https://optics-framework.org/docs/advanced/popups) to the session. A rule replaces the one with the same name |
+| Get Popup Events | Return each popup check of the session, with the rule, action, verdict and evidence |
+| Get Popup Summary | Return one line of counts for each rule, then one line for each popup with no rule |
 | Press Element With Index | Press Element with an index |

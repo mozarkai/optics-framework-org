@@ -106,19 +106,20 @@ Check the spelling against [config.yaml](https://optics-framework.org/docs/refer
 
 ## Finding elements
 
-### "Element not found: <name>"
+### "${name} is not defined in the project's elements"
 
-A step uses `${name}`, and no elements file defines `name`. The step fails before Optics looks at the screen.
+A step uses `${name}`, and no elements file defines `name`. The step fails with `E0201` before Optics looks at the screen.
 
 - Add a row for `name` to `test_data/elements.csv`, and check the spelling and case.
 - If an `Invoke API` `extract` creates the value, add a placeholder row (`access_token,placeholder`) so `optics dry_run` accepts it. Other keywords that write a variable need no row. See [Dry runs](https://optics-framework.org/docs/advanced/variables#dry-runs).
 - If every name fails, check that the elements file starts with `Element_Name,Element_ID` and that you saved it as plain CSV.
 
-### `[E0201]` No valid strategies found
+### "… is not on the screen"
 
-Optics looked for the element every way it could and didn't find it on the current screen.
+Optics looked for the element every way it could and didn't find it on the current screen. The reason names the element and each value that Optics looked for, such as `login_button is not on the screen. Looked for '//button[@id='login']' and 'Sign in'. [E0201]`.
 
 - Check the value against the screen. In `optics live`, try it with `assert_presence` and see whether it's found.
+- If the reason ends with `it is not valid XPath 1.0`, correct the XPath. Each `[` and `(` needs its `]` and `)`, and each quote needs its closing quote.
 - If the element appears late, put `Assert Presence` before the step. Actions don't wait.
 - For text drawn inside images, enable a [text detection engine](https://optics-framework.org/docs/elements/text-and-images#turn-on-ocr) and a screenshot source.
 - Add fallback values, so a second way can take over when the first breaks.
@@ -126,7 +127,7 @@ Optics looked for the element every way it could and didn't find it on the curre
 
 See [`E0201` and `X0201`](https://optics-framework.org/docs/reference/errors#e02-elements).
 
-### "OCR was not tried: no text_detection engine is configured"
+### "OCR is off, so text that shows only in images was not searched"
 
 The step did not find the element in the UI tree. Optics did not read the screenshot, because no OCR engine is enabled.
 
@@ -138,15 +139,15 @@ Optics decides what a value is from how it looks. Text that starts with `(` or `
 
 Put `text=` in front to force text, for example `text=(optional)`. See [Choose the kind of value](https://optics-framework.org/docs/elements/define#choose-the-kind-of-value).
 
-### `id:` values always fail
+### `id:` values fail
 
-No element source supports values written as `id:login`, so they fail with `E0201` every time.
+Optics turns `id:login` into one XPath that matches the id on each platform: `@id` on the web and on a desktop, `@resource-id` on Android with or without the `<package>:id/` part, and `@name` on iOS. If the step fails with `E0201`, no element on the screen has that id.
 
-Use an XPath on the id instead, for example `//*[@resource-id='com.birch.shop:id/login']` on Android or `//*[@id='login']` on the web.
+Check the id in the page source or in Appium Inspector. A value with nothing after `id:` fails with `E0205`. See [Choose the kind of value](https://optics-framework.org/docs/elements/define#choose-the-kind-of-value).
 
 ### Assert Presence with several elements fails
 
-Assert Presence, Assert Visibility and Validate Screen separate elements with `|`, not commas. In a CSV, a comma starts a new cell, so the second element becomes the timeout and the step fails with `ValueError: invalid literal for int()`.
+Assert Presence, Assert Visibility and Validate Screen separate elements with `|`, not commas. In a CSV, a comma starts a new cell, so the second element becomes the timeout and the step fails with `invalid literal for int() with base 10`.
 
 Write `Assert Presence,Welcome|Picked for you,20`. See [Check several elements at once](https://optics-framework.org/docs/reference/keywords/verification#check-several-elements-at-once).
 
@@ -177,13 +178,13 @@ Add `index=1` to pick the second match, counting from 0, or narrow the search wi
 
 ## Running tests
 
-### "Keyword not found: X. Did you mean …"
+### "'X' is not a keyword. Did you mean …"
 
 A module step names a keyword that doesn't exist, usually because of a typo. Optics suggests the closest real name.
 
 Fix the spelling. Case and spaces don't matter, so `Press Element` and `press element` both work. Run `optics list` to see every keyword.
 
-### A module that calls another module reports "Keyword not found"
+### A module that calls another module reports "is not a keyword"
 
 A module step that names another module is read as a keyword name.
 
@@ -221,7 +222,7 @@ Put `Assert Presence` before the action, which waits up to 30 seconds by default
 
 A value that reads as a number compares with a number as a number, so `${count} > 5` works. The step fails with `E0403` when the value is not a number, such as `abc > 5`, or when you put `${name}` in quotes. Write `${status} == 'ready'`, not `'${status}' == 'ready'`. See [Compare numbers](https://optics-framework.org/docs/reference/keywords/flow#compare-numbers).
 
-### `ValueError: invalid literal for int()`
+### "invalid literal for int() with base 10"
 
 A parameter that must be a whole number got something else. Two causes are common: a timeout or count with a decimal point, such as `2.5`, and an empty cell. Empty cells are dropped, so the values after them shift left into the wrong parameter.
 
@@ -269,15 +270,18 @@ Create the folder before the run. See [config.yaml](https://optics-framework.org
 
 ### "cannot take these params"
 
-A step does not give its keyword the parameters that it takes. `optics dry_run` fails the step with E0403:
+A step does not give its keyword the parameters that it takes. `optics dry_run` and `optics execute` fail the step with E0403:
 
 ```terminal
-Code.E0403: 'Press Element' cannot take these params: missing a required argument: 'element'. See its params with: optics list Press Element
+╭────────────────────────────────── Failures ──────────────────────────────────╮
+│ Shopper can sign in › Sign In › Press Element                                │
+│ Press Element cannot take these params: missing a required argument:         │
+│ 'element'                                                                    │
+│ Run 'optics list Press Element' to see its params.                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-`optics execute` fails the same step with X0401 and the Python message: `ActionKeyword.press_element() missing 1 required positional argument: 'element'`. Run `optics dry_run` to get the message above.
-
-Run the command at the end of the message. It prints the parameters in column order: `param_1` is the first column after `module_step`. Then fix the row:
+Run the command in the hint. It prints the parameters in column order: `param_1` is the first column after `module_step`. Then fix the row:
 
 - `missing a required argument`: add the value in its column.
 - `too many positional arguments`: remove the extra cells.
@@ -449,9 +453,9 @@ Set `OPTICS_EVENT_DRAIN_TIMEOUT_S` to a higher value, such as `10`. See [Environ
 
 ### CI logs are full of progress output
 
-The live result tree redraws itself, which clutters plain CI logs.
+The live result tree redraws itself, which clutters CI logs. Optics shows the tree only on a terminal. When the output is not a terminal, as in most CI systems, Optics prints one line per step and sends logs to stderr.
 
-Run `optics execute my-project --no-use-printer`, and set `file_log: true` to keep full logs as build artifacts.
+If your CI runs Optics in a terminal, add `--output plain`: `optics execute my-project --output plain`. Do not add `--no-use-printer`: it shows no progress at all. Set `file_log: true` to keep full logs as build artifacts. See [Choose the output](https://optics-framework.org/docs/reference/cli#choose-the-output).
 
 ### `--runner pytest` fails
 

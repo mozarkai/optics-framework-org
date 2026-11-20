@@ -99,13 +99,7 @@ A module name written on its own as a step doesn't run that module. Use `Execute
 
 ## Rules for modules run by these keywords
 
-Modules run by `Condition`, `Execute Module` and [`Run Loop`](https://optics-framework.org/docs/advanced/data-driven) follow simpler rules than top-level steps:
-
-- Each element uses only its **first value**. Fallbacks don't apply.
-- **`name=value` parameters aren't available.** Give values in order: `Assert Presence,Picked for you,5`, not `timeout_str=5`.
-- Their steps don't appear separately in the run tree. A failure message names the step that failed.
-
-If a branch needs fallbacks, give it its own test case instead and choose which test cases run with [`--include` and `--exclude`](https://optics-framework.org/docs/create/organise#run-only-some-test-cases).
+Steps in modules run by `Condition`, `Execute Module` and [`Run Loop`](https://optics-framework.org/docs/advanced/data-driven) run like top-level steps: each element tries its fallbacks in turn, and `name=value` parameters work. Their steps don't appear separately in the run tree. A failure message names the step that failed.
 
 ## See also
 

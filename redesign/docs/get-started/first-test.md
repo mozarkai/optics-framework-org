@@ -170,19 +170,20 @@ A test is only useful if it fails when the app is broken. Pretend the store rena
 ```terminal
     └── Add the backpack to the cart                     |     30.77s |    FAIL
         ├── Press Element (//button[@id='add-to-cart-... |      0.10s |    PASS
-        └── Assert Presence (Removed)                    |     30.01s |    FAIL
+        └── Assert Presence (Removed)                    |     30.02s |    FAIL
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │ Total Test Cases: 1 | Passed: 0 | Failed: 1                                  │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-╭────────────────────────────── Failure details ───────────────────────────────╮
-│ Shopper can add a backpack → step 'Assert Presence (Removed)' — Keyword      │
-│ 'Assert Presence' failed after fallback attempts; last error: E0201:         │
-│ ['Removed'] not found based on rule 'any'. OCR was not tried: no             │
-│ text_detection engine is configured.                                         │
+╭────────────────────────────────── Failures ──────────────────────────────────╮
+│ Shopper can add a backpack › Add the backpack to the cart › Assert Presence  │
+│ (Removed)                                                                    │
+│ 'Removed' is not on the screen.                                              │
+│ OCR is off, so text that shows only in images was not searched. Add a        │
+│ text_detection engine to config.yaml to search it.                           │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The run is slower this time because Assert Presence waits up to its 30-second timeout for the text to appear. The tree shows exactly which step failed, and the **Failure details** box names it with the last error. The command also exits with code `1`, which is how CI knows to mark the build red.
+The run is slower this time because Assert Presence waits up to its 30-second timeout for the text to appear. The tree shows exactly which step failed. The **Failures** box names the step, says why it failed and gives a hint. The command also exits with code `1`, which is how CI knows to mark the build red.
 
 Optics also writes `execution_output/failed_steps_elements.json`. It lists the elements that were on screen when the step failed, so you can see the text that the page showed instead. Change `Removed` back to `Remove` before you continue.
 

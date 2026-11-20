@@ -380,7 +380,7 @@ Element_Name,Element_ID
             <div><dt>Detected errors</dt><dd>Crash dialogs and messages like “Session expired”, matched from <code class="ic">error_definitions.csv</code> on the last screen, add a failure to the JUnit report even without an assertion.</dd></div>
           </dl>
         </div>
-        <div class="run-card"><figure class="rc" data-exit="0"><img src="runs/birch-2.1/end.webp?v=85b68dd007" alt="The last screen of the Birch 2.1 run" width="412" height="839" loading="lazy"><figcaption><span class="label">Birch 2.1</span><b>Run passed</b><ul><li>14 of 14 steps passed</li></ul><code>exit 0</code></figcaption></figure><figure class="rc" data-exit="1"><img src="runs/birch-2.2/end.webp?v=2e76779fbb" alt="The last screen of the Birch 2.2 run, showing “Session expired”" width="412" height="839" loading="lazy"><figcaption><span class="label">Birch 2.2</span><b>Run failed</b><ul><li>14 of 14 steps passed</li><li>“Session expired” on the last screen</li></ul><code>exit 1</code></figcaption></figure></div>
+        <div class="run-card"><figure class="rc" data-exit="0"><img src="runs/birch-2.1/end.webp?v=85b68dd007" alt="The last screen of the Birch 2.1 run" width="412" height="839" loading="lazy"><figcaption><span class="label">Birch 2.1</span><b>Run passed</b><ul><li>14 of 14 steps passed</li></ul><code>exit 0</code></figcaption></figure><figure class="rc" data-exit="1"><img src="runs/birch-2.2/end.webp?v=3793079b3a" alt="The last screen of the Birch 2.2 run, showing “Session expired”" width="412" height="839" loading="lazy"><figcaption><span class="label">Birch 2.2</span><b>Run failed</b><ul><li>14 of 14 steps passed</li><li>“Session expired” on the last screen</li></ul><code>exit 1</code></figcaption></figure></div>
         <p class="band-more"><a class="btn btn-ghost btn-sm" href="run">Step through the run</a></p>
       </div>
     </section>
@@ -442,9 +442,9 @@ Element_Name,Element_ID
       - <span class="c-dim">uses:</span> actions/setup-python@v7
         <span class="c-dim">with:</span>
           <span class="c-dim">python-version:</span> <span class="c-lit">"3.12"</span>
-      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]==1.11.5"</span>
+      - <span class="c-dim">run:</span> pip install <span class="c-lit">"optics-framework[playwright]"</span>
       - <span class="c-dim">run:</span> python -m playwright install --with-deps chromium
-      - <span class="c-dim">run:</span> <b>optics execute birch-tests</b> --no-use-printer
+      - <span class="c-dim">run:</span> <b>optics execute birch-tests</b>
       - <span class="c-dim">if:</span> always()
         <span class="c-dim">uses:</span> mikepenz/action-junit-report@v6
         <span class="c-dim">with:</span>
@@ -493,14 +493,14 @@ Element_Name,Element_ID
             <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework">GitHub</a><span>read <time datetime="2026-11-20">20 Nov 2026</time></span></p>
           </figure>
           <figure class="fig">
-            <p class="fig-n">12</p>
+            <p class="fig-n">13</p>
             <figcaption><p class="fig-what">releases in the 90 days to <time datetime="2026-11-20">20 Nov 2026</time></p></figcaption>
             <p class="fig-src label"><a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a><span>read <time datetime="2026-11-20">20 Nov 2026</time></span></p>
           </figure>
         </div>
         <div class="rel-now">
-          <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a> <span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></p>
-          <p class="rel-lead">Desktop apps: test macOS, Windows and Linux apps with the same CSV suites.</p>
+          <p class="rel-head"><a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.5">1.11.5</a> <span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></p>
+          <p class="rel-lead">Popups: write rules that close the popups that block a step.</p>
           <a class="btn btn-ghost btn-sm" href="releases">All releases</a>
         </div>
         <details class="sources">
@@ -635,7 +635,7 @@ Element_Name,Element_ID
                 <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then run my Optics suite in CI.</p>
               </div>
               <div class="ho-split">
-                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job with the Optics version pinned</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Finds your suite, or writes one first</li><li>Writes the CI job</li><li>Checks the suite with <code>optics dry_run</code></li></ol></div>
                 <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>The secrets your suite reads, added to your CI settings</li></ul></div>
               </div>
             </div>
@@ -751,7 +751,7 @@ Element_Name,Element_ID
             <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
             <span>Optics</span>
           </a>
-          <a class="foot-rel" href="releases"><b>1.11.4</b><span class="label">Latest, <time datetime="2026-11-17">17 Nov 2026</time></span></a>
+          <a class="foot-rel" href="releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
         </div>
         <nav class="foot-col" aria-label="Product">
           <h2 class="label">Product</h2>
@@ -793,8 +793,8 @@ Element_Name,Element_ID
   <script src="app.js?v=aaa72e04a3" defer></script>
   <script src="track.js?v=a7621959d3" defer></script>
   <script src="birch.js?v=239c605768" defer></script>
-  <script src="doors-contract.js?v=584d6862c6" defer></script>
+  <script src="doors-contract.js?v=fccea16b5f" defer></script>
   <script src="doors.js?v=6b469e37b0" defer></script>
-  <script src="playground.js?v=dc0dad80b6" defer></script>
+  <script src="playground.js?v=a8b5994904" defer></script>
 <!--/email_off--></body>
 </html>

@@ -37,7 +37,7 @@ birch-tests/execution_output/
 
 ## Investigate a failure
 
-1. **Read the Failure details box** in the terminal. It names the test case, the step and the reason. `last error:` gives the error of the last fallback value, and `(cause: …)` gives the root cause.
+1. **Read the Failures box** in the terminal. For each failed step, it names the test case, the module and the step, says why the step failed, and gives a hint. For an element, the reason names each value that Optics looked for.
 2. **Open `failed_steps_elements.json`** to see the elements on the screen when the step failed. On a web page, each element has a `loc` locator that you can copy into your elements file.
 3. **Open the `failure_<test case>` screenshot.** It shows where the test case ended. Then open the last `pre_…` screenshot before the failure. Is the screen what you expected? If it shows a loading spinner, the step ran too early: add an `Assert Presence` before it. If it shows a different screen, an earlier step went somewhere unexpected.
 4. **Search the logs** for the element's value. With `file_log: true`, `execution_logs.log` has a line for every attempt, such as `Trying … on 'Sign in' ... FAIL`.
@@ -73,9 +73,9 @@ name: birch-tests
 
 Each `<testcase>` has `kind`, `timestamp` (when it started), `time` (how long it took, in seconds) and `status`. A failed test case also has a `<failure>`.
 
-`kind` tells you the role of the test case: `suite_setup`, `setup`, `test`, `teardown` or `suite_teardown`. Use it to filter setup and teardown out of your test counts. A `<failure>` or `<error>` has a `code` attribute with the error code, such as `E0201`, when the failure has a code.
+`kind` tells you the role of the test case: `suite_setup`, `setup`, `test`, `teardown` or `suite_teardown`. Use it to filter setup and teardown out of your test counts. A `<failure>` or `<error>` has a `code` attribute with the error code, such as `E0201`, when the failure has a code. The `message` of a `<failure>` says why the step failed. Its text adds the hint on the next line.
 
-Inside each test case, every module is a `<kw type="setup">`, and each of its keywords is a `<kw>` inside it. Each `<kw>` has `status`, `starttime`, `endtime` and `elapsed`. A failed one also has a `message` and a `code`. CI tools that show nested steps display the same tree you saw in the terminal.
+Inside each test case, every module is a `<kw type="setup">`, and each of its keywords is a `<kw>` inside it. Each `<kw>` has `status`, `starttime`, `endtime` and `elapsed`. A failed one also has a `message` and a `code`. A keyword that [AI self-heal](https://optics-framework.org/docs/elements/self-heal#find-out-what-healed) completed has `healed="true"` and a `<heal>` element with the steps that the model did. CI tools that show nested steps display the same tree you saw in the terminal.
 
 ```xml
 <testcase name="Shopper can find a missing link" classname="birch-tests" kind="test" time="3.79" ... status="FAIL">
@@ -85,7 +85,8 @@ Inside each test case, every module is a `<kw type="setup">`, and each of its ke
     </kw>
     <kw name="Validate Element" status="NOT_RUN"/>
   </kw>
-  <failure message="Keyword 'Assert Presence' failed after fallback attempts; ..." type="Failure" code="E0201">...</failure>
+  <failure message="'Missing link' is not on the screen." type="Failure" code="E0201">'Missing link' is not on the screen.
+OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it.</failure>
 </testcase>
 ```
 
@@ -177,57 +178,58 @@ These are real reports from `optics execute` on a Playwright project named `chec
 ```xml
 <?xml version="1.0" ?>
 <testsuites>
-  <testsuite name="checkout_suite" id="3c053b88-48df-4b28-ab4b-fc44890db471" tests="6" failures="1" errors="0" skipped="0" time="4.22" timestamp="2026-11-09T18:22:48.815+05:30">
-    <testcase name="Suite Setup" id="a4ff9a93-0a9f-45b5-910d-6341946532b9" classname="checkout_suite" kind="suite_setup" time="1.28" timestamp="2026-11-09T18:22:48.815+05:30" status="PASS">
-      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261109 18:22:48.815" endtime="20261109 18:22:50.093" elapsed="1.28">
-        <kw name="Launch App" status="PASS" starttime="20261109 18:22:48.815" endtime="20261109 18:22:50.092" elapsed="1.28"/>
+  <testsuite name="checkout_suite" id="04f2f909-2741-435e-bbed-b76cec621740" tests="6" failures="1" errors="0" skipped="0" time="3.32" timestamp="2026-11-20T16:54:31.081+05:30">
+    <testcase name="Suite Setup" id="9a4c3b23-cf8d-4cb0-915b-1b724ab7e71f" classname="checkout_suite" kind="suite_setup" time="0.43" timestamp="2026-11-20T16:54:31.081+05:30" status="PASS">
+      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261120 16:54:31.081" endtime="20261120 16:54:31.514" elapsed="0.43">
+        <kw name="Launch App" status="PASS" starttime="20261120 16:54:31.082" endtime="20261120 16:54:31.513" elapsed="0.43"/>
       </kw>
     </testcase>
-    <testcase name="Setup (TC1 Notice Shown)" id="017f66ac-0693-4320-8fbe-a023b0127231" classname="checkout_suite" kind="setup" time="0.08" timestamp="2026-11-09T18:22:50.094+05:30" status="PASS">
-      <kw name="Check Notice" type="setup" status="PASS" starttime="20261109 18:22:50.095" endtime="20261109 18:22:50.173" elapsed="0.08">
-        <kw name="Assert Presence" status="PASS" starttime="20261109 18:22:50.095" endtime="20261109 18:22:50.173" elapsed="0.08">
+    <testcase name="Setup (TC1 Notice Shown)" id="4fd54886-f661-4cd0-947d-de74066e70ef" classname="checkout_suite" kind="setup" time="0.07" timestamp="2026-11-20T16:54:31.514+05:30" status="PASS">
+      <kw name="Check Notice" type="setup" status="PASS" starttime="20261120 16:54:31.514" endtime="20261120 16:54:31.585" elapsed="0.07">
+        <kw name="Assert Presence" status="PASS" starttime="20261120 16:54:31.514" endtime="20261120 16:54:31.585" elapsed="0.07">
           <log>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s</log>
           <log>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS</log>
           <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
         </kw>
       </kw>
     </testcase>
-    <testcase name="TC1 Notice Shown" id="382ccfbe-3434-4cf5-aa0e-3cad55b1bc91" classname="checkout_suite" kind="test" time="0.04" timestamp="2026-11-09T18:22:50.174+05:30" status="PASS">
-      <kw name="Check Notice" type="setup" status="PASS" starttime="20261109 18:22:50.174" endtime="20261109 18:22:50.212" elapsed="0.04">
-        <kw name="Assert Presence" status="PASS" starttime="20261109 18:22:50.174" endtime="20261109 18:22:50.211" elapsed="0.04">
+    <testcase name="TC1 Notice Shown" id="de2954d7-93ee-44ad-bc01-1683569d8976" classname="checkout_suite" kind="test" time="0.04" timestamp="2026-11-20T16:54:31.585+05:30" status="PASS">
+      <kw name="Check Notice" type="setup" status="PASS" starttime="20261120 16:54:31.585" endtime="20261120 16:54:31.622" elapsed="0.04">
+        <kw name="Assert Presence" status="PASS" starttime="20261120 16:54:31.585" endtime="20261120 16:54:31.622" elapsed="0.04">
           <log>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s</log>
           <log>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS</log>
           <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
         </kw>
       </kw>
     </testcase>
-    <testcase name="Setup (TC2 Missing Text)" id="d5a26adf-8fc7-48e6-ae5f-a881ec3d0c61" classname="checkout_suite" kind="setup" time="0.10" timestamp="2026-11-09T18:22:50.212+05:30" status="PASS">
-      <kw name="Check Notice" type="setup" status="PASS" starttime="20261109 18:22:50.212" endtime="20261109 18:22:50.307" elapsed="0.09">
-        <kw name="Assert Presence" status="PASS" starttime="20261109 18:22:50.212" endtime="20261109 18:22:50.307" elapsed="0.09">
+    <testcase name="Setup (TC2 Missing Text)" id="47392934-823a-480c-b3cc-52fd0220b4d9" classname="checkout_suite" kind="setup" time="0.05" timestamp="2026-11-20T16:54:31.622+05:30" status="PASS">
+      <kw name="Check Notice" type="setup" status="PASS" starttime="20261120 16:54:31.622" endtime="20261120 16:54:31.669" elapsed="0.05">
+        <kw name="Assert Presence" status="PASS" starttime="20261120 16:54:31.622" endtime="20261120 16:54:31.669" elapsed="0.05">
           <log>Asserting (assert_elements) elements: ['text=for use in documentation examples'] with rule: any and timeout: 5s</log>
           <log>Trying TextElementStrategy on '['text=for use in documentation examples']' ... SUCCESS</log>
           <log>Trying ScreenshotStrategy on 'screenshot' ... SUCCESS</log>
         </kw>
       </kw>
     </testcase>
-    <testcase name="TC2 Missing Text" id="c4837f0f-b1b8-4a9d-acee-484d563ebdc7" classname="checkout_suite" kind="test" time="2.70" timestamp="2026-11-09T18:22:50.308+05:30" status="FAIL">
-      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261109 18:22:50.308" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:22:52.957" elapsed="2.65">
-        <kw name="Assert Presence" status="FAIL" starttime="20261109 18:22:50.309" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:22:52.320" elapsed="2.01">
+    <testcase name="TC2 Missing Text" id="83fc7681-5b4b-40b6-855e-ef52c047e2aa" classname="checkout_suite" kind="test" time="2.71" timestamp="2026-11-20T16:54:31.669+05:30" status="FAIL">
+      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261120 16:54:31.669" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:34.319" elapsed="2.65">
+        <kw name="Assert Presence" status="FAIL" starttime="20261120 16:54:31.669" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:33.678" elapsed="2.01">
           <log>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
-          <log>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</log>
+          <log>'text=This text is not on the page' is not on the screen.</log>
         </kw>
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
       <kw name="Check Notice" type="setup" status="NOT_RUN">
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <failure message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." type="Failure" code="E0201">Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</failure>
+      <failure message="'text=This text is not on the page' is not on the screen." type="Failure" code="E0201">'text=This text is not on the page' is not on the screen.
+OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it.</failure>
     </testcase>
-    <testcase name="Suite Teardown" id="b12a2c29-1e21-48bb-a0e6-0aff9e3b507d" classname="checkout_suite" kind="suite_teardown" time="0.02" timestamp="2026-11-09T18:22:53.053+05:30" status="PASS">
-      <kw name="Close Browser" type="setup" status="PASS" starttime="20261109 18:22:53.053" endtime="20261109 18:22:53.077" elapsed="0.02">
-        <kw name="Close And Terminate App" status="PASS" starttime="20261109 18:22:53.054" endtime="20261109 18:22:53.076" elapsed="0.02">
+    <testcase name="Suite Teardown" id="04d3789c-1899-4254-afa5-af288e61964e" classname="checkout_suite" kind="suite_teardown" time="0.02" timestamp="2026-11-20T16:54:34.419+05:30" status="PASS">
+      <kw name="Close Browser" type="setup" status="PASS" starttime="20261120 16:54:34.419" endtime="20261120 16:54:34.442" elapsed="0.02">
+        <kw name="Close And Terminate App" status="PASS" starttime="20261120 16:54:34.419" endtime="20261120 16:54:34.442" elapsed="0.02">
           <log>No events to send.</log>
         </kw>
       </kw>
@@ -286,37 +288,38 @@ These are real reports from `optics execute` on a Playwright project named `chec
 ```xml
 <?xml version="1.0" ?>
 <testsuites>
-  <testsuite name="checkout_suite" id="e5b0d587-646c-4a96-8cd7-07cd80af727f" tests="4" failures="1" errors="0" skipped="2" time="3.75" timestamp="2026-11-09T18:24:10.036+05:30">
-    <testcase name="Suite Setup" id="9377898b-02c8-4c45-99b2-3ac47f0ac0e7" classname="checkout_suite" kind="suite_setup" time="3.71" timestamp="2026-11-09T18:24:10.036+05:30" status="FAIL">
-      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261109 18:24:10.036" endtime="20261109 18:24:11.046" elapsed="1.01">
-        <kw name="Launch App" status="PASS" starttime="20261109 18:24:10.036" endtime="20261109 18:24:11.045" elapsed="1.01"/>
+  <testsuite name="checkout_suite" id="232fddda-e551-4724-a6d9-efae1d0e1bca" tests="4" failures="1" errors="0" skipped="2" time="3.72" timestamp="2026-11-20T16:54:35.565+05:30">
+    <testcase name="Suite Setup" id="45110bcc-1192-49ae-89e8-4e4ce87767fc" classname="checkout_suite" kind="suite_setup" time="3.70" timestamp="2026-11-20T16:54:35.565+05:30" status="FAIL">
+      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261120 16:54:35.565" endtime="20261120 16:54:36.034" elapsed="0.47">
+        <kw name="Launch App" status="PASS" starttime="20261120 16:54:35.565" endtime="20261120 16:54:36.034" elapsed="0.47"/>
       </kw>
-      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261109 18:24:11.046" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:24:13.686" elapsed="2.64">
-        <kw name="Assert Presence" status="FAIL" starttime="20261109 18:24:11.046" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:24:13.055" elapsed="2.01">
+      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261120 16:54:36.034" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:38.697" elapsed="2.66">
+        <kw name="Assert Presence" status="FAIL" starttime="20261120 16:54:36.034" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:38.048" elapsed="2.01">
           <log>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
-          <log>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</log>
+          <log>'text=This text is not on the page' is not on the screen.</log>
         </kw>
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <failure message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." type="Failure" code="E0201">Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</failure>
+      <failure message="'text=This text is not on the page' is not on the screen." type="Failure" code="E0201">'text=This text is not on the page' is not on the screen.
+OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it.</failure>
     </testcase>
     <testcase name="Setup (TC1 Notice Shown)" classname="checkout_suite" kind="setup" time="0" status="NOT_RUN">
       <kw name="Check Notice" type="setup" status="NOT_RUN">
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <skipped message="Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."/>
+      <skipped message="Suite setup failed: 'text=This text is not on the page' is not on the screen."/>
     </testcase>
     <testcase name="TC1 Notice Shown" classname="checkout_suite" kind="test" time="0" status="NOT_RUN">
       <kw name="Check Notice" type="setup" status="NOT_RUN">
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <skipped message="Suite setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."/>
+      <skipped message="Suite setup failed: 'text=This text is not on the page' is not on the screen."/>
     </testcase>
-    <testcase name="Suite Teardown" id="41c54b4d-5049-47f8-b9b5-9091e0c654d3" classname="checkout_suite" kind="suite_teardown" time="0.04" timestamp="2026-11-09T18:24:14.317+05:30" status="PASS">
-      <kw name="Close Browser" type="setup" status="PASS" starttime="20261109 18:24:14.318" endtime="20261109 18:24:14.353" elapsed="0.03">
-        <kw name="Close And Terminate App" status="PASS" starttime="20261109 18:24:14.319" endtime="20261109 18:24:14.352" elapsed="0.03">
+    <testcase name="Suite Teardown" id="0f2b518e-b281-466a-adcd-88a1b46e6abb" classname="checkout_suite" kind="suite_teardown" time="0.02" timestamp="2026-11-20T16:54:39.303+05:30" status="PASS">
+      <kw name="Close Browser" type="setup" status="PASS" starttime="20261120 16:54:39.303" endtime="20261120 16:54:39.325" elapsed="0.02">
+        <kw name="Close And Terminate App" status="PASS" starttime="20261120 16:54:39.303" endtime="20261120 16:54:39.325" elapsed="0.02">
           <log>No events to send.</log>
         </kw>
       </kw>
@@ -331,51 +334,53 @@ These are real reports from `optics execute` on a Playwright project named `chec
 ```xml
 <?xml version="1.0" ?>
 <testsuites>
-  <testsuite name="checkout_suite" id="f7f3b305-9230-4bc8-99c3-101f9d4eda09" tests="6" failures="2" errors="0" skipped="2" time="7.40" timestamp="2026-11-09T18:22:54.592+05:30">
-    <testcase name="Suite Setup" id="a043b9e2-72ef-47f9-97a4-0226c8da1206" classname="checkout_suite" kind="suite_setup" time="1.37" timestamp="2026-11-09T18:22:54.592+05:30" status="PASS">
-      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261109 18:22:54.592" endtime="20261109 18:22:55.961" elapsed="1.37">
-        <kw name="Launch App" status="PASS" starttime="20261109 18:22:54.592" endtime="20261109 18:22:55.960" elapsed="1.37"/>
+  <testsuite name="checkout_suite" id="e5f2fe5f-d365-405a-9978-2feeab57af74" tests="6" failures="2" errors="0" skipped="2" time="6.45" timestamp="2026-11-20T16:54:40.478+05:30">
+    <testcase name="Suite Setup" id="4f67bb3f-f2eb-4822-ac42-14cac963991f" classname="checkout_suite" kind="suite_setup" time="0.44" timestamp="2026-11-20T16:54:40.478+05:30" status="PASS">
+      <kw name="Open Example Page" type="setup" status="PASS" starttime="20261120 16:54:40.478" endtime="20261120 16:54:40.916" elapsed="0.44">
+        <kw name="Launch App" status="PASS" starttime="20261120 16:54:40.479" endtime="20261120 16:54:40.915" elapsed="0.44"/>
       </kw>
     </testcase>
-    <testcase name="Setup (TC1 Notice Shown)" id="10f860b3-6f6e-403d-94ea-c9ed9bac5fae" classname="checkout_suite" kind="setup" time="2.72" timestamp="2026-11-09T18:22:55.962+05:30" status="FAIL">
-      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261109 18:22:55.962" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:22:58.624" elapsed="2.66">
-        <kw name="Assert Presence" status="FAIL" starttime="20261109 18:22:55.962" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:22:57.982" elapsed="2.02">
+    <testcase name="Setup (TC1 Notice Shown)" id="ebf32e8f-ca85-4980-8646-0a8a56e33f24" classname="checkout_suite" kind="setup" time="2.73" timestamp="2026-11-20T16:54:40.916+05:30" status="FAIL">
+      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261120 16:54:40.916" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:43.576" elapsed="2.66">
+        <kw name="Assert Presence" status="FAIL" starttime="20261120 16:54:40.916" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:42.927" elapsed="2.01">
           <log>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
-          <log>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</log>
+          <log>'text=This text is not on the page' is not on the screen.</log>
         </kw>
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <failure message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." type="Failure" code="E0201">Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</failure>
+      <failure message="'text=This text is not on the page' is not on the screen." type="Failure" code="E0201">'text=This text is not on the page' is not on the screen.
+OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it.</failure>
     </testcase>
     <testcase name="TC1 Notice Shown" classname="checkout_suite" kind="test" time="0" status="NOT_RUN">
       <kw name="Check Notice" type="setup" status="NOT_RUN">
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <skipped message="Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."/>
+      <skipped message="Setup failed: 'text=This text is not on the page' is not on the screen."/>
     </testcase>
-    <testcase name="Setup (TC2 Notice Again)" id="c4f41132-b9c1-4db6-95bf-47d3bead660e" classname="checkout_suite" kind="setup" time="3.27" timestamp="2026-11-09T18:22:58.684+05:30" status="FAIL">
-      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261109 18:22:58.684" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:23:01.338" elapsed="2.65">
-        <kw name="Assert Presence" status="FAIL" starttime="20261109 18:22:58.685" message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." code="E0201" endtime="20261109 18:23:00.696" elapsed="2.01">
+    <testcase name="Setup (TC2 Notice Again)" id="89cf52fa-f641-4579-a73f-afdbeceb2e8b" classname="checkout_suite" kind="setup" time="3.24" timestamp="2026-11-20T16:54:43.647+05:30" status="FAIL">
+      <kw name="Check Missing Text" type="setup" status="FAIL" starttime="20261120 16:54:43.647" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:46.315" elapsed="2.67">
+        <kw name="Assert Presence" status="FAIL" starttime="20261120 16:54:43.647" message="'text=This text is not on the page' is not on the screen." code="E0201" endtime="20261120 16:54:45.666" elapsed="2.02">
           <log>Asserting (assert_elements) elements: ['text=This text is not on the page'] with rule: any and timeout: 2s</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
           <log>Trying TextElementStrategy on '['text=This text is not on the page']' ... FAIL (error: Elements not found.)</log>
-          <log>Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</log>
+          <log>'text=This text is not on the page' is not on the screen.</log>
         </kw>
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <failure message="Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured." type="Failure" code="E0201">Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured.</failure>
+      <failure message="'text=This text is not on the page' is not on the screen." type="Failure" code="E0201">'text=This text is not on the page' is not on the screen.
+OCR is off, so text that shows only in images was not searched. Add a text_detection engine to config.yaml to search it.</failure>
     </testcase>
     <testcase name="TC2 Notice Again" classname="checkout_suite" kind="test" time="0" status="NOT_RUN">
       <kw name="Check Notice" type="setup" status="NOT_RUN">
         <kw name="Assert Presence" status="NOT_RUN"/>
       </kw>
-      <skipped message="Setup failed: Keyword 'Assert Presence' failed after fallback attempts; last error: E0201: ['text=This text is not on the page'] not found based on rule 'any'. OCR was not tried: no text_detection engine is configured."/>
+      <skipped message="Setup failed: 'text=This text is not on the page' is not on the screen."/>
     </testcase>
-    <testcase name="Suite Teardown" id="4f218417-1ff0-4c4a-b50a-5e609c051584" classname="checkout_suite" kind="suite_teardown" time="0.04" timestamp="2026-11-09T18:23:02.537+05:30" status="PASS">
-      <kw name="Close Browser" type="setup" status="PASS" starttime="20261109 18:23:02.538" endtime="20261109 18:23:02.579" elapsed="0.04">
-        <kw name="Close And Terminate App" status="PASS" starttime="20261109 18:23:02.540" endtime="20261109 18:23:02.579" elapsed="0.04">
+    <testcase name="Suite Teardown" id="598f26b6-1483-4c2b-81d9-1ff0e807bd27" classname="checkout_suite" kind="suite_teardown" time="0.04" timestamp="2026-11-20T16:54:47.455+05:30" status="PASS">
+      <kw name="Close Browser" type="setup" status="PASS" starttime="20261120 16:54:47.456" endtime="20261120 16:54:47.497" elapsed="0.04">
+        <kw name="Close And Terminate App" status="PASS" starttime="20261120 16:54:47.456" endtime="20261120 16:54:47.497" elapsed="0.04">
           <log>No events to send.</log>
         </kw>
       </kw>

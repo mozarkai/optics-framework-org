@@ -50,14 +50,14 @@ $ optics --version
 Optics Framework 1.11.5
 ```
 
-To upgrade, run the install command again. It finds the Optics you already have, from the installer, uv tool, pipx or pip, and upgrades it where it is, with the extras you installed.
+To upgrade, run `optics upgrade`, or run the install command again. Both find the Optics you already have, from the installer, uv tool, pipx or pip, and upgrade it where it is, with the extras you installed. Optics tells you when a newer release is out. See [`optics upgrade`](https://optics-framework.org/docs/reference/cli#optics-upgrade).
 
 **Installer options**
 Pass options after `sh -s --`. On Windows, set the matching environment variable before running the installer.
 
 | Option | Windows variable | What it does |
 |---|---|---|
-| `--version 1.11.5` | `OPTICS_VERSION` | Install a specific release. |
+| `--version X.Y.Z` | `OPTICS_VERSION` | Install a specific release. |
 | `--extra appium,rapidocr` | `OPTICS_EXTRA` | Install engines at the same time. |
 | `--dir PATH` | `OPTICS_INSTALL_DIR` | Install somewhere other than `~/.optics`, without looking for an existing Optics. |
 | `--no-modify-path` | `OPTICS_NO_MODIFY_PATH` | Don't edit your shell profile. |

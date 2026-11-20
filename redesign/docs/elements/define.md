@@ -37,6 +37,7 @@ Optics decides what a value is from how it looks:
 | Write | Optics treats it as | Example |
 |---|---|---|
 | Starts with `/`, `//` or `(` | XPath, looked up in the UI tree | `//*[@resource-id='login']` |
+| `id:` then an id | The element with this id: `@id` on the web and on a desktop, `@resource-id` on Android, `@name` on iOS | `id:login` |
 | Plain words | Text: UI tree first, then OCR on a screenshot | `Sign in` |
 | `text_only:` then words | Text, OCR only | `text_only:Sign in` |
 | Ends in `.png`, `.jpg`, `.jpeg` or `.bmp` | An image to match on a screenshot | `cart_icon.png` |
@@ -67,6 +68,8 @@ An XPath is a path through the app's UI tree. It's the fastest and most precise 
 
 To pick the second of several matches, wrap the XPath in parentheses and add an index: `(//android.widget.Button)[2]`.
 
+To find an element by its id on any platform, write `id:` and the id. Optics turns it into one XPath. On Android, `id:login` and `id:com.birch.shop:id/login` both find the element with the resource id `com.birch.shop:id/login`.
+
 ### Text
 
 Plain text matches an element showing that text, or with that accessibility label. It's the most readable kind of value, and it survives layout changes. If the text isn't in the UI tree, for example because it's drawn inside an image or a game canvas, Optics reads the screenshot with OCR, as long as a [text detection engine](https://optics-framework.org/docs/elements/text-and-images) is enabled.
@@ -81,8 +84,6 @@ A value is checked against the rules in the table above, top to bottom. Text tha
 An image value is the file name of a cropped picture of the element. Put the picture anywhere in the project folder (the templates use `test_data/input_templates/`) and refer to it by file name only. Image matching is the slowest kind and needs an image detection engine. Use it for icons with no text or id. [Find elements by text and image](https://optics-framework.org/docs/elements/text-and-images) shows how to capture a good picture.
 
 ### Values to avoid
-
-`id:` values, such as `id:login`, aren't supported by any element source and always fail. Use an XPath on the id instead.
 
 Assert Presence, Assert Visibility, Validate Element and Validate Screen skip class names. If every element in the check is a class name, the step passes without a check.
 

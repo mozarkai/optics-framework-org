@@ -2,6 +2,16 @@
 
 What each Optics release added, newest first. Source: https://github.com/mozarkai/optics-framework/releases, read 20 Nov 2026.
 
+- [1.11.5](https://github.com/mozarkai/optics-framework/releases/tag/1.11.5), 20 Nov 2026. Popups: write rules that close the popups that block a step. 8 fixes.
+  - doctor: Add a Desktop section (https://github.com/mozarkai/optics-framework/pull/728)
+  - ble: Drive devices over Bluetooth through the airhand dongle (https://github.com/mozarkai/optics-framework/pull/726)
+  - ocr: Add RapidOCR and Apple Vision, one capture and one OCR pass per lookup (https://github.com/mozarkai/optics-framework/pull/735)
+  - runner: Record AI self-heals of a batch run in its events and junit_output.xml (https://github.com/mozarkai/optics-framework/pull/742)
+  - Update notice, optics upgrade and an MCP send_feedback tool (https://github.com/mozarkai/optics-framework/pull/739)
+  - execute: Show progress as plain or JSON lines when stdout is not a terminal (https://github.com/mozarkai/optics-framework/pull/748)
+  - ble: Hold webcam focus, find dark screens by the pointer, open apps on any launcher (https://github.com/mozarkai/optics-framework/pull/751)
+  - popup: Handle popups that block a step, with rules, evidence and permissions at launch (https://github.com/mozarkai/optics-framework/pull/721)
+  - Popup module action (https://github.com/mozarkai/optics-framework/pull/756)
 - [1.11.4](https://github.com/mozarkai/optics-framework/releases/tag/1.11.4), 17 Nov 2026. Desktop apps: test macOS, Windows and Linux apps with the same CSV suites.
   - Name the report after the project name kept in config.yaml (https://github.com/mozarkai/optics-framework/pull/719)
   - mcp: Cut agent turns and tokens, and fix what the runs found (https://github.com/mozarkai/optics-framework/pull/720)

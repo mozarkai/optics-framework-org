@@ -36,7 +36,7 @@
     text_only: "Text, OCR only. Optics skips the UI tree and reads the screenshot.",
     Image: "Image. Optics matches this picture on a screenshot. The file can be anywhere in the project folder.",
     CSS: "CSS selector. Playwright, Selenium, and web pages on Appium.",
-    ID: "An id: locator. No element source supports it, so this value always fails.",
+    ID: "An id: locator. Optics turns it into one XPath: @id on the web and on a desktop, @resource-id on Android, @name on iOS.",
     Class: "A class name. Assert Presence, Assert Visibility, Validate Element and Validate Screen skip class names.",
   };
 
@@ -94,7 +94,7 @@
 
   function checkParams(keyword, kw, params) {
     var error = bindError(kw, params);
-    return error && "'" + keyword + "' cannot take these params: " + error + ". See its params with: optics list " + keyword;
+    return error && keyword + " cannot take these params: " + error;
   }
 
   function eachStep(p, fn) { p.modules.forEach(function (m) { m.steps.forEach(fn); }); }
@@ -209,7 +209,6 @@
 
   function locatorNotes(p, b, out) {
     locators(p, b.value).forEach(function (l) {
-      if (l.type === "ID") out.push(note("fail", b.p.at, "No element source supports id: locators, so " + l.v + " always fails. Use an XPath on the id.", DOCS.elements));
       if (S.wholeVarName(b.value) === null && looksLikeText(l)) out.push(note("warn", b.p.at, l.v + " is read as " + (l.type === "XPath" ? "an XPath" : "a CSS selector") + ". Write text=" + l.v + " to find the text.", DOCS.elements));
     });
   }

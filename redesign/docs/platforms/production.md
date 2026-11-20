@@ -134,7 +134,7 @@ This output is from a computer with no dongle. With the dongle plugged in, the `
 
 ### Aim the camera at the screen
 
-Put the device in the stand, with the full screen in the camera frame. Open a bright screen, for example Settings in light mode. Optics finds the screen at the first capture of the run. See [Find the screen](#find-the-screen).
+Put the device in the stand, with the full screen in the camera frame. Open a bright screen, for example Settings in light mode. Optics finds the screen at the first capture of the run. For a device in dark mode, use `find_screen: pointer`. See [Find the screen](#find-the-screen).
 
 ### Write the suite
 
@@ -209,13 +209,14 @@ The camera frame shows more than the screen. Optics must know where the four cor
 |---|---|
 | `find_screen: brightness` | The driver presses `brightnessdown` 8 times, then `brightnessup` 8 times. Only the screen changes, so Optics finds it on any page that is not black. The screen goes back to its brightness. If it started below the middle level, it ends at the middle level. The `ble` driver has these keys. If the driver cannot press them, or the screen does not change, Optics uses `frame`. |
 | `find_screen: frame` | Optics finds the bright area inside the dark bezel in one frame. The page must be bright from edge to edge. No driver is necessary. |
+| `find_screen: pointer` | The driver moves the pointer to 9 positions in a grid on the screen, and Optics finds the pointer in the camera frame at each position. At least 6 of the 9 positions must agree. The screen can show any page, also a page that is dark to its edges. The `ble` driver has a pointer on `ios`, `macos`, `windows` and `linux`. On `android`, the dongle acts as a touch screen and has no pointer, so the run stops with `E0501`. |
 | `deskew_corners` | You give the four corners as `"x,y"`: top left, top right, bottom right, bottom left. |
 
 When Optics finds the screen, it saves `camera_screen_found_<time>.jpg` in the output folder, with the screen marked. The log gives the corners as a `deskew_corners` value. Open the picture after the first run. If the mark is correct, you can put that value in config.yaml in place of `find_screen`.
 
-With a webcam and `find_screen: brightness`, you do not measure `deskew_corners`. The dongle taps at exact positions, so the taps are as accurate as the screen corners that Optics finds.
+With a webcam and `find_screen`, you do not measure `deskew_corners`. The dongle taps at exact positions, so the taps are as accurate as the screen corners that Optics finds.
 
-Optics fits a straight line to each edge of the screen and puts the corners where the lines meet, so rounded corners and a notch do not move them. The screen in the camera must have the same shape as `out_width` x `out_height`, with a tolerance of 4%. Optics corrects for the angle of the camera. Show a bright screen when the run starts. If an edge of the screen is black, for example in dark mode or with a black status bar, Optics cannot find that edge and stops with `E0305`.
+Optics fits a straight line to each edge of the screen and puts the corners where the lines meet, so rounded corners and a notch do not move them. The screen in the camera must have the same shape as `out_width` x `out_height`, with a tolerance of 4%. Optics corrects for the angle of the camera. With `brightness` and `frame`, show a bright screen when the run starts. If an edge of the screen is black, for example in dark mode or with a black status bar, these methods cannot find that edge, and the run stops with `E0305`. Use `pointer` for such a screen.
 
 At each capture, Optics compares the area around the screen with the first capture:
 
@@ -235,19 +236,20 @@ With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Elemen
 | `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. Optics finds the dongle again by this number after you plug it in again. |
 | `port` | None | A fixed serial port, such as `/dev/cu.usbmodem1101` or `COM5`, in place of `serial`. Set `serial` or `port`, not both. |
 | `launch` | The default of the platform | The methods that `Launch App` tries, in sequence. See [Open apps](#open-apps). |
-| `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. |
+| `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. With a camera, `drawer_search` finds the search box without it. |
 
 ### Open apps
 
-`Launch App`, `Launch Other App` and `Force Terminate App` take the name of the app as the device shows it, for example `Settings`. The config.yaml of each device tells Optics how to open apps. Thus one suite runs on phones with different launchers.
+`Launch App`, `Launch Other App` and `Force Terminate App` take the name of the app as the device shows it, for example `Settings`. Optics tries the methods of the platform in sequence, so one suite runs on phones with different launchers and needs no launch settings. Set `launch` to change the methods or their sequence.
 
 | Method | Steps | Default for |
 |---|---|---|
 | `launcher_key` | The launcher shortcut (Cmd+Space or Ctrl+Esc), the name, Enter. On iOS, the driver first presses Home twice, because Home from an app that Spotlight opened goes back to Spotlight. | `ios`, `macos`, `windows` |
-| `drawer_search` | Home, Meta (the app drawer), the name, Enter. This opens the top result on launchers that filter as you type. | `android` |
-| `drawer_tap` | Home, Meta, a tap on `app_search`, the name, Up, Enter | `android` with `app_search` |
+| `drawer_search` | Home, Meta (the app drawer), the name, Enter. This opens the top result on launchers that filter as you type. If the name goes into no field, Optics taps the search box of the app list and types the name again. This needs a camera. | First on `android` |
+| `drawer_tap` | Home, Meta, a tap on `app_search`, the name, Up, Enter | First on `android` with `app_search` |
 | `search_key` | The Search media key, the name, Enter | None |
-| `home_icon` | Home, then a tap on the icon above the name of the app. It needs a camera and finds only apps on the first home screen. Use it for launchers that have no app drawer, or that give Meta to the assistant. | Last on `ios` and `android` |
+| `home_icon` | Home, then a tap on the icon above the name of the app. It needs a camera and finds only apps on the first home screen. Use it for launchers that have no app drawer, or that give Meta to the assistant. | Second on `ios` and `android` |
+| `drawer_list` | Home, Meta, then Optics scrolls the app list until it shows the name, at most 15 times, and taps the icon above the name. It needs a camera. Use it for launchers that have no search box. | Last on `android` |
 
 `config.yaml`:
 
@@ -258,7 +260,7 @@ capabilities:
   launch: [search_key, drawer_search, home_icon]
 ```
 
-With a camera and an OCR engine, Optics checks each method. After it types the name, the screen must show the name two times: in the search box and as a result. After Enter, both must be gone from where they were. The match ignores case and spaces, joins words that OCR reads apart on one line, and accepts a result label that the launcher cut off with an ellipsis. If a method fails, Optics presses Home and tries the next method. When all methods fail, `Launch App` stops with `E0405`. When a method other than the first opens the app, the log gives the `launch` value that tries that method first.
+With a camera and an OCR engine, Optics checks each method. After it types the name, the screen must show the name two times: in the search box and as a result. After Enter, both must be gone from where they were. The match ignores case and spaces, joins words that OCR reads apart on one line, and accepts a result label that the launcher cut off with an ellipsis. If a method fails, Optics presses Home and tries the next method. When all methods fail, `Launch App` stops with `E0405`. When a method other than the first opens the app, Optics tries that method first at the next `Launch App` of the session. The log gives the `launch` value that tries that method first in every run.
 
 Without a camera, Optics uses the first method that needs no camera and does not check the result. When the camera reads no text after Enter, Optics does not check the result either, and the log says so. On `linux`, there is no default method. Without `launch: [search_key]`, `Launch App` fails with `E0105`.
 
@@ -272,7 +274,7 @@ On iOS, do not press `home` just before `Launch App`. Home a few seconds after S
 | `camera_width`, `camera_height` | The largest size of the camera | The size that the camera captures at. Set both or neither. |
 | `url` | None | An `http://` or `https://` URL, or a TCP frame server as `ip:port`. Use it in place of `camera_index`. |
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>` and masks it in logs. |
-| `find_screen` | None | `brightness` or `frame`. See [Find the screen](#find-the-screen). |
+| `find_screen` | None | `brightness`, `frame` or `pointer`. See [Find the screen](#find-the-screen). |
 | `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`. Set `deskew_corners` or `find_screen`, not both. |
 | `out_width`, `out_height` | `1080`, `1920` | The size of the frame that OCR reads, at most 8192 on each side. Set the screen size of the device. |
 | `rotation` | None | `clockwise` or `counterclockwise`. Optics turns the frame a quarter turn after it cuts out the screen. |
@@ -280,6 +282,14 @@ On iOS, do not press `home` just before `Launch App`. Home a few seconds after S
 | `byte_order` | `little` | Frame server only. The byte order of the size header, `little` or `big`. |
 
 With `camera_index`, each capture is a new frame. Optics discards the frames that the camera kept in its buffer, so a frame after a tap shows the screen after the tap. When the camera opens, Optics waits 1 second for the exposure. Then it locks focus, white balance and exposure, if the camera lets it. The log gives the capture size, the frame rate and the locked controls.
+
+The autofocus of a webcam does not stay on a screen, so OCR reads a blurred frame. On macOS, Optics holds the focus of a USB webcam where the screen is sharpest. It focuses on the full frame first, then on the screen when it finds it. The log gives the value, such as `Holding the camera's focus at 20`.
+
+Optics keeps the value for each camera model in `~/.optics/camera_focus.json`. The next session tries that value first, and searches again only if the view is not sharp. With `find_screen`, when the device or the camera moves, Optics focuses again. The camera keeps its autofocus in these conditions:
+
+- No focus value makes the view sharp.
+- More than one USB webcam on the Mac can focus, because Optics cannot tell which one films the device.
+- The computer runs Linux or Windows, or the frames come from a `url`.
 
 Without `find_screen` or `deskew_corners`, and when you set `out_width` and `out_height`, Optics scales each frame to that size. Use this only for a source that shows the screen and nothing more, such as a capture card.
 
@@ -382,6 +392,7 @@ Optics refuses a config that has a v1 setting, and `optics doctor` names the set
 - **"connected, but the link is not encrypted".** On the device, forget **airhand** and pair again.
 - **"set serial (the dongle's USB serial number) or port, not both".** Remove one of the two from config.yaml.
 - **"launch methods drawer_search need a key or an app_search that platform ios does not have".** Remove the method from `launch`, or use a method of the platform.
+- **"find_screen: pointer needs a driver that shows a pointer" (`E0501`).** On Android, the dongle has no pointer. Use `brightness`, `frame` or `deskew_corners`.
 - **"The camera does not see the device screen" (`E0305`).** Open `camera_blind_<time>.jpg` in the output folder. Make sure that the screen is on, bright and in the frame, and that nothing moved.
 - **`Launch App` fails with `E0405`.** No launch method opened the app. Set `launch` to the methods that open apps on this device.
 - **Typed text is not correct on iOS.** Set the hardware keyboard layout to U.S. and turn off Auto-Capitalization and Smart Punctuation.

@@ -58,7 +58,7 @@ optics mcp install [--toolset core|full]
 | `--transport` | `stdio` | `stdio`: your agent starts the server and talks to it directly. `http`: the server listens at `http://<host>:<port>/mcp`. |
 | `--host` | `127.0.0.1` | The address to listen on. `http` only. |
 | `--port` | `8090` | The port to listen on. `http` only. |
-| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 11 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
+| `--toolset` | `OPTICS_MCP_TOOLSET`, else `core` | `core`: the 12 tools below. `full`: also one tool for each keyword. See [Full toolset](#full-toolset). |
 
 We recommend `stdio` for an agent on your own machine. Use `http` when the server runs in a container or on another machine.
 
@@ -192,7 +192,7 @@ A tap on a ref uses a locator that matches only that element, never fuzzy text o
 
 ## Core tools
 
-The default toolset has 11 tools. Every tool except `start_session` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
+The default toolset has 12 tools. Every tool except `start_session` and `send_feedback` takes `session_id`. You can leave it out when one session is open. When more than one session is open, the call fails with `session_required` and lists the ids.
 
 | Tool | Parameters (defaults) | What it does |
 |---|---|---|
@@ -207,6 +207,7 @@ The default toolset has 11 tools. Every tool except `start_session` takes `sessi
 | `batch` | `steps` (1–12) | Runs the steps in order on one screen, such as a form, and stops at the first that fails. A step is `{"tool": "tap", "target"}`, `{"tool": "type_text", "target", "text"}` or `{"tool": "press_key", "key"}`. `expect_present` and `expect_absent` check the screen after the last step. See [batch](#batch). |
 | `check` | `present` ([]), `absent` ([]), `timeout_s` (5, 0–60) | Waits for the texts or refs, then gives a verdict. See [check](#check). |
 | `run_keyword` | `keyword`, `params` ({}) | Runs any other keyword. See [run_keyword](#run-keyword). |
+| `send_feedback` | `kind`, `impact`, `task`, `description`, `tool` (""), `error` (""), `suggestion` ("") | Sends a short report to the Optics maintainers. See [send_feedback](#send-feedback). |
 
 The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` and `run_keyword`) also take these parameters:
 
@@ -232,7 +233,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `ba
 | `llm_model` | `OPTICS_LLM_MODEL`, else `gemini-2.5-flash` for Gemini | The model for self-heal. `openai` and `anthropic` need one. |
 | `strict_element_match` | false | Accepts only exact text matches. |
 
-The reply starts with the session id and the driver. Over `http`, the first line also gives the idle lease, such as `· idle lease 900 s`. When the driver does not support some keywords, the next line names them. With `app`, the reply then opens the app and shows the first screen. This is the reply to `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`:
+The reply starts with the session id and the driver. Over `http`, the first line also gives the idle lease, such as `· idle lease 900 s`. When a newer Optics release is out, the first `start_session` reply of the server adds the line ``Tell the user once: Optics <newest> is out (you have 1.11.5). Run `optics upgrade`.`` When the driver does not support some keywords, the next line names them. With `app`, the reply then opens the app and shows the first screen. This is the reply to `{"driver": "playwright", "app": "https://example.com", "capabilities": {"headless": true}}`:
 
 ```text
 session 0b7ea260-c3b1-4dd9-b724-beb9790b844b (playwright)
@@ -475,13 +476,31 @@ screen 622118 · unchanged
 
 The `optics://keywords` resource lists every keyword that `run_keyword` accepts. Flow control, deprecated keywords and the coordinate keywords are not in it. With one session open, it also leaves out the keywords that the session's driver does not support. `start_session` names them, and `run_keyword` refuses them as `unsupported`. When a call has one parameter name that the keyword does not have, and the keyword still needs exactly one parameter, `run_keyword` uses the value for that parameter, for example `script` for `script_or_json`. Optics caps a `timeout` parameter at 60 seconds. Clients see `run_keyword` marked as destructive, because it can run `force_terminate_app`, `close_and_terminate_app` and `execute_script`.
 
+### send_feedback
+
+`send_feedback` lets the agent tell the Optics maintainers what broke, what was missing, what confused it or what worked well. The server tells the agent to use it when it is stuck or when a task ends. The agent does not ask you first.
+
+| Parameter | What it holds |
+|---|---|
+| `kind` | `broken`, `missing`, `confusing`, `idea` or `worked`. |
+| `impact` | What it did to the task: `blocked`, `worked_around`, `friction` or `none`. |
+| `task` | What the agent was doing, at most 200 characters. |
+| `description` | What happened and what the agent tried, at most 4,000 characters. |
+| `tool` | The tool or keyword, at most 100 characters. |
+| `error` | The error text, at most 1,000 characters. |
+| `suggestion` | What would have helped, at most 1,000 characters. |
+
+Optics adds the Optics version, the name of the client, the transport and your operating system. Before it sends the report to `https://optics-framework.org/api/feedback`, it replaces the secret values of the agent's sessions with `****`, and email addresses, API keys and tokens with `[email]`, `[key]` or `[token]`. The reply is one line, such as `Thanks, the Optics maintainers will read it. Carry on with your task.` When the report cannot be sent, the reply says so and tells the agent to continue its task.
+
+Set `OPTICS_NO_FEEDBACK=1` or `DO_NOT_TRACK=1` before you start the server to remove the tool. The server then has 11 core tools and does not ask the agent for feedback. See [Privacy](https://optics-framework.org/privacy) for what the site keeps.
+
 ## Full toolset
 
 Start the server with `--toolset full`, or set `OPTICS_MCP_TOOLSET=full`, to add one tool for each app, action and verification keyword. The tool name is the keyword in snake_case, such as `press_element`, `enter_text`, `assert_text` or `go_back`. Each tool takes `session_id` plus the keyword's parameters, all as strings. An element parameter can be a ref. See [Keywords](https://optics-framework.org/docs/reference/keywords/) for each parameter.
 
 The full toolset also has:
 
-- The 11 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
+- The 12 core tools, but the keyword tools `launch_app` and `scroll` replace the core tools of the same name.
 - `screenshot`, which returns the screen as a PNG image.
 - Deprecated keywords, `swipe`, `get_interactive_elements`, `initialise_setup`, `start_appium_session` and `get_driver_session_id`.
 
@@ -560,9 +579,10 @@ A suite is often written after the app is closed, so the server keeps the steps 
 
 ```text
 session 0b7ea260-c3b1-4dd9-b724-beb9790b844b terminated. Its 7 recorded steps are at optics://session/0b7ea260-c3b1-4dd9-b724-beb9790b844b/steps.
+If Optics got in your way, or did well, tell its maintainers with send_feedback.
 ```
 
-A later call with that `session_id` fails with `unknown_session` and tells the agent the same thing:
+The second line is not there when `send_feedback` is off. A later call with that `session_id` fails with `unknown_session` and tells the agent the same thing:
 
 ```text
 Session '0b7ea260-c3b1-4dd9-b724-beb9790b844b' has ended. It was ended by terminate_session. Its 7 recorded steps are at optics://session/0b7ea260-c3b1-4dd9-b724-beb9790b844b/steps.
@@ -582,6 +602,9 @@ Set these in the environment that starts `optics mcp`. In a JSON client config, 
 | `OPTICS_MCP_TOOLSET` | `core` | `core` or `full`. The `--toolset` flag wins. |
 | `OPTICS_MCP_SESSION_IDLE_S` | `900` | `http` only. A session without a call for this many seconds ends at the next call of another client. A `stdio` server never ends its client's session for this. `0` turns it off. |
 | `OPTICS_HOME` | `~/.optics` | Where a `stdio` server writes the steps of each session, in `mcp/steps/`. |
+| `OPTICS_NO_FEEDBACK` | off | `1` removes the `send_feedback` tool. See [send_feedback](#send-feedback). |
+| `OPTICS_NO_UPDATE_CHECK` | off | `1` stops the daily check for a newer release. |
+| `DO_NOT_TRACK` | off | `1` removes `send_feedback` and stops the update check. |
 | `OPTICS_MCP_CALL_TIMEOUT_S` | `100` | The longest time one call can take. After it, the call returns a `timeout` error, and the session stays `busy` until the driver call ends. |
 | `OPTICS_ALLOWED_HOSTS` | | `http` only. Host names that the server answers in addition to loopback names, separated by commas. |
 | `OPTICS_MCP_ALLOW_COORDINATE_TAPS` | off | `1`, `true`, `yes` or `on` allows the coordinate keywords. See [Coordinate taps](#coordinate-taps). |
@@ -641,7 +664,7 @@ e1 p "This domain is for use in documentation examples without needing permissio
 e7 a "Learn more" [tap]
 ```
 
-The result has `isError: true`. An error without a code, such as a bad ref, has no `[E…]` part. For `invalid_params`, `unsupported` and `other`, the `Next:` line ends with a link to the keyword reference or the error codes page. See [Error codes](https://optics-framework.org/docs/reference/errors).
+The result has `isError: true`. An error without a code, such as a bad ref, has no `[E…]` part. For `invalid_params`, `unsupported` and `other`, the `Next:` line gives a link to the keyword reference or the error codes page. For `unsupported`, `silent_failure`, `loop`, `session_lost` and `other`, it also asks the agent to tell the maintainers with `send_feedback`, when the tool is on. See [Error codes](https://optics-framework.org/docs/reference/errors).
 
 An `observe` query that matches no row is not an error. The reply gives the number of rows it searched, so the agent can tell an empty screen from a missed search:
 
@@ -667,4 +690,4 @@ screen b5dfb4 · no row of 7 holds "Sign in"
 | `session_required` | More than one session is open, and `session_id` was left out. The message lists the ids. | |
 | `other` | Any other error, such as a refused `start_session`. | |
 
-A tool in the full toolset raises its error as `[E0201] message`. A keyword with several fallback values fails with `All fallback values failed for keyword '…'` and the code of the last try.
+A tool in the full toolset raises its error as `[E0201] message`. When every value of an element fails, the message is `None of '<first>' and '<last>' is on the screen.`

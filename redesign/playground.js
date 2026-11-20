@@ -58,12 +58,12 @@
       var named = /^\$\{(\w+)\}$/.exec(v);
       if (named) {
         var def = NAMED[named[1]];
-        if (!def) return { err: "${" + named[1] + "} is not defined" };
+        if (!def) return { err: "${" + named[1] + "} is not defined in the project's elements" };
         var t = A.el(def.el);
-        return B.visible(t) && t.closest(".bz-" + A.screen) ? { t: t, tag: def.tag, def: def } : { err: "Element not found: " + v };
+        return B.visible(t) && t.closest(".bz-" + A.screen) ? { t: t, tag: def.tag, def: def } : { err: "'" + v + "' is not on the screen." };
       }
       var hit = A.byText(v);
-      return hit ? { t: hit, tag: "Text" } : { err: "Element not found: '" + v + "'" };
+      return hit ? { t: hit, tag: "Text" } : { err: "'" + v + "' is not on the screen." };
     }
     function done(tag, base) { return { ok: true, time: base, tag: tag }; }
     if (kw === "launch_app") {

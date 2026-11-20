@@ -8,7 +8,7 @@ AI self-heal is the last line of defence. When a step cannot find its element wi
 
 Self-heal keeps long runs alive through small, expected changes to the UI. Examples are a scheduled check of a production app, or a nightly regression. There, a full report is better than a stop at the first renamed button.
 
-Self-heal does not replace good elements. A healed step **passes**, so you must read the logs to see a real change in the app. Fix the element after the run, as [Find out what healed](#find-out-what-healed) shows.
+Self-heal does not replace good elements. A healed step **passes**, so you must read the report to see a real change in the app. Fix the element after the run, as [Find out what healed](#find-out-what-healed) shows.
 
 ## Turn it on
 
@@ -140,7 +140,31 @@ A press on a different row can lead to the target, such as a press on a menu or 
 
 ## Find out what healed
 
-With `optics execute` and `optics live`, a healed step shows as passed. To see what happened, turn on file logs:
+A healed step passes. The tree of `optics execute` and the history of `optics live` show it as passed. `optics execute` records each heal in its report and its events:
+
+- `junit_output.xml` marks the `<kw>` of the step with `healed="true"`. Its `<heal>` element gives a summary and each step that the model did. When a step of the model uses a value of the element in the failed step, its `<arg>` shows the element name, such as `${sign_in}`:
+
+  ```xml
+  <kw name="Press Element" status="PASS" ... healed="true">
+    <heal summary="AI self-heal recovered 'press_element' after 1 step: press_element Log in">
+      <step keyword="press_element">
+        <arg>Log in</arg>
+      </step>
+    </heal>
+  </kw>
+  ```
+
+- `--output plain` shows the step as `HEALED`, with the summary:
+
+  ```text
+  09:41:12 HEALED       keyword "Press Element" (8.4s): AI self-heal recovered 'press_element' after 1 step: press_element Log in
+  ```
+
+- In `logs.json` (`json_log: true`) and in `--output jsonl`, the `PASS` event of the keyword has `healed`, `heal_summary` and `heal_steps` in `extra`. `heal_steps` is the list of steps as JSON text.
+
+The `pytest` runner does not record heals.
+
+For each action that the model did, turn on file logs:
 
 `config.yaml`:
 

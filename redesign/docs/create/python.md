@@ -512,7 +512,7 @@ optics2.quit()
 
 ## Handle errors
 
-Most failures raise `OpticsError`. It has the error `code`, a `message`, and `details` that can be `None`. Compare `code` with the `Code` enum:
+Most failures raise `OpticsError`. It has the error `code`, a `message`, a `hint` with the next step, and `details` that can be `None`. `str(e)` is the code and the reason, such as `E0201: None of '//button[@id='a']' and 'Nope' is on the screen.` Compare `code` with the `Code` enum:
 
 ```python
 from optics_framework import Optics
@@ -524,6 +524,7 @@ with Optics(config) as optics:
     except OpticsError as e:
         print(f"Error code: {e.code}")
         print(f"Error message: {e.message}")
+        print(f"Next step: {e.hint}")
         print(f"Error details: {e.details}")
         if e.code == Code.E0101:
             print("Driver not initialized")

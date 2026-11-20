@@ -15,11 +15,22 @@ optics [--version] [--help] <command> [options]
 | Flag | What it does |
 |---|---|
 | `--version` | Prints `Optics Framework 1.11.5` and exits with code 0. |
-| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
+| `--help`, `-h` | Lists the commands: `list`, `configure`, `config`, `doctor`, `upgrade`, `quickstart`, `dry_run`, `dry-run`, `init`, `execute`, `live`, `generate`, `setup`, `serve`, `mcp`, `completion`. |
 
 There's no `optics version` command. Use `optics --version`.
 
 When you run `optics` with no command for the first time, it prints a welcome panel that points to `optics quickstart`, `optics doctor` and `optics --help`. After that, it prints a one-line reminder. Optics remembers the first run in the marker file `~/.optics/.onboarded`. Delete the file to see the welcome panel again. If `~/.optics` is not writable, for example with a read-only home folder, in a container or in CI, set `OPTICS_HOME` to a folder that is. The marker then goes there.
+
+Once a day, Optics asks PyPI for the newest release. When a newer release is out, a command that you run in a terminal ends with a notice on stderr. `optics doctor` shows it as a ⚠️ `release` row, and `optics upgrade` does not show it:
+
+```text
+Optics <newest> is out (you have 1.11.5). Run `optics upgrade`.
+  <newest>: <what the release adds> <link to the docs>
+```
+
+The notice gives the headline of each newer release, at most three, from [optics-framework.org/release.json](https://optics-framework.org/release.json). After an upgrade, the first command shows the headline of the new release one time, as `New in Optics <version>: …`. The check runs in the background, and a command waits at most 0.5 seconds for it. Optics keeps the result in `~/.optics/update.json`. `optics live`, `optics serve` and `optics mcp` show the notice in their own output.
+
+Optics does not check when the `CI` variable is set. To stop the check, set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1`. See [Privacy](https://optics-framework.org/privacy).
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
 
@@ -167,7 +178,7 @@ Doctor prints one row per check: ✅ ok, ⚠️ warning (optional or not yet nee
 
 | Section | What it checks |
 |---|---|
-| Core | Python version (Optics needs 3.12 or later), the installed Optics version, and whether this environment allows engine installs. |
+| Core | Python version (Optics needs 3.12 or later), the installed Optics version, whether this environment allows engine installs, and a `release` row when a newer Optics release is out. |
 | Engines | Whether each engine package is installed: Appium, BLE, Selenium, Playwright, Apple Vision, RapidOCR, EasyOCR, Pytesseract, Google Vision, Gemini, OpenAI, Anthropic and the MCP server. |
 | Mobile | `adb` on your PATH, connected Android devices, and whether the Appium server answers (the project's URL, or `127.0.0.1:4723`). A project that does not drive Android gets a warning, not a failure, for `adb`. |
 | Desktop | Whether the Appium server answers, appium-xa11y-driver in `APPIUM_HOME` (default `~/.appium`), and on macOS an ℹ️ row for the Accessibility and Screen Recording permissions. When the driver is missing, the hint is `appium driver install --source=npm appium-xa11y-driver`. For a project with `platformName` `Mac`, `Linux` or `Windows`, a missing driver is a blocking problem. See [Check and run](https://optics-framework.org/docs/platforms/desktop#check-and-run). |
@@ -230,12 +241,33 @@ After a successful install, Optics prints the next steps: `optics init`, then `o
 
 Exit code 1 if a name is unknown, a version specifier is malformed (`appium=6.1.2`), or the install fails.
 
+## `optics upgrade`
+
+Upgrades Optics to the newest release, in the way that your environment allows.
+
+```text
+optics upgrade
+```
+
+It takes no flags. Optics keeps the extras that you installed, such as `[appium]` or `[mcp]`:
+
+| Optics was installed with | What `optics upgrade` does |
+|---|---|
+| The install script, `pip` or a virtual environment | Runs `pip install --upgrade` in the same environment, or `uv pip install --upgrade` when it has no pip. |
+| `uv tool` or `pipx` | Runs `uv tool upgrade optics-framework` or `pipx upgrade optics-framework`. |
+| `uvx` | Prints `uvx optics-framework@latest`. Run it yourself. |
+| A uv, Poetry, PDM or Pipenv project | Prints the command of that tool, for example `poetry add optics-framework@latest`, so that the lockfile gets the new version. Run it yourself. |
+| Windows | Prints the command. Run it from PowerShell, because Windows locks `optics.exe` while it runs. |
+| A Python that the OS manages, or Conda | Prints why it cannot upgrade there, and how to make a virtual environment. |
+
+When you have the newest release, it prints `Optics 1.11.5 is the newest release.` and exits with code 0. When it only prints a command, it exits with code 1.
+
 ## `optics dry_run`
 
 Checks a project for mistakes without running any step on a device.
 
 ```text
-optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
+optics dry_run <folder> [--runner NAME] [--output auto|tree|plain|jsonl|none]
                [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
@@ -245,7 +277,7 @@ optics dry_run <folder> [--runner NAME] [--use-printer | --no-use-printer]
 |---|---|---|
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. Leave the default. |
-| `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. |
+| `--output` | `auto` | How the dry run shows progress. See [Choose the output](#choose-the-output). |
 | `--include`, `--exclude` | All test cases | Checks only some test cases. See [Pick test cases](#pick-test-cases). |
 
 A dry run checks that:
@@ -271,10 +303,10 @@ The dry run fails the step, names the command that shows the parameters, and exi
 ```terminal
 $ optics dry_run pw
 …
-╭──────────────────────────────── Failure details ─────────────────────────────────╮
-│ TC1 Verify Landing → step 'Press Element' — Code.E0403: 'Press Element' cannot   │
-│ take these params: missing a required argument: 'element'. See its params with:  │
-│ optics list Press Element                                                        │
+╭──────────────────────────────────── Failures ────────────────────────────────────╮
+│ TC1 Verify Landing › Verify Example Page › Press Element                         │
+│ Press Element cannot take these params: missing a required argument: 'element'   │
+│ Run 'optics list Press Element' to see its params.                               │
 ╰──────────────────────────────────────────────────────────────────────────────────╯
 dry_run checks the keywords, their params and the names they use. It does not check locators, the app or the device: optics execute does.
 ```
@@ -292,7 +324,7 @@ The output and exit codes are the same as [`optics execute`](#optics-execute). I
 Runs every test case in a project on the real device, browser or app, and records the results.
 
 ```text
-optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
+optics execute <folder> [--runner NAME] [--output auto|tree|plain|jsonl|none]
                [--include TEST_CASE ...] [--exclude TEST_CASE ...]
 ```
 
@@ -300,9 +332,49 @@ optics execute <folder> [--runner NAME] [--use-printer | --no-use-printer]
 |---|---|---|
 | `folder` | Required | The project folder. It must exist. |
 | `--runner` | `test_runner` | The runner. We recommend the default. `pytest` is also accepted, but it needs the `pytest-cov` package installed. |
-| `--use-printer` / `--no-use-printer` | Printer on | Shows or hides the live result tree. Turn it off for plain CI logs. |
+| `--output` | `auto` | How the run shows progress: `auto`, `tree`, `plain`, `jsonl` or `none`. See [Choose the output](#choose-the-output). |
 | `--include` | All test cases | Runs only the test cases with these names. |
 | `--exclude` | None | Skips the test cases with these names. |
+
+### Choose the output
+
+`--output` works the same on `optics execute` and `optics dry_run`:
+
+| Value | What it shows |
+|---|---|
+| `auto` | The default. The live tree in a terminal. `plain` when stdout is not a terminal, for example in CI or in a pipe. |
+| `tree` | The live result tree and the summary. `--use-printer` is the same. |
+| `plain` | One line for each test case, module and keyword when it starts and when it ends. |
+| `jsonl` | One JSON object for each of the same events. |
+| `none` | No progress. Only the logs. `--no-use-printer` is the same. |
+
+With `plain` and `jsonl`, the progress lines go to stdout and the logs go to stderr. Optics writes each line at once, so a CI log shows the run while it continues. A failed step shows its reason one time, and the module and test case above it show only the code. This is the Birch suite with no OCR engine, so `Assert Presence` cannot read `Free returns`:
+
+```terminal
+$ optics execute birch-tests | cat
+16:52:16 RUNNING  test case "Shopper can sign in"
+16:52:16 RUNNING    module "Sign In"
+16:52:16 RUNNING      keyword "Enter Text"
+16:52:16 PASS         keyword "Enter Text" (0.1s)
+…
+16:52:17 PASS     test case "Shopper can sign in" (0.3s)
+16:52:17 RUNNING  test case "Shopper can find a shoe"
+16:52:17 RUNNING    module "Find A Shoe"
+16:52:17 RUNNING      keyword "Assert Presence"
+16:52:47 FAIL         keyword "Assert Presence" (30.0s): 'Free returns' is not on the screen. [E0201]
+16:52:47 FAIL       module "Find A Shoe" (30.7s) [E0201]
+16:52:47 FAIL     test case "Shopper can find a shoe" (30.7s) [E0201]
+…
+16:52:48 FAIL     run "Execution": Some test cases failed
+```
+
+`plain` and `jsonl` show no totals and no **Failures** box. A run that passes ends with the last `PASS` line. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error from [error detection](https://optics-framework.org/docs/run/error-detection) shows only in that last line, so read `junit_output.xml` for the totals and the errors.
+
+A step that self-heal recovered shows `HEALED` in place of `PASS`. Each `jsonl` line has the fields `entity_type` (`test_case`, `module`, `keyword` or `execution`), `name`, `status`, `message`, `code`, `elapsed`, `timestamp`, `entity_id` and `parent_id`. To keep the events in a file, send stdout to it:
+
+```shell
+$ optics execute ./birch-tests --output jsonl > events.jsonl
+```
 
 ### Pick test cases
 
@@ -346,7 +418,7 @@ Optics also stops when a name matches only setup or teardown test cases, or when
 4. It runs Suite Setup, then each test case, then Suite Teardown. A test case that fails does not stop the others. A failed setup skips the test cases that it prepares. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown).
 5. It saves a final screenshot and page source, and runs [error detection](https://optics-framework.org/docs/run/error-detection) if the project has an error definitions file. This happens before Suite Teardown when the suite has one.
 
-The printer shows a live tree, then a summary:
+In a terminal, the printer shows a live tree, then a summary:
 
 ```terminal
 Test Suite
@@ -361,17 +433,18 @@ Total Test Cases: 1 | Passed: 1 | Failed: 0
 
 When a failed setup skips test cases, the summary also shows `| Skipped: <count>`.
 
-When a step fails, a "Failure details" box names the test, the step and the reason:
+When a step fails, a **Failures** box names the test case, the module and the step, then says why it failed. A last line gives a hint when Optics has one:
 
 ```terminal
-Shopper can add a backpack → step 'Press Elemnt (//input[@id='login-button'])' — Keyword not found: Press Elemnt. Did you mean 'Press Element'? (run `optics list` to see all keywords)
+╭──────────────────────────────────── Failures ────────────────────────────────────╮
+│ TC1 Verify Landing › Verify Example Page › Press Element (Sign up now)           │
+│ 'Sign up now' is not on the screen.                                              │
+│ OCR is off, so text that shows only in images was not searched. Add a            │
+│ text_detection engine to config.yaml to search it.                               │
+╰──────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-The reason has the form `Keyword '<keyword>' failed: <code>: <message>`. If every fallback value failed, it is `Keyword '<keyword>' failed after fallback attempts; last error: <error>`. If the error has a deeper cause, `(cause: …)` comes at the end:
-
-```terminal
-Shopper can sign in → step 'Enter Text (user-name, standard_user)' — Keyword 'Enter Text' failed after fallback attempts; last error: E0201: No valid strategies found for 'user-name' in 'enter_text' (cause: E0201: Element 'user-name' not found. OCR was not tried: no text_detection engine is configured.)
-```
+When every value of an element fails, the reason names them all: `None of '<first>' and '<last>' is on the screen.` See [Error codes](https://optics-framework.org/docs/reference/errors) for each message.
 
 Results go to `execution_output/` in the project: `junit_output.xml`, screenshots, `failed_steps_elements.json` when a step fails, and logs if you turn them on. See [Project files](https://optics-framework.org/docs/reference/files#outputs) and [Read the results](https://optics-framework.org/docs/run/results#what-each-outcome-writes).
 
@@ -390,7 +463,7 @@ On-screen errors found by error detection appear in `junit_output.xml` as a fail
 
 ```shell
 $ optics execute ./birch-tests
-$ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --no-use-printer
+$ OPTICS_SKIP_PREFLIGHT=1 optics execute ./birch-tests --output plain
 ```
 
 ## `optics live`
@@ -559,10 +632,10 @@ An unknown name prints a suggestion and exits with code 1:
 
 ```terminal
 $ optics list Asert Presense
-Keyword not found: Asert Presense. Did you mean 'Assert Presence'? (run `optics list` to see all keywords)
+'Asert Presense' is not a keyword. Did you mean 'Assert Presence'?
 ```
 
-When `optics dry_run` finds a step with the wrong parameters, its message ends with the `optics list <keyword>` command to run. For examples, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
+When `optics dry_run` finds a step with the wrong parameters, its hint names the `optics list <keyword>` command to run. For examples, see [Keywords](https://optics-framework.org/docs/reference/keywords/).
 
 ## `optics completion`
 
@@ -602,7 +675,10 @@ None of these override config.yaml. Settings for `optics execute`, `dry_run` and
 | Variable | Used by | What it does |
 |---|---|---|
 | `OPTICS_SKIP_PREFLIGHT` | `execute` | Set to `1` or `true` to skip the server and device check before a run. |
-| `OPTICS_HOME` | `optics` | Folder for the first-run marker. Default `~/.optics`. |
+| `OPTICS_HOME` | `optics` | Folder for the first-run marker and the update check. Default `~/.optics`. |
+| `OPTICS_NO_UPDATE_CHECK` | `optics` | Set to `1` to stop the daily update check. See [Global behavior](#global-behavior). |
+| `OPTICS_NO_FEEDBACK` | `mcp` | Set to `1` to remove the `send_feedback` tool. See [send_feedback](https://optics-framework.org/docs/reference/mcp#send-feedback). |
+| `DO_NOT_TRACK` | `optics`, `mcp` | Set to `1` to stop the update check and remove the `send_feedback` tool. |
 | `OPTICS_AI_SELF_HEAL` | `serve`, `mcp` | Set to `1`, `true`, `yes` or `on` to turn on AI self-heal for every session by default. |
 | `OPTICS_LLM_PROVIDER` | `serve`, `mcp` | The LLM engine for self-heal: `gemini` (default), `openai` or `anthropic`. |
 | `OPTICS_LLM_MODEL` | `serve`, `mcp` | The model for self-heal. Gemini defaults to `gemini-2.5-flash`; `openai` and `anthropic` need one. |

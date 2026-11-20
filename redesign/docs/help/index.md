@@ -18,7 +18,7 @@ $ optics doctor my-project
 
 Always pass the project folder. Without it, doctor checks your machine but not your config. If doctor shows no ❌ rows and the problem remains:
 
-1. **Search [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting) for the exact message.** Problems are listed by the words Optics prints, such as `No driver enabled` or `Element not found`.
+1. **Search [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting) for the exact message.** Problems are listed by the words Optics prints, such as `No driver enabled` or `is not on the screen`.
 2. **Look up the code.** If the message has a code like `E0201`, [Error codes](https://optics-framework.org/docs/reference/errors) says what it means and what to do.
 3. **Read the [FAQ](https://optics-framework.org/docs/help/faq)** when something works differently from what you expected. Some behavior is a known limit, not a bug.
 
@@ -31,7 +31,7 @@ A good report lets someone reproduce the problem without asking you anything. In
 - **Your Optics version.** Run `optics --version`.
 - **The `optics doctor` output for your project.** Run `optics doctor <project>` and paste everything it prints.
 - **Your `config.yaml`, without secrets.** Remove API keys, passwords and tokens, and replace private URLs with placeholders.
-- **The failing step.** Paste the rows from `modules/modules.csv` and `test_data/elements.csv` that the step uses, and the full "Failure details" box from the run.
+- **The failing step.** Paste the rows from `modules/modules.csv` and `test_data/elements.csv` that the step uses, and the full **Failures** box from the run.
 - **The log.** Choose the one that matches what you ran:
   - `optics execute`: set `file_log: true` in `config.yaml`, run again, and attach `execution_output/internal_logs.log` and `execution_output/execution_logs.log`. Set `log_level: DEBUG` for the most detail.
   - `optics live`: attach `logs/optics_live_<time>.log` from the project folder. Its path is printed when you quit.

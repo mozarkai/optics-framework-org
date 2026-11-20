@@ -175,6 +175,45 @@ iOS has no Back key and no Android key numbers, so Press Keycode does not work o
 
 - **Type and submit.** Type with Enter Text on a field, then tap the keyboard's own submit key by its label. Enter Text Direct and Enter Text Using Keyboard type into the field that has focus, so tap the field first. They accept `<enter>`, `<tab>`, `<backspace>` and `<space>`. Other keys fail with E0401.
 
+## Answer system alerts
+
+iOS shows system alerts, such as a permission prompt, outside the app. The page source does not include them. You have three ways to answer them.
+
+**Answer every alert as it appears.** Set XCUITest's `autoClickAlertSelector` setting under `capabilities`. WebDriverAgent then presses the button that the selector finds on each alert:
+
+`config.yaml`:
+
+```yaml
+capabilities:
+  platformName: iOS
+  automationName: XCUITest
+  bundleId: com.birch.shop
+  appium:settings:
+    autoClickAlertSelector: "**/XCUIElementTypeButton[`label == 'Allow'`]"
+```
+
+The selector applies to every system alert, not only permission prompts. Button labels change with the language of the device.
+
+**Answer one alert with a popup rule.** An `alert` action presses a button of the system alert by its label. Optics reads the text of the alert with `mobile: alert`, so `text_contains` can match it:
+
+`test_data/popup_rules.json`:
+
+```json
+[
+  {
+    "name": "notifications_prompt",
+    "detect": {"text_contains": ["Would Like to Send You Notifications"]},
+    "action": {"type": "alert", "target": "Allow"}
+  }
+]
+```
+
+See [Handle popups](https://optics-framework.org/docs/advanced/popups).
+
+**Change the setting during a session over HTTP.** Send `PUT /v1/sessions/{id}/appium_settings` with `{"settings": {"autoClickAlertSelector": "..."}}`. See [Popups over HTTP](https://optics-framework.org/docs/reference/http-api#popups-over-http).
+
+The `permissions` key of config.yaml works on Android only. On iOS, Optics logs a warning and sets nothing.
+
 ## If it isn't working
 
 - **The doctor shows ❌ for `bundleId`.** Add `bundleId` under `capabilities`. Only the plain key name counts for this check.
@@ -192,5 +231,6 @@ iOS has no Back key and no Android key numbers, so Press Keycode does not work o
 - [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web)
 - [Test Android apps](https://optics-framework.org/docs/platforms/android)
 - [Define elements](https://optics-framework.org/docs/elements/define)
+- [Handle popups](https://optics-framework.org/docs/advanced/popups)
 - [Run tests in CI](https://optics-framework.org/docs/run/ci)
 - [config.yaml reference](https://optics-framework.org/docs/reference/config)
