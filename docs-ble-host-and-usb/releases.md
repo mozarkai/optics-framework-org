@@ -1,0 +1,103 @@
+# Releases
+
+What each Optics release added, newest first. Source: https://github.com/mozarkai/optics-framework/releases, read 20 Nov 2026.
+
+- [1.11.5](https://github.com/mozarkai/optics-framework/releases/tag/1.11.5), 20 Nov 2026. Popups: write rules that close the popups that block a step. 8 fixes.
+  - doctor: Add a Desktop section (https://github.com/mozarkai/optics-framework/pull/728)
+  - ble: Drive devices over Bluetooth through the airhand dongle (https://github.com/mozarkai/optics-framework/pull/726)
+  - ocr: Add RapidOCR and Apple Vision, one capture and one OCR pass per lookup (https://github.com/mozarkai/optics-framework/pull/735)
+  - runner: Record AI self-heals of a batch run in its events and junit_output.xml (https://github.com/mozarkai/optics-framework/pull/742)
+  - Update notice, optics upgrade and an MCP send_feedback tool (https://github.com/mozarkai/optics-framework/pull/739)
+  - execute: Show progress as plain or JSON lines when stdout is not a terminal (https://github.com/mozarkai/optics-framework/pull/748)
+  - ble: Hold webcam focus, find dark screens by the pointer, open apps on any launcher (https://github.com/mozarkai/optics-framework/pull/751)
+  - popup: Handle popups that block a step, with rules, evidence and permissions at launch (https://github.com/mozarkai/optics-framework/pull/721)
+  - Popup module action (https://github.com/mozarkai/optics-framework/pull/756)
+- [1.11.4](https://github.com/mozarkai/optics-framework/releases/tag/1.11.4), 17 Nov 2026. Desktop apps: test macOS, Windows and Linux apps with the same CSV suites.
+  - Name the report after the project name kept in config.yaml (https://github.com/mozarkai/optics-framework/pull/719)
+  - mcp: Cut agent turns and tokens, and fix what the runs found (https://github.com/mozarkai/optics-framework/pull/720)
+  - appium: Drive desktop apps through the Xa11y driver (https://github.com/mozarkai/optics-framework/pull/714)
+- [1.11.3](https://github.com/mozarkai/optics-framework/releases/tag/1.11.3), 10 Nov 2026. 9 fixes.
+  - self-heal: Keep small models on the target name (https://github.com/mozarkai/optics-framework/pull/704)
+  - config: Accept API keys in config.yaml (https://github.com/mozarkai/optics-framework/pull/706)
+  - Mark setup and teardown in the report and stop tests a failed setup guards (https://github.com/mozarkai/optics-framework/pull/712)
+- [1.11.2](https://github.com/mozarkai/optics-framework/releases/tag/1.11.2), 6 Nov 2026. 8 fixes.
+  - agent: Drive MCP and live NL mode by refs from one screen snapshot (https://github.com/mozarkai/optics-framework/pull/673)
+  - playwright: Remote browsers over CDP/Playwright protocol, configurable timeouts and phone emulation (https://github.com/mozarkai/optics-framework/pull/629)
+  - appium: Drive mobile web pages through the webview context (CSS / DOM XPath) (https://github.com/mozarkai/optics-framework/pull/631)
+  - playwright: Start a new context signed in from a storage_state file (https://github.com/mozarkai/optics-framework/pull/656)
+  - config: Resolve environment variables and relative paths in config files (https://github.com/mozarkai/optics-framework/pull/688)
+  - camera_screenshot: Fetch screenshots over HTTP with a bearer token (https://github.com/mozarkai/optics-framework/pull/658)
+  - Run optics execute cleanly inside an environment (https://github.com/mozarkai/optics-framework/pull/690)
+  - appium: Press, type and clear on TV web apps with D-pad focus (https://github.com/mozarkai/optics-framework/pull/693)
+- [1.11.1](https://github.com/mozarkai/optics-framework/releases/tag/v1.11.1), 26 Oct 2026. 6 fixes.
+  - runtime-vars: Store keyword results and use them in later steps (https://github.com/mozarkai/optics-framework/pull/651)
+- [1.11.0](https://github.com/mozarkai/optics-framework/releases/tag/1.11.0), 15 Oct 2026. 2 fixes.
+  - Record a web journey once through MCP and replay it with Playwright (https://github.com/mozarkai/optics-framework/pull/615)
+  - llm: Support OpenAI-compatible and Anthropic engines (https://github.com/mozarkai/optics-framework/pull/611)
+- [1.10.6](https://github.com/mozarkai/optics-framework/releases/tag/1.10.6), 13 Oct 2026. 5 fixes.
+- [1.10.5](https://github.com/mozarkai/optics-framework/releases/tag/1.10.5), 7 Oct 2026. 2 fixes.
+- [1.10.4](https://github.com/mozarkai/optics-framework/releases/tag/1.10.4), 21 Sept 2026. 10 fixes.
+  - runner: Let a quoted value hold a space in a yaml step (https://github.com/mozarkai/optics-framework/pull/548)
+  - mcp: Grounded targeting — no coordinate guessing + compact interactive-element inspector (https://github.com/mozarkai/optics-framework/pull/544)
+- [1.10.3](https://github.com/mozarkai/optics-framework/releases/tag/1.10.3), 8 Sept 2026. 2 fixes.
+  - mcp: Turn a live session into a reusable, replayable test suite (https://github.com/mozarkai/optics-framework/pull/529)
+- [1.10.2](https://github.com/mozarkai/optics-framework/releases/tag/1.10.2), 4 Sept 2026. 3 fixes.
+- [1.10.1](https://github.com/mozarkai/optics-framework/releases/tag/1.10.1), 4 Sept 2026. 5 fixes.
+- [1.10.0](https://github.com/mozarkai/optics-framework/releases/tag/1.10.0), 26 Aug 2026.
+- [1.9.3](https://github.com/mozarkai/optics-framework/releases/tag/v1.9.3), 19 Aug 2026. 1 fix.
+- [1.9.2](https://github.com/mozarkai/optics-framework/releases/tag/v1.9.2), 19 Aug 2026. 7 fixes.
+- [1.9.1](https://github.com/mozarkai/optics-framework/releases/tag/v1.9.1), 3 Aug 2026. 3 fixes.
+- [1.9.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.9.0), 31 Jul 2026. 12 fixes.
+  - live: Interactive optics live with natural-language mode and AI self-heal (https://github.com/mozarkai/optics-framework/pull/295)
+  - mcp: Add `optics mcp` server exposing keywords over MCP (https://github.com/mozarkai/optics-framework/pull/308)
+  - On-screen error detection for runs and library consumers (https://github.com/mozarkai/optics-framework/pull/323)
+  - Enhance MCP server deployment instructions and add Docker support (https://github.com/mozarkai/optics-framework/pull/322)
+  - live: Incremental /save and NL curation for cleaner recordings (https://github.com/mozarkai/optics-framework/pull/327)
+  - live: Refactor AI self-heal to use keyword-based ReAct loop and improve locator logging (https://github.com/mozarkai/optics-framework/pull/303)
+  - setup: Declare engine backends as extras; install them via optics setup (https://github.com/mozarkai/optics-framework/pull/402)
+  - setup: Allow pinning an engine version in `optics setup --install` (https://github.com/mozarkai/optics-framework/pull/419)
+- [1.8.6](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.6), 29 May 2026. 2 fixes.
+  - IOS app version fetching via ideviceinstaller (v1.8.6-beta9) (https://github.com/mozarkai/optics-framework/pull/282)
+- [1.8.5](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.5), 25 Feb 2026.
+- [1.8.4](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.4), 23 Feb 2026.
+- [1.8.3](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.3), 20 Feb 2026.
+- [1.8.2](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.2), 20 Feb 2026.
+- [1.8.1](https://github.com/mozarkai/optics-framework/releases/tag/v1.8.1), 20 Feb 2026.
+- [1.8.0](https://github.com/mozarkai/optics-framework/releases/tag/1.8.0), 29 Jan 2026.
+  - Enhance CSV handling for element IDs and parameters (https://github.com/mozarkai/optics-framework/pull/233)
+- [1.7.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.7.0), 10 Oct 2025.
+- [1.6.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.6.0), 19 Sept 2025. 2 fixes.
+  - Added logs in action_keyword for debugging (https://github.com/mozarkai/optics-framework/pull/171)
+  - Updated special key notation and fixed the implementation (https://github.com/mozarkai/optics-framework/pull/173)
+  - Appium element extractor support update for iOS (https://github.com/mozarkai/optics-framework/pull/175)
+  - Improve error classification (https://github.com/mozarkai/optics-framework/pull/176)
+  - Press_element using Area of Interest, press_by_percentage fix (https://github.com/mozarkai/optics-framework/pull/178)
+  - Attaching to exisitng appium session, retrieving appium session… (https://github.com/mozarkai/optics-framework/pull/180)
+  - Add method to resolve serial port by product description in BLE… (https://github.com/mozarkai/optics-framework/pull/193)
+  - Add keyword discovery and listing endpoints to expose API (https://github.com/mozarkai/optics-framework/pull/194)
+  - Enhance Docker deployment with vision backend support and loggi… (https://github.com/mozarkai/optics-framework/pull/197)
+  - Add metadata.json and fetch sample metadata dynamically for TCM (https://github.com/mozarkai/optics-framework/pull/199)
+- [1.4.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.4.0), 26 Aug 2025. 8 fixes.
+  - Add optional support for robotframework as a library (https://github.com/mozarkai/optics-framework/pull/116)
+  - Accepting execution_output_path as param in optics setup, readi… (https://github.com/mozarkai/optics-framework/pull/123)
+  - Dockerfiles for optics API hosting (https://github.com/mozarkai/optics-framework/pull/122)
+  - Optics.py accepting config as string (https://github.com/mozarkai/optics-framework/pull/130)
+  - Keyword parameter handling in generate.py (https://github.com/mozarkai/optics-framework/pull/134)
+  - Event attributes path handling for pytest (https://github.com/mozarkai/optics-framework/pull/137)
+  - Thread termination in screenshot_stream, revert easyocr return (https://github.com/mozarkai/optics-framework/pull/142)
+  - Removed case sensitivity for text detection (https://github.com/mozarkai/optics-framework/pull/144)
+  - Sending events as apart of session terminate ( optics quit ) st… (https://github.com/mozarkai/optics-framework/pull/146)
+  - Pytest project path setting, requirments.txt generation update (https://github.com/mozarkai/optics-framework/pull/148)
+  - Fetching deduplicated frames as a batch to clear the queue, imp… (https://github.com/mozarkai/optics-framework/pull/155)
+  - Add support for force_terminate_app (https://github.com/mozarkai/optics-framework/pull/160)
+  - Add support for api (https://github.com/mozarkai/optics-framework/pull/145)
+  - Enhance read_data method to support scalar environment variables and improve error handling in screenshot capture (https://github.com/mozarkai/optics-framework/pull/166)
+- [1.3.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.3.0), 3 Jul 2025.
+- [1.2.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.2.0), 2 Jun 2025.
+  - Add an argument in execute to not show live log (https://github.com/mozarkai/optics-framework/pull/53)
+  - Handling special keys input, refactored enter_texts, multiple locator strategies support for selenium (https://github.com/mozarkai/optics-framework/pull/52)
+  - Refactored verifier to use strategies (https://github.com/mozarkai/optics-framework/pull/54)
+  - EventSDK integration to drivers (https://github.com/mozarkai/optics-framework/pull/55)
+- [1.1.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.1.0), 12 May 2025.
+- [1.0.0](https://github.com/mozarkai/optics-framework/releases/tag/v1.0.0), 19 Apr 2025. 2 fixes.
+  - Suite/case setup and teardown, include/exclude test case from c… (https://github.com/mozarkai/optics-framework/pull/23)
