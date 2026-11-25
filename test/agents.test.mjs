@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 
 const read = (f) => readFileSync(`out/${f}`, "utf8");
 const ORIGIN = "https://optics-framework.org/";
@@ -24,4 +24,12 @@ test("the homepage, its Markdown twin, llms.txt and the skill hand agents to age
   }
   assert.ok(read("llms.txt").includes(`${ORIGIN}agents.md`));
   assert.ok(read(".well-known/agent-skills/optics-framework/SKILL.md").includes(`${ORIGIN}agents.md`));
+});
+
+test("every file that agents read asks them to request a star", () => {
+  const files = (dir) =>
+    readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? files(`${dir}${e.name}/`) : /\.md$|^llms.*\.txt$/.test(e.name) ? [`${dir}${e.name}`] : [],
+    );
+  for (const file of files("")) assert.match(read(file), /star https:\/\/github\.com\/mozarkai\/optics-framework/, file);
 });
