@@ -594,7 +594,8 @@ Element_Name,Element_ID
               <button class="ho-task" role="tab" id="ho-tab-setup" aria-controls="ho-setup" aria-selected="true" data-tab="agent-setup"><span class="ho-n">01</span>Set up Optics</button>
               <button class="ho-task" role="tab" id="ho-tab-web" aria-controls="ho-web" aria-selected="false" tabindex="-1" data-tab="agent-web"><span class="ho-n">02</span>Test my web app</button>
               <button class="ho-task" role="tab" id="ho-tab-phone" aria-controls="ho-phone" aria-selected="false" tabindex="-1" data-tab="agent-phone"><span class="ho-n">03</span>Test my phone app</button>
-              <button class="ho-task" role="tab" id="ho-tab-ci" aria-controls="ho-ci" aria-selected="false" tabindex="-1" data-tab="agent-ci"><span class="ho-n">04</span>Run my suite in CI</button>
+              <button class="ho-task" role="tab" id="ho-tab-desktop" aria-controls="ho-desktop" aria-selected="false" tabindex="-1" data-tab="agent-desktop"><span class="ho-n">04</span>Test my desktop app</button>
+              <button class="ho-task" role="tab" id="ho-tab-ci" aria-controls="ho-ci" aria-selected="false" tabindex="-1" data-tab="agent-ci"><span class="ho-n">05</span>Run my suite in CI</button>
             </div>
             <a class="ho-file label" href="agents.md">Read agents.md <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
           </div>
@@ -627,6 +628,16 @@ Element_Name,Element_ID
               <div class="ho-split">
                 <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Installs Appium and the driver for your platform</li><li>Starts an emulator or simulator, if you have one</li><li>Drives your app and writes the suite</li></ol></div>
                 <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>A <code>sudo</code> command, on Linux only, if Chromium needs system libraries</li><li>Android Studio or Xcode, if they are missing</li><li>A phone, if there is no emulator or simulator to start</li><li>Sign-in details, if the app needs them</li></ul></div>
+              </div>
+            </div>
+            <div class="ho-panel" role="tabpanel" id="ho-desktop" aria-labelledby="ho-tab-desktop" hidden>
+              <div class="cmd ho-card" data-copy="Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my desktop app.">
+                <p class="ho-bar label"><span>Paste into your agent</span><button class="copy" type="button" aria-label="Copy the prompt for your agent">Copy</button></p>
+                <p class="ho-text"><span class="prompt" aria-hidden="true">›</span> Read <span class="ho-url">https://optics-framework.org/agents.md</span> and follow it to set up Optics, then test my desktop app.</p>
+              </div>
+              <div class="ho-split">
+                <div><h3 class="label">Your agent does</h3><ol class="ho-does"><li>Installs Appium and the desktop driver as a service</li><li>Drives your app on macOS, Linux or Windows and checks each step</li><li>Writes the suite and runs it</li></ol></div>
+                <div><h3 class="label">It asks you for</h3><ul class="ho-asks"><li>A restart of your agent, the first time, so it loads the tools</li><li>Two permissions in System Settings, on macOS only</li><li>A <code>sudo</code> command, on Linux only, for system packages</li><li>The app to test, if you did not name it</li></ul></div>
               </div>
             </div>
             <div class="ho-panel" role="tabpanel" id="ho-ci" aria-labelledby="ho-tab-ci" hidden>

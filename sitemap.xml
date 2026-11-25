@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://optics-framework.org/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-25</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/about</loc>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/privacy</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-25</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/playground</loc>
@@ -194,7 +194,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/desktop</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-25</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/platforms/production</loc>
@@ -242,7 +242,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/desktop-apps</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-25</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/guides/protected-apps</loc>

@@ -71,6 +71,7 @@
 
       <h2 class="h3">The install scripts</h2>
       <p class="body-text">The scripts at <code class="ic">/install</code> and <code class="ic">/install.ps1</code> run on your machine. They create a Python environment under <code class="ic">~/.optics</code> and install the <code class="ic">optics-framework</code> package from the Python Package Index, so PyPI receives the download request. Fetching a script is counted like any other request; once running, the scripts send nothing about you or your machine anywhere.</p>
+      <p class="body-text">The desktop setup scripts under <code class="ic">/desktop/</code> prepare a computer for desktop tests. They download Node.js from nodejs.org, and Appium and its desktop driver from the npm registry. On Linux they install packages with <code class="ic">apt</code>, and on Windows they can download the Visual C++ runtime from Microsoft. They send nothing about you or your machine to this site.</p>
 
       <h2 class="h3">The framework</h2>
       <p class="body-text">Optics runs on your own machine or CI. Your suites, screenshots and results stay where you run them. Two things reach this site, and you can turn each one off.</p>

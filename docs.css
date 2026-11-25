@@ -100,6 +100,7 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .prose li::marker { color: var(--ink-3); }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 40px; }
 .prose img { max-width: 100%; border-radius: 0; border: 1px solid var(--line); }
+.prose video { width: 100%; height: auto; aspect-ratio: 16 / 9; border: 1px solid var(--line); background: var(--code-bg); }
 .prose blockquote { margin: 0; padding: 2px 0 2px 18px; border-left: 3px solid var(--line-2); color: var(--ink-2); }
 .prose .ic { white-space: normal; overflow-wrap: anywhere; color: var(--ink); }
 .prose kbd { color: var(--ink); }
