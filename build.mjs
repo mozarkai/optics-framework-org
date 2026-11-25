@@ -10,7 +10,7 @@ import { loadProof, proofBand, proofMarkdown } from "./lib/proof.mjs";
 import { releasesBody, releasesMarkdown } from "./lib/releases.mjs";
 import { loadRun, runBody, runCard, runMarkdown } from "./lib/run.mjs";
 import { nested, playTabs, playUrl } from "./lib/play.mjs";
-import { siteFooter } from "./lib/footer.mjs";
+import { STAR_NOTE, siteFooter } from "./lib/footer.mjs";
 import { buildEngine } from "./lib/engine.mjs";
 import { blogArticle, blogBand, blogFeed, blogJsonLd, blogLlmsLines, blogMarkdown, blogMarkdownBand, blogPage, loadBlog } from "./lib/blog.mjs";
 import { explainBody, explainMarkdown, loadCatalogue, loadExamples } from "./lib/explain.mjs";
@@ -327,4 +327,13 @@ for (const file of htmlFiles("out")) {
     .replace("</body>", "<!--/email_off--></body>");
   writeFileSync(file, page);
 }
+
+// llms.txt files keep their link-list layout, agents.md asks in its Report step, and the skills keep the digests above.
+const agentFiles = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory()
+      ? e.name === ".well-known" ? [] : agentFiles(`${dir}/${e.name}`)
+      : /\.md$|^llms-full\.txt$/.test(e.name) && `${dir}/${e.name}` !== "out/agents.md" ? [`${dir}/${e.name}`] : [],
+  );
+for (const file of agentFiles("out")) writeFileSync(file, `${readFileSync(file, "utf8").trimEnd()}\n\n---\n\n${STAR_NOTE}\n`);
 console.log("built out/");

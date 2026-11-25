@@ -134,6 +134,7 @@ Paste one line into Claude Code, Codex, Cursor or any agent that runs commands. 
 - Set up Optics: `Read https://optics-framework.org/agents.md and follow it to set up Optics.`
 - Test a web app: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my web app.`
 - Test a phone app: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my Android or iOS app.`
+- Test a desktop app: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then test my desktop app.`
 - Run a suite in CI: `Read https://optics-framework.org/agents.md and follow it to set up Optics, then run my Optics suite in CI.`
 
 <!-- blog:latest -->
