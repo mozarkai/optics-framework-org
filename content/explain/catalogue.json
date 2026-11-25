@@ -575,11 +575,6 @@
    ]
   },
   {
-   "slug": "start_popup_run",
-   "group": "ActionKeyword",
-   "params": []
-  },
-  {
    "slug": "swipe",
    "group": "ActionKeyword",
    "params": [
@@ -1051,7 +1046,6 @@
   "scroll_until_element_appears": 4,
   "select_dropdown_option": 4,
   "sleep": 1,
-  "start_popup_run": 0,
   "swipe": 5,
   "swipe_by_percentage": 5,
   "swipe_from_element": 9,
@@ -1072,11 +1066,6 @@
   "invoke_api": 1,
   "read_data": 3,
   "run_loop": null,
-  "add_note": null,
-  "inside": 3,
-  "log": 4,
-  "to_payload": 2,
-  "with_traceback": null,
   "assert_equality": 3,
   "assert_presence": 5,
   "assert_text": 4,

@@ -29,7 +29,7 @@ test("every example suite is in the goldens", () => {
 });
 
 test("the catalogue matches the keywords optics list prints", () => {
-  assert.equal(Object.keys(catalogue.keywords).length, 52);
+  assert.equal(Object.keys(catalogue.keywords).length, 51);
   assert.equal(catalogue.keywords.press_element.title, "Press Element");
 });
 

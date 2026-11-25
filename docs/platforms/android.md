@@ -255,7 +255,7 @@ permissions:
 - The capabilities need `appPackage`. Without it, Optics logs a warning and sets nothing.
 - With `autoLaunch: false`, Optics sets the permissions as the session starts, and you open the app yourself. With `autoWebview: true` or a `browserName`, the app opens as the session starts, and Optics sets the permissions after that.
 - `location` sets both the fine and the coarse location permission. See [permissions](/docs/reference/config#permissions) for every name. A full name such as `android.permission.READ_CONTACTS` also works.
-- An unknown name fails Launch App with E0501. When Appium cannot set one permission, Optics logs a warning and sets the others.
+- An unknown name stops the run before it starts, with E0501. When Appium cannot set one permission, Optics logs a warning and sets the others.
 
 For other popups, such as an offer or a rating request, write a popup rule. See [Handle popups](/docs/advanced/popups).
 
