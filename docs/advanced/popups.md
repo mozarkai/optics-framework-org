@@ -60,9 +60,9 @@ A file that Optics cannot read, or a rule that is not valid, stops the run befor
 
 ```terminal
 ╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
-│ birch/test_data/popup_rules.json: rule 1 is invalid (detect: Value error,    │
-│ detect needs text_contains, resource_id or xpath; action: Value error,       │
-│ action 'tap' needs a target)                                                 │
+│ birch/test_data/popup_rules.json: popup_rules['rate_prompt'].detect: detect  │
+│ needs text_contains, resource_id or xpath;                                   │
+│ popup_rules['rate_prompt'].action: action 'tap' needs a target               │
 │                                                                              │
 │ Fix that popup_rules.json, then re-run.                                      │
 ╰──────────────────────────────────────────────────────────────────────────────╯
@@ -169,7 +169,7 @@ Set `sensitive: true` for a popup that you must never press, such as a payment o
 
 ## Check before every step
 
-Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set `check: before_every_step` to try the rule before each action step that finds an element. See [Steps that check for popups](#steps-that-check-for-popups) for the keywords:
+Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set `check: before_every_step` to try the rule before each step that finds an element. See [Steps that check for popups](#steps-that-check-for-popups) for the keywords:
 
 ```json
 {
@@ -179,6 +179,8 @@ Some popups do not block the element. A session timeout dialog can leave the scr
   "action": {"type": "tap", "target": "Sign in again"}
 }
 ```
+
+When a rule closes a popup and the step tries again, the before-every-step rules run again first.
 
 Each such step reads the page source once more, so use this only for popups that need it.
 
@@ -205,11 +207,15 @@ Copy text from the message into a new rule. The screenshot and the page source i
 
 ## Steps that check for popups
 
-The rules run for keywords that find an element and act on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.
+The rules run for keywords that find an element:
+
+- Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.
+- Assert Presence, Assert Visibility, Assert Text, Is Element, Validate Element and Validate Screen. When the element is not found and a rule closes a popup, the assertion looks again with its full timeout.
+
+A popup that stops the step, such as a popup with no rule (E0206), fails Validate Screen too. Is Element with `invisible` passes only when no popup is on screen.
 
 Other keywords do not check for popups:
 
-- Assertions, such as Assert Presence and Validate Element. `check: before_every_step` does not apply to them either. When you put Assert Presence before an action, as the platform pages recommend, a popup that appears first makes the assertion fail with E0201. Move the assertion after the action, or close the popup with [Detect And Press](https://optics-framework.org/docs/reference/keywords/actions#detect-and-press) before the assertion.
 - Detect And Press, Swipe Until Element Appears and Scroll Until Element Appears.
 - Steps that use coordinates or the whole screen, such as Press By Coordinates, Swipe and Scroll.
 

@@ -61,6 +61,8 @@ The terminal tree shows `on-screen-error-detection` as `FAIL` and counts it in t
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
+With `--output plain` or `jsonl`, the same test case shows as a `FAIL` line with each match: `FAIL     test case "on-screen-error-detection": ERR_SESSION | high | Session expired | The user was signed out`.
+
 **A detected error fails the run:**
 A detected error counts as a failed test case, so `optics execute` exits with code `1`. CI tools that read the exit code or the JUnit report show the run as failed, even when every step passed. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
 

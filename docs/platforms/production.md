@@ -207,6 +207,7 @@ The camera frame shows more than the screen. Optics must know where the four cor
 
 | Setting | What Optics does |
 |---|---|
+| `find_screen: auto` | Optics tries `brightness` first. If it finds no lit screen and the driver shows a pointer, it tries `pointer`. Use it when the screen can show a bright page or a dark page. With no driver, Optics uses `frame`. |
 | `find_screen: brightness` | The driver presses `brightnessdown` 8 times, then `brightnessup` 8 times. Only the screen changes, so Optics finds it on any page that is not black. The screen goes back to its brightness. If it started below the middle level, it ends at the middle level. The `ble` driver has these keys. If the driver cannot press them, or the screen does not change, Optics uses `frame`. |
 | `find_screen: frame` | Optics finds the bright area inside the dark bezel in one frame. The page must be bright from edge to edge. No driver is necessary. |
 | `find_screen: pointer` | The driver moves the pointer to 9 positions in a grid on the screen, and Optics finds the pointer in the camera frame at each position. At least 6 of the 9 positions must agree. The screen can show any page, also a page that is dark to its edges. The `ble` driver has a pointer on `ios`, `macos`, `windows` and `linux`. On `android`, the dongle acts as a touch screen and has no pointer, so the run stops with `E0501`. |
@@ -235,6 +236,7 @@ With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Elemen
 | `frame` | Required | `{width, height}`: the size in pixels of the positions that keywords use. Use the camera frame size (`out_width` x `out_height`). Without a camera, use the screen size of the device. |
 | `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. Optics finds the dongle again by this number after you plug it in again. |
 | `port` | None | A fixed serial port, such as `/dev/cu.usbmodem1101` or `COM5`, in place of `serial`. Set `serial` or `port`, not both. |
+| `host` | None | The Bluetooth name or address of the paired device to drive, as `airhand hosts` shows it. The dongle lets only that device connect. A name that no paired device has, or that two devices have, stops the run with `E0501`. A device that does not connect in 20 seconds also stops the run with `E0501`. This needs airhand firmware 0.1.6 or later. |
 | `launch` | The default of the platform | The methods that `Launch App` tries, in sequence. See [Open apps](#open-apps). |
 | `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. With a camera, `drawer_search` finds the search box without it. |
 
@@ -274,7 +276,7 @@ On iOS, do not press `home` just before `Launch App`. Home a few seconds after S
 | `camera_width`, `camera_height` | The largest size of the camera | The size that the camera captures at. Set both or neither. |
 | `url` | None | An `http://` or `https://` URL, or a TCP frame server as `ip:port`. Use it in place of `camera_index`. |
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>` and masks it in logs. |
-| `find_screen` | None | `brightness`, `frame` or `pointer`. See [Find the screen](#find-the-screen). |
+| `find_screen` | None | `auto`, `brightness`, `frame` or `pointer`. See [Find the screen](#find-the-screen). |
 | `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`. Set `deskew_corners` or `find_screen`, not both. |
 | `out_width`, `out_height` | `1080`, `1920` | The size of the frame that OCR reads, at most 8192 on each side. Set the screen size of the device. |
 | `rotation` | None | `clockwise` or `counterclockwise`. Optics turns the frame a quarter turn after it cuts out the screen. |
@@ -338,6 +340,41 @@ If the device disconnects from the dongle, a keyword waits up to 10 seconds for 
 Set `elements_sources: []`. Then the suite uses positions and keys only: `Press By Percentage`, `Press By Coordinates`, `Swipe`, `Scroll`, `Enter Text Using Keyboard`, `Press Keycode`, `Clear Text` and `Launch App`. A keyword that must see the screen, such as `Press Element` or `Assert Presence`, stops with `E0501`. Optics saves no screenshots.
 
 `optics doctor` shows a warning for this setup: "no screen source: only keywords that do not read the screen run".
+
+## Screen over USB
+
+If USB debugging is permitted on an Android phone, or the iPhone is attached to a Mac with Xcode, Optics can read the screen over USB in place of a camera. The dongle still does all taps and typing. Use the `usb_screenshot` source:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - ble:
+      enabled: true
+      capabilities:
+        platform: android
+        frame: {width: 1080, height: 2400}   # the screenshot size of the phone
+elements_sources:
+  - usb_screenshot:
+      enabled: true
+text_detection:
+  - rapidocr: {enabled: true}
+```
+
+| Name | Default | What it does |
+|---|---|---|
+| `serial` | None | The Android serial or the iOS UDID. Set it when more than one phone is attached. |
+| `platform` | The `platform` of the driver | `android` or `ios`. Set it when no `ble` driver is enabled. |
+
+Android uses `adb`, and iOS uses `xcrun devicectl`. `optics doctor` finds the tool and the phone, takes a screenshot and compares its size with `frame`.
+
+Know these limits:
+
+- **Protected screens are black.** An app that blocks screenshots gives a black screenshot, and the step stops with `E0303`. Use a camera for these apps.
+- **Some apps see USB debugging.** Some apps do not run while developer options or USB debugging are on.
+- **iOS is slow.** Each screenshot takes 1 to 2.5 seconds, and it needs a Mac with Xcode.
+
+`optics serve` and `optics mcp` refuse `usb_screenshot` from a remote session, because the server would read a phone attached to it. A local stdio MCP server permits it.
 
 ## Use it in optics live, serve and MCP
 

@@ -225,8 +225,8 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `ba
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
 | `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. With `[]`, the session starts without the screen. See [Sessions without a screen source](#sessions-without-a-screen-source). |
-| `text_detection` | none, or the camera default | OCR engines, for example `["rapidocr"]`. A session that reads a camera gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. `[]` turns OCR off. |
-| `image_detection` | none, or the camera default | Image engines, for example `["templatematch"]`. A session that reads a camera gets `templatematch`. |
+| `text_detection` | none, or the camera default | OCR engines, for example `["rapidocr"]`. A session that reads the screen only as a picture, from a camera or `usb_screenshot`, gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. `[]` turns OCR off. |
+| `image_detection` | none, or the camera default | Image engines, for example `["templatematch"]`. A session that reads a camera or `usb_screenshot` gets `templatematch`. |
 | `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). |
 | `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM engine for self-heal: `gemini`, `openai` or `anthropic`. |
@@ -310,6 +310,8 @@ The `ble` driver has no element source of its own. When you leave out `elements_
   "elements_sources": ["camera_screenshot"]
 }
 ```
+
+A phone on the server's USB can give its own screenshots in place of a camera. Name `usb_screenshot` in `elements_sources`. The session gets the same OCR and `templatematch` defaults. Only a `stdio` server permits it: an `http` server refuses it with `E0501`, because it would read a phone attached to the server. See [Screen over USB](https://optics-framework.org/docs/platforms/production#screen-over-usb).
 
 A session that cannot list rows still starts. The reply says what it lacks, in place of the first screen:
 

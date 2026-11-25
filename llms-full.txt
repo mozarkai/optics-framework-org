@@ -1664,7 +1664,7 @@ Source: https://optics-framework.org/docs/create/agent
 
 > Connect Optics to Claude, Cursor or any MCP client so your agent can drive a device and write the suite.
 
-`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV or browser. The agent reads the screen as a list of rows, acts on a row by its reference, and sees what changed after each action. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
+`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV, desktop app or browser. The agent reads the screen as a list of rows, acts on a row by its reference, and sees what changed after each action. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
 
 The agent is yours. Optics doesn't call any AI service in this mode, so it works with whichever model your client uses.
 
@@ -1874,7 +1874,7 @@ Results go to `execution_output/`. When a step fails, `failed_steps_elements.jso
 
 The server gives the agent:
 
-- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
+- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`. One session drives a browser with Playwright or Selenium, a phone or TV with Appium, a [desktop app](https://optics-framework.org/docs/platforms/desktop) on macOS, Linux or Windows, or a [locked-down device](https://optics-framework.org/docs/platforms/production) over Bluetooth. See [start_session](https://optics-framework.org/docs/reference/mcp#start-session) for each one.
 - **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` (several steps on one screen, such as a form) and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
 - **A feedback tool**: `send_feedback` sends a short report to the Optics maintainers when the agent is stuck or a task ends. Set `OPTICS_NO_FEEDBACK=1` to remove it. See [send_feedback](https://optics-framework.org/docs/reference/mcp#send-feedback).
 - **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
@@ -4497,6 +4497,8 @@ The terminal tree shows `on-screen-error-detection` as `FAIL` and counts it in t
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
+With `--output plain` or `jsonl`, the same test case shows as a `FAIL` line with each match: `FAIL     test case "on-screen-error-detection": ERR_SESSION | high | Session expired | The user was signed out`.
+
 **A detected error fails the run:**
 A detected error counts as a failed test case, so `optics execute` exits with code `1`. CI tools that read the exit code or the JUnit report show the run as failed, even when every step passed. See [Run tests in CI](https://optics-framework.org/docs/run/ci#decide-pass-or-fail).
 
@@ -4716,11 +4718,11 @@ A CI log is not a terminal, so `optics execute` and `optics dry_run` print one l
 16:52:47 FAIL     test case "Shopper can find a shoe" (30.7s) [E0201]
 ```
 
-The lines show no totals. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error shows only in that line, so publish `junit_output.xml` as the examples on this page do.
+The lines show no totals. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error shows as a failed `on-screen-error-detection` test case before that line. For the totals, publish `junit_output.xml` as the examples on this page do.
 
 For a tool that reads the run, add `--output jsonl` to get one JSON event on each line. Do not add `--no-use-printer`. It shows no progress, only the logs. See [Choose the output](https://optics-framework.org/docs/reference/cli#choose-the-output).
 
-Optics does not check for updates when the `CI` variable is set, so the log has no update notice.
+Optics does not check for updates when the `CI` variable is set, so the log has no update notice. `optics upgrade` still asks PyPI for the newest release.
 
 ## Decide pass or fail
 
@@ -5136,7 +5138,7 @@ permissions:
 - The capabilities need `appPackage`. Without it, Optics logs a warning and sets nothing.
 - With `autoLaunch: false`, Optics sets the permissions as the session starts, and you open the app yourself. With `autoWebview: true` or a `browserName`, the app opens as the session starts, and Optics sets the permissions after that.
 - `location` sets both the fine and the coarse location permission. See [permissions](https://optics-framework.org/docs/reference/config#permissions) for every name. A full name such as `android.permission.READ_CONTACTS` also works.
-- An unknown name fails Launch App with E0501. When Appium cannot set one permission, Optics logs a warning and sets the others.
+- An unknown name stops the run before it starts, with E0501. When Appium cannot set one permission, Optics logs a warning and sets the others.
 
 For other popups, such as an offer or a rating request, write a popup rule. See [Handle popups](https://optics-framework.org/docs/advanced/popups).
 
@@ -7166,6 +7168,7 @@ The camera frame shows more than the screen. Optics must know where the four cor
 
 | Setting | What Optics does |
 |---|---|
+| `find_screen: auto` | Optics tries `brightness` first. If it finds no lit screen and the driver shows a pointer, it tries `pointer`. Use it when the screen can show a bright page or a dark page. With no driver, Optics uses `frame`. |
 | `find_screen: brightness` | The driver presses `brightnessdown` 8 times, then `brightnessup` 8 times. Only the screen changes, so Optics finds it on any page that is not black. The screen goes back to its brightness. If it started below the middle level, it ends at the middle level. The `ble` driver has these keys. If the driver cannot press them, or the screen does not change, Optics uses `frame`. |
 | `find_screen: frame` | Optics finds the bright area inside the dark bezel in one frame. The page must be bright from edge to edge. No driver is necessary. |
 | `find_screen: pointer` | The driver moves the pointer to 9 positions in a grid on the screen, and Optics finds the pointer in the camera frame at each position. At least 6 of the 9 positions must agree. The screen can show any page, also a page that is dark to its edges. The `ble` driver has a pointer on `ios`, `macos`, `windows` and `linux`. On `android`, the dongle acts as a touch screen and has no pointer, so the run stops with `E0501`. |
@@ -7194,6 +7197,7 @@ With `E0305`, Optics saves the frame as `camera_blind_<time>.jpg`. `Press Elemen
 | `frame` | Required | `{width, height}`: the size in pixels of the positions that keywords use. Use the camera frame size (`out_width` x `out_height`). Without a camera, use the screen size of the device. |
 | `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. Optics finds the dongle again by this number after you plug it in again. |
 | `port` | None | A fixed serial port, such as `/dev/cu.usbmodem1101` or `COM5`, in place of `serial`. Set `serial` or `port`, not both. |
+| `host` | None | The Bluetooth name or address of the paired device to drive, as `airhand hosts` shows it. The dongle lets only that device connect. A name that no paired device has, or that two devices have, stops the run with `E0501`. A device that does not connect in 20 seconds also stops the run with `E0501`. This needs airhand firmware 0.1.6 or later. |
 | `launch` | The default of the platform | The methods that `Launch App` tries, in sequence. See [Open apps](#open-apps). |
 | `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. With a camera, `drawer_search` finds the search box without it. |
 
@@ -7233,7 +7237,7 @@ On iOS, do not press `home` just before `Launch App`. Home a few seconds after S
 | `camera_width`, `camera_height` | The largest size of the camera | The size that the camera captures at. Set both or neither. |
 | `url` | None | An `http://` or `https://` URL, or a TCP frame server as `ip:port`. Use it in place of `camera_index`. |
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>` and masks it in logs. |
-| `find_screen` | None | `brightness`, `frame` or `pointer`. See [Find the screen](#find-the-screen). |
+| `find_screen` | None | `auto`, `brightness`, `frame` or `pointer`. See [Find the screen](#find-the-screen). |
 | `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`. Set `deskew_corners` or `find_screen`, not both. |
 | `out_width`, `out_height` | `1080`, `1920` | The size of the frame that OCR reads, at most 8192 on each side. Set the screen size of the device. |
 | `rotation` | None | `clockwise` or `counterclockwise`. Optics turns the frame a quarter turn after it cuts out the screen. |
@@ -7297,6 +7301,41 @@ If the device disconnects from the dongle, a keyword waits up to 10 seconds for 
 Set `elements_sources: []`. Then the suite uses positions and keys only: `Press By Percentage`, `Press By Coordinates`, `Swipe`, `Scroll`, `Enter Text Using Keyboard`, `Press Keycode`, `Clear Text` and `Launch App`. A keyword that must see the screen, such as `Press Element` or `Assert Presence`, stops with `E0501`. Optics saves no screenshots.
 
 `optics doctor` shows a warning for this setup: "no screen source: only keywords that do not read the screen run".
+
+## Screen over USB
+
+If USB debugging is permitted on an Android phone, or the iPhone is attached to a Mac with Xcode, Optics can read the screen over USB in place of a camera. The dongle still does all taps and typing. Use the `usb_screenshot` source:
+
+`config.yaml`:
+
+```yaml
+driver_sources:
+  - ble:
+      enabled: true
+      capabilities:
+        platform: android
+        frame: {width: 1080, height: 2400}   # the screenshot size of the phone
+elements_sources:
+  - usb_screenshot:
+      enabled: true
+text_detection:
+  - rapidocr: {enabled: true}
+```
+
+| Name | Default | What it does |
+|---|---|---|
+| `serial` | None | The Android serial or the iOS UDID. Set it when more than one phone is attached. |
+| `platform` | The `platform` of the driver | `android` or `ios`. Set it when no `ble` driver is enabled. |
+
+Android uses `adb`, and iOS uses `xcrun devicectl`. `optics doctor` finds the tool and the phone, takes a screenshot and compares its size with `frame`.
+
+Know these limits:
+
+- **Protected screens are black.** An app that blocks screenshots gives a black screenshot, and the step stops with `E0303`. Use a camera for these apps.
+- **Some apps see USB debugging.** Some apps do not run while developer options or USB debugging are on.
+- **iOS is slow.** Each screenshot takes 1 to 2.5 seconds, and it needs a Mac with Xcode.
+
+`optics serve` and `optics mcp` refuse `usb_screenshot` from a remote session, because the server would read a phone attached to it. A local stdio MCP server permits it.
 
 ## Use it in optics live, serve and MCP
 
@@ -7856,9 +7895,9 @@ A file that Optics cannot read, or a rule that is not valid, stops the run befor
 
 ```terminal
 ╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
-│ birch/test_data/popup_rules.json: rule 1 is invalid (detect: Value error,    │
-│ detect needs text_contains, resource_id or xpath; action: Value error,       │
-│ action 'tap' needs a target)                                                 │
+│ birch/test_data/popup_rules.json: popup_rules['rate_prompt'].detect: detect  │
+│ needs text_contains, resource_id or xpath;                                   │
+│ popup_rules['rate_prompt'].action: action 'tap' needs a target               │
 │                                                                              │
 │ Fix that popup_rules.json, then re-run.                                      │
 ╰──────────────────────────────────────────────────────────────────────────────╯
@@ -7965,7 +8004,7 @@ Set `sensitive: true` for a popup that you must never press, such as a payment o
 
 ## Check before every step
 
-Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set `check: before_every_step` to try the rule before each action step that finds an element. See [Steps that check for popups](#steps-that-check-for-popups) for the keywords:
+Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set `check: before_every_step` to try the rule before each step that finds an element. See [Steps that check for popups](#steps-that-check-for-popups) for the keywords:
 
 ```json
 {
@@ -7975,6 +8014,8 @@ Some popups do not block the element. A session timeout dialog can leave the scr
   "action": {"type": "tap", "target": "Sign in again"}
 }
 ```
+
+When a rule closes a popup and the step tries again, the before-every-step rules run again first.
 
 Each such step reads the page source once more, so use this only for popups that need it.
 
@@ -8001,11 +8042,15 @@ Copy text from the message into a new rule. The screenshot and the page source i
 
 ## Steps that check for popups
 
-The rules run for keywords that find an element and act on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.
+The rules run for keywords that find an element:
+
+- Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.
+- Assert Presence, Assert Visibility, Assert Text, Is Element, Validate Element and Validate Screen. When the element is not found and a rule closes a popup, the assertion looks again with its full timeout.
+
+A popup that stops the step, such as a popup with no rule (E0206), fails Validate Screen too. Is Element with `invisible` passes only when no popup is on screen.
 
 Other keywords do not check for popups:
 
-- Assertions, such as Assert Presence and Validate Element. `check: before_every_step` does not apply to them either. When you put Assert Presence before an action, as the platform pages recommend, a popup that appears first makes the assertion fail with E0201. Move the assertion after the action, or close the popup with [Detect And Press](https://optics-framework.org/docs/reference/keywords/actions#detect-and-press) before the assertion.
 - Detect And Press, Swipe Until Element Appears and Scroll Until Element Appears.
 - Steps that use coordinates or the whole screen, such as Press By Coordinates, Swipe and Scroll.
 
@@ -9364,7 +9409,6 @@ Over [`optics serve`](https://optics-framework.org/docs/reference/cli), MCP and 
 | Execute Script | Run a driver command or browser JavaScript | [Execute Script](https://optics-framework.org/docs/reference/keywords/actions#execute-script) |
 | Get Text | Read an element's text | [Get Text](https://optics-framework.org/docs/reference/keywords/actions#get-text) |
 | Sleep | Wait a number of seconds | [Sleep](https://optics-framework.org/docs/reference/keywords/actions#sleep) |
-| Start Popup Run | Set the popup counts and events to zero | [Start Popup Run](https://optics-framework.org/docs/reference/keywords/actions#start-popup-run) |
 | Press Checkbox | Deprecated: use Press Element | [Press Checkbox](https://optics-framework.org/docs/reference/keywords/actions#press-checkbox) |
 | Press Radio Button | Deprecated: use Press Element | [Press Radio Button](https://optics-framework.org/docs/reference/keywords/actions#press-radio-button) |
 | Swipe Seekbar To Right Android | Deprecated: use Swipe From Element | [Swipe Seekbar To Right Android](https://optics-framework.org/docs/reference/keywords/actions#swipe-seekbar-to-right-android) |
@@ -9405,7 +9449,7 @@ Press Checkbox and Press Radio Button still work but log a warning. Use [Press E
 
 - **CSV and YAML suites, `optics live` and `optics serve`** have every keyword on this page.
 - **The MCP server** gives a small set of core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](https://optics-framework.org/docs/reference/mcp).
-- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup, Start Popup Run and the three deprecated ones. Some parameters differ. See [Write tests in Python](https://optics-framework.org/docs/create/python).
+- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See [Write tests in Python](https://optics-framework.org/docs/create/python).
 - **`optics generate`** skips flow-control keywords and a few others when it converts a suite to code.
 
 ## Python and Robot Framework only
@@ -10237,26 +10281,6 @@ Good to know:
 - `1.5` fails the step. Use `1` or `2`.
 - We recommend an assertion with a timeout instead. It continues as soon as the element appears.
 
-## Popups
-
-### Start Popup Run
-
-Sets the popup counts and the list of popup events to zero. It has no parameters.
-
-```csv
-Checkout,Start Popup Run
-```
-
-```yaml
-- Start Popup Run
-```
-
-Good to know:
-
-- In `optics execute`, the runner keeps one popup record for the whole run, so this step changes nothing.
-- `optics serve` starts a new popup run before each action, so each request has its own `max_per_run` limit.
-- See [Handle popups](https://optics-framework.org/docs/advanced/popups).
-
 ## Deprecated
 
 These keywords still run but will be removed. Use the replacement shown.
@@ -10316,6 +10340,8 @@ Sign In,Assert Presence,Welcome|Trail Runner 2,20,any
 ```
 
 We recommend Assert Presence for most checks. Use Assert Visibility when the element must be on screen right now, not only in the page. For how `element` values are read, see [Element arguments](https://optics-framework.org/docs/reference/keywords/#element-arguments).
+
+Assertions use the project's [popup rules](https://optics-framework.org/docs/advanced/popups). When the element is not found and a rule closes a popup, the assertion looks again with its full timeout. See [Steps that check for popups](https://optics-framework.org/docs/advanced/popups#steps-that-check-for-popups).
 
 ## Check several elements at once
 
@@ -10435,8 +10461,9 @@ Home,Validate Screen,Welcome|Trail Runner 2,10
 
 Good to know:
 
-- Validate Screen never fails a step. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.
+- Validate Screen does not fail a step when the elements are not found. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.
 - From Python, `optics serve` and MCP it returns true or false.
+- A popup that stops the step still fails it, for example a popup with no rule (E0206) or a rule that reached its limit (E0407).
 
 ### Assert Text
 
@@ -10493,7 +10520,7 @@ Checkout,Is Element,${terms_checkbox},checked,5
 Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
-- `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
+- `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes. When a popup is on screen at that time, the popup rules run first, and a popup with no rule fails the step with E0206.
 - `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. OCR and image matches do not have these states. An element found only by OCR or image fails the step with error E0401: `Cannot check the <state> state of '<element>': it was found only by OCR or image.`
 - On a web page, Optics reads the state from the page. This includes a web page that Appium drives in a mobile browser. `disabled` and `aria-disabled="true"` count as disabled. `aria-checked`, `checked` and `selected` count as checked.
 - On Samsung Tizen and LG webOS TVs, `checked` and `unchecked` fail with error E0105. See [TV](https://optics-framework.org/docs/platforms/tv).
@@ -11075,7 +11102,7 @@ Optics <newest> is out (you have 1.11.5). Run `optics upgrade`.
 
 The notice gives the headline of each newer release, at most three, from [optics-framework.org/release.json](https://optics-framework.org/release.json). After an upgrade, the first command shows the headline of the new release one time, as `New in Optics <version>: …`. The check runs in the background, and a command waits at most 0.5 seconds for it. Optics keeps the result in `~/.optics/update.json`. `optics live`, `optics serve` and `optics mcp` show the notice in their own output.
 
-Optics does not check when the `CI` variable is set. To stop the check, set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1`. See [Privacy](https://optics-framework.org/privacy).
+Optics does not check when the `CI` variable is set. To stop the check, set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1`. See [Privacy](https://optics-framework.org/privacy). These settings do not stop [`optics upgrade`](#optics-upgrade), which always asks PyPI for the newest release.
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
 
@@ -11200,7 +11227,9 @@ For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element
 **Warning:**
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform).
 
-**Editor mode** (`--edit`) uses these keys: ↑/↓ to move, Space to edit or toggle, S to save, Q to quit. Saving rewrites the whole file and removes your comments. Editing an engine list replaces it with `enabled: true` entries and drops their `url` and `capabilities`, so we recommend guided mode or a text editor for engine settings.
+**Editor mode** (`--edit`) uses these keys: ↑/↓ to move, Space to edit or toggle, S to save, Q to quit. A setting that holds a list or a map, such as `popup_rules`, takes YAML. Saving rewrites the whole file and removes your comments. Editing an engine list replaces it with `enabled: true` entries and drops their `url` and `capabilities`, so we recommend guided mode or a text editor for engine settings.
+
+When config.yaml has a value that is not valid, the editor still opens. It shows the error, such as `E0501 in <folder>/config.yaml: …`, and the setting shows its value with `(not valid)`. Edit the setting to correct it.
 
 ```shell
 $ optics configure ./birch-tests
@@ -11305,7 +11334,9 @@ It takes no flags. Optics keeps the extras that you installed, such as `[appium]
 | Windows | Prints the command. Run it from PowerShell, because Windows locks `optics.exe` while it runs. |
 | A Python that the OS manages, or Conda | Prints why it cannot upgrade there, and how to make a virtual environment. |
 
-When you have the newest release, it prints `Optics 1.11.5 is the newest release.` and exits with code 0. When it only prints a command, it exits with code 1.
+Before it runs the installer, it prints `Upgrading Optics <installed> to <newest>.` It asks PyPI for the newest release also when `CI`, `OPTICS_NO_UPDATE_CHECK` or `DO_NOT_TRACK` is set. With `DO_NOT_TRACK=1` it asks only PyPI. When PyPI does not answer, it prints `Could not look up the newest release on PyPI.` and the installer gets the newest release that it finds.
+
+When you have the newest release, it prints `Optics <version> is the newest release.` and exits with code 0. When it only prints a command, it exits with code 1.
 
 ## `optics dry_run`
 
@@ -11413,7 +11444,7 @@ $ optics execute birch-tests | cat
 16:52:48 FAIL     run "Execution": Some test cases failed
 ```
 
-`plain` and `jsonl` show no totals and no **Failures** box. A run that passes ends with the last `PASS` line. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error from [error detection](https://optics-framework.org/docs/run/error-detection) shows only in that last line, so read `junit_output.xml` for the totals and the errors.
+`plain` and `jsonl` show no totals and no **Failures** box. A run that passes ends with the last `PASS` line. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error from [error detection](https://optics-framework.org/docs/run/error-detection) shows as a failed test case before that line, with each match: `FAIL     test case "on-screen-error-detection": PAY_FAIL | high | payment failed | Payment was declined`. Read `junit_output.xml` for the totals.
 
 A step that self-heal recovered shows `HEALED` in place of `PASS`. Each `jsonl` line has the fields `entity_type` (`test_case`, `module`, `keyword` or `execution`), `name`, `status`, `message`, `code`, `elapsed`, `timestamp`, `entity_id` and `parent_id`. To keep the events in a file, send stdout to it:
 
@@ -12411,6 +12442,7 @@ image_detection:
 | `frame` | Required | `{width, height}`: the size in pixels of the positions that keywords use. Use the camera frame size. Without a camera, use the screen size of the device. |
 | `serial` | None | The USB serial number of the dongle. Set it when more than one dongle is plugged in. |
 | `port` | None | A fixed serial port (`/dev/cu.usbmodem1101`, `COM5`) in place of `serial`. Set one of the two, not both. `optics serve` and `optics mcp` refuse it. |
+| `host` | None | The Bluetooth name or address of the paired device to drive. The dongle lets only that device connect. A device that the dongle cannot choose stops the run with `E0501`. See [`ble` driver](https://optics-framework.org/docs/platforms/production#ble-driver). |
 | `launch` | The default of the platform | The methods that `Launch App` tries, in sequence: `launcher_key`, `drawer_search`, `drawer_tap`, `search_key`, `home_icon`, `drawer_list`. See [Open apps](https://optics-framework.org/docs/platforms/production#open-apps). |
 | `app_search` | None | Android only. The position `{x, y}` of the search box in the app drawer, in `frame` pixels. With a camera, `drawer_search` finds the search box without it. |
 
@@ -12424,7 +12456,7 @@ The driver refuses the settings of the driver before 1.11.5: `device_id`, `pixel
 | `token` | None | HTTP only. Optics sends it as `Authorization: Bearer <token>`. Optics masks it in logs. |
 | `header_size` | `8` | TCP only. Bytes in the length header of the frame server: `4` or `8`. |
 | `byte_order` | `little` | TCP only. The byte order of the length header: `little` or `big`. |
-| `find_screen` | None | `brightness`, `frame` or `pointer`: Optics finds the corners of the screen in the camera frame. `pointer` also finds a dark screen, and needs a `ble` driver on a platform other than `android`. See [Find the screen](https://optics-framework.org/docs/platforms/production#find-the-screen). |
+| `find_screen` | None | `auto`, `brightness`, `frame` or `pointer`: Optics finds the corners of the screen in the camera frame. `pointer` also finds a dark screen, and needs a `ble` driver on a platform other than `android`. `auto` tries `brightness`, then `pointer` when the driver shows a pointer. See [Find the screen](https://optics-framework.org/docs/platforms/production#find-the-screen). |
 | `deskew_corners` | None | The four corners of the screen in the camera frame, as `"x,y"`: top left, top right, bottom right, bottom left. Set this or `find_screen`, not both. |
 | `out_width`, `out_height` | `1080`, `1920` | The size of the frame, at most `8192` on each side. Set the screen size of the device. If you set them without `find_screen` or `deskew_corners`, Optics scales each frame to this size. |
 | `rotation` | None | `clockwise` or `counterclockwise`: a quarter turn after Optics cuts out the screen. |
@@ -12444,6 +12476,13 @@ For a `url` in config.yaml, set `token` too. Keep the token out of the file: `to
 Optics checks `deskew_corners`, `find_screen` and `rotation` when the session starts. Four points that are not the corners of a convex screen, in order, stop the run. A `rotation` value other than `clockwise` or `counterclockwise` also stops the run.
 
 A frame must arrive within 15 seconds. An HTTP reply or a TCP frame larger than 64 MiB fails with [E0304](https://optics-framework.org/docs/reference/errors#e03-screenshots). When the camera does not see the screen, because the screen is off or the device moved, the run stops with `E0305`.
+
+| `usb_screenshot` capability | Default | What it does |
+|---|---|---|
+| `serial` | None | The Android serial or the iOS UDID. Set it when more than one phone is attached. |
+| `platform` | The `platform` of the driver | `android` (`adb`) or `ios` (`xcrun devicectl`). Set it when no `ble` driver is enabled. |
+
+`usb_screenshot` reads the screen of a phone on USB and does no taps. See [Screen over USB](https://optics-framework.org/docs/platforms/production#screen-over-usb).
 
 There is no UI tree over Bluetooth, so XPath and UI-tree text do not work. Use text that OCR can read, or image templates. A project with `elements_sources: []` uses positions and keys only.
 
@@ -12529,7 +12568,16 @@ popup_rules:
 
 Each `popup_rules.json` in the project is read after this key. A rule in a file replaces a rule with the same name here.
 
-A rule that is not valid stops the run before it starts. The log names the field, such as `popup_rules.0.action`, and the panel then shows `Cannot start: E0104` and `No driver enabled`, because Optics could not read config.yaml. Fix the rule, not the driver.
+A rule that is not valid stops the run before it starts. The panel shows `Cannot start: E0501` and names the rule and the field:
+
+```terminal
+╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
+│ popup_rules['Rate Us'].action.type: Input should be 'tap', 'back', 'alert',  │
+│ 'module' or 'none' (got 'swipe')                                             │
+│                                                                              │
+│ Fix it in birch/config.yaml, then re-run.                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## permissions
 
@@ -12542,8 +12590,8 @@ permissions:
   android.permission.READ_CONTACTS: allow
 ```
 
-- The value is `allow` or `deny`. Any other value stops the run before it starts, in the same way as a popup rule that is not valid.
-- The names are `camera`, `location`, `notifications`, `microphone`, `background_location`, `contacts`, `calendar`, `phone`, `call_log`, `sms`, `storage`, `photos`, `videos`, `audio`, `bluetooth`, `nearby_wifi`, `body_sensors` and `activity_recognition`, or a full `android.permission.*` name. An unknown name fails Launch App with E0501.
+- The value is `allow` or `deny`. Any other value stops the run before it starts with `Cannot start: E0501`, for example `permissions.camera: Input should be 'allow' or 'deny' (got 'yes_please')`.
+- The names are `camera`, `location`, `notifications`, `microphone`, `background_location`, `contacts`, `calendar`, `phone`, `call_log`, `sms`, `storage`, `photos`, `videos`, `audio`, `bluetooth`, `nearby_wifi`, `body_sensors` and `activity_recognition`, or a full `android.permission.*` name. An unknown name also stops the run before it starts with E0501, and the message lists the names.
 - The capabilities need `appPackage`. See [Grant permissions before launch](https://optics-framework.org/docs/platforms/android#grant-permissions-before-launch).
 - On iOS, Optics logs a warning and applies nothing. See [Answer system alerts](https://optics-framework.org/docs/platforms/ios#answer-system-alerts).
 
@@ -13473,8 +13521,8 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `ba
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](https://optics-framework.org/docs/platforms/web#use-a-remote-browser). |
 | `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](https://optics-framework.org/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](https://optics-framework.org/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
 | `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. With `[]`, the session starts without the screen. See [Sessions without a screen source](#sessions-without-a-screen-source). |
-| `text_detection` | none, or the camera default | OCR engines, for example `["rapidocr"]`. A session that reads a camera gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. `[]` turns OCR off. |
-| `image_detection` | none, or the camera default | Image engines, for example `["templatematch"]`. A session that reads a camera gets `templatematch`. |
+| `text_detection` | none, or the camera default | OCR engines, for example `["rapidocr"]`. A session that reads the screen only as a picture, from a camera or `usb_screenshot`, gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. `[]` turns OCR off. |
+| `image_detection` | none, or the camera default | Image engines, for example `["templatematch"]`. A session that reads a camera or `usb_screenshot` gets `templatematch`. |
 | `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
 | `ai_self_heal` | `OPTICS_AI_SELF_HEAL`, else off | Turns on [AI self-heal](https://optics-framework.org/docs/elements/self-heal). |
 | `llm_provider` | `OPTICS_LLM_PROVIDER`, else `gemini` | The LLM engine for self-heal: `gemini`, `openai` or `anthropic`. |
@@ -13558,6 +13606,8 @@ The `ble` driver has no element source of its own. When you leave out `elements_
   "elements_sources": ["camera_screenshot"]
 }
 ```
+
+A phone on the server's USB can give its own screenshots in place of a camera. Name `usb_screenshot` in `elements_sources`. The session gets the same OCR and `templatematch` defaults. Only a `stdio` server permits it: an `http` server refuses it with `E0501`, because it would read a phone attached to the server. See [Screen over USB](https://optics-framework.org/docs/platforms/production#screen-over-usb).
 
 A session that cannot list rows still starts. The reply says what it lacks, in place of the first screen:
 
@@ -14116,7 +14166,7 @@ $ curl -s -X PUT "http://127.0.0.1:8000/v1/sessions/$SID/modules" \
 A rule that is not valid returns `400` with E0501, and the old rules stay:
 
 ```json
-{"detail": {"type": "optics:config", "code": "E0501", "status": 400, "message": "popup_rules: rule 1 is invalid (: Value error, retry_step needs an action that dismisses the popup): 1 validation error for PopupRule", "hint": "Correct config.yaml, or add the missing file.", "details": null, "meta": null, "cause": null}}
+{"detail": {"type": "optics:config", "code": "E0501", "status": 400, "message": "popup_rules['survey']: retry_step needs an action that dismisses the popup: 1 validation error for list[function-after[_consistent(), PopupRule]]", "hint": "Correct config.yaml, or add the missing file.", "details": null, "meta": null, "cause": null}}
 ```
 
 A popup with no rule fails the step with `409` and E0206:
@@ -14438,7 +14488,7 @@ Not every failure has a code. See [Messages without a code](#messages-without-a-
 
 | Code | What happened | What to do |
 |---|---|---|
-| `E0501` | **A required setting or file is missing.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised when a project has no test cases file or no modules file (`Missing required files in <folder>: test_cases, modules`). Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set, and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty (`The config uses ${NAME}, but the NAME environment variable is not set or is empty.`), and for a `./` path in config.yaml that does not exist. `optics serve` and `optics mcp` over HTTP also raise it for `project_path`, `credentials_path`, a `file:` URL and a `Read Data` file, and `optics serve` for `OPTICS_CORS_ORIGINS=*`. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
+| `E0501` | **A required setting or file is missing.** A file, folder or setting Optics needs isn't there: the project folder doesn't exist, no driver or element source is enabled, a `Read Data` file or `ENV:` variable is missing, a CSV is empty, or config.yaml can't be parsed. Also raised when a project has no test cases file or no modules file (`Missing required files in <folder>: test_cases, modules`). Also raised for a Playwright setting that is not valid (`device`, `storage_state`, `protocol`, `context`), for an environment variable in `url` or `headers` that is not set, and when `optics serve` or `optics mcp` get `${NAME}`, a `storage_state` path or `Read Data` with `ENV:`. Also raised for a Chrome or Edge `profile` that matches none or more than one (`No browser profile '<name>'. Profiles: ...`). Also raised for `profile` and `user_data_dir` set together, for a `profile` over HTTP, `optics serve` or a remote `url`, and for `user_data_dir` in an API session. Also raised for a `credentials_path` file that is missing or is not a Google service account key. Also raised for a `$NAME` or `${NAME}` in config.yaml when the environment variable is not set or is empty (`The config uses ${NAME}, but the NAME environment variable is not set or is empty.`), and for a `./` path in config.yaml that does not exist. `optics serve` and `optics mcp` over HTTP also raise it for `project_path`, `credentials_path`, a `file:` URL and a `Read Data` file, and `optics serve` for `OPTICS_CORS_ORIGINS=*`. Also raised for a config.yaml value that is not valid, such as a value of the wrong type, a popup rule or a `permissions` entry, and for a rule in `popup_rules.json` that is not valid. The message names the setting and the value, such as `popup_rules['Rate Us'].action.type: Input should be 'tap', 'back', 'alert', 'module' or 'none' (got 'swipe')`. In `optics live`, also raised by `/save` with nothing recorded and by plain-English mode with no LLM engine enabled. | Check the path or setting in the message. Set the environment variable before the run. For a profile, pick one from the list in the message. See [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile). Run `optics doctor <folder>` to check config.yaml. Enable one driver and its element sources. |
 | `E0503` | **A setting has a value that is not valid.** A config list or API file has the wrong shape, or a YAML file can't be parsed. Also raised for an empty `--include` or `--exclude` name. Also raised for an elements file with `Element_Name` but no `Element_ID` column, for example `Element_Name,Element_Locator`: `The elements file has Element_Name but no Element_ID column, so no element has a locator.` Also raised when two test cases have the same setup or teardown role: `The test cases have more than one test setup: '<first>' and '<second>'`. | Write each engine as a list item with a name: `- appium: {enabled: true, ...}`. Check YAML indentation. See [config.yaml](https://optics-framework.org/docs/reference/config#engine-lists) and [API definitions](https://optics-framework.org/docs/reference/files#api-definitions). For an elements file, use the header `Element_Name,Element_ID`. For two setups, keep one name that ends with "Setup" and rename the other. See [Setup and teardown](https://optics-framework.org/docs/reference/files#setup-and-teardown). |
 
 ## E06: Modules and engines
@@ -14612,7 +14662,7 @@ Make a new virtual environment outside these folders, for example in your home f
 
 ### "Cannot start: E0104": No driver enabled in …/config.yaml
 
-No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow) needs no driver.
+No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error, and fell back to defaults. A value of the wrong type stops the run with `Cannot start: E0501` instead, and the message names the setting, such as `ai_self_heal: Input should be a valid boolean`. A suite that uses only [flow control keywords](https://optics-framework.org/docs/reference/keywords/flow) needs no driver.
 
 - Run `optics doctor <project>`. Its `config: file` row shows whether the file parses.
 - Set `enabled: true` on one driver, or run `optics configure <project>` to write a working config.
@@ -15466,7 +15516,7 @@ The desktop setup scripts under `/desktop/` prepare a computer for desktop tests
 
 Optics runs on your own machine or CI. Your suites, screenshots and results stay where you run them. Two things reach this site, and you can turn each one off.
 
-**Update check:** once a day, and never in CI, Optics asks PyPI for the newest version and fetches `/release.json` from this site to show what the release adds. The request carries the Optics version, the part of Optics that asked (the CLI, `optics live`, `optics serve` or the MCP server) and your operating system, and it is counted like any other request. Set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1` to stop it.
+**Update check:** once a day, and never in CI, Optics asks PyPI for the newest version and fetches `/release.json` from this site to show what the release adds. The request carries the Optics version, the part of Optics that asked (the CLI, `optics live`, `optics serve` or the MCP server) and your operating system, and it is counted like any other request. Set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1` to stop it. When you run `optics upgrade`, Optics makes the same requests, also in CI. With `DO_NOT_TRACK=1` it asks only PyPI.
 
 **Feedback from agents:** the Optics MCP server gives AI agents a `send_feedback` tool. An agent can use it without asking you first, to send a short report: the kind of report and its effect on the task, the task, what it tried, the error text, what would have helped, the tool involved, the Optics version, the agent's name, the transport and your operating system. The site stores the report with the time and your country, not your IP address. Optics removes keys, tokens, email addresses and the secret values of the session before it sends a report, and the site removes keys, tokens, passwords and email addresses again before it stores one. These filters find known patterns only, so other personal data in the text of a report stays. Once a day, the site puts the reports of the day in a private GitHub repository. Only the Optics maintainers read the reports. Set `OPTICS_NO_FEEDBACK=1` or `DO_NOT_TRACK=1` to remove the tool.
 

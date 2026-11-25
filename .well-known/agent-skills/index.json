@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Drive Android, iOS, smart TV, desktop app and browser sessions with the Optics (optics-framework) MCP server, and write or fix Optics CSV/YAML test suites (test_cases, modules, elements, error_definitions). Use when automating or testing a real app UI with Optics, or when an Optics keyword name, parameter or default is uncertain.",
       "url": "/.well-known/agent-skills/optics-framework/SKILL.md",
-      "digest": "sha256:848055e7531c4ffc7f9d080c5c347092e5e0bfa39ae68d0a1f38b71a9bbbedeb"
+      "digest": "sha256:2edbaed34f0ad4a9a58c9db29248cb4ba0fc5254f4daa4c52b1e46d8c8c42397"
     }
   ]
 }

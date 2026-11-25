@@ -116,9 +116,9 @@
 10:12:34 <span class="c-pass">PASS</span>           popup "rate_prompt" handled</code></pre></figure></div></li></ol>
 <p>A file that Optics cannot read, or a rule that is not valid, stops the run before it starts. <code class="ic">optics dry_run</code> does the same check:</p>
 <figure class="code doc-code no-copy" data-lang="terminal"><pre><code>╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
-│ birch/test_data/popup_rules.json: rule 1 is invalid (detect: Value error,    │
-│ detect needs text_contains, resource_id or xpath; action: Value error,       │
-│ action 'tap' needs a target)                                                 │
+│ birch/test_data/popup_rules.json: popup_rules['rate_prompt'].detect: detect  │
+│ needs text_contains, resource_id or xpath;                                   │
+│ popup_rules['rate_prompt'].action: action 'tap' needs a target               │
 │                                                                              │
 │ Fix that popup_rules.json, then re-run.                                      │
 ╰──────────────────────────────────────────────────────────────────────────────╯</code></pre></figure>
@@ -166,7 +166,7 @@ Close Survey,Press Element,${survey_confirm}">Copy</button><pre><code><span clas
 <figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{&quot;name&quot;: &quot;delete_account&quot;, &quot;detect&quot;: {&quot;text_contains&quot;: [&quot;Delete your account?&quot;]}, &quot;sensitive&quot;: true}">Copy</button><pre><code>{<span class="c-mod">"name"</span>: <span class="c-lit">"delete_account"</span>, <span class="c-mod">"detect"</span>: {<span class="c-mod">"text_contains"</span>: [<span class="c-lit">"Delete your account?"</span>]}, <span class="c-mod">"sensitive"</span>: <span class="c-info">true</span>}</code></pre></figure>
 <figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:15:40 <span class="c-fail">FAIL</span>         keyword "Press Element" (0.9s): Popup 'delete_account' ended the run; nothing was pressed [E0408]</code></pre></figure>
 <h2 id="check-before-every-step">Check before every step<a class="anchor" href="#check-before-every-step" aria-label="Link to this section">#</a></h2>
-<p>Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set <code class="ic">check: before_every_step</code> to try the rule before each action step that finds an element. See <a href="#steps-that-check-for-popups">Steps that check for popups</a> for the keywords:</p>
+<p>Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set <code class="ic">check: before_every_step</code> to try the rule before each step that finds an element. See <a href="#steps-that-check-for-popups">Steps that check for popups</a> for the keywords:</p>
 <figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{
   &quot;name&quot;: &quot;session_timeout&quot;,
   &quot;check&quot;: &quot;before_every_step&quot;,
@@ -178,6 +178,7 @@ Close Survey,Press Element,${survey_confirm}">Copy</button><pre><code><span clas
   <span class="c-mod">"detect"</span>: {<span class="c-mod">"resource_id"</span>: <span class="c-lit">"com.birch.shop:id/session_expired"</span>},
   <span class="c-mod">"action"</span>: {<span class="c-mod">"type"</span>: <span class="c-lit">"tap"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"Sign in again"</span>}
 }</code></pre></figure>
+<p>When a rule closes a popup and the step tries again, the before-every-step rules run again first.</p>
 <p>Each such step reads the page source once more, so use this only for popups that need it.</p>
 <h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
 <p><code class="ic">max_per_step</code> and <code class="ic">max_per_run</code> stop a popup that comes back again and again. When a rule reaches a limit, the step fails with <a href="../../docs/reference/errors#e04-keywords-and-parameters">E0407</a> and the run continues:</p>
@@ -188,9 +189,11 @@ Close Survey,Press Element,${survey_confirm}">Copy</button><pre><code><span clas
 <p>Copy text from the message into a new rule. The screenshot and the page source in the output folder show the popup.</p>
 <ul><li>Optics finds dialogs, alerts, bottom sheets and system prompts. A popup that the app draws as a normal view is not found as a dialog, so the step fails with E0201 as before. Write a rule for it.</li><li>Optics looks for unknown popups only when the project has at least one rule.</li></ul>
 <h2 id="steps-that-check-for-popups">Steps that check for popups<a class="anchor" href="#steps-that-check-for-popups" aria-label="Link to this section">#</a></h2>
-<p>The rules run for keywords that find an element and act on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.</p>
+<p>The rules run for keywords that find an element:</p>
+<ul><li>Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.</li><li>Assert Presence, Assert Visibility, Assert Text, Is Element, Validate Element and Validate Screen. When the element is not found and a rule closes a popup, the assertion looks again with its full timeout.</li></ul>
+<p>A popup that stops the step, such as a popup with no rule (E0206), fails Validate Screen too. Is Element with <code class="ic">invisible</code> passes only when no popup is on screen.</p>
 <p>Other keywords do not check for popups:</p>
-<ul><li>Assertions, such as Assert Presence and Validate Element. <code class="ic">check: before_every_step</code> does not apply to them either. When you put Assert Presence before an action, as the platform pages recommend, a popup that appears first makes the assertion fail with E0201. Move the assertion after the action, or close the popup with <a href="../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a> before the assertion.</li><li>Detect And Press, Swipe Until Element Appears and Scroll Until Element Appears.</li><li>Steps that use coordinates or the whole screen, such as Press By Coordinates, Swipe and Scroll.</li></ul>
+<ul><li>Detect And Press, Swipe Until Element Appears and Scroll Until Element Appears.</li><li>Steps that use coordinates or the whole screen, such as Press By Coordinates, Swipe and Scroll.</li></ul>
 <h2 id="evidence-and-events">Evidence and events<a class="anchor" href="#evidence-and-events" aria-label="Link to this section">#</a></h2>
 <p>Each time a rule acts or a popup stops a step, Optics saves files to the output folder:</p>
 <div class="table-wrap"><table><thead><tr><th>File</th><th>When</th></tr></thead><tbody><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_before.png</code></td><td>Before the action, and for a popup with no rule.</td></tr><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_after.png</code></td><td>After the action.</td></tr><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_source.xml</code></td><td>When the popup stops the step or the run.</td></tr></tbody></table></div>

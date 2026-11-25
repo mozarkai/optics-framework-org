@@ -161,11 +161,11 @@ A CI log is not a terminal, so `optics execute` and `optics dry_run` print one l
 16:52:47 FAIL     test case "Shopper can find a shoe" (30.7s) [E0201]
 ```
 
-The lines show no totals. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error shows only in that line, so publish `junit_output.xml` as the examples on this page do.
+The lines show no totals. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error shows as a failed `on-screen-error-detection` test case before that line. For the totals, publish `junit_output.xml` as the examples on this page do.
 
 For a tool that reads the run, add `--output jsonl` to get one JSON event on each line. Do not add `--no-use-printer`. It shows no progress, only the logs. See [Choose the output](https://optics-framework.org/docs/reference/cli#choose-the-output).
 
-Optics does not check for updates when the `CI` variable is set, so the log has no update notice.
+Optics does not check for updates when the `CI` variable is set, so the log has no update notice. `optics upgrade` still asks PyPI for the newest release.
 
 ## Decide pass or fail
 

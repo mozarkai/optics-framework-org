@@ -170,7 +170,7 @@ $ curl -s -X PUT "http://127.0.0.1:8000/v1/sessions/$SID/modules" \
 A rule that is not valid returns `400` with E0501, and the old rules stay:
 
 ```json
-{"detail": {"type": "optics:config", "code": "E0501", "status": 400, "message": "popup_rules: rule 1 is invalid (: Value error, retry_step needs an action that dismisses the popup): 1 validation error for PopupRule", "hint": "Correct config.yaml, or add the missing file.", "details": null, "meta": null, "cause": null}}
+{"detail": {"type": "optics:config", "code": "E0501", "status": 400, "message": "popup_rules['survey']: retry_step needs an action that dismisses the popup: 1 validation error for list[function-after[_consistent(), PopupRule]]", "hint": "Correct config.yaml, or add the missing file.", "details": null, "meta": null, "cause": null}}
 ```
 
 A popup with no rule fails the step with `409` and E0206:

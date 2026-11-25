@@ -14,6 +14,8 @@ Sign In,Assert Presence,Welcome|Trail Runner 2,20,any
 
 We recommend Assert Presence for most checks. Use Assert Visibility when the element must be on screen right now, not only in the page. For how `element` values are read, see [Element arguments](https://optics-framework.org/docs/reference/keywords/#element-arguments).
 
+Assertions use the project's [popup rules](https://optics-framework.org/docs/advanced/popups). When the element is not found and a rule closes a popup, the assertion looks again with its full timeout. See [Steps that check for popups](https://optics-framework.org/docs/advanced/popups#steps-that-check-for-popups).
+
 ## Check several elements at once
 
 Assert Presence, Assert Visibility, Validate Element and Validate Screen accept several elements separated by `|` (a pipe). `rule` decides whether `any` or `all` of them must be found.
@@ -132,8 +134,9 @@ Home,Validate Screen,Welcome|Trail Runner 2,10
 
 Good to know:
 
-- Validate Screen never fails a step. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.
+- Validate Screen does not fail a step when the elements are not found. In a CSV or YAML suite it only waits and logs the result. Use Assert Presence when the check must fail the test.
 - From Python, `optics serve` and MCP it returns true or false.
+- A popup that stops the step still fails it, for example a popup with no rule (E0206) or a rule that reached its limit (E0407).
 
 ### Assert Text
 
@@ -190,7 +193,7 @@ Checkout,Is Element,${terms_checkbox},checked,5
 Good to know:
 
 - `visible` checks presence in the UI tree, the same way Assert Presence does.
-- `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes.
+- `invisible` doesn't wait for an element to go away. If the element is there, the step fails at once. If it isn't, the step waits the full timeout, then passes. When a popup is on screen at that time, the popup rules run first, and a popup with no rule fails the step with E0206.
 - `enabled`, `disabled`, `checked` and `unchecked` need an element found in the UI tree or in a web page. OCR and image matches do not have these states. An element found only by OCR or image fails the step with error E0401: `Cannot check the <state> state of '<element>': it was found only by OCR or image.`
 - On a web page, Optics reads the state from the page. This includes a web page that Appium drives in a mobile browser. `disabled` and `aria-disabled="true"` count as disabled. `aria-checked`, `checked` and `selected` count as checked.
 - On Samsung Tizen and LG webOS TVs, `checked` and `unchecked` fail with error E0105. See [TV](https://optics-framework.org/docs/platforms/tv).

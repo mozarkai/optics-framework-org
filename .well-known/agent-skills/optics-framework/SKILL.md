@@ -42,6 +42,11 @@ To install Optics and connect its MCP server, follow https://optics-framework.or
      Do every step on the app with these tools. Do not use AppleScript, `osascript`, `xdotool`
      or other UI automation on it. If the optics tools are missing, run `optics mcp install`,
      then start a new agent session.
+   - Locked-down device: `driver: "ble"` with an airhand dongle on USB, which acts as a
+     Bluetooth mouse and keyboard. `capabilities: {"platform": "android", "frame": {"width": 1080,
+     "height": 2400}}`; add `"host": "<Bluetooth name>"` when several devices are paired.
+     To read the screen, add `elements_sources: ["camera_screenshot"]` for a webcam, or
+     `["usb_screenshot"]` for the phone's own screenshots over USB (stdio server only).
 2. Act on refs with `tap`, `type_text`, `scroll`, `press_key` (`"back"` goes back) and
    `launch_app`. Add `expect_present` / `expect_absent` so the reply says `verified: pass`.
    Use `batch` for several `tap`, `type_text` or `press_key` steps on one screen, such as a form.
