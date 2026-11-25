@@ -619,26 +619,6 @@ Good to know:
 - `1.5` fails the step. Use `1` or `2`.
 - We recommend an assertion with a timeout instead. It continues as soon as the element appears.
 
-## Popups
-
-### Start Popup Run
-
-Sets the popup counts and the list of popup events to zero. It has no parameters.
-
-```csv
-Checkout,Start Popup Run
-```
-
-```yaml
-- Start Popup Run
-```
-
-Good to know:
-
-- In `optics execute`, the runner keeps one popup record for the whole run, so this step changes nothing.
-- `optics serve` starts a new popup run before each action, so each request has its own `max_per_run` limit.
-- See [Handle popups](/docs/advanced/popups).
-
 ## Deprecated
 
 These keywords still run but will be removed. Use the replacement shown.

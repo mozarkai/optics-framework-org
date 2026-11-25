@@ -218,7 +218,6 @@ Over [`optics serve`](/docs/reference/cli), MCP and [Python](/docs/create/python
 | Execute Script | Run a driver command or browser JavaScript | [Execute Script](/docs/reference/keywords/actions#execute-script) |
 | Get Text | Read an element's text | [Get Text](/docs/reference/keywords/actions#get-text) |
 | Sleep | Wait a number of seconds | [Sleep](/docs/reference/keywords/actions#sleep) |
-| Start Popup Run | Set the popup counts and events to zero | [Start Popup Run](/docs/reference/keywords/actions#start-popup-run) |
 | Press Checkbox | Deprecated: use Press Element | [Press Checkbox](/docs/reference/keywords/actions#press-checkbox) |
 | Press Radio Button | Deprecated: use Press Element | [Press Radio Button](/docs/reference/keywords/actions#press-radio-button) |
 | Swipe Seekbar To Right Android | Deprecated: use Swipe From Element | [Swipe Seekbar To Right Android](/docs/reference/keywords/actions#swipe-seekbar-to-right-android) |
@@ -259,7 +258,7 @@ Press Checkbox and Press Radio Button still work but log a warning. Use [Press E
 
 - **CSV and YAML suites, `optics live` and `optics serve`** have every keyword on this page.
 - **The MCP server** gives a small set of core tools by default. Its `run_keyword` tool runs most other keywords, but not the flow control keywords. See [MCP server](/docs/reference/mcp).
-- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup, Start Popup Run and the three deprecated ones. Some parameters differ. See [Write tests in Python](/docs/create/python).
+- **Python and Robot Framework** have every keyword except Execute Module, Initialise Setup and the three deprecated ones. Some parameters differ. See [Write tests in Python](/docs/create/python).
 - **`optics generate`** skips flow-control keywords and a few others when it converts a suite to code.
 
 ## Python and Robot Framework only

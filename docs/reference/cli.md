@@ -32,7 +32,7 @@ Optics <newest> is out (you have 1.11.5). Run `optics upgrade`.
 
 The notice gives the headline of each newer release, at most three, from [optics-framework.org/release.json](https://optics-framework.org/release.json). After an upgrade, the first command shows the headline of the new release one time, as `New in Optics <version>: …`. The check runs in the background, and a command waits at most 0.5 seconds for it. Optics keeps the result in `~/.optics/update.json`. `optics live`, `optics serve` and `optics mcp` show the notice in their own output.
 
-Optics does not check when the `CI` variable is set. To stop the check, set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1`. See [Privacy](/privacy).
+Optics does not check when the `CI` variable is set. To stop the check, set `OPTICS_NO_UPDATE_CHECK=1` or `DO_NOT_TRACK=1`. See [Privacy](/privacy). These settings do not stop [`optics upgrade`](#optics-upgrade), which always asks PyPI for the newest release.
 
 If Optics can't load one of its own dependencies, every command stops with a red "Cannot start" panel. The panel shows the underlying error and the reinstall command for your environment, for example `pipx reinstall optics-framework` or `pip install --force-reinstall optics-framework`.
 
@@ -159,7 +159,9 @@ For `android`, `ios` and `desktop`, Optics also enables the `appium_web` element
 The `web-selenium` answer writes `capabilities: {}`, which Selenium can't start with. Add `browserName: chrome` (or `firefox`) under `capabilities` before you run. See [config.yaml](/docs/reference/config#examples-by-platform).
 :::
 
-**Editor mode** (`--edit`) uses these keys: [[↑]]/[[↓]] to move, [[Space]] to edit or toggle, [[S]] to save, [[Q]] to quit. Saving rewrites the whole file and removes your comments. Editing an engine list replaces it with `enabled: true` entries and drops their `url` and `capabilities`, so we recommend guided mode or a text editor for engine settings.
+**Editor mode** (`--edit`) uses these keys: [[↑]]/[[↓]] to move, [[Space]] to edit or toggle, [[S]] to save, [[Q]] to quit. A setting that holds a list or a map, such as `popup_rules`, takes YAML. Saving rewrites the whole file and removes your comments. Editing an engine list replaces it with `enabled: true` entries and drops their `url` and `capabilities`, so we recommend guided mode or a text editor for engine settings.
+
+When config.yaml has a value that is not valid, the editor still opens. It shows the error, such as `E0501 in <folder>/config.yaml: …`, and the setting shows its value with `(not valid)`. Edit the setting to correct it.
 
 ```shell
 $ optics configure ./birch-tests
@@ -264,7 +266,9 @@ It takes no flags. Optics keeps the extras that you installed, such as `[appium]
 | Windows | Prints the command. Run it from PowerShell, because Windows locks `optics.exe` while it runs. |
 | A Python that the OS manages, or Conda | Prints why it cannot upgrade there, and how to make a virtual environment. |
 
-When you have the newest release, it prints `Optics 1.11.5 is the newest release.` and exits with code 0. When it only prints a command, it exits with code 1.
+Before it runs the installer, it prints `Upgrading Optics <installed> to <newest>.` It asks PyPI for the newest release also when `CI`, `OPTICS_NO_UPDATE_CHECK` or `DO_NOT_TRACK` is set. With `DO_NOT_TRACK=1` it asks only PyPI. When PyPI does not answer, it prints `Could not look up the newest release on PyPI.` and the installer gets the newest release that it finds.
+
+When you have the newest release, it prints `Optics <version> is the newest release.` and exits with code 0. When it only prints a command, it exits with code 1.
 
 ## `optics dry_run`
 
@@ -370,7 +374,7 @@ $ optics execute birch-tests | cat
 16:52:48 FAIL     run "Execution": Some test cases failed
 ```
 
-`plain` and `jsonl` show no totals and no **Failures** box. A run that passes ends with the last `PASS` line. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error from [error detection](/docs/run/error-detection) shows only in that last line, so read `junit_output.xml` for the totals and the errors.
+`plain` and `jsonl` show no totals and no **Failures** box. A run that passes ends with the last `PASS` line. A run that fails ends with `FAIL run "Execution": Some test cases failed`. An on-screen error from [error detection](/docs/run/error-detection) shows as a failed test case before that line, with each match: `FAIL     test case "on-screen-error-detection": PAY_FAIL | high | payment failed | Payment was declined`. Read `junit_output.xml` for the totals.
 
 A step that self-heal recovered shows `HEALED` in place of `PASS`. Each `jsonl` line has the fields `entity_type` (`test_case`, `module`, `keyword` or `execution`), `name`, `status`, `message`, `code`, `elapsed`, `timestamp`, `entity_id` and `parent_id`. To keep the events in a file, send stdout to it:
 

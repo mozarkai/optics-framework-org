@@ -307,7 +307,7 @@ Optics refuses an expression or a filter with `E0406` when it uses something oth
 
 - `E0407`: a rule matched more than its `max_per_step` or `max_per_run` times.
 - `E0408`: the popup stayed after the rule's action, or the rule ended the step or the run (`sensitive`, action `none`, or `then` set to `fail_step` or `stop_run`).
-- `E0409`: a rule dismissed the popup. `_locate_and_act` catches it and looks for the element again, so it never leaves the keyword.
+- `E0409`: a rule dismissed the popup. `_popup_step` catches it and runs the step again, for actions and assertions, so it never leaves the keyword.
 
 A rule whose `module` action names a module that the session does not have ends the step with `E0601`. Each error from the guard has `details={"stop_run": <bool>}`.
 

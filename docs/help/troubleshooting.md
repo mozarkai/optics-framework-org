@@ -57,7 +57,7 @@ Make a new virtual environment outside these folders, for example in your home f
 
 ### "Cannot start: E0104": No driver enabled in …/config.yaml {#no-driver-enabled}
 
-No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error or a value of the wrong type, and fell back to defaults. A suite that uses only [flow control keywords](/docs/reference/keywords/flow) needs no driver.
+No entry under `driver_sources` has `enabled: true`, and the test cases use a keyword that needs a driver. Optics also prints this when it could not read `config.yaml` at all, for example because of a YAML syntax error, and fell back to defaults. A value of the wrong type stops the run with `Cannot start: E0501` instead, and the message names the setting, such as `ai_self_heal: Input should be a valid boolean`. A suite that uses only [flow control keywords](/docs/reference/keywords/flow) needs no driver.
 
 - Run `optics doctor <project>`. Its `config: file` row shows whether the file parses.
 - Set `enabled: true` on one driver, or run `optics configure <project>` to write a working config.

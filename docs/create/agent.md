@@ -6,7 +6,7 @@ level: Intermediate
 time: 10 min
 ---
 
-`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV or browser. The agent reads the screen as a list of rows, acts on a row by its reference, and sees what changed after each action. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
+`optics mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. It gives an AI agent eyes and hands on a phone, TV, desktop app or browser. The agent reads the screen as a list of rows, acts on a row by its reference, and sees what changed after each action. The agent explores your app, then writes an ordinary Optics suite that you review and run with `optics execute`.
 
 ::scene{name="agent" caption="The agent drives the app through Optics tools, reads the project format, and writes the suite files. You run them like any other suite."}
 
@@ -208,7 +208,7 @@ Results go to `execution_output/`. When a step fails, `failed_steps_elements.jso
 
 The server gives the agent:
 
-- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`.
+- **Session tools**: `start_session` (picks the driver, URL and device settings, and opens the app) and `terminate_session`. One session drives a browser with Playwright or Selenium, a phone or TV with Appium, a [desktop app](/docs/platforms/desktop) on macOS, Linux or Windows, or a [locked-down device](/docs/platforms/production) over Bluetooth. See [start_session](/docs/reference/mcp#start-session) for each one.
 - **Tools that act on the screen**: `tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `batch` (several steps on one screen, such as a form) and `check`. `observe` lists the screen and can add a screenshot. `run_keyword` runs any other keyword, such as `assert_text`.
 - **A feedback tool**: `send_feedback` sends a short report to the Optics maintainers when the agent is stuck or a task ends. Set `OPTICS_NO_FEEDBACK=1` to remove it. See [send_feedback](/docs/reference/mcp#send-feedback).
 - **Resources to read**: the steps the session ran as CSV rows, the current screen, the raw UI tree and the keyword catalogue. `optics://project-format` teaches the agent how to write suite files. `optics://browser-profiles` lists the Chrome and Edge profiles on your machine.
