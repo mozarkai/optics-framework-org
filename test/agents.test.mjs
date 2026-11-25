@@ -17,7 +17,7 @@ test("agents.md is published and every page it names on this site exists", () =>
 
 test("the homepage, its Markdown twin, llms.txt and the skill hand agents to agents.md", () => {
   const prompts = [...read("index.html").matchAll(/data-copy="(Read [^"]+)"/g)].map((m) => m[1]);
-  assert.equal(prompts.length, 4);
+  assert.equal(prompts.length, 5);
   for (const prompt of prompts) {
     assert.ok(prompt.startsWith(`Read ${ORIGIN}agents.md and follow it`), prompt);
     assert.ok(read("index.md").includes(prompt), `index.md lacks: ${prompt}`);

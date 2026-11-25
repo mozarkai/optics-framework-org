@@ -2,7 +2,7 @@
 
 > You are an AI coding agent. A person gave you this page and a task. Follow the steps in order. Each step checks before it changes something, so you can follow this page again after a restart: the work that is done is skipped.
 
-Optics is open-source test automation for Android, iOS, TV and web apps. Its MCP server, `optics mcp`, lets you drive a device or a browser and write the steps as a test suite that the person can run on every build.
+Optics is open-source test automation for Android, iOS, TV, web and desktop apps. Its MCP server, `optics mcp`, lets you drive a device or a browser and write the steps as a test suite that the person can run on every build.
 
 ## Rules
 
@@ -10,6 +10,7 @@ Optics is open-source test automation for Android, iOS, TV and web apps. Its MCP
   - start or connect a phone, emulator, simulator or TV that you cannot start yourself,
   - give a password, an API key or other credentials for the app under test,
   - type a password for `sudo` or an administrator prompt,
+  - give a desktop app permissions in System Settings on macOS,
   - restart or reload your client, so that it loads the new MCP tools.
 - Do not write a password or a secret in a command, a file or a commit. Read secrets from environment variables.
 - Change only the person's project, the `~/.optics` folder, your client's MCP configuration and skills folder, and the tools that a step on this page tells you to install.
@@ -134,6 +135,36 @@ Do the section below that matches the task the person gave you. If the task was 
 5. If `curl -s http://127.0.0.1:4723/status` gets no answer, start the Appium server in the background with `appium`.
 6. Call `start_session` with `"driver": "appium"`, `"app"` set to the app id and the capabilities: `{"platformName": "Android", "automationName": "UiAutomator2", "udid": "<serial from adb devices>", "appPackage": "<app id>"}`, or `{"platformName": "iOS", "automationName": "XCUITest", "udid": "<simulator udid>", "bundleId": "<app id>"}`.
 7. Continue with steps 4 to 9 of "Test a web app". Write the Appium settings in `config.yaml`.
+
+### Test a desktop app
+
+This drives a native app on this computer: macOS, Linux with X11, or Windows.
+
+1. Install the Appium engine: `OPTICS setup --install appium`.
+2. If `curl -s http://127.0.0.1:4723/xa11y/status` gets no answer, set up the Host. Download the setup script to a temporary folder and run it. Do not send it to a shell through a pipe, because the script copies its own file. It installs Node.js, Appium and appium-xa11y-driver, and starts Appium as a service on `127.0.0.1:4723`. It is safe to run again.
+
+   macOS and Linux (use `linux` in place of `mac` on Linux):
+
+   ```sh
+   setup="$(mktemp -d)/setup.sh"
+   curl -fsSL -o "$setup" https://optics-framework.org/desktop/mac/setup.sh
+   bash "$setup"
+   ```
+
+   Windows, in PowerShell:
+
+   ```powershell
+   $setup = Join-Path $env:TEMP 'setup.ps1'
+   iwr https://optics-framework.org/desktop/windows/setup.ps1 -OutFile $setup
+   powershell -ExecutionPolicy Bypass -File $setup
+   ```
+
+   On Linux the script installs packages with `apt`. If it cannot get root, ask the person to run the command that it prints. If the script stops because a different process holds port 4723, tell the person which process it names.
+3. Run `curl -s http://127.0.0.1:4723/xa11y/status` again and keep its `platformName`: `Mac`, `Linux` or `Windows`. On macOS, `accessibility` must be `true`. If it is `false`, ask the person to do the step in `next`: in System Settings > Privacy & Security, give Accessibility, and Screen & System Audio Recording for screenshots, to the app that `grantTo` names. Do not give them to the terminal. Then restart Appium with `launchctl kickstart -k gui/$(id -u)/appium-xa11y` and check again. Do not continue until `accessibility` is `true`.
+4. Find the app. On macOS, use an app name, a bundle id or an `.app` path, for example `TextEdit`. On Linux and Windows, use an executable on the `PATH` or a full path, for example `mousepad` or `notepad.exe`. If the task does not name an app, ask the person. If it does not name a flow, pick the main flow and tell the person which one.
+5. Call `start_session` with `{"driver": "appium", "url": "http://127.0.0.1:4723", "app": "<app>", "capabilities": {"platformName": "<platformName>", "automationName": "Xa11y"}}`. Always set `app`: without it the session fails with E0104, or drives the app in front, which can be your own client.
+6. Use only the optics tools on the app. Do not click, type or read the app with AppleScript, `osascript`, `xdotool` or PowerShell. `press_key` takes key combinations such as `primary+s`, which is Cmd on macOS and Ctrl on Linux and Windows.
+7. Continue with steps 4 to 9 of "Test a web app". Write the Appium `url` and these capabilities in `config.yaml`, as in [Test desktop apps](https://optics-framework.org/docs/platforms/desktop.md).
 
 ### Run the suite in CI
 

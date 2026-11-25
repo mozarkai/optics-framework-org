@@ -9,6 +9,8 @@ time: 20 min
 
 Optics tests native desktop apps on macOS, Linux and Windows. It uses the same CSV files, keywords and reports as for phones and browsers. A test can open an editor, type a note, press a key combination, open a calculator and check a result.
 
+<video src="../../media/optics-desktop.mp4" poster="../../media/optics-desktop-poster.webp" controls playsinline preload="none" aria-label="Film: an agent drives a team chat app on macOS through the Optics MCP server, posts a message and checks that it landed. The agent saves the steps as a test suite, which passes on macOS, Linux and Windows and then runs on cloud VMs and in CI."></video>
+
 :::note
 Windows support is experimental. It is tested on Windows Server 2022 with Notepad and the classic Calculator. [Limits](#limits) has the details for each OS.
 :::
@@ -52,7 +54,7 @@ Download the script to a temporary folder, not to your project. Do not send it t
 ::tab[macOS]
 ```shell
 $ setup="$(mktemp -d)/setup.sh"
-$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/mac/setup.sh
+$ curl -fsSL -o "$setup" https://optics-framework.org/desktop/mac/setup.sh
 $ bash "$setup"
 ```
 
@@ -61,7 +63,7 @@ The service is the LaunchAgent `appium-xa11y`. Its log is `~/Library/Logs/appium
 ::tab[Linux]
 ```shell
 $ setup="$(mktemp -d)/setup.sh"
-$ curl -fsSL -o "$setup" https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/linux/setup.sh
+$ curl -fsSL -o "$setup" https://optics-framework.org/desktop/linux/setup.sh
 $ bash "$setup"
 ```
 
@@ -76,7 +78,7 @@ In PowerShell:
 
 ```powershell
 PS> $setup = Join-Path $env:TEMP 'setup.ps1'
-PS> iwr https://raw.githubusercontent.com/chinmayajha/appium-xa11y-driver/v0.1.4/hosts/windows/setup.ps1 -OutFile $setup
+PS> iwr https://optics-framework.org/desktop/windows/setup.ps1 -OutFile $setup
 PS> powershell -ExecutionPolicy Bypass -File $setup
 ```
 
@@ -557,14 +559,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: chinmayajha/appium-xa11y-driver
-          ref: v0.1.4
-          path: xa11y-driver
       - name: Prepare the Windows Host
         shell: powershell
-        run: xa11y-driver/hosts/windows/setup.ps1 -NoService
+        run: |
+          $setup = Join-Path $env:RUNNER_TEMP 'setup.ps1'
+          iwr https://optics-framework.org/desktop/windows/setup.ps1 -OutFile $setup
+          powershell -ExecutionPolicy Bypass -File $setup -NoService
       - name: Start Appium
         shell: bash
         run: |
