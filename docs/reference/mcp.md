@@ -220,7 +220,7 @@ The tools that act (`tap`, `type_text`, `scroll`, `press_key`, `launch_app`, `ba
 | `app` | "" | An app id or URL to open after the session starts. |
 | `url` | Appium: `http://127.0.0.1:4723` | The driver's server URL. For Playwright, the endpoint of a [remote browser](/docs/platforms/web#use-a-remote-browser). |
 | `capabilities` | `{}` | The driver's capabilities, as in [config.yaml](/docs/reference/config#examples-by-platform). For a phone-sized page, add `"device": "Pixel 7"`. See [Emulate a phone](/docs/platforms/web#emulate-a-phone). For a signed-in web session, add `profile`. See [Sign in with a browser profile](#sign-in-with-a-browser-profile). |
-| `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. With `[]`, the session starts without the screen. See [Sessions without a screen source](#sessions-without-a-screen-source). |
+| `elements_sources` | Every source of the driver | For Appium: `appium_find_element`, `appium_page_source`, `appium_web` and `appium_screenshot`. With `[]`, the session starts without the screen. See [Sessions without a screen source](#sessions-without-a-screen-source). An entry can also be a config.yaml entry with capabilities. See [Use a webcam](#use-a-webcam). |
 | `text_detection` | none, or the camera default | OCR engines, for example `["rapidocr"]`. A session that reads a camera gets the fastest installed engine: `apple_vision`, then `rapidocr`, `easyocr` and `pytesseract`. `[]` turns OCR off. |
 | `image_detection` | none, or the camera default | Image engines, for example `["templatematch"]`. A session that reads a camera gets `templatematch`. |
 | `project_path` | "" | A project folder. Optics loads its image templates. It doesn't load elements or test cases. `stdio` only: an `http` server refuses it with E0501. |
@@ -304,6 +304,22 @@ The `ble` driver has no element source of its own. When you leave out `elements_
   "driver": "ble",
   "capabilities": {"platform": "android", "frame": {"width": 1080, "height": 2400}, "serial": "<dongle serial>"},
   "elements_sources": ["camera_screenshot"]
+}
+```
+
+#### Use a webcam
+
+A `stdio` server can read a webcam on its own machine. Give `camera_screenshot` as a config.yaml entry, with the capabilities of [BLE and camera](/docs/reference/config#ble-and-camera), such as `camera_index`, `find_screen` and `rotation`. The session sets `out_width` and `out_height` from `frame`. When you set `rotation`, it swaps them, because the picture turns after Optics makes it straight. A size that you give is kept.
+
+This is a session for an iPhone that lies on its side under a webcam:
+
+```json
+{
+  "driver": "ble",
+  "capabilities": {"platform": "ios", "frame": {"width": 1170, "height": 2532}, "host": "<phone Bluetooth name>"},
+  "elements_sources": [
+    {"camera_screenshot": {"capabilities": {"camera_index": 0, "find_screen": "auto", "rotation": "counterclockwise"}}}
+  ]
 }
 ```
 
