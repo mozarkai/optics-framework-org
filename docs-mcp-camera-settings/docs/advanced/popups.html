@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Handle popups · Optics Framework docs</title>
+  <meta name="description" content="Write rules that close the popups that block a step, and stop the run on popups you did not plan for.">
+  <meta name="ai-summary" content="Write rules that close the popups that block a step, and stop the run on popups you did not plan for.">
+  <link rel="canonical" href="https://optics-framework.org/docs/advanced/popups">
+  <link rel="alternate" type="text/markdown" href="popups.md" title="This page as Markdown">
+  <meta property="og:title" content="Handle popups · Optics Framework docs">
+  <meta property="og:description" content="Write rules that close the popups that block a step, and stop the run on popups you did not plan for.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=019a04646d">
+  <link rel="stylesheet" href="../../docs.css?v=56de380154">
+  <link rel="stylesheet" href="../../scenes.css?v=82466becc5">
+</head>
+<body class="docs " data-docs-root="../../docs/"><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab" href="../../docs/create/">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab on" href="../../docs/advanced/" aria-current="true">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/contribute/">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section open" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/popups" aria-current="page">Popups</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/advanced/">Advanced</a><span class="sep" aria-hidden="true">/</span><span>Logic and data</span></nav>
+        <header class="doc-head">
+          <h1>Handle popups</h1>
+          <p class="doc-summary">Write rules that close the popups that block a step, and stop the run on popups you did not plan for.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Intermediate, about 10 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="popups.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="popups.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Apps show popups at times you cannot plan: an offer, a rating request, an update notice, a session timeout or a permission prompt. When a popup covers the element that a step needs, the step fails. Popup rules tell Optics what each known popup looks like and what to do about it.</p>
+<p>When a step cannot find its element, Optics does this:</p>
+<ol><li>It reads the screen and tries your rules in list order. The first rule that matches wins.</li><li>It does the rule's action, such as a tap on <code class="ic">Not now</code>, and waits up to 5 seconds for the popup to go.</li><li>It tries the step again.</li></ol>
+<p>If no rule matches but the screen shows a dialog, the step fails with <a href="../../docs/reference/errors#e02-elements">E0206</a> and Optics saves a screenshot and the page source. Optics never guesses which button to press.</p>
+<p>Nothing changes until you write a rule. A step that finds its element reads nothing more and tries no rule. Rules run before <a href="../../docs/elements/self-heal">AI self-heal</a>, so a known popup costs no LLM call.</p>
+<aside class="callout callout-important"><p class="callout-title">Appium only</p><p>Popup rules work on Android and iOS apps through Appium. Playwright, Selenium and the other drivers see no popups. On those drivers, use <a href="../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a> for a popup that shows only sometimes.</p></aside>
+<aside class="callout callout-tip"><p class="callout-title">Try it in your browser</p><p>The <a href="../../playground/popups">popups playground</a> runs the real popup guard against eleven popups on a demo app. Turn each popup and each rule on or off, then watch what Optics does.</p></aside>
+<h2 id="write-your-first-rule">Write your first rule<a class="anchor" href="#write-your-first-rule" aria-label="Link to this section">#</a></h2>
+<ol class="doc-steps"><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3 id="find-the-text-of-the-popup">Find the text of the popup<a class="anchor" href="#find-the-text-of-the-popup" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Open the screen in <code class="ic">optics live</code>, or look at the screenshot of the failed step, and read the title of the popup. Pick text that only the popup shows.</p>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3 id="add-popup-rulesjson">Add popup_rules.json<a class="anchor" href="#add-popup-rulesjson" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<p>Put a file named <code class="ic">popup_rules.json</code> in your project, for example in <code class="ic">test_data/</code>. It holds a list of rules:</p>
+<figure class="code doc-code has-title" data-lang="json"><figcaption><span>test_data/popup_rules.json</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="[
+  {
+    &quot;name&quot;: &quot;rate_prompt&quot;,
+    &quot;detect&quot;: {&quot;text_contains&quot;: [&quot;Enjoying Birch?&quot;]},
+    &quot;action&quot;: {&quot;type&quot;: &quot;tap&quot;, &quot;target&quot;: &quot;Not now&quot;}
+  }
+]">Copy</button><pre><code>[
+  {
+    <span class="c-mod">"name"</span>: <span class="c-lit">"rate_prompt"</span>,
+    <span class="c-mod">"detect"</span>: {<span class="c-mod">"text_contains"</span>: [<span class="c-lit">"Enjoying Birch?"</span>]},
+    <span class="c-mod">"action"</span>: {<span class="c-mod">"type"</span>: <span class="c-lit">"tap"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"Not now"</span>}
+  }
+]</code></pre></figure>
+</div></li><li class="step-item"><div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3 id="run-the-suite">Run the suite<a class="anchor" href="#run-the-suite" aria-label="Link to this section">#</a></h3></div><div class="step-body">
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="optics execute birch --output plain">Copy</button><pre><code><span class="prompt">$</span> <b>optics</b> execute birch <span class="c-info">--output</span> plain</code></pre></figure>
+<p>A step that the popup blocked passes, and a <code class="ic">popup</code> line shows below it:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:12:31 RUNNING      keyword "Press Element"
+10:12:34 <span class="c-pass">PASS</span>         keyword "Press Element" (3.2s)
+10:12:34 <span class="c-pass">PASS</span>           popup "rate_prompt" handled</code></pre></figure></div></li></ol>
+<p>A file that Optics cannot read, or a rule that is not valid, stops the run before it starts. <code class="ic">optics dry_run</code> does the same check:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>╭──────────────────────────── Cannot start: E0501 ─────────────────────────────╮
+│ birch/test_data/popup_rules.json: rule 1 is invalid (detect: Value error,    │
+│ detect needs text_contains, resource_id or xpath; action: Value error,       │
+│ action 'tap' needs a target)                                                 │
+│                                                                              │
+│ Fix that popup_rules.json, then re-run.                                      │
+╰──────────────────────────────────────────────────────────────────────────────╯</code></pre></figure>
+<h2 id="rule-fields">Rule fields<a class="anchor" href="#rule-fields" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Default</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">name</code></td><td>Required</td><td>The name of the rule. Each name must be unique.</td></tr><tr><td><code class="ic">detect</code></td><td>Required</td><td>What the popup looks like. See <a href="#detect-a-popup">Detect a popup</a>.</td></tr><tr><td><code class="ic">action</code></td><td><code class="ic">{"type": "none"}</code></td><td>What to do about the popup. See <a href="#actions">Actions</a>.</td></tr><tr><td><code class="ic">then</code></td><td><code class="ic">retry_step</code></td><td>What happens after the action: <code class="ic">retry_step</code>, <code class="ic">fail_step</code> or <code class="ic">stop_run</code>. See <a href="#after-the-action">After the action</a>.</td></tr><tr><td><code class="ic">check</code></td><td><code class="ic">on_failure</code></td><td>When to check: <code class="ic">on_failure</code>, after a step does not find its element, or <code class="ic">before_every_step</code>. See <a href="#check-before-every-step">Check before every step</a>.</td></tr><tr><td><code class="ic">sensitive</code></td><td><code class="ic">false</code></td><td><code class="ic">true</code> presses nothing, saves the evidence and ends the run. See <a href="#sensitive-popups">Sensitive popups</a>.</td></tr><tr><td><code class="ic">max_per_step</code></td><td><code class="ic">2</code></td><td>How many times the rule can act in one step.</td></tr><tr><td><code class="ic">max_per_run</code></td><td><code class="ic">5</code></td><td>How many times the rule can act in one run.</td></tr></tbody></table></div>
+<h2 id="detect-a-popup">Detect a popup<a class="anchor" href="#detect-a-popup" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">detect</code> takes one or more keys. Every key that you give must match the screen.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Matches when</th></tr></thead><tbody><tr><td><code class="ic">text_contains</code></td><td>Any one of the strings is part of the text on the screen. Case does not matter.</td></tr><tr><td><code class="ic">resource_id</code></td><td>An element has exactly this resource id, such as <code class="ic">com.birch.shop:id/promo_close</code>.</td></tr><tr><td><code class="ic">xpath</code></td><td>The XPath finds at least one element in the page source.</td></tr></tbody></table></div>
+<p><code class="ic">text_contains</code> searches all the text on the screen, not only the popup. Use text that only the popup shows, or add a <code class="ic">resource_id</code> or <code class="ic">xpath</code> key, so the rule does not match a normal screen.</p>
+<h2 id="actions">Actions<a class="anchor" href="#actions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th><code class="ic">type</code></th><th><code class="ic">target</code></th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">tap</code></td><td>Required</td><td>Taps the element <code class="ic">target</code> names: text, a resource id or an XPath. Optics uses the position from the page source. If the target is not there, it searches the screen as Press Element does.</td></tr><tr><td><code class="ic">back</code></td><td>None</td><td>Presses back, as Go Back does.</td></tr><tr><td><code class="ic">alert</code></td><td>Required</td><td>iOS only. Presses the button with this label on a system alert, such as <code class="ic">Allow</code>. See <a href="../../docs/platforms/ios#answer-system-alerts">iOS</a>.</td></tr><tr><td><code class="ic">module</code></td><td>Required</td><td>Runs the module with this name from your suite. Use it for a popup that needs more than one tap.</td></tr><tr><td><code class="ic">none</code></td><td>None</td><td>Does nothing. Use it with <code class="ic">then: fail_step</code> or <code class="ic">then: stop_run</code> to stop and keep the evidence.</td></tr></tbody></table></div>
+<p>Add <code class="ic">fallback</code> to a <code class="ic">tap</code> action to give a second target. Optics tries it when it does not find <code class="ic">target</code>:</p>
+<figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{&quot;type&quot;: &quot;tap&quot;, &quot;target&quot;: &quot;Not now&quot;, &quot;fallback&quot;: &quot;//*[@content-desc='Close']&quot;}">Copy</button><pre><code>{<span class="c-mod">"type"</span>: <span class="c-lit">"tap"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"Not now"</span>, <span class="c-mod">"fallback"</span>: <span class="c-lit">"//*[@content-desc='Close']"</span>}</code></pre></figure>
+<h3 id="run-a-module">Run a module<a class="anchor" href="#run-a-module" aria-label="Link to this section">#</a></h3>
+<p>A <code class="ic">module</code> action runs a module from your modules file, in the same session. Any keyword works in it:</p>
+<figure class="code doc-code has-title" data-lang="json"><figcaption><span>test_data/popup_rules.json</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="[
+  {
+    &quot;name&quot;: &quot;survey&quot;,
+    &quot;detect&quot;: {&quot;text_contains&quot;: [&quot;Tell us how we did&quot;]},
+    &quot;action&quot;: {&quot;type&quot;: &quot;module&quot;, &quot;target&quot;: &quot;Close Survey&quot;}
+  }
+]">Copy</button><pre><code>[
+  {
+    <span class="c-mod">"name"</span>: <span class="c-lit">"survey"</span>,
+    <span class="c-mod">"detect"</span>: {<span class="c-mod">"text_contains"</span>: [<span class="c-lit">"Tell us how we did"</span>]},
+    <span class="c-mod">"action"</span>: {<span class="c-mod">"type"</span>: <span class="c-lit">"module"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"Close Survey"</span>}
+  }
+]</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="csv"><figcaption><span>modules/modules.csv</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="module_name,module_step,param_1
+Close Survey,Press Element,${survey_skip}
+Close Survey,Press Element,${survey_confirm}">Copy</button><pre><code><span class="c-dim">module_name,module_step,param_1</span>
+<span class="c-mod">Close Survey</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${survey_skip}</span>
+<span class="c-mod">Close Survey</span><span class="c-dim">,</span><b>Press Element</b><span class="c-dim">,</span><span class="c-var">${survey_confirm}</span></code></pre></figure>
+<ul><li>Other popup rules stay on while the module runs. The rule that started the module does not act on its own popup until the module ends.</li><li>When the module fails, or ends with the popup still on the screen, the step fails with E0408.</li><li>When the session has no module with that name, the step fails with <a href="../../docs/reference/errors#e06-modules-and-engines">E0601</a>.</li></ul>
+<h2 id="after-the-action">After the action<a class="anchor" href="#after-the-action" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th><code class="ic">then</code></th><th>What happens</th></tr></thead><tbody><tr><td><code class="ic">retry_step</code></td><td>Optics tries the step again. The rule needs an action other than <code class="ic">none</code>.</td></tr><tr><td><code class="ic">fail_step</code></td><td>The step fails with <a href="../../docs/reference/errors#e04-keywords-and-parameters">E0408</a>. The run continues with the next test case.</td></tr><tr><td><code class="ic">stop_run</code></td><td>The step fails with E0408, and the test cases that have not started do not run. They show as <code class="ic">NOT_RUN</code>.</td></tr></tbody></table></div>
+<p>When the popup is still on the screen 5 seconds after the action, the step fails with E0408, whatever <code class="ic">then</code> says.</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:14:02 <span class="c-fail">FAIL</span>         keyword "Press Element" (3.2s): Popup 'update_required' was dismissed and then ended the run [E0408]
+10:14:02 <span class="c-fail">FAIL</span>           popup "update_required" stopped: Update required. Install the latest version to continue. Later Update [E0408]
+10:14:02 <span class="c-fail">FAIL</span>       module "Checkout" (3.5s): Popup 'update_required' was dismissed and then ended the run [E0408]
+10:14:02 <span class="c-fail">FAIL</span>     test case "Shopper can check out" (9.7s) [E0408]
+10:14:02 NOT_RUN  test case "Shopper can sign out"</code></pre></figure>
+<h3 id="sensitive-popups">Sensitive popups<a class="anchor" href="#sensitive-popups" aria-label="Link to this section">#</a></h3>
+<p>Set <code class="ic">sensitive: true</code> for a popup that you must never press, such as a payment or account deletion prompt. Optics ignores <code class="ic">action</code> and <code class="ic">then</code>, presses nothing, saves a screenshot and the page source, and stops the run with E0408:</p>
+<figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{&quot;name&quot;: &quot;delete_account&quot;, &quot;detect&quot;: {&quot;text_contains&quot;: [&quot;Delete your account?&quot;]}, &quot;sensitive&quot;: true}">Copy</button><pre><code>{<span class="c-mod">"name"</span>: <span class="c-lit">"delete_account"</span>, <span class="c-mod">"detect"</span>: {<span class="c-mod">"text_contains"</span>: [<span class="c-lit">"Delete your account?"</span>]}, <span class="c-mod">"sensitive"</span>: <span class="c-info">true</span>}</code></pre></figure>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:15:40 <span class="c-fail">FAIL</span>         keyword "Press Element" (0.9s): Popup 'delete_account' ended the run; nothing was pressed [E0408]</code></pre></figure>
+<h2 id="check-before-every-step">Check before every step<a class="anchor" href="#check-before-every-step" aria-label="Link to this section">#</a></h2>
+<p>Some popups do not block the element. A session timeout dialog can leave the screen below it visible. Set <code class="ic">check: before_every_step</code> to try the rule before each action step that finds an element. See <a href="#steps-that-check-for-popups">Steps that check for popups</a> for the keywords:</p>
+<figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{
+  &quot;name&quot;: &quot;session_timeout&quot;,
+  &quot;check&quot;: &quot;before_every_step&quot;,
+  &quot;detect&quot;: {&quot;resource_id&quot;: &quot;com.birch.shop:id/session_expired&quot;},
+  &quot;action&quot;: {&quot;type&quot;: &quot;tap&quot;, &quot;target&quot;: &quot;Sign in again&quot;}
+}">Copy</button><pre><code>{
+  <span class="c-mod">"name"</span>: <span class="c-lit">"session_timeout"</span>,
+  <span class="c-mod">"check"</span>: <span class="c-lit">"before_every_step"</span>,
+  <span class="c-mod">"detect"</span>: {<span class="c-mod">"resource_id"</span>: <span class="c-lit">"com.birch.shop:id/session_expired"</span>},
+  <span class="c-mod">"action"</span>: {<span class="c-mod">"type"</span>: <span class="c-lit">"tap"</span>, <span class="c-mod">"target"</span>: <span class="c-lit">"Sign in again"</span>}
+}</code></pre></figure>
+<p>Each such step reads the page source once more, so use this only for popups that need it.</p>
+<h2 id="limits">Limits<a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">max_per_step</code> and <code class="ic">max_per_run</code> stop a popup that comes back again and again. When a rule reaches a limit, the step fails with <a href="../../docs/reference/errors#e04-keywords-and-parameters">E0407</a> and the run continues:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:16:21 <span class="c-fail">FAIL</span>         keyword "Press Element" (0.7s): Popup 'rate_prompt' came back too often (step 0/2, run 5/5) [E0407]</code></pre></figure>
+<h2 id="popups-with-no-rule">Popups with no rule<a class="anchor" href="#popups-with-no-rule" aria-label="Link to this section">#</a></h2>
+<p>When a step does not find its element, no rule matches and the screen shows a dialog, the step fails with E0206:</p>
+<figure class="code doc-code no-copy" data-lang="terminal"><pre><code>10:18:05 <span class="c-fail">FAIL</span>         keyword "Press Element" (0.9s): A popup with no rule is on screen: 'Allow Birch to send you notifications? Allow Don't allow' [E0206]</code></pre></figure>
+<p>Copy text from the message into a new rule. The screenshot and the page source in the output folder show the popup.</p>
+<ul><li>Optics finds dialogs, alerts, bottom sheets and system prompts. A popup that the app draws as a normal view is not found as a dialog, so the step fails with E0201 as before. Write a rule for it.</li><li>Optics looks for unknown popups only when the project has at least one rule.</li></ul>
+<h2 id="steps-that-check-for-popups">Steps that check for popups<a class="anchor" href="#steps-that-check-for-popups" aria-label="Link to this section">#</a></h2>
+<p>The rules run for keywords that find an element and act on it: Press Element, Enter Text, Enter Number, Clear Element Text, Get Text, Swipe From Element and Scroll From Element.</p>
+<p>Other keywords do not check for popups:</p>
+<ul><li>Assertions, such as Assert Presence and Validate Element. <code class="ic">check: before_every_step</code> does not apply to them either. When you put Assert Presence before an action, as the platform pages recommend, a popup that appears first makes the assertion fail with E0201. Move the assertion after the action, or close the popup with <a href="../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a> before the assertion.</li><li>Detect And Press, Swipe Until Element Appears and Scroll Until Element Appears.</li><li>Steps that use coordinates or the whole screen, such as Press By Coordinates, Swipe and Scroll.</li></ul>
+<h2 id="evidence-and-events">Evidence and events<a class="anchor" href="#evidence-and-events" aria-label="Link to this section">#</a></h2>
+<p>Each time a rule acts or a popup stops a step, Optics saves files to the output folder:</p>
+<div class="table-wrap"><table><thead><tr><th>File</th><th>When</th></tr></thead><tbody><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_before.png</code></td><td>Before the action, and for a popup with no rule.</td></tr><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_after.png</code></td><td>After the action.</td></tr><tr><td><code class="ic">popup_&lt;run&gt;_&lt;n&gt;_source.xml</code></td><td>When the popup stops the step or the run.</td></tr></tbody></table></div>
+<p>Optics saves these files only when <a href="../../docs/reference/config#save-captures"><code class="ic">save_captures</code></a> is on. The screenshots also need a screenshot source, such as <code class="ic">appium_screenshot</code>. <code class="ic">optics serve</code> turns captures off, so it saves no files.</p>
+<p>With <code class="ic">--output jsonl</code>, each popup is an event with <code class="ic">"entity_type": "popup"</code>. Its <code class="ic">args</code> hold the details:</p>
+<figure class="code doc-code" data-lang="json"><button class="copy" type="button" aria-label="Copy code" data-copy="{
+  &quot;rule&quot;: &quot;rate_prompt&quot;,
+  &quot;check&quot;: &quot;on_failure&quot;,
+  &quot;matched&quot;: [&quot;text_contains&quot;],
+  &quot;popup_kind&quot;: &quot;in_app&quot;,
+  &quot;popup_title&quot;: &quot;Enjoying Birch?&quot;,
+  &quot;popup_text&quot;: &quot;Enjoying Birch? Rate us in the store. Not now Rate&quot;,
+  &quot;verdict&quot;: &quot;handled&quot;,
+  &quot;action&quot;: &quot;tap Not now&quot;,
+  &quot;popup_gone&quot;: true,
+  &quot;dismissed_in_ms&quot;: 1531,
+  &quot;step_count&quot;: 1,
+  &quot;run_count&quot;: 1,
+  &quot;screenshots&quot;: [&quot;popup_1e30795d_1_before.png&quot;, &quot;popup_1e30795d_1_after.png&quot;],
+  &quot;page_source&quot;: null,
+  &quot;code&quot;: null,
+  &quot;stop_run&quot;: false
+}">Copy</button><pre><code>{
+  <span class="c-mod">"rule"</span>: <span class="c-lit">"rate_prompt"</span>,
+  <span class="c-mod">"check"</span>: <span class="c-lit">"on_failure"</span>,
+  <span class="c-mod">"matched"</span>: [<span class="c-lit">"text_contains"</span>],
+  <span class="c-mod">"popup_kind"</span>: <span class="c-lit">"in_app"</span>,
+  <span class="c-mod">"popup_title"</span>: <span class="c-lit">"Enjoying Birch?"</span>,
+  <span class="c-mod">"popup_text"</span>: <span class="c-lit">"Enjoying Birch? Rate us in the store. Not now Rate"</span>,
+  <span class="c-mod">"verdict"</span>: <span class="c-lit">"handled"</span>,
+  <span class="c-mod">"action"</span>: <span class="c-lit">"tap Not now"</span>,
+  <span class="c-mod">"popup_gone"</span>: <span class="c-info">true</span>,
+  <span class="c-mod">"dismissed_in_ms"</span>: <span class="c-info">1531</span>,
+  <span class="c-mod">"step_count"</span>: <span class="c-info">1</span>,
+  <span class="c-mod">"run_count"</span>: <span class="c-info">1</span>,
+  <span class="c-mod">"screenshots"</span>: [<span class="c-lit">"popup_1e30795d_1_before.png"</span>, <span class="c-lit">"popup_1e30795d_1_after.png"</span>],
+  <span class="c-mod">"page_source"</span>: <span class="c-info">null</span>,
+  <span class="c-mod">"code"</span>: <span class="c-info">null</span>,
+  <span class="c-mod">"stop_run"</span>: <span class="c-info">false</span>
+}</code></pre></figure>
+<ul><li><code class="ic">verdict</code> is <code class="ic">handled</code>, <code class="ic">stopped</code>, <code class="ic">limit</code> or <code class="ic">unknown</code>.</li><li><code class="ic">popup_kind</code> is <code class="ic">system_alert</code> for a prompt of the operating system, and <code class="ic">in_app</code> for a popup of the app.</li><li>The event also names the keyword, the element, the test case and the module.</li></ul>
+<p>With <code class="ic">file_log: true</code>, <code class="ic">execution_logs.log</code> ends with one line for each rule:</p>
+<figure class="code doc-code" data-lang="text"><button class="copy" type="button" aria-label="Copy code" data-copy="Popup 'rate_prompt': handled 1, limit 1, stopped 0">Copy</button><pre><code>Popup 'rate_prompt': handled 1, limit 1, stopped 0</code></pre></figure>
+<h2 id="where-to-put-rules">Where to put rules<a class="anchor" href="#where-to-put-rules" aria-label="Link to this section">#</a></h2>
+<p>Optics reads rules from these places. A rule replaces an earlier rule with the same name.</p>
+<ul><li><code class="ic">popup_rules</code> in <a href="../../docs/reference/config#popup-rules">config.yaml</a>, as a list in the same format.</li><li>Every file named <code class="ic">popup_rules.json</code> in the project, in path order. <code class="ic">optics execute</code>, <code class="ic">optics dry_run</code>, <code class="ic">optics live</code> and <code class="ic">optics generate</code> read them. See <a href="../../docs/reference/files#popup-rules">Project files</a>.</li><li>Over HTTP, <code class="ic">popup_rules</code> when you start a session, or <code class="ic">PUT /v1/sessions/{id}/popup_rules</code> later. See <a href="../../docs/reference/http-api#popups-over-http">Popups over HTTP</a>.</li><li>In Python and Robot Framework, <code class="ic">add_popup_rules</code> (<code class="ic">Add Popup Rules</code>). Read the results with <code class="ic">get_popup_events</code> and <code class="ic">get_popup_summary</code>.</li></ul>
+<p><code class="ic">optics generate</code> copies the rules into the generated code. When a rule runs a module, the generated code also gets every module and element of the suite.</p>
+<h2 id="permission-prompts">Permission prompts<a class="anchor" href="#permission-prompts" aria-label="Link to this section">#</a></h2>
+<p>On Android, set <code class="ic">permissions</code> in config.yaml to grant or deny app permissions before the app opens, so the prompt never shows. See <a href="../../docs/platforms/android#grant-permissions-before-launch">Android</a>. On iOS, answer system alerts with a capability or an <code class="ic">alert</code> action. See <a href="../../docs/platforms/ios#answer-system-alerts">iOS</a>.</p>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/advanced/conditions">Conditions and loops</a>, for screens that show only sometimes</li><li><a href="../../docs/elements/self-heal">Self-heal</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Handle%20popups&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fadvanced%2Fpopups%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Handle%20popups&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fadvanced%2Fpopups%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/advanced/conditions"><span>Previous</span>Conditions and loops</a><a class="pager-next" href="../../docs/advanced/api-calls"><span>Next</span>Call APIs</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/advanced/popups.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#write-your-first-rule">Write your first rule</a></li><li class="toc-l3"><a href="#find-the-text-of-the-popup">Find the text of the popup</a></li><li class="toc-l3"><a href="#add-popup-rulesjson">Add popup_rules.json</a></li><li class="toc-l3"><a href="#run-the-suite">Run the suite</a></li><li class="toc-l2"><a href="#rule-fields">Rule fields</a></li><li class="toc-l2"><a href="#detect-a-popup">Detect a popup</a></li><li class="toc-l2"><a href="#actions">Actions</a></li><li class="toc-l3"><a href="#run-a-module">Run a module</a></li><li class="toc-l2"><a href="#after-the-action">After the action</a></li><li class="toc-l3"><a href="#sensitive-popups">Sensitive popups</a></li><li class="toc-l2"><a href="#check-before-every-step">Check before every step</a></li><li class="toc-l2"><a href="#limits">Limits</a></li><li class="toc-l2"><a href="#popups-with-no-rule">Popups with no rule</a></li><li class="toc-l2"><a href="#steps-that-check-for-popups">Steps that check for popups</a></li><li class="toc-l2"><a href="#evidence-and-events">Evidence and events</a></li><li class="toc-l2"><a href="#where-to-put-rules">Where to put rules</a></li><li class="toc-l2"><a href="#permission-prompts">Permission prompts</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="../../" aria-label="Optics home">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="../../releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="../../#install">Install</a></li><li><a href="../../playground">Playground</a></li><li><a href="../../releases">Releases</a></li><li><a href="../../birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="../../docs/get-started/">Get started</a></li><li><a href="../../docs/guides/">Guides</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li><li><a href="../../docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="../../blog">Blog</a></li><li><a href="../../feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="../../llms.txt">llms.txt</a></li><li><a href="../../agents.md">Agent setup</a></li><li><a href="../../.well-known/mcp/server-card.json">MCP server card</a></li><li><a href="../../openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="../../about">About</a><a href="../../contact">Contact</a><a href="../../privacy">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaa72e04a3" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=49b314c882" defer></script>
+  <script src="../../scenes.js?v=3ec9937cca" defer></script>
+  <script src="../../scene-defs.js?v=85a18eb0b5" defer></script>
+<!--/email_off--></body>
+</html>
