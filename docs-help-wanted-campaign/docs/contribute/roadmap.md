@@ -41,7 +41,6 @@ A typo or a small fix needs no issue. Issues that the maintainers marked for con
 | [Find elements by what they look like](#vision) | Medium | Intermediate to Advanced |
 | [Test the API and the database behind the app](#data) | High | Advanced |
 | [Check what the device says](#audio) | Medium | Advanced |
-| [Let Optics explore the app on its own](#explore) | Medium | Advanced |
 | [Build tests visually](#visual-builder) | Medium | Advanced |
 | [Learn from recorded sessions](#traces) | Medium | Intermediate |
 | [Find elements faster](#faster-location) | High | Advanced |
@@ -390,39 +389,6 @@ Help me understand:
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-### Let Optics explore the app on its own
-
-**Priority**: Medium · **Difficulty**: Advanced · **Issue**: [#364](https://github.com/mozarkai/optics-framework/issues/364)
-
-**What we imagine.** You point Optics at an app and let it explore. It taps, types and scrolls through the app by itself, and it checks rules all the time: no error screen, no crash, the app stays in front. When a rule breaks, Optics gives back the shortest list of steps that repeats the problem, as a module that you can run again. This works on phones, desktops, TVs and the web.
-
-**Optics today.**
-
-- Optics lists the elements on a screen (`Get Interactive Elements`).
-- At the end of a run, it finds known error screens from `error_definitions.csv`.
-- It dismisses popups by rules, and it records the steps that work as modules.
-
-**Questions to explore.**
-
-- How does a user write a rule, and which rules should be on by default?
-- How does a run stay repeatable, so that the same seed gives the same steps?
-- How does exploration stay away from actions with real effects, such as a purchase or a delete?
-
-**Prompt for your agent:**
-
-```text
-I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Let Optics explore the app on its own" (https://optics-framework.org/docs/contribute/roadmap#explore), and issue #364.
-
-Clone the repository and read CLAUDE.md first. Then read how Optics lists what is on a screen (common/screen_snapshot.py), how it detects error screens (common/error_detection.py), how popup rules work (common/popup_guard.py), and how the MCP server records steps (common/agent_core.py).
-
-Help me understand:
-- What Optics knows about a screen at each step, and how it refers to each element.
-- How error detection and popup rules decide that something is wrong.
-- How recorded steps become a module that `optics execute` can run.
-
-Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
-```
-
 ## Create tests faster
 
 ### Build tests visually
@@ -724,19 +690,8 @@ Help me understand:
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-## Smaller open issues
-
-These issues are smaller and well defined. Each one is a good way to learn a part of Optics.
-
-- [#684](https://github.com/mozarkai/optics-framework/issues/684): see and act inside iframes in web sessions.
-- [#687](https://github.com/mozarkai/optics-framework/issues/687): list the elements inside shadow roots.
-- [#683](https://github.com/mozarkai/optics-framework/issues/683): headless Chromium that does not tell sites it is automated.
-- [#297](https://github.com/mozarkai/optics-framework/issues/297): device discovery behind `DriverInterface`.
-- [#493](https://github.com/mozarkai/optics-framework/issues/493): parameter signatures and types in `optics list`.
-- [#492](https://github.com/mozarkai/optics-framework/issues/492): a non-interactive mode for `optics quickstart`.
-
 **Start small:**
-If you are new to the project, start with a smaller issue or with documentation. It is a good way to learn the codebase while you make a useful contribution.
+If you are new to the project, start with documentation or an issue with the [`good first issue`](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. It is a good way to learn the codebase while you make a useful contribution.
 
 ---
 
