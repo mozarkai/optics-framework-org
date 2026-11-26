@@ -1,8 +1,8 @@
 // Content negotiation in front of GitHub Pages, which cannot vary a response on the
 // Accept header. A request that prefers text/markdown, or comes from an AI crawler that
 // does not ask for HTML, gets the page's Markdown twin (`/` -> `/index.md`, `/about` ->
-// `/about.md`) and a missing page gets a 404 with `/404.md`, the closest pages in the
-// sitemap and `/llms.txt`; a request that prefers JSON
+// `/about.md`). A missing page gets a 404 with `/404.md`, the closest pages in the sitemap
+// and `/llms.txt`, and so does any client that does not prefer HTML; a request that prefers JSON
 // gets a missing page as an RFC 9457 problem document, and one that accepts neither HTML
 // nor Markdown gets a 406. Markdown responses carry the AEO headers (dualmark.dev/docs/spec).
 // Everything else passes through untouched apart from `Vary` (so caches keep the
@@ -230,20 +230,30 @@ async function trimmed({ url, get }) {
   return Response.redirect(to.href, 301);
 }
 
+// The HTML 404 is for people. A client that does not prefer HTML (curl, an agent's fetch) is
+// answered as an AI crawler is: the Markdown at this address, else the Markdown 404.
+// A path to a file keeps the HTML 404, because most misses there are scanners.
+async function missingPage(ctx, accept) {
+  const wants = markdownPath(ctx.url.pathname) ? negotiate(accept, { bot: true }) : ctx.wants;
+  const asked = { ...ctx, wants };
+  return (await trimmed(ctx)) || (wants !== ctx.wants && (await serveTwin(asked))) || notFound(asked);
+}
+
 export async function handle(request, upstream = fetch) {
   const { method } = request;
   if (method !== "GET" && method !== "HEAD") return upstream(request);
   const url = new URL(request.url);
+  const accept = request.headers.get("accept");
   const ctx = {
     url,
     method,
-    wants: negotiate(request.headers.get("accept"), { bot: isAiBot(request.headers.get("user-agent")) }),
+    wants: negotiate(accept, { bot: isAiBot(request.headers.get("user-agent")) }),
     get: (path) => upstream(new Request(sameSite(url, path))),
   };
   const twin = await serveTwin(ctx);
   if (twin) return twin;
   const response = await upstream(request);
-  const missing = response.status === 404 && ((await trimmed(ctx)) || (await notFound(ctx)));
+  const missing = response.status === 404 && (await missingPage(ctx, accept));
   return missing || present(response, ctx);
 }
 

@@ -304,3 +304,22 @@ test("a page asked for with a trailing slash redirects to the page", async () =>
   assert.equal((await get("/no-such-page/")).status, 404);
   assert.equal((await get("//evil.example/")).status, 404);
 });
+
+test("a missing page answers a client that does not prefer HTML in Markdown, and a browser or a probe for a file as before", async () => {
+  for (const accept of [undefined, "*/*", "text/markdown;q=0.5, */*"]) {
+    const missing = await get("/docs/installation", accept);
+    assert.equal(missing.status, 404, String(accept));
+    assert.match(missing.headers.get("content-type"), /^text\/markdown/, String(accept));
+    assert.match(await missing.text(), /## Closest pages\n\n- https:\/\/optics-framework\.org\/docs\/get-started\/install\n/, String(accept));
+    const skills = await get("/skills", accept);
+    assert.equal(skills.status, 200, String(accept));
+    assert.equal(skills.headers.get("x-robots-tag"), null, String(accept));
+    assert.equal(await skills.text(), readFileSync("out/skills.md", "utf8"), String(accept));
+  }
+  const browser = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+  for (const [path, accept] of [["/docs/installation", browser], ["/skills", browser], ["/wp-login.php", "*/*"], ["/.env", undefined], ["/logo-old.png", "image/avif,image/webp,*/*;q=0.8"]]) {
+    const res = await get(path, accept);
+    assert.equal(res.status, 404, path);
+    assert.match(res.headers.get("content-type"), /^text\/html/, path);
+  }
+});
