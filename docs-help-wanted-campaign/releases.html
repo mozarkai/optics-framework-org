@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Optics releases: what each version added</title>
+  <meta name="description" content="Every published release of optics-framework, newest first, with the features each one added and how many fixes it shipped.">
+  <meta name="ai-summary" content="Every published release of optics-framework, newest first, with the features each one added and how many fixes it shipped.">
+  <link rel="canonical" href="https://optics-framework.org/releases">
+  <link rel="alternate" type="text/markdown" href="releases.md" title="Optics releases, as Markdown">
+  <link rel="stylesheet" href="proof.css?v=c9003286f0">
+  <script>if (/[?&]sim=/.test(location.search) || location.hash === "#simulator") location.replace("playground/ship" + location.search + location.hash);</script>
+  <meta property="og:title" content="Optics releases: what each version added">
+  <meta property="og:description" content="Every published release of optics-framework, newest first, with the features each one added and how many fixes it shipped.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=e566c0188d">
+</head>
+<body><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="./" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="./#create">Create</a>
+        <a href="./#run">Run</a>
+        <a href="playground">Playground</a>
+        <a href="docs/">Docs</a>
+        <a href="blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="./#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<h1>Releases</h1>
+      <p class="lede">What each Optics release added, newest first.</p>
+      <article class="rl-latest" aria-label="Latest release">
+        <div>
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.5">1.11.5</a>
+          <p class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></p>
+        </div>
+        <div class="rl-body">
+          <p class="rl-lead"><a href="docs/advanced/popups">Popups: write rules that close the popups that block a step.</a></p>
+          <ul class="rel-added"><li><span class="rel-scope">doctor</span><a href="https://github.com/mozarkai/optics-framework/pull/728">Add a Desktop section</a></li><li><span class="rel-scope">ble</span><a href="https://github.com/mozarkai/optics-framework/pull/726">Drive devices over Bluetooth through the airhand dongle</a></li><li><span class="rel-scope">ocr</span><a href="https://github.com/mozarkai/optics-framework/pull/735">Add RapidOCR and Apple Vision, one capture and one OCR pass per lookup</a></li><li><span class="rel-scope">runner</span><a href="https://github.com/mozarkai/optics-framework/pull/742">Record AI self-heals of a batch run in its events and junit_output.xml</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/739">Update notice, optics upgrade and an MCP send_feedback tool</a></li><li><span class="rel-scope">execute</span><a href="https://github.com/mozarkai/optics-framework/pull/748">Show progress as plain or JSON lines when stdout is not a terminal</a></li><li><span class="rel-scope">ble</span><a href="https://github.com/mozarkai/optics-framework/pull/751">Hold webcam focus, find dark screens by the pointer, open apps on any launcher</a></li><li><span class="rel-scope">popup</span><a href="https://github.com/mozarkai/optics-framework/pull/721">Handle popups that block a step, with rules, evidence and permissions at launch</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/756">Popup module action</a></li><li class="rel-more">8 fixes</li></ul>
+        </div>
+      </article>
+      <section class="rl-group" aria-labelledby="rl-1.11">
+      <h2 class="rl-minor label" id="rl-1.11">1.11</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.4">1.11.4</a>
+          <span class="label"><time datetime="2026-11-17">17 Nov 2026</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/719">Name the report after the project name kept in config.yaml</a></li><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/720">Cut agent turns and tokens, and fix what the runs found</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/714">Drive desktop apps through the Xa11y driver</a></li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.3">1.11.3</a>
+          <span class="label"><time datetime="2026-11-10">10 Nov 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">self-heal</span><a href="https://github.com/mozarkai/optics-framework/pull/704">Keep small models on the target name</a></li><li><span class="rel-scope">config</span><a href="https://github.com/mozarkai/optics-framework/pull/706">Accept API keys in config.yaml</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/712">Mark setup and teardown in the report and stop tests a failed setup guards</a></li><li class="rel-more">9 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.2">1.11.2</a>
+          <span class="label"><time datetime="2026-11-06">6 Nov 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">agent</span><a href="https://github.com/mozarkai/optics-framework/pull/673">Drive MCP and live NL mode by refs from one screen snapshot</a></li><li><span class="rel-scope">playwright</span><a href="https://github.com/mozarkai/optics-framework/pull/629">Remote browsers over CDP/Playwright protocol, configurable timeouts and phone emulation</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/631">Drive mobile web pages through the webview context (CSS / DOM XPath)</a></li><li><span class="rel-scope">playwright</span><a href="https://github.com/mozarkai/optics-framework/pull/656">Start a new context signed in from a storage_state file</a></li><li><span class="rel-scope">config</span><a href="https://github.com/mozarkai/optics-framework/pull/688">Resolve environment variables and relative paths in config files</a></li><li><span class="rel-scope">camera_screenshot</span><a href="https://github.com/mozarkai/optics-framework/pull/658">Fetch screenshots over HTTP with a bearer token</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/690">Run optics execute cleanly inside an environment</a></li><li><span class="rel-scope">appium</span><a href="https://github.com/mozarkai/optics-framework/pull/693">Press, type and clear on TV web apps with D-pad focus</a></li><li class="rel-more">8 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.11.1">1.11.1</a>
+          <span class="label"><time datetime="2026-10-26">26 Oct 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">runtime-vars</span><a href="https://github.com/mozarkai/optics-framework/pull/651">Store keyword results and use them in later steps</a></li><li class="rel-more">6 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.11.0">1.11.0</a>
+          <span class="label"><time datetime="2026-10-15">15 Oct 2026</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/615">Record a web journey once through MCP and replay it with Playwright</a></li><li><span class="rel-scope">llm</span><a href="https://github.com/mozarkai/optics-framework/pull/611">Support OpenAI-compatible and Anthropic engines</a></li><li class="rel-more">2 fixes</li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.10">
+      <h2 class="rl-minor label" id="rl-1.10">1.10</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.6">1.10.6</a>
+          <span class="label"><time datetime="2026-10-13">13 Oct 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">5 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.5">1.10.5</a>
+          <span class="label"><time datetime="2026-10-07">7 Oct 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">2 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.4">1.10.4</a>
+          <span class="label"><time datetime="2026-09-21">21 Sept 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">runner</span><a href="https://github.com/mozarkai/optics-framework/pull/548">Let a quoted value hold a space in a yaml step</a></li><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/544">Grounded targeting — no coordinate guessing + compact interactive-element inspector</a></li><li class="rel-more">10 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.3">1.10.3</a>
+          <span class="label"><time datetime="2026-09-08">8 Sept 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/529">Turn a live session into a reusable, replayable test suite</a></li><li class="rel-more">2 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.2">1.10.2</a>
+          <span class="label"><time datetime="2026-09-04">4 Sept 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">3 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.1">1.10.1</a>
+          <span class="label"><time datetime="2026-09-04">4 Sept 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">5 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.10.0">1.10.0</a>
+          <span class="label"><time datetime="2026-08-26">26 Aug 2026</time></span>
+          
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.9">
+      <h2 class="rl-minor label" id="rl-1.9">1.9</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.9.3">1.9.3</a>
+          <span class="label"><time datetime="2026-08-19">19 Aug 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">1 fix</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.9.2">1.9.2</a>
+          <span class="label"><time datetime="2026-08-19">19 Aug 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">7 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.9.1">1.9.1</a>
+          <span class="label"><time datetime="2026-08-03">3 Aug 2026</time></span>
+          <ul class="rel-added"><li class="rel-more">3 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.9.0">1.9.0</a>
+          <span class="label"><time datetime="2026-07-31">31 Jul 2026</time></span>
+          <ul class="rel-added"><li><span class="rel-scope">live</span><a href="https://github.com/mozarkai/optics-framework/pull/295">Interactive optics live with natural-language mode and AI self-heal</a></li><li><span class="rel-scope">mcp</span><a href="https://github.com/mozarkai/optics-framework/pull/308">Add `optics mcp` server exposing keywords over MCP</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/323">On-screen error detection for runs and library consumers</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/322">Enhance MCP server deployment instructions and add Docker support</a></li><li><span class="rel-scope">live</span><a href="https://github.com/mozarkai/optics-framework/pull/327">Incremental /save and NL curation for cleaner recordings</a></li><li><span class="rel-scope">live</span><a href="https://github.com/mozarkai/optics-framework/pull/303">Refactor AI self-heal to use keyword-based ReAct loop and improve locator logging</a></li><li><span class="rel-scope">setup</span><a href="https://github.com/mozarkai/optics-framework/pull/402">Declare engine backends as extras; install them via optics setup</a></li><li><span class="rel-scope">setup</span><a href="https://github.com/mozarkai/optics-framework/pull/419">Allow pinning an engine version in `optics setup --install`</a></li><li class="rel-more">12 fixes</li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.8">
+      <h2 class="rl-minor label" id="rl-1.8">1.8</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.6">1.8.6</a>
+          <span class="label"><time datetime="2026-05-29">29 May 2026</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/282">IOS app version fetching via ideviceinstaller (v1.8.6-beta9)</a></li><li class="rel-more">2 fixes</li></ul>
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.5">1.8.5</a>
+          <span class="label"><time datetime="2026-02-25">25 Feb 2026</time></span>
+          
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.4">1.8.4</a>
+          <span class="label"><time datetime="2026-02-23">23 Feb 2026</time></span>
+          
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.3">1.8.3</a>
+          <span class="label"><time datetime="2026-02-20">20 Feb 2026</time></span>
+          
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.2">1.8.2</a>
+          <span class="label"><time datetime="2026-02-20">20 Feb 2026</time></span>
+          
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.8.1">1.8.1</a>
+          <span class="label"><time datetime="2026-02-20">20 Feb 2026</time></span>
+          
+        </li>
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/1.8.0">1.8.0</a>
+          <span class="label"><time datetime="2026-01-29">29 Jan 2026</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/233">Enhance CSV handling for element IDs and parameters</a></li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.7">
+      <h2 class="rl-minor label" id="rl-1.7">1.7</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.7.0">1.7.0</a>
+          <span class="label"><time datetime="2025-10-10">10 Oct 2025</time></span>
+          
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.6">
+      <h2 class="rl-minor label" id="rl-1.6">1.6</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.6.0">1.6.0</a>
+          <span class="label"><time datetime="2025-09-19">19 Sept 2025</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/171">Added logs in action_keyword for debugging</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/173">Updated special key notation and fixed the implementation</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/175">Appium element extractor support update for iOS</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/176">Improve error classification</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/178">Press_element using Area of Interest, press_by_percentage fix</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/180">Attaching to exisitng appium session, retrieving appium session…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/193">Add method to resolve serial port by product description in BLE…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/194">Add keyword discovery and listing endpoints to expose API</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/197">Enhance Docker deployment with vision backend support and loggi…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/199">Add metadata.json and fetch sample metadata dynamically for TCM</a></li><li class="rel-more">2 fixes</li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.4">
+      <h2 class="rl-minor label" id="rl-1.4">1.4</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.4.0">1.4.0</a>
+          <span class="label"><time datetime="2025-08-26">26 Aug 2025</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/116">Add optional support for robotframework as a library</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/123">Accepting execution_output_path as param in optics setup, readi…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/122">Dockerfiles for optics API hosting</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/130">Optics.py accepting config as string</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/134">Keyword parameter handling in generate.py</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/137">Event attributes path handling for pytest</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/142">Thread termination in screenshot_stream, revert easyocr return</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/144">Removed case sensitivity for text detection</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/146">Sending events as apart of session terminate ( optics quit ) st…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/148">Pytest project path setting, requirments.txt generation update</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/155">Fetching deduplicated frames as a batch to clear the queue, imp…</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/160">Add support for force_terminate_app</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/145">Add support for api</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/166">Enhance read_data method to support scalar environment variables and improve error handling in screenshot capture</a></li><li class="rel-more">8 fixes</li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.3">
+      <h2 class="rl-minor label" id="rl-1.3">1.3</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.3.0">1.3.0</a>
+          <span class="label"><time datetime="2025-07-03">3 Jul 2025</time></span>
+          
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.2">
+      <h2 class="rl-minor label" id="rl-1.2">1.2</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.2.0">1.2.0</a>
+          <span class="label"><time datetime="2025-06-02">2 Jun 2025</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/53">Add an argument in execute to not show live log</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/52">Handling special keys input, refactored enter_texts, multiple locator strategies support for selenium</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/54">Refactored verifier to use strategies</a></li><li><a href="https://github.com/mozarkai/optics-framework/pull/55">EventSDK integration to drivers</a></li></ul>
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.1">
+      <h2 class="rl-minor label" id="rl-1.1">1.1</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.1.0">1.1.0</a>
+          <span class="label"><time datetime="2025-05-12">12 May 2025</time></span>
+          
+        </li>
+      </ol>
+    </section>
+      <section class="rl-group" aria-labelledby="rl-1.0">
+      <h2 class="rl-minor label" id="rl-1.0">1.0</h2>
+      <ol class="rl-list">
+        <li class="rl-row">
+          <a class="rel-tag" href="https://github.com/mozarkai/optics-framework/releases/tag/v1.0.0">1.0.0</a>
+          <span class="label"><time datetime="2025-04-19">19 Apr 2025</time></span>
+          <ul class="rel-added"><li><a href="https://github.com/mozarkai/optics-framework/pull/23">Suite/case setup and teardown, include/exclude test case from c…</a></li><li class="rel-more">2 fixes</li></ul>
+        </li>
+      </ol>
+    </section>
+      <p class="rl-src label"><a href="https://github.com/mozarkai/optics-framework/releases">GitHub releases</a> read <time datetime="2026-11-20">20 Nov 2026</time></p>
+    </div>
+  </main>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="./" aria-label="Optics home">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="./#install">Install</a></li><li><a href="playground">Playground</a></li><li><a href="releases">Releases</a></li><li><a href="birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="docs/get-started/">Get started</a></li><li><a href="docs/guides/">Guides</a></li><li><a href="docs/reference/keywords/">Keyword reference</a></li><li><a href="docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="blog">Blog</a></li><li><a href="feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="llms.txt">llms.txt</a></li><li><a href="agents.md">Agent setup</a></li><li><a href=".well-known/mcp/server-card.json">MCP server card</a></li><li><a href="openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="about">About</a><a href="contact">Contact</a><a href="privacy">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="app.js?v=aaa72e04a3" defer></script>
+  <script src="track.js?v=a7621959d3" defer></script>
+<!--/email_off--></body>
+</html>
