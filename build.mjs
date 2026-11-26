@@ -274,6 +274,20 @@ writeFileSync(
   `out/${SKILLS}/index.json`,
   JSON.stringify({ $schema: "https://schemas.agentskills.io/discovery/0.2.0/schema.json", skills }, null, 2) + "\n",
 );
+// The same list as Markdown: the Optics MCP server sends agents here before a whole task.
+writeFileSync(
+  "out/skills.md",
+  [
+    "# Optics skills",
+    "",
+    "> Each skill is the procedure for one whole task with Optics. Fetch the one that fits your task and follow it. You do not have to install it.",
+    "",
+    ...skills.map((s) => `- [${s.name}](${ORIGIN}${s.url}): ${s.description}`),
+    "",
+    `For a keyword, a setting or an error code, read the docs index: ${ORIGIN}/docs/llms.txt`,
+    "",
+  ].join("\n"),
+);
 
 // The documentation: docs/*.md rendered into out/docs/, with a Markdown twin per page.
 const docs = buildDocs({ lastModified, footer });
