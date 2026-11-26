@@ -21,7 +21,7 @@ To report unacceptable behavior, write to the maintainers at [lalit@mozark.ai](m
 |---|---|
 | Report a bug | [Bug report form](https://github.com/mozarkai/optics-framework/issues/new?template=bug_report.yml) |
 | Ask for a feature | [Feature request form](https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml) |
-| Do a larger task | [`help wanted` queue](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and the [roadmap](https://optics-framework.org/docs/contribute/roadmap) |
+| Do a larger task | [`help wanted` queue](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and the [Help wanted](https://optics-framework.org/docs/contribute/roadmap) ideas |
 | Improve the documentation | For a typo or a small fix, you do not need an issue. For a large rewrite, open an issue first. |
 
 Before you open an issue, search the [existing issues](https://github.com/mozarkai/optics-framework/issues). If your issue exists, add a thumbs-up reaction and any new details to it. Do not open a duplicate.
@@ -139,7 +139,7 @@ Do not report a security vulnerability in a public issue. Follow [SECURITY.md](h
 - [Architecture](https://optics-framework.org/docs/contribute/architecture): The parts of Optics and how they work together.
 - [Extend Optics](https://optics-framework.org/docs/contribute/extending): Add a keyword, a driver, an element source or a vision engine.
 - [Architecture decisions](https://optics-framework.org/docs/contribute/decisions): Why Optics has its current design.
-- [Roadmap](https://optics-framework.org/docs/contribute/roadmap): Open work that needs a contributor.
+- [Help wanted](https://optics-framework.org/docs/contribute/roadmap): The ideas we want to build with contributors.
 
 ---
 

@@ -1,1554 +1,697 @@
 # Help wanted
 
-> The open areas of Optics where a contribution helps, with the current state, the goal and the files to change for each.
+> The ideas we want to build with contributors. Each one says what we imagine for the people who use Optics, where Optics is today, and gives a prompt to explore it with your agent.
 
-This page lists the areas where Optics needs help. Each area gives the current state, the goal, the implementation details and the priority. Some areas suit a first contribution. Others need deep knowledge of the framework. Parts that current code already does are marked **Done**, with the file that does it.
+Optics grows with its contributors. This page lists the ideas we want help with. Each idea says what we imagine for the people who use Optics, where Optics is today and which questions are still open. It does not prescribe a design. The design is the part we want to work out with you.
 
-**Open issues:**
-Today, one issue has the `help wanted` label: [#364, introduce fuzzy testing](https://github.com/mozarkai/optics-framework/issues/364). None of the areas on this page has that label. Search the [open issues](https://github.com/mozarkai/optics-framework/issues) before you start, because some of this work may already have an issue.
+**Explore an idea with your agent:**
+Each idea ends with a prompt. Copy it into Claude Code, Codex or another coding agent. The agent reads the Optics source and explains the area to you. The prompt asks only for understanding, so you come to the issue with a plan of your own.
 
 ## Propose work
 
-1. Read the area on this page, and the code it names.
-2. Search the open issues. If an issue for the work exists, add your plan to it.
-3. If there is no issue, [open one](https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml) with the feature request form. Say which area and which item you want to work on, and how you plan to do it.
-4. Set up your environment with [Set up for development](https://optics-framework.org/docs/contribute/setup), then follow the steps in [Making your contribution](#making-your-contribution).
+### Pick an idea
 
-A typo or a small fix needs no issue. For a bigger change, open the issue first. You can open a draft pull request at any time to ask for direction.
+Read the ideas below and pick one that interests you. The priority and difficulty of each idea are in [the table](#ideas-at-a-glance).
 
-## Priority and difficulty levels
+### Explore it with the prompt
 
-Each area has a priority and a difficulty.
+Paste the idea's prompt into your agent. Read the code that it points to, and run Optics on the area yourself.
+
+### Open an issue with your plan
+
+Search the [open issues](https://github.com/mozarkai/optics-framework/issues) first. If an issue for the idea exists, add your plan to it. If not, [open one](https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml) with the feature request form. Say which idea you picked and how you want to approach it. Before a large pull request, agree on the direction with a maintainer in the issue.
+
+### Build it
+
+Set up with [Set up for development](https://optics-framework.org/docs/contribute/setup), and follow the steps in [Contribute](https://optics-framework.org/docs/contribute/). You can open a draft pull request at any time to ask for direction.
+
+A typo or a small fix needs no issue. Issues that the maintainers marked for contributors carry the [`help wanted`](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+
+## Ideas at a glance
+
+| Idea | Priority | Difficulty |
+| --- | --- | --- |
+| [Run one suite on many devices at once](#many-devices) | High | Advanced |
+| [Move a session to another server](#move-sessions) | High | Advanced |
+| [Drag, long press and pinch](#gestures) | High | Intermediate |
+| [Clipboard and biometrics](#device-features) | Medium | Intermediate |
+| [Flutter apps](#flutter) | Medium | Advanced |
+| [Check what a web page asks the server](#network) | Medium | Intermediate |
+| [Locators that each platform knows best](#platform-locators) | High | Intermediate |
+| [Find elements by what they look like](#vision) | Medium | Intermediate to Advanced |
+| [Test the API and the database behind the app](#data) | High | Advanced |
+| [Check what the device says](#audio) | Medium | Advanced |
+| [Build tests visually](#visual-builder) | Medium | Advanced |
+| [Learn from recorded sessions](#traces) | Medium | Intermediate |
+| [Find elements faster](#faster-location) | High | Advanced |
+| [A server that a team can share](#server-security) | High | Intermediate |
+| [Make every run faster](#performance) | Medium | Intermediate |
+| [One place for each decision](#simplify) | Medium | Intermediate |
+| [Journeys on every platform](#test-journeys) | High | Beginner to Intermediate |
+| [Documentation](#documentation) | Medium | Beginner |
+| [CI and tooling](#infrastructure) | Low to Medium | Intermediate |
 
 | Level | Meaning |
 | --- | --- |
-| **High Priority** | Critical for production use or security |
-| **Medium Priority** | Important for usability and completeness |
-| **Low Priority** | Nice to have improvements |
-| **Beginner** | Good first contribution, minimal framework knowledge needed |
-| **Intermediate** | Requires some framework knowledge |
-| **Advanced** | Requires deep framework understanding |
+| **High** | Teams that run Optics at scale need it |
+| **Medium** | It makes Optics more useful or more complete |
+| **Low** | It is good to have |
+| **Beginner** | A good first contribution; little framework knowledge is necessary |
+| **Intermediate** | Some knowledge of the framework is necessary |
+| **Advanced** | Deep knowledge of the framework is necessary |
 
-## The areas
+## Run at scale
 
-| Area | Priority | Difficulty | Status |
-| --- | --- | --- | --- |
-| [1. Stateless API layer](#1-stateless-api-layer) | High | Advanced | Open |
-| [2. Parallel strategy execution](#2-parallel-strategy-execution) | High | Advanced | Open |
-| [3. Flexible driver-specific strategies](#3-flexible-driver-specific-strategies) | High | Intermediate | Partly done |
-| [4. Additional image detection drivers](#4-additional-image-detection-drivers) | Medium | Intermediate to Advanced | Open |
-| [5. Interactive test creation](#5-interactive-test-creation) | Medium | Advanced | Partly done |
-| [6. Code simplification and unification](#6-code-simplification-unification) | Medium | Intermediate | Partly done |
-| [7. Test coverage](#7-test-coverage) | High | Beginner to Intermediate | Partly done |
-| [8. Security improvements](#8-security-improvements) | High | Intermediate | Partly done |
-| [9. Feature development](#9-feature-development) | Medium to High | Intermediate to Advanced | Partly done |
-| [10. Performance optimizations](#10-performance-optimizations) | Medium | Intermediate | Partly done |
-| [11. Documentation](#11-documentation) | Medium | Beginner to Intermediate | Partly done |
-| [12. Infrastructure](#12-infrastructure) | Low to Medium | Intermediate | Partly done |
+### Run one suite on many devices at once
 
-## 1. Stateless API layer
+**Priority**: High · **Difficulty**: Advanced
 
-**Priority**: High | **Difficulty**: Advanced | **Status**: Open
+**What we imagine.** You point Optics at a set of devices: a rack of phones, a group of emulators, a device cloud or a mix of browsers. Optics runs the same suite on all of them at the same time, or splits a long suite across them to finish sooner. One report shows each device's result side by side, so a failure that happens on one device only is easy to find.
 
-### Current state
+**Optics today.**
 
-The API layer keeps its state in `SessionManager`, which stores sessions in memory (`self.sessions` in `optics_framework/common/session_manager.py`). You cannot move a session from one instance to another. This makes it difficult to scale horizontally or to recover from an instance failure. When a driver session drops, Optics does not reconnect: you must stop the session and start a new one (`optics_framework/common/session_liveness.py`).
+- `optics execute` runs a suite in one session, on one device.
+- When `config.yaml` turns on more than one driver, Optics uses them as a fallback chain, one after the other (`optics_framework/common/instance_fallback.py`).
+- `optics serve` and `optics mcp` already keep many sessions open at the same time (`optics_framework/common/session_manager.py`).
 
-### Goal
+**Questions to explore.**
 
-Make the API layer stateless, so that you can move a session from one instance to another and keep its context. This enables:
+- How does a project name its devices, and how does it say "every device" or "split the suite"?
+- How do the live output and the JUnit report show several devices without noise?
+- What happens to the run when one device disconnects?
 
-- Horizontal scaling of API instances
-- Session recovery after instance failures
-- Load balancing across multiple instances
-- Zero-downtime deployments
+**Prompt for your agent:**
 
-### Key areas
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Run one suite on many devices at once" (https://optics-framework.org/docs/contribute/roadmap#many-devices).
 
-#### Session storage
+Clone the repository and read CLAUDE.md first. Then follow the path of `optics execute` from the CLI to the device, and read how a session, its drivers and its event manager are built.
 
-**Current**: Sessions stored in-memory only (`optics_framework/common/session_manager.py`)
+Help me understand:
+- What ties one run of `optics execute` to one session and one device today.
+- Which parts of a run (session, events, report, popup state, output folder) belong to one device, and which belong to the whole run.
+- How the JUnit report and the live output are built from events.
 
-**Needed**:
-
-- External session storage (database, Redis, etc.)
-- Session serialization/deserialization
-- Session state export/import functionality
-
-#### Session context
-
-**Current**: Session contains driver instances, element sources, vision models that cannot be serialized
-
-**Needed**:
-
-- Serialize all session state (configuration, driver state, element sources, vision models)
-- Reconstruct session from serialized state
-- Handle driver reconnection on migration
-- Store driver session IDs and connection details
-
-#### API endpoints
-
-**New Endpoints Needed**:
-
-- `POST /v1/sessions/{id}/export` - Export session state as JSON
-- `POST /v1/sessions/import` - Import session state and recreate session
-- `POST /v1/sessions/{id}/migrate` - Migrate session to another instance
-
-None of these endpoints exists yet. The session endpoints today are listed in the [HTTP API reference](https://optics-framework.org/docs/reference/http-api).
-
-### Files to modify
-
-- `optics_framework/common/session_manager.py` - Add serialization support
-- `optics_framework/common/expose_api.py` - Add migration endpoints
-- `optics_framework/common/models.py` - Add session state models (Pydantic)
-- `optics_framework/common/optics_builder.py` - Support session reconstruction
-
-### Related documentation
-
-- [Session Management](https://optics-framework.org/docs/contribute/components#sessionmanager)
-- [REST API Layer](https://optics-framework.org/docs/contribute/api-layer)
-
-## 2. Parallel strategy execution
-
-**Priority**: High | **Difficulty**: Advanced | **Status**: Open
-
-### Current state
-
-Strategies run **sequentially** (one after another) in a fallback chain. `StrategyManager.locate()` in `optics_framework/common/strategies.py` is a generator that tries Strategy 1, waits for it to finish (success or failure), then tries Strategy 2, and so on. This is reliable, but slower than necessary, because:
-
-1. **Independent strategies wait unnecessarily**: Many strategies can run simultaneously since they don't depend on each other
-2. **Total execution time is sum of all strategies**: If Strategy 1 takes 2s and Strategy 2 takes 3s, total time is 5s even if Strategy 2 could succeed immediately
-3. **Resource underutilization**: CPU, I/O, and network resources are idle while waiting for sequential execution
-
-**Example of Current Sequential Flow**:
-
-```python
-# Current: Sequential execution
-1. Try XPathStrategy.find_element() → Wait 2s → Fail
-2. Try TextElementStrategy.find_element() → Wait 1s → Fail
-3. Try TextDetectionStrategy.find_element() → Wait 3s → Success
-# Total time: 6 seconds
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-### Goal
+### Move a session to another server
 
-Run independent strategies at the same time. This cuts the time to locate an element, and keeps the same reliability and fallback behaviour.
+**Priority**: High · **Difficulty**: Advanced · **Issue**: [#351](https://github.com/mozarkai/optics-framework/issues/351)
 
-**Benefits**:
+**What we imagine.** Many copies of `optics serve` work as one service. A session can move from one copy to another and keep its context, and a session survives when its server restarts. Teams can scale the service out, balance the load and deploy without downtime.
 
-- **Faster element location**: Strategies execute concurrently, returning the first successful result
-- **Better resource utilization**: CPU, I/O, and network resources used efficiently
-- **Faster tests**: Tests execute faster, especially with multiple fallback strategies
-- **Maintains reliability**: Still supports fallback, but optimizes for the common case
+**Optics today.**
 
-**Example of Desired Parallel Flow**:
+- `SessionManager` keeps each session in the memory of one process (`optics_framework/common/session_manager.py`).
+- A session holds live objects: drivers, element sources, vision models and the recorded steps.
+- When a driver session ends, Optics stops the session with `E0106` and you start a new one (`optics_framework/common/session_liveness.py`).
 
-```python
-# Desired: Parallel execution
-1. Start XPathStrategy.find_element() → (runs in background)
-2. Start TextElementStrategy.find_element() → (runs in background)
-3. Start TextDetectionStrategy.find_element() → (runs in background)
-4. First successful result returns → Total time: ~3 seconds (longest strategy)
+**Questions to explore.**
+
+- Which parts of a session are configuration that a new process can rebuild, and which are live state?
+- What should a caller see while a session moves?
+- How does this fit the HTTP API and the MCP server, which both keep sessions?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Move a session to another server" (https://optics-framework.org/docs/contribute/roadmap#move-sessions), and issue #351.
+
+Clone the repository and read CLAUDE.md first. Then read how `SessionManager` and `Session` are built, how `optics serve` (common/expose_api.py) and `optics mcp` (helper/mcp_server.py) create and look up sessions, and what a session holds.
+
+Help me understand:
+- Everything a session holds, sorted into configuration and live state.
+- How a session starts, how it ends, and what happens when its driver goes away.
+- Where `optics serve` and `optics mcp` keep their sessions, and how they differ.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-### Execution semantics
+## Reach every part of the app
 
-**Critical Requirement**: Only one strategy should execute the final keyword/action. Once a strategy successfully performs the keyword, all remaining strategies must be immediately aborted.
+### Drag, long press and pinch
 
-**Execution Rules**:
+**Priority**: High · **Difficulty**: Intermediate
 
-1. **Parallel Location Phase**: Multiple strategies run in parallel to locate the element
-   - All strategies attempt to find the element simultaneously
-   - First successful location result is selected
-   - Remaining location attempts are cancelled/aborted
-2. **Single Action Execution**: Only the winning strategy executes the keyword/action
-   - The strategy that successfully located the element proceeds to execute the action
-   - Other strategies are aborted before they can execute any actions
-   - This prevents duplicate actions (e.g., clicking the same button twice)
-3. **Fallback Behavior**: If the selected strategy fails to execute the keyword
-   - Abort the failed strategy
-   - Move to the next successful location result (if available)
-   - If no other strategies succeeded in location, try the next strategy in sequence
+**What we imagine.** A test does every gesture that a person does. It reorders a list by drag, opens a context menu with a long press, and zooms a map or a photo with a pinch. The gesture starts and ends on elements, not on fixed coordinates, so the step still works when the layout changes. These gestures are among the features that mobile testers ask for most.
 
-**Example Flow**:
+**Optics today.**
 
-```python
-# Parallel location phase
-strategy1_result = await XPathStrategy.locate(element)      # Success: found element
-strategy2_result = await TextStrategy.locate(element)      # Success: found element
-strategy3_result = await OCRStrategy.locate(element)       # Still running...
+- Optics presses, swipes and scrolls, from an element or from a point (`Press Element`, `Swipe From Element`, `Scroll From Element`, `Swipe Until Element Appears`).
+- Each keyword runs on every driver that can do it. A driver that cannot do it refuses the keyword with `E0105`.
 
-# Strategy 1 wins (first success)
-if strategy1_result:
-    # Abort strategy 2 and 3 immediately
-    abort_strategy(strategy2)
-    abort_strategy(strategy3)
+**Questions to explore.**
 
-    # Only strategy 1 executes the keyword
-    try:
-        await strategy1.execute_keyword("press_element", strategy1_result)
-        return success  # Done! No other strategies execute
-    except Exception:
-        # Strategy 1 failed to execute, try strategy 2
-        abort_strategy(strategy1)
-        await strategy2.execute_keyword("press_element", strategy2_result)
-        return success
+- Which drivers (Appium on each platform, Playwright, Selenium, the `ble` driver) can do which gesture?
+- How should a step name where a gesture starts and where it ends?
+- How does each gesture fit the fallback ladder and AI self-heal?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Drag, long press and pinch" (https://optics-framework.org/docs/contribute/roadmap#gestures).
+
+Clone the repository and read CLAUDE.md first. Then read how `Press Element` and `Swipe From Element` work, from the keyword in api/action_keyword.py down to each driver in engines/drivers/.
+
+Help me understand:
+- How a keyword finds an element and then acts on it (`_locate_and_act`), and what the act receives.
+- Which gesture methods `DriverInterface` has, and how each driver implements them or refuses them.
+- What a new keyword must reach to work in every entry point (CSV runner, Python library, HTTP API, MCP, optics live).
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-**Implementation Requirements**:
+### Clipboard and biometrics
 
-- **Cancellation Tokens**: Use `asyncio.CancelledError` or cancellation tokens to abort strategies
-- **Early Exit**: Return immediately when first strategy succeeds
-- **Resource Cleanup**: Properly clean up aborted strategies (close connections, release locks)
-- **Error Handling**: Handle cancellation gracefully without side effects
+**Priority**: Medium · **Difficulty**: Intermediate
 
-### Key scenarios
+**What we imagine.** A test uses the device as a person does. It reads what the app copied, such as a referral code, and puts text on the clipboard before a paste. It passes or fails a fingerprint or face prompt on an emulator or a simulator, so a test of a sign-in flow that uses biometrics runs from start to end.
 
-#### Scenario 1: XPath with parallel coordinate discovery
+**Optics today.**
 
-**Current Behavior**: When given an XPath, the framework:
+- Optics has no keyword for the clipboard or for biometric prompts yet.
+- Optics treats secret values with care: it writes them as `<redacted>` in recordings and reports (`is_secret` in `optics_framework/common/screen_snapshot.py`).
 
-1. Tries `find_element()` using the XPath directly
-2. If that fails, tries other strategies sequentially
+**Questions to explore.**
 
-**Desired Parallel Behavior**: When given an XPath, simultaneously:
+- Which platforms allow these features on emulators, on simulators and on real devices?
+- When is a clipboard value a secret, and how should a report show it?
+- How should a platform that does not have the feature answer?
 
-1. **Primary path**: Execute `find_element()` using the XPath directly
-2. **Parallel path**: Search page source to find the XPath and extract coordinates
-3. **Fallback path**: If XPath is not accessible, use coordinates from page source
+**Prompt for your agent:**
 
-**Implementation Flow**:
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Clipboard and biometrics" (https://optics-framework.org/docs/contribute/roadmap#device-features).
 
-```python
-# Parallel execution
-async def locate_with_xpath(element: str):
-    tasks = [
-        # Task 1: Direct findElement
-        find_element_direct(element),
+Clone the repository and read CLAUDE.md first. Then read the section on optional driver capabilities, `DriverInterface` (common/driver_interface.py), and how the Appium driver groups platforms with `PlatformProfile` and `@supported_on`.
 
-        # Task 2: Parse page source for XPath and get coordinates
-        parse_page_source_for_coordinates(element),
+Help me understand:
+- How Optics adds a capability that only some drivers or platforms have, and what a user sees on the others.
+- How Optics finds and hides secret values in recordings, logs and reports.
+- Which keywords today come close to these features.
 
-        # Task 3: Alternative XPath variations
-        try_xpath_variations(element)
-    ]
-
-    # Return first successful result
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    return first_successful_result(results)
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-#### Scenario 2: Text with parallel XPath discovery and OCR
+### Flutter apps
 
-**Current Behavior**: When given text, the framework:
+**Priority**: Medium · **Difficulty**: Advanced
 
-1. Tries text-based element location
-2. If that fails, tries OCR sequentially
-3. If that fails, tries other strategies
+**What we imagine.** A Flutter app is as easy to test as a native app. A test finds Flutter widgets by their keys and labels, and it stays stable when a widget has no accessibility label. The same suite runs on the Android and iOS builds of the app.
 
-**Desired Parallel Behavior**: When given text, simultaneously:
+**Optics today.**
 
-1. **Path A**: Search page source to find text and convert to XPath, then execute `find_element()`
-2. **Path B**: Capture screenshot and use OCR/text detection to find coordinates
-3. **Path C**: Try direct text matching in element source
+- Optics drives a Flutter app as it drives any app: through the platform's accessibility tree, OCR and image matching.
+- Optics has no link to Flutter's own widget tree.
 
-**Implementation Flow**:
+**Questions to explore.**
 
-```python
-# Parallel execution for text
-async def locate_with_text(text: str):
-    tasks = [
-        # Task 1: Page source → XPath → findElement
-        page_source_to_xpath_to_find_element(text),
+- Which signals does a Flutter app give in a release build, and which only in a debug build?
+- How does a Flutter element fit the locator types and the fallback ladder?
+- Which sample app should the work use, so that tests can run in CI?
 
-        # Task 2: Screenshot → OCR → Coordinates
-        screenshot_ocr_to_coordinates(text),
+**Prompt for your agent:**
 
-        # Task 3: Direct text element location
-        direct_text_element_location(text)
-    ]
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Flutter apps" (https://optics-framework.org/docs/contribute/roadmap#flutter).
 
-    # Return first successful result
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    return first_successful_result(results)
+Clone the repository and read CLAUDE.md first. Then read how Optics locates an element: `determine_element_type` in common/utils.py, the strategies in common/strategies.py, and the Appium element sources in engines/elementsources/.
+
+Help me understand:
+- How Optics reads a native app's screen today, and which sources and strategies take part.
+- How an element source declares the locators it can handle.
+- Where a Flutter app's screen would look different from a native app's screen to these sources.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-#### Scenario 3: Image template with parallel detection methods
+### Check what a web page asks the server
 
-**Current Behavior**: When given an image template, tries image detection strategies sequentially.
+**Priority**: Medium · **Difficulty**: Intermediate · **Issue**: [#686](https://github.com/mozarkai/optics-framework/issues/686)
 
-**Desired Parallel Behavior**: Simultaneously:
+**What we imagine.** A web test checks what the page shows and what the page asked the server. A step waits for the response to a request, checks its status and its data, and keeps a value from it for a later step. When a test fails, the report shows the requests that led to the failure.
 
-1. Template matching (OpenCV)
-2. Remote OIR service
-3. Alternative image detection models
+**Optics today.**
 
-### Implementation approach
+- A web test reads the page: its elements, its text and its screenshots, through the Playwright and Selenium drivers.
+- `Invoke API` calls an API directly, but it does not see the requests that the page makes itself.
 
-#### Architecture changes
+**Questions to explore.**
 
-The four sketches below show the proposed design. They are not current code.
+- Which drivers can watch requests, and does this also work on mobile web through Appium?
+- How does a step name the request it waits for?
+- How should a report show requests and responses that hold secrets?
 
-**1. Strategy execution model**
-Convert from sequential to parallel execution with abort capability:
+**Prompt for your agent:**
 
-```python
-# Current: Sequential
-class StrategyManager:
-    def locate(self, element: str):
-        for strategy in self.strategies:
-            result = strategy.locate(element)  # Blocks here
-            if result:
-                return result
-        raise ElementNotFoundError()
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Check what a web page asks the server" (https://optics-framework.org/docs/contribute/roadmap#network), and issue #686.
 
-# Desired: Parallel with abort
-class StrategyManager:
-    async def locate(self, element: str):
-        # Create tasks with cancellation support
-        tasks = {
-            strategy: asyncio.create_task(strategy.locate_async(element))
-            for strategy in self.strategies
-        }
+Clone the repository and read CLAUDE.md first. Then read the Playwright driver (engines/drivers/playwright.py), the Selenium driver (engines/drivers/selenium.py), and how `Invoke API` saves values from a response (api/flow_control.py).
 
-        # Wait for first success, then abort others
-        for strategy, task in tasks.items():
-            try:
-                result = await task
-                if result:
-                    # Abort all remaining tasks
-                    for other_strategy, other_task in tasks.items():
-                        if other_strategy != strategy and not other_task.done():
-                            other_task.cancel()
-                    return result
-            except asyncio.CancelledError:
-                continue
+Help me understand:
+- How the Playwright and Selenium drivers open and follow pages and tabs.
+- How a keyword saves a value for a later step, and how variables move between steps.
+- How Optics hides secret values in logs and reports.
 
-        raise ElementNotFoundError()
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-The "Current" half is simplified. The real `StrategyManager.locate()` takes the element, an optional area of interest and an index, and yields a `LocateResult` for each strategy that finds the element.
+### Locators that each platform knows best
 
-**2. Strategy interface updates**
-Make strategies async-compatible:
+**Priority**: High · **Difficulty**: Intermediate
 
-```python
-# Current
-class LocatorStrategy(ABC):
-    def locate(self, element: str, index: int = 0):
-        # Synchronous implementation
-        pass
+**What we imagine.** Each platform brings its strongest way to find an element, and that way joins the same fallback chain as every other locator. An Android test can use a UI Automator selector, and an iOS test can use a predicate string or a class chain. A new driver can add a lookup of its own without changes to the core.
 
-# Desired
-class LocatorStrategy(ABC):
-    async def locate_async(self, element: str, index: int = 0):
-        # Asynchronous implementation
-        pass
+**Optics today.**
 
-    def locate(self, element: str, index: int = 0):
-        # Synchronous wrapper for backward compatibility
-        return run_async(self.locate_async(element, index))
+- Optics reads XPath, CSS (`css=`), a cross-platform `id:`, Playwright's `role=`, `label=`, `placeholder=`, `text=`, `title=`, `alt=` and `data-testid=`, accessibility IDs and class names.
+- The four locate strategies are a fixed list in `StrategyFactory` (`optics_framework/common/strategies.py`).
+
+**Questions to explore.**
+
+- Which platform locators do users ask for most?
+- How does a locator string tell Optics which lookup it needs?
+- How does a driver offer a lookup of its own, and where does that lookup go in the fallback order?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Locators that each platform knows best" (https://optics-framework.org/docs/contribute/roadmap#platform-locators).
+
+Clone the repository and read CLAUDE.md first. Then read the element location pipeline: `determine_element_type` and `resolve_locator` in common/utils.py, `StrategyFactory` and `StrategyManager` in common/strategies.py, and the Appium and Playwright locator code.
+
+Help me understand:
+- How a locator string becomes a lookup, step by step, from the keyword to the element source.
+- Why the strategy list is fixed today, and what depends on its order.
+- Which locator forms each driver understands today.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-`run_async()` exists in `optics_framework/common/async_utils.py`. It now also needs a `timeout` argument: `run_async(coro, timeout)`.
+### Find elements by what they look like
 
-**3. Parallel execution groups with abort**
-Group strategies that can run in parallel with abort capability:
+**Priority**: Medium · **Difficulty**: Intermediate to Advanced
 
-```python
-class ParallelStrategyGroup:
-    """Groups strategies that can execute in parallel"""
+**What we imagine.** A test finds an element on any screen, also where there is no element tree: a game, a video, a camera view of a TV. You describe the element in words, such as "the blue Pay button", or show a picture of it, and Optics finds it fast on a normal computer.
 
-    def __init__(self, strategies: List[LocatorStrategy]):
-        self.strategies = strategies
-        self.priority = min(s.priority for s in strategies)
+**Optics today.**
 
-    async def execute_parallel(self, element: str):
-        """Execute all strategies in parallel, return first success, abort others"""
-        # Create cancellable tasks
-        tasks = {
-            strategy: asyncio.create_task(strategy.locate_async(element))
-            for strategy in self.strategies
-        }
+- Two image engines match pictures: `templatematch` (OpenCV, local) and `remote_oir` (a remote service).
+- OCR engines read text on the screen: EasyOCR, RapidOCR, Pytesseract, Apple Vision, Google Vision and a remote OCR service.
 
-        # Wait for first success
-        for strategy, task in tasks.items():
-            try:
-                result = await task
-                if result:
-                    # Abort all remaining tasks
-                    self._abort_remaining(tasks, strategy)
-                    return result
-            except asyncio.CancelledError:
-                continue
+**Questions to explore.**
 
-        return None
+- Which kinds of model fit: element detectors, models that find an element from a description, faster OCR?
+- How does an element described in words fit the elements file and the fallback ladder?
+- How do we measure accuracy and speed on real app screens, not on document pages?
 
-    def _abort_remaining(self, tasks: dict, winner: LocatorStrategy):
-        """Cancel all tasks except the winner"""
-        for strategy, task in tasks.items():
-            if strategy != winner and not task.done():
-                task.cancel()
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Find elements by what they look like" (https://optics-framework.org/docs/contribute/roadmap#vision).
+
+Clone the repository and read CLAUDE.md first. Then read `ImageInterface` and `TextInterface` (common/), the engines in engines/vision_models/, and the vision strategies in common/strategies.py.
+
+Help me understand:
+- What an image engine and an OCR engine receive, and what they must return.
+- How a vision match becomes a press on the device, including the area of interest and the pixel scaling.
+- How the engines are chosen and loaded from config.yaml.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-**4. Dependency management**
-Identify which strategies can run in parallel vs. which must be sequential:
+## Test beyond the screen
 
-```python
-class StrategyDependencyGraph:
-    """Manages strategy dependencies and parallel execution"""
+### Test the API and the database behind the app
 
-    def can_run_parallel(self, strategy1: LocatorStrategy, strategy2: LocatorStrategy) -> bool:
-        """Check if two strategies can run in parallel"""
-        # Strategies can run in parallel if:
-        # 1. They don't modify shared state
-        # 2. They don't depend on each other's results
-        # 3. They use different resources (e.g., page source vs screenshot)
-        return (
-            not strategy1.modifies_shared_state() and
-            not strategy2.modifies_shared_state() and
-            strategy1.resource_type() != strategy2.resource_type()
-        )
+**Priority**: High · **Difficulty**: Advanced
+
+**What we imagine.** API and database checks are a natural part of every suite, as natural as screen steps. One test creates data through an API, acts on the screen, then confirms the result in the database. A suite can also be API-only. Each check shows in the live output and in the report like any other step, and credentials stay secret. We want to design this as a whole: how a project describes its services and databases, how values move between data steps and screen steps, and how the report tells the story.
+
+**Optics today.**
+
+- `Invoke API` calls an endpoint that a YAML file describes, checks the response and saves values as variables. See [Call APIs in a test](https://optics-framework.org/docs/advanced/api-calls).
+- `Evaluate`, `Condition` and `Read Data` work with values in a test.
+- A contribution in review adds database checks: [#752](https://github.com/mozarkai/optics-framework/pull/752).
+
+**Questions to explore.**
+
+- What should a project file for APIs and databases look like, beside `config.yaml` and the elements file?
+- Which checks do teams need most: status, schema, values, timing, data that eventually arrives?
+- How should data steps work in each entry point: the CSV runner, the Python library, `optics live` and the MCP server?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Test the API and the database behind the app" (https://optics-framework.org/docs/contribute/roadmap#data). Pull request #752 adds database checks.
+
+Clone the repository and read CLAUDE.md first. Then read `Invoke API`, `Evaluate`, `Condition` and `Read Data` in api/flow_control.py, how the runner loads API files (helper/execute.py, common/runner/data_reader.py), and the page https://optics-framework.org/docs/advanced/api-calls.
+
+Help me understand:
+- How a project describes an API today, and how a step uses it.
+- How values move between steps, and how secrets stay out of logs and reports.
+- What pull request #752 adds, and how it fits beside the API support.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-#### Specific implementation patterns
+### Check what the device says
 
-**Pattern 1: XPath with coordinate discovery**
-```python
-async def locate_xpath_parallel(element: str):
-    """Locate element by XPath with parallel coordinate discovery"""
+**Priority**: Medium · **Difficulty**: Advanced
 
-    async def direct_find():
-        """Direct findElement using XPath"""
-        return await element_source.locate(element)
+**What we imagine.** A test hears the device. It checks that a voice assistant gave the right answer, that the app spoke "Payment done", or that a sound played when a timer ended. Speech becomes text on the test machine, so the audio stays private and the check runs offline.
 
-    async def page_source_coords():
-        """Parse page source to find XPath and get coordinates"""
-        page_source, _ = await element_source.get_page_source()
-        xpath_node = parse_xpath_from_page_source(page_source, element)
-        if xpath_node:
-            return get_coordinates_from_node(xpath_node)
-        return None
+**Optics today.**
 
-    # Execute both in parallel
-    results = await asyncio.gather(
-        direct_find(),
-        page_source_coords(),
-        return_exceptions=True
-    )
+- Optics reads what a device shows: its page source, its screenshots and the text in them.
+- Optics does not record the sound of a device yet.
 
-    # Prefer direct find, fallback to coordinates
-    if results[0] and not isinstance(results[0], Exception):
-        return results[0]
-    if results[1] and not isinstance(results[1], Exception):
-        return results[1]
-    raise ElementNotFoundError()
+**Questions to explore.**
+
+- How can Optics get the sound from each kind of device: phone, browser, desktop app and TV?
+- How should an audio check read in a suite, and how much time should it wait?
+- How should the report keep the audio, so that a person can listen to a failure?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Check what the device says" (https://optics-framework.org/docs/contribute/roadmap#audio).
+
+Clone the repository and read CLAUDE.md first. Then read how Optics reads a screen: the screenshot and OCR path in common/strategies.py, the element source interface in common/elementsource_interface.py, and how assertions wait in `Verifier` (api/verifier.py).
+
+Help me understand:
+- How an assertion keyword waits and decides pass or fail.
+- How Optics adds a new kind of engine, as it did for OCR and LLM engines.
+- Where a failure's evidence (screenshots, page source) is saved for the report.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-**Pattern 2: Text with multi-path discovery**
-```python
-async def locate_text_parallel(text: str):
-    """Locate element by text with parallel multi-path discovery"""
+## Create tests faster
 
-    async def page_source_path():
-        """Page source → Find text → Convert to XPath → findElement"""
-        page_source, _ = await element_source.get_page_source()
-        xpath = find_text_in_page_source(page_source, text)
-        if xpath:
-            return await element_source.locate(xpath)
-        return None
+### Build tests visually
 
-    async def screenshot_ocr_path():
-        """Screenshot → OCR → Find coordinates"""
-        screenshot = await element_source.capture()
-        text_locations = await text_detection.find_element(screenshot, text)
-        if text_locations:
-            return text_locations[0]  # Return first match
-        return None
+**Priority**: Medium · **Difficulty**: Advanced
 
-    async def direct_text_path():
-        """Direct text element location"""
-        return await element_source.locate_by_text(text)
+**What we imagine.** A person who does not type keywords builds a test by pointing at a live screen. They select an element, see the locators that would find it and how stable each one is, and add a step. They reorder, edit and remove steps, and run them one at a time while they build.
 
-    # Execute all three paths in parallel
-    results = await asyncio.gather(
-        page_source_path(),
-        screenshot_ocr_path(),
-        direct_text_path(),
-        return_exceptions=True
-    )
+**Optics today.**
 
-    # Return first successful result
-    for result in results:
-        if result and not isinstance(result, Exception):
-            return result
-    raise ElementNotFoundError()
+- `optics live` runs one keyword at a time on a live app, and `/save` writes the steps that worked into the suite. See [Record a test](https://optics-framework.org/docs/create/record).
+- In plain-English mode, an AI model picks the steps for a goal that you describe. See [Describe a test in plain English](https://optics-framework.org/docs/create/describe).
+- `GET /v1/sessions/{session_id}/screen_elements` and the MCP server list the elements on a screen with ways to find each one.
+
+**Questions to explore.**
+
+- Should the builder live in a browser, inside `optics live`, or beside your editor?
+- How does it show a locator's stability before you save the step?
+- How do visual edits stay in step with the CSV or YAML files?
+
+**Prompt for your agent:**
+
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Build tests visually" (https://optics-framework.org/docs/contribute/roadmap#visual-builder).
+
+Clone the repository and read CLAUDE.md first. Then read the live session journey (helper/live.py, helper/live_tui.py), the screen elements endpoint of `optics serve` (common/expose_api.py) and how the MCP server lists rows and locators (common/screen_snapshot.py).
+
+Help me understand:
+- How `optics live` runs a step and how `/save` writes the suite files.
+- How Optics lists the elements on a screen and suggests locators for each one.
+- What the HTTP API already gives a user interface that wants to drive a session.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-**Pattern 3: Resource-aware parallel execution**
-```python
-class ResourceAwareStrategyExecutor:
-    """Executes strategies in parallel while managing resources"""
+### Learn from recorded sessions
 
-    def __init__(self):
-        self.page_source_lock = asyncio.Lock()
-        self.screenshot_lock = asyncio.Lock()
-        self.driver_lock = asyncio.Lock()
+**Priority**: Medium · **Difficulty**: Intermediate
 
-    async def execute_parallel(self, strategies: List[LocatorStrategy], element: str):
-        """Execute strategies in parallel with resource management"""
+**What we imagine.** A team can learn from its own sessions. A person chooses to export the sessions that agents and testers ran with Optics, with the screens they saw, the actions they took and the results, in an open format for agent traces. With these traces, the team can study why tests fail, share examples, or train a smaller model that knows their app. This is not telemetry. Nothing leaves the machine unless a person exports it.
 
-        # Group strategies by resource type
-        page_source_strategies = [s for s in strategies if s.uses_page_source()]
-        screenshot_strategies = [s for s in strategies if s.uses_screenshot()]
-        driver_strategies = [s for s in strategies if s.uses_driver()]
+**Optics today.**
 
-        # Execute groups in parallel, but serialize within groups if needed
-        tasks = []
+- Optics records the steps that work: `/save` in `optics live`, the `steps` resource of the MCP server, and the steps that AI self-heal adds, which the JUnit report keeps.
+- Secret values are written as `<redacted>` in every recording.
 
-        if page_source_strategies:
-            tasks.append(self._execute_with_lock(
-                page_source_strategies, element, self.page_source_lock
-            ))
+**Questions to explore.**
 
-        if screenshot_strategies:
-            tasks.append(self._execute_with_lock(
-                screenshot_strategies, element, self.screenshot_lock
-            ))
+- Which trace formats do people use, and which tools read them?
+- What must a trace keep (screens, reasoning, timing), and what must it never keep?
+- Should traces come from the MCP server, `optics live`, self-heal or all three?
 
-        if driver_strategies:
-            tasks.append(self._execute_with_lock(
-                driver_strategies, element, self.driver_lock
-            ))
+**Prompt for your agent:**
 
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        return first_successful_result(results)
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Learn from recorded sessions" (https://optics-framework.org/docs/contribute/roadmap#traces).
+
+Clone the repository and read CLAUDE.md first. Then read how sessions are recorded: the `Recorder` and `AgentSession` in common/agent_core.py, the `steps` resource in helper/mcp_server.py, `/save` in helper/live.py, and how AI self-heal records its steps (common/ai_self_heal.py).
+
+Help me understand:
+- What each recording holds today, and where it is saved.
+- How Optics decides that a value is secret, and how it hides it.
+- What differs between a recording from the MCP server, from `optics live` and from self-heal.
+
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-### Key implementation areas
+## Make the core faster and safer
 
-#### 1. Async strategy interface
+### Find elements faster
 
-**Files to Modify**:
+**Priority**: High · **Difficulty**: Advanced
 
-- `optics_framework/common/strategies.py` - Add async methods to `LocatorStrategy`
-- All strategy implementations - Add `locate_async()` methods
+**What we imagine.** Optics finds an element in the time of its fastest strategy that succeeds, not in the sum of the strategies before it. It still acts only once, and only through the element that it found first. Tests with many fallback locators become faster, and their results stay the same.
 
-**Changes Needed**:
+**Optics today.**
 
-- Convert `locate()` methods to async
-- Maintain backward compatibility with sync wrappers
-- Update strategy base class
+- `StrategyManager.locate` gives results one strategy at a time: XPath, text, OCR, then image (`optics_framework/common/strategies.py`).
+- A later strategy looks only after the act on an earlier result fails, so the device never gets two actions for one step.
+- Assertions already share one screenshot per round among the vision strategies, and skip a screen that did not change.
 
-#### 2. Parallel execution engine
+**Questions to explore.**
 
-**Files to Create/Modify**:
+- Which strategies share the driver, and which only need a screenshot?
+- What does a faster lookup cost in CPU when OCR runs on every step?
+- How do we measure the gain on real suites?
 
-- `optics_framework/common/parallel_strategy_executor.py` - New parallel executor
-- `optics_framework/common/strategies.py` - Update `StrategyManager` for parallel execution
+**Prompt for your agent:**
 
-**Features**:
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Find elements faster" (https://optics-framework.org/docs/contribute/roadmap#faster-location).
 
-- Parallel task execution using `asyncio.create_task()` and cancellation
-- First-success-wins semantics with immediate abort of remaining strategies
-- Exception handling and aggregation
-- Resource management (locks for shared resources)
-- Cancellation token support for graceful abort
-- Only winning strategy executes the keyword/action
+Clone the repository and read CLAUDE.md first. Then read the element location pipeline: `StrategyManager.locate` and `_assert` in common/strategies.py, `_act_until_success` in api/action_keyword.py, and the four fallback layers that CLAUDE.md describes.
 
-#### 3. Strategy dependency analysis
+Help me understand:
+- The order in which strategies look and act today, and why a later strategy waits.
+- Which resources (driver, page source, screenshot) each strategy uses.
+- How assertion rounds already share work between strategies.
 
-**Files to Create**:
-
-- `optics_framework/common/strategy_dependencies.py` - Dependency analysis
-
-**Features**:
-
-- Identify which strategies can run in parallel
-- Group strategies by resource requirements
-- Manage resource locks (page source, screenshot, driver)
-
-#### 4. Configuration and control
-
-**Files to Modify**:
-
-- `optics_framework/common/config_handler.py` - Add parallel execution config
-- `optics_framework/common/models.py` - Add configuration models
-
-**Configuration Options** (proposed; `config.yaml` has no `strategy_execution` key yet):
-
-```yaml
-strategy_execution:
-  mode: "parallel"  # "sequential" or "parallel"
-  max_parallel_strategies: 5
-  timeout_per_strategy: 10
-  resource_locks:
-    page_source: true
-    screenshot: true
-    driver: false
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-### Performance considerations
+### A server that a team can share
 
-#### Expected improvements
+**Priority**: High · **Difficulty**: Intermediate · **Issue**: [#314](https://github.com/mozarkai/optics-framework/issues/314)
 
-- **XPath location**: 40-60% faster (2-3 strategies in parallel)
-- **Text location**: 50-70% faster (3-4 strategies in parallel)
-- **Image location**: 30-50% faster (2-3 detection methods in parallel)
-- **Overall test execution**: 20-40% faster for tests with many element locations
+**What we imagine.** A team runs one `optics serve` on its network and shares it safely. Each caller signs in with a key or a token, sees only its own sessions, and stays within limits that the team sets.
 
-These are estimates. Measure them before and after your change.
+**Optics today.**
 
-#### Resource management
+- `optics serve` and `optics mcp` have no sign-in of their own, and they log a warning when they listen beyond the local machine (`optics_framework/common/http_guard.py`).
+- Browsers can call the server only from the origins in `OPTICS_CORS_ORIGINS`, and none by default.
+- A loopback-bound server, or any server once `OPTICS_ALLOWED_HOSTS` is set, refuses requests for other host names.
+- Optics refuses a remote caller's request to read the server's files or environment (`optics_framework/common/caller_policy.py`), and refuses images over 64 MB or 64 megapixels.
 
-- **CPU**: Better utilization with parallel I/O operations
-- **Memory**: Slight increase due to parallel task execution
-- **Network**: Better utilization for remote services (OCR, OIR)
-- **Driver**: Careful locking to prevent driver conflicts
+**Questions to explore.**
 
-### Testing requirements
+- Which sign-in methods do teams expect: API keys, bearer tokens, a gateway in front?
+- How do sessions belong to a caller, as they already do in the MCP server?
+- Which limits matter: requests per caller, sessions per caller, request size?
 
-#### Unit tests
+**Prompt for your agent:**
 
-- Test parallel execution with mock strategies
-- Test first-success-wins behavior
-- Test abort/cancellation of remaining strategies when one succeeds
-- Test that only one strategy executes the keyword/action
-- Test exception handling
-- Test resource locking
-- Test graceful cancellation cleanup
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "A server that a team can share" (https://optics-framework.org/docs/contribute/roadmap#server-security), and issue #314.
 
-#### Integration tests
+Clone the repository and read CLAUDE.md first. Then read the HTTP server (common/expose_api.py, helper/serve.py), the guards in common/http_guard.py and common/caller_policy.py, and how the MCP server ties each session to the client that started it (helper/mcp_server.py).
 
-- Test with real drivers and element sources
-- Test performance improvements
-- Test backward compatibility
-- Test configuration options
+Help me understand:
+- How a request reaches a keyword today, and which checks it passes on the way.
+- How the MCP server decides who owns a session.
+- What a remote caller can and cannot ask the server to do.
 
-### Migration path
-
-#### Phase 1: Add async support (non-breaking)
-
-- Add async methods alongside sync methods
-- Maintain backward compatibility
-- No behavior changes
-
-#### Phase 2: Parallel execution (opt-in)
-
-- Add configuration option for parallel execution
-- Default to sequential for safety
-- Allow users to opt-in
-
-#### Phase 3: Parallel by default
-
-- Make parallel execution the default
-- Keep sequential as fallback option
-- Optimize based on real-world usage
-
-### Files to modify
-
-**Core Strategy System**:
-
-- `optics_framework/common/strategies.py` - Add parallel execution support
-- `optics_framework/common/execution.py` - Update execution flow
-
-**Strategy Implementations**:
-
-- `optics_framework/common/strategies.py` - Update all strategy classes
-- All element source implementations - Add async support
-
-**Configuration**:
-
-- `optics_framework/common/config_handler.py` - Add parallel execution config
-- `optics_framework/common/models.py` - Add configuration models
-
-**New Files**:
-
-- `optics_framework/common/parallel_strategy_executor.py` - Parallel executor
-- `optics_framework/common/strategy_dependencies.py` - Dependency management
-
-### Related documentation
-
-- [Strategy Pattern](https://optics-framework.org/docs/contribute/strategies)
-- [Execution Architecture](https://optics-framework.org/docs/contribute/execution)
-
-### Challenges and considerations
-
-#### Challenge 1: Resource conflicts
-
-**Problem**: Multiple strategies accessing the same resource (driver, page source) simultaneously
-
-**Solution**:
-
-- Use asyncio locks for shared resources
-- Group strategies by resource type
-- Serialize access to shared resources
-
-#### Challenge 2: Backward compatibility
-
-**Problem**: Existing code expects synchronous strategy execution
-
-**Solution**:
-
-- Maintain sync wrappers for async methods
-- Use `run_async()` utility for compatibility
-- Gradual migration path
-
-#### Challenge 3: Error handling
-
-**Problem**: Multiple strategies may fail in parallel
-
-**Solution**:
-
-- Aggregate all exceptions
-- Return most informative error
-- Log all strategy attempts
-
-#### Challenge 4: Performance tuning
-
-**Problem**: Too many parallel tasks may degrade performance
-
-**Solution**:
-
-- Configurable max parallel strategies
-- Resource-aware task scheduling
-- Monitor and optimize based on metrics
-
-#### Challenge 5: Ensuring single action execution
-
-**Problem**: Multiple strategies might try to execute the same keyword/action
-
-**Solution**:
-
-- Implement strict abort mechanism when first strategy succeeds
-- Use cancellation tokens to immediately stop remaining strategies
-- Only allow the winning strategy to proceed to action execution
-- Add validation to prevent duplicate actions
-- Implement proper cleanup for aborted strategies
-
-## 3. Flexible driver-specific strategies
-
-**Priority**: High | **Difficulty**: Intermediate | **Status**: Partly done
-
-### Current state
-
-The locator strategies are generic and work across all drivers. `StrategyFactory` builds them from a fixed list (`self._registry` in `optics_framework/common/strategies.py`): `XPathStrategy`, `TextElementStrategy`, `TextDetectionStrategy` and `ImageDetectionStrategy`. A driver cannot add its own strategy to that list.
-
-Since this item was written, each element source learned to read driver-specific locators inside the existing strategies. The items below say which ones.
-
-### Goal
-
-Let a driver add strategies of its own, so that each driver can use its best features and still keep the fallback mechanism.
-
-### Key areas
-
-#### Playwright-specific strategies
-
-Playwright provides locator methods that the generic strategies did not use:
-
-- `get_by_role()` - Locate by ARIA role (button, textbox, etc.). **Done**: the `role=` prefix, and plain text also tries buttons and links by role.
-- `get_by_test_id()` - Locate by test ID attribute. **Done**: the `data-testid=` and `testid=` prefixes.
-- `get_by_label()` - Locate by associated label. **Done**: the `label=` prefix.
-- `get_by_placeholder()` - Locate by placeholder text. **Done**: the `placeholder=` prefix.
-- `get_by_text()` - Locate by visible text. **Done**: the `text=` prefix.
-- `get_by_title()` - Locate by title attribute. **Done**: the `title=` prefix.
-- `get_by_alt_text()` - Locate by alt text (for images). **Done**: the `alt=` prefix.
-
-Evidence: `optics_framework/engines/drivers/playwright_locator.py`. A plain value such as `Submit` tries text, label, placeholder, button and link, exact matches first.
-
-**Example**:
-
-```python
-# Current: Generic text strategy
-element = "Submit Button"
-
-# With Playwright role strategy:
-element = "role:button[name='Submit']"
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-The `role:` spelling above was the proposal. The shipped syntax uses Playwright's own selector engine: `role=button[name="Submit"]`.
+### Make every run faster
 
-#### Selenium/Playwright CSS strategies
+**Priority**: Medium · **Difficulty**: Intermediate
 
-The old state was that only XPath was supported. CSS selectors are faster and easier to read:
+**What we imagine.** A test run spends its time on the app, not on Optics. Screens are read once, engines start once, and a report shows where the time of a run went, so that a slow step is easy to find.
 
-- CSS selector support (not just XPath). **Done** for Playwright (`optics_framework/engines/drivers/playwright_locator.py`), Selenium (`optics_framework/engines/drivers/selenium_locator.py`) and Appium web contexts (`optics_framework/engines/elementsources/appium_find_element.py`, `optics_framework/engines/elementsources/appium_web.py`). Use the `css=` prefix, or a value that looks like CSS, such as `#login` or `button.primary`.
-- CSS pseudo-selectors (`:first-child`, `:nth-of-type`, etc.). **Done**: they work inside a `css=` value.
-- CSS attribute selectors (`[data-testid="submit"]`). **Done**: they work as a `css=` value, and a value with `[...]` is read as CSS.
+**Optics today.**
 
-#### Appium-specific strategies
+- The factories keep engine instances and reuse them (`optics_framework/common/base_factory.py`).
+- Each OCR engine remembers its result for the last four frames, so a repeated read of the same screen is free (`optics_framework/common/text_interface.py`).
+- Events go through an `asyncio` queue, and `EventSDK` sends them in batches.
 
-- UI Automator selectors (Android). Open: you cannot give a UI Automator selector as an element value. Optics uses UI Automator only internally, to measure web views.
-- iOS predicate strings. Open.
-- Accessibility ID strategies. **Done**: a text value on a native app is looked up by accessibility ID (`optics_framework/engines/elementsources/appium_find_element.py`).
-- Class name strategies. **Done**: a value that starts with `android.` or `XCUI` is looked up by class name (`determine_element_type()` in `optics_framework/common/utils.py`).
+**Questions to explore.**
 
-#### Strategy registration
+- Where does the time of a typical run go today? Measure it before you change anything.
+- Which image and OCR work could run on a GPU when there is one?
+- What should a time report look like, and who reads it?
 
-**Needed** (all open):
+**Prompt for your agent:**
 
-- Driver-specific strategy factory
-- Strategy priority per driver
-- Dynamic strategy discovery mechanism
-- Strategy registration API for drivers
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Make every run faster" (https://optics-framework.org/docs/contribute/roadmap#performance).
 
-### Files to modify
+Clone the repository and read CLAUDE.md first. Then read how a keyword runs from the test runner to the driver (common/runner/test_runnner.py, api/action_keyword.py, common/strategies.py), how engines are created and cached (common/base_factory.py), and how events flow (common/events.py).
 
-- `optics_framework/common/strategies.py` - Add driver-specific strategy support
-- `optics_framework/engines/drivers/playwright.py` - Add Playwright-specific strategies (the locator rules now live in `optics_framework/engines/drivers/playwright_locator.py`)
-- `optics_framework/engines/drivers/selenium.py` - Add CSS selector strategies (the locator rules now live in `optics_framework/engines/drivers/selenium_locator.py`)
-- `optics_framework/engines/drivers/appium.py` - Add Appium-specific strategies
+Help me understand:
+- Every place where a step reads the screen, and how often it does so.
+- Which work is cached today, and for how long.
+- How I could measure where the time of a run goes, with the tools the project already has.
 
-### Related documentation
-
-- [Strategy Pattern](https://optics-framework.org/docs/contribute/strategies)
-- [Extending the Framework](https://optics-framework.org/docs/contribute/extending#creating-new-strategies)
-
-## 4. Additional image detection drivers
-
-**Priority**: Medium | **Difficulty**: Intermediate to Advanced | **Status**: Open
-
-### Current state
-
-Only two image detection models are available:
-
-- **TemplateMatch** (OpenCV-based) - Local template matching. Engine name `templatematch`, class `TemplateMatchingHelper` in `optics_framework/engines/vision_models/image_models/templatematch.py`.
-- **RemoteOIR** (Remote service) - Remote object image recognition. Engine name `remote_oir`, class `RemoteImageDetection` in `optics_framework/engines/vision_models/image_models/remote_oir.py`.
-
-### Goal
-
-Add more image detection and vision models. This gives users more options, better accuracy, and other use cases.
-
-### Potential additions
-
-#### YOLO integration
-
-Object detection using YOLO (You Only Look Once) models:
-
-- Real-time object detection
-- Pre-trained models for UI elements
-- Custom model support
-
-**File to Create**: `optics_framework/engines/vision_models/image_models/yolo.py`
-
-#### Cloud vision services
-
-- **AWS Rekognition**: Amazon's image recognition service
-- **Azure Computer Vision**: Microsoft's vision API
-- **Google Cloud Vision**: Google's image analysis API (for object detection, not just OCR)
-
-**Files to Create**:
-
-- `optics_framework/engines/vision_models/image_models/aws_rekognition.py`
-- `optics_framework/engines/vision_models/image_models/azure_vision.py`
-- `optics_framework/engines/vision_models/image_models/google_vision_detection.py`
-
-#### Deep learning models
-
-- **TensorFlow/PyTorch Models**: Support for custom trained models
-- Pre-trained models for UI element detection
-- Model loading and inference
-
-**File to Create**: `optics_framework/engines/vision_models/image_models/tensorflow_model.py`
-
-#### Advanced OpenCV algorithms
-
-- **ORB** (Oriented FAST and Rotated BRIEF)
-- **BRISK** (Binary Robust Invariant Scalable Keypoints)
-- **AKAZE** (Accelerated-KAZE)
-- Feature matching alternatives to SIFT
-
-### Implementation guidelines
-
-All image detection models must implement the `ImageInterface`:
-
-```python
-from optics_framework.common.image_interface import ImageInterface
-
-class YourImageDetection(ImageInterface):
-    def element_exist(self, input_data, reference_data):
-        # Implementation
-        pass
-
-    def find_element(self, input_data, image, index=None):
-        # Implementation
-        pass
-
-    def assert_elements(self, input_data, elements, rule="any"):
-        # Implementation
-        pass
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-`element_exist()` returns `(True, (x, y), matches)` or `(False, (None, None), None)`. `find_element()` returns `(found, center, bounds)`, where `bounds` is `((x1, y1), (x2, y2))`, or `None`. The shared helpers in `optics_framework/engines/vision_models/base_methods.py` load a template and draw the match on the screenshot; both shipped models use them.
+### One place for each decision
 
-### Files to create
+**Priority**: Medium · **Difficulty**: Intermediate · **Issues**: [#484](https://github.com/mozarkai/optics-framework/issues/484), [#300](https://github.com/mozarkai/optics-framework/issues/300)
 
-- `optics_framework/engines/vision_models/image_models/yolo.py`
-- `optics_framework/engines/vision_models/image_models/aws_rekognition.py`
-- `optics_framework/engines/vision_models/image_models/azure_vision.py`
-- `optics_framework/engines/vision_models/image_models/tensorflow_model.py`
+**What we imagine.** A new keyword, engine or driver takes one change in one place, and every entry point gets it. Contributors find each decision where they expect it, and a change does not need edits in many files.
 
-### Related documentation
+**Optics today.**
 
-- [Vision Models](https://optics-framework.org/docs/contribute/engines#vision-models)
-- [Extending Vision Models](https://optics-framework.org/docs/contribute/extending#creating-new-image-detection-models)
+- A keyword reaches eight entry points. Most find it by reflection, but the Python and Robot Framework library needs its own wrapper in `optics.py`.
+- `scripts/check_layers.py` keeps the order of the layers, and the shared fallback ladder (`common/fallback.py`) and `build_keywords` (`api/keywords.py`) already serve every entry point.
 
-## 5. Interactive test creation
+**Questions to explore.**
 
-**Priority**: Medium | **Difficulty**: Advanced | **Status**: Partly done
+- Which decisions are still repeated across entry points or drivers?
+- Which repeated code in the drivers and element sources is the same idea, and which only looks similar?
+- How do we keep the public keyword names stable during the change?
 
-### Current state
+**Prompt for your agent:**
 
-You can write tests as CSV or YAML files, or in code. Since this item was written, `optics live` added an interactive mode: you run one keyword at a time against the live app, and `/save` writes the steps that worked into your suite as a module. See [Record a test](https://optics-framework.org/docs/create/record). The code is in `optics_framework/helper/live.py` and `optics_framework/helper/live_tui.py`. There is still no visual tool for people who do not want to type keywords.
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "One place for each decision" (https://optics-framework.org/docs/contribute/roadmap#simplify), and issues #484 and #300.
 
-### Goal
+Clone the repository and read CLAUDE.md first, especially "Keyword entry points" and "Layer order". Then read api/keywords.py, common/runner/keyword_register.py, optics.py and scripts/check_layers.py.
 
-Support interactive test creation where users can:
+Help me understand:
+- What a new keyword must reach today, and which entry points find it on their own.
+- Which code in the drivers and element sources repeats the same decision.
+- How the layer check limits where shared code can live.
 
-- Record interactions automatically
-- Visually select elements on screen
-- Generate test steps automatically. **Done** in two ways: `optics live` records each step that passes and `/save` writes them as CSV, and in plain-English mode an AI model picks the steps for a goal you describe (`optics_framework/common/nl_agent.py`, see [Describe a test in plain English](https://optics-framework.org/docs/create/describe)).
-- Edit tests in a visual interface
-- Preview test execution step-by-step. **Done** in the terminal: `optics live` runs each step as you type it.
-
-### Key features
-
-#### Test recorder
-
-Record user interactions and generate test steps:
-
-- Capture mouse clicks, keyboard input, scrolls
-- Automatically detect element locators
-- Generate test steps in CSV/YAML format. **Done** for CSV through `optics live` and `/save`.
-- Support for multiple strategies (XPath, text, image)
-
-#### Visual element selector
-
-Click on screen to select elements:
-
-- Highlight elements on hover
-- Show element information (XPath, text, attributes)
-- Suggest multiple locator strategies
-- Validate element locators
-
-#### Test editor
-
-Visual editor for test cases:
-
-- Drag-and-drop test step reordering
-- Edit step parameters
-- Add/remove test steps
-- Preview test structure
-
-#### Element inspector
-
-Inspect and validate element locators:
-
-- Show all available locators for an element. Partly done: `GET /v1/sessions/{session_id}/screen_elements` and the MCP server list the elements on screen with ways to find each one (`optics_framework/common/screen_snapshot.py`).
-- Test locator validity
-- Suggest better locators
-- Show element hierarchy
-
-### Potential implementation
-
-- **Web-based UI**: React/Vue.js frontend with FastAPI backend
-- **Browser Extension**: Chrome/Firefox extension for recording
-- **Desktop Application**: Electron app for test authoring
-- **CLI Integration**: Extend existing CLI with interactive mode. **Done**: `optics live`.
-
-### Files to create
-
-- `optics_framework/helper/recorder.py` - Test recording functionality (the keyword recorder of `optics live` is in `optics_framework/helper/live.py`)
-- `optics_framework/helper/inspector.py` - Element inspection tools
-- `optics_framework/api/recorder_api.py` - API endpoints for recorder
-- Web UI components (separate repo or `optics_framework/web_ui/`)
-
-### Related documentation
-
-- [CLI Usage](https://optics-framework.org/docs/reference/cli)
-- [User Workflow](https://optics-framework.org/docs/create/organise)
-
-## 6. Code simplification & unification
-
-**Priority**: Medium | **Difficulty**: Intermediate | **Status**: Partly done
-
-### Current state
-
-Several parts of the code repeat the same patterns. If you unify them, the code is easier to maintain.
-
-### Areas identified
-
-#### Driver method patterns
-
-Similar implementations across Appium, Selenium, and Playwright:
-
-- `press_element()`, `enter_text()`, `clear_text()`, `scroll()` have similar patterns
-- Common error handling
-- Similar event logging
-
-**Files**:
-
-- `optics_framework/engines/drivers/appium.py`
-- `optics_framework/engines/drivers/selenium.py`
-- `optics_framework/engines/drivers/playwright.py`
-
-**Solution**: Create base driver mixins or helper classes
-
-#### Element source patterns
-
-Similar code in find_element, page_source, screenshot classes:
-
-- Common initialization patterns
-- Similar error handling
-- Common interface implementations
-
-**Files**: `optics_framework/engines/elementsources/*.py`
-
-**Solution**: Create common base class for element source implementations. Partly done: `EncodedScreenshotSource` in `optics_framework/common/elementsource_interface.py` is the shared base of the Appium, Selenium and Playwright screenshot sources, and decodes their screenshots with one set of size limits.
-
-#### Vision model patterns
-
-OCR models share similar structure:
-
-- Common text detection patterns. Partly done: `TextInterface` in `optics_framework/common/text_interface.py` gives every OCR model one `find_element()` and reads each frame only once.
-- Similar configuration handling
-- Common error handling
-
-**Files**: `optics_framework/engines/vision_models/ocr_models/*.py`
-
-**Solution**: Enhanced base classes for vision models
-
-#### Strategy factory pattern
-
-Current implementation has hard-coded strategy registry:
-
-- Strategy registration is static
-- Limited flexibility for custom strategies
-
-**File**: `optics_framework/common/strategies.py`
-
-**Solution**: Make strategy registration more flexible and dynamic
-
-#### Session management
-
-Complex builder pattern could be simplified:
-
-- Many intermediate steps
-- Could use simpler factory pattern in some cases
-
-**File**: `optics_framework/common/optics_builder.py`
-
-**Solution**: Simplify builder pattern or add convenience methods
-
-### Specific unification opportunities
-
-1. **Base Driver Mixin**: Create `BaseWebDriverMixin` for common web driver methods
-2. **Element Source Base**: Common base class for element source implementations
-3. **Vision Model Base**: Enhanced base classes for vision models
-4. **Strategy Registry**: Make strategy registration more flexible
-5. **Configuration Normalization**: Unify configuration handling across components
-6. **Error Handling Utilities**: Standardize error handling patterns
-
-### Files to create/modify
-
-**Create**:
-
-- `optics_framework/common/base_driver_mixin.py` - Common driver methods
-- `optics_framework/common/base_element_source.py` - Common element source base
-- `optics_framework/common/error_utils.py` - Error handling utilities
-
-**Modify**:
-
-- `optics_framework/common/strategies.py` - Flexible strategy registration
-- `optics_framework/common/optics_builder.py` - Simplify builder pattern
-- All driver implementations to use mixins
-- All element source implementations to use base class
-
-### Related documentation
-
-- [Architecture Overview](https://optics-framework.org/docs/contribute/architecture)
-- [Extending the Framework](https://optics-framework.org/docs/contribute/extending)
-
-## 7. Test coverage
-
-**Priority**: High | **Difficulty**: Beginner to Intermediate | **Status**: Partly done
-
-### Current state
-
-The test suite has grown since this item was written: `tests/units/` has tests for the API, the common modules, the engines and the CLI helpers, and `tests/integration/` runs Playwright, Selenium and desktop journeys. Many core components still lack complete tests.
-
-### Missing tests for
-
-- Most engine implementations (drivers, element sources, vision models). Partly done: `tests/units/engines/` tests the drivers and element sources. Vision models have few tests.
-- Strategy manager and location strategies. Partly done: `tests/units/common/test_strategies.py`.
-- Event system and event handlers. Partly done: `tests/units/common/test_junit_eventhandler.py`.
-- Session management edge cases
-- Error handling scenarios
-- Factory pattern implementations. Partly done: `tests/units/common/test_factories.py`.
-- API layer endpoints. Partly done: `tests/units/common/test_expose_api.py` and `tests/units/api/`.
-- CLI commands. Partly done: `tests/units/helpers/test_cli.py` and `tests/integration/test_cli_list.py`.
-
-### Test files to create
-
-#### Unit tests
-
-- `tests/units/engines/drivers/test_ble.py` - BLE driver tests. **Exists.**
-- `tests/units/engines/drivers/test_playwright.py` - Playwright driver tests. Partly done: `test_playwright_locator.py` and `test_playwright_settings_and_text.py` exist.
-- `tests/units/engines/drivers/test_appium.py` - Appium driver tests (if missing). Partly done: several `test_appium_*.py` files exist in the same folder.
-- `tests/units/engines/elementsources/test_playwright_find_element.py`. **Exists.**
-- `tests/units/engines/elementsources/test_playwright_page_source.py`. **Exists.**
-- `tests/units/engines/elementsources/test_playwright_screenshot.py`
-- `tests/units/common/test_strategies.py` - Strategy manager tests. **Exists.**
-- `tests/units/common/test_session_manager.py` - Session management tests
-- `tests/units/api/test_verifier.py` - Verifier API tests. **Exists.**
-- `tests/units/common/test_factories.py` - Factory pattern tests. **Exists.**
-
-#### Integration tests
-
-- `tests/integration/test_api_endpoints.py` - API endpoint integration tests. Unit tests for the endpoints exist in `tests/units/common/test_expose_api.py`.
-- `tests/integration/test_session_lifecycle.py` - Full session lifecycle
-- `tests/integration/test_driver_fallback.py` - Driver fallback mechanism
-
-#### Functional tests
-
-There is no `tests/functional/` folder yet.
-
-- `tests/functional/test_end_to_end.py` - End-to-end test execution. Partly done: `tests/integration/test_playwright_journey.py` and `tests/integration/test_selenium_journey.py` run whole journeys.
-- `tests/functional/test_vision_detection.py` - Vision detection workflows
-
-### Testing guidelines
-
-- Use `pytest` for all tests
-- Follow existing test patterns in `tests/units/`
-- Use fixtures from `tests/units/conftest.py`
-- Aim for >80% code coverage
-- Test both success and failure scenarios
-- Include edge cases and error conditions
-
-### Related documentation
-
-- [Developer Guide](https://optics-framework.org/docs/contribute/setup#run-tests)
-- [Architecture Overview](https://optics-framework.org/docs/contribute/architecture)
-
-## 8. Security improvements
-
-**Priority**: High | **Difficulty**: Intermediate | **Status**: Partly done
-
-### Current state
-
-The [REST API layer](https://optics-framework.org/docs/contribute/api-layer) page lists the security work that production use needs. `optics serve` and `optics mcp` have no authentication of their own. When you bind either one to an address other than loopback, it logs a warning (`warn_if_exposed()` in `optics_framework/common/http_guard.py`).
-
-### CORS configuration
-
-**Done**, with a stricter default than this item proposed.
-
-The old state was that CORS allowed all origins (`allow_origins=["*"]`) in `optics_framework/common/expose_api.py`. The item asked for configurable CORS with environment-based restrictions. The proposed implementation was:
-
-```python
-# Allow configuration via environment variables
-allowed_origins = os.getenv("OPTICS_CORS_ORIGINS", "*").split(",")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins if "*" not in allowed_origins else ["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
-What shipped, in `add_http_guards()` in `optics_framework/common/http_guard.py`:
+## Quality and community
 
-- `OPTICS_CORS_ORIGINS` is a comma-separated allowlist. With no value, no browser origin is allowed.
-- `*` is refused with error `E0501`, because any web page could then drive the server.
-- A Host check refuses requests whose `Host` header is not a loopback name or a name in `OPTICS_ALLOWED_HOSTS`. This stops a web page from rebinding its domain to `127.0.0.1`.
+### Journeys on every platform
 
-### Authentication
+**Priority**: High · **Difficulty**: Beginner to Intermediate · **Issue**: [#365](https://github.com/mozarkai/optics-framework/issues/365)
 
-**Current**: No authentication currently
+**What we imagine.** Every behavior that a user can see has one journey test that guards it, and the journeys run on every platform that Optics supports, real devices included. A change that breaks a user's suite fails in CI before it reaches a release.
 
-**Needed**:
+**Optics today.**
 
-- API key authentication
-- Bearer token authentication
-- Session-based authentication
+- Each contract has one test that owns it, at the strongest boundary that is cheap to drive: `run_project`, the `Optics` library, `optics serve`, an MCP session or a real browser. See "Tests" in `CLAUDE.md`.
+- Journeys such as `tests/integration/test_playwright_journey.py` and `tests/integration/test_selenium_journey.py` run whole suites.
+- The `check-tests` hook refuses tests that assert nothing, sleep for a fixed time, read source code or assert a tautology (`scripts/check_tests.py`).
 
-**Files to Modify**:
+**Questions to explore.**
 
-- `optics_framework/common/expose_api.py` - Add authentication middleware
-- `optics_framework/common/auth.py` - Create authentication module (new file)
+- Which user-visible behaviors have no journey yet?
+- How can CI run Android emulators, iOS simulators and desktop apps at a cost the project can carry?
+- Which journeys should block a release, and which should only report?
 
-### Input validation
+**Prompt for your agent:**
 
-**Current**: Using Pydantic for validation
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "Journeys on every platform" (https://optics-framework.org/docs/contribute/roadmap#test-journeys), and issue #365.
 
-**Enhancements Needed**:
+Clone the repository and read CLAUDE.md first, especially the "Tests" section. Then read scripts/check_tests.py, the journeys in tests/integration/, and the CI workflows in .github/workflows/.
 
-- Rate limiting per IP/session
-- Request size limits. Partly done: uploaded images are refused above 64 MB encoded or 64 megapixels (`optics_framework/common/image_decode.py`).
-- SQL injection prevention (if adding database support)
-- XSS prevention for string inputs
+Help me understand:
+- The project's rules for a test that earns its place, and why they exist.
+- Which user-visible behaviors the journeys cover today, and which they do not.
+- What CI runs today, on which platforms, and what it skips.
 
-### Related documentation
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
+```
 
-- [REST API Layer](https://optics-framework.org/docs/contribute/api-layer#security-considerations)
-- [Security Policy](https://github.com/mozarkai/optics-framework/blob/main/SECURITY.md)
+### Documentation
 
-## 9. Feature development
+**Priority**: Medium · **Difficulty**: Beginner
 
-**Priority**: Medium to High | **Difficulty**: Intermediate to Advanced | **Status**: Partly done
+**What we imagine.** Every person who uses Optics finds the answer on this site in a few minutes, from a first test to a large CI setup. The docs show real examples for each task and each CI system, and they guide each upgrade.
 
-### MCP servicer
+**Optics today.**
 
-**Done.** The roadmap item was: introduce a dedicated service to handle MCP (Model Context Protocol), to make the framework more scalable and modular. `optics mcp` now runs an MCP server (`optics_framework/helper/mcp_server.py`). See the [MCP reference](https://optics-framework.org/docs/reference/mcp).
+- The docs are in the [optics-framework-org repository](https://github.com/mozarkai/optics-framework-org), under `docs/`.
+- [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting), [Error codes](https://optics-framework.org/docs/reference/errors), [Run in CI](https://optics-framework.org/docs/run/ci) (GitHub Actions and GitLab CI) and the [readiness checklist](https://optics-framework.org/docs/run/checklist) exist.
 
-**Needed** (all done):
+**Questions to explore.**
 
-- MCP protocol implementation
-- Service architecture design
-- Integration with existing framework
+- Which CI systems need examples next: Jenkins, Azure DevOps, CircleCI?
+- Which tasks need a guide: tuning for speed, upgrading between versions, choosing locators?
+- Which workflows are easier to learn from a short video?
 
-### Omniparser integration
+**Prompt for your agent:**
 
-**From Roadmap**: Integrate Omniparser for flexible element extraction and location
+```text
+I want to contribute to the Optics documentation (https://optics-framework.org/docs/). I am looking at this idea from its Help wanted page: "Documentation" (https://optics-framework.org/docs/contribute/roadmap#documentation).
 
-**Goal**: Enable more flexible element parsing capabilities
+Clone https://github.com/mozarkai/optics-framework-org and read CLAUDE.md first, especially the "Documentation" section. Then read docs/nav.json and the pages under docs/run/ and docs/help/.
 
-**Needed** (all open):
+Help me understand:
+- How the docs are organised and how a new page is added.
+- The voice and style rules that the pages follow.
+- Which tasks a new user is likely to look for that the docs do not answer yet.
 
-- Omniparser library integration
-- Parser configuration
-- Strategy integration
+Do not write new pages yet. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
+```
 
-### Playwright integration enhancements
+### CI and tooling
 
-**From Roadmap**: Add support for Playwright. **Done**: the `playwright` driver and its element sources ship (`optics_framework/engines/drivers/playwright.py`, `optics_framework/engines/elementsources/playwright_*.py`). See [Web](https://optics-framework.org/docs/platforms/web).
+**Priority**: Low to Medium · **Difficulty**: Intermediate · **Issue**: [#320](https://github.com/mozarkai/optics-framework/issues/320)
 
-**Needed**:
+**What we imagine.** Every pull request shows what it changes in coverage and in speed, the container images build and get scanned in CI, and maintainers see the health of the code at a glance.
 
-- Complete remaining Playwright methods. Mostly done: a few calls are not supported, for example `get_app_version`, `force_terminate_app` and special keys that have no web key name.
-- Add driver-specific strategies (see [section 3](#3-flexible-driver-specific-strategies)). Partly done there.
-- Improve error handling
+**Optics today.**
 
-### Audio support
+- The test workflow runs `pytest` without coverage (`.github/workflows/tests.yml`).
+- The pre-commit hooks run Ruff, `check-tests`, `check-layers`, `sonar-lint`, Bandit, Commitizen, Gitleaks and file checks (`.pre-commit-config.yaml`).
+- CodeQL, the OpenSSF Scorecard, Dependabot and a SonarQube scan run in CI.
 
-**From Roadmap**: Extend the framework to support audio inputs and outputs
+**Questions to explore.**
 
-**Goal**: Enable testing and verification of voice-based or sound-related interactions
+- Which coverage and speed numbers help a reviewer, and which only add noise?
+- How should CI build and scan the images under `Docker/`?
+- Which benchmarks show a slow-down before a release?
 
-**Needed** (all open):
+**Prompt for your agent:**
 
-- Audio input capture
-- Audio output verification
-- Speech recognition integration
-- Audio comparison utilities
+```text
+I want to contribute to Optics, an open-source test automation framework (https://github.com/mozarkai/optics-framework). I am looking at this idea from its Help wanted page: "CI and tooling" (https://optics-framework.org/docs/contribute/roadmap#infrastructure), and issue #320.
 
-### Session persistence
+Clone the repository and read CLAUDE.md first. Then read .github/workflows/, .pre-commit-config.yaml, pytest.toml, scripts/ and Docker/.
 
-**Identified in**: the [components](https://optics-framework.org/docs/contribute/components) page
+Help me understand:
+- What each workflow and each hook checks today, and when it runs.
+- How tests and coverage are configured, and what CI reports.
+- How the Docker images are built and used.
 
-**Current**: Sessions are in-memory only, lost on process termination
-
-**Needed** (all open):
-
-- Session serialization
-- Session recovery on restart
-- Session state snapshots
-- Persistent storage backend
-
-**Note:**
-This overlaps with [section 1 (Stateless API Layer)](#1-stateless-api-layer) but focuses on persistence rather than migration.
-
-### Additional drivers
-
-- iOS driver enhancements
-- Additional browser drivers (Edge, Safari). Partly done: the Playwright driver runs Chromium, Firefox or WebKit (the engine of Safari) through its `browser` setting, and Microsoft Edge through `channel: msedge`. Selenium supports Chrome and Firefox only.
-- IoT device drivers
-- Desktop application drivers (Windows, macOS, Linux). **Done**: Appium with the Xa11y driver drives desktop apps on all three (`optics_framework/engines/drivers/appium_platforms.py`). See [Desktop](https://optics-framework.org/docs/platforms/desktop).
-
-## 10. Performance optimizations
-
-**Priority**: Medium | **Difficulty**: Intermediate | **Status**: Partly done
-
-### Areas identified
-
-#### Strategy execution
-
-**Current**: Strategies executed sequentially
-
-**Opportunities**:
-
-- Parallel strategy attempts where safe (see [section 2](#2-parallel-strategy-execution))
-- Early exit optimization
-- Strategy result caching
-
-**File**: `optics_framework/common/strategies.py`
-
-#### Factory caching
-
-**Current**: Instance caching implemented (`_create_or_retrieve()` in `optics_framework/common/base_factory.py`, cleared with `clear_instances()`)
-
-**Enhancements**:
-
-- Cache invalidation strategies
-- Memory-aware caching
-- Cache size limits
-
-**File**: `optics_framework/common/base_factory.py`
-
-#### Event processing
-
-**Current**: `EventManager` puts events on an `asyncio.Queue` and processes them in a background task (`optics_framework/common/events.py`). `EventSDK` sends events in batches (`send_batch_events()` in `optics_framework/common/eventSDK.py`).
-
-**Opportunities**:
-
-- Batch events for better throughput. **Done** for `EventSDK`.
-- Async event processing. **Done** in `EventManager`.
-- Event queue optimization
-
-**Files**:
-
-- `optics_framework/common/events.py`
-- `optics_framework/common/eventSDK.py`
-
-#### Image processing
-
-**Current**: OCR and template matching operations
-
-**Opportunities**:
-
-- Parallel image processing
-- Image caching. Partly done: each OCR model keeps its result for the last 4 frames, so a repeated read of the same screen is free (`FRAMES_REMEMBERED` in `optics_framework/common/text_interface.py`).
-- Optimize OpenCV operations
-- GPU acceleration where available
-
-**Files**:
-
-- `optics_framework/engines/vision_models/image_models/templatematch.py`
-- `optics_framework/engines/vision_models/ocr_models/*.py`
-
-### Related documentation
-
-- [Architecture Decisions](https://optics-framework.org/docs/contribute/decisions)
-- [Performance Considerations](https://optics-framework.org/docs/contribute/components#performance-considerations)
-
-## 11. Documentation
-
-**Priority**: Medium | **Difficulty**: Beginner to Intermediate | **Status**: Partly done
-
-The docs are in the [optics-framework-org repository](https://github.com/mozarkai/optics-framework-org), under `docs/`.
-
-### Documentation gaps
-
-#### API examples
-
-**Current**: API reference exists but lacks practical examples. Partly done: [Python API](https://optics-framework.org/docs/create/python) has a complete pytest example, and [HTTP API](https://optics-framework.org/docs/reference/http-api) has a walkthrough and an errors section.
-
-**Needed**:
-
-- More code examples in API reference
-- Common use case examples
-- Error handling examples
-
-**Pages**: [Python API](https://optics-framework.org/docs/create/python) and [HTTP API](https://optics-framework.org/docs/reference/http-api)
-
-#### Troubleshooting guides
-
-**Current**: Partly done. [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting) lists common problems by the message Optics prints, and [Error codes](https://optics-framework.org/docs/reference/errors) lists each code.
-
-**Needed**:
-
-- Common issues and solutions. **Done**: [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting).
-- Debugging guides
-- Performance troubleshooting
-- Error code reference with solutions. **Done**: [Error codes](https://optics-framework.org/docs/reference/errors).
-
-#### Performance tuning
-
-**Needed**: Guide for optimizing framework performance
-
-**Topics**:
-
-- Configuration optimization
-- Strategy selection guidance
-- Memory management
-- Parallel execution tips
-
-#### Migration guides
-
-**Needed**: When breaking changes occur
-
-**Topics**:
-
-- Version migration guides
-- Configuration migration
-- API migration guides
-
-#### Video tutorials
-
-**Needed**: Screen recordings for complex workflows
-
-**Topics**:
-
-- Getting started walkthrough
-- Creating your first test
-- Advanced features
-- Troubleshooting common issues
-
-#### Best practices
-
-**Needed**: Complete best practices guide. Partly done: the [readiness checklist](https://optics-framework.org/docs/run/checklist) covers suites that run in CI.
-
-**Topics**:
-
-- Test design patterns
-- Element locator best practices
-- Configuration management
-- CI/CD integration
-- Error handling strategies
-
-#### Integration examples
-
-**Needed**: Examples with CI/CD systems
-
-**Examples**:
-
-- GitHub Actions. **Done**: [Run in CI](https://optics-framework.org/docs/run/ci).
-- Jenkins
-- GitLab CI. **Done**: [Run in CI](https://optics-framework.org/docs/run/ci).
-- Azure DevOps
-- CircleCI
-
-### Related documentation
-
-- [Contributing Guidelines](https://optics-framework.org/docs/contribute/)
-- [Developer Guide](https://optics-framework.org/docs/contribute/setup#documentation-changes)
-
-## 12. Infrastructure
-
-**Priority**: Low to Medium | **Difficulty**: Intermediate | **Status**: Partly done
-
-### CI/CD enhancements
-
-#### Test coverage reporting
-
-`pytest.toml` collects coverage (`--cov=optics_framework`), but the test workflow runs with `--no-cov` (`.github/workflows/tests.yml`).
-
-**Needed** (all open):
-
-- Automated coverage reports
-- Coverage badges
-- Coverage trend tracking
-- Coverage thresholds
-
-#### Performance benchmarking
-
-**Needed** (all open):
-
-- Automated performance tests
-- Performance regression detection
-- Benchmark comparisons
-- Performance reports
-
-#### Security scanning automation
-
-**Needed**:
-
-- Automated dependency scanning. **Done**: Dependabot (`.github/dependabot.yml`) and the OpenSSF Scorecard workflow (`.github/workflows/scorecard.yml`).
-- Code security scanning. **Done**: CodeQL (`.github/workflows/codeql.yml`), and Bandit and Gitleaks in the pre-commit hooks (`.pre-commit-config.yaml`).
-- Container security scanning
-- Automated security updates. Partly done: Dependabot opens weekly update pull requests for pip packages.
-
-### Tooling
-
-#### Pre-commit hooks enhancements
-
-**Current**: `.pre-commit-config.yaml` runs Ruff, Bandit, trailing-whitespace, end-of-file-fixer, check-yaml, check-json, Commitizen and Gitleaks.
-
-**Enhancements**:
-
-- Additional linting rules
-- Documentation checks
-- Test coverage checks
-- Commit message validation improvements
-
-#### Code quality metrics dashboard
-
-**Current**: Partly done: a SonarQube scan runs in `.github/workflows/mozarksonar.yml`.
-
-**Needed**:
-
-- Code quality metrics
-- Technical debt tracking
-- Code complexity metrics
-- Maintainability index
-
-#### Dependency update automation
-
-**Needed**:
-
-- Automated dependency updates. **Done**: Dependabot, weekly, for pip.
-- Security update prioritization
-- Update testing automation
-- Changelog generation. Configured: `.cz.toml` sets `update_changelog_on_bump`, so Commitizen updates the changelog when it bumps the version.
-
-### Related documentation
-
-- [Developer Guide](https://optics-framework.org/docs/contribute/setup)
-- [CI/CD Workflows](https://github.com/mozarkai/optics-framework/tree/main/.github/workflows)
-
-## Getting started
-
-### Choose an area
-
-1. Review the sections above and identify an area that interests you
-2. Check the priority and difficulty levels
-3. Review related documentation
-4. Look at existing code to understand patterns
-
-### Before you start
-
-1. Read the [Contributing Guidelines](https://optics-framework.org/docs/contribute/)
-2. Read the [Developer Guide](https://optics-framework.org/docs/contribute/setup)
-3. Set up your development environment
-4. Familiarize yourself with the codebase
-5. [Open an issue](#propose-work) for anything larger than a small fix
-
-### Making your contribution
-
-1. **Fork the Repository**: Create your own fork
-2. **Create a Branch**: Use a descriptive branch name
-3. **Make Changes**: Follow coding standards and patterns
-4. **Write Tests**: Add tests for your changes
-5. **Update Documentation**: Update relevant docs
-6. **Submit PR**: Create a pull request with clear description
-
-### Need help?
-
-- Open an issue on GitHub for questions
-- Check existing documentation
-- Review similar implementations in the codebase
-- Ask in pull request comments
-
-### Recognition
-
-Contributors will be:
-
-- Listed in the project's contributors
-- Credited in release notes
-- Acknowledged in documentation (for significant contributions)
-
-## Summary
-
-The areas fall into five groups:
-
-- **Architecture**: Stateless API, flexible strategies
-- **Features**: New drivers, interactive tools
-- **Quality**: Tests, documentation, code simplification
-- **Performance**: Optimizations and enhancements
-- **Security**: Authentication, validation, hardening
+Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
+```
 
 **Start small:**
-If you are new to the project, start with documentation improvements or test coverage. They are a good way to learn the codebase while you make a useful contribution.
+If you are new to the project, start with documentation or an issue with the [`good first issue`](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. It is a good way to learn the codebase while you make a useful contribution.
 
 ---
 

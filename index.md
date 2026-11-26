@@ -11,6 +11,7 @@ Optics is open-source test automation for Android, iOS, web, TV and desktop. Wri
 - Source: https://github.com/mozarkai/optics-framework
 - For AI agents: https://optics-framework.org/llms.txt
 - Setup steps for AI agents: https://optics-framework.org/agents.md
+- Help build Optics: https://optics-framework.org/docs/contribute/roadmap (open ideas, each with a prompt for your agent)
 - One-minute demo film: https://optics-framework.org/media/optics-film.mp4 (transcript: https://optics-framework.org/media/optics-film-transcript.md)
 
 ## Playground

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://optics-framework.org/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/about</loc>
@@ -314,7 +314,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/contribute/</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/contribute/setup</loc>
@@ -374,7 +374,7 @@
   </url>
   <url>
     <loc>https://optics-framework.org/docs/contribute/roadmap</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://optics-framework.org/docs/help/</loc>
