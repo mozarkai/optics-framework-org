@@ -1568,7 +1568,7 @@ The factory for LLM engines. Its package is `optics_framework.engines.llm_models
 
 ### InstanceFallback
 
-**Location:** `optics_framework/common/base_factory.py`
+**Location:** `optics_framework/common/instance_fallback.py`
 
 `InstanceFallback` holds multiple implementations. When a method fails on one implementation, it tries the next.
 
