@@ -217,6 +217,24 @@ test("agent discovery documents are published and point at real files", () => {
   assert.equal(JSON.parse(read(".well-known/mcp/server-card.json")).name, "org.optics-framework/optics");
 });
 
+// Released Optics MCP servers print these skill links, so the names stay.
+const LINKED_SKILLS = ["write-a-suite", "set-up-android", "set-up-ios", "set-up-tv", "set-up-desktop", "set-up-bluetooth"];
+
+test("skills.md lists every skill, and every site link in a skill resolves", () => {
+  const { skills } = JSON.parse(read(".well-known/agent-skills/index.json"));
+  for (const skill of skills) assert.ok(read("skills.md").includes(`(${ORIGIN}${skill.url})`), skill.name);
+  for (const name of LINKED_SKILLS) assert.ok(skills.some((s) => s.name === name), name);
+  const markdown = (dir) =>
+    readdirSync(`out/${dir}`, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? markdown(`${dir}${e.name}/`) : e.name.endsWith(".md") ? [`${dir}${e.name}`] : []));
+  for (const file of markdown(".well-known/agent-skills/")) {
+    for (const [, path] of read(file).matchAll(/https:\/\/optics-framework\.org\/([^\s)#`"']*)/g)) {
+      const target = path.replace(/[.,]+$/, "");
+      assert.ok(!target || existsSync(`out/${target}`) || existsSync(`out/${target}.html`), `${file} links missing ${target}`);
+    }
+  }
+  assert.match(read("llms.txt"), /\(https:\/\/optics-framework\.org\/skills\.md\)/);
+});
+
 test("llms.txt follows the llmstxt.org layout and says when to use Optics", () => {
   const text = read("llms.txt");
   const lines = text.split("\n");

@@ -30,6 +30,19 @@
       ]
     },
     {
+      "identifier": "urn:air:optics-framework.org:skills:tasks",
+      "displayName": "Optics task skills",
+      "type": "text/markdown",
+      "url": "https://optics-framework.org/skills.md",
+      "representativeQueries": [
+        "migrate my Appium, Playwright or Maestro tests to Optics",
+        "turn an agent session into an Optics test suite",
+        "find why an Optics run failed and fix it",
+        "run Optics tests in GitHub Actions",
+        "set up an Android phone, an iPhone, a TV or a desktop app for Optics"
+      ]
+    },
+    {
       "identifier": "urn:air:optics-framework.org:api:optics-serve",
       "displayName": "optics serve HTTP API",
       "type": "application/vnd.oai.openapi+json",
