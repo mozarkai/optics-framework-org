@@ -712,10 +712,10 @@ result = <span class="c-info">await</span> self._try_execute_with_fallback(metho
 <p>In the Python library, a keyword such as <code class="ic">press_element</code> also takes a list (<code class="ic">fallback_str = Union[str, List[str]]</code>). Its <code class="ic">@fallback_params</code> decorator passes the values to <code class="ic">fallback.run()</code>, which tries them in order.</p>
 <p><strong>3. Type conversion and named parameters:</strong></p>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="# A key=value parameter becomes a keyword argument when key names a parameter
-# of the method (DataReader.split_params_by_signature); otherwise it stays positional
+# of the method (split_params_by_signature); otherwise it stays positional
 # store_as=${name} keeps the keyword's return value in that variable
 # KeywordExecutor turns a JSON list into a Python list for a list-typed parameter">Copy</button><pre><code><span class="c-dim"># A key=value parameter becomes a keyword argument when key names a parameter</span>
-<span class="c-dim"># of the method (DataReader.split_params_by_signature); otherwise it stays positional</span>
+<span class="c-dim"># of the method (split_params_by_signature); otherwise it stays positional</span>
 <span class="c-dim"># store_as=${name} keeps the keyword's return value in that variable</span>
 <span class="c-dim"># KeywordExecutor turns a JSON list into a Python list for a list-typed parameter</span></code></pre></figure>
 <h3 id="robot-framework-integration">Robot Framework integration<a class="anchor" href="#robot-framework-integration" aria-label="Link to this section">#</a></h3>
@@ -1102,7 +1102,7 @@ template_data.add_template(<span class="c-lit">"login_form"</span>, <span class=
 <p><strong>Location:</strong> <code class="ic">optics_framework/common/runner/data_reader.py</code></p>
 <p>Handles data reading from the project files. <code class="ic">DataReader</code> is an abstract class with two implementations:</p>
 <ul><li><code class="ic">CSVDataReader</code>: test cases, modules, elements and error definitions in CSV files</li><li><code class="ic">YAMLDataReader</code>: test cases, modules, elements and API definitions in YAML files</li></ul>
-<p><code class="ic">DataReader.split_params_by_signature()</code> also lives here; the runners use it to split <code class="ic">key=value</code> parameters.</p>
+<p>The runners split <code class="ic">key=value</code> parameters with <code class="ic">split_params_by_signature()</code>, which is in <code class="ic">optics_framework/common/runner/step_params.py</code>.</p>
 <h4 id="supported-sources-at-run-time">Supported sources at run time<a class="anchor" href="#supported-sources-at-run-time" aria-label="Link to this section">#</a></h4>
 <p>The flow keywords bring data into the session's elements while a test runs:</p>
 <ul><li>CSV files: <code class="ic">Read Data</code> (also JSON files)</li><li>API endpoints: <code class="ic">Invoke API</code></li><li>Lists/arrays: <code class="ic">Read Data</code> with a 2D list (Python API only), and <code class="ic">Run Loop</code> with <code class="ic">a|b|c</code> values</li><li>Variables: <code class="ic">Read Data</code> with <code class="ic">ENV:VAR_NAME</code>, and <code class="ic">store_as</code> on any keyword</li></ul>
@@ -1325,7 +1325,7 @@ element_names: ContextVar[dict[str, str]] = ContextVar(&quot;element_names&quot;
 
 current_test_case: ContextVar[str] = ContextVar(<span class="c-lit">"current_test_case"</span>, default=<span class="c-info">None</span>)
 element_names: ContextVar[dict[str, str]] = ContextVar(<span class="c-lit">"element_names"</span>)</code></pre></figure>
-<p><code class="ic">element_names</code> maps each locator value of the keyword about to run to the element name it came from. <code class="ic">name_locators(params, locators)</code> sets it before each keyword; the first name wins. AI self-heal uses it to tell the model the element's name.</p>
+<p><code class="ic">element_names</code> maps each locator value of the keyword about to run to the element name it came from. <code class="ic">name_locators(params, locators)</code> in <code class="ic">optics_framework/common/runner/step_params.py</code> sets it before each keyword; the first name wins. AI self-heal uses it to tell the model the element's name.</p>
 <p><strong>Why context variables?</strong></p>
 <ul><li><strong>Thread-safe</strong>: Each thread/async task has its own context</li><li><strong>Async-safe</strong>: Automatically propagated to async tasks</li><li><strong>No parameter passing</strong>: Access context without explicit parameters</li><li><strong>Isolation</strong>: Context isolated per execution context</li></ul>
 <h3 id="setting-test-context">Setting test context<a class="anchor" href="#setting-test-context" aria-label="Link to this section">#</a></h3>

@@ -400,7 +400,7 @@ raise blind or _not_found(element, effective_element, text_only, last_error, hin
 raise blind <span class="c-info">or</span> _not_found(element, effective_element, text_only, last_error, hint)</code></pre></figure>
 <p>Earlier versions of these docs showed this loop continuing only on <code class="ic">if e.code == Code.E0201:  # Element not found</code> and had <code class="ic">raise  # Re-raise other errors</code> for all other errors. Current code does not do that.</p>
 <h3 id="2-driver-fallback">2. Driver fallback<a class="anchor" href="#2-driver-fallback" aria-label="Link to this section">#</a></h3>
-<p>When you configure more than one driver, <code class="ic">InstanceFallback</code> (in <code class="ic">base_factory.py</code>) calls each instance in turn. It moves to the next instance after any exception, not only after driver errors. It logs each failure with <code class="ic">internal_logger.error</code>. When all instances fail, it raises the last exception.</p>
+<p>When you configure more than one driver, <code class="ic">InstanceFallback</code> (in <code class="ic">instance_fallback.py</code>) calls each instance in turn. It moves to the next instance after any exception, not only after driver errors. It logs each failure with <code class="ic">internal_logger.error</code>. When all instances fail, it raises the last exception.</p>
 <figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="for driver in driver_fallback.instances:
     try:
         driver.press_element(element, repeat)

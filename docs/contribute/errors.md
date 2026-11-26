@@ -497,7 +497,7 @@ Earlier versions of these docs showed this loop continuing only on `if e.code ==
 
 ### 2. Driver fallback
 
-When you configure more than one driver, `InstanceFallback` (in `base_factory.py`) calls each instance in turn. It moves to the next instance after any exception, not only after driver errors. It logs each failure with `internal_logger.error`. When all instances fail, it raises the last exception.
+When you configure more than one driver, `InstanceFallback` (in `instance_fallback.py`) calls each instance in turn. It moves to the next instance after any exception, not only after driver errors. It logs each failure with `internal_logger.error`. When all instances fail, it raises the last exception.
 
 ```python
 for driver in driver_fallback.instances:

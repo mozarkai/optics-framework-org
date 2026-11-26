@@ -320,7 +320,7 @@ def press_element(self, element: str, ..., *, located: Any = None):
 execution_logger = logging.getLogger(&quot;optics.execution&quot;)">Copy</button><pre><code>internal_logger = logging.getLogger(<span class="c-lit">"optics.internal"</span>)
 execution_logger = logging.getLogger(<span class="c-lit">"optics.execution"</span>)</code></pre></figure>
 <h2 id="adr-012-instancefallback-wrapper">ADR-012: InstanceFallback Wrapper<a class="anchor" href="#adr-012-instancefallback-wrapper" aria-label="Link to this section">#</a></h2>
-<p><strong>Status:</strong> Accepted. Still true: see <code class="ic">optics_framework/common/base_factory.py</code>. <code class="ic">InstanceFallback</code> is now a pydantic model. It records the instance in use as <code class="ic">current_instance</code>, and when all instances fail, it raises the last error. <code class="ic">routed_to</code> sends the calls in a block to one instance only.</p>
+<p><strong>Status:</strong> Accepted. Still true: see <code class="ic">optics_framework/common/instance_fallback.py</code>. <code class="ic">InstanceFallback</code> is now a pydantic model. It records the instance in use as <code class="ic">current_instance</code>, and when all instances fail, it raises the last error. <code class="ic">routed_to</code> sends the calls in a block to one instance only.</p>
 <p><strong>Context:</strong> When you configure more than one driver or element source, Optics must try each one automatically until one is successful. This gives resilience and fallback.</p>
 <p><strong>Decision:</strong> Wrap the instances in an <code class="ic">InstanceFallback</code> class. On each method call, it tries each instance automatically until one is successful.</p>
 <p><strong>Rationale:</strong></p>

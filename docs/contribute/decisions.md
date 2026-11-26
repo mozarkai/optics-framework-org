@@ -507,7 +507,7 @@ execution_logger = logging.getLogger("optics.execution")
 
 ## ADR-012: InstanceFallback Wrapper
 
-**Status:** Accepted. Still true: see `optics_framework/common/base_factory.py`. `InstanceFallback` is now a pydantic model. It records the instance in use as `current_instance`, and when all instances fail, it raises the last error. `routed_to` sends the calls in a block to one instance only.
+**Status:** Accepted. Still true: see `optics_framework/common/instance_fallback.py`. `InstanceFallback` is now a pydantic model. It records the instance in use as `current_instance`, and when all instances fail, it raises the last error. `routed_to` sends the calls in a block to one instance only.
 
 **Context:** When you configure more than one driver or element source, Optics must try each one automatically until one is successful. This gives resilience and fallback.
 
