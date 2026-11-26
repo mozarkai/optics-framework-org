@@ -57,6 +57,7 @@ Do not reach for Optics for unit tests, load or performance testing, API-only co
 - [Hard targets](https://optics-framework.org/playground/hard-targets.md): a locked phone, a TV, a game, an icon, popups, conditions, loops, crashes and repeated text, each with the suite lines that drive it.
 - [Explain a suite](https://optics-framework.org/playground/explain.md): an interactive page that explains a suite row by row and predicts `optics dry_run`. The Markdown twin holds the example suites.
 - [OpenAPI document](https://optics-framework.org/openapi.json): the `optics serve` HTTP API, OpenAPI 3.1. Not hosted here; it describes the server you run locally.
+- [Skills](https://optics-framework.org/skills.md): one procedure for each whole task, such as migrate a suite to Optics, write a suite from a session, fix a failed run, run in CI or set up a device. Fetch the one that fits and follow it; no install.
 - [Agent skill](https://optics-framework.org/.well-known/agent-skills/optics-framework/SKILL.md): a SKILL.md for driving devices and writing suites with Optics. Listed in `/.well-known/agent-skills/index.json`; the MCP server card is `/.well-known/mcp/server-card.json`.
 - [Source code](https://github.com/mozarkai/optics-framework): issues, discussions and releases.
 - [PyPI package](https://pypi.org/project/optics-framework/): `optics-framework`.
