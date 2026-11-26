@@ -1,31 +1,24 @@
 # Help wanted
 
-> The ideas we want to build with contributors. Each one says what we imagine for the people who use Optics, where Optics is today, and gives a prompt to explore it with your agent.
+> The ideas we want to build with contributors, with a prompt for your agent on each one.
 
-Optics grows with its contributors. This page lists the ideas we want help with. Each idea says what we imagine for the people who use Optics, where Optics is today and which questions are still open. It does not prescribe a design. The design is the part we want to work out with you.
+These are the ideas we want to build with you. Each idea says what we imagine, not how to build it. The design is the part we work out together.
 
-**Explore an idea with your agent:**
-Each idea ends with a prompt. Copy it into Claude Code, Codex or another coding agent. The agent reads the Optics source and explains the area to you. The prompt asks only for understanding, so you come to the issue with a plan of your own.
+**Copy prompt** gives your coding agent a prompt that explains the idea's area of the Optics code. It asks for understanding, not for code.
 
 ## Propose work
 
-### Pick an idea
+### Pick an idea and explore it
 
-Read the ideas below and pick one that interests you. The priority and difficulty of each idea are in [the table](#ideas-at-a-glance).
-
-### Explore it with the prompt
-
-Paste the idea's prompt into your agent. Read the code that it points to, and run Optics on the area yourself.
+Copy its prompt into Claude Code, Codex or another agent, and read the code that the agent points to.
 
 ### Open an issue with your plan
 
-Search the [open issues](https://github.com/mozarkai/optics-framework/issues) first. If an issue for the idea exists, add your plan to it. If not, [open one](https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml) with the feature request form. Say which idea you picked and how you want to approach it. Before a large pull request, agree on the direction with a maintainer in the issue.
+Search the [open issues](https://github.com/mozarkai/optics-framework/issues) first. If there is none, [open one](https://github.com/mozarkai/optics-framework/issues/new?template=feature_request.yml). Agree on the direction with a maintainer before a large pull request.
 
 ### Build it
 
-Set up with [Set up for development](https://optics-framework.org/docs/contribute/setup), and follow the steps in [Contribute](https://optics-framework.org/docs/contribute/). You can open a draft pull request at any time to ask for direction.
-
-A typo or a small fix needs no issue. Issues that the maintainers marked for contributors carry the [`help wanted`](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+Start with [Set up for development](https://optics-framework.org/docs/contribute/setup) and the steps in [Contribute](https://optics-framework.org/docs/contribute/).
 
 ## Ideas at a glance
 
@@ -51,34 +44,15 @@ A typo or a small fix needs no issue. Issues that the maintainers marked for con
 | [Documentation](#documentation) | Medium | Beginner |
 | [CI and tooling](#infrastructure) | Low to Medium | Intermediate |
 
-| Level | Meaning |
-| --- | --- |
-| **High** | Teams that run Optics at scale need it |
-| **Medium** | It makes Optics more useful or more complete |
-| **Low** | It is good to have |
-| **Beginner** | A good first contribution; little framework knowledge is necessary |
-| **Intermediate** | Some knowledge of the framework is necessary |
-| **Advanced** | Deep knowledge of the framework is necessary |
-
 ## Run at scale
 
 ### Run one suite on many devices at once
 
 **Priority**: High · **Difficulty**: Advanced
 
-**What we imagine.** You point Optics at a set of devices: a rack of phones, a group of emulators, a device cloud or a mix of browsers. Optics runs the same suite on all of them at the same time, or splits a long suite across them to finish sooner. One report shows each device's result side by side, so a failure that happens on one device only is easy to find.
+Point Optics at a set of devices, such as a rack of phones, a group of emulators or a device cloud. It runs the same suite on all of them at the same time, or splits a long suite to finish sooner. One report shows each device side by side.
 
-**Optics today.**
-
-- `optics execute` runs a suite in one session, on one device.
-- When `config.yaml` turns on more than one driver, Optics uses them as a fallback chain, one after the other (`optics_framework/common/instance_fallback.py`).
-- `optics serve` and `optics mcp` already keep many sessions open at the same time (`optics_framework/common/session_manager.py`).
-
-**Questions to explore.**
-
-- How does a project name its devices, and how does it say "every device" or "split the suite"?
-- How do the live output and the JUnit report show several devices without noise?
-- What happens to the run when one device disconnects?
+**Today:** `optics execute` runs one session on one device. Several enabled drivers form a fallback chain, not parallel runs.
 
 **Prompt for your agent:**
 
@@ -92,6 +66,11 @@ Help me understand:
 - Which parts of a run (session, events, report, popup state, output folder) belong to one device, and which belong to the whole run.
 - How the JUnit report and the live output are built from events.
 
+The maintainers' open questions:
+- How does a project name its devices, and how does it say "every device" or "split the suite"?
+- How do the live output and the JUnit report show several devices without noise?
+- What happens to the run when one device disconnects?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -99,19 +78,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Advanced · **Issue**: [#351](https://github.com/mozarkai/optics-framework/issues/351)
 
-**What we imagine.** Many copies of `optics serve` work as one service. A session can move from one copy to another and keep its context, and a session survives when its server restarts. Teams can scale the service out, balance the load and deploy without downtime.
+Many copies of `optics serve` work as one service. A session can move to another copy and survive a restart, so teams can scale out and deploy without downtime.
 
-**Optics today.**
-
-- `SessionManager` keeps each session in the memory of one process (`optics_framework/common/session_manager.py`).
-- A session holds live objects: drivers, element sources, vision models and the recorded steps.
-- When a driver session ends, Optics stops the session with `E0106` and you start a new one (`optics_framework/common/session_liveness.py`).
-
-**Questions to explore.**
-
-- Which parts of a session are configuration that a new process can rebuild, and which are live state?
-- What should a caller see while a session moves?
-- How does this fit the HTTP API and the MCP server, which both keep sessions?
+**Today:** each session lives in the memory of one process, with its drivers, engines and recorded steps.
 
 **Prompt for your agent:**
 
@@ -125,6 +94,11 @@ Help me understand:
 - How a session starts, how it ends, and what happens when its driver goes away.
 - Where `optics serve` and `optics mcp` keep their sessions, and how they differ.
 
+The maintainers' open questions:
+- Which parts of a session can a new process rebuild, and which are live state?
+- What should a caller see while a session moves?
+- How does this fit the HTTP API and the MCP server, which both keep sessions?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -134,18 +108,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Intermediate
 
-**What we imagine.** A test does every gesture that a person does. It reorders a list by drag, opens a context menu with a long press, and zooms a map or a photo with a pinch. The gesture starts and ends on elements, not on fixed coordinates, so the step still works when the layout changes. These gestures are among the features that mobile testers ask for most.
+A test does every gesture a person does: reorder a list by drag, open a menu with a long press, zoom a map with a pinch. Each gesture starts and ends on elements, so it still works when the layout changes.
 
-**Optics today.**
-
-- Optics presses, swipes and scrolls, from an element or from a point (`Press Element`, `Swipe From Element`, `Scroll From Element`, `Swipe Until Element Appears`).
-- Each keyword runs on every driver that can do it. A driver that cannot do it refuses the keyword with `E0105`.
-
-**Questions to explore.**
-
-- Which drivers (Appium on each platform, Playwright, Selenium, the `ble` driver) can do which gesture?
-- How should a step name where a gesture starts and where it ends?
-- How does each gesture fit the fallback ladder and AI self-heal?
+**Today:** Optics presses, swipes and scrolls, from an element or from a point.
 
 **Prompt for your agent:**
 
@@ -159,6 +124,11 @@ Help me understand:
 - Which gesture methods `DriverInterface` has, and how each driver implements them or refuses them.
 - What a new keyword must reach to work in every entry point (CSV runner, Python library, HTTP API, MCP, optics live).
 
+The maintainers' open questions:
+- Which drivers (Appium on each platform, Playwright, Selenium, the `ble` driver) can do which gesture?
+- How should a step name where a gesture starts and where it ends?
+- How does each gesture fit the fallback ladder and AI self-heal?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -166,18 +136,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate
 
-**What we imagine.** A test uses the device as a person does. It reads what the app copied, such as a referral code, and puts text on the clipboard before a paste. It passes or fails a fingerprint or face prompt on an emulator or a simulator, so a test of a sign-in flow that uses biometrics runs from start to end.
+A test reads what the app copied, such as a referral code, and puts text on the clipboard before a paste. It passes or fails a fingerprint or face prompt on an emulator or a simulator, so a biometric sign-in runs end to end.
 
-**Optics today.**
-
-- Optics has no keyword for the clipboard or for biometric prompts yet.
-- Optics treats secret values with care: it writes them as `<redacted>` in recordings and reports (`is_secret` in `optics_framework/common/screen_snapshot.py`).
-
-**Questions to explore.**
-
-- Which platforms allow these features on emulators, on simulators and on real devices?
-- When is a clipboard value a secret, and how should a report show it?
-- How should a platform that does not have the feature answer?
+**Today:** there is no keyword for either yet.
 
 **Prompt for your agent:**
 
@@ -191,6 +152,11 @@ Help me understand:
 - How Optics finds and hides secret values in recordings, logs and reports.
 - Which keywords today come close to these features.
 
+The maintainers' open questions:
+- Which platforms allow these features on emulators, on simulators and on real devices?
+- When is a clipboard value a secret, and how should a report show it?
+- How should a platform that does not have the feature answer?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -198,18 +164,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Advanced
 
-**What we imagine.** A Flutter app is as easy to test as a native app. A test finds Flutter widgets by their keys and labels, and it stays stable when a widget has no accessibility label. The same suite runs on the Android and iOS builds of the app.
+A Flutter app is as easy to test as a native app. A test finds widgets by their keys and labels, and the same suite runs on the Android and iOS builds.
 
-**Optics today.**
-
-- Optics drives a Flutter app as it drives any app: through the platform's accessibility tree, OCR and image matching.
-- Optics has no link to Flutter's own widget tree.
-
-**Questions to explore.**
-
-- Which signals does a Flutter app give in a release build, and which only in a debug build?
-- How does a Flutter element fit the locator types and the fallback ladder?
-- Which sample app should the work use, so that tests can run in CI?
+**Today:** Optics drives a Flutter app through the accessibility tree, OCR and image matching, with no link to Flutter's own widget tree.
 
 **Prompt for your agent:**
 
@@ -223,6 +180,11 @@ Help me understand:
 - How an element source declares the locators it can handle.
 - Where a Flutter app's screen would look different from a native app's screen to these sources.
 
+The maintainers' open questions:
+- Which signals does a Flutter app give in a release build, and which only in a debug build?
+- How does a Flutter element fit the locator types and the fallback ladder?
+- Which sample app should the work use, so that tests can run in CI?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -230,18 +192,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate · **Issue**: [#686](https://github.com/mozarkai/optics-framework/issues/686)
 
-**What we imagine.** A web test checks what the page shows and what the page asked the server. A step waits for the response to a request, checks its status and its data, and keeps a value from it for a later step. When a test fails, the report shows the requests that led to the failure.
+A web test checks what the page asked the server, not only what it shows. A step waits for a response, checks its status and data, and keeps a value for a later step.
 
-**Optics today.**
-
-- A web test reads the page: its elements, its text and its screenshots, through the Playwright and Selenium drivers.
-- `Invoke API` calls an API directly, but it does not see the requests that the page makes itself.
-
-**Questions to explore.**
-
-- Which drivers can watch requests, and does this also work on mobile web through Appium?
-- How does a step name the request it waits for?
-- How should a report show requests and responses that hold secrets?
+**Today:** web tests read the page. `Invoke API` calls an API directly but does not see the page's own requests.
 
 **Prompt for your agent:**
 
@@ -255,6 +208,11 @@ Help me understand:
 - How a keyword saves a value for a later step, and how variables move between steps.
 - How Optics hides secret values in logs and reports.
 
+The maintainers' open questions:
+- Which drivers can watch requests, and does this also work on mobile web through Appium?
+- How does a step name the request it waits for?
+- How should a report show requests and responses that hold secrets?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -262,18 +220,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Intermediate
 
-**What we imagine.** Each platform brings its strongest way to find an element, and that way joins the same fallback chain as every other locator. An Android test can use a UI Automator selector, and an iOS test can use a predicate string or a class chain. A new driver can add a lookup of its own without changes to the core.
+Each platform brings its strongest lookup, such as UI Automator selectors on Android or predicate strings on iOS, into the same fallback chain. A new driver adds a lookup without changes to the core.
 
-**Optics today.**
-
-- Optics reads XPath, CSS (`css=`), a cross-platform `id:`, Playwright's `role=`, `label=`, `placeholder=`, `text=`, `title=`, `alt=` and `data-testid=`, accessibility IDs and class names.
-- The four locate strategies are a fixed list in `StrategyFactory` (`optics_framework/common/strategies.py`).
-
-**Questions to explore.**
-
-- Which platform locators do users ask for most?
-- How does a locator string tell Optics which lookup it needs?
-- How does a driver offer a lookup of its own, and where does that lookup go in the fallback order?
+**Today:** Optics reads XPath, CSS, a cross-platform `id:`, Playwright's semantic locators, accessibility IDs and class names. The four locate strategies are a fixed list.
 
 **Prompt for your agent:**
 
@@ -287,6 +236,11 @@ Help me understand:
 - Why the strategy list is fixed today, and what depends on its order.
 - Which locator forms each driver understands today.
 
+The maintainers' open questions:
+- Which platform locators do users ask for most?
+- How does a locator string tell Optics which lookup it needs?
+- How does a driver offer a lookup of its own, and where does that lookup go in the fallback order?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -294,18 +248,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate to Advanced
 
-**What we imagine.** A test finds an element on any screen, also where there is no element tree: a game, a video, a camera view of a TV. You describe the element in words, such as "the blue Pay button", or show a picture of it, and Optics finds it fast on a normal computer.
+A test finds an element on any screen, also where there is no element tree: a game, a video, a camera view of a TV. You describe it in words, such as "the blue Pay button", or show a picture, and Optics finds it fast on a normal computer.
 
-**Optics today.**
-
-- Two image engines match pictures: `templatematch` (OpenCV, local) and `remote_oir` (a remote service).
-- OCR engines read text on the screen: EasyOCR, RapidOCR, Pytesseract, Apple Vision, Google Vision and a remote OCR service.
-
-**Questions to explore.**
-
-- Which kinds of model fit: element detectors, models that find an element from a description, faster OCR?
-- How does an element described in words fit the elements file and the fallback ladder?
-- How do we measure accuracy and speed on real app screens, not on document pages?
+**Today:** two image engines match pictures, and six OCR engines read text.
 
 **Prompt for your agent:**
 
@@ -319,6 +264,11 @@ Help me understand:
 - How a vision match becomes a press on the device, including the area of interest and the pixel scaling.
 - How the engines are chosen and loaded from config.yaml.
 
+The maintainers' open questions:
+- Which kinds of model fit: element detectors, models that find an element from a description, faster OCR?
+- How does an element described in words fit the elements file and the fallback ladder?
+- How do we measure accuracy and speed on real app screens?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -328,19 +278,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Advanced
 
-**What we imagine.** API and database checks are a natural part of every suite, as natural as screen steps. One test creates data through an API, acts on the screen, then confirms the result in the database. A suite can also be API-only. Each check shows in the live output and in the report like any other step, and credentials stay secret. We want to design this as a whole: how a project describes its services and databases, how values move between data steps and screen steps, and how the report tells the story.
+API and database checks are as natural in a suite as screen steps. One test creates data through an API, acts on the screen, then confirms the result in the database, and a suite can also be API-only. We want to design this as a whole, from the project files to the report.
 
-**Optics today.**
-
-- `Invoke API` calls an endpoint that a YAML file describes, checks the response and saves values as variables. See [Call APIs in a test](https://optics-framework.org/docs/advanced/api-calls).
-- `Evaluate`, `Condition` and `Read Data` work with values in a test.
-- A contribution in review adds database checks: [#752](https://github.com/mozarkai/optics-framework/pull/752).
-
-**Questions to explore.**
-
-- What should a project file for APIs and databases look like, beside `config.yaml` and the elements file?
-- Which checks do teams need most: status, schema, values, timing, data that eventually arrives?
-- How should data steps work in each entry point: the CSV runner, the Python library, `optics live` and the MCP server?
+**Today:** `Invoke API` calls an endpoint, checks the response and saves values ([Call APIs in a test](https://optics-framework.org/docs/advanced/api-calls)). A contribution in review adds database checks ([#752](https://github.com/mozarkai/optics-framework/pull/752)).
 
 **Prompt for your agent:**
 
@@ -354,6 +294,11 @@ Help me understand:
 - How values move between steps, and how secrets stay out of logs and reports.
 - What pull request #752 adds, and how it fits beside the API support.
 
+The maintainers' open questions:
+- What should a project file for APIs and databases look like, beside `config.yaml` and the elements file?
+- Which checks do teams need most: status, schema, values, timing, data that eventually arrives?
+- How should data steps work in each entry point: the CSV runner, the Python library, `optics live` and the MCP server?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -361,18 +306,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Advanced
 
-**What we imagine.** A test hears the device. It checks that a voice assistant gave the right answer, that the app spoke "Payment done", or that a sound played when a timer ended. Speech becomes text on the test machine, so the audio stays private and the check runs offline.
+A test hears the device. It checks that a voice assistant answered correctly or that the app said "Payment done". Speech becomes text on the test machine, so the audio stays private.
 
-**Optics today.**
-
-- Optics reads what a device shows: its page source, its screenshots and the text in them.
-- Optics does not record the sound of a device yet.
-
-**Questions to explore.**
-
-- How can Optics get the sound from each kind of device: phone, browser, desktop app and TV?
-- How should an audio check read in a suite, and how much time should it wait?
-- How should the report keep the audio, so that a person can listen to a failure?
+**Today:** Optics reads what a device shows, not what it plays.
 
 **Prompt for your agent:**
 
@@ -386,6 +322,11 @@ Help me understand:
 - How Optics adds a new kind of engine, as it did for OCR and LLM engines.
 - Where a failure's evidence (screenshots, page source) is saved for the report.
 
+The maintainers' open questions:
+- How can Optics get the sound from each kind of device: phone, browser, desktop app and TV?
+- How should an audio check read in a suite, and how long should it wait?
+- How should the report keep the audio, so that a person can listen to a failure?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -395,19 +336,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Advanced
 
-**What we imagine.** A person who does not type keywords builds a test by pointing at a live screen. They select an element, see the locators that would find it and how stable each one is, and add a step. They reorder, edit and remove steps, and run them one at a time while they build.
+Anyone builds a test by pointing at a live screen. They select an element, see how stable each locator is, add the step, and run steps one at a time while they build.
 
-**Optics today.**
-
-- `optics live` runs one keyword at a time on a live app, and `/save` writes the steps that worked into the suite. See [Record a test](https://optics-framework.org/docs/create/record).
-- In plain-English mode, an AI model picks the steps for a goal that you describe. See [Describe a test in plain English](https://optics-framework.org/docs/create/describe).
-- `GET /v1/sessions/{session_id}/screen_elements` and the MCP server list the elements on a screen with ways to find each one.
-
-**Questions to explore.**
-
-- Should the builder live in a browser, inside `optics live`, or beside your editor?
-- How does it show a locator's stability before you save the step?
-- How do visual edits stay in step with the CSV or YAML files?
+**Today:** `optics live` runs keywords on a live app, and `/save` writes the steps that worked ([Record a test](https://optics-framework.org/docs/create/record)).
 
 **Prompt for your agent:**
 
@@ -421,6 +352,11 @@ Help me understand:
 - How Optics lists the elements on a screen and suggests locators for each one.
 - What the HTTP API already gives a user interface that wants to drive a session.
 
+The maintainers' open questions:
+- Should the builder live in a browser, inside `optics live`, or beside an editor?
+- How does it show a locator's stability before the step is saved?
+- How do visual edits stay in step with the CSV or YAML files?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -428,18 +364,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate
 
-**What we imagine.** A team can learn from its own sessions. A person chooses to export the sessions that agents and testers ran with Optics, with the screens they saw, the actions they took and the results, in an open format for agent traces. With these traces, the team can study why tests fail, share examples, or train a smaller model that knows their app. This is not telemetry. Nothing leaves the machine unless a person exports it.
+A team learns from its own sessions. A person chooses to export the screens, actions and results of their Optics sessions in an open format for agent traces, to study failures or train a model that knows their app. This is not telemetry: nothing leaves the machine unless a person exports it.
 
-**Optics today.**
-
-- Optics records the steps that work: `/save` in `optics live`, the `steps` resource of the MCP server, and the steps that AI self-heal adds, which the JUnit report keeps.
-- Secret values are written as `<redacted>` in every recording.
-
-**Questions to explore.**
-
-- Which trace formats do people use, and which tools read them?
-- What must a trace keep (screens, reasoning, timing), and what must it never keep?
-- Should traces come from the MCP server, `optics live`, self-heal or all three?
+**Today:** Optics records the steps that work, from `optics live`, the MCP server and AI self-heal, with secrets written as `<redacted>`.
 
 **Prompt for your agent:**
 
@@ -453,6 +380,11 @@ Help me understand:
 - How Optics decides that a value is secret, and how it hides it.
 - What differs between a recording from the MCP server, from `optics live` and from self-heal.
 
+The maintainers' open questions:
+- Which trace formats do people use, and which tools read them?
+- What must a trace keep (screens, reasoning, timing), and what must it never keep?
+- Should traces come from the MCP server, `optics live`, self-heal or all three?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -462,19 +394,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Advanced
 
-**What we imagine.** Optics finds an element in the time of its fastest strategy that succeeds, not in the sum of the strategies before it. It still acts only once, and only through the element that it found first. Tests with many fallback locators become faster, and their results stay the same.
+Optics finds an element in the time of its fastest strategy that succeeds, not the sum of the ones before it. It still acts once, through the element it found first.
 
-**Optics today.**
-
-- `StrategyManager.locate` gives results one strategy at a time: XPath, text, OCR, then image (`optics_framework/common/strategies.py`).
-- A later strategy looks only after the act on an earlier result fails, so the device never gets two actions for one step.
-- Assertions already share one screenshot per round among the vision strategies, and skip a screen that did not change.
-
-**Questions to explore.**
-
-- Which strategies share the driver, and which only need a screenshot?
-- What does a faster lookup cost in CPU when OCR runs on every step?
-- How do we measure the gain on real suites?
+**Today:** strategies look one at a time, and a later one looks only after the act on an earlier result fails.
 
 **Prompt for your agent:**
 
@@ -488,6 +410,11 @@ Help me understand:
 - Which resources (driver, page source, screenshot) each strategy uses.
 - How assertion rounds already share work between strategies.
 
+The maintainers' open questions:
+- Which strategies share the driver, and which only need a screenshot?
+- What does a faster lookup cost in CPU when OCR runs on every step?
+- How do we measure the gain on real suites?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -495,20 +422,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Intermediate · **Issue**: [#314](https://github.com/mozarkai/optics-framework/issues/314)
 
-**What we imagine.** A team runs one `optics serve` on its network and shares it safely. Each caller signs in with a key or a token, sees only its own sessions, and stays within limits that the team sets.
+A team runs one `optics serve` on its network and shares it safely. Each caller signs in, sees only its own sessions and stays within limits the team sets.
 
-**Optics today.**
-
-- `optics serve` and `optics mcp` have no sign-in of their own, and they log a warning when they listen beyond the local machine (`optics_framework/common/http_guard.py`).
-- Browsers can call the server only from the origins in `OPTICS_CORS_ORIGINS`, and none by default.
-- A loopback-bound server, or any server once `OPTICS_ALLOWED_HOSTS` is set, refuses requests for other host names.
-- Optics refuses a remote caller's request to read the server's files or environment (`optics_framework/common/caller_policy.py`), and refuses images over 64 MB or 64 megapixels.
-
-**Questions to explore.**
-
-- Which sign-in methods do teams expect: API keys, bearer tokens, a gateway in front?
-- How do sessions belong to a caller, as they already do in the MCP server?
-- Which limits matter: requests per caller, sessions per caller, request size?
+**Today:** the server has no sign-in of its own. It checks hosts and origins, and it refuses requests to read its own files.
 
 **Prompt for your agent:**
 
@@ -522,6 +438,11 @@ Help me understand:
 - How the MCP server decides who owns a session.
 - What a remote caller can and cannot ask the server to do.
 
+The maintainers' open questions:
+- Which sign-in methods do teams expect: API keys, bearer tokens, a gateway in front?
+- How do sessions belong to a caller, as they already do in the MCP server?
+- Which limits matter: requests per caller, sessions per caller, request size?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -529,19 +450,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate
 
-**What we imagine.** A test run spends its time on the app, not on Optics. Screens are read once, engines start once, and a report shows where the time of a run went, so that a slow step is easy to find.
+A run spends its time on the app, not on Optics, and a report shows where the time went.
 
-**Optics today.**
-
-- The factories keep engine instances and reuse them (`optics_framework/common/base_factory.py`).
-- Each OCR engine remembers its result for the last four frames, so a repeated read of the same screen is free (`optics_framework/common/text_interface.py`).
-- Events go through an `asyncio` queue, and `EventSDK` sends them in batches.
-
-**Questions to explore.**
-
-- Where does the time of a typical run go today? Measure it before you change anything.
-- Which image and OCR work could run on a GPU when there is one?
-- What should a time report look like, and who reads it?
+**Today:** engines are created once and reused, and OCR remembers its last four frames.
 
 **Prompt for your agent:**
 
@@ -555,6 +466,11 @@ Help me understand:
 - Which work is cached today, and for how long.
 - How I could measure where the time of a run goes, with the tools the project already has.
 
+The maintainers' open questions:
+- Where does the time of a typical run go today? Measure it before you change anything.
+- Which image and OCR work could run on a GPU when there is one?
+- What should a time report look like, and who reads it?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -562,18 +478,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Intermediate · **Issues**: [#484](https://github.com/mozarkai/optics-framework/issues/484), [#300](https://github.com/mozarkai/optics-framework/issues/300)
 
-**What we imagine.** A new keyword, engine or driver takes one change in one place, and every entry point gets it. Contributors find each decision where they expect it, and a change does not need edits in many files.
+A new keyword, engine or driver takes one change in one place, and every entry point gets it.
 
-**Optics today.**
-
-- A keyword reaches eight entry points. Most find it by reflection, but the Python and Robot Framework library needs its own wrapper in `optics.py`.
-- `scripts/check_layers.py` keeps the order of the layers, and the shared fallback ladder (`common/fallback.py`) and `build_keywords` (`api/keywords.py`) already serve every entry point.
-
-**Questions to explore.**
-
-- Which decisions are still repeated across entry points or drivers?
-- Which repeated code in the drivers and element sources is the same idea, and which only looks similar?
-- How do we keep the public keyword names stable during the change?
+**Today:** most entry points find a new keyword on their own, but the Python and Robot Framework library needs its own wrapper.
 
 **Prompt for your agent:**
 
@@ -587,6 +494,11 @@ Help me understand:
 - Which code in the drivers and element sources repeats the same decision.
 - How the layer check limits where shared code can live.
 
+The maintainers' open questions:
+- Which decisions are still repeated across entry points or drivers?
+- Which repeated code is the same idea, and which only looks similar?
+- How do we keep the public keyword names stable during the change?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -596,19 +508,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: High · **Difficulty**: Beginner to Intermediate · **Issue**: [#365](https://github.com/mozarkai/optics-framework/issues/365)
 
-**What we imagine.** Every behavior that a user can see has one journey test that guards it, and the journeys run on every platform that Optics supports, real devices included. A change that breaks a user's suite fails in CI before it reaches a release.
+Every behavior a user can see has one journey test, and the journeys run on every platform Optics supports, real devices included.
 
-**Optics today.**
-
-- Each contract has one test that owns it, at the strongest boundary that is cheap to drive: `run_project`, the `Optics` library, `optics serve`, an MCP session or a real browser. See "Tests" in `CLAUDE.md`.
-- Journeys such as `tests/integration/test_playwright_journey.py` and `tests/integration/test_selenium_journey.py` run whole suites.
-- The `check-tests` hook refuses tests that assert nothing, sleep for a fixed time, read source code or assert a tautology (`scripts/check_tests.py`).
-
-**Questions to explore.**
-
-- Which user-visible behaviors have no journey yet?
-- How can CI run Android emulators, iOS simulators and desktop apps at a cost the project can carry?
-- Which journeys should block a release, and which should only report?
+**Today:** journeys run whole suites in a real browser, and a hook refuses tests that assert nothing or read source code.
 
 **Prompt for your agent:**
 
@@ -622,6 +524,11 @@ Help me understand:
 - Which user-visible behaviors the journeys cover today, and which they do not.
 - What CI runs today, on which platforms, and what it skips.
 
+The maintainers' open questions:
+- Which user-visible behaviors have no journey yet?
+- How can CI run Android emulators, iOS simulators and desktop apps at a cost the project can carry?
+- Which journeys should block a release, and which should only report?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -629,18 +536,9 @@ Do not write code and do not propose a design. Explain what you find, point me t
 
 **Priority**: Medium · **Difficulty**: Beginner
 
-**What we imagine.** Every person who uses Optics finds the answer on this site in a few minutes, from a first test to a large CI setup. The docs show real examples for each task and each CI system, and they guide each upgrade.
+Everyone finds their answer on this site in a few minutes, with real examples for each task, each CI system and each upgrade.
 
-**Optics today.**
-
-- The docs are in the [optics-framework-org repository](https://github.com/mozarkai/optics-framework-org), under `docs/`.
-- [Troubleshooting](https://optics-framework.org/docs/help/troubleshooting), [Error codes](https://optics-framework.org/docs/reference/errors), [Run in CI](https://optics-framework.org/docs/run/ci) (GitHub Actions and GitLab CI) and the [readiness checklist](https://optics-framework.org/docs/run/checklist) exist.
-
-**Questions to explore.**
-
-- Which CI systems need examples next: Jenkins, Azure DevOps, CircleCI?
-- Which tasks need a guide: tuning for speed, upgrading between versions, choosing locators?
-- Which workflows are easier to learn from a short video?
+**Today:** the docs live in the [optics-framework-org repository](https://github.com/mozarkai/optics-framework-org). CI examples cover GitHub Actions and GitLab CI.
 
 **Prompt for your agent:**
 
@@ -654,6 +552,11 @@ Help me understand:
 - The voice and style rules that the pages follow.
 - Which tasks a new user is likely to look for that the docs do not answer yet.
 
+The maintainers' open questions:
+- Which CI systems need examples next: Jenkins, Azure DevOps, CircleCI?
+- Which tasks need a guide: tuning for speed, upgrading between versions, choosing locators?
+- Which workflows are easier to learn from a short video?
+
 Do not write new pages yet. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
 
@@ -661,19 +564,9 @@ Do not write new pages yet. Explain what you find, point me to the files that ma
 
 **Priority**: Low to Medium · **Difficulty**: Intermediate · **Issue**: [#320](https://github.com/mozarkai/optics-framework/issues/320)
 
-**What we imagine.** Every pull request shows what it changes in coverage and in speed, the container images build and get scanned in CI, and maintainers see the health of the code at a glance.
+Every pull request shows what it changes in coverage and speed, and the container images build and get scanned in CI.
 
-**Optics today.**
-
-- The test workflow runs `pytest` without coverage (`.github/workflows/tests.yml`).
-- The pre-commit hooks run Ruff, `check-tests`, `check-layers`, `sonar-lint`, Bandit, Commitizen, Gitleaks and file checks (`.pre-commit-config.yaml`).
-- CodeQL, the OpenSSF Scorecard, Dependabot and a SonarQube scan run in CI.
-
-**Questions to explore.**
-
-- Which coverage and speed numbers help a reviewer, and which only add noise?
-- How should CI build and scan the images under `Docker/`?
-- Which benchmarks show a slow-down before a release?
+**Today:** CI runs the tests on Linux, Windows and macOS, with pre-commit hooks, CodeQL and a SonarQube scan, but no coverage report.
 
 **Prompt for your agent:**
 
@@ -687,11 +580,13 @@ Help me understand:
 - How tests and coverage are configured, and what CI reports.
 - How the Docker images are built and used.
 
+The maintainers' open questions:
+- Which coverage and speed numbers help a reviewer, and which only add noise?
+- How should CI build and scan the images under `Docker/`?
+- Which benchmarks show a slow-down before a release?
+
 Do not write code and do not propose a design. Explain what you find, point me to the files that matter, and list the questions I should ask the maintainers when I open an issue.
 ```
-
-**Start small:**
-If you are new to the project, start with documentation or an issue with the [`good first issue`](https://github.com/mozarkai/optics-framework/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. It is a good way to learn the codebase while you make a useful contribution.
 
 ---
 
