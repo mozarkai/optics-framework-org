@@ -198,18 +198,18 @@ test("the AI catalog and MCP server card carry their own media types", async () 
   assert.equal((await get("/.well-known/mcp/server-card.json")).headers.get("content-type"), "application/mcp-server-card+json");
 });
 
-test("Markdown responses stay out of search indexes and name their HTML page", async () => {
-  for (const [path, accept, canonical, file] of [
-    ["/", "text/markdown", "/", "index.md"],
-    ["/about.html", "text/markdown", "/about", "about.md"],
-    ["/about.md", undefined, "/about", "about.md"],
-    ["/docs.md", undefined, "/docs/", "docs/index.md"],
+test("only Markdown at a URL of its own stays out of search indexes, and every Markdown response names its HTML page", async () => {
+  for (const [path, accept, canonical, file, robots] of [
+    ["/", "text/markdown", "/", "index.md", null],
+    ["/about.html", "text/markdown", "/about", "about.md", "noindex, follow"],
+    ["/about.md", undefined, "/about", "about.md", "noindex, follow"],
+    ["/docs.md", undefined, "/docs/", "docs/index.md", "noindex, follow"],
   ]) {
     for (const method of ["GET", "HEAD"]) {
       const res = await get(path, accept, method);
       assert.equal(res.status, 200, path);
       assert.equal(res.headers.get("content-type"), "text/markdown; charset=utf-8");
-      assert.match(res.headers.get("x-robots-tag"), /^noindex\b/);
+      assert.equal(res.headers.get("x-robots-tag"), robots, path);
       assert.equal(res.headers.get("link"), `<https://optics-framework.org${canonical}>; rel="canonical"`);
       assert.match(res.headers.get("x-markdown-tokens"), /^[1-9]\d*$/);
       assert.equal(res.headers.get("x-content-type-options"), "nosniff");
@@ -232,6 +232,55 @@ test("AI crawlers get Markdown unless they ask for HTML", async () => {
   assert.match(person.headers.get("content-type"), /^text\/html/);
   assert.match(person.headers.get("vary"), /User-Agent/);
   assert.match((await get("/styles.css", "*/*", "GET", "GPTBot/1.0")).headers.get("content-type"), /^text\/css/);
+});
+
+test("AI search crawlers may index the Markdown they get at a page's own URL", async () => {
+  for (const ua of ["OAI-SearchBot/1.0; +https://openai.com/searchbot", "PerplexityBot/1.0"]) {
+    for (const path of ["/", "/docs/", "/docs/run/ci"]) {
+      const res = await get(path, undefined, "GET", ua);
+      assert.match(res.headers.get("content-type"), /^text\/markdown/, `${ua} ${path}`);
+      assert.equal(res.headers.get("x-robots-tag"), null, `${ua} ${path}`);
+    }
+  }
+});
+
+test("a missing page gives agents the closest pages and the site index, still as a 404", async () => {
+  const llms = readFileSync("out/llms.txt", "utf8");
+  for (const [path, closest] of [
+    ["/docs/installation", "https://optics-framework.org/docs/get-started/install"],
+    ["/docs/keywords/verify", "https://optics-framework.org/docs/reference/keywords/verification"],
+    ["/smart-tv", "https://optics-framework.org/docs/guides/smart-tv-apps"],
+  ]) {
+    const res = await get(path, undefined, "GET", "OAI-SearchBot/1.0");
+    assert.equal(res.status, 404, path);
+    assert.match(res.headers.get("x-robots-tag"), /noindex/);
+    const body = await res.text();
+    assert.ok(body.endsWith(llms), path);
+    const first = body.slice(body.indexOf("## Closest pages"), -llms.length).match(/^- (.+)$/m)[1];
+    assert.equal(first, closest, path);
+  }
+  for (const path of ["/userfiles", "/.env.shared", "/__ora-404-probe-9s1x6rf4"]) {
+    const body = await (await get(path, "text/markdown")).text();
+    assert.doesNotMatch(body, /## Closest pages/, path);
+    assert.ok(body.endsWith(llms), path);
+    assert.ok(!body.includes(path), path);
+  }
+});
+
+test("a page URL with punctuation stuck to its end redirects to the page", async () => {
+  for (const [path, to] of [
+    ["/playground.", "/playground"],
+    ["/releases.", "/releases"],
+    ["/blog.md.", "/blog.md"],
+    ["/playground/run.md.", "/playground/run.md"],
+    ["/install.ps1%3C", "/install.ps1"],
+    ["/docs/run/ci),", "/docs/run/ci"],
+  ]) {
+    const response = await get(path, undefined, "GET", "meta-externalagent/1.1");
+    assert.equal(response.status, 301, path);
+    assert.equal(response.headers.get("location"), `https://optics-framework.org${to}`, path);
+  }
+  assert.equal((await get("/no-such-page.")).status, 404);
 });
 
 test("a page asked for in neither HTML nor Markdown answers 406", async () => {

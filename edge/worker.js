@@ -1,7 +1,8 @@
 // Content negotiation in front of GitHub Pages, which cannot vary a response on the
 // Accept header. A request that prefers text/markdown, or comes from an AI crawler that
 // does not ask for HTML, gets the page's Markdown twin (`/` -> `/index.md`, `/about` ->
-// `/about.md`) and a missing page gets `/404.md` with a 404; a request that prefers JSON
+// `/about.md`) and a missing page gets a 404 with `/404.md`, the closest pages in the
+// sitemap and `/llms.txt`; a request that prefers JSON
 // gets a missing page as an RFC 9457 problem document, and one that accepts neither HTML
 // nor Markdown gets a 406. Markdown responses carry the AEO headers (dualmark.dev/docs/spec).
 // Everything else passes through untouched apart from `Vary` (so caches keep the
@@ -10,6 +11,7 @@
 
 import { isAiBot } from "./agents.js";
 import { collect, isBeacon, recordHit } from "./analytics.js";
+import { closest, sitemapPaths } from "./closest.js";
 import { isFeedback, receive, sendDigest } from "./feedback.js";
 import { snapshot } from "./snapshot.js";
 
@@ -127,14 +129,15 @@ function asHtml(response, url) {
   return out;
 }
 
-// noindex keeps search engines on the HTML page, which the canonical Link names.
+// A Markdown URL of its own (/about.md) gets noindex, which keeps search engines on the
+// HTML page the canonical Link names. At the page's own URL the Markdown is that page.
 async function asMarkdown(response, { url, method, status = 200, canonical }) {
   const body = await response.text();
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   headers.set("content-type", MARKDOWN);
   headers.set("x-content-type-options", "nosniff");
-  headers.set("x-robots-tag", "noindex, follow");
+  if (url.pathname !== canonical) headers.set("x-robots-tag", "noindex, follow");
   headers.set("x-markdown-tokens", String(Math.max(1, Math.ceil(body.length / 4))));
   headers.set("x-aeo-version", "1.0");
   if (canonical) headers.set("link", `<${sameSite(url, canonical).href}>; rel="canonical"`);
@@ -182,11 +185,23 @@ async function serveTwin(ctx) {
   return null;
 }
 
+const textOf = async (response) => (response.ok ? response.text() : "");
+
+// The requested path is never echoed into the body, so a crafted URL cannot put words in it.
+async function notFoundMarkdown({ url, get }) {
+  const [page, sitemap, llms] = await Promise.all(["/404.md", "/sitemap.xml", "/llms.txt"].map(get));
+  if (!page.ok) return null;
+  const pages = closest(url.pathname, sitemapPaths(await textOf(sitemap)));
+  const links = pages.length ? `## Closest pages\n\n${pages.map((path) => `- ${sameSite(url, path).href}`).join("\n")}\n` : "";
+  const body = [await page.text(), links, await textOf(llms)].filter(Boolean).join("\n");
+  return new Response(body, page);
+}
+
 // A missing .md URL was a request for Markdown whatever the Accept header said.
 async function notFound(ctx) {
   if (ctx.wants === "json") return notFoundProblem(ctx.url, ctx.method);
-  const page = (ctx.wants === "markdown" || ctx.url.pathname.endsWith(".md")) && (await ctx.get("/404.md"));
-  return page?.ok ? asMarkdown(page, { ...ctx, status: 404 }) : null;
+  const page = (ctx.wants === "markdown" || ctx.url.pathname.endsWith(".md")) && (await notFoundMarkdown(ctx));
+  return page ? asMarkdown(page, { ...ctx, status: 404 }) : null;
 }
 
 function present(response, { url, wants, method }) {
@@ -199,9 +214,13 @@ function present(response, { url, wants, method }) {
   return wants === "none" && response.ok ? notAcceptable(method) : asHtml(response, url);
 }
 
+// A slash, or punctuation a link picked up from the sentence around it ("/releases.",
+// "/install.ps1<"), at the end of a path that exists without it.
+const TRAILING = /(?:[/.,;:!)\]'>"]|%(?:2[29]|3[ce]|5d))+$/i;
+
 // Pages answers /about/ with a 404 although /about exists.
-async function withoutSlash({ url, get }) {
-  const path = url.pathname.replace(/\/+$/, "");
+async function trimmed({ url, get }) {
+  const path = url.pathname.replace(TRAILING, "");
   if (!path || path === url.pathname || path.startsWith("//")) return null;
   const page = await get(path);
   await page.body?.cancel();
@@ -224,7 +243,7 @@ export async function handle(request, upstream = fetch) {
   const twin = await serveTwin(ctx);
   if (twin) return twin;
   const response = await upstream(request);
-  const missing = response.status === 404 && ((await withoutSlash(ctx)) || (await notFound(ctx)));
+  const missing = response.status === 404 && ((await trimmed(ctx)) || (await notFound(ctx)));
   return missing || present(response, ctx);
 }
 
