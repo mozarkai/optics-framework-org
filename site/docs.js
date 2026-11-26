@@ -205,7 +205,7 @@
   // Every row stays in the page, so search engines, agents and the Markdown twin keep the whole table.
   var LONG = 12, SHOWN = 8, FILTERED = 15;
   var longTables = [];
-  document.querySelectorAll(".prose .table-wrap").forEach(function (wrap, n) {
+  document.querySelectorAll("body:not(.tables-full) .prose .table-wrap").forEach(function (wrap, n) {
     var rows = Array.prototype.slice.call(wrap.querySelectorAll("tbody > tr"));
     if (rows.length <= LONG) return;
     var box = document.createElement("div");
