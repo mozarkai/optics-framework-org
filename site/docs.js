@@ -173,7 +173,7 @@
     if (seen) seen.observe(fig);
   });
 
-  document.querySelectorAll(".doc-code .copy").forEach(function (btn) {
+  document.querySelectorAll(".doc-code .copy, .doc-prompt .copy").forEach(function (btn) {
     btn.addEventListener("click", function () { writeClipboard(btn.dataset.copy).then(function () { copied(btn); }); });
   });
   var pageCopy = document.querySelector(".page-copy");
