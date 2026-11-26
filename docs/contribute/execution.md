@@ -746,7 +746,7 @@ In the Python library, a keyword such as `press_element` also takes a list (`fal
 
 ```python
 # A key=value parameter becomes a keyword argument when key names a parameter
-# of the method (DataReader.split_params_by_signature); otherwise it stays positional
+# of the method (split_params_by_signature); otherwise it stays positional
 # store_as=${name} keeps the keyword's return value in that variable
 # KeywordExecutor turns a JSON list into a Python list for a list-typed parameter
 ```
@@ -1247,7 +1247,7 @@ Handles data reading from the project files. `DataReader` is an abstract class w
 - `CSVDataReader`: test cases, modules, elements and error definitions in CSV files
 - `YAMLDataReader`: test cases, modules, elements and API definitions in YAML files
 
-`DataReader.split_params_by_signature()` also lives here; the runners use it to split `key=value` parameters.
+The runners split `key=value` parameters with `split_params_by_signature()`, which is in `optics_framework/common/runner/step_params.py`.
 
 #### Supported sources at run time
 
@@ -1529,7 +1529,7 @@ current_test_case: ContextVar[str] = ContextVar("current_test_case", default=Non
 element_names: ContextVar[dict[str, str]] = ContextVar("element_names")
 ```
 
-`element_names` maps each locator value of the keyword about to run to the element name it came from. `name_locators(params, locators)` sets it before each keyword; the first name wins. AI self-heal uses it to tell the model the element's name.
+`element_names` maps each locator value of the keyword about to run to the element name it came from. `name_locators(params, locators)` in `optics_framework/common/runner/step_params.py` sets it before each keyword; the first name wins. AI self-heal uses it to tell the model the element's name.
 
 **Why context variables?**
 

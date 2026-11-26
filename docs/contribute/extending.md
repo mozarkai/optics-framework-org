@@ -46,7 +46,7 @@ The parts of the diagram work like this:
 - **Factory discovery.** `GenericFactory.create_instance_dynamic` (`common/base_factory.py`) imports `optics_framework.engines.<package>.<name>`, where `<name>` is the key in `config.yaml`. An unknown name raises `E0601`.
 - **Interface check.** The factory takes the first concrete class in the module that subclasses the interface (`DriverInterface`, `ElementSourceInterface`, `TextInterface`, `ImageInterface` or `LLMInterface`). If there is none, it raises `E0603`. The class name does not matter, so keep one implementation in each module.
 - **Registration.** The factory reads the parameters of your `__init__`. It passes `config` (the entry's settings) only when `__init__` has a `config` parameter. It passes `event_sdk` to a driver and the matched `driver` to an element source in the same way.
-- **Usage.** When you enable more than one entry of a kind, the factory wraps them in an `InstanceFallback` (`common/base_factory.py`). Call sites then try each instance in `config.yaml` order.
+- **Usage.** When you enable more than one entry of a kind, the factory wraps them in an `InstanceFallback` (`common/instance_fallback.py`). Call sites then try each instance in `config.yaml` order.
 
 | Extension | Where it goes | Base class | Selected by |
 |---|---|---|---|
