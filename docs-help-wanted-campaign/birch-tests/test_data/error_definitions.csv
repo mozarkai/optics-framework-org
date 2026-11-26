@@ -1,0 +1,3 @@
+error_code,match_string,description,severity
+ERR_SESSION,Session expired,The shopper was signed out,high
+ERR_SERVER,Something went wrong,The server returned an error page,high
