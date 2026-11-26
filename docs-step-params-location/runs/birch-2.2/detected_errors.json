@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-11-20T16:51:21.392445+05:30",
+  "detected": [
+    {
+      "error_code": "ERR_SESSION",
+      "matched_on": "match_string",
+      "match_string": "Session expired",
+      "description": "The shopper was signed out",
+      "severity": "high",
+      "detected_at": "end_of_run"
+    }
+  ]
+}

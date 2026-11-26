@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "optics-framework",
+      "type": "skill-md",
+      "description": "Drive Android, iOS, smart TV, desktop app and browser sessions with the Optics (optics-framework) MCP server, and write or fix Optics CSV/YAML test suites (test_cases, modules, elements, error_definitions). Use when automating or testing a real app UI with Optics, or when an Optics keyword name, parameter or default is uncertain.",
+      "url": "/.well-known/agent-skills/optics-framework/SKILL.md",
+      "digest": "sha256:2edbaed34f0ad4a9a58c9db29248cb4ba0fc5254f4daa4c52b1e46d8c8c42397"
+    }
+  ]
+}

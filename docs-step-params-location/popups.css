@@ -1,0 +1,143 @@
+/* /popups: the popup deck beside the engine, and the popups Birch throws. */
+
+.pp-score { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(32px, 4vw, 48px); border: 1.5px solid var(--ink); border-bottom: 0; background: var(--panel); }
+.pp-score div { display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-right: 1px solid var(--line-2); }
+.pp-score div:last-child { border-right: 0; }
+.pp-score b { font: 800 clamp(1.8rem, 1.2rem + 1.6vw, 2.8rem)/1 var(--sans); font-stretch: 75%; font-variant-numeric: tabular-nums; }
+.pp-score span { font: 500 var(--t-label)/1 var(--mono); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.pp-score .bump b { animation: pp-bump .5s var(--spring); }
+.pp-score div:nth-child(1).bump b { color: var(--code-pass); }
+.pp-score div:nth-child(2).bump b, .pp-score div:nth-child(3).bump b { color: #E5487A; }
+.pp .eng-lab { margin-top: 0; }
+
+.pp-presets { flex: none; }
+.pp-deck { flex: 1; min-height: 0; overflow-y: auto; margin: 0; padding: 4px 0; list-style: none; scrollbar-width: thin; scrollbar-color: #3a3d5c transparent; }
+.pp-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "dot name show rule" ". what what what"; align-items: center; gap: 4px 10px; padding: 10px 14px; border-bottom: 1px solid var(--code-line); transition: opacity .2s ease; }
+.pp-row.off .pp-name, .pp-row.off .pp-what, .pp-row.off .pp-dot { opacity: .45; }
+.pp-dot { grid-area: dot; width: 10px; height: 10px; border-radius: 50%; background: var(--code-mod); }
+.pp-dot-system { background: var(--code-info); }
+.pp-dot-security { background: #FF7096; }
+.pp-dot-promo, .pp-dot-spin { background: var(--sun); }
+.pp-dot-bubble, .pp-dot-sheet { background: var(--code-lit); }
+.pp-name { grid-area: name; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; min-width: 0; }
+.pp-name b { color: #fff; font-weight: 600; }
+.pp-name small { color: var(--code-dim); font-size: 10.5px; }
+.pp-what { grid-area: what; color: var(--code-lit); font-size: 11px; overflow-wrap: anywhere; }
+.pp-sw { position: relative; cursor: pointer; }
+.pp-sw:nth-of-type(1) { grid-area: show; }
+.pp-sw:nth-of-type(2) { grid-area: rule; }
+.pp-sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.pp-sw span { display: block; padding: 6px 9px; border: 1px solid rgba(255, 255, 255, .16); color: var(--code-dim); font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; transition: color .15s, border-color .15s, background-color .15s; }
+.pp-sw:hover span { border-color: rgba(255, 255, 255, .5); }
+.pp-sw input:checked + span { border-color: var(--sun); color: var(--sun); }
+.pp-sw:nth-of-type(2) input:checked + span { border-color: var(--code-lit); color: var(--code-lit); }
+.pp-sw input:focus-visible + span { outline: 2px solid var(--sun); outline-offset: 2px; }
+.eng-lab[data-state="running"] .pp-sw { pointer-events: none; opacity: .5; }
+.pp-code { flex: 1; min-height: 0; margin: 0; padding: 16px 18px; overflow: auto; white-space: pre; font: inherit; color: var(--code-ink); scrollbar-width: thin; scrollbar-color: #3a3d5c transparent; }
+.pp-rules { font-size: 11px; line-height: 1.7; }
+.eng-log .e-note.pop { color: var(--code-ink); }
+.eng-log .e-note.pop.ok b { color: var(--code-pass); font-weight: 500; }
+.eng-log .e-note.pop.bad b { color: #fff; background: #B8325A; padding: 0 4px; font-weight: 500; }
+
+/* The popups, inside the phone: Birch's own look, the same in both site themes. */
+.pp-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; font-family: var(--sans); color: #1C1B19; }
+.pp-pop { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 18px; background: rgba(20, 18, 14, 0); transition: background-color .3s ease; }
+.pp-pop.in { background: rgba(20, 18, 14, .42); }
+.pp-pop.out { background: rgba(20, 18, 14, 0); transition-delay: .45s; }
+.pp-card { position: relative; width: 100%; padding: 20px 18px 14px; border-radius: 22px; background: #fff; box-shadow: 0 24px 48px -20px rgba(0, 0, 0, .5); opacity: 0; transform: translateY(14px) scale(.94); transition: opacity .25s ease, transform .45s var(--spring); }
+.pp-pop.in .pp-card { opacity: 1; transform: none; }
+.pp-pop.out .pp-card { opacity: 0; transform: scale(.9); transition: opacity .3s ease .45s, transform .3s ease .45s; }
+.pp-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+.pp-msg { margin: 6px 0 0; font-size: 12.5px; line-height: 1.45; color: #5D5A52; }
+.pp-acts { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 4px; margin-top: 14px; }
+.pp-acts button { padding: 9px 12px; border: 0; border-radius: 99px; background: none; color: #2F6B4F; font: 650 12.5px/1 var(--sans); }
+.pp-acts .pp-main { background: #2F6B4F; color: #fff; }
+.pp-pop button.press { filter: brightness(.85); }
+
+.pp-sheet { align-items: end; padding: 0; }
+.pp-sheet .pp-card { border-radius: 22px 22px 0 0; padding-bottom: 22px; transform: translateY(100%); }
+.pp-sheet .pp-card::before { content: ""; display: block; width: 36px; height: 4px; margin: -8px auto 14px; border-radius: 2px; background: #D7D3C8; }
+.pp-sheet .pp-acts { justify-content: stretch; }
+.pp-sheet .pp-acts button { flex: 1; border: 1.5px solid #2F6B4F; }
+
+.pp-system { padding: 0 22px; }
+.pp-system .pp-card { padding: 22px 18px 10px; border-radius: 26px; background: #EEF0F7; text-align: center; font-family: system-ui, sans-serif; }
+.pp-system .pp-card::before { content: ""; display: block; width: 26px; height: 26px; margin: 0 auto 14px; border-radius: 50%; background: radial-gradient(circle at 50% 38%, #3E4F8C 0 5px, transparent 5.5px), radial-gradient(circle at 50% 100%, #3E4F8C 0 9px, transparent 9.5px); }
+.pp-system .pp-title { font-size: 15px; font-weight: 500; }
+.pp-system .pp-acts { flex-direction: column; gap: 0; margin-top: 16px; }
+.pp-system .pp-acts button { padding: 13px; border-top: 1px solid #D6D9E4; border-radius: 0; color: #3E4F8C; }
+.pp-system .pp-acts .pp-main { background: none; color: #3E4F8C; }
+
+.pp-stars { display: flex; gap: 4px; margin-bottom: 12px; }
+.pp-stars svg { width: 22px; height: 22px; fill: #F3BE00; animation: pp-twinkle 1.6s ease-in-out infinite; }
+.pp-stars svg:nth-child(2) { animation-delay: .1s; } .pp-stars svg:nth-child(3) { animation-delay: .2s; }
+.pp-stars svg:nth-child(4) { animation-delay: .3s; } .pp-stars svg:nth-child(5) { animation-delay: .4s; }
+
+.pp-security .pp-card { border-top: 4px solid #B8325A; }
+.pp-shield { width: 34px; height: 34px; margin-bottom: 10px; }
+.pp-shield svg { width: 100%; height: 100%; fill: #B8325A; }
+.pp-security .pp-acts .pp-main { background: #B8325A; }
+
+.pp-update .pp-card::before { content: "4.2"; display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 12px; border-radius: 12px; background: #E8EFE9; color: #2F6B4F; font: 800 14px/1 var(--sans); }
+
+.pp-promo { padding: 0; }
+.pp-promo.in { background: #17150F; }
+.pp-promo .pp-card { display: grid; align-content: center; justify-items: center; height: 100%; padding: 60px 24px; border-radius: 0; background: radial-gradient(circle at 50% 30%, #F3BE00, #E5487A 70%); color: #17150F; text-align: center; }
+.pp-promo .pp-title { font-size: 30px; font-weight: 900; font-stretch: 75%; letter-spacing: .02em; text-transform: uppercase; }
+.pp-promo .pp-msg { color: #17150F; font-weight: 600; }
+.pp-burst { display: grid; place-items: center; width: 108px; height: 108px; margin-bottom: 18px; border-radius: 50%; background: #17150F; color: #F3BE00; font: 900 30px/1 var(--sans); rotate: -12deg; animation: pp-spin 6s linear infinite; }
+.pp-promo .pp-acts { justify-content: center; }
+.pp-promo .pp-acts .pp-main { padding: 12px 22px; background: #17150F; }
+.pp-x { position: absolute; top: 48px; right: 14px; width: 28px; height: 28px; border: 0; border-radius: 50%; background: rgba(23, 21, 15, .18); }
+.pp-x::before, .pp-x::after { content: ""; position: absolute; left: 8px; top: 13px; width: 12px; height: 2px; background: #17150F; rotate: 45deg; }
+.pp-x::after { rotate: -45deg; }
+
+.pp-tour { align-items: end; padding-bottom: 150px; }
+.pp-tour.in { background: radial-gradient(circle at 50% 30%, transparent 64px, rgba(20, 18, 14, .62) 66px); }
+.pp-tour .pp-card { background: #2F6B4F; color: #fff; }
+.pp-tour .pp-card::after { content: ""; position: absolute; left: 50%; top: -8px; width: 16px; height: 16px; background: inherit; rotate: 45deg; translate: -50% 0; }
+.pp-tour .pp-msg { color: rgba(255, 255, 255, .8); }
+.pp-tour .pp-acts .pp-main { background: #fff; color: #2F6B4F; }
+
+.pp-wheel { width: 96px; height: 96px; margin: 0 auto 14px; border-radius: 50%; background: conic-gradient(#F3BE00 0 60deg, #E5487A 0 120deg, #2F6B4F 0 180deg, #6FD0FF 0 240deg, #C3B2FF 0 300deg, #FF8A3D 0); animation: pp-spin 2.4s linear infinite; }
+.pp-wheel i { display: block; width: 18px; height: 18px; margin: 39px auto 0; border-radius: 50%; background: #fff; }
+.pp-spin .pp-card { text-align: center; }
+.pp-spin .pp-acts { justify-content: center; }
+
+.pp-club .pp-card { background: linear-gradient(160deg, #1C1B19, #3E4F8C); color: #fff; }
+.pp-club .pp-msg { color: rgba(255, 255, 255, .75); }
+.pp-badge { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 12px; border-radius: 50%; background: #F3BE00; color: #17150F; font: 900 14px/1 var(--sans); }
+.pp-club .pp-acts button { color: #fff; }
+.pp-club .pp-acts .pp-main { background: #F3BE00; color: #17150F; }
+
+.pp-bubble { inset: auto 12px 22px 12px; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 99px; background: #1C1B19; color: #fff; box-shadow: 0 14px 28px -10px rgba(0, 0, 0, .6); pointer-events: none; opacity: 0; transform: translateY(20px) scale(.7); transform-origin: 90% 50%; transition: opacity .25s ease, transform .5s var(--spring); }
+.pp-bubble.in { background: #1C1B19; opacity: 1; transform: none; animation: pp-wobble 2.4s ease-in-out .6s infinite; }
+.pp-bubble.out { opacity: 0; transform: translateX(160px) scale(.3); transition-delay: .35s; }
+.pp-face { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: #3DDC84; color: #0b2a18; font: 900 15px/1 var(--sans); }
+.pp-bubble-text { flex: 1; min-width: 0; white-space: nowrap; }
+.pp-bubble .pp-title { font-size: 12.5px; }
+.pp-bubble .pp-msg { margin: 1px 0 0; font-size: 11px; color: rgba(255, 255, 255, .7); }
+.pp-min { flex: none; padding: 7px 9px; border: 0; border-radius: 99px; background: rgba(255, 255, 255, .14); color: #fff; font: 600 10.5px/1 var(--sans); }
+
+.pp-stamp { position: absolute; z-index: 2; left: 50%; top: 42%; padding: 6px 12px; border: 3px solid currentColor; border-radius: 6px; font: 900 18px/1 var(--sans); font-stretch: 75%; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; translate: -50% -50%; rotate: -12deg; animation: pp-stamp .45s var(--spring) both; }
+.pp-stamp-ok { color: #2F6B4F; background: rgba(232, 239, 233, .92); }
+.pp-stamp-bad { color: #B8325A; background: rgba(255, 240, 244, .94); }
+.pp-bubble .pp-stamp { top: 50%; font-size: 13px; }
+.pp-card > .pp-stamp { left: auto; right: -8px; top: -12px; font-size: 15px; translate: none; rotate: 8deg; }
+.pp-promo .pp-card > .pp-stamp { top: 96px; right: 16px; }
+
+@keyframes pp-bump { 40% { transform: scale(1.3); } }
+@keyframes pp-stamp { from { opacity: 0; scale: 2.2; } }
+@keyframes pp-spin { to { rotate: 360deg; } }
+@keyframes pp-twinkle { 50% { transform: scale(1.18); } }
+@keyframes pp-wobble { 0%, 80%, 100% { rotate: 0deg; } 85% { rotate: -4deg; } 90% { rotate: 4deg; } 95% { rotate: -2deg; } }
+
+@media (max-width: 720px) {
+  .pp-score { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pp-score div:nth-child(2) { border-right: 0; }
+  .pp-score div:nth-child(-n+2) { border-bottom: 1px solid var(--line-2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-card, .pp-bubble, .pp-pop { transition: none !important; }
+  .pp-stars svg, .pp-burst, .pp-wheel, .pp-bubble.in, .pp-stamp, .pp-score .bump b { animation: none; }
+}
