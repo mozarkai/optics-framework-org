@@ -13930,6 +13930,20 @@ Call `terminate_session`. The reply gives the address of the steps.
 ### Save the run as a test
 Read `optics://session/{session_id}/steps` and `optics://project-format`. Write the CSV files and a config.yaml, replace each `<redacted>` value, then run `optics execute <folder>`.
 
+## Skills for whole tasks
+
+A skill is the procedure for one whole task, such as a migration from a different framework or a suite in CI. The skills are pages of this site, so the agent fetches the one that fits and follows it. You do not install them.
+
+The list is at [optics-framework.org/skills.md](https://optics-framework.org/skills.md):
+
+| Task | Skills |
+|---|---|
+| Create tests | `migrate-to-optics`, `write-a-suite`, `explore-an-app`, `reproduce-a-bug`, `data-driven-tests`, `export-to-code` |
+| Keep tests green | `fix-a-failed-run`, `harden-locators`, `handle-popups`, `detect-error-screens`, `enable-self-heal`, `run-in-ci` |
+| Reach the target | `set-up-android`, `set-up-ios`, `set-up-desktop`, `set-up-tv`, `set-up-bluetooth`, `test-mobile-web`, `find-by-text-and-image`, `sign-in-and-secrets` |
+
+To use one, ask for the task in your own words, for example "Migrate the Playwright tests in this folder to Optics". If your agent does not find the skill, give it the address of the list.
+
 ## Limits
 
 - **No flow control.** `Run Loop`, `Condition`, `Evaluate`, `Read Data`, `Invoke API` and the other flow-control keywords are not tools. Your agent can still write them into CSV modules for `optics execute`.
