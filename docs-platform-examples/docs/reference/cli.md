@@ -75,7 +75,7 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project from `optics_framework/samples/`. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. Each name is a folder there. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project from `optics_framework/samples/`. One of the names in [Start from an example](https://optics-framework.org/docs/get-started/examples). Each name is a folder there. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
