@@ -20,7 +20,7 @@ Run `optics doctor <folder>`. Read the Bluetooth section and correct the first r
 
 | Row or message | Correction |
 | --- | --- |
-| The output has no `ble dongle` row | `optics setup --install ble apple-vision` on a Mac, `optics setup --install ble rapidocr` on Linux and Windows |
+| The output has no `ble dongle` row, or `start_session` gives `E0601` for `airhand` | `optics setup --install ble apple-vision` on a Mac, `optics setup --install ble rapidocr` on Linux and Windows. It keeps the extras that the install has, `mcp` too. Then the person reconnects the Optics MCP server, because a running server does not load new packages. |
 | "No airhand dongle is plugged in" | The person plugs in the dongle. A new dongle needs the [airhand firmware](https://github.com/chinmayajha/airhand), version 0.1.2 or later. |
 | "no device connected" | On the device, the person selects **airhand** in the Bluetooth settings |
 | "connected, but the link is not encrypted" | On the device, the person forgets **airhand** and pairs again |
@@ -62,7 +62,24 @@ image_detection:
 - `frame` is the screen in pixels. `out_width` and `out_height` must be the same as `frame`.
 - On Linux and Windows, use `rapidocr` in place of `apple_vision`.
 
-## 4. Aim the camera
+## 4. Start a session from the MCP server
+
+Use the Optics MCP server that the client started (stdio), on the computer that the camera and the dongle are plugged into. Give the camera settings in `start_session`:
+
+```json
+{"driver": "ble",
+ "capabilities": {"platform": "ios", "frame": {"width": 1170, "height": 2532}},
+ "elements_sources": [{"camera_screenshot": {"capabilities": {
+   "camera_index": 0, "find_screen": "auto", "out_width": 1170, "out_height": 2532}}}]}
+```
+
+The session is ready when its reply lists rows of the screen.
+
+- On a Mac, the first session can show a macOS camera prompt, for the terminal app or for the Python of the Optics install. Tell the person to select **Allow**. When the client app may not use the camera, Optics reads it in a reader process of its own. Do not write a camera server, and do not start an HTTP MCP server for the camera.
+- If the reply gives `E0305` with "nobody answered the macOS camera prompt", ask the person to select **Allow**, then start the session again.
+- If the reply gives `E0305` with "does not let ... use the camera", the person allows that Python in **System Settings > Privacy & Security > Camera**.
+
+## 5. Aim the camera
 
 1. The person puts the device in a stand, with the full screen in the camera frame. Then they open a bright screen.
 2. Start a session, or run the suite. Optics finds the screen at the first capture.
@@ -70,7 +87,7 @@ image_detection:
 
 If the run stops with `E0305`, open `camera_blind_<time>.jpg`. Make sure that the screen is on and bright, and that the stand did not move.
 
-## 5. Write steps for a camera
+## 6. Write steps for a camera
 
 Each element is a text that OCR can read, or an image.
 
