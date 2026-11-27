@@ -104,7 +104,7 @@
       "type": "skill-md",
       "description": "Get a phone, tablet or computer ready for Optics with nothing installed on it, through an airhand Bluetooth dongle and a camera or a USB screen. Use when a `ble` session does not start, when an app blocks USB debugging or screenshots, or when a person asks to test a production device.",
       "url": "/.well-known/agent-skills/set-up-bluetooth/SKILL.md",
-      "digest": "sha256:87ec9885b7b097d344f5a6c8ed7871323361c8f1579c105648f39d42198875b5"
+      "digest": "sha256:bc9c4256beaf92374a9848c5f1b367c63d30df36bd83404ac8703b1172859225"
     },
     {
       "name": "set-up-desktop",
