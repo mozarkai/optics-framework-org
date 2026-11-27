@@ -108,18 +108,18 @@
       var Y = { tc1: 94, tc2: 121, m1: 222, m2: 249, m3: 276, m4: 303, e1: 395, e2: 422 };
       var t = 700;
       tl.add(tc.rows[1], "hl", t);
-      wire.draw(tl, [[30, Y.tc1], [16, Y.tc1], [16, Y.m1], [30, Y.m1]], t + 300, "#7086FF");
+      wire.draw(tl, [[30, Y.tc1], [16, Y.tc1], [16, Y.m1], [30, Y.m1]], t + 300);
       tl.add(md.rows[1], "hl", t + 800); tl.add(md.rows[2], "hl", t + 800);
       t += 1700;
       tl.add(el.rows[1], "hl", t);
-      wire.draw(tl, [[590, Y.m1], [606, Y.m1], [606, Y.e1], [590, Y.e1]], t, "#F3BE00");
+      wire.draw(tl, [[590, Y.m1], [606, Y.m1], [606, Y.e1], [590, Y.e1]], t, "var(--say-t)");
       P.lock(tl, "email", "email_field", t + 500, "#F3BE00");
       var e = P.typeField(tl, ".f-email", "ava@birch.shop", t + 1000, 30);
       P.unlock(tl, e + 200);
       tl.rm(el.rows[1], "hl", e + 300);
       t = e + 600;
       tl.add(el.rows[2], "hl", t);
-      wire.draw(tl, [[590, Y.m2], [616, Y.m2], [616, Y.e2], [590, Y.e2]], t, "#F3BE00");
+      wire.draw(tl, [[590, Y.m2], [616, Y.m2], [616, Y.e2], [590, Y.e2]], t, "var(--say-t)");
       P.lock(tl, "signin", "sign_in", t + 500, "#9672F8");
       P.tap(tl, "signin", t + 1100);
       P.unlock(tl, t + 1500);
@@ -129,7 +129,7 @@
       // the next test step
       t += 2300;
       tl.rm(tc.rows[1], "hl", t); tl.add(tc.rows[2], "hl", t);
-      wire.draw(tl, [[30, Y.tc2], [10, Y.tc2], [10, Y.m3], [30, Y.m3]], t + 200, "#7086FF");
+      wire.draw(tl, [[30, Y.tc2], [10, Y.tc2], [10, Y.m3], [30, Y.m3]], t + 200);
       tl.add(md.rows[3], "hl", t + 500);
       P.lock(tl, [14, 280, 111, 34], "Text · Trail Runner 2", t + 900, "#24C3AB");
       P.tap(tl, "card0", t + 1500);
@@ -652,19 +652,19 @@
     w: 880, h: 500,
     build: function (w, tl) {
       var wire = K.wire(w, 880, 500);
-      var node = function (x, y, a, b) { return abs(w, x, y, '<div class="sc-node" style="position:relative;height:58px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;width:210px"><span>' + a + '</span><span style="font:400 12px/1 var(--sans);color:var(--sc-ink2)">' + b + "</span></div>"); };
+      var node = function (x, y, a, b) { return abs(w, x, y, '<div class="sc-node" style="height:58px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;width:210px"><span>' + a + '</span><span style="font:400 12px/1 var(--sans);color:var(--sc-ink2)">' + b + "</span></div>"); };
       var mac = node(30, 150, "optics execute", "on your machine");
       var dongle = node(30, 330, "BLE dongle", "the ble driver: a Bluetooth mouse");
       var P = K.phone(w, 340, 78, 0.74);
       P.start("home");
-      var cam = abs(w, 380, 6, '<div style="width:120px;height:44px;border-radius:12px;background:#1b1d2b;box-shadow:0 10px 20px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;gap:8px"><span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#4d67ff,#0b0e2a 70%);box-shadow:0 0 0 3px #2a2d40"></span><span style="width:7px;height:7px;border-radius:50%;background:#FF5577"></span></div>');
+      var cam = abs(w, 380, 6, '<div style="width:120px;height:44px;border-radius:12px;background:#1b1d2b;display:flex;align-items:center;justify-content:center;gap:8px"><span style="width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#4d67ff,#0b0e2a 70%);box-shadow:0 0 0 3px #2a2d40"></span><span style="width:7px;height:7px;border-radius:50%;background:#FF5577"></span></div>');
       var cl = label(w, 518, 22, "camera_screenshot");
       cl.style.textTransform = "none"; cl.style.letterSpacing = "0"; cl.style.fontFamily = "var(--mono)";
       // the pointer an Android phone shows for a Bluetooth mouse, parked in the corner
       var cur = h(P.scr, '<div class="sc-cursor" style="left:4px;top:4px">' + K.cursorSvg() + "</div>");
       var log = K.file(w, { x: 610, y: 150, w: 250, title: "what Optics does", rows: [] });
       var t = 600;
-      wire.draw(tl, [[380, 28], [240, 179]], t, "#F3BE00");
+      wire.draw(tl, [[380, 28], [240, 179]], t, "var(--say-t)");
       log.add(tl, '<span class="t-dim">1</span> read a camera frame', t + 300);
       P.scan(tl, t + 600);
       t += 1800;
@@ -672,9 +672,9 @@
       log.add(tl, '<span class="t-dim">2</span> OCR: <span class="t-lit">Trail Runner 2</span>', t);
       log.add(tl, '<span class="t-dim">3</span> at <span class="t-var">(296, 1282)</span> px', t + 500);
       t += 1300;
-      wire.draw(tl, [[135, 208], [135, 330]], t, "#7086FF");
+      wire.draw(tl, [[135, 208], [135, 330]], t);
       log.add(tl, '<span class="t-dim">4</span> px → mouse moves', t + 200);
-      wire.draw(tl, [[240, 359], [340, 359]], t + 500, "#7086FF");
+      wire.draw(tl, [[240, 359], [340, 359]], t + 500);
       tl.css(cur, { left: "62px", top: "290px" }, t + 900);
       P.tap(tl, [14, 280, 111, 34], t + 1800);
       log.add(tl, '<span class="t-dim">5</span> tap, pointer back to corner', t + 1800);
@@ -692,13 +692,13 @@
     w: 880, h: 500,
     build: function (w, tl) {
       var ways = [
-        ["Write it", "#9672F8", "CSV or YAML by hand"],
-        ["Record it", "#24C3AB", "optics live"],
-        ["Describe it", "#F3BE00", "plain English, Ctrl+N in optics live"],
-        ["Delegate it", "#F56FA1", "your AI agent, through optics mcp"],
+        ["Write it", "var(--write)", "CSV or YAML by hand"],
+        ["Record it", "var(--record)", "optics live"],
+        ["Describe it", "var(--say)", "plain English, Ctrl+N in optics live"],
+        ["Delegate it", "var(--delegate)", "your AI agent, through optics mcp"],
       ];
       var cards = ways.map(function (wy, i) {
-        return abs(w, 24, 46 + i * 104, '<div class="sc-node" style="width:236px;height:84px;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px"><span style="font-size:16px;display:flex;align-items:center;gap:9px"><i style="width:10px;height:10px;border-radius:3px;background:' + wy[1] + '"></i>' + wy[0] + '</span><span style="font:400 12.5px/1.2 var(--sans);color:var(--sc-ink2);white-space:normal">' + wy[2] + "</span></div>");
+        return abs(w, 24, 46 + i * 104, '<div class="sc-node" style="width:236px;height:84px;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px"><span style="font-size:16px;display:flex;align-items:center;gap:9px"><i style="width:10px;height:10px;background:' + wy[1] + '"></i>' + wy[0] + '</span><span style="font:400 12.5px/1.2 var(--sans);color:var(--sc-ink2);white-space:normal">' + wy[2] + "</span></div>");
       });
       label(w, 300, 128, "One suite, plain text");
       var suite = K.file(w, { x: 300, y: 150, w: 222, title: "birch-tests/", rows: ['<span class="t-dim">config.yaml</span>', '<span class="t-dim">test_cases/test_cases.csv</span>', '<span class="t-dim">modules/modules.csv</span>', '<span class="t-dim">test_data/elements.csv</span>'] });
@@ -709,13 +709,14 @@
       var t = 500;
       cards.forEach(function (c, i) {
         tl.css(c, { opacity: ".35" }, 0);
-        tl.css(c, { opacity: "1", boxShadow: "0 14px 30px -18px " + ways[i][1] }, t);
-        wire.draw(tl, [[260, 88 + i * 104], [300, 214]], t + 200, ways[i][1]);
+        tl.css(c, { opacity: "1", borderColor: ways[i][1] }, t);
+        var y = 88 + i * 104, land = 196 + i * 18, lane = i === 0 || i === 3 ? 288 : 276;
+        wire.draw(tl, [[260, y], [lane, y], [lane, land], [300, land]], t + 200, ways[i][1]);
         suite.rows.forEach(function (r) { tl.add(r, "hl", t + 600); tl.rm(r, "hl", t + 1000); });
-        tl.css(c, { boxShadow: "" }, t + 1100);
+        tl.css(c, { borderColor: "" }, t + 1100);
         t += 1100;
       });
-      wire.draw(tl, [[522, 214], [552, 214]], t, "#7086FF");
+      wire.draw(tl, [[522, 214], [552, 214]], t);
       var e = T.cmd(tl, '<span class="t-mod">❯</span>', "optics execute birch-tests", t + 300, 30);
       var C = 26;
       T.line(tl, "Test Suite", e + 300);
@@ -765,7 +766,7 @@
       var webV = stage();
       var br = abs(webV, 10, 30, '<div class="sc-browser" style="width:350px;height:270px"><div class="sc-url"><i></i><i></i><i></i><span>github.com/settings/profile</span></div></div>');
       var page = h(br, '<div style="position:relative;height:236px;background:#FBFAF6"></div>');
-      h(page, '<div class="sc-abs" style="left:18px;top:18px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#7086FF,#24C3AB)"></div>');
+      h(page, '<div class="sc-abs" style="left:18px;top:18px;width:46px;height:46px;border-radius:50%;background:#24C3AB"></div>');
       h(page, '<div class="sc-abs" style="left:76px;top:22px;font:700 17px/1.2 var(--sans);color:#1C1B19">Public profile</div>');
       h(page, '<div class="sc-abs" style="left:76px;top:46px;font:500 11.5px/1 var(--sans);color:#6f6b62">Signed in from your Chrome profile</div>');
       [0, 1, 2].forEach(function (i) { h(page, '<div class="sc-abs" style="left:18px;top:' + (90 + i * 42) + 'px;width:300px;height:28px;border-radius:6px;background:#EFEBE2"></div>'); });
@@ -775,7 +776,7 @@
       var bleV = stage();
       var B = K.phone(bleV, 160, 48, 0.48);
       B.start("home");
-      abs(bleV, 180, 0, '<div style="width:110px;height:40px;border-radius:12px;background:#1b1d2b;box-shadow:0 10px 20px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;gap:8px"><span style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#4d67ff,#0b0e2a 70%);box-shadow:0 0 0 3px #2a2d40"></span><span style="width:7px;height:7px;border-radius:50%;background:#FF5577"></span></div>');
+      abs(bleV, 180, 0, '<div style="width:110px;height:40px;border-radius:12px;background:#1b1d2b;display:flex;align-items:center;justify-content:center;gap:8px"><span style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#4d67ff,#0b0e2a 70%);box-shadow:0 0 0 3px #2a2d40"></span><span style="width:7px;height:7px;border-radius:50%;background:#FF5577"></span></div>');
       var dongle = abs(bleV, 0, 210, '<div class="sc-node" style="width:126px;height:44px;justify-content:center">BLE dongle</div>');
       var bw = K.wire(bleV, 370, 360);
       label(bleV, 10, 334, "ble · camera_screenshot · OCR");
@@ -815,9 +816,9 @@
         if (n === "android") { P.lock(tl, "search", "Text · Search", a, "#24C3AB"); P.unlock(tl, a + 900); }
         if (n === "lg_tv") { tl.add(tiles[0], "focus", e); tl.rm(tiles[0], "focus", a); tl.add(tiles[1], "focus", a); tl.html(key.querySelector(".k"), "ENTER", a + 600); }
         if (n === "browser_profile") { tl.css(found, { opacity: "1" }, a); tl.css(found, { opacity: "0" }, a + 1400); }
-        if (n === "ble_camera") { B.scan(tl, a); bw.draw(tl, [[126, 232], [150, 232]], a + 400, "#7086FF"); B.tap(tl, [14, 178, 111, 136], a + 900); bw.clear(tl, a + 1600); }
+        if (n === "ble_camera") { B.scan(tl, a); bw.draw(tl, [[126, 232], [150, 232]], a + 400); B.tap(tl, [14, 178, 111, 136], a + 900); bw.clear(tl, a + 1600); }
         if (n === "windows_cloud") {
-          tl.css(tunnel, { borderColor: "#7086FF" }, e + 250);
+          tl.css(tunnel, { borderColor: "var(--write)" }, e + 250);
           ["7", "+", "8", "="].forEach(function (k, j) { tl.css(keys[k], { filter: "brightness(1.6)" }, a + j * 250); tl.css(keys[k], { filter: "" }, a + j * 250 + 180); });
           tl.html(disp, "15", a + 1000);
           tl.html(disp, "0", a + 2200);
@@ -983,7 +984,7 @@
         // falls back to the button's text.
         [R("Sign In", "Press Element", V("${sign_in}")), "0.55s [Text]", "signin", "", function (t) {
           P.lock(tl, "signin", "XPath: no match", t, "#FF7096");
-          P.lock(tl, "signin", "Text: Sign in", t + 900, "#7086FF");
+          P.lock(tl, "signin", "Text: Sign in", t + 900);
           P.tap(tl, "signin", t + 1450);
           P.unlock(tl, t + 1700);
           return P.screen(tl, "home", t + 1800) + 300;
@@ -1020,7 +1021,7 @@
         if (o.narrow) { if (i) tl.html(ticker, s[0] + done(s[1]), t); tl.rm(ticker, "done", t); tl.add(ticker, "hl", t); }
         else { tl.add(rows[i], "hl", t); wire.draw(tl, [[680, y], land(s[2])], t + 80); }
         var a = t + 420;
-        if (s[3]) a = P.lock(tl, s[2], s[3], a, "#7086FF");
+        if (s[3]) a = P.lock(tl, s[2], s[3], a);
         var e = s[4](a + 80);
         if (s[3]) P.unlock(tl, e + 120);
         t = e + 260;
