@@ -53,7 +53,7 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .side-section ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 1px; }
 .side-section a { display: block; padding: 6px 10px; border-radius: 0; color: var(--ink-2); text-decoration: none; font-size: .9375rem; line-height: 1.4; }
 .side-section a:hover { color: var(--ink); background: var(--bg-2); }
-.side-section a[aria-current="page"] { color: var(--ink); background: var(--bg-2); box-shadow: inset 2px 0 var(--ink); font-weight: 600; }
+.side-section a[aria-current="page"] { color: var(--ink); background: var(--bg-2); font-weight: 600; }
 
 .doc { display: grid; grid-template-columns: minmax(0, 1fr) var(--toc-w); gap: 48px; padding: 36px clamp(20px, 4vw, 56px) 80px; min-width: 0; }
 .no-toc .doc { grid-template-columns: minmax(0, 1fr); }
@@ -101,7 +101,8 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 40px; }
 .prose img { max-width: 100%; border-radius: 0; border: 1px solid var(--line); }
 .prose video { width: 100%; height: auto; aspect-ratio: 16 / 9; border: 1px solid var(--line); background: var(--code-bg); }
-.prose blockquote { margin: 0; padding: 2px 0 2px 18px; border-left: 3px solid var(--line-2); color: var(--ink-2); }
+.prose blockquote { position: relative; margin: 0; padding-left: 1.4em; color: var(--ink-2); }
+.prose blockquote::before { content: "\201C"; position: absolute; left: 0; top: -.12em; font-size: 1.6em; line-height: 1; color: var(--ink-3); }
 .prose .ic { white-space: normal; overflow-wrap: anywhere; color: var(--ink); }
 .prose kbd { color: var(--ink); }
 
@@ -149,9 +150,10 @@ html:has(.docs) { scroll-padding-top: 126px; }
 .diff pre code span { min-width: 100%; }
 
 /* callouts */
-.callout { --c: var(--accent); --ct: var(--accent); padding: 16px 20px 18px; border-radius: 0; border-left: 3px solid var(--c); background: color-mix(in srgb, var(--c) 8%, var(--bg)); }
+.callout { --c: var(--accent); --ct: var(--accent); padding: 16px 20px 18px; border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 7%, var(--bg)); }
 .callout > * + * { margin-top: 8px; }
-.callout-title { font: 500 var(--t-label)/1.4 var(--mono); text-transform: uppercase; letter-spacing: .09em; color: var(--ct); }
+.callout-title { display: flex; align-items: center; gap: 10px; font: 500 var(--t-label)/1.4 var(--mono); text-transform: uppercase; letter-spacing: .09em; color: var(--ct); }
+.callout-title::before { content: ""; flex: none; width: 8px; height: 8px; background: var(--c); }
 .callout-tip { --c: var(--record); --ct: var(--record-t); }
 .callout-warning { --c: var(--say); --ct: var(--say-t); }
 .callout-mistake { --c: var(--delegate); --ct: var(--delegate-t); }
@@ -203,11 +205,12 @@ a.card:hover .card-title, a.card:focus-visible .card-title { text-decoration-col
 /* ---------- on this page ---------- */
 .toc { position: sticky; top: calc(var(--head-h) + 36px); align-self: start; max-height: calc(100vh - var(--head-h) - 72px); overflow-y: auto; font-size: .875rem; }
 .toc-title { font-size: .875rem; font-weight: 650; color: var(--ink-3); margin-bottom: 10px; }
-.toc ul { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--line); }
-.toc li a { display: block; padding: 5px 0 5px 14px; margin-left: -1px; border-left: 2px solid transparent; color: var(--ink-3); text-decoration: none; line-height: 1.4; }
+.toc ul { list-style: none; padding: 0; margin: 0; }
+.toc li a { position: relative; display: block; padding: 5px 0 5px 14px; color: var(--ink-3); text-decoration: none; line-height: 1.4; }
 .toc li.toc-l3 a { padding-left: 26px; font-size: .8125rem; }
 .toc li a:hover { color: var(--ink); }
-.toc li a.active { color: var(--accent); border-left-color: var(--accent); }
+.toc li a.active { color: var(--accent); }
+.toc li a.active::before { content: ""; position: absolute; left: 0; top: calc(5px + .7em - 3px); width: 6px; height: 6px; background: currentColor; }
 
 /* ---------- foot of article ---------- */
 .doc-foot { margin-top: 64px; display: grid; gap: 28px; }

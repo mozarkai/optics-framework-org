@@ -25,8 +25,8 @@
 .doors-body h4 { min-height: 1em; margin: 0 0 10px; color: var(--code-dim); font: 500 10.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 .doors-body pre { height: 196px; margin: 0; font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; overflow: auto; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-width: thin; scrollbar-color: #3a3d5c transparent; }
 .doors-wait { display: inline-block; width: 7px; height: 13px; vertical-align: -2px; background: var(--sun); animation: pg-blink .4s steps(2) infinite; }
-.live-l[data-step] { cursor: pointer; }
-.live-l.door-on { box-shadow: inset 2px 0 0 var(--sun); background: rgba(255, 255, 255, .03); }
+.live-l[data-step] { margin-inline: -8px; padding-inline: 8px; cursor: pointer; }
+.live-l.door-on { background: var(--row-on); }
 
 @media (max-width: 900px) {
   .pg.live:has(.doors.on) .live-term { height: 400px; }
