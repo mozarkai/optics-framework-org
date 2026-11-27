@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ship a release: break an Optics test, then ship a hundred</title>
+  <meta name="description" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
+  <meta name="ai-summary" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
+  <link rel="canonical" href="https://optics-framework.org/playground/ship">
+  <link rel="alternate" type="text/markdown" href="ship.md" title="Ship a release: break an Optics test, then ship a hundred, as Markdown">
+  <link rel="stylesheet" href="../playground.css?v=57a201b36b">
+  <link rel="stylesheet" href="../sim.css?v=aad2d11780">
+  <meta property="og:title" content="Ship a release: break an Optics test, then ship a hundred">
+  <meta property="og:description" content="Change the sign-in button of a demo shop app and watch Optics climb its locator ladder, then simulate release after release and count the false failures.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../styles.css?v=045d3afd85">
+</head>
+<body><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a class="brand" href="../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="../#create">Create</a>
+        <a href="../#run">Run</a>
+        <a href="../playground">Playground</a>
+        <a href="../docs/">Docs</a>
+        <a href="../blog">Blog</a>
+        <a href="https://github.com/mozarkai/optics-framework">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+        <a class="btn btn-solid btn-sm" href="../#install">Install</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="wrap">
+<nav class="play-tabs" aria-label="Playground"><a href="../playground">Browser</a><a href="popups">Popups</a><a href="run">Real run</a><a href="ship" aria-current="page">Ship a release</a><a href="hard-targets">Hard targets</a><a href="explain">Explain a suite</a></nav>
+      <h1>Ship a release</h1>
+      <p class="lede">Change the sign-in button and ship it. Optics climbs the ladder until it finds the button, or the test fails.</p>
+      <p class="vh" id="pg-brk-desc">A simulation of a new release of Birch, a demo shop app. It does not run Optics. Select the changes to make to the sign-in button, then select Ship. Each step of the ladder shows if it found the button. The result tells you if the test passes, fails on a real bug, or fails when the app still works.</p>
+      <div class="pg brk" role="group" aria-label="Playground: break the test" aria-describedby="pg-brk-desc">
+        <p class="play-tag label" aria-hidden="true"><span>Your release.</span> <em>Try to break the test.</em></p>
+      <ol class="rungs">
+        <li><span class="rung-n">1</span><div><b>XPath</b><span>A native query through the accessibility tree.</span></div></li>
+        <li><span class="rung-n">2</span><div><b>Text</b><span>The visible text, CSS or class in the page source.</span></div></li>
+        <li><span class="rung-n">3</span><div><b>OCR</b><span>Reads the screenshot with Apple Vision, RapidOCR, EasyOCR, Tesseract or Google Vision.</span></div></li>
+        <li><span class="rung-n">4</span><div><b>Image</b><span>Matches a reference picture of the element on screen.</span></div></li>
+        <li class="rung-opt"><span class="rung-n">5</span><div><b>AI self-heal, if you switch it on</b><span>An LLM reads the screen and recovers with the same keywords, in <code class="ic">optics live</code> and <code class="ic">optics execute</code>.</span></div></li>
+      </ol>
+      </div>
+      <div class="pg sim" id="simulator"></div>
+      <script src="../birch.js?v=239c605768" defer></script>
+      <script src="../playground.js?v=a8b5994904" defer></script>
+      <script src="../sim.js?v=e2abe9b155" defer></script>
+    </div>
+  </main>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="../" aria-label="Optics home">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="../releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="../#install">Install</a></li><li><a href="../playground">Playground</a></li><li><a href="../releases">Releases</a></li><li><a href="../birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="../docs/get-started/">Get started</a></li><li><a href="../docs/guides/">Guides</a></li><li><a href="../docs/reference/keywords/">Keyword reference</a></li><li><a href="../docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="../blog">Blog</a></li><li><a href="../feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="../llms.txt">llms.txt</a></li><li><a href="../agents.md">Agent setup</a></li><li><a href="../.well-known/mcp/server-card.json">MCP server card</a></li><li><a href="../openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="../about">About</a><a href="../contact">Contact</a><a href="../privacy">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../app.js?v=aaa72e04a3" defer></script>
+  <script src="../track.js?v=a7621959d3" defer></script>
+<!--/email_off--></body>
+</html>

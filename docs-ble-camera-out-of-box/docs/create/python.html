@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Use Optics from Python · Optics Framework docs</title>
+  <meta name="description" content="Call Optics keywords from pytest or any Python script when a test needs real code.">
+  <meta name="ai-summary" content="Call Optics keywords from pytest or any Python script when a test needs real code.">
+  <link rel="canonical" href="https://optics-framework.org/docs/create/python">
+  <link rel="alternate" type="text/markdown" href="python.md" title="This page as Markdown">
+  <meta property="og:title" content="Use Optics from Python · Optics Framework docs">
+  <meta property="og:description" content="Call Optics keywords from pytest or any Python script when a test needs real code.">
+  <meta property="og:image" content="https://optics-framework.org/media/optics-og.jpg">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../../logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../../fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set the theme before first paint so there is no flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("optics-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="../../styles.css?v=045d3afd85">
+  <link rel="stylesheet" href="../../docs.css?v=8278716858">
+  <link rel="stylesheet" href="../../scenes.css?v=dfaca74b88">
+</head>
+<body class="docs " data-docs-root="../../docs/"><!--email_off-->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav docs-nav">
+    <div class="docs-bar">
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="brand" href="../../" aria-label="Optics home">
+        <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+        <span>Optics</span>
+      </a>
+      <a class="docs-label" href="../../docs/">Docs</a>
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-label="Search the docs">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <span class="search-ph">Search the docs</span>
+        <kbd class="search-kbd">/</kbd>
+      </button>
+      <div class="nav-actions">
+        <a class="nav-text" href="https://github.com/mozarkai/optics-framework">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="dtabs" aria-label="Documentation sections"><a class="dtab" href="../../docs/get-started/">Get started</a><a class="dtab on" href="../../docs/create/" aria-current="true">Create tests</a><a class="dtab" href="../../docs/elements/">Find elements</a><a class="dtab" href="../../docs/run/">Run and report</a><a class="dtab" href="../../docs/platforms/">Platforms</a><a class="dtab" href="../../docs/advanced/">Advanced</a><a class="dtab" href="../../docs/guides/">Guides</a><a class="dtab" href="../../docs/reference/">Reference</a><a class="dtab" href="../../docs/contribute/">Contribute</a><a class="dtab" href="../../docs/help/">Help</a></nav>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-inner"><div class="side-section" data-section="get-started"><p class="side-title">Get started</p><ul><li><a href="../../docs/get-started/">Overview</a></li><li><a href="../../docs/get-started/quickstart">Quickstart</a></li><li><a href="../../docs/get-started/install">Install</a></li><li><a href="../../docs/get-started/examples">Examples</a></li></ul><p class="side-group">Learn the basics</p><ul><li><a href="../../docs/get-started/first-test">Write your first test</a></li><li><a href="../../docs/get-started/concepts">Core concepts</a></li><li><a href="../../docs/get-started/next-steps">Next steps</a></li></ul></div><div class="side-section open" data-section="create"><p class="side-title">Create tests</p><ul><li><a href="../../docs/create/">Overview</a></li></ul><p class="side-group">No code</p><ul><li><a href="../../docs/create/write">Write it</a></li><li><a href="../../docs/create/record">Record it</a></li><li><a href="../../docs/create/describe">Describe it</a></li></ul><p class="side-group">With an AI agent</p><ul><li><a href="../../docs/create/agent">Delegate it</a></li></ul><p class="side-group">In code</p><ul><li><a href="../../docs/create/python" aria-current="page">Python</a></li><li><a href="../../docs/create/robot">Robot Framework</a></li></ul><p class="side-group">Organise a suite</p><ul><li><a href="../../docs/create/organise">Organise a suite</a></li><li><a href="../../docs/create/yaml">YAML format</a></li></ul></div><div class="side-section" data-section="elements"><p class="side-title">Find elements</p><ul><li><a href="../../docs/elements/">Overview</a></li><li><a href="../../docs/elements/define">Define elements</a></li></ul><p class="side-group">When the UI tree is not enough</p><ul><li><a href="../../docs/elements/text-and-images">Text and images</a></li><li><a href="../../docs/elements/area-of-interest">Area of interest</a></li><li><a href="../../docs/elements/self-heal">AI self-heal</a></li></ul></div><div class="side-section" data-section="run"><p class="side-title">Run and report</p><ul><li><a href="../../docs/run/">Overview</a></li><li><a href="../../docs/run/results">Results</a></li><li><a href="../../docs/run/error-detection">Error detection</a></li></ul><p class="side-group">Run every day</p><ul><li><a href="../../docs/run/ci">Run tests in CI</a></li><li><a href="../../docs/run/checklist">Readiness checklist</a></li></ul></div><div class="side-section" data-section="platforms"><p class="side-title">Platforms</p><ul><li><a href="../../docs/platforms/">Overview</a></li></ul><p class="side-group">Targets</p><ul><li><a href="../../docs/platforms/android">Android</a></li><li><a href="../../docs/platforms/ios">iOS</a></li><li><a href="../../docs/platforms/web">Web</a></li><li><a href="../../docs/platforms/mobile-web">Mobile web</a></li><li><a href="../../docs/platforms/tv">TV</a></li><li><a href="../../docs/platforms/desktop">Desktop</a></li><li><a href="../../docs/platforms/production">Production devices</a></li></ul></div><div class="side-section" data-section="advanced"><p class="side-title">Advanced</p><ul><li><a href="../../docs/advanced/">Overview</a></li></ul><p class="side-group">Logic and data</p><ul><li><a href="../../docs/advanced/variables">Variables</a></li><li><a href="../../docs/advanced/data-driven">Data-driven tests</a></li><li><a href="../../docs/advanced/conditions">Conditions and loops</a></li><li><a href="../../docs/advanced/popups">Popups</a></li><li><a href="../../docs/advanced/api-calls">Call APIs</a></li></ul><p class="side-group">Integrate</p><ul><li><a href="../../docs/advanced/http-api">HTTP API</a></li><li><a href="../../docs/advanced/generate">Generate code</a></li></ul></div><div class="side-section" data-section="guides"><p class="side-title">Guides</p><ul><li><a href="../../docs/guides/">Overview</a></li></ul><p class="side-group">Task guides</p><ul><li><a href="../../docs/guides/smart-tv-apps">Smart TV apps</a></li><li><a href="../../docs/guides/desktop-apps">Desktop apps</a></li><li><a href="../../docs/guides/protected-apps">Apps that block screenshots</a></li><li><a href="../../docs/guides/ai-agent-phone">AI agent on a phone</a></li></ul><p class="side-group">Compare</p><ul><li><a href="../../docs/guides/optics-vs-maestro">Optics vs Maestro</a></li><li><a href="../../docs/guides/optics-and-appium">Optics and Appium</a></li></ul></div><div class="side-section" data-section="reference"><p class="side-title">Reference</p><ul><li><a href="../../docs/reference/">Reference</a></li></ul><p class="side-group">Keywords</p><ul><li><a href="../../docs/reference/keywords/">Keywords</a></li><li><a href="../../docs/reference/keywords/app">App management</a></li><li><a href="../../docs/reference/keywords/actions">Actions</a></li><li><a href="../../docs/reference/keywords/verification">Verification</a></li><li><a href="../../docs/reference/keywords/flow">Flow control</a></li></ul><p class="side-group">Tools and files</p><ul><li><a href="../../docs/reference/cli">CLI</a></li><li><a href="../../docs/reference/config">config.yaml</a></li><li><a href="../../docs/reference/files">Project files</a></li><li><a href="../../docs/reference/engines">Engines and extras</a></li><li><a href="../../docs/reference/mcp">MCP server reference</a></li><li><a href="../../docs/reference/http-api">HTTP API reference</a></li><li><a href="../../docs/reference/errors">Error codes</a></li></ul></div><div class="side-section" data-section="contribute"><p class="side-title">Contribute</p><ul><li><a href="../../docs/contribute/">Overview</a></li><li><a href="../../docs/contribute/setup">Development setup</a></li></ul><p class="side-group">How Optics is built</p><ul><li><a href="../../docs/contribute/architecture">Architecture</a></li><li><a href="../../docs/contribute/components">Components</a></li><li><a href="../../docs/contribute/engines">Engines</a></li><li><a href="../../docs/contribute/strategies">Strategies</a></li><li><a href="../../docs/contribute/execution">Execution</a></li><li><a href="../../docs/contribute/events">Event system</a></li><li><a href="../../docs/contribute/errors">Error handling</a></li><li><a href="../../docs/contribute/logging">Logging</a></li></ul><p class="side-group">Entry points</p><ul><li><a href="../../docs/contribute/cli-layer">CLI layer</a></li><li><a href="../../docs/contribute/api-layer">REST API layer</a></li><li><a href="../../docs/contribute/library-layer">Python library layer</a></li></ul><p class="side-group">Change Optics</p><ul><li><a href="../../docs/contribute/extending">Extend Optics</a></li><li><a href="../../docs/contribute/decisions">Decisions</a></li><li><a href="../../docs/contribute/roadmap">Help wanted</a></li></ul></div><div class="side-section" data-section="help"><p class="side-title">Help</p><ul><li><a href="../../docs/help/">Overview</a></li><li><a href="../../docs/help/troubleshooting">Troubleshooting</a></li><li><a href="../../docs/help/faq">FAQ</a></li><li><a href="../../docs/help/glossary">Glossary</a></li></ul></div></div>
+    </aside>
+    <div class="scrim" hidden></div>
+
+    <main id="main" class="doc">
+      <article class="doc-article">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../../docs/">Docs</a><span class="sep" aria-hidden="true">/</span><a href="../../docs/create/">Create tests</a><span class="sep" aria-hidden="true">/</span><span>In code</span></nav>
+        <header class="doc-head">
+          <h1>Use Optics from Python</h1>
+          <p class="doc-summary">Call Optics keywords from pytest or any Python script when a test needs real code.</p>
+          <div class="doc-meta">
+            <p class="doc-level">Advanced, about 10 min</p>
+            <div class="page-actions">
+              <button class="page-copy" type="button" data-md="python.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+                <span>Copy page</span>
+              </button>
+              <a class="page-md" href="python.md">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15V9l2.5 3L12 9v6M15.5 9v6m0 0L13.5 13m2 2 2-2"/></svg>
+                <span>View as Markdown</span>
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="prose">
+<p>Every keyword is also a method on the <code class="ic">Optics</code> class. Use it when a test needs logic the suite files can't express, or when your team already runs everything through pytest. You keep the same fallbacks, OCR and image matching as a CSV suite.</p>
+<aside class="callout callout-note"><p class="callout-title">Note</p><p>If CSV or YAML files can express your test, prefer them. Anyone on the team can read and review a suite file, and the runner gives you the step tree, screenshots and error detection for free. See <a href="../../docs/create/">Choose how to create tests</a>.</p></aside>
+<h2 id="write-a-test-with-pytest">Write a test with pytest<a class="anchor" href="#write-a-test-with-pytest" aria-label="Link to this section">#</a></h2>
+<p>This test signs in to the Sauce Labs demo store, adds a backpack to the cart, and checks the cart badge and the price in the cart. It runs as written with <code class="ic">pip install "optics-framework[playwright]" pytest</code>.</p>
+<figure class="code doc-code has-title" data-lang="python"><figcaption><span>test_checkout.py</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="import pytest
+from optics_framework import Optics
+
+CONFIG = {
+    &quot;driver_sources&quot;: [{&quot;playwright&quot;: {&quot;enabled&quot;: True}}],
+    &quot;elements_sources&quot;: [
+        {&quot;playwright_find_element&quot;: {&quot;enabled&quot;: True}},
+        {&quot;playwright_page_source&quot;: {&quot;enabled&quot;: True}},
+        {&quot;playwright_screenshot&quot;: {&quot;enabled&quot;: True}},
+    ],
+}
+
+
+@pytest.fixture
+def optics():
+    with Optics(CONFIG) as session:  # quits the browser when the test ends
+        yield session
+
+
+def test_shopper_can_add_a_backpack(optics):
+    optics.launch_app(&quot;https://www.saucedemo.com&quot;)
+    optics.enter_text(&quot;//input[@id='user-name']&quot;, &quot;standard_user&quot;)
+    optics.enter_text(&quot;//input[@id='password']&quot;, &quot;secret_sauce&quot;)
+    optics.press_element([&quot;//input[@id='login-button']&quot;, &quot;Login&quot;])  # fallbacks
+    optics.assert_presence(&quot;Products&quot;, timeout=&quot;10&quot;)
+    price = optics.get_text(&quot;//div[@data-test='inventory-item-price']&quot;)
+    optics.press_element(&quot;//button[@id='add-to-cart-sauce-labs-backpack']&quot;)
+    optics.assert_text(&quot;//span[@data-test='shopping-cart-badge']&quot;, &quot;1&quot;)
+    optics.press_element(&quot;//a[@data-test='shopping-cart-link']&quot;)
+    optics.assert_text(&quot;//div[@data-test='inventory-item-price']&quot;, price)">Copy</button><pre><code><span class="c-info">import</span> pytest
+<span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+CONFIG = {
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"playwright"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+    <span class="c-lit">"elements_sources"</span>: [
+        {<span class="c-lit">"playwright_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+        {<span class="c-lit">"playwright_page_source"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+        {<span class="c-lit">"playwright_screenshot"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+    ],
+}
+
+
+@pytest.fixture
+<span class="c-info">def</span> optics():
+    <span class="c-info">with</span> Optics(CONFIG) <span class="c-info">as</span> session:  <span class="c-dim"># quits the browser when the test ends</span>
+        yield session
+
+
+<span class="c-info">def</span> test_shopper_can_add_a_backpack(optics):
+    optics.launch_app(<span class="c-lit">"https://www.saucedemo.com"</span>)
+    optics.enter_text(<span class="c-lit">"//input[@id='user-name']"</span>, <span class="c-lit">"standard_user"</span>)
+    optics.enter_text(<span class="c-lit">"//input[@id='password']"</span>, <span class="c-lit">"secret_sauce"</span>)
+    optics.press_element([<span class="c-lit">"//input[@id='login-button']"</span>, <span class="c-lit">"Login"</span>])  <span class="c-dim"># fallbacks</span>
+    optics.assert_presence(<span class="c-lit">"Products"</span>, timeout=<span class="c-lit">"10"</span>)
+    price = optics.get_text(<span class="c-lit">"//div[@data-test='inventory-item-price']"</span>)
+    optics.press_element(<span class="c-lit">"//button[@id='add-to-cart-sauce-labs-backpack']"</span>)
+    optics.assert_text(<span class="c-lit">"//span[@data-test='shopping-cart-badge']"</span>, <span class="c-lit">"1"</span>)
+    optics.press_element(<span class="c-lit">"//a[@data-test='shopping-cart-link']"</span>)
+    optics.assert_text(<span class="c-lit">"//div[@data-test='inventory-item-price']"</span>, price)</code></pre></figure>
+<figure class="code doc-code" data-lang="shell"><button class="copy" type="button" aria-label="Copy code" data-copy="pytest test_checkout.py">Copy</button><pre><code><span class="prompt">$</span> <b>pytest</b> test_checkout.py</code></pre></figure>
+<h2 id="configure-the-session">Configure the session<a class="anchor" href="#configure-the-session" aria-label="Link to this section">#</a></h2>
+<p>Pass the same lists you'd put in <code class="ic">config.yaml</code>, as a Python dict. <code class="ic">driver_sources</code> and <code class="ic">elements_sources</code> are required, and each must be a list. Without them, <code class="ic">setup</code> raises <code class="ic">ValueError: Missing required configuration key: driver_sources</code>. The SDK reads these keys:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>What it's for</th></tr></thead><tbody><tr><td><code class="ic">driver_sources</code>, <code class="ic">elements_sources</code></td><td>What to drive and how to look at the screen. See the <a href="../../docs/reference/config">config reference</a>.</td></tr><tr><td><code class="ic">text_detection</code>, <code class="ic">image_detection</code></td><td>OCR and image matching engines, if you use them.</td></tr><tr><td><code class="ic">project_path</code></td><td>A folder to search for image files and to resolve relative paths in <code class="ic">read_data</code> and <code class="ic">add_api</code>. Required for image elements.</td></tr><tr><td><code class="ic">execution_output_path</code></td><td>Where screenshots and results go.</td></tr></tbody></table></div>
+<p><code class="ic">ai_self_heal</code> and <code class="ic">llm_models</code> work as they do in <code class="ic">config.yaml</code>. The SDK doesn't apply <code class="ic">log_level</code>.</p>
+<p>You can give the config in four ways.</p>
+<h3 id="pass-a-dict">Pass a dict<a class="anchor" href="#pass-a-dict" aria-label="Link to this section">#</a></h3>
+<p>Give the dict to <code class="ic">Optics()</code> or to <code class="ic">setup()</code>. Both create a new session.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+config = {
+    &quot;driver_sources&quot;: [
+        {
+            &quot;appium&quot;: {
+                &quot;enabled&quot;: True,
+                &quot;url&quot;: &quot;http://localhost:4723&quot;,
+                &quot;capabilities&quot;: {
+                    &quot;platformName&quot;: &quot;Android&quot;,
+                    &quot;deviceName&quot;: &quot;emulator-5554&quot;
+                }
+            }
+        }
+    ],
+    &quot;elements_sources&quot;: [
+        {&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}
+    ],
+    &quot;text_detection&quot;: [
+        {&quot;easyocr&quot;: {&quot;enabled&quot;: True}}
+    ],
+    &quot;image_detection&quot;: [
+        {&quot;templatematch&quot;: {&quot;enabled&quot;: True}}
+    ],
+    &quot;project_path&quot;: &quot;/path/to/project&quot;
+}
+
+optics = Optics(config=config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+config = {
+    <span class="c-lit">"driver_sources"</span>: [
+        {
+            <span class="c-lit">"appium"</span>: {
+                <span class="c-lit">"enabled"</span>: <span class="c-info">True</span>,
+                <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>,
+                <span class="c-lit">"capabilities"</span>: {
+                    <span class="c-lit">"platformName"</span>: <span class="c-lit">"Android"</span>,
+                    <span class="c-lit">"deviceName"</span>: <span class="c-lit">"emulator-5554"</span>
+                }
+            }
+        }
+    ],
+    <span class="c-lit">"elements_sources"</span>: [
+        {<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}
+    ],
+    <span class="c-lit">"text_detection"</span>: [
+        {<span class="c-lit">"easyocr"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}
+    ],
+    <span class="c-lit">"image_detection"</span>: [
+        {<span class="c-lit">"templatematch"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}
+    ],
+    <span class="c-lit">"project_path"</span>: <span class="c-lit">"/path/to/project"</span>
+}
+
+optics = Optics(config=config)</code></pre></figure>
+<h3 id="read-a-config-file">Read a config file<a class="anchor" href="#read-a-config-file" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">setup_from_file</code> reads a JSON or YAML file:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+optics = Optics()
+optics.setup_from_file(&quot;config.yaml&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+optics = Optics()
+optics.setup_from_file(<span class="c-lit">"config.yaml"</span>)</code></pre></figure>
+<figure class="code doc-code has-title" data-lang="yaml"><figcaption><span>config.yaml</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+      capabilities:
+        platformName: &quot;Android&quot;
+        deviceName: &quot;emulator-5554&quot;
+
+elements_sources:
+  - appium_find_element:
+      enabled: true
+
+text_detection:
+  - easyocr:
+      enabled: true
+
+image_detection:
+  - templatematch:
+      enabled: true
+
+project_path: &quot;/path/to/project&quot;">Copy</button><pre><code><span class="c-mod">driver_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+      <span class="c-mod">url</span><span class="c-dim">:</span> <span class="c-lit">"http://localhost:4723"</span>
+      <span class="c-mod">capabilities</span><span class="c-dim">:</span>
+        <span class="c-mod">platformName</span><span class="c-dim">:</span> <span class="c-lit">"Android"</span>
+        <span class="c-mod">deviceName</span><span class="c-dim">:</span> <span class="c-lit">"emulator-5554"</span>
+
+<span class="c-mod">elements_sources</span><span class="c-dim">:</span>
+  - <span class="c-mod">appium_find_element</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+
+<span class="c-mod">text_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">easyocr</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+
+<span class="c-mod">image_detection</span><span class="c-dim">:</span>
+  - <span class="c-mod">templatematch</span><span class="c-dim">:</span>
+      <span class="c-mod">enabled</span><span class="c-dim">:</span> <span class="c-info">true</span>
+
+<span class="c-mod">project_path</span><span class="c-dim">:</span> <span class="c-lit">"/path/to/project"</span></code></pre></figure>
+<p>A missing file raises <code class="ic">FileNotFoundError</code>. Any other problem raises <code class="ic">ValueError: Failed to read configuration file</code>. To change a value first, load the file yourself and pass the dict:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="import yaml
+from optics_framework import Optics
+
+with open(&quot;birch-tests/config.yaml&quot;) as f:
+    config = yaml.safe_load(f)
+config[&quot;project_path&quot;] = &quot;birch-tests&quot;
+
+with Optics(config) as optics:
+    optics.launch_app()">Copy</button><pre><code><span class="c-info">import</span> yaml
+<span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+<span class="c-info">with</span> open(<span class="c-lit">"birch-tests/config.yaml"</span>) <span class="c-info">as</span> f:
+    config = yaml.safe_load(f)
+config[<span class="c-lit">"project_path"</span>] = <span class="c-lit">"birch-tests"</span>
+
+<span class="c-info">with</span> Optics(config) <span class="c-info">as</span> optics:
+    optics.launch_app()</code></pre></figure>
+<h3 id="pass-yaml-or-json-text">Pass YAML or JSON text<a class="anchor" href="#pass-yaml-or-json-text" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">setup(config=...)</code> also takes the config as text. Text that starts with <code class="ic">{</code> or <code class="ic">[</code> is read as JSON. Other text is read as YAML. Invalid text raises <code class="ic">OpticsError</code> with code <code class="ic">E0503</code>.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+yaml_config = &quot;&quot;&quot;
+driver_sources:
+  - appium:
+      enabled: true
+      url: &quot;http://localhost:4723&quot;
+elements_sources:
+  - appium_find_element:
+      enabled: true
+&quot;&quot;&quot;
+
+optics = Optics()
+optics.setup(config=yaml_config)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+yaml_config = <span class="c-lit">""</span>"
+driver_sources:
+  - appium:
+      enabled: true
+      url: <span class="c-lit">"http://localhost:4723"</span>
+elements_sources:
+  - appium_find_element:
+      enabled: true
+<span class="c-lit">""</span>"
+
+optics = Optics()
+optics.setup(config=yaml_config)</code></pre></figure>
+<aside class="callout callout-mistake"><p class="callout-title">Common mistake</p><p><code class="ic">setup(config="config.yaml")</code> doesn't read the file. Optics reads the text <code class="ic">config.yaml</code> as YAML and raises <code class="ic">ValueError: Missing required configuration key: driver_sources</code>. Use <code class="ic">setup_from_file</code> for a path.</p></aside>
+<h3 id="pass-each-list-on-its-own">Pass each list on its own<a class="anchor" href="#pass-each-list-on-its-own" aria-label="Link to this section">#</a></h3>
+<p>This older form still works, but it logs a warning that it's deprecated. It takes <code class="ic">driver_sources</code>, <code class="ic">elements_sources</code>, <code class="ic">image_detection</code>, <code class="ic">text_detection</code> and <code class="ic">execution_output_path_param</code>. It has no <code class="ic">project_path</code>, so image elements don't work with it.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.setup(
+    driver_sources=[{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}],
+    elements_sources=[{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}]
+)">Copy</button><pre><code>optics.setup(
+    driver_sources=[{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}],
+    elements_sources=[{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}]
+)</code></pre></figure>
+<p><code class="ic">execution_output_path_param</code> also works with <code class="ic">config=</code>. It sets <code class="ic">execution_output_path</code> when the config doesn't.</p>
+<h3 id="test-a-desktop-app">Test a desktop app<a class="anchor" href="#test-a-desktop-app" aria-label="Link to this section">#</a></h3>
+<p>A desktop app uses the Appium driver with the OS and the app. Run Appium with <code class="ic">appium-xa11y-driver</code> on the machine that shows the app. See <a href="../../docs/platforms/desktop">Test desktop apps</a> for the setup:</p>
+<figure class="code doc-code has-title" data-lang="python"><figcaption><span>test_notes.py</span></figcaption><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+optics = Optics()
+optics.setup(config={
+    &quot;driver_sources&quot;: [{&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://127.0.0.1:4723&quot;, &quot;capabilities&quot;: {
+        &quot;platformName&quot;: &quot;Mac&quot;, &quot;automationName&quot;: &quot;Xa11y&quot;, &quot;app&quot;: &quot;com.apple.TextEdit&quot;}}}],
+    &quot;elements_sources&quot;: [{&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}},
+                         {&quot;appium_page_source&quot;: {&quot;enabled&quot;: True}},
+                         {&quot;appium_screenshot&quot;: {&quot;enabled&quot;: True}}],
+})
+optics.launch_app()
+optics.enter_text(&quot;//text_area&quot;, &quot;Hello from Optics&quot;)
+optics.assert_text(&quot;//text_area&quot;, &quot;Hello from Optics&quot;)
+optics.press_keycode(&quot;primary+a&quot;)
+optics.enter_text_using_keyboard(&quot;&lt;backspace&gt;&quot;)
+optics.close_and_terminate_app()
+optics.quit()">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+optics = Optics()
+optics.setup(config={
+    <span class="c-lit">"driver_sources"</span>: [{<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://127.0.0.1:4723"</span>, <span class="c-lit">"capabilities"</span>: {
+        <span class="c-lit">"platformName"</span>: <span class="c-lit">"Mac"</span>, <span class="c-lit">"automationName"</span>: <span class="c-lit">"Xa11y"</span>, <span class="c-lit">"app"</span>: <span class="c-lit">"com.apple.TextEdit"</span>}}}],
+    <span class="c-lit">"elements_sources"</span>: [{<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+                         {<span class="c-lit">"appium_page_source"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}},
+                         {<span class="c-lit">"appium_screenshot"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}],
+})
+optics.launch_app()
+optics.enter_text(<span class="c-lit">"//text_area"</span>, <span class="c-lit">"Hello from Optics"</span>)
+optics.assert_text(<span class="c-lit">"//text_area"</span>, <span class="c-lit">"Hello from Optics"</span>)
+optics.press_keycode(<span class="c-lit">"primary+a"</span>)
+optics.enter_text_using_keyboard(<span class="c-lit">"&lt;backspace&gt;"</span>)
+optics.close_and_terminate_app()
+optics.quit()</code></pre></figure>
+<p><code class="ic">press_keycode</code> takes a key combination. <code class="ic">primary</code> is Cmd on macOS and Ctrl on Linux and Windows. You can also write <code class="ic">cmd+a</code> or <code class="ic">ctrl+a</code>.</p>
+<h2 id="how-calls-differ-from-suite-files">How calls differ from suite files<a class="anchor" href="#how-calls-differ-from-suite-files" aria-label="Link to this section">#</a></h2>
+<ul><li><strong>Method names are snake_case.</strong> <code class="ic">Press Element</code> is <code class="ic">press_element</code>. Your editor's autocomplete lists them all.</li><li><strong>Pass every value as a string.</strong> <code class="ic">optics.press_by_coordinates("540", "1600")</code> works. A number raises <code class="ic">TypeError: Parameter 'coor_x' must be str or List[str]</code>.</li><li><strong>A list means "try these in order".</strong> <code class="ic">press_element(["//button[@id='login']", "Login"])</code> tries the XPath, then the text. To check several elements at once, separate them with a pipe in one string: <code class="ic">assert_presence("Products|Your Cart")</code>.</li><li><strong><code class="ic">${name}</code> isn't looked up</strong> in action and verification methods, except <code class="ic">assert_equality</code>. Pass the locator itself, or the list that <code class="ic">get_element_value(name)</code> returns. Flow control methods and the steps of modules that they run do read <code class="ic">${name}</code>.</li><li><strong>There is no <code class="ic">store_as</code>.</strong> Keep a return value in a Python variable, as <code class="ic">price</code> above.</li><li><strong>Methods return values.</strong> <code class="ic">get_text</code> returns the text, <code class="ic">capture_screenshot</code> returns a base64 PNG, <code class="ic">capture_pagesource</code> returns a dict with <code class="ic">page_source</code> and <code class="ic">timestamp</code>, and <code class="ic">assert_presence</code> returns <code class="ic">True</code>. A failed check raises an exception, which fails the pytest test. See <a href="#handle-errors">Handle errors</a>.</li><li><strong><code class="ic">assert_text</code>, <code class="ic">is_element</code> and <code class="ic">go_back</code>.</strong> <code class="ic">assert_text(element, expected)</code> fails on different text. <code class="ic">is_element(element, state, timeout)</code> accepts <code class="ic">visible</code>, <code class="ic">invisible</code>, <code class="ic">enabled</code>, <code class="ic">disabled</code>, <code class="ic">checked</code> and <code class="ic">unchecked</code>. <code class="ic">go_back()</code> goes back one screen.</li><li><strong>Some parameters differ.</strong> See the table below.</li></ul>
+<h2 id="every-method">Every method<a class="anchor" href="#every-method" aria-label="Link to this section">#</a></h2>
+<p>These methods run a keyword. The keyword page gives what each parameter does. Python has fewer parameters for some of them, and other defaults:</p>
+<ul><li><code class="ic">assert_presence</code> and <code class="ic">assert_visibility</code> call the timeout <code class="ic">timeout</code>, not <code class="ic">timeout_str</code>, wait 60 seconds by default and have no <code class="ic">fail</code>.</li><li><code class="ic">detect_and_press</code> waits 10 seconds by default.</li><li><code class="ic">enter_text</code>, <code class="ic">enter_number</code>, <code class="ic">clear_element_text</code>, <code class="ic">get_text</code>, <code class="ic">swipe_from_element</code> and <code class="ic">scroll_from_element</code> have no area of interest and no <code class="ic">index</code>.</li><li><code class="ic">launch_other_app</code> calls its parameter <code class="ic">bundleid</code> and has no <code class="ic">event_name</code>.</li><li><code class="ic">invoke_api(api)</code> and <code class="ic">read_data(element, source, query)</code> use other parameter names than the keywords.</li><li><code class="ic">capture_screenshot</code> and <code class="ic">capture_pagesource</code> have no <code class="ic">event_name</code>.</li></ul>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>Keyword</th></tr></thead><tbody><tr><td><code class="ic">launch_app(app_identifier=None, app_activity=None, event_name=None)</code></td><td><a href="../../docs/reference/keywords/app#launch-app">Launch App</a></td></tr><tr><td><code class="ic">launch_other_app(bundleid)</code></td><td><a href="../../docs/reference/keywords/app#launch-other-app">Launch Other App</a></td></tr><tr><td><code class="ic">start_appium_session(event_name=None)</code></td><td><a href="../../docs/reference/keywords/app#start-appium-session">Start Appium Session</a></td></tr><tr><td><code class="ic">get_driver_session_id()</code></td><td><a href="../../docs/reference/keywords/app#get-driver-session-id">Get Driver Session Id</a></td></tr><tr><td><code class="ic">close_and_terminate_app()</code></td><td><a href="../../docs/reference/keywords/app#close-and-terminate-app">Close And Terminate App</a></td></tr><tr><td><code class="ic">force_terminate_app(app_name, event_name=None)</code></td><td><a href="../../docs/reference/keywords/app#force-terminate-app">Force Terminate App</a></td></tr><tr><td><code class="ic">get_app_version(app_package=None)</code></td><td><a href="../../docs/reference/keywords/app#get-app-version">Get App Version</a></td></tr><tr><td><code class="ic">press_element(element, repeat="1", offset_x="0", offset_y="0", index="0", aoi_x=None, aoi_y=None, aoi_width=None, aoi_height=None, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#press-element">Press Element</a></td></tr><tr><td><code class="ic">press_by_percentage(percent_x, percent_y, repeat="1", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#press-by-percentage">Press By Percentage</a></td></tr><tr><td><code class="ic">press_by_coordinates(coor_x, coor_y, repeat="1", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#press-by-coordinates">Press By Coordinates</a></td></tr><tr><td><code class="ic">detect_and_press(element, timeout="10", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#detect-and-press">Detect And Press</a></td></tr><tr><td><code class="ic">swipe(coor_x, coor_y, direction="right", swipe_length="50", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#swipe">Swipe</a></td></tr><tr><td><code class="ic">swipe_by_percentage(percent_x, percent_y, direction="right", swipe_length="50", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#swipe-by-percentage">Swipe By Percentage</a></td></tr><tr><td><code class="ic">swipe_until_element_appears(element, direction="down", timeout="30", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#swipe-until-element-appears">Swipe Until Element Appears</a></td></tr><tr><td><code class="ic">swipe_from_element(element, direction="right", swipe_length="50", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#swipe-from-element">Swipe From Element</a></td></tr><tr><td><code class="ic">scroll(direction="down", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#scroll">Scroll</a></td></tr><tr><td><code class="ic">scroll_until_element_appears(element, direction="down", timeout="30", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#scroll-until-element-appears">Scroll Until Element Appears</a></td></tr><tr><td><code class="ic">scroll_from_element(element, direction="down", scroll_length="100", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#scroll-from-element">Scroll From Element</a></td></tr><tr><td><code class="ic">enter_text(element, text, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#enter-text">Enter Text</a></td></tr><tr><td><code class="ic">enter_text_direct(text, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#enter-text-direct">Enter Text Direct</a></td></tr><tr><td><code class="ic">enter_text_using_keyboard(text_input, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#enter-text-using-keyboard">Enter Text Using Keyboard</a></td></tr><tr><td><code class="ic">enter_number(element, number, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#enter-number">Enter Number</a></td></tr><tr><td><code class="ic">press_keycode(keycode, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#press-keycode">Press Keycode</a></td></tr><tr><td><code class="ic">go_back(event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#go-back">Go Back</a></td></tr><tr><td><code class="ic">clear_element_text(element, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#clear-element-text">Clear Element Text</a></td></tr><tr><td><code class="ic">get_text(element)</code></td><td><a href="../../docs/reference/keywords/actions#get-text">Get Text</a></td></tr><tr><td><code class="ic">select_dropdown_option(element, option, timeout="30", event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#select-dropdown-option">Select Dropdown Option</a></td></tr><tr><td><code class="ic">sleep(duration)</code></td><td><a href="../../docs/reference/keywords/actions#sleep">Sleep</a></td></tr><tr><td><code class="ic">execute_script(script_or_json, event_name=None)</code></td><td><a href="../../docs/reference/keywords/actions#execute-script">Execute Script</a></td></tr><tr><td><code class="ic">validate_element(element, timeout="10", rule="all", event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#validate-element">Validate Element</a></td></tr><tr><td><code class="ic">assert_presence(elements, timeout="60", rule="any", event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#assert-presence">Assert Presence</a></td></tr><tr><td><code class="ic">assert_visibility(elements, timeout="60", rule="any", event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#assert-visibility">Assert Visibility</a></td></tr><tr><td><code class="ic">validate_screen(elements, timeout="30", rule="any", event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#validate-screen">Validate Screen</a></td></tr><tr><td><code class="ic">assert_equality(output, expression, event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#assert-equality">Assert Equality</a></td></tr><tr><td><code class="ic">is_element(element, element_state, timeout, event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#is-element">Is Element</a></td></tr><tr><td><code class="ic">assert_text(element, expected, timeout="10", event_name=None)</code></td><td><a href="../../docs/reference/keywords/verification#assert-text">Assert Text</a></td></tr><tr><td><code class="ic">get_interactive_elements(filter_config=None, compact=False)</code></td><td><a href="../../docs/reference/keywords/verification#get-interactive-elements">Get Interactive Elements</a></td></tr><tr><td><code class="ic">capture_screenshot()</code></td><td><a href="../../docs/reference/keywords/verification#capture-screenshot">Capture Screenshot</a></td></tr><tr><td><code class="ic">capture_pagesource()</code></td><td><a href="../../docs/reference/keywords/verification#capture-pagesource">Capture Pagesource</a></td></tr><tr><td><code class="ic">get_screen_elements()</code></td><td><a href="../../docs/reference/keywords/verification#get-screen-elements">Get Screen Elements</a></td></tr><tr><td><code class="ic">invoke_api(api)</code></td><td><a href="../../docs/reference/keywords/flow#invoke-api">Invoke API</a></td></tr><tr><td><code class="ic">read_data(element, source, query="")</code></td><td><a href="../../docs/reference/keywords/flow#read-data">Read Data</a></td></tr><tr><td><code class="ic">run_loop(target, *args)</code></td><td><a href="../../docs/reference/keywords/flow#run-loop">Run Loop</a></td></tr><tr><td><code class="ic">condition(*args)</code></td><td><a href="../../docs/reference/keywords/flow#condition">Condition</a></td></tr><tr><td><code class="ic">evaluate(param1, param2)</code></td><td><a href="../../docs/reference/keywords/flow#evaluate">Evaluate</a></td></tr><tr><td><code class="ic">date_evaluate(param1, param2, param3, param4="%d %B")</code></td><td><a href="../../docs/reference/keywords/flow#date-evaluate">Date Evaluate</a></td></tr></tbody></table></div>
+<p>Execute Module, Initialise Setup and the deprecated keywords aren't methods.</p>
+<h3 id="python-only-methods">Python-only methods<a class="anchor" href="#python-only-methods" aria-label="Link to this section">#</a></h3>
+<p>These have no CSV equivalent:</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>What it does</th></tr></thead><tbody><tr><td><code class="ic">setup(config=None, driver_sources=None, elements_sources=None, image_detection=None, text_detection=None, execution_output_path_param=None)</code></td><td>Create a session. See <a href="#configure-the-session">Configure the session</a>.</td></tr><tr><td><code class="ic">setup_from_file(config_file_path)</code></td><td>Create a session from a JSON or YAML file.</td></tr><tr><td><code class="ic">discover_templates(project_path)</code></td><td>Return every image file under a folder (<code class="ic">.png</code>, <code class="ic">.jpg</code>, <code class="ic">.jpeg</code>, <code class="ic">.bmp</code>, <code class="ic">.tiff</code>, <code class="ic">.tif</code>), by file name. <code class="ic">setup</code> calls it for <code class="ic">project_path</code>.</td></tr><tr><td><code class="ic">add_element(name, value)</code></td><td>Add a value to a named element, after any values it already has.</td></tr><tr><td><code class="ic">get_element_value(name)</code></td><td>Return the list of values for a named element.</td></tr><tr><td><code class="ic">add_module(module_name, module_def)</code></td><td>Define a module as a list of <code class="ic">(keyword, [values])</code> pairs, for <code class="ic">run_loop</code> and <code class="ic">condition</code>.</td></tr><tr><td><code class="ic">add_testcase(testcase)</code></td><td>Replace the session's test cases.</td></tr><tr><td><code class="ic">add_api(api_data)</code></td><td>Load API definitions for <code class="ic">invoke_api</code> from a YAML file or a dict. See <a href="#call-apis">Call APIs</a>.</td></tr><tr><td><code class="ic">add_error_definitions(source)</code></td><td>Load on-screen error definitions. See <a href="../../docs/run/error-detection#check-for-errors-from-python">Check for errors from Python</a>.</td></tr><tr><td><code class="ic">capture_and_detect(context_label="end_of_run", test_case=None)</code></td><td>Check the current screen against those definitions and return the matches.</td></tr><tr><td><code class="ic">press_element_with_index(element, index="0", event_name=None)</code></td><td>Press Element with only <code class="ic">element</code>, <code class="ic">index</code> and <code class="ic">event_name</code>.</td></tr><tr><td><code class="ic">quit()</code></td><td>End the session. The <code class="ic">with</code> block calls it for you.</td></tr></tbody></table></div>
+<h2 id="examples-by-task">Examples by task<a class="anchor" href="#examples-by-task" aria-label="Link to this section">#</a></h2>
+<p>Each block below assumes an <code class="ic">optics</code> session. Replace the locators with ones from your app.</p>
+<h3 id="start-and-stop-the-app">Start and stop the app<a class="anchor" href="#start-and-stop-the-app" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.launch_app(app_identifier=&quot;com.example.app&quot;)
+optics.launch_other_app(&quot;com.other.app&quot;)
+
+version = optics.get_app_version()
+print(f&quot;App version: {version}&quot;)
+session_id = optics.get_driver_session_id()
+print(f&quot;Session ID: {session_id}&quot;)
+
+optics.close_and_terminate_app()
+optics.force_terminate_app(&quot;com.example.app&quot;)">Copy</button><pre><code>optics.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+optics.launch_other_app(<span class="c-lit">"com.other.app"</span>)
+
+version = optics.get_app_version()
+print(f<span class="c-lit">"App version: {version}"</span>)
+session_id = optics.get_driver_session_id()
+print(f<span class="c-lit">"Session ID: {session_id}"</span>)
+
+optics.close_and_terminate_app()
+optics.force_terminate_app(<span class="c-lit">"com.example.app"</span>)</code></pre></figure>
+<p><code class="ic">force_terminate_app</code> needs the app's package name or bundle ID.</p>
+<h3 id="tap-and-type">Tap and type<a class="anchor" href="#tap-and-type" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.press_element(&quot;Submit&quot;)
+optics.press_element([&quot;button1&quot;, &quot;button2&quot;, &quot;//button[@id='submit']&quot;])
+optics.press_by_coordinates(&quot;100&quot;, &quot;200&quot;)
+optics.press_by_percentage(&quot;50&quot;, &quot;50&quot;)
+optics.press_element_with_index(&quot;Add to cart&quot;, index=&quot;1&quot;)
+optics.detect_and_press(&quot;Allow&quot;, timeout=&quot;5&quot;)
+optics.select_dropdown_option(&quot;//select[@id='size']&quot;, &quot;US 9&quot;)
+
+optics.enter_text(&quot;//input[@name='user']&quot;, &quot;testuser&quot;)
+optics.enter_text_direct(&quot;text&quot;)
+optics.enter_text_using_keyboard(&quot;&lt;enter&gt;&quot;)
+optics.enter_number(&quot;//input[@name='quantity']&quot;, &quot;123&quot;)
+optics.clear_element_text(&quot;input_field&quot;)">Copy</button><pre><code>optics.press_element(<span class="c-lit">"Submit"</span>)
+optics.press_element([<span class="c-lit">"button1"</span>, <span class="c-lit">"button2"</span>, <span class="c-lit">"//button[@id='submit']"</span>])
+optics.press_by_coordinates(<span class="c-lit">"100"</span>, <span class="c-lit">"200"</span>)
+optics.press_by_percentage(<span class="c-lit">"50"</span>, <span class="c-lit">"50"</span>)
+optics.press_element_with_index(<span class="c-lit">"Add to cart"</span>, index=<span class="c-lit">"1"</span>)
+optics.detect_and_press(<span class="c-lit">"Allow"</span>, timeout=<span class="c-lit">"5"</span>)
+optics.select_dropdown_option(<span class="c-lit">"//select[@id='size']"</span>, <span class="c-lit">"US 9"</span>)
+
+optics.enter_text(<span class="c-lit">"//input[@name='user']"</span>, <span class="c-lit">"testuser"</span>)
+optics.enter_text_direct(<span class="c-lit">"text"</span>)
+optics.enter_text_using_keyboard(<span class="c-lit">"&lt;enter&gt;"</span>)
+optics.enter_number(<span class="c-lit">"//input[@name='quantity']"</span>, <span class="c-lit">"123"</span>)
+optics.clear_element_text(<span class="c-lit">"input_field"</span>)</code></pre></figure>
+<p><code class="ic">enter_text_direct</code> and <code class="ic">enter_text_using_keyboard</code> take no element. They type into the field that has focus.</p>
+<h3 id="swipe-and-scroll">Swipe and scroll<a class="anchor" href="#swipe-and-scroll" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.swipe(&quot;540&quot;, &quot;1500&quot;, &quot;up&quot;, &quot;800&quot;)
+optics.swipe_by_percentage(&quot;50&quot;, &quot;50&quot;, &quot;up&quot;, &quot;25&quot;)
+optics.swipe_until_element_appears(&quot;target_element&quot;, direction=&quot;up&quot;)
+optics.swipe_from_element(&quot;source_element&quot;, &quot;left&quot;, &quot;300&quot;)
+
+optics.scroll(&quot;down&quot;)
+optics.scroll_until_element_appears(&quot;target_element&quot;, direction=&quot;down&quot;)
+optics.scroll_from_element(&quot;source_element&quot;, &quot;down&quot;, &quot;400&quot;)">Copy</button><pre><code>optics.swipe(<span class="c-lit">"540"</span>, <span class="c-lit">"1500"</span>, <span class="c-lit">"up"</span>, <span class="c-lit">"800"</span>)
+optics.swipe_by_percentage(<span class="c-lit">"50"</span>, <span class="c-lit">"50"</span>, <span class="c-lit">"up"</span>, <span class="c-lit">"25"</span>)
+optics.swipe_until_element_appears(<span class="c-lit">"target_element"</span>, direction=<span class="c-lit">"up"</span>)
+optics.swipe_from_element(<span class="c-lit">"source_element"</span>, <span class="c-lit">"left"</span>, <span class="c-lit">"300"</span>)
+
+optics.scroll(<span class="c-lit">"down"</span>)
+optics.scroll_until_element_appears(<span class="c-lit">"target_element"</span>, direction=<span class="c-lit">"down"</span>)
+optics.scroll_from_element(<span class="c-lit">"source_element"</span>, <span class="c-lit">"down"</span>, <span class="c-lit">"400"</span>)</code></pre></figure>
+<p>Swipe takes a start point, a direction and a length, not an end point. Scroll takes only a direction.</p>
+<h3 id="keys-text-and-scripts">Keys, text and scripts<a class="anchor" href="#keys-text-and-scripts" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.press_keycode(&quot;4&quot;)
+optics.go_back()
+
+text = optics.get_text(&quot;element_id&quot;)
+print(f&quot;Element text: {text}&quot;)
+
+optics.sleep(&quot;2&quot;)
+
+result = optics.execute_script('{&quot;script&quot;: &quot;mobile: shell&quot;, &quot;args&quot;: {&quot;command&quot;: &quot;echo hello&quot;}}')">Copy</button><pre><code>optics.press_keycode(<span class="c-lit">"4"</span>)
+optics.go_back()
+
+text = optics.get_text(<span class="c-lit">"element_id"</span>)
+print(f<span class="c-lit">"Element text: {text}"</span>)
+
+optics.sleep(<span class="c-lit">"2"</span>)
+
+result = optics.execute_script(<span class="c-lit">'{"script": "mobile: shell", "args": {"command": "echo hello"}}'</span>)</code></pre></figure>
+<p><code class="ic">press_keycode("4")</code> presses the Android back key. <code class="ic">execute_script</code> takes one string: a script, or JSON with <code class="ic">script</code> and <code class="ic">args</code>.</p>
+<h3 id="check-the-screen">Check the screen<a class="anchor" href="#check-the-screen" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.validate_element(&quot;welcome_message&quot;)
+optics.assert_presence(&quot;element1|element2&quot;, rule=&quot;all&quot;)
+optics.assert_presence(&quot;element1|element2&quot;, rule=&quot;any&quot;)
+found = optics.validate_screen(&quot;header|content|footer&quot;)
+optics.assert_visibility(&quot;Products&quot;, timeout=&quot;10&quot;)
+optics.is_element(&quot;//button[@id='login']&quot;, &quot;enabled&quot;, &quot;5&quot;)
+optics.assert_equality(price, &quot;$29.99&quot;)">Copy</button><pre><code>optics.validate_element(<span class="c-lit">"welcome_message"</span>)
+optics.assert_presence(<span class="c-lit">"element1|element2"</span>, rule=<span class="c-lit">"all"</span>)
+optics.assert_presence(<span class="c-lit">"element1|element2"</span>, rule=<span class="c-lit">"any"</span>)
+found = optics.validate_screen(<span class="c-lit">"header|content|footer"</span>)
+optics.assert_visibility(<span class="c-lit">"Products"</span>, timeout=<span class="c-lit">"10"</span>)
+optics.is_element(<span class="c-lit">"//button[@id='login']"</span>, <span class="c-lit">"enabled"</span>, <span class="c-lit">"5"</span>)
+optics.assert_equality(price, <span class="c-lit">"$29.99"</span>)</code></pre></figure>
+<p><code class="ic">rule="all"</code> needs every element. <code class="ic">rule="any"</code> needs one. <code class="ic">validate_screen</code> returns <code class="ic">True</code> or <code class="ic">False</code> and never raises.</p>
+<h3 id="capture-the-screen">Capture the screen<a class="anchor" href="#capture-the-screen" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="screenshot = optics.capture_screenshot()
+print(f&quot;Screenshot: {screenshot}&quot;)
+
+page_source = optics.capture_pagesource()
+print(f&quot;Page source: {page_source}&quot;)
+
+elements = optics.get_interactive_elements()
+for element in elements:
+    print(f&quot;Element: {element}&quot;)
+
+buttons = optics.get_interactive_elements([&quot;buttons&quot;, &quot;inputs&quot;], compact=True)
+screen = optics.get_screen_elements()">Copy</button><pre><code>screenshot = optics.capture_screenshot()
+print(f<span class="c-lit">"Screenshot: {screenshot}"</span>)
+
+page_source = optics.capture_pagesource()
+print(f<span class="c-lit">"Page source: {page_source}"</span>)
+
+elements = optics.get_interactive_elements()
+<span class="c-info">for</span> element <span class="c-info">in</span> elements:
+    print(f<span class="c-lit">"Element: {element}"</span>)
+
+buttons = optics.get_interactive_elements([<span class="c-lit">"buttons"</span>, <span class="c-lit">"inputs"</span>], compact=<span class="c-info">True</span>)
+screen = optics.get_screen_elements()</code></pre></figure>
+<p><code class="ic">get_screen_elements</code> returns a dict with a base64 screenshot and a list of elements.</p>
+<h3 id="use-variables">Use variables<a class="anchor" href="#use-variables" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">add_element</code> adds a value to a named element. Flow control methods read it as <code class="ic">${name}</code>. Action methods don't, so pass the values from <code class="ic">get_element_value</code>:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.add_element(&quot;submit_button&quot;, &quot;//button[@id='submit']&quot;)
+optics.add_element(&quot;submit_button&quot;, &quot;Submit&quot;)
+
+element_value = optics.get_element_value(&quot;submit_button&quot;)
+print(f&quot;Element value: {element_value}&quot;)
+
+optics.press_element(element_value)">Copy</button><pre><code>optics.add_element(<span class="c-lit">"submit_button"</span>, <span class="c-lit">"//button[@id='submit']"</span>)
+optics.add_element(<span class="c-lit">"submit_button"</span>, <span class="c-lit">"Submit"</span>)
+
+element_value = optics.get_element_value(<span class="c-lit">"submit_button"</span>)
+print(f<span class="c-lit">"Element value: {element_value}"</span>)
+
+optics.press_element(element_value)</code></pre></figure>
+<p><code class="ic">element_value</code> is <code class="ic">["//button[@id='submit']", "Submit"]</code>, so <code class="ic">press_element</code> tries the XPath, then the text.</p>
+<h3 id="branch-and-loop">Branch and loop<a class="anchor" href="#branch-and-loop" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">condition</code> and <code class="ic">run_loop</code> run modules. Define each module with <code class="ic">add_module</code> first:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.add_module(&quot;Proceed&quot;, [(&quot;Press Element&quot;, [&quot;Continue&quot;])])
+optics.add_module(&quot;Wait&quot;, [(&quot;Sleep&quot;, [&quot;1&quot;])])
+
+optics.add_element(&quot;status&quot;, &quot;ready&quot;)
+optics.condition(&quot;${status} == 'ready'&quot;, &quot;Proceed&quot;)
+
+optics.add_element(&quot;count&quot;, &quot;15&quot;)
+optics.condition(&quot;${count} &gt; 10&quot;, &quot;Proceed&quot;, &quot;Wait&quot;)
+
+optics.run_loop(&quot;Wait&quot;, &quot;5&quot;)
+optics.run_loop(&quot;Proceed&quot;, &quot;${item}&quot;, &quot;a|b|c&quot;)">Copy</button><pre><code>optics.add_module(<span class="c-lit">"Proceed"</span>, [(<span class="c-lit">"Press Element"</span>, [<span class="c-lit">"Continue"</span>])])
+optics.add_module(<span class="c-lit">"Wait"</span>, [(<span class="c-lit">"Sleep"</span>, [<span class="c-lit">"1"</span>])])
+
+optics.add_element(<span class="c-lit">"status"</span>, <span class="c-lit">"ready"</span>)
+optics.condition(<span class="c-lit">"${status} == 'ready'"</span>, <span class="c-lit">"Proceed"</span>)
+
+optics.add_element(<span class="c-lit">"count"</span>, <span class="c-lit">"15"</span>)
+optics.condition(<span class="c-lit">"${count} &gt; 10"</span>, <span class="c-lit">"Proceed"</span>, <span class="c-lit">"Wait"</span>)
+
+optics.run_loop(<span class="c-lit">"Wait"</span>, <span class="c-lit">"5"</span>)
+optics.run_loop(<span class="c-lit">"Proceed"</span>, <span class="c-lit">"${item}"</span>, <span class="c-lit">"a|b|c"</span>)</code></pre></figure>
+<p><code class="ic">condition</code> takes pairs of a condition and a module, then an optional else module. <code class="ic">run_loop</code> takes the module first, then a count or pairs of a variable and its values. It returns one list of results for each pass. See <a href="../../docs/reference/keywords/flow#condition">Condition</a> and <a href="../../docs/reference/keywords/flow#run-loop">Run Loop</a>.</p>
+<h3 id="read-data-and-compute-values">Read data and compute values<a class="anchor" href="#read-data-and-compute-values" aria-label="Link to this section">#</a></h3>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="data = optics.read_data(&quot;${users}&quot;, &quot;users.csv&quot;, &quot;status=='active';select=username,email&quot;)
+print(f&quot;Data: {data}&quot;)
+token = optics.read_data(&quot;${token}&quot;, &quot;ENV:API_TOKEN&quot;)
+
+optics.add_element(&quot;var1&quot;, &quot;10&quot;)
+optics.add_element(&quot;var2&quot;, &quot;20&quot;)
+result = optics.evaluate(&quot;${result}&quot;, &quot;${var1} + ${var2}&quot;)
+print(f&quot;Result: {result}&quot;)
+
+future_date = optics.date_evaluate(&quot;${future_date}&quot;, &quot;2026-10-10&quot;, &quot;+1 day&quot;, &quot;%Y-%m-%d&quot;)
+past_date = optics.date_evaluate(&quot;${past_date}&quot;, &quot;2026-10-10&quot;, &quot;-7 days&quot;)">Copy</button><pre><code>data = optics.read_data(<span class="c-lit">"${users}"</span>, <span class="c-lit">"users.csv"</span>, <span class="c-lit">"status=='active';select=username,email"</span>)
+print(f<span class="c-lit">"Data: {data}"</span>)
+token = optics.read_data(<span class="c-lit">"${token}"</span>, <span class="c-lit">"ENV:API_TOKEN"</span>)
+
+optics.add_element(<span class="c-lit">"var1"</span>, <span class="c-lit">"10"</span>)
+optics.add_element(<span class="c-lit">"var2"</span>, <span class="c-lit">"20"</span>)
+result = optics.evaluate(<span class="c-lit">"${result}"</span>, <span class="c-lit">"${var1} + ${var2}"</span>)
+print(f<span class="c-lit">"Result: {result}"</span>)
+
+future_date = optics.date_evaluate(<span class="c-lit">"${future_date}"</span>, <span class="c-lit">"2026-10-10"</span>, <span class="c-lit">"+1 day"</span>, <span class="c-lit">"%Y-%m-%d"</span>)
+past_date = optics.date_evaluate(<span class="c-lit">"${past_date}"</span>, <span class="c-lit">"2026-10-10"</span>, <span class="c-lit">"-7 days"</span>)</code></pre></figure>
+<p>The first value of <code class="ic">read_data</code>, <code class="ic">evaluate</code> and <code class="ic">date_evaluate</code> is the variable to write. Each method also returns the value. A relative file path starts at <code class="ic">project_path</code>. <code class="ic">read_data</code> takes a file or <code class="ic">ENV:NAME</code> only. A list of rows raises <code class="ic">TypeError</code>. See <a href="../../docs/reference/keywords/flow#read-data">Read Data</a>.</p>
+<h3 id="call-apis">Call APIs<a class="anchor" href="#call-apis" aria-label="Link to this section">#</a></h3>
+<p><code class="ic">add_api</code> loads API definitions from a YAML file or a dict. A relative path starts at <code class="ic">project_path</code>. The definitions replace the ones the session had. A dict can have the top-level <code class="ic">api</code> key or start at <code class="ic">collections</code>.</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="optics.add_api(&quot;api.yaml&quot;)
+response = optics.invoke_api(&quot;users.get_user&quot;)
+print(f&quot;API response: {response}&quot;)">Copy</button><pre><code>optics.add_api(<span class="c-lit">"api.yaml"</span>)
+response = optics.invoke_api(<span class="c-lit">"users.get_user"</span>)
+print(f<span class="c-lit">"API response: {response}"</span>)</code></pre></figure>
+<p><code class="ic">invoke_api</code> takes the API as <code class="ic">collection.api</code> and returns the <code class="ic">status_code</code>, <code class="ic">headers</code>, <code class="ic">body</code> and <code class="ic">elapsed_ms</code> of the response. See <a href="../../docs/reference/keywords/flow#invoke-api">Invoke API</a> for the YAML format.</p>
+<h2 id="manage-sessions">Manage sessions<a class="anchor" href="#manage-sessions" aria-label="Link to this section">#</a></h2>
+<p><code class="ic">setup</code> creates a session, and <code class="ic">quit</code> ends it:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+optics = Optics()
+optics.setup(config=config)
+
+optics.launch_app(app_identifier=&quot;com.example.app&quot;)
+optics.press_element(&quot;button&quot;)
+
+optics.quit()">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+optics = Optics()
+optics.setup(config=config)
+
+optics.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+optics.press_element(<span class="c-lit">"button"</span>)
+
+optics.quit()</code></pre></figure>
+<p><code class="ic">Optics</code> is a context manager. <code class="ic">with Optics(config) as optics:</code> calls <code class="ic">quit()</code> when the block ends, also after an exception. <code class="ic">quit()</code> logs an error instead of raising it, and does nothing when there is no session.</p>
+<p>Each <code class="ic">Optics</code> object has its own session, so you can drive two apps at once:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+
+optics1 = Optics(config=config1)
+optics2 = Optics(config=config2)
+
+optics1.launch_app(app_identifier=&quot;com.example.app&quot;)
+optics2.launch_app(app_identifier=&quot;com.example.admin&quot;)
+
+optics1.quit()
+optics2.quit()">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+
+optics1 = Optics(config=config1)
+optics2 = Optics(config=config2)
+
+optics1.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+optics2.launch_app(app_identifier=<span class="c-lit">"com.example.admin"</span>)
+
+optics1.quit()
+optics2.quit()</code></pre></figure>
+<h2 id="handle-errors">Handle errors<a class="anchor" href="#handle-errors" aria-label="Link to this section">#</a></h2>
+<p>Most failures raise <code class="ic">OpticsError</code>. It has the error <code class="ic">code</code>, a <code class="ic">message</code>, a <code class="ic">hint</code> with the next step, and <code class="ic">details</code> that can be <code class="ic">None</code>. <code class="ic">str(e)</code> is the code and the reason, such as <code class="ic">E0201: None of '//button[@id='a']' and 'Nope' is on the screen.</code> Compare <code class="ic">code</code> with the <code class="ic">Code</code> enum:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+from optics_framework.common.error import OpticsError, Code
+
+with Optics(config) as optics:
+    try:
+        optics.press_element(&quot;nonexistent_element&quot;)
+    except OpticsError as e:
+        print(f&quot;Error code: {e.code}&quot;)
+        print(f&quot;Error message: {e.message}&quot;)
+        print(f&quot;Next step: {e.hint}&quot;)
+        print(f&quot;Error details: {e.details}&quot;)
+        if e.code == Code.E0101:
+            print(&quot;Driver not initialized&quot;)
+        elif e.code == Code.E0201:
+            print(&quot;Element not found&quot;)
+        else:
+            print(f&quot;Other error: {e.message}&quot;)">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+<span class="c-info">from</span> optics_framework.common.error <span class="c-info">import</span> OpticsError, Code
+
+<span class="c-info">with</span> Optics(config) <span class="c-info">as</span> optics:
+    <span class="c-info">try</span>:
+        optics.press_element(<span class="c-lit">"nonexistent_element"</span>)
+    <span class="c-info">except</span> OpticsError <span class="c-info">as</span> e:
+        print(f<span class="c-lit">"Error code: {e.code}"</span>)
+        print(f<span class="c-lit">"Error message: {e.message}"</span>)
+        print(f<span class="c-lit">"Next step: {e.hint}"</span>)
+        print(f<span class="c-lit">"Error details: {e.details}"</span>)
+        <span class="c-info">if</span> e.code == Code.E0101:
+            print(<span class="c-lit">"Driver not initialized"</span>)
+        <span class="c-info">elif</span> e.code == Code.E0201:
+            print(<span class="c-lit">"Element not found"</span>)
+        <span class="c-info">else</span>:
+            print(f<span class="c-lit">"Other error: {e.message}"</span>)</code></pre></figure>
+<ul><li><code class="ic">E0201</code> means the element wasn't found. When you pass a list of values, Optics tries the next value only after <code class="ic">E0201</code>, another <code class="ic">E02</code> code or <code class="ic">X0201</code>. When every value fails, the error carries the code of the last one.</li><li><code class="ic">E0101</code> means there is no driver session. <code class="ic">add_module</code> and <code class="ic">add_error_definitions</code> raise it when you call them before <code class="ic">setup</code>.</li><li>A method other than those two raises <code class="ic">ValueError: Setup not complete. Call setup() first.</code> before <code class="ic">setup</code>.</li><li>A value that isn't a string raises <code class="ic">TypeError</code>.</li><li>An assertion can also raise <code class="ic">AssertionError</code>.</li></ul>
+<p>See <a href="../../docs/reference/errors">Error codes</a> for every code.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example" aria-label="Link to this section">#</a></h2>
+<p>This script signs in and keeps the screenshot. It ends the session even when a step fails:</p>
+<figure class="code doc-code" data-lang="python"><button class="copy" type="button" aria-label="Copy code" data-copy="from optics_framework import Optics
+from optics_framework.common.error import OpticsError
+
+def test_login_flow():
+    config = {
+        &quot;driver_sources&quot;: [
+            {&quot;appium&quot;: {&quot;enabled&quot;: True, &quot;url&quot;: &quot;http://localhost:4723&quot;}}
+        ],
+        &quot;elements_sources&quot;: [
+            {&quot;appium_find_element&quot;: {&quot;enabled&quot;: True}}
+        ],
+        &quot;project_path&quot;: &quot;/path/to/project&quot;
+    }
+
+    optics = Optics()
+
+    try:
+        optics.setup(config=config)
+        optics.launch_app(app_identifier=&quot;com.example.app&quot;)
+
+        optics.add_element(&quot;username&quot;, &quot;//input[@id='username']&quot;)
+        optics.add_element(&quot;password&quot;, &quot;//input[@id='password']&quot;)
+        optics.add_element(&quot;login_button&quot;, &quot;//button[@id='login']&quot;)
+
+        optics.enter_text(optics.get_element_value(&quot;username&quot;), &quot;testuser&quot;)
+        optics.enter_text(optics.get_element_value(&quot;password&quot;), &quot;testpass&quot;)
+        optics.press_element(optics.get_element_value(&quot;login_button&quot;))
+
+        optics.validate_element(&quot;Welcome&quot;)
+
+        screenshot = optics.capture_screenshot()
+        print(f&quot;Screenshot: {len(screenshot)} characters of base64&quot;)
+
+    except OpticsError as e:
+        print(f&quot;Test failed: {e.message}&quot;)
+        raise
+    finally:
+        optics.quit()
+
+if __name__ == &quot;__main__&quot;:
+    test_login_flow()">Copy</button><pre><code><span class="c-info">from</span> optics_framework <span class="c-info">import</span> Optics
+<span class="c-info">from</span> optics_framework.common.error <span class="c-info">import</span> OpticsError
+
+<span class="c-info">def</span> test_login_flow():
+    config = {
+        <span class="c-lit">"driver_sources"</span>: [
+            {<span class="c-lit">"appium"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>, <span class="c-lit">"url"</span>: <span class="c-lit">"http://localhost:4723"</span>}}
+        ],
+        <span class="c-lit">"elements_sources"</span>: [
+            {<span class="c-lit">"appium_find_element"</span>: {<span class="c-lit">"enabled"</span>: <span class="c-info">True</span>}}
+        ],
+        <span class="c-lit">"project_path"</span>: <span class="c-lit">"/path/to/project"</span>
+    }
+
+    optics = Optics()
+
+    <span class="c-info">try</span>:
+        optics.setup(config=config)
+        optics.launch_app(app_identifier=<span class="c-lit">"com.example.app"</span>)
+
+        optics.add_element(<span class="c-lit">"username"</span>, <span class="c-lit">"//input[@id='username']"</span>)
+        optics.add_element(<span class="c-lit">"password"</span>, <span class="c-lit">"//input[@id='password']"</span>)
+        optics.add_element(<span class="c-lit">"login_button"</span>, <span class="c-lit">"//button[@id='login']"</span>)
+
+        optics.enter_text(optics.get_element_value(<span class="c-lit">"username"</span>), <span class="c-lit">"testuser"</span>)
+        optics.enter_text(optics.get_element_value(<span class="c-lit">"password"</span>), <span class="c-lit">"testpass"</span>)
+        optics.press_element(optics.get_element_value(<span class="c-lit">"login_button"</span>))
+
+        optics.validate_element(<span class="c-lit">"Welcome"</span>)
+
+        screenshot = optics.capture_screenshot()
+        print(f<span class="c-lit">"Screenshot: {len(screenshot)} characters of base64"</span>)
+
+    <span class="c-info">except</span> OpticsError <span class="c-info">as</span> e:
+        print(f<span class="c-lit">"Test failed: {e.message}"</span>)
+        raise
+    <span class="c-info">finally</span>:
+        optics.quit()
+
+<span class="c-info">if</span> __name__ == <span class="c-lit">"__main__"</span>:
+    test_login_flow()</code></pre></figure>
+<h2 id="good-practice">Good practice<a class="anchor" href="#good-practice" aria-label="Link to this section">#</a></h2>
+<ul><li>Keep the config in a YAML file, apart from the test code. Read passwords and tokens from environment variables, not from the code.</li><li>End every session. Use a <code class="ic">with</code> block, or call <code class="ic">quit()</code> in <code class="ic">finally</code>.</li><li>Keep locators in one place under clear names, and give fallbacks as lists.</li><li>Catch <code class="ic">OpticsError</code>, not every exception, and log its <code class="ic">code</code> and <code class="ic">message</code>.</li><li>Put shared steps in helper functions, and group tests in Python modules.</li></ul>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul><li><a href="../../docs/create/robot">Use Optics in Robot Framework</a></li><li><a href="../../docs/advanced/generate">Generate pytest code from a suite</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li></ul>
+        </div>
+        <footer class="doc-foot">
+          <div class="helpful" data-issue="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Use%20Optics%20from%20Python&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Fpython%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">
+            <p>Was this page helpful?</p>
+            <div class="helpful-btns">
+              <button type="button" data-vote="yes">Yes</button>
+              <button type="button" data-vote="no">No</button>
+            </div>
+            <p class="helpful-thanks" hidden>Thanks for telling us. <a href="https://github.com/mozarkai/optics-framework/issues/new?title=Docs%3A%20Use%20Optics%20from%20Python&amp;body=Page%3A%20https%3A%2F%2Foptics-framework.org%2Fdocs%2Fcreate%2Fpython%0A%0AWhat%20was%20missing%20or%20wrong%3F%0A">Tell us what was missing</a> and we will fix it.</p>
+          </div>
+          <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="../../docs/create/agent"><span>Previous</span>Delegate it</a><a class="pager-next" href="../../docs/create/robot"><span>Next</span>Robot Framework</a></nav>
+          <p class="doc-edit"><a href="https://github.com/mozarkai/optics-framework-org/edit/main/docs/create/python.md">Edit this page on GitHub</a><a href="https://github.com/mozarkai/optics-framework/issues">Ask a question</a></p>
+        </footer>
+      </article>
+      <nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ul><li class="toc-l2"><a href="#write-a-test-with-pytest">Write a test with pytest</a></li><li class="toc-l2"><a href="#configure-the-session">Configure the session</a></li><li class="toc-l3"><a href="#pass-a-dict">Pass a dict</a></li><li class="toc-l3"><a href="#read-a-config-file">Read a config file</a></li><li class="toc-l3"><a href="#pass-yaml-or-json-text">Pass YAML or JSON text</a></li><li class="toc-l3"><a href="#pass-each-list-on-its-own">Pass each list on its own</a></li><li class="toc-l3"><a href="#test-a-desktop-app">Test a desktop app</a></li><li class="toc-l2"><a href="#how-calls-differ-from-suite-files">How calls differ from suite files</a></li><li class="toc-l2"><a href="#every-method">Every method</a></li><li class="toc-l3"><a href="#python-only-methods">Python-only methods</a></li><li class="toc-l2"><a href="#examples-by-task">Examples by task</a></li><li class="toc-l3"><a href="#start-and-stop-the-app">Start and stop the app</a></li><li class="toc-l3"><a href="#tap-and-type">Tap and type</a></li><li class="toc-l3"><a href="#swipe-and-scroll">Swipe and scroll</a></li><li class="toc-l3"><a href="#keys-text-and-scripts">Keys, text and scripts</a></li><li class="toc-l3"><a href="#check-the-screen">Check the screen</a></li><li class="toc-l3"><a href="#capture-the-screen">Capture the screen</a></li><li class="toc-l3"><a href="#use-variables">Use variables</a></li><li class="toc-l3"><a href="#branch-and-loop">Branch and loop</a></li><li class="toc-l3"><a href="#read-data-and-compute-values">Read data and compute values</a></li><li class="toc-l3"><a href="#call-apis">Call APIs</a></li><li class="toc-l2"><a href="#manage-sessions">Manage sessions</a></li><li class="toc-l2"><a href="#handle-errors">Handle errors</a></li><li class="toc-l2"><a href="#complete-example">Complete example</a></li><li class="toc-l2"><a href="#good-practice">Good practice</a></li><li class="toc-l2"><a href="#see-also">See also</a></li></ul></nav>
+    </main>
+  </div>
+
+  <footer class="foot" data-hour="9">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-lead">
+          <a class="brand" href="../../" aria-label="Optics home">
+            <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#logo"/></svg>
+            <span>Optics</span>
+          </a>
+          <a class="foot-rel" href="../../releases"><b>1.11.5</b><span class="label">Latest, <time datetime="2026-11-20">20 Nov 2026</time></span></a>
+        </div>
+        <nav class="foot-col" aria-label="Product">
+          <h2 class="label">Product</h2>
+          <ul><li><a href="../../#install">Install</a></li><li><a href="../../playground">Playground</a></li><li><a href="../../releases">Releases</a></li><li><a href="../../birch/">Birch demo app</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Docs">
+          <h2 class="label">Docs</h2>
+          <ul><li><a href="../../docs/get-started/">Get started</a></li><li><a href="../../docs/guides/">Guides</a></li><li><a href="../../docs/reference/keywords/">Keyword reference</a></li><li><a href="../../docs/contribute/">Contribute</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="Project">
+          <h2 class="label">Project</h2>
+          <ul><li><a href="https://github.com/mozarkai/optics-framework">GitHub</a></li><li><a href="https://pypi.org/project/optics-framework/">PyPI</a></li><li><a href="https://github.com/mozarkai/optics-framework/issues">Report an issue</a></li><li><a href="../../blog">Blog</a></li><li><a href="../../feed.xml">RSS feed</a></li></ul>
+        </nav>
+        <nav class="foot-col" aria-label="For agents">
+          <h2 class="label">For agents</h2>
+          <ul><li><a href="../../llms.txt">llms.txt</a></li><li><a href="../../agents.md">Agent setup</a></li><li><a href="../../.well-known/mcp/server-card.json">MCP server card</a></li><li><a href="../../openapi.json">OpenAPI</a></li></ul>
+        </nav>
+      </div>
+      <div class="foot-base label">
+        <p>Open source under the Apache 2.0 licence</p>
+        <p class="foot-trust"><a href="../../about">About</a><a href="../../contact">Contact</a><a href="../../privacy">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="search-dialog" aria-label="Search the docs">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="search-input" type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+      <button class="search-close" type="button" aria-label="Close search">Esc</button>
+    </div>
+    <ul class="search-results" role="listbox" aria-label="Results"></ul>
+    <p class="search-empty" hidden>No pages match. Try a keyword name such as <code class="ic">Press Element</code> or a command such as <code class="ic">optics live</code>.</p>
+  </dialog>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 600 600">
+      <g fill="none" stroke-width="83" stroke-linecap="round">
+        <path stroke="#9672F8" d="M216.5 49.5V172Q216.5 216.5 172 216.5H49.5"/>
+        <path stroke="#24C3AB" d="M383.5 49.5V172Q383.5 216.5 428 216.5H550.5"/>
+        <path stroke="#F3BE00" d="M550.5 383.5H428Q383.5 383.5 383.5 428V550.5"/>
+        <path stroke="#F56FA1" d="M49.5 383.5H172Q216.5 383.5 216.5 428V550.5"/>
+      </g>
+      <path style="fill:var(--star);stroke:var(--star)" stroke-width="18" stroke-linejoin="round" d="M300 232C302 280 320 298 368 300C320 302 302 320 300 368C298 320 280 302 232 300C280 298 298 280 300 232Z"/>
+    </symbol>
+  </svg>
+
+  <script src="../../app.js?v=aaa72e04a3" defer></script>
+  <script src="../../track.js?v=a7621959d3" defer></script>
+  <script src="../../docs.js?v=20c41239af" defer></script>
+  <script src="../../scenes.js?v=6b863b536f" defer></script>
+  <script src="../../scene-defs.js?v=6a4fa428af" defer></script>
+<!--/email_off--></body>
+</html>
