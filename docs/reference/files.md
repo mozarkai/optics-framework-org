@@ -329,46 +329,33 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 ## A complete example
 
-The `youtube` sample drives the YouTube Android app in three ways: by on-screen text, by XPath and by image matching. Create it with `optics init my_project --template youtube`, or pick it in `optics quickstart`.
+The `android` sample opens the Settings app, scrolls to About phone and finds the build number. Settings is on every Android device, so you can run the sample before you change anything. Create it with `optics init my_project --template android`, or pick it in `optics quickstart`.
 
 ```csv title="test_cases/test_cases.csv"
 test_case,test_step
-Suite Setup,Launch Youtube App
-Suite Teardown,Close Youtube App
-Running youtube Repeat,Repeat Test
+Android Suite Setup,Open Settings
+Check About Phone,Open About Phone
+Check About Phone,Find The Build Number
+Android Suite Teardown,Close Settings
 ```
 
 ```csv title="modules/modules.csv"
-module_name,module_step,param_1,param_2,param_3,param_4,param_5
-Launch Youtube App,Launch App,,,,
-Launch Youtube App,Press Element,${popup_element_text},,,
-Close Youtube App,Close And Terminate App,,,,
-Interact using text,Assert Presence,${Subscriptions_text},,,
-Interact using text,Press Element,${Subscriptions_text},,,
-Interact using text,Press Element,${Home_text},,,
-Interact using xpath,Assert Presence,${Subscriptions_xpath},,,
-Interact using xpath,Press Element,${Subscriptions_xpath},,,
-Interact using xpath,Press Element,${Home_xpath},,,
-Interact using images,Press Element,${Subscriptions_image},,,
-Interact using images,Press Element,${Home_image},,,
-Dynamic Launch,condition,${METHOD} == 'text',Interact using text,${METHOD} == 'xpath',Interact using xpath,Interact using images
-Repeat Test,Run Loop,Dynamic Launch,${METHOD},${List}
+module_name,module_step,param_1,param_2,param_3
+Open Settings,Launch App
+Open Settings,Assert Presence,${Search_Settings},20
+Open About Phone,Scroll Until Element Appears,${About_Phone},down,30
+Open About Phone,Press Element,${About_Phone}
+Open About Phone,Assert Presence,${Device_Name},10
+Find The Build Number,Scroll Until Element Appears,${Build_Number},down,30
+Close Settings,Close And Terminate App
 ```
 
 ```csv title="test_data/elements.csv"
-Element_Name,Element_ID
-popup_element_text,Allow
-Subscriptions_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Subscriptions"]
-you_xpath,(//android.widget.ImageView[@resource-id="com.google.android.youtube:id/image"])[4]
-Home_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Home"]
-Subscriptions_text,Subscriptions
-you_text,Library
-Home_text,Home
-Subscriptions_image,sub.jpeg
-Youtube_image,youtube.jpeg
-Home_image,home.png
-METHOD,text
-List,"[""xpath"",""text"",""images""]"
+Element_Name,Element_ID,Element_ID_2
+Search_Settings,Search settings,//*[@content-desc="Search settings"]
+About_Phone,About phone,About emulated device
+Device_Name,Device name,//*[@text="Device name"]
+Build_Number,Build number,//*[@text="Build number"]
 ```
 
 ```yaml title="config.yaml"
@@ -377,17 +364,25 @@ driver_sources:
       enabled: true
       url: "http://localhost:4723"
       capabilities:
-        appActivity: "com.google.android.youtube.app.honeycomb.Shell$HomeActivity"
-        appPackage: "com.google.android.youtube"
-        automationName: "UiAutomator2"
-        deviceName: "emulator-5554"
-        platformName: "Android"
+        platformName: Android
+        automationName: UiAutomator2
+        deviceName: emulator-5554
+        appPackage: com.android.settings
+        appActivity: .Settings
+
+elements_sources:
+  - appium_find_element:
+      enabled: true
+  - appium_page_source:
+      enabled: true
+  - appium_screenshot:
+      enabled: true
 ```
 
-`Repeat Test` runs `Dynamic Launch` once for each value in `List`, with `${METHOD}` set to that value. `Dynamic Launch` uses `Condition` to pick the module for the current method. The images `home.png`, `sub.jpeg` and `youtube.jpeg` are in `test_data/input_templates/`. The sample also enables EasyOCR and template matching. The full sample has more steps (Shorts, Scroll and Search) and more elements.
+`Android Suite Setup` and `Android Suite Teardown` run once around the test cases. Each element has two values: the text first, then an XPath or the text that an emulator shows (`About emulated device`). Optics tries them in turn. The sample also has `test_data/error_definitions.csv`, which [error detection](/docs/run/error-detection) reads at the end of the run, and `llm_models` entries that are off.
 
 ```tree
-youtube/
+android/
 ├── config.yaml
 ├── test_cases/
 │   └── test_cases.csv
@@ -395,14 +390,11 @@ youtube/
 │   └── modules.csv
 ├── test_data/
 │   ├── elements.csv
-│   └── input_templates/
-│       ├── home.png
-│       ├── sub.jpeg
-│       └── youtube.jpeg
+│   └── error_definitions.csv
 └── execution_output/        # generated at run time
 ```
 
-Check it with `optics dry_run ./youtube`, then run it with `optics execute ./youtube`. Both take a project folder, not a single test case.
+Check it with `optics dry_run ./my_project`, then run it with `optics execute ./my_project`. Both take a project folder, not a single test case. [Start from an example](/docs/get-started/examples) lists the samples for other platforms.
 
 ## Outputs
 

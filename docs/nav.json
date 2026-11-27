@@ -4,7 +4,7 @@
       "id": "get-started",
       "title": "Get started",
       "groups": [
-        { "title": null, "pages": ["get-started/index", "get-started/quickstart", "get-started/install"] },
+        { "title": null, "pages": ["get-started/index", "get-started/quickstart", "get-started/install", "get-started/examples"] },
         { "title": "Learn the basics", "pages": ["get-started/first-test", "get-started/concepts", "get-started/next-steps"] }
       ]
     },

@@ -52,7 +52,7 @@ There are no flags. The command asks these questions in order:
 
 1. **What do you want to automate?** `mobile` (default), `web`, `desktop` or `bluetooth`. Use `bluetooth` for any device that an airhand dongle drives: it offers to install the `ble` engine, then asks which device the dongle drives (default `ios`), the dongle serial, the screen size and a camera screenshot URL.
 2. **Install the engine now?** Appium for mobile and desktop; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
-3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web, the `desktop_editor` sample for desktop. Decline to pick an empty project or another sample.
+3. **Start from a sample?** The `android` sample for mobile, the `browser` sample for web, the `mac_local` sample for desktop and the `ble_camera` sample for bluetooth. Decline to pick an empty project or another sample.
 4. **Project name** (default `my-optics-project`) and **where it should live** (default: the current folder). If the folder exists, it asks for another name.
 5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and desktop, and no for web. For desktop, it asks which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (default `com.apple.TextEdit`, `gedit` or `notepad.exe`) and the Appium server URL.
 6. It runs `optics doctor` on the new project and shows the report.
@@ -99,31 +99,35 @@ birch-tests/
 
 ```terminal
 Or replace it with a sample: optics init birch-tests --force --template <sample>
-  contact          Contacts
-  clock            Clock
-  calendar         Calendar
-  youtube          YouTube
-  gmail_web        Gmail Web
-  playwright       Playwright Web
+  android          Android
+  ios              iOS
+  android_tv       Android TV
+  lg_tv            LG TV
+  samsung_tv       Samsung TV
+  browser          Browser
+  browser_profile  Browser Profile
   mobile_web       Mobile Web
-  desktop_editor   Desktop Editor
+  ble_camera       BLE With Camera
+  ble_usb          BLE With USB Screenshot
+  mac_local        Mac Local
+  mac_cloud        Mac Cloud
+  windows_cloud    Windows Cloud
 ```
 
-| Sample | Target | Engines it uses |
-|---|---|---|
-| `contact` | Google Contacts on an Android emulator | Appium, EasyOCR. Fills in a contact form from test data (`${First_Name}`), checks each screen with `Assert Presence`, and includes an error definitions file. |
-| `clock` | Android Clock app | Appium, Pytesseract, image templates. Shows `Run Loop`. |
-| `calendar` | Android Calendar app | Appium, EasyOCR. Shows `Invoke API` and `Date Evaluate`. |
-| `youtube` | YouTube on Android | Appium, EasyOCR, image templates. Shows `Condition`. |
-| `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. Opens the sign-in and the create-account flows and enters text, with text locators only. |
-| `playwright` | `https://example.com` | Playwright. Needs no device or server. |
-| `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](/docs/platforms/mobile-web). |
-| `desktop_editor` | TextEdit on macOS: types a note, checks it, clears it and closes the editor | Appium with appium-xa11y-driver. Change `platformName` and `app` for Linux or Windows. See [Test desktop apps](/docs/platforms/desktop). |
+| Sample | Target |
+|---|---|
+| `android`, `ios` | The Settings app on an Android or iOS device |
+| `android_tv`, `lg_tv`, `samsung_tv` | Android TV Settings, and an app on an LG webOS or Samsung Tizen TV |
+| `browser`, `browser_profile`, `mobile_web` | A website in Playwright, the same with a signed-in Chrome profile, and Chrome on Android |
+| `ble_camera`, `ble_usb` | A phone driven over Bluetooth, seen through a webcam or over USB |
+| `mac_local`, `mac_cloud`, `windows_cloud` | TextEdit on this Mac, and Calculator on a cloud Mac or Windows VM |
+
+[Start from an example](/docs/get-started/examples) shows what each sample does and what to change for your app.
 
 Example:
 
 ```shell
-$ optics init birch-tests --template playwright --path ~/work --git-init
+$ optics init birch-tests --template browser --path ~/work --git-init
 ```
 
 After it creates the project, Optics prints the next steps. For a blank project, they are `optics configure`, then `optics dry_run`, and a line that says the test steps go in `test_cases/test_cases.csv` and `optics list` shows every step. For a sample, they are `optics dry_run`, then `optics execute`.
