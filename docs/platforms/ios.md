@@ -66,7 +66,7 @@ com.birch.shop
 
 ### Write config.yaml
 
-Create a project with `optics init birch-ios`, then replace its `config.yaml`:
+Create a project with `optics init birch-ios`, then replace its `config.yaml`. To start from a suite that runs on any simulator, run `optics init birch-ios --template ios` instead. It opens the Settings app.
 
 ```yaml title="config.yaml"
 driver_sources:

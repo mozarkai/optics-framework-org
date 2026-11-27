@@ -86,7 +86,7 @@ An activity that starts with a dot is short for the package plus that name: `.Ma
 
 ### Write config.yaml
 
-Create a project with `optics init birch-android`, then replace its `config.yaml`:
+Create a project with `optics init birch-android`, then replace its `config.yaml`. To start from a suite that runs on any device, run `optics init birch-android --template android` instead. It opens the Settings app.
 
 ```yaml title="config.yaml"
 driver_sources:
