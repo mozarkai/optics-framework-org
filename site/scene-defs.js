@@ -32,7 +32,7 @@
     return t + (dur || 700);
   }
   function keyChip(world, x, y, k, v) {
-    return abs(world, x, y, '<div class="sc-chip mono" style="height:38px;font-size:13.5px;padding:0 16px"><span style="color:var(--sc-ink2)">' + k + '</span>&nbsp;<span class="v" style="color:#B8860B">' + v + "</span></div>");
+    return abs(world, x, y, '<div class="sc-chip mono" style="height:38px;font-size:13.5px;padding:0 16px"><span style="color:var(--sc-ink2)">' + k + '</span>&nbsp;<span class="v" style="color:var(--say-t)">' + v + "</span></div>");
   }
 
   // ------------------------------------------------------------------ ladder
@@ -202,7 +202,7 @@
       var mode = T.status.querySelector(".m");
       var P = K.phone(w, 636, 20, 0.82);
       P.start("home");
-      var key = abs(w, 210, 190, '<div class="sc-chip" style="height:44px;font-size:15px;gap:6px"><kbd>Ctrl</kbd>+<kbd>N</kbd><span style="color:#B8860B;margin-left:6px">AI mode</span></div>');
+      var key = abs(w, 210, 190, '<div class="sc-chip" style="height:44px;font-size:15px;gap:6px"><kbd>Ctrl</kbd>+<kbd>N</kbd><span style="color:var(--say-t);margin-left:6px">AI mode</span></div>');
       pop(tl, key, 400);
       tl.hide(key, 1500);
       liveStep(T, tl, "launch_app", "1.18s", "", 0);
@@ -563,7 +563,7 @@
       function step(cx, html) {
         return abs(w, cx - 150, 30, '<div style="width:300px;display:flex;justify-content:center"><div class="sc-chip mono" style="height:36px;font-size:12.5px;padding:0 14px">' + html + "</div></div>");
       }
-      var kw = function (k, v) { return '<span style="color:var(--sc-ink2)">' + k + '</span>&nbsp;<span class="v" style="color:#B8860B">' + v + "</span>"; };
+      var kw = function (k, v) { return '<span style="color:var(--sc-ink2)">' + k + '</span>&nbsp;<span class="v" style="color:var(--say-t)">' + v + "</span>"; };
       step(150, kw("Press Element", "Trail Runner 2"));
       var tvStep = step(450, kw("Press Keycode", "RIGHT"));
       step(745, kw("Press Element", "Trail Runner 2"));
