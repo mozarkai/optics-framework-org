@@ -34,6 +34,7 @@
   /* terminal palette, identical in both themes */
   --code-ink: #E4E2F0; --code-dim: #8A88A6; --code-mod: #C3B2FF; --code-var: #F3BE00;
   --code-lit: #5FD6C4; --code-pass: #3DDC84; --code-info: #6FD0FF;
+  --row-on: rgba(243, 190, 0, .14);
 }
 
 :root, [data-theme="light"] {

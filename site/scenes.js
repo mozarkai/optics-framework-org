@@ -47,7 +47,7 @@
 
   // A terminal (or any dark window) whose lines stack from the bottom.
   function term(parent, o) {
-    var win = h(parent, '<div class="sc-win"><div class="sc-bar"><i></i><i></i><i></i><span>' + esc(o.title || "") + '</span></div><div class="sc-term' + (o.top ? " top" : "") + '"></div></div>');
+    var win = h(parent, '<div class="sc-win"><div class="sc-bar"><span>' + esc(o.title || "") + '</span></div><div class="sc-term' + (o.top ? " top" : "") + '"></div></div>');
     win.style.cssText = "left:" + o.x + "px;top:" + o.y + "px;width:" + o.w + "px;height:" + o.h + "px";
     var body = win.querySelector(".sc-term");
     if (o.status) win.appendChild(h(document.createElement("div"), '<div class="sc-status">' + o.status + "</div>"));
@@ -95,7 +95,7 @@
     };
   }
 
-  // SVG connector drawn from a to b.
+  // SVG connector from a to b: two points turn at right angles halfway across, more are joined in order.
   function wire(parent, W, H) {
     var svg = h(parent, '<svg class="sc-svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '"></svg>');
     return {
@@ -104,7 +104,7 @@
         var d = "M" + pts[0][0] + " " + pts[0][1];
         if (pts.length === 2) {
           var mx = (pts[0][0] + pts[1][0]) / 2;
-          d += " C" + mx + " " + pts[0][1] + " " + mx + " " + pts[1][1] + " " + pts[1][0] + " " + pts[1][1];
+          d += " H" + mx + " V" + pts[1][1] + " H" + pts[1][0];
         } else for (var i = 1; i < pts.length; i++) d += " L" + pts[i][0] + " " + pts[i][1];
         var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
         p.setAttribute("d", d);
@@ -231,7 +231,7 @@
           ret.style.transition = "none";
           ret.style.left = bx[0] - pad - 30 + "px"; ret.style.top = bx[1] - pad - 24 + "px";
           ret.style.width = bx[2] + 2 * pad + 60 + "px"; ret.style.height = bx[3] + 2 * pad + 48 + "px";
-          ret.style.setProperty("--rc", color || "#9672F8");
+          ret.style.setProperty("--rc", color || "var(--write)");
           ret.querySelector("em").textContent = label;
           void ret.offsetWidth;
           ret.style.transition = "";
