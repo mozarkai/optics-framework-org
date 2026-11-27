@@ -727,6 +727,111 @@
     },
   };
 
+  // ------------------------------------------------------------------ examples (optics init --template)
+  // One command copies a sample suite for a platform. The terminal makes five projects in
+  // turn; the config line that picks the target changes, and the device on the right with it.
+  S.examples = {
+    w: 880, h: 500,
+    build: function (w, tl) {
+      var T = K.term(w, { x: 20, y: 22, w: 440, h: 196, title: "~/work", top: true });
+      T.body.style.fontSize = "12px";
+      label(w, 20, 240, "demo/");
+      var f = K.file(w, { x: 20, y: 262, w: 440, title: "demo/config.yaml", rows: ['<span class="t-dim">driver_sources:</span>', "", ""] });
+      var names = ["android", "ios", "android_tv", "lg_tv", "samsung_tv", "browser", "browser_profile", "mobile_web", "ble_camera", "ble_usb", "mac_local", "mac_cloud", "windows_cloud"];
+      var chips = {};
+      names.forEach(function (n, i) {
+        var col = i % 5, row = Math.floor(i / 5);
+        chips[n] = chip(w, 20 + col * 172, 400 + row * 34, n, "mono");
+        chips[n].style.width = "160px"; chips[n].style.justifyContent = "center";
+      });
+      var stage = function () { return abs(w, 490, 22, '<div class="sc-fade" style="position:absolute;left:0;top:0;width:370px;height:360px"></div>'); };
+
+      var phoneV = stage();
+      var P = K.phone(phoneV, 104, 0, 0.6);
+      P.start("home");
+      label(phoneV, 104, 334, "Appium · UiAutomator2");
+
+      var tvV = stage();
+      var tv = abs(tvV, 10, 60, '<div class="sc-tv" style="width:350px;height:210px"><div class="sc-tv-scr"></div></div>');
+      var scr = tv.querySelector(".sc-tv-scr");
+      h(scr, '<div class="sc-abs" style="left:16px;top:14px;color:#fff;font:700 12px/1 var(--sans);display:flex;gap:6px;align-items:center"><span style="width:11px;height:11px;border-radius:50% 0;background:#2F7A5A"></span>birch tv</div>');
+      var tiles = [];
+      [["Pace Knit", "#C8643B"], ["Trail Runner 2", "#2F6B4F"], ["Ridge GTX", "#3E4F8C"], ["Tempo Lite", "#B8456A"]].forEach(function (p, i) {
+        tiles.push(h(scr, '<div class="sc-tile" style="left:' + (16 + i * 80) + 'px;top:44px;width:70px;height:96px;background:' + p[1] + '"><div style="position:absolute;left:6px;bottom:6px;right:4px;color:#fff;font:650 9.5px/1.2 var(--sans)">' + p[0] + "</div></div>"));
+      });
+      var key = chip(tvV, 120, 290, '<span style="color:var(--sc-ink2)">remote</span> <b class="k">RIGHT</b>', "mono");
+      label(tvV, 10, 334, "Appium · LG webOS");
+
+      var webV = stage();
+      var br = abs(webV, 10, 30, '<div class="sc-browser" style="width:350px;height:270px"><div class="sc-url"><i></i><i></i><i></i><span>github.com/settings/profile</span></div></div>');
+      var page = h(br, '<div style="position:relative;height:236px;background:#FBFAF6"></div>');
+      h(page, '<div class="sc-abs" style="left:18px;top:18px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#7086FF,#24C3AB)"></div>');
+      h(page, '<div class="sc-abs" style="left:76px;top:22px;font:700 17px/1.2 var(--sans);color:#1C1B19">Public profile</div>');
+      h(page, '<div class="sc-abs" style="left:76px;top:46px;font:500 11.5px/1 var(--sans);color:#6f6b62">Signed in from your Chrome profile</div>');
+      [0, 1, 2].forEach(function (i) { h(page, '<div class="sc-abs" style="left:18px;top:' + (90 + i * 42) + 'px;width:300px;height:28px;border-radius:6px;background:#EFEBE2"></div>'); });
+      var found = h(page, '<div class="sc-abs" style="left:70px;top:16px;width:150px;height:30px;outline:3px solid #24C3AB;outline-offset:2px;border-radius:6px;opacity:0;transition:opacity .3s"></div>');
+      label(webV, 10, 334, "Playwright · profile: Default");
+
+      var bleV = stage();
+      var B = K.phone(bleV, 160, 48, 0.48);
+      B.start("home");
+      abs(bleV, 180, 0, '<div style="width:110px;height:40px;border-radius:12px;background:#1b1d2b;box-shadow:0 10px 20px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;gap:8px"><span style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#4d67ff,#0b0e2a 70%);box-shadow:0 0 0 3px #2a2d40"></span><span style="width:7px;height:7px;border-radius:50%;background:#FF5577"></span></div>');
+      var dongle = abs(bleV, 0, 210, '<div class="sc-node" style="width:126px;height:44px;justify-content:center">BLE dongle</div>');
+      var bw = K.wire(bleV, 370, 360);
+      label(bleV, 10, 334, "ble · camera_screenshot · OCR");
+
+      var deskV = stage();
+      var win = abs(deskV, 60, 10, '<div class="sc-browser" style="width:250px;height:282px;background:#2b2d36;border-color:#3a3d48"><div class="sc-url" style="background:#22242c;border-color:#3a3d48"><i></i><i></i><i></i><span style="background:transparent;color:#c9c6bd">Calculator</span></div></div>');
+      var disp = h(win, '<div style="height:58px;padding:0 18px;color:#fff;font:300 34px/58px var(--sans);text-align:right">0</div>');
+      var pad = h(win, '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 12px"></div>');
+      var keys = {};
+      ["C", "±", "%", "÷", "7", "8", "9", "×", "4", "5", "6", "−", "1", "2", "3", "+", "0", "00", ".", "="].forEach(function (k) {
+        keys[k] = h(pad, '<div style="height:28px;border-radius:14px;display:grid;place-items:center;font:500 14px/1 var(--sans);color:#fff;background:' + ("÷×−+=".indexOf(k) >= 0 ? "#F0962F" : "#4a4d58") + ';transition:filter .2s">' + k + "</div>");
+      });
+      var tunnel = chip(deskV, 40, 304, '<span style="color:var(--sc-ink2)">ssh tunnel</span>&nbsp;127.0.0.1:4733', "mono");
+      label(deskV, 10, 342, "Appium · Xa11y · Windows VM");
+
+      var runs = [
+        ["android", phoneV, "platformName: Android", "appPackage: com.android.settings"],
+        ["lg_tv", tvV, "platformName: LGTV", "appium:appId: com.birch.tv"],
+        ["browser_profile", webV, "playwright:", "profile: ${OPTICS_BROWSER_PROFILE:-Default}"],
+        ["ble_camera", bleV, "ble: {platform: ios}", "camera_screenshot: {camera_index: 0}"],
+        ["windows_cloud", deskV, "platformName: Windows", "url: ${WINDOWS_APPIUM_URL:-…:4733}"],
+      ];
+      var t = 300, prev = null;
+      runs.forEach(function (r, i) {
+        var n = r[0], v = r[1];
+        T.clear(tl, t);
+        var e = T.cmd(tl, '<span class="t-mod">❯</span>', "optics init demo --template " + n, t + 100, 40);
+        T.line(tl, '<span class="t-dim">Copied template \'' + n + '\' into the project.</span>', e + 100);
+        tl.add(chips[n], "ok", e + 100);
+        if (prev) { tl.rm(chips[prev[0]], "ok", e + 100); tl.hide(prev[1], e + 100); }
+        tl.html(f.rows[1], '  <span class="t-var">' + r[2] + "</span>", e + 200);
+        tl.html(f.rows[2], '  <span class="t-lit">' + r[3] + "</span>", e + 300);
+        tl.add(f.rows[1], "hl", e + 200); tl.rm(f.rows[1], "hl", e + 1400);
+        tl.show(v, e + 250);
+        var x = T.cmd(tl, '<span class="t-mod">❯</span>', "optics execute demo", e + 700, 40);
+        var a = x + 200;
+        if (n === "android") { P.lock(tl, "search", "Text · Search", a, "#24C3AB"); P.unlock(tl, a + 900); }
+        if (n === "lg_tv") { tl.add(tiles[0], "focus", e); tl.rm(tiles[0], "focus", a); tl.add(tiles[1], "focus", a); tl.html(key.querySelector(".k"), "ENTER", a + 600); }
+        if (n === "browser_profile") { tl.css(found, { opacity: "1" }, a); tl.css(found, { opacity: "0" }, a + 1400); }
+        if (n === "ble_camera") { B.scan(tl, a); bw.draw(tl, [[126, 232], [150, 232]], a + 400, "#7086FF"); B.tap(tl, [14, 178, 111, 136], a + 900); bw.clear(tl, a + 1600); }
+        if (n === "windows_cloud") {
+          tl.css(tunnel, { borderColor: "#7086FF" }, e + 250);
+          ["7", "+", "8", "="].forEach(function (k, j) { tl.css(keys[k], { filter: "brightness(1.6)" }, a + j * 250); tl.css(keys[k], { filter: "" }, a + j * 250 + 180); });
+          tl.html(disp, "15", a + 1000);
+          tl.html(disp, "0", a + 2200);
+        }
+        T.line(tl, '<span class="t-ok">PASS</span> 1 test case', a + 1200);
+        prev = r;
+        t = a + 2000;
+      });
+      tl.rm(chips[prev[0]], "ok", t);
+      tl.hide(prev[1], t);
+      tl.end = t + 200;
+    },
+  };
+
   // ------------------------------------------------------------------ terminal-only scenes
   // Each script line: ["$", "command"] typed at a prompt, [text] printed, or [ms] a pause.
   function termScene(title, script, opts) {

@@ -139,11 +139,11 @@ Close Browser,Close And Terminate App
 
 ## Testing a phone app instead
 
-Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from a sample for the Android Contacts app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](https://optics-framework.org/docs/platforms/android) walks through both.
+Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from the `android` sample, which opens the Settings app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](https://optics-framework.org/docs/platforms/android) walks through both.
 
 ## Testing a desktop app instead
 
-Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `desktop_editor` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) walks through it.
+Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `mac_local` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) walks through it.
 
 ## Next steps
 

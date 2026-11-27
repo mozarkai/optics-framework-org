@@ -246,6 +246,8 @@ The chromedriver version must match the Chromium of the TV exactly. For example,
 
 ## Example: open a title from a grid
 
+The `lg_tv` and `samsung_tv` samples hold a suite like this one, with a search too, and `android_tv` drives the TV Settings app. [Start from an example](https://optics-framework.org/docs/get-started/examples) shows each one.
+
 A TV app usually shows rows of tiles. This module moves down one row, right one tile, opens it and starts playback. It checks the screen after each move that changes the page:
 
 `modules/modules.csv`:

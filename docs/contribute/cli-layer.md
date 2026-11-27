@@ -66,7 +66,7 @@ All commands follow the same pattern: registration, argument parsing, validation
 **Usage:**
 
 ```bash
-optics init my_project --path ./tests --template contact --git-init
+optics init my_project --path ./tests --template android --git-init
 ```
 
 **Arguments:**

@@ -138,6 +138,8 @@ Put the device in the stand, with the full screen in the camera frame. Open a br
 
 ### Write the suite
 
+The `ble_camera` sample holds this setup and this suite: `optics init birch-ble --template ble_camera`. The `ble_usb` sample reads the screen [over USB](#screen-over-usb) in place of a camera.
+
 Each value is text that OCR can read on the screen. `Press Element` reads one frame and does not wait, so an `Assert Presence` comes before it after each change of screen.
 
 **CSV**

@@ -39,7 +39,7 @@ On macOS, Appium needs the Accessibility and Screen & System Audio Recording per
 ### Make a project and run it
 
 ```shell
-$ optics init notes --template desktop_editor
+$ optics init notes --template mac_local
 $ optics doctor notes
 $ optics execute notes
 ```

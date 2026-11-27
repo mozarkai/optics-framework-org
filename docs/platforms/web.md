@@ -235,6 +235,8 @@ Use a browser profile when you are signed in to the site in Chrome or Edge on th
 | `profile` | You are signed in to Chrome or Edge on this computer. | A temporary copy of that profile. Optics deletes the copy at the end of the session. |
 | `user_data_dir` | You want to sign in once in the Optics browser and keep the sign-in for later runs. | A folder that stays between runs. |
 
+The `browser_profile` sample starts signed in to GitHub this way: `optics init gh --template browser_profile`.
+
 Set `profile` to the directory of the profile (`Default`, `Profile 1`), its name or its account email:
 
 `config.yaml`:

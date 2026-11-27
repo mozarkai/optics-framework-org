@@ -123,10 +123,10 @@ $ curl -s http://127.0.0.1:4723/xa11y/status
 Or make the sample project yourself:
 
 ```shell
-$ optics init notes --template desktop_editor
+$ optics init notes --template mac_local
 ```
 
-The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
+The `mac_local` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
 
 ### Check and run
 
@@ -295,7 +295,7 @@ $ ssh -N -o ExitOnForwardFailure=yes -L 4733:127.0.0.1:4723 user@host
 
 A local Appium often uses port 4723. Then the tunnel cannot use `127.0.0.1:4723`, and Optics connects to the local Appium, not to the Host. With `ExitOnForwardFailure=yes`, `ssh` stops when it cannot open the local port.
 
-Set `url: "http://127.0.0.1:4733"` in `config.yaml`. Then check that the Host answers and gives the `platformName` of your config:
+Set `url: "http://127.0.0.1:4733"` in `config.yaml`. The `mac_cloud` and `windows_cloud` samples read the URL from `MAC_APPIUM_URL` or `WINDOWS_APPIUM_URL`, with ports 4734 and 4733 as the defaults. Then check that the Host answers and gives the `platformName` of your config:
 
 ```shell
 $ curl -s http://127.0.0.1:4733/xa11y/status
@@ -341,7 +341,7 @@ Write locators in `test_data/elements.csv`:
 
 ### Give one element a value for each OS
 
-The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The `desktop_editor` sample uses this for the editor:
+The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The `mac_local` sample uses this for the editor:
 
 `test_data/elements.csv`:
 

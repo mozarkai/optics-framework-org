@@ -559,11 +559,11 @@ Close Browser,Close And Terminate App
 
 ## Testing a phone app instead
 
-Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from a sample for the Android Contacts app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](https://optics-framework.org/docs/platforms/android) walks through both.
+Choose `mobile` when `optics quickstart` asks what you want to automate. Optics then starts from the `android` sample, which opens the Settings app. Before the run, you need an Android emulator or phone connected, and an Appium server running. [Set up Android testing](https://optics-framework.org/docs/platforms/android) walks through both.
 
 ## Testing a desktop app instead
 
-Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `desktop_editor` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) walks through it.
+Choose `desktop` when `optics quickstart` asks what you want to automate. Optics starts from the `mac_local` sample, which types a note in TextEdit, mousepad or Notepad. Before the run, set up Appium and appium-xa11y-driver on your computer. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) walks through it.
 
 ## Next steps
 
@@ -744,6 +744,154 @@ Web
 
 - [Quickstart](https://optics-framework.org/docs/get-started/quickstart): Run a working sample in a browser.
 - [Write your first test](https://optics-framework.org/docs/get-started/first-test): Build a test of your own, step by step.
+
+---
+
+Source: https://optics-framework.org/docs/get-started/examples
+
+# Start from an example
+
+> Make a working suite for your platform with one command, then change it for your app.
+
+Optics ships a sample suite for each platform. Each sample has a `config.yaml` for that platform and a short suite for an app that the platform has, where it has one. Copy one into a new project:
+
+```shell
+$ optics init demo --template android
+```
+
+The project gets the files of the sample:
+
+```tree
+demo/
+├── config.yaml                 # the driver and the element sources
+├── test_cases/test_cases.csv   # suite setup, the test cases, suite teardown
+├── modules/modules.csv         # the steps
+└── test_data/elements.csv      # the locators, some with a fallback value
+```
+
+`optics init demo` with no `--template` shows a list of the samples in a terminal. `optics quickstart` offers the sample of the platform that you choose.
+
+## Choose an example
+
+`Which sample to start from`:
+
+```mermaid
+flowchart LR
+    Q{"What do you test?"}
+    Q -->|"a phone app"| P["android · ios"]
+    Q -->|"a TV app"| T["android_tv · lg_tv · samsung_tv"]
+    Q -->|"a website"| W["browser · browser_profile · mobile_web"]
+    Q -->|"a device you cannot install on"| B["ble_camera · ble_usb"]
+    Q -->|"a desktop app"| D["mac_local · mac_cloud · windows_cloud"]
+```
+
+| Sample | What the suite does | What you need |
+|---|---|---|
+| `android` | Opens Settings, scrolls to About phone and finds the build number. Includes an [error definitions](https://optics-framework.org/docs/run/error-detection) file. | Appium, and an Android emulator or phone |
+| `ios` | Opens Settings, then General, then About, and goes back. | Appium on a Mac with Xcode, and a simulator or iPhone |
+| `android_tv` | Opens TV Settings, then Device Preferences, and opens About with the remote's center key. | Appium, and an Android TV emulator or a TV on `adb` |
+| `lg_tv` | Opens a tile in a grid with remote keys, then searches for it with the on-screen keyboard. | Appium 2 with the webOS driver, and a TV in Developer Mode |
+| `samsung_tv` | The same flow as `lg_tv`, on a Samsung Tizen TV. | Appium 2 with the Tizen driver, Tizen Studio, and a TV in Developer Mode |
+| `browser` | Opens a page and checks its text. | Nothing more: Playwright starts Chromium |
+| `browser_profile` | Opens GitHub settings with your Chrome profile, signed in. | Chrome, signed in to GitHub |
+| `mobile_web` | Searches Wikipedia in Chrome on Android. | Appium, and an Android emulator or phone |
+| `ble_camera` | Opens Settings on an iPhone over Bluetooth, and reads the screen through a webcam. | An airhand dongle and a webcam |
+| `ble_usb` | Opens Settings on an Android phone over Bluetooth, and reads the screen over USB. | An airhand dongle, `adb` and USB debugging |
+| `mac_local` | Types a note in TextEdit, checks it and clears it. | Appium and appium-xa11y-driver on your Mac |
+| `mac_cloud` | Adds 7 and 8 in Calculator on a cloud Mac. | A Mac Host with Appium and an SSH tunnel |
+| `windows_cloud` | Adds 7 and 8 in Calculator on a Windows VM. | A Windows Host with Appium and an SSH tunnel |
+
+The TV samples drive Birch, the sample shoe store of these docs. Tizen and webOS drive only a debug build of your own app, so replace the app id and the text in `elements.csv` with the values of your app.
+
+## Phones and TVs
+
+`android`, `ios` and `android_tv` drive the Settings app, which every device has, so you can run them before you change anything. Before the first run, set the device in `config.yaml`:
+
+| Sample | Set |
+|---|---|
+| `android`, `android_tv` | `deviceName` (or `udid`) to a serial from `adb devices` |
+| `ios` | `deviceName` to a simulator name, or `udid` for a real iPhone |
+| `lg_tv` | `appium:deviceHost` to the TV's address, and `appium:appId` to your app |
+| `samsung_tv` | `appium:deviceAddress`, `appium:rcToken`, `appium:appPackage` and `appium:app` (the `.wgt` file) |
+
+Android TV moves the focus with Android key numbers, such as `23` for the center key. Tizen and webOS take remote key names, such as `RIGHT` and `ENTER`, and Press Element moves the focus for you. [Test TV apps](https://optics-framework.org/docs/platforms/tv) explains both.
+
+## Browsers
+
+`browser` runs as it is. `browser_profile` copies the sign-ins of a Chrome profile into a temporary folder, so the suite starts signed in, and your profile does not change. Set the profile with an environment variable, or edit `config.yaml`:
+
+```shell
+$ OPTICS_BROWSER_PROFILE="Profile 1" optics execute demo
+```
+
+The value is the profile folder, its name or its account email. [Start signed in with a browser profile](https://optics-framework.org/docs/platforms/web#start-signed-in-with-a-browser-profile) has the details.
+
+## Devices over Bluetooth
+
+The `ble` samples drive a device that has nothing installed. The dongle taps and types, and Optics reads the screen with OCR. The two samples see the screen in different ways:
+
+| Sample | Screen | Keep in step |
+|---|---|---|
+| `ble_camera` | A webcam aimed at the phone, with `find_screen: brightness` | `frame` equals `out_width` × `out_height` |
+| `ble_usb` | `adb` screenshots over USB | `frame` equals the size of the phone's screenshot |
+
+Each step that taps waits first with Assert Presence, because a camera frame shows the screen only at one moment. [Test production devices](https://optics-framework.org/docs/platforms/production) covers the camera, the dongle and the setup.
+
+## Desktops
+
+`mac_local` drives TextEdit on the Mac that runs Optics. The cloud samples drive a Host on another computer through an SSH tunnel, because Appium has no authentication:
+
+**macOS**
+
+```shell
+$ ssh -N -o ExitOnForwardFailure=yes -L 4734:127.0.0.1:4723 user@cloud-mac
+$ optics execute demo
+```
+**Windows**
+
+```shell
+$ ssh -N -o ExitOnForwardFailure=yes -L 4733:127.0.0.1:4723 user@windows-vm
+$ optics execute demo
+```
+
+The URL comes from `MAC_APPIUM_URL` or `WINDOWS_APPIUM_URL`, with the tunnel port as the default. [Test desktop apps](https://optics-framework.org/docs/platforms/desktop) shows how to set up a Host.
+
+## Make it yours
+
+### Check the setup
+
+`optics doctor` checks the driver, the server and the device for the project:
+
+```shell
+$ optics doctor demo
+```
+
+### Run the sample once
+
+Run it before you change anything. Then a failure after your change comes from your change.
+
+```shell
+$ optics execute demo
+```
+
+### Point it at your app
+
+Change the app in `config.yaml`, and the locators in `test_data/elements.csv`. Keep the module and test case names, or rename them to match your flow.
+
+### Check your changes without a device
+
+A dry run finds a misspelled keyword, a missing `${name}` or a wrong number of values before anything runs:
+
+```shell
+$ optics dry_run demo
+```
+
+## See also
+
+- [Write your first test](https://optics-framework.org/docs/get-started/first-test): Build a suite from scratch, step by step.
+- [Supported platforms](https://optics-framework.org/docs/platforms/): The driver, the element sources and the limits of each platform.
+- [Define elements](https://optics-framework.org/docs/elements/define): Give an element more than one value.
+- [optics init](https://optics-framework.org/docs/reference/cli#optics-init): Every option of the command.
 
 ---
 
@@ -4961,7 +5109,7 @@ An activity that starts with a dot is short for the package plus that name: `.Ma
 
 ### Write config.yaml
 
-Create a project with `optics init birch-android`, then replace its `config.yaml`:
+Create a project with `optics init birch-android`, then replace its `config.yaml`. To start from a suite that runs on any device, run `optics init birch-android --template android` instead. It opens the Settings app.
 
 `config.yaml`:
 
@@ -5240,7 +5388,7 @@ com.birch.shop
 
 ### Write config.yaml
 
-Create a project with `optics init birch-ios`, then replace its `config.yaml`:
+Create a project with `optics init birch-ios`, then replace its `config.yaml`. To start from a suite that runs on any simulator, run `optics init birch-ios --template ios` instead. It opens the Settings app.
 
 `config.yaml`:
 
@@ -5654,6 +5802,8 @@ Use a browser profile when you are signed in to the site in Chrome or Edge on th
 | `storage_state` | The run must work on any computer, in CI, with `device` or in a remote browser. | A file that Playwright saved. See [Start signed in from a saved file](#start-signed-in-from-a-saved-file). |
 | `profile` | You are signed in to Chrome or Edge on this computer. | A temporary copy of that profile. Optics deletes the copy at the end of the session. |
 | `user_data_dir` | You want to sign in once in the Optics browser and keep the sign-in for later runs. | A folder that stays between runs. |
+
+The `browser_profile` sample starts signed in to GitHub this way: `optics init gh --template browser_profile`.
 
 Set `profile` to the directory of the profile (`Default`, `Profile 1`), its name or its account email:
 
@@ -6259,6 +6409,8 @@ The chromedriver version must match the Chromium of the TV exactly. For example,
 
 ## Example: open a title from a grid
 
+The `lg_tv` and `samsung_tv` samples hold a suite like this one, with a search too, and `android_tv` drives the TV Settings app. [Start from an example](https://optics-framework.org/docs/get-started/examples) shows each one.
+
 A TV app usually shows rows of tiles. This module moves down one row, right one tile, opens it and starts playback. It checks the screen after each move that changes the page:
 
 `modules/modules.csv`:
@@ -6436,10 +6588,10 @@ $ curl -s http://127.0.0.1:4723/xa11y/status
 Or make the sample project yourself:
 
 ```shell
-$ optics init notes --template desktop_editor
+$ optics init notes --template mac_local
 ```
 
-The `desktop_editor` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
+The `mac_local` sample opens TextEdit on macOS, types a note, checks it, clears it and closes the editor. If Appium uses a port other than 4723, change `url` in `notes/config.yaml`. On Linux or Windows, also change `platformName` and `app`. [Write config.yaml](#write-config-yaml) shows the values.
 
 ### Check and run
 
@@ -6608,7 +6760,7 @@ $ ssh -N -o ExitOnForwardFailure=yes -L 4733:127.0.0.1:4723 user@host
 
 A local Appium often uses port 4723. Then the tunnel cannot use `127.0.0.1:4723`, and Optics connects to the local Appium, not to the Host. With `ExitOnForwardFailure=yes`, `ssh` stops when it cannot open the local port.
 
-Set `url: "http://127.0.0.1:4733"` in `config.yaml`. Then check that the Host answers and gives the `platformName` of your config:
+Set `url: "http://127.0.0.1:4733"` in `config.yaml`. The `mac_cloud` and `windows_cloud` samples read the URL from `MAC_APPIUM_URL` or `WINDOWS_APPIUM_URL`, with ports 4734 and 4733 as the defaults. Then check that the Host answers and gives the `platformName` of your config:
 
 ```shell
 $ curl -s http://127.0.0.1:4733/xa11y/status
@@ -6654,7 +6806,7 @@ Write locators in `test_data/elements.csv`:
 
 ### Give one element a value for each OS
 
-The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The `desktop_editor` sample uses this for the editor:
+The same app has different trees on each OS. Give the element one column for each value, and Optics tries each value in turn. The `mac_local` sample uses this for the editor:
 
 `test_data/elements.csv`:
 
@@ -7099,6 +7251,8 @@ This output is from a computer with no dongle. With the dongle plugged in, the `
 Put the device in the stand, with the full screen in the camera frame. Open a bright screen, for example Settings in light mode. Optics finds the screen at the first capture of the run. For a device in dark mode, use `find_screen: pointer`. See [Find the screen](#find-the-screen).
 
 ### Write the suite
+
+The `ble_camera` sample holds this setup and this suite: `optics init birch-ble --template ble_camera`. The `ble_usb` sample reads the screen [over USB](#screen-over-usb) in place of a camera.
 
 Each value is text that OCR can read on the screen. `Press Element` reads one frame and does not wait, so an `Assert Presence` comes before it after each change of screen.
 
@@ -8644,7 +8798,7 @@ On macOS, Appium needs the Accessibility and Screen & System Audio Recording per
 ### Make a project and run it
 
 ```shell
-$ optics init notes --template desktop_editor
+$ optics init notes --template mac_local
 $ optics doctor notes
 $ optics execute notes
 ```
@@ -11123,7 +11277,7 @@ There are no flags. The command asks these questions in order:
 
 1. **What do you want to automate?** `mobile` (default), `web`, `desktop` or `bluetooth`. Use `bluetooth` for any device that an airhand dongle drives: it offers to install the `ble` engine, then asks which device the dongle drives (default `ios`), the dongle serial, the screen size and a camera screenshot URL.
 2. **Install the engine now?** Appium for mobile and desktop; Playwright and Selenium for web. If you decline, it prints the `optics setup --install` command to run later.
-3. **Start from a sample?** The `contact` sample for mobile, the `playwright` sample for web, the `desktop_editor` sample for desktop. Decline to pick an empty project or another sample.
+3. **Start from a sample?** The `android` sample for mobile, the `browser` sample for web, the `mac_local` sample for desktop and the `ble_camera` sample for bluetooth. Decline to pick an empty project or another sample.
 4. **Project name** (default `my-optics-project`) and **where it should live** (default: the current folder). If the folder exists, it asks for another name.
 5. **Config questions.** If the sample ships its own config.yaml, you choose whether to overwrite it. The default is yes for mobile and desktop, and no for web. For desktop, it asks which desktop (`Mac`, `Linux` or `Windows`, default: this computer's OS), the app to launch (default `com.apple.TextEdit`, `gedit` or `notepad.exe`) and the Appium server URL.
 6. It runs `optics doctor` on the new project and shows the report.
@@ -11148,7 +11302,7 @@ optics init [name] [--path DIR] [--template NAME] [--force] [--git-init]
 |---|---|---|
 | `name` | Asks for it | The project name. The project goes in `<path>/<name>`. |
 | `--path` | Current folder | The parent folder. Missing folders are created. |
-| `--template` | Asks in a terminal; blank otherwise | Copies a sample project from `optics_framework/samples/`. One of `calendar`, `clock`, `contact`, `desktop_editor`, `gmail_web`, `mobile_web`, `playwright`, `youtube`. Each name is a folder there. |
+| `--template` | Asks in a terminal; blank otherwise | Copies a sample project from `optics_framework/samples/`. One of the names in [Start from an example](https://optics-framework.org/docs/get-started/examples). Each name is a folder there. |
 | `--force` | Off | Deletes an existing folder with the same name first. Without it, an existing folder is an error and nothing is created. |
 | `--git-init` | Off | Runs `git init` in the new project. Skipped quietly if Git isn't installed. |
 | `--name` | | Deprecated. Pass the name as the first argument instead. |
@@ -11169,31 +11323,35 @@ birch-tests/
 
 ```terminal
 Or replace it with a sample: optics init birch-tests --force --template <sample>
-  contact          Contacts
-  clock            Clock
-  calendar         Calendar
-  youtube          YouTube
-  gmail_web        Gmail Web
-  playwright       Playwright Web
+  android          Android
+  ios              iOS
+  android_tv       Android TV
+  lg_tv            LG TV
+  samsung_tv       Samsung TV
+  browser          Browser
+  browser_profile  Browser Profile
   mobile_web       Mobile Web
-  desktop_editor   Desktop Editor
+  ble_camera       BLE With Camera
+  ble_usb          BLE With USB Screenshot
+  mac_local        Mac Local
+  mac_cloud        Mac Cloud
+  windows_cloud    Windows Cloud
 ```
 
-| Sample | Target | Engines it uses |
-|---|---|---|
-| `contact` | Google Contacts on an Android emulator | Appium, EasyOCR. Fills in a contact form from test data (`${First_Name}`), checks each screen with `Assert Presence`, and includes an error definitions file. |
-| `clock` | Android Clock app | Appium, Pytesseract, image templates. Shows `Run Loop`. |
-| `calendar` | Android Calendar app | Appium, EasyOCR. Shows `Invoke API` and `Date Evaluate`. |
-| `youtube` | YouTube on Android | Appium, EasyOCR, image templates. Shows `Condition`. |
-| `gmail_web` | Gmail in Chrome | Selenium, EasyOCR. Opens the sign-in and the create-account flows and enters text, with text locators only. |
-| `playwright` | `https://example.com` | Playwright. Needs no device or server. |
-| `mobile_web` | Wikipedia search in Chrome on Android | Appium with `browserName: Chrome`, and the `appium_web` element source. See [Test mobile websites](https://optics-framework.org/docs/platforms/mobile-web). |
-| `desktop_editor` | TextEdit on macOS: types a note, checks it, clears it and closes the editor | Appium with appium-xa11y-driver. Change `platformName` and `app` for Linux or Windows. See [Test desktop apps](https://optics-framework.org/docs/platforms/desktop). |
+| Sample | Target |
+|---|---|
+| `android`, `ios` | The Settings app on an Android or iOS device |
+| `android_tv`, `lg_tv`, `samsung_tv` | Android TV Settings, and an app on an LG webOS or Samsung Tizen TV |
+| `browser`, `browser_profile`, `mobile_web` | A website in Playwright, the same with a signed-in Chrome profile, and Chrome on Android |
+| `ble_camera`, `ble_usb` | A phone driven over Bluetooth, seen through a webcam or over USB |
+| `mac_local`, `mac_cloud`, `windows_cloud` | TextEdit on this Mac, and Calculator on a cloud Mac or Windows VM |
+
+[Start from an example](https://optics-framework.org/docs/get-started/examples) shows what each sample does and what to change for your app.
 
 Example:
 
 ```shell
-$ optics init birch-tests --template playwright --path ~/work --git-init
+$ optics init birch-tests --template browser --path ~/work --git-init
 ```
 
 After it creates the project, Optics prints the next steps. For a blank project, they are `optics configure`, then `optics dry_run`, and a line that says the test steps go in `test_cases/test_cases.csv` and `optics list` shows every step. For a sample, they are `optics dry_run`, then `optics execute`.
@@ -12962,52 +13120,39 @@ Go Home,Execute Script,"{""script"": ""mobile: pressKey"", ""args"": {""keycode"
 
 ## A complete example
 
-The `youtube` sample drives the YouTube Android app in three ways: by on-screen text, by XPath and by image matching. Create it with `optics init my_project --template youtube`, or pick it in `optics quickstart`.
+The `android` sample opens the Settings app, scrolls to About phone and finds the build number. Settings is on every Android device, so you can run the sample before you change anything. Create it with `optics init my_project --template android`, or pick it in `optics quickstart`.
 
 `test_cases/test_cases.csv`:
 
 ```csv
 test_case,test_step
-Suite Setup,Launch Youtube App
-Suite Teardown,Close Youtube App
-Running youtube Repeat,Repeat Test
+Android Suite Setup,Open Settings
+Check About Phone,Open About Phone
+Check About Phone,Find The Build Number
+Android Suite Teardown,Close Settings
 ```
 
 `modules/modules.csv`:
 
 ```csv
-module_name,module_step,param_1,param_2,param_3,param_4,param_5
-Launch Youtube App,Launch App,,,,
-Launch Youtube App,Press Element,${popup_element_text},,,
-Close Youtube App,Close And Terminate App,,,,
-Interact using text,Assert Presence,${Subscriptions_text},,,
-Interact using text,Press Element,${Subscriptions_text},,,
-Interact using text,Press Element,${Home_text},,,
-Interact using xpath,Assert Presence,${Subscriptions_xpath},,,
-Interact using xpath,Press Element,${Subscriptions_xpath},,,
-Interact using xpath,Press Element,${Home_xpath},,,
-Interact using images,Press Element,${Subscriptions_image},,,
-Interact using images,Press Element,${Home_image},,,
-Dynamic Launch,condition,${METHOD} == 'text',Interact using text,${METHOD} == 'xpath',Interact using xpath,Interact using images
-Repeat Test,Run Loop,Dynamic Launch,${METHOD},${List}
+module_name,module_step,param_1,param_2,param_3
+Open Settings,Launch App
+Open Settings,Assert Presence,${Search_Settings},20
+Open About Phone,Scroll Until Element Appears,${About_Phone},down,30
+Open About Phone,Press Element,${About_Phone}
+Open About Phone,Assert Presence,${Device_Name},10
+Find The Build Number,Scroll Until Element Appears,${Build_Number},down,30
+Close Settings,Close And Terminate App
 ```
 
 `test_data/elements.csv`:
 
 ```csv
-Element_Name,Element_ID
-popup_element_text,Allow
-Subscriptions_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Subscriptions"]
-you_xpath,(//android.widget.ImageView[@resource-id="com.google.android.youtube:id/image"])[4]
-Home_xpath,//android.widget.TextView[@resource-id="com.google.android.youtube:id/text" and @text="Home"]
-Subscriptions_text,Subscriptions
-you_text,Library
-Home_text,Home
-Subscriptions_image,sub.jpeg
-Youtube_image,youtube.jpeg
-Home_image,home.png
-METHOD,text
-List,"[""xpath"",""text"",""images""]"
+Element_Name,Element_ID,Element_ID_2
+Search_Settings,Search settings,//*[@content-desc="Search settings"]
+About_Phone,About phone,About emulated device
+Device_Name,Device name,//*[@text="Device name"]
+Build_Number,Build number,//*[@text="Build number"]
 ```
 
 `config.yaml`:
@@ -13018,17 +13163,25 @@ driver_sources:
       enabled: true
       url: "http://localhost:4723"
       capabilities:
-        appActivity: "com.google.android.youtube.app.honeycomb.Shell$HomeActivity"
-        appPackage: "com.google.android.youtube"
-        automationName: "UiAutomator2"
-        deviceName: "emulator-5554"
-        platformName: "Android"
+        platformName: Android
+        automationName: UiAutomator2
+        deviceName: emulator-5554
+        appPackage: com.android.settings
+        appActivity: .Settings
+
+elements_sources:
+  - appium_find_element:
+      enabled: true
+  - appium_page_source:
+      enabled: true
+  - appium_screenshot:
+      enabled: true
 ```
 
-`Repeat Test` runs `Dynamic Launch` once for each value in `List`, with `${METHOD}` set to that value. `Dynamic Launch` uses `Condition` to pick the module for the current method. The images `home.png`, `sub.jpeg` and `youtube.jpeg` are in `test_data/input_templates/`. The sample also enables EasyOCR and template matching. The full sample has more steps (Shorts, Scroll and Search) and more elements.
+`Android Suite Setup` and `Android Suite Teardown` run once around the test cases. Each element has two values: the text first, then an XPath or the text that an emulator shows (`About emulated device`). Optics tries them in turn. The sample also has `test_data/error_definitions.csv`, which [error detection](https://optics-framework.org/docs/run/error-detection) reads at the end of the run, and `llm_models` entries that are off.
 
 ```tree
-youtube/
+android/
 ├── config.yaml
 ├── test_cases/
 │   └── test_cases.csv
@@ -13036,14 +13189,11 @@ youtube/
 │   └── modules.csv
 ├── test_data/
 │   ├── elements.csv
-│   └── input_templates/
-│       ├── home.png
-│       ├── sub.jpeg
-│       └── youtube.jpeg
+│   └── error_definitions.csv
 └── execution_output/        # generated at run time
 ```
 
-Check it with `optics dry_run ./youtube`, then run it with `optics execute ./youtube`. Both take a project folder, not a single test case.
+Check it with `optics dry_run ./my_project`, then run it with `optics execute ./my_project`. Both take a project folder, not a single test case. [Start from an example](https://optics-framework.org/docs/get-started/examples) lists the samples for other platforms.
 
 ## Outputs
 
